@@ -2,7 +2,7 @@
 *.apk
 *.ap_
 
-# Files for the ART/Dalvik VM
+# Files for the Dalvik VM
 *.dex
 
 # Java class files
@@ -34,14 +34,10 @@ captures/
 
 # Intellij
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/libraries
+.idea/
 
 # Keystore files
 *.jks
 
-# External native build folder generated in Android Studio 2.2 and later
-.externalNativeBuild
-
+# Ignore Mac DS_Store files
 .DS_Store
