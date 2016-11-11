@@ -61,3 +61,4 @@ gotten the project to build successfully!
 * Javon Negahban
 * Nick Romero
 * Jacob Boyles
+* Brian Gouldsberry
