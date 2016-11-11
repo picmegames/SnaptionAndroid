@@ -60,3 +60,4 @@ gotten the project to build successfully!
 * Tyler Wong
 * Javon Negahban
 * Nick Romero
+* Jacob Boyles
