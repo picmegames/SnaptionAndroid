@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.calpoly.csc.snaptionverticalprototype.R;
+import edu.calpoly.csc.snaptionverticalprototype.view.fragments.WallFragment;
 
 /**
  * The Main Activity and entry point for the application.
@@ -30,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
    @BindView(R.id.navigation_view)
    NavigationView mNavigationView;
 
+   private Fragment mCurrentFragment;
+   private int mMenuId;
+   private String fragTag;
+
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -38,16 +44,35 @@ public class MainActivity extends AppCompatActivity {
 
       setSupportActionBar(mToolbar);
 
+      fragTag = WallFragment.class.getSimpleName();
+      mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+      if (mCurrentFragment == null) {
+         mCurrentFragment = new WallFragment();
+      }
+
+      getSupportFragmentManager().beginTransaction()
+            .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+
       mNavigationView.setNavigationItemSelectedListener(
             new NavigationView.OnNavigationItemSelectedListener() {
          @Override
          public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
             mDrawerLayout.closeDrawers();
+            mMenuId = menuItem.getItemId();
 
-            switch (0) {
+            switch (mMenuId) {
                default:
+                  fragTag = WallFragment.class.getSimpleName();
+                  mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                  if (mCurrentFragment == null) {
+                     mCurrentFragment = new WallFragment();
+                  }
+
                   break;
             }
+
+            getSupportFragmentManager().beginTransaction()
+                  .replace(R.id.frame, mCurrentFragment, fragTag).commit();
 
             return true;
          }

@@ -3,10 +3,14 @@
     <!-- Titles -->
     <string name="app_name">Snaption Vertical Prototipo</string>
 
+    <!-- Tags -->
+    <string name="open_drawer">Navigation View Open</string>
+    <string name="close_drawer">Navigation View Closed</string>
+
     <!-- Labels -->
-    <string name="drawer_wall_label">Pared</string>
-    <string name="drawer_friends_label">Amigos</string>
-    <string name="drawer_profile_label">Perfil</string>
-    <string name="drawer_settings_label">Ajustes</string>
+    <string name="wall_label">Pared</string>
+    <string name="friends_label">Amigos</string>
+    <string name="profile_label">Perfil</string>
+    <string name="settings_label">Ajustes</string>
 
 </resources>
