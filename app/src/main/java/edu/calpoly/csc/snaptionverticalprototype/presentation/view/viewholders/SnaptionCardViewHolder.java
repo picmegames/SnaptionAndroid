@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaptionverticalprototype.view.viewholders;
+package edu.calpoly.csc.snaptionverticalprototype.presentation.view.viewholders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

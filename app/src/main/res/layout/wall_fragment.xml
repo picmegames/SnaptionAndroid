@@ -4,7 +4,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent">
 
-    <edu.calpoly.csc.snaptionverticalprototype.view.customviews.AnimatedRecyclerView
+    <edu.calpoly.csc.snaptionverticalprototype.presentation.view.customviews.AnimatedRecyclerView
         android:id="@+id/wall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

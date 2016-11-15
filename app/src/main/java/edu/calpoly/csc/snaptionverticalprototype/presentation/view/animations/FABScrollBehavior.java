@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaptionverticalprototype.view.animations;
+package edu.calpoly.csc.snaptionverticalprototype.presentation.view.animations;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

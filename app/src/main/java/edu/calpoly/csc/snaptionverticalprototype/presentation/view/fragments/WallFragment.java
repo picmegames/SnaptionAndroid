@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaptionverticalprototype.view.fragments;
+package edu.calpoly.csc.snaptionverticalprototype.presentation.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import edu.calpoly.csc.snaptionverticalprototype.R;
-import edu.calpoly.csc.snaptionverticalprototype.view.customviews.AnimatedRecyclerView;
+import edu.calpoly.csc.snaptionverticalprototype.presentation.view.customviews.AnimatedRecyclerView;
 
 /**
  * @author Tyler Wong
