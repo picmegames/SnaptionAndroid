@@ -65,4 +65,5 @@ dependencies {
     // RxJava
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.2'
+    compile 'com.artemzin.rxjava:proguard-rules:1.2.2.0'
 }
