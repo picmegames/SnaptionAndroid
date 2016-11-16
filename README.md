@@ -1,4 +1,4 @@
-# SnaptionVerticalPrototype
+# Snaption Vertical Prototype - Fightin' Puffins
 
 [![Build Status](https://travis-ci.com/tylerbwong/SnaptionVerticalPrototype.svg?token=AABXGtYrzS4uRtMAUqq3&branch=master)](https://travis-ci.com/tylerbwong/SnaptionVerticalPrototype)
 
@@ -33,7 +33,8 @@ project in Android Studio.
 project.
 4. Depending on if you have used Android Studio in the past, the IDE
 may prompt you to install extra plugins and dependencies in order to 
-build the project. Go ahead and install everything it asks you to.
+build the project (i.e. Gradle Plugins, Android SDKs, Android Build Tools).
+Go ahead and install everything it asks you to.
 5. Once the project has been opened and all plugins and dependencies
 have been installed, try building the project by going to `Build -> 
 Rebuild Project`. Hopefully it builds!
@@ -50,6 +51,52 @@ a remote build.
 8. This push should initiate a remote build either on Travis CI or
 Jenkins (whichever we decide to use) and hopefully it builds successfully
 too!
+
+### Running the Application
+
+In Android Studio, you will have the option of running the application
+on your compatible personal Android device, or through an emulator.
+
+#### Through an Emulator
+
+1. In Android Studio, go to `Tools -> Android -> AVD Manager`.
+2. Click on `Create New Virtual Device`
+3. Specify which kind of device you would like to run. For our purposes,
+a Nexus 5X will suffice. Click `Next`.
+4. You will now be asked to select an Android System Image. This is the
+version of Android that the emulator will run. Select anything API 23
+and above. Click `Next`.
+5. The next page will show different options about the hardware of the
+virtual device. Here you will be able to specify the amount of RAM, the
+VM Heap size, and even the size of an SD card (external storage). Leave
+everything as the default, but increase the amount of RAM to 2048 MB.
+Click `Finish`. 
+6. You are now ready to run the application. Find the green arrow at the
+top of Android Studio and click it. It will bring up a window that will
+let you choose a device to run the application on. Click the virtual
+device that you just created. Click `OK`. If everything builds and you
+created the virtual device correctly, the virtual device should start up
+and the app should run automatically!
+
+#### Through Your Own Device
+
+1. In order to run the application on your own device, you will need to
+enable Developer options. On your Android device, navigate to 
+`Settings -> About Phone`.
+2. Scroll down until you see a "Build Number". Keep tapping that row
+until a message says that you are a developer.
+3. Go back to the Settings page and click on `Developer Options`. Make
+sure Developer Options is turned on.
+4. Scroll down and make sure that `USB debugging` is enabled.
+5. Now your device is ready to run your application. Plug in your device
+to your computer and press the green arrow to run the application. Instead
+of choosing an emulator, you should see your personal device listed under
+"Connected devices". Choose your device and click `OK`.
+6. If this is your first time using your device to run an app through
+Android Studio, a pop-up might appear on your device asking if you would
+like to accept your computer's RSA fingerprint. Check `Always remember
+this computer` and click `OK`. The app will be installed and you should
+be ready to run your app on your own device!
 
 ### Troubleshooting
 
