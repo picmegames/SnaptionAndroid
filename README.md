@@ -15,7 +15,7 @@ build the Snaption Vertical Prototype on your own machine.
 
 ### Requirements
 * [Android Studio](https://developer.android.com/studio/index.html)
-* [JDK 7+](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+* [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 You may be asked to install extra SDKs or Build tools upon opening the 
