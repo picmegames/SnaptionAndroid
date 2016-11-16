@@ -6,7 +6,7 @@ This is the vertical prototype for the Snaption Android Application.
 
 ## Features
 * Login (Facebook and Google with Auth0)
-* Snaption Upload
+* Snaption Picture Upload and Game Creation
 
 ## Building
 
