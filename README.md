@@ -10,15 +10,16 @@ This is the vertical prototype for the Snaption Android Application.
 
 ## Building
 
-These are some of the necessary tools and steps that you will need to 
-build the Snaption Vertical Prototype on your own machine.
+These are some of the necessary tools and steps that you will need to
+build the Snaption Vertical Prototype on your own machine. These steps will
+work with Windows, macOS, and Linux.
 
-### Requirements
+### Prerequisites
 * [Android Studio](https://developer.android.com/studio/index.html)
 * [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-You may be asked to install extra SDKs or Build tools upon opening the 
+You may be asked to install extra SDKs or Build tools upon opening the
 project in Android Studio.
 
 ### Instructions
@@ -32,25 +33,33 @@ project in Android Studio.
 3. Android Studio should then walk you through the steps to set up the
 project.
 4. Depending on if you have used Android Studio in the past, the IDE
-may prompt you to install extra plugins and dependencies in order to 
+may prompt you to install extra plugins and dependencies in order to
 build the project (i.e. Gradle Plugins, Android SDKs, Android Build Tools).
-Go ahead and install everything it asks you to.
+Go ahead and install everything it asks you to. If you have installed everything
+that Android Studio has asked you to and the build still fails, go to `Tools ->
+Android -> SDK Manager` and install the following:
+   * SDK Platforms/Android 7.1.1 (Nougat)
+   * SDK Platforms/Android 6.0 (Marshmallow)
+   * SDK Tools/Android SDK Build-Tools 25
+   * SDK Tools/Android SDK Platform-Tools 25
+   * SDK Tools/Android SDK Tools 25.2.3
+   * SDK Tools/Support Repository/Android Support Repository
+   * SDK Tools/Support Repository/Google Repository
 5. Once the project has been opened and all plugins and dependencies
-have been installed, try building the project by going to `Build -> 
+have been installed, try building the project by going to `Build ->
 Rebuild Project`. Hopefully it builds!
 6. Once the project builds successfully, go ahead and add your name to
-the bottom of this README.md and push it to the repository to initiate 
+the bottom of this README.md and push it to the repository to initiate
 a remote build.
 7. To push your new code change to the remote master branch, run:
    ```
-   git add <Any files to be commited, "." or "-A" for all>
+   git add <Any files to be committed, "." or "-A" for all>
    git commit -m "<Meaningful commit message (Note the quotes)>"
    git push
    ```
-   
-8. This push should initiate a remote build either on Travis CI or
-Jenkins (whichever we decide to use) and hopefully it builds successfully
-too!
+
+8. This push should initiate a remote build either on Travis CI and hopefully
+it builds successfully too!
 
 ### Running the Application
 
@@ -70,7 +79,7 @@ and above. Click `Next`.
 virtual device. Here you will be able to specify the amount of RAM, the
 VM Heap size, and even the size of an SD card (external storage). Leave
 everything as the default, but increase the amount of RAM to 2048 MB.
-Click `Finish`. 
+Click `Finish`.
 6. You are now ready to run the application. Find the green arrow at the
 top of Android Studio and click it. It will bring up a window that will
 let you choose a device to run the application on. Click the virtual
@@ -81,7 +90,7 @@ and the app should run automatically!
 #### Through Your Own Device
 
 1. In order to run the application on your own device, you will need to
-enable Developer options. On your Android device, navigate to 
+enable Developer options. On your Android device, navigate to
 `Settings -> About Phone`.
 2. Scroll down until you see a "Build Number". Keep tapping that row
 until a message says that you are a developer.
@@ -103,8 +112,16 @@ be ready to run your app on your own device!
 If you have any questions feel free to ask me or anyone else who has
 gotten the project to build successfully!
 
+### Libraries
+* [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
+* [bumptech/glide](https://github.com/bumptech/glide)
+* [square/retrofit](https://github.com/square/retrofit)
+* [ReactiveX/RxJava](https://github.com/ReactiveX/RxJava)
+* [ReactiveX/RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [artem-zinnatullin/RxJavaProGuardRules](https://github.com/artem-zinnatullin/RxJavaProGuardRules)
+
 ### Successful Builders
-* Tyler Wong
+* Tyler Wong (Rebuild)
 * Javon Negahban (Rebuild)
 * Nick Romero (Rebuild)
 * Jacob Boyles
