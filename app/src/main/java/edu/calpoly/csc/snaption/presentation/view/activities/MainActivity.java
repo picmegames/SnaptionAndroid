@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaptionverticalprototype.presentation.view.activities;
+package edu.calpoly.csc.snaption.presentation.view.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import edu.calpoly.csc.snaptionverticalprototype.R;
-import edu.calpoly.csc.snaptionverticalprototype.presentation.view.fragments.WallFragment;
+import edu.calpoly.csc.snaption.R;
+import edu.calpoly.csc.snaption.presentation.view.fragments.WallFragment;
 
 /**
  * The Main Activity and entry point for the application.

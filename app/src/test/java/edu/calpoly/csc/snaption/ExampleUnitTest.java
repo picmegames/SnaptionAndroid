@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaptionverticalprototype;
+package edu.calpoly.csc.snaption;
 
 import org.junit.Test;
 

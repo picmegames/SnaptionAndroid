@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaptionverticalprototype.presentation.view.adapters;
+package edu.calpoly.csc.snaption.presentation.view.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.calpoly.csc.snaptionverticalprototype.R;
-import edu.calpoly.csc.snaptionverticalprototype.data.models.Snaption;
-import edu.calpoly.csc.snaptionverticalprototype.presentation.view.viewholders.SnaptionCardViewHolder;
+import edu.calpoly.csc.snaption.R;
+import edu.calpoly.csc.snaption.data.models.Snaption;
+import edu.calpoly.csc.snaption.presentation.view.viewholders.SnaptionCardViewHolder;
 
 /**
  * @author Tyler Wong

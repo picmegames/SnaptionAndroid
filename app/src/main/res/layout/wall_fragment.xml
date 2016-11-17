@@ -4,7 +4,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent">
 
-    <edu.calpoly.csc.snaptionverticalprototype.presentation.view.customviews.AnimatedRecyclerView
+    <edu.calpoly.csc.snaption.presentation.view.customviews.AnimatedRecyclerView
         android:id="@+id/wall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,7 @@
         app:fabSize="normal"
         app:layout_anchor="@+id/wall"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="edu.calpoly.csc.snaptionverticalprototype.presentation.view.animations.FABScrollBehavior"
+        app:layout_behavior="edu.calpoly.csc.snaption.presentation.view.animations.FABScrollBehavior"
         app:rippleColor="@color/colorAccent"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,6 @@
 # Snaption Vertical Prototype - Fightin' Puffins
 
-[![Build Status](https://travis-ci.com/tylerbwong/SnaptionVerticalPrototype.svg?token=AABXGtYrzS4uRtMAUqq3&branch=master)](https://travis-ci.com/tylerbwong/SnaptionVerticalPrototype)
+[![Build Status](https://travis-ci.com/tylerbwong/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=master)](https://travis-ci.com/tylerbwong/SnaptionAndroid)
 
 This is the vertical prototype for the Snaption Android Application.
 
@@ -11,7 +11,7 @@ This is the vertical prototype for the Snaption Android Application.
 ## Building
 
 These are some of the necessary tools and steps that you will need to
-build the Snaption Vertical Prototype on your own machine. These steps will
+build the Snaption Android application on your own machine. These steps will
 work with Windows, macOS, and Linux.
 
 ### Prerequisites
@@ -26,7 +26,7 @@ project in Android Studio.
 
 1. To grab the latest source code from the remote master branch, run:
    ```
-   git clone https://github.com/tylerbwong/SnaptionVerticalPrototype.git
+   git clone https://github.com/tylerbwong/SnaptionAndroid.git
    ```
 
 2. Open up Android Studio and select `Open Existing Android Project`
