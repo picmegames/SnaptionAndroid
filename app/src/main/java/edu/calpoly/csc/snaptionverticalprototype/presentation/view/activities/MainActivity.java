@@ -2,14 +2,12 @@ package edu.calpoly.csc.snaptionverticalprototype.presentation.view.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -53,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
       getSupportFragmentManager().beginTransaction()
             .replace(R.id.frame, mCurrentFragment, fragTag).commit();
 
-      mNavigationView.setNavigationItemSelectedListener(
-            new NavigationView.OnNavigationItemSelectedListener() {
-         @Override
-         public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
+      mNavigationView.setNavigationItemSelectedListener(menuItem -> {
             mDrawerLayout.closeDrawers();
             mMenuId = menuItem.getItemId();
 
@@ -76,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
          }
-      });
+      );
 
       ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
             this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {

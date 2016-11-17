@@ -34,12 +34,7 @@ public class AnimatedRecyclerView extends RecyclerView {
    }
 
    private void init() {
-      mRunnable = new Runnable() {
-         @Override
-         public void run() {
-            mScrollable = true;
-         }
-      };
+      mRunnable = () -> mScrollable = true;
    }
 
    @Override
