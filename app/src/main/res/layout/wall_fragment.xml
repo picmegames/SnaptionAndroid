@@ -23,7 +23,7 @@
         app:fabSize="normal"
         app:layout_anchor="@+id/wall"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="edu.calpoly.csc.snaptionverticalprototype.view.animations.FABScrollBehavior"
+        app:layout_behavior="edu.calpoly.csc.snaptionverticalprototype.presentation.view.animations.FABScrollBehavior"
         app:rippleColor="@color/colorAccent"/>
 
 </android.support.design.widget.CoordinatorLayout>

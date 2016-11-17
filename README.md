@@ -64,7 +64,7 @@ on your compatible personal Android device, or through an emulator.
 3. Specify which kind of device you would like to run. For our purposes,
 a Nexus 5X will suffice. Click `Next`.
 4. You will now be asked to select an Android System Image. This is the
-version of Android that the emulator will run. Select anything API 23
+version of Android that the emulator will run. Select anything API 19
 and above. Click `Next`.
 5. The next page will show different options about the hardware of the
 virtual device. Here you will be able to specify the amount of RAM, the
