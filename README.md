@@ -123,7 +123,7 @@ gotten the project to build successfully!
 ### Successful Builders
 * Tyler Wong (Rebuild)
 * Javon Negahban (Rebuild)
-* Nick Romero (Rebuild)
+* Nick Romero (Rebuild - 2)
 * Jacob Boyles
 * Brian Gouldsberry
 * Quang Ngo
