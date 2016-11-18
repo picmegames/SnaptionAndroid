@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaption.presentation.view.customviews;
+package com.snaptiongame.snaptionapp.presentation.view.customviews;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

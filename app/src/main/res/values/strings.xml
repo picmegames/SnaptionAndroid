@@ -1,6 +1,6 @@
 <resources>
     <!-- Titles -->
-    <string name="app_name">Snaption Vertical Prototype</string>
+    <string name="app_name">Snaption</string>
 
     <!-- Tags -->
     <string name="open_drawer">Navigation View Open</string>

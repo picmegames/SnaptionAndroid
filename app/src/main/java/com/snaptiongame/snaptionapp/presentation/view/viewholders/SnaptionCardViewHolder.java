@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaption.presentation.view.viewholders;
+package com.snaptiongame.snaptionapp.presentation.view.viewholders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import edu.calpoly.csc.snaption.R;
+import com.snaptiongame.snaptionapp.R;
 
 /**
  * @author Tyler Wong

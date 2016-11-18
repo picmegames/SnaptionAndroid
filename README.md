@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/tylerbwong/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=master)](https://travis-ci.com/tylerbwong/SnaptionAndroid)
 
-This is the vertical prototype for the Snaption Android Application.
+This is the Snaption Android Application.
 
 ## Features
 * Login (Facebook and Google)

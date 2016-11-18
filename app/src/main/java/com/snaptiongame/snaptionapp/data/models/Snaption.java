@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaption.data.models;
+package com.snaptiongame.snaptionapp.data.models;
 
 /**
  * @author Tyler Wong

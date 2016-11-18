@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaption.presentation.view.fragments;
+package com.snaptiongame.snaptionapp.presentation.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import edu.calpoly.csc.snaption.R;
-import edu.calpoly.csc.snaption.presentation.view.customviews.AnimatedRecyclerView;
+import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView;
 
 /**
  * @author Tyler Wong

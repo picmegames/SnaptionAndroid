@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaption;
+package com.snaptiongame.snaptionapp;
 
 import org.junit.Test;
 

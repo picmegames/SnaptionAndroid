@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Titles -->
-    <string name="app_name">Snaption Vertical Prototipo</string>
+    <string name="app_name">Snaption</string>
 
     <!-- Tags -->
     <string name="open_drawer">Navigation View Open</string>

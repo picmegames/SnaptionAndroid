@@ -1,4 +1,4 @@
-package edu.calpoly.csc.snaption.presentation.view.animations;
+package com.snaptiongame.snaptionapp.presentation.view.animations;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
