@@ -1,11 +1,15 @@
 package com.snaptiongame.snaptionapp.presentation.view.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -30,15 +34,20 @@ import butterknife.OnClick;
  */
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+   @BindView(R.id.logo)
+   ImageView mLogo;
    @BindView(R.id.facebook_login_button)
    LoginButton mFacebookLoginButton;
-   @BindView(R.id.google_login_button)
-   SignInButton mGoogleLoginButton;
+   @BindView(R.id.google_sign_in_button)
+   SignInButton mGoogleSignInButton;
 
    private CallbackManager mCallbackManager;
    private GoogleApiClient mGoogleApiClient;
+   private SharedPreferences mPreferences;
 
    private static final int RC_SIGN_IN = 2222;
+
+   public static final String LOGGED_IN = "logged in";
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
       setContentView(R.layout.activity_login);
       ButterKnife.bind(this);
 
+      // Set Logo
+      Glide.with(this).load(R.drawable.snaption_logo).into(mLogo);
+
+      // Get Shared Preferences Editor
+      mPreferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+
       // Init Facebook Login Callbacks
       FacebookSdk.sdkInitialize(getApplicationContext());
       mCallbackManager = CallbackManager.Factory.create();
@@ -57,6 +72,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
          @Override
          public void onSuccess(LoginResult loginResult) {
             System.out.println("Success! Logged in with token: " + loginResult.getAccessToken().toString());
+            // Handle Google Sign In success
+            // Send user e-mail and other info to server?
+            // Send some access token?
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putBoolean(LOGGED_IN, true);
+            editor.apply();
+
+            returnToMain();
          }
 
          @Override
@@ -81,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             .build();
    }
 
-   @OnClick(R.id.google_login_button)
+   @OnClick(R.id.google_sign_in_button)
    public void googleLogin(View view) {
       Intent googleIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
       startActivityForResult(googleIntent, RC_SIGN_IN);
@@ -94,6 +117,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
          if (account != null) {
             System.out.println(account.getEmail());
          }
+
+         // Handle Google Sign In success
+         // Send user e-mail and other info to server?
+         // Send some access token?
+         SharedPreferences.Editor editor = mPreferences.edit();
+         editor.putBoolean(LOGGED_IN, true);
+         editor.apply();
+
+         returnToMain();
       }
       else {
          System.out.println("Google login failed :(");
@@ -110,6 +142,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
       }
 
       mCallbackManager.onActivityResult(requestCode, resultCode, data);
+   }
+
+   private void returnToMain() {
+      Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+      startActivity(mainIntent);
    }
 
    @Override
