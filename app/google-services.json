@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "112909434761",
+    "project_id": "snaption-b48b9"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112909434761:android:c32db780c43899a8",
+        "android_client_info": {
+          "package_name": "com.snaptiongame.snaptionapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112909434761-np8iqbibe146obegoh1fh1jv9bcmmfek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.snaptiongame.snaptionapp",
+            "certificate_hash": "DB2EC1DDBE231DB3BE0E7A6350339214E709AAFD"
+          }
+        },
+        {
+          "client_id": "112909434761-vaojfc5uhsm0au8g7d5nk061blr3ceja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtMckiQbFMtU98yfDeXn9WCR-2DUPb14o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
