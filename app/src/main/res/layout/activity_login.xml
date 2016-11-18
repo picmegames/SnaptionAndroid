@@ -16,7 +16,7 @@
         android:textColor="@android:color/white"/>
 
     <ImageView
-        android:id="@+id/snaption_logo"
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
@@ -27,14 +27,14 @@
         android:id="@+id/facebook_login_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/snaption_logo"
+        android:layout_below="@+id/logo"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"/>
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_login_button"
+        android:id="@+id/google_sign_in_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_below="@+id/facebook_login_button"
