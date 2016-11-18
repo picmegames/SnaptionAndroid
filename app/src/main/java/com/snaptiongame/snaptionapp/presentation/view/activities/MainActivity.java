@@ -11,10 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.presentation.view.fragments.WallFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * The Main Activity and entry point for the application.

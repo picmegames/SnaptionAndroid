@@ -1,5 +1,6 @@
 package com.snaptiongame.snaptionapp.presentation.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -11,11 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.presentation.view.activities.LoginActivity;
+import com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
-import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView;
 
 /**
  * @author Tyler Wong
@@ -47,6 +51,12 @@ public class WallFragment extends Fragment {
       }
 
       return view;
+   }
+
+   @OnClick(R.id.fab)
+   public void createGame(View view) {
+      Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+      startActivity(loginIntent);
    }
 
    @Override
