@@ -1,6 +1,8 @@
 package com.snaptiongame.snaptionapp.presentation.view.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.presentation.view.activities.LoginActivity;
@@ -55,8 +58,17 @@ public class WallFragment extends Fragment {
 
    @OnClick(R.id.fab)
    public void createGame(View view) {
-      Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-      startActivity(loginIntent);
+      Context context = getContext();
+      SharedPreferences preferences = context.getSharedPreferences(
+            context.getPackageName(), Context.MODE_PRIVATE);
+
+      if (!preferences.getBoolean(LoginActivity.LOGGED_IN, false)) {
+         Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+         startActivity(loginIntent);
+      }
+      else {
+         Toast.makeText(context, "This will lead to create game!", Toast.LENGTH_LONG).show();
+      }
    }
 
    @Override

@@ -11,9 +11,13 @@
     <string name="friends_label">Friends</string>
     <string name="profile_label">Profile</string>
     <string name="settings_label">Settings</string>
+    <string name="log_out_label">Log Out</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id">359612531056210</string>
     <string name="fb_login_protocol_scheme">fb359612531056210</string>
+    <string name="fb_permission_profile">public_profile</string>
+    <string name="fb_permission_friends">user_friends</string>
+    <string name="fb_permission_publish">publish_actions</string>
 
 </resources>
