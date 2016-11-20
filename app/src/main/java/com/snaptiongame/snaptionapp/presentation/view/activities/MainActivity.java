@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.auth.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.fragments.WallFragment;
 
 import butterknife.BindView;

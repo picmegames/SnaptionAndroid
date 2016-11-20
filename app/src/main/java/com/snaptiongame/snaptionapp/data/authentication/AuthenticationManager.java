@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.auth;
+package com.snaptiongame.snaptionapp.data.authentication;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import com.snaptiongame.snaptionapp.R;
  */
 
 public final class AuthenticationManager {
-   private static AuthenticationManager mAuthenticationManager;
+   private static AuthenticationManager mAuthManager;
 
    private CallbackManager mCallbackManager;
    private GoogleApiClient mGoogleApiClient;
@@ -60,11 +60,11 @@ public final class AuthenticationManager {
    }
 
    public static AuthenticationManager getInstance(Context context) {
-      if (mAuthenticationManager == null) {
-         mAuthenticationManager = new AuthenticationManager(context);
+      if (mAuthManager == null) {
+         mAuthManager = new AuthenticationManager(context);
       }
 
-      return mAuthenticationManager;
+      return mAuthManager;
    }
 
    public void googleActivityResult(Intent data) {
