@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.auth.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

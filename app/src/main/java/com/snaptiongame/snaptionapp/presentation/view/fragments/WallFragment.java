@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.auth.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.activities.LoginActivity;
 import com.snaptiongame.snaptionapp.presentation.view.activities.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView;
