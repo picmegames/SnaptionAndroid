@@ -2,7 +2,6 @@ package com.snaptiongame.snaptionapp.presentation.view.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.auth.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.activities.LoginActivity;
+import com.snaptiongame.snaptionapp.presentation.view.activities.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView;
 
 import butterknife.BindView;
@@ -34,12 +35,15 @@ public class WallFragment extends Fragment {
    @BindView(R.id.wall)
    AnimatedRecyclerView mWall;
 
+   private AuthenticationManager mAuthManager;
    private Unbinder mUnbinder;
 
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
       super.onCreateView(inflater, container, savedInstanceState);
+      mAuthManager = AuthenticationManager.getInstance(getContext());
+
       View view = inflater.inflate(R.layout.wall_fragment, container, false);
       mUnbinder = ButterKnife.bind(this, view);
 
@@ -59,16 +63,24 @@ public class WallFragment extends Fragment {
    @OnClick(R.id.fab)
    public void createGame(View view) {
       Context context = getContext();
-      SharedPreferences preferences = context.getSharedPreferences(
-            context.getPackageName(), Context.MODE_PRIVATE);
 
-      if (!preferences.getBoolean(LoginActivity.LOGGED_IN, false)) {
-         Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-         startActivity(loginIntent);
+      if (!mAuthManager.isLoggedIn()) {
+         mAuthManager.registerCallback(this::goToMain);
+         goToLogin();
       }
       else {
          Toast.makeText(context, "This will lead to create game!", Toast.LENGTH_LONG).show();
       }
+   }
+
+   private void goToMain() {
+      Intent mainIntent = new Intent(getContext(), MainActivity.class);
+      startActivity(mainIntent);
+   }
+
+   private void goToLogin() {
+      Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+      startActivity(loginIntent);
    }
 
    @Override
