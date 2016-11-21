@@ -14,10 +14,10 @@
     <string name="log_out_label">Log Out</string>
 
     <!-- Facebook Login -->
-    <string name="facebook_app_id">359612531056210</string>
-    <string name="fb_login_protocol_scheme">fb359612531056210</string>
-    <string name="fb_permission_profile">public_profile</string>
-    <string name="fb_permission_friends">user_friends</string>
-    <string name="fb_permission_publish">publish_actions</string>
+    <string name="facebook_app_id" translatable="false">359612531056210</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb359612531056210</string>
+    <string name="fb_permission_profile" translatable="false">public_profile</string>
+    <string name="fb_permission_friends" translatable="false">user_friends</string>
+    <string name="fb_permission_publish" translatable="false">publish_actions</string>
 
 </resources>
