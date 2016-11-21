@@ -53,8 +53,7 @@ public final class AuthenticationManager {
             .build();
 
       mGoogleApiClient = new GoogleApiClient.Builder(context)
-            .enableAutoManage((FragmentActivity) context, connectionResult -> {
-            })
+            .enableAutoManage((FragmentActivity) context, connectionResult -> {})
             .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
             .build();
    }

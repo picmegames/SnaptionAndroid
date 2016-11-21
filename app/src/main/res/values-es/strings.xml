@@ -12,5 +12,6 @@
     <string name="friends_label">Amigos</string>
     <string name="profile_label">Perfil</string>
     <string name="settings_label">Ajustes</string>
+    <string name="log_out_label">Cerrar Sesión</string>
 
 </resources>
