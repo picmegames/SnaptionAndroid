@@ -13,13 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.fragments.WallFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * The Main Activity and entry point for the application.
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity
    DrawerLayout mDrawerLayout;
    @BindView(R.id.navigation_view)
    NavigationView mNavigationView;
+   CircleImageView mProfilePicture;
+   TextView mNameView;
+   TextView mEmailView;
 
    private AuthenticationManager mAuthManager;
    private Fragment mCurrentFragment;
@@ -44,11 +50,28 @@ public class MainActivity extends AppCompatActivity
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       mAuthManager = AuthenticationManager.getInstance(this);
+      mAuthManager.registerCallback(this::goToLogin);
 
       setContentView(R.layout.activity_main);
       ButterKnife.bind(this);
 
       setSupportActionBar(mToolbar);
+
+      View headerView = mNavigationView.getHeaderView(0);
+      mProfilePicture = (CircleImageView) headerView.findViewById(R.id.profile_image);
+      mNameView = (TextView) headerView.findViewById(R.id.username);
+      mEmailView = (TextView) headerView.findViewById(R.id.email);
+
+      Intent intent = getIntent();
+      String profileImageUrl = intent.getStringExtra("profileImageUrl");
+      String name = intent.getStringExtra("name");
+      String email = intent.getStringExtra("email");
+
+      Glide.with(this)
+            .load(profileImageUrl)
+            .into(mProfilePicture);
+      mNameView.setText(name);
+      mEmailView.setText(email);
 
       fragTag = WallFragment.class.getSimpleName();
       mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
@@ -102,12 +125,14 @@ public class MainActivity extends AppCompatActivity
    @Override
    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
       mDrawerLayout.closeDrawers();
-      boolean isLoggingOut = false;
 
       switch (item.getItemId()) {
          case R.id.log_out:
             mAuthManager.logout();
-            isLoggingOut = true;
+
+            mProfilePicture.setImageDrawable(null);
+            mNameView.setText("");
+            mEmailView.setText("");
             break;
 
          default:
@@ -120,18 +145,18 @@ public class MainActivity extends AppCompatActivity
             break;
       }
 
-      if (!isLoggingOut) {
-         getSupportFragmentManager().beginTransaction()
-               .replace(R.id.frame, mCurrentFragment, fragTag).commit();
-      }
-      else {
-         goToLogin();
-      }
+      getSupportFragmentManager().beginTransaction()
+            .replace(R.id.frame, mCurrentFragment, fragTag).commit();
 
       return true;
    }
 
-   private void goToLogin() {
+   @Override
+   public void onBackPressed() {
+      // Don't allow back button in MainActivity
+   }
+
+   private void goToLogin(String profileImageUrl, String name, String email) {
       Intent loginIntent = new Intent(this, LoginActivity.class);
       startActivity(loginIntent);
    }

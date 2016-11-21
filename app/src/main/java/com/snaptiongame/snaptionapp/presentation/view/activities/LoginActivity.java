@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
       // Initialize Authentication Manager
       mAuthManager = AuthenticationManager.getInstance(getApplicationContext());
-      mAuthManager.registerCallback(this::onBackPressed);
+      mAuthManager.registerCallback(this::backToMain);
 
       setContentView(R.layout.activity_login);
       ButterKnife.bind(this);
@@ -54,6 +54,14 @@ public class LoginActivity extends AppCompatActivity {
             .into(mLogo);
 
       mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
+   }
+
+   private void backToMain(String profileImageUrl, String name, String email) {
+      Intent mainIntent = new Intent(this, MainActivity.class);
+      mainIntent.putExtra("profileImageUrl", profileImageUrl);
+      mainIntent.putExtra("name", name);
+      mainIntent.putExtra("email", email);
+      startActivity(mainIntent);
    }
 
    @Override

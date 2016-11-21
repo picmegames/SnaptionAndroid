@@ -18,6 +18,7 @@
     <string name="fb_login_protocol_scheme" translatable="false">fb359612531056210</string>
     <string name="fb_permission_profile" translatable="false">public_profile</string>
     <string name="fb_permission_friends" translatable="false">user_friends</string>
+    <string name="fb_permission_email" translatable="false">email</string>
     <string name="fb_permission_publish" translatable="false">publish_actions</string>
 
 </resources>

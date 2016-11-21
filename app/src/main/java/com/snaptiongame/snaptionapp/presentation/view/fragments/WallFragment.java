@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.activities.LoginActivity;
-import com.snaptiongame.snaptionapp.presentation.view.activities.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView;
 
 import butterknife.BindView;
@@ -65,17 +64,11 @@ public class WallFragment extends Fragment {
       Context context = getContext();
 
       if (!mAuthManager.isLoggedIn()) {
-         mAuthManager.registerCallback(this::goToMain);
          goToLogin();
       }
       else {
          Toast.makeText(context, "This will lead to create game!", Toast.LENGTH_LONG).show();
       }
-   }
-
-   private void goToMain() {
-      Intent mainIntent = new Intent(getContext(), MainActivity.class);
-      startActivity(mainIntent);
    }
 
    private void goToLogin() {
