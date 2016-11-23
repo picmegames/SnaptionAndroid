@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.presentation.view.activities;
+package com.snaptiongame.snaptionapp.presentation.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.presentation.view.fragments.WallFragment;
+import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
+import com.snaptiongame.snaptionapp.presentation.view.wall.WallFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.presentation.view.fragments;
+package com.snaptiongame.snaptionapp.presentation.view.wall;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.presentation.view.activities.LoginActivity;
+import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 import com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView;
 
 import butterknife.BindView;

@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.presentation.view.adapters;
+package com.snaptiongame.snaptionapp.presentation.view.wall;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.presentation.view.viewholders.SnaptionCardViewHolder;
 
 /**
  * @author Tyler Wong
