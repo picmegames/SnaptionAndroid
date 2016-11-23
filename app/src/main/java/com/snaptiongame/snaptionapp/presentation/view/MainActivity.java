@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
    DrawerLayout mDrawerLayout;
    @BindView(R.id.navigation_view)
    NavigationView mNavigationView;
+
    CircleImageView mProfilePicture;
    TextView mNameView;
    TextView mEmailView;
