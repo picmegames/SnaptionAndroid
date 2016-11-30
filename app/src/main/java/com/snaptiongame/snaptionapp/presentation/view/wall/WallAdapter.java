@@ -47,7 +47,7 @@ public class WallAdapter extends RecyclerView.Adapter {
          Glide.clear(holder.mImage);
       }
 
-      if (curSnaption.username != null) {
+      if (curSnaption.pickerName != null) {
          Glide.with(mContext)
                .load("http://img42.wallpapercasa.com/uploads/wallpapers/2012/02/20/327247/" +
                      "thumb_big_hd_e10440b14317b967d73c5ad6467039ae.jpg")
@@ -62,8 +62,8 @@ public class WallAdapter extends RecyclerView.Adapter {
       }
 
       holder.mTopCaption.setText(curSnaption.captions.get(0).caption);
-      holder.mCaptionerName.setText(curSnaption.username);
-      holder.mPickerName.setText(curSnaption.username);
+      holder.mCaptionerName.setText(curSnaption.captions.get(0).username);
+      holder.mPickerName.setText(curSnaption.pickerName);
    }
 
    public void setSnaptions(List<Snaption> snaptions) {
