@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/create_game"
+        android:checked="false"
+        android:title="@string/create_game"/>
+
+    <item
+        android:id="@+id/share"
+        android:checked="false"
+        android:title="@string/share"/>
+
+</menu>

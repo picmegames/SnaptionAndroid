@@ -1,19 +1,21 @@
 {
   "project_info": {
-    "project_number": "112909434761",
-    "project_id": "snaption-b48b9"
+    "project_number": "346066457840",
+    "firebase_url": "https://zinc-wares-148806.firebaseio.com",
+    "project_id": "zinc-wares-148806",
+    "storage_bucket": "zinc-wares-148806.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:112909434761:android:c32db780c43899a8",
+        "mobilesdk_app_id": "1:346066457840:android:c32db780c43899a8",
         "android_client_info": {
           "package_name": "com.snaptiongame.snaptionapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "112909434761-np8iqbibe146obegoh1fh1jv9bcmmfek.apps.googleusercontent.com",
+          "client_id": "346066457840-2kb7gucs2uktlk2nd3d19qivi5ini68p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.snaptiongame.snaptionapp",
@@ -21,13 +23,13 @@
           }
         },
         {
-          "client_id": "112909434761-vaojfc5uhsm0au8g7d5nk061blr3ceja.apps.googleusercontent.com",
+          "client_id": "346066457840-g7fg2s2283kb7le97fga5pd0sb4hv86d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBtMckiQbFMtU98yfDeXn9WCR-2DUPb14o"
+          "current_key": "AIzaSyA8QlavFiTfIC4sLmj1i1qFGCbv2wlDIEs"
         }
       ],
       "services": {
@@ -35,11 +37,23 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346066457840-g7fg2s2283kb7le97fga5pd0sb4hv86d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "346066457840-shfaq8o9p3o2g1usba6p5qg2752lpnnf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.snapstone.SnaptionVP"
+              }
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

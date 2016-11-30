@@ -48,6 +48,9 @@
             </intent-filter>
         </activity>
 
+        <provider android:authorities="com.facebook.app.FacebookContentProvider359612531056210"
+                  android:name="com.facebook.FacebookContentProvider"
+                  android:exported="true"/>
     </application>
 
 </manifest>
