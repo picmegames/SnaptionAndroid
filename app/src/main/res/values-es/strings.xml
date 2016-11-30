@@ -3,15 +3,14 @@
     <!-- Titles -->
     <string name="app_name">Snaption</string>
 
-    <!-- Tags -->
-    <string name="open_drawer">Navigation View Open</string>
-    <string name="close_drawer">Navigation View Closed</string>
-
     <!-- Labels -->
     <string name="wall_label">Pared</string>
     <string name="friends_label">Amigos</string>
     <string name="profile_label">Perfil</string>
     <string name="settings_label">Ajustes</string>
-    <string name="log_out_label">Cerrar Sesión</string>
+    <string name="log_out_label">Cerrar sesión</string>
+    <string name="share">Compartir</string>
+    <string name="create_game">Crear juego</string>
+    <string name="top_caption">Subtítulo superior</string>
 
 </resources>

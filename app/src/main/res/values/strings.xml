@@ -3,8 +3,14 @@
     <string name="app_name">Snaption</string>
 
     <!-- Tags -->
-    <string name="open_drawer">Navigation View Open</string>
-    <string name="close_drawer">Navigation View Closed</string>
+    <string name="open_drawer" translatable="false">Navigation View Open</string>
+    <string name="close_drawer" translatable="false">Navigation View Closed</string>
+
+    <!-- Urls -->
+    <string name="snaption_url" translatable="false">http://www.snaptiongame.com/</string>
+
+    <!-- Titles -->
+    <string name="top_caption">Top Comment</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
@@ -12,6 +18,8 @@
     <string name="profile_label">Profile</string>
     <string name="settings_label">Settings</string>
     <string name="log_out_label">Log Out</string>
+    <string name="share">Share</string>
+    <string name="create_game">Create Game</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

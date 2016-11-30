@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
          case R.id.log_out:
             mAuthManager.logout();
 
-            mProfilePicture.setImageDrawable(null);
+            Glide.clear(mProfilePicture);
             mNameView.setText("");
             mEmailView.setText("");
             break;

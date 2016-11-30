@@ -16,23 +16,33 @@ public final class Snaption {
    public static final String sStartDate = "start_date";
    public static final String sEndDate = "end_date";
    public static final String sIsPrivate = "is_private";
+   public static final String sUserId = "user_id";
+   public static final String sUsername = "username";
    public static final String sImage = "image";
+   public static final String sImageUrl = "image_url";
    public static final String sCaptions = "captions";
 
-   @SerializedName(sId) public String id;
+   @SerializedName(sId) public int id;
    @SerializedName(sStartDate) public long startDate;
    @SerializedName(sEndDate) public long endDate;
    @SerializedName(sIsPrivate) public boolean isPrivate;
+   @SerializedName(sUsername) public String username;
+   @SerializedName(sUserId) public int userId;
    @SerializedName(sImage) public byte[] image;
+   @SerializedName(sImageUrl) public String imageUrl;
    @SerializedName(sCaptions) public List<Caption> captions;
 
    @ParcelConstructor
-   public Snaption(long startDate, long endDate, boolean isPrivate,
-                   byte[] image, List<Caption> captions) {
+   public Snaption(int id, long startDate, long endDate, boolean isPrivate, String username, int userId,
+                   byte[] image, String imageUrl, List<Caption> captions) {
+      this.id = id;
       this.startDate = startDate;
       this.endDate = endDate;
       this.isPrivate = isPrivate;
+      this.username = username;
+      this.userId = userId;
       this.image = image;
+      this.imageUrl = imageUrl;
       this.captions = captions;
    }
 
@@ -46,11 +56,11 @@ public final class Snaption {
       }
       Snaption snaption = (Snaption) o;
 
-      return id.equals(snaption.id);
+      return id == snaption.id;
    }
 
    @Override
    public int hashCode() {
-      return id.hashCode();
+      return id;
    }
 }

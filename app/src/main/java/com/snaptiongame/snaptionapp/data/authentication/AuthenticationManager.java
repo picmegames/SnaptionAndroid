@@ -215,21 +215,17 @@ public final class AuthenticationManager {
 
    private void handleGoogleSignInResult(GoogleSignInResult result) {
       if (result.isSuccess()) {
-         GoogleSignInAccount account = result.getSignInAccount();
-
-         if (account != null) {
-            System.out.println(account.getEmail());
-         }
-
          // Handle Google Sign In success
          // Send user e-mail and other info to server?
          // Send some access token?
          GoogleSignInAccount profileResult = result.getSignInAccount();
          Uri profileImageUri = profileResult.getPhotoUrl();
          String profileImageUrl = "";
+
          if (profileImageUri != null) {
             profileImageUrl = profileResult.getPhotoUrl().toString();
          }
+
          String username = profileResult.getDisplayName();
          String email = profileResult.getEmail();
 

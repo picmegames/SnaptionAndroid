@@ -4,7 +4,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent">
 
-    <com.snaptiongame.snaptionapp.presentation.view.customviews.AnimatedRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/wall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,6 @@
         app:fabSize="normal"
         app:layout_anchor="@+id/wall"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="com.snaptiongame.snaptionapp.presentation.view.animations.FABScrollBehavior"
         app:rippleColor="@color/colorAccent"/>
 
 </android.support.design.widget.CoordinatorLayout>
