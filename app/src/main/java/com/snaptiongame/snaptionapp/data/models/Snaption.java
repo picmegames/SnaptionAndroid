@@ -16,8 +16,8 @@ public final class Snaption {
    public static final String sStartDate = "start_date";
    public static final String sEndDate = "end_date";
    public static final String sIsPrivate = "is_private";
-   public static final String sUserId = "user_id";
-   public static final String sUsername = "username";
+   public static final String sPickerId = "picker_id";
+   public static final String sPickerName = "picker_name";
    public static final String sImage = "image";
    public static final String sImageUrl = "image_url";
    public static final String sCaptions = "captions";
@@ -26,21 +26,21 @@ public final class Snaption {
    @SerializedName(sStartDate) public long startDate;
    @SerializedName(sEndDate) public long endDate;
    @SerializedName(sIsPrivate) public boolean isPrivate;
-   @SerializedName(sUsername) public String username;
-   @SerializedName(sUserId) public int userId;
+   @SerializedName(sPickerName) public String pickerName;
+   @SerializedName(sPickerId) public int pickerId;
    @SerializedName(sImage) public byte[] image;
    @SerializedName(sImageUrl) public String imageUrl;
    @SerializedName(sCaptions) public List<Caption> captions;
 
    @ParcelConstructor
-   public Snaption(int id, long startDate, long endDate, boolean isPrivate, String username, int userId,
-                   byte[] image, String imageUrl, List<Caption> captions) {
+   public Snaption(int id, long startDate, long endDate, boolean isPrivate, String pickerName,
+                   int pickerId, byte[] image, String imageUrl, List<Caption> captions) {
       this.id = id;
       this.startDate = startDate;
       this.endDate = endDate;
       this.isPrivate = isPrivate;
-      this.username = username;
-      this.userId = userId;
+      this.pickerName = pickerName;
+      this.pickerId = pickerId;
       this.image = image;
       this.imageUrl = imageUrl;
       this.captions = captions;

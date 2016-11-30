@@ -26,10 +26,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    @BindView(R.id.image)
    ImageView mImage;
-   @BindView(R.id.commenter_image)
-   CircleImageView mCommenterImage;
-   @BindView(R.id.commenter_name)
-   TextView mCommenterName;
+   @BindView(R.id.captioner_image)
+   CircleImageView mCaptionerImage;
+   @BindView(R.id.captioner_name)
+   TextView mCaptionerName;
    @BindView(R.id.picker_image)
    CircleImageView mPickerImage;
    @BindView(R.id.picker_name)

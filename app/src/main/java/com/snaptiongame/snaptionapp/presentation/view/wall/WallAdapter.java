@@ -51,18 +51,18 @@ public class WallAdapter extends RecyclerView.Adapter {
          Glide.with(mContext)
                .load("http://img42.wallpapercasa.com/uploads/wallpapers/2012/02/20/327247/" +
                      "thumb_big_hd_e10440b14317b967d73c5ad6467039ae.jpg")
-               .into(holder.mCommenterImage);
+               .into(holder.mCaptionerImage);
          Glide.with(mContext)
                .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
                .into(holder.mPickerImage);
       }
       else {
-         Glide.clear(holder.mCommenterImage);
+         Glide.clear(holder.mCaptionerImage);
          Glide.clear(holder.mPickerImage);
       }
 
       holder.mTopCaption.setText(curSnaption.captions.get(0).caption);
-      holder.mCommenterName.setText(curSnaption.username);
+      holder.mCaptionerName.setText(curSnaption.username);
       holder.mPickerName.setText(curSnaption.username);
    }
 

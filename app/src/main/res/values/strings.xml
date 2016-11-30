@@ -10,7 +10,7 @@
     <string name="snaption_url" translatable="false">http://www.snaptiongame.com/</string>
 
     <!-- Titles -->
-    <string name="top_caption">Top Comment</string>
+    <string name="top_caption">Top Caption</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
