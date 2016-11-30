@@ -29,4 +29,33 @@
     <string name="fb_permission_email" translatable="false">email</string>
     <string name="fb_permission_publish" translatable="false">publish_actions</string>
 
+
+    <!-- Create New Game Labels -->
+    <string name="create_game_label">Create Game</string>
+    <string name="content_level_label">Content Level</string>
+    <string name="category_label">Category</string>
+    <string name="privacy_label">Private Game</string>
+    <string name="timer_label">Timer</string>
+
+
+    <!-- Content Rating Labels-->
+    <string name="family_label">Family</string>
+    <string name="mature_label">Mature</string>
+
+
+    <string-array name="content_ratings_array">
+        <item>Family</item>
+        <item>Mature</item>
+    </string-array>
+
+    <string-array name="categories_array">
+        <item>Animals</item>
+        <item>Nature</item>
+        <item>People</item>
+        <item>Funny</item>
+        <item>Crazy</item>
+    </string-array>
+
+
+
 </resources>
