@@ -52,6 +52,9 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
 
          menu.setOnMenuItemClickListener(item -> {
             switch(item.getItemId()) {
+               case R.id.flag:
+                  Toast.makeText(mContext, "This will flag a photo as inappropriate!",
+                        Toast.LENGTH_LONG).show();
                case R.id.create_game:
                   Toast.makeText(mContext, "This will make a game with the picture.",
                         Toast.LENGTH_LONG).show();

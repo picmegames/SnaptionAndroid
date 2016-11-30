@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
       // Set Logo
       Glide.with(this)
-            .load(R.drawable.snaption_logo)
+            .load(R.mipmap.ic_launcher)
             .override(logoWidth, logoHeight)
             .fitCenter()
             .into(mLogo);

@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/flag"
+        android:checked="false"
+        android:title="@string/flag"/>
+
+    <item
         android:id="@+id/create_game"
         android:checked="false"
         android:title="@string/create_game"/>

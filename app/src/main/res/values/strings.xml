@@ -20,6 +20,7 @@
     <string name="log_out_label">Log Out</string>
     <string name="share">Share</string>
     <string name="create_game">Create Game</string>
+    <string name="flag">Flag As Inappropriate</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

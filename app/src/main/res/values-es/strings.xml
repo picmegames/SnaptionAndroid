@@ -12,5 +12,6 @@
     <string name="share">Compartir</string>
     <string name="create_game">Crear juego</string>
     <string name="top_caption">Subtítulo superior</string>
+    <string name="flag">Marcar como inapropiado</string>
 
 </resources>
