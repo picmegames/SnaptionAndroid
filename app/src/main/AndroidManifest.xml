@@ -5,8 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
+        android:screenOrientation="portrait"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,9 +26,18 @@
             android:windowSoftInputMode="adjustPan">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.view.CreateGame"
+            android:configChanges="orientation"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
+
+
         </activity>
 
         <activity
@@ -51,6 +62,7 @@
         <provider android:authorities="com.facebook.app.FacebookContentProvider359612531056210"
                   android:name="com.facebook.FacebookContentProvider"
                   android:exported="true"/>
+
     </application>
 
 </manifest>

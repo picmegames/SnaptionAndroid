@@ -71,6 +71,10 @@ public class WallAdapter extends RecyclerView.Adapter {
       notifyDataSetChanged();
    }
 
+   public List<Snaption> getSnaptions() {
+      return this.mSnaptions;
+   }
+
    @Override
    public int getItemCount() {
       return mSnaptions.size();
