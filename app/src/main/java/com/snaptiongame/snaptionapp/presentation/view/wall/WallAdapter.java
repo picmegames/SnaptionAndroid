@@ -1,6 +1,8 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,11 @@ public class WallAdapter extends RecyclerView.Adapter {
                .load(curSnaption.imageUrl)
                .centerCrop()
                .into(holder.mImage);
+      }
+      else if (curSnaption.image != null) {
+         holder.mImage.setImageDrawable(
+               new BitmapDrawable(mContext.getResources(), BitmapFactory.decodeByteArray(
+                     curSnaption.image, 0, curSnaption.image.length)));
       }
       else {
          Glide.clear(holder.mImage);

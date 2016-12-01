@@ -9,11 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
@@ -22,7 +20,6 @@ import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.CreateGame;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
-import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -103,11 +100,16 @@ public class WallFragment extends Fragment {
    public void createGame() {
       if (!mAuthManager.isLoggedIn()) {
          goToLogin();
+         mAuthManager.registerCallback(this::goToCreateGame);
       }
       else {
-         Intent createGame = new Intent(getContext(), CreateGame.class);
-         startActivityForResult(createGame, 2);
+         goToCreateGame("", "", "");
       }
+   }
+
+   private void goToCreateGame(String profileImageUrl, String name, String email) {
+      Intent createGameIntent = new Intent(getContext(), CreateGame.class);
+      startActivity(createGameIntent);
    }
 
    private void goToLogin() {

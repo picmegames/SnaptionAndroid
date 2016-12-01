@@ -2,129 +2,88 @@ package com.snaptiongame.snaptionapp.presentation.view;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.icu.util.Calendar;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.graphics.drawable.BitmapDrawable;
 
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.snaptiongame.snaptionapp.Manifest;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class CreateGame extends AppCompatActivity {
+    @BindView(R.id.newGameImage)
+    ImageView mNewGameImage;
+    @BindView(R.id.createGameUser)
+    TextView mUsernameView;
+    @BindView(R.id.contentRatingsSpinner)
+    Spinner mContentSpinner;
+    @BindView(R.id.categorySpinner)
+    Spinner mCategorySpinner;
 
-    private ImageView newGameImage;
-
-    private Spinner contentSpinner;
-
-    private Spinner categorySpinner;
-
-    private Button createGameButton;
-
-    private CardView imageHolder;
-
-    private Uri chosenImageURI;
-
-    //private  URI chosenImageURI;
+    private Uri mChosenImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_game);
-
-        newGameImage = (ImageView) findViewById(R.id.newGameImage);
-        newGameImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
-                imagePickerIntent.setType("image/*");
-                startActivityForResult(imagePickerIntent, 1);
-            }
-        });
-
-        createGameButton = (Button) findViewById(R.id.createGameButton);
-        createGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = findViewById(R.id.createGameUser).toString();
-                String contentLevel = contentSpinner.getSelectedItem().toString();
-                String category = categorySpinner.getSelectedItem().toString();
-
-                if (newGameImage.getDrawable() != null) {
-                    byte[] imageByteArray = convertImageToByteArray();
-
-                    Caption fakeCaption = new Caption(30, 30, 30,  username, 0, "Here is a caption");
-                    List<Caption> fakeCaptions = new ArrayList<Caption>();
-                    fakeCaptions.add(0,fakeCaption);
-
-                    
-                    Snaption newSnaption = new Snaption(30, java.util.Calendar.DATE, java.util.Calendar.DATE,
-                            false, username, 30, imageByteArray, "null", fakeCaptions);
-
-
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("Snaption", newSnaption);
-                    setResult(2, resultIntent);
-                    finish();
-
-                }
-
-            }
-        });
+        ButterKnife.bind(this);
 
         assignSpinnerValues();
     }
 
+    @OnClick(R.id.newGameImage)
+    public void getImage() {
+        Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
+        imagePickerIntent.setType("image/*");
+        startActivityForResult(imagePickerIntent, 1);
+    }
+
+    @OnClick(R.id.createGameButton)
+    public void createGame() {
+        String username = mUsernameView.getText().toString();
+
+        if (mNewGameImage.getDrawable() != null) {
+            byte[] imageByteArray = convertImageToByteArray();
+
+            Caption fakeCaption = new Caption(30, 30, 30, username, 0, "Here is a caption");
+            List<Caption> fakeCaptions = new ArrayList<>();
+            fakeCaptions.add(0, fakeCaption);
+
+            Snaption newSnaption = new Snaption(30, java.util.Calendar.DATE, java.util.Calendar.DATE,
+                  false, username, 30, imageByteArray, null, fakeCaptions);
+
+            // Mock send to server
+            SnaptionProvider.testSnaptions.add(0, newSnaption);
+
+            onBackPressed();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        int wrapContent = ViewGroup.LayoutParams.WRAP_CONTENT;
-        int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
-
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK)
-        {
-
-            chosenImageURI = data.getData();
-            newGameImage.setImageURI(chosenImageURI);
-
+        if (resultCode == RESULT_OK) {
+            mChosenImageUri = data.getData();
+            mNewGameImage.setImageURI(mChosenImageUri);
         }
     }
 
     private void assignSpinnerValues() {
-
-
-        contentSpinner = (Spinner) findViewById(R.id.contentRatingsSpinner);
-        categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
-
-
         ArrayAdapter contentAdapter = ArrayAdapter.createFromResource(this,
                 R.array.content_ratings_array, android.R.layout.simple_spinner_item);
 
@@ -134,25 +93,15 @@ public class CreateGame extends AppCompatActivity {
         contentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        contentSpinner.setAdapter(contentAdapter);
-        categorySpinner.setAdapter(categoryAdapter);
+        mContentSpinner.setAdapter(contentAdapter);
+        mCategorySpinner.setAdapter(categoryAdapter);
     }
 
     private byte[] convertImageToByteArray() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        URI javaURI = null;
-        FileInputStream fileInputStream = null;
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-        int len = 0;
-        Drawable imageDrawable = newGameImage.getDrawable();
-        Bitmap bmp = ((BitmapDrawable)imageDrawable).getBitmap();
+        Drawable imageDrawable = mNewGameImage.getDrawable();
+        Bitmap bmp = ((BitmapDrawable) imageDrawable).getBitmap();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        buffer = byteArrayOutputStream.toByteArray();
-        return buffer;
-
-
-
-        //return buffer;
+        return byteArrayOutputStream.toByteArray();
     }
 }

@@ -16,6 +16,7 @@ import rx.Observable;
 
 public class SnaptionProvider {
    private static SnaptionApiService mApiService = SnaptionApiProvider.getApiService();
+   public static List<Snaption> testSnaptions = new ArrayList<>();
 
    public static Observable<List<Snaption>> getAllSnaptions() {
       List<Caption> testCaptions1 = new ArrayList<>();
@@ -31,7 +32,6 @@ public class SnaptionProvider {
             "http://writm.com/wp-content/uploads/2016/08/Cat-hd-wallpapers.jpg", testCaptions1);
       Snaption testSnaption4 = new Snaption(0, 0, 1, false, "Quang", 0, null,
             "http://www.i-love-cats.com/images/2015/04/12/cat-wallpaper-38.jpg", testCaptions1);
-      List<Snaption> testSnaptions = new ArrayList<>();
       testSnaptions.add(testSnaption1);
       testSnaptions.add(testSnaption2);
       testSnaptions.add(testSnaption3);

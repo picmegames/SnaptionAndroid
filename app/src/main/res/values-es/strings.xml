@@ -13,5 +13,11 @@
     <string name="create_game">Crear juego</string>
     <string name="top_caption">Subtítulo superior</string>
     <string name="flag">Marcar como inapropiado</string>
+    <string name="category_label">Categoría</string>
+    <string name="content_level_label">Nivel de contenido</string>
+    <string name="family_label">Familia</string>
+    <string name="mature_label">Maduro</string>
+    <string name="privacy_label">Juego privado</string>
+    <string name="timer_label">Minutero</string>
 
 </resources>

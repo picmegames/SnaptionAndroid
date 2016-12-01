@@ -1,7 +1,6 @@
 package com.snaptiongame.snaptionapp.data.models;
 
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +8,6 @@ import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,31 +50,21 @@ public final class Snaption implements Parcelable{
    }
 
    public Snaption(android.os.Parcel in) {
-
-
-
-
       this.id = in.readInt();
-      //Log.i("ID", String.valueOf(id));
       this.startDate = in.readLong();
-      //Log.i("startDate", String.valueOf(startDate));
       this.endDate = in.readLong();
-      //Log.i("endDate", String.valueOf(endDate));
       this.isPrivate = in.readByte() != 0x00;
-      //Log.i("isPrivate", String.valueOf(isPrivate));
       this.pickerName = in.readString();
-      //Log.i("pickerName", String.valueOf(pickerName));
       this.pickerId = in.readInt();
-      //Log.i("pickerID", String.valueOf(pickerId));
       this.image = new byte[in.readInt()];
 
       in.readByteArray(this.image);
       this.imageUrl = in.readString();
       if (in.readByte() == 0x01) {
-         this.captions = new ArrayList<Caption>();
+         this.captions = new ArrayList<>();
          in.readList(captions, Caption.class.getClassLoader());
       }
-      else{
+      else {
          captions = null;
       }
    }
@@ -117,17 +105,17 @@ public final class Snaption implements Parcelable{
 
       dest.writeByteArray(image);
       dest.writeString(imageUrl);
+
       if (captions == null) {
          dest.writeByte((byte) (0x00));
-      } else {
+      }
+      else {
          dest.writeByte((byte) (0x01));
          dest.writeList(captions);
       }
    }
 
    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-
-
       @Override
       public Object createFromParcel(android.os.Parcel parcel) {
          return new Snaption(parcel);

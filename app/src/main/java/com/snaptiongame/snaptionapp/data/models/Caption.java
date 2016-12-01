@@ -80,7 +80,6 @@ public final class Caption implements Parcelable {
    }
 
    public static final Parcelable.Creator<Caption> CREATOR = new Parcelable.Creator<Caption>() {
-
       @Override
       public Caption createFromParcel(android.os.Parcel in) {
          return new Caption(in);

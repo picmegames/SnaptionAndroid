@@ -32,7 +32,6 @@
 
 
     <!-- Create New Game Labels -->
-    <string name="create_game_label">Create Game</string>
     <string name="content_level_label">Content Level</string>
     <string name="category_label">Category</string>
     <string name="privacy_label">Private Game</string>
