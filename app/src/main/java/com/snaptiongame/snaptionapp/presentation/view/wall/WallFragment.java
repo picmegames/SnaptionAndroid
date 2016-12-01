@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,10 @@ import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
+import com.snaptiongame.snaptionapp.presentation.view.CreateGame;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -102,7 +105,8 @@ public class WallFragment extends Fragment {
          goToLogin();
       }
       else {
-         Toast.makeText(getContext(), "This will lead to create game!", Toast.LENGTH_LONG).show();
+         Intent createGame = new Intent(getContext(), CreateGame.class);
+         startActivityForResult(createGame, 2);
       }
    }
 
@@ -110,6 +114,21 @@ public class WallFragment extends Fragment {
       Intent loginIntent = new Intent(getContext(), LoginActivity.class);
       startActivity(loginIntent);
    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            Bundle returnData = data.getExtras();
+            Snaption snaption = returnData.getParcelable("Snaption");
+
+            mAdapter.getSnaptions().add(0, snaption);
+
+           
+            mAdapter.notifyDataSetChanged();
+
+        }
+    }
 
    @Override
    public void onDestroyView() {
