@@ -20,6 +20,7 @@ import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.CreateGame;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,7 +59,7 @@ public class WallFragment extends Fragment {
       mUnbinder = ButterKnife.bind(this, view);
 
       mWall.setLayoutManager(new LinearLayoutManager(getContext()));
-      mAdapter = new WallAdapter(getContext(), null);
+      mAdapter = new WallAdapter(getContext(), new ArrayList<>());
       mWall.setAdapter(mAdapter);
 
       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -100,7 +101,6 @@ public class WallFragment extends Fragment {
    public void createGame() {
       if (!mAuthManager.isLoggedIn()) {
          goToLogin();
-         mAuthManager.registerCallback(this::goToCreateGame);
       }
       else {
          goToCreateGame("", "", "");
