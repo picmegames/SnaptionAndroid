@@ -25,6 +25,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * @author Nick Romero
+ */
+
 public class CreateGame extends AppCompatActivity {
     @BindView(R.id.newGameImage)
     ImageView mNewGameImage;
