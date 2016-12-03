@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
 
       // Initialize Authentication Manager
-      mAuthManager = AuthenticationManager.getInstance(getApplicationContext());
+      mAuthManager = AuthenticationManager.getInstance(this);
       mAuthManager.registerCallback(this::backToMain);
 
       setContentView(R.layout.activity_login);
