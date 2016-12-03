@@ -19,7 +19,6 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            buildConfigField "String", "SNAPTION_SERVER", '"http://104.198.36.194"'
         }
         release {
             debuggable false

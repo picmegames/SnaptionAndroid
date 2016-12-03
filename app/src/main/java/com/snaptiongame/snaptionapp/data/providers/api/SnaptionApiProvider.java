@@ -2,7 +2,6 @@ package com.snaptiongame.snaptionapp.data.providers.api;
 
 import android.os.AsyncTask;
 
-import com.snaptiongame.snaptionapp.BuildConfig;
 import com.snaptiongame.snaptionapp.SnaptionApplication;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
@@ -21,6 +20,8 @@ public class SnaptionApiProvider {
    private static Retrofit.Builder builder;
    private static Scheduler networkScheduler;
 
+   private static final String SNAPTION_SERVER_URL = "http://104.198.36.194";
+
    static {
       builder = new Retrofit.Builder()
             .client(SnaptionApplication.makeOkHttpClient())
@@ -29,7 +30,7 @@ public class SnaptionApiProvider {
 
    public static SnaptionApiService getApiService() {
       if (apiService == null) {
-         setBaseUrl(BuildConfig.SNAPTION_SERVER);
+         setBaseUrl(SNAPTION_SERVER_URL);
       }
 
       if (networkScheduler == null) {
