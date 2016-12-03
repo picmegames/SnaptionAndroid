@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.presentation.view.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
    private static final int RC_SIGN_IN = 2222;
 
    @Override
-   protected void onCreate(Bundle savedInstanceState) {
+   protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
       // Initialize Authentication Manager

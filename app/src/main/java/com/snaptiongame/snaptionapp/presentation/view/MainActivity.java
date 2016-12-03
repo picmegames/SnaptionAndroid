@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity
    private String fragTag;
 
    @Override
-   protected void onCreate(Bundle savedInstanceState) {
+   protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       mAuthManager = AuthenticationManager.getInstance(this);
       mAuthManager.registerCallback(this::goToLogin);
