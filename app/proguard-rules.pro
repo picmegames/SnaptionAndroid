@@ -22,6 +22,7 @@
 -dontwarn retrofit2.Platform$Java8
 -keepattributes Signature
 -keepattributes Exceptions
+-dontwarn retrofit2.adapter.rxjava.CompletableHelper$**
 
 # Okio
 -keep class sun.misc.Unsafe { *; }
@@ -38,3 +39,9 @@
 
 # retrolambda
 -dontwarn java.lang.invoke.*
+
+# Parcel library
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
+-keep class org.parceler.Parceler$$Parcels
