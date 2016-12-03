@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ public class CreateGame extends AppCompatActivity {
                   false, username, 30, imageByteArray, null, fakeCaptions);
 
             // Mock send to server
-            SnaptionProvider.testSnaptions.add(0, newSnaption);
+            //SnaptionProvider.testSnaptions.add(0, newSnaption);
 
             onBackPressed();
         }

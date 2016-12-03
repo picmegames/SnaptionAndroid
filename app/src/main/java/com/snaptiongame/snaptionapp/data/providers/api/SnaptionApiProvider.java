@@ -1,42 +1,55 @@
 package com.snaptiongame.snaptionapp.data.providers.api;
 
+import android.os.AsyncTask;
+
+import com.snaptiongame.snaptionapp.BuildConfig;
+import com.snaptiongame.snaptionapp.SnaptionApplication;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Scheduler;
+import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
  */
 
 public class SnaptionApiProvider {
-   private static SnaptionApiService mApiService;
-   private static Retrofit.Builder mBuilder;
-   private static Scheduler mNetworkScheduler;
+   private static SnaptionApiService apiService;
+   private static Retrofit.Builder builder;
+   private static Scheduler networkScheduler;
+
+   static {
+      builder = new Retrofit.Builder()
+            .client(SnaptionApplication.makeOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create(SnaptionApplication.gson));
+   }
 
    public static SnaptionApiService getApiService() {
-      if (mApiService == null) {
-         // setBaseUrl(BuildConfig.SNAPTION_SERVER);
+      if (apiService == null) {
+         setBaseUrl(BuildConfig.SNAPTION_SERVER);
       }
 
-      if (mNetworkScheduler == null) {
-         // setNetworkScheduler(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
+      if (networkScheduler == null) {
+         setNetworkScheduler(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
       }
 
-      return mApiService;
+      return apiService;
    }
 
    public static Retrofit.Builder setBaseUrl(String baseUrl) {
-      mBuilder = mBuilder.baseUrl(baseUrl);
-      mApiService = mBuilder.build().create(SnaptionApiService.class);
+      builder = builder.baseUrl(baseUrl);
+      apiService = builder.build().create(SnaptionApiService.class);
 
-      return mBuilder;
+      return builder;
    }
 
    public static Retrofit.Builder setNetworkScheduler(Scheduler scheduler) {
-      mNetworkScheduler = scheduler;
-      // mBuilder = mBuilder.addCallAdapterFactory();
-      mApiService = mBuilder.build().create(SnaptionApiService.class);
-      return mBuilder;
+      networkScheduler = scheduler;
+      builder = builder.addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(scheduler));
+      apiService = builder.build().create(SnaptionApiService.class);
+      return builder;
    }
 }

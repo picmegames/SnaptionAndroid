@@ -39,9 +39,9 @@ public class WallAdapter extends RecyclerView.Adapter {
       SnaptionCardViewHolder holder = (SnaptionCardViewHolder) viewHolder;
       Snaption curSnaption = mSnaptions.get(position);
 
-      if (curSnaption.imageUrl != null) {
+      if (curSnaption.picture != null) {
          Glide.with(mContext)
-               .load(curSnaption.imageUrl)
+               .load(curSnaption.picture)
                .centerCrop()
                .into(holder.mImage);
       }
@@ -68,8 +68,8 @@ public class WallAdapter extends RecyclerView.Adapter {
          Glide.clear(holder.mPickerImage);
       }
 
-      holder.mTopCaption.setText(curSnaption.captions.get(0).caption);
-      holder.mCaptionerName.setText(curSnaption.captions.get(0).username);
+      //holder.mTopCaption.setText(curSnaption.captions.get(0).caption);
+      //holder.mCaptionerName.setText(curSnaption.captions.get(0).username);
       holder.mPickerName.setText(curSnaption.pickerName);
    }
 
