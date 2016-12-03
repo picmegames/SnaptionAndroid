@@ -13,9 +13,10 @@ import java.lang.reflect.Type;
  * @author Tyler Wong
  */
 
-public class SnaptionConverter implements JsonDeserializer {
+public class SnaptionConverter implements JsonDeserializer<Snaption> {
    @Override
-   public Object deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+   public Snaption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+         throws JsonParseException {
       JsonElement fields = json.getAsJsonObject().get("fields");
       return new Gson().fromJson(fields, Snaption.class);
    }

@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.presentation.view.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,11 +35,11 @@ public class LoginActivity extends AppCompatActivity {
    private static final int RC_SIGN_IN = 2222;
 
    @Override
-   protected void onCreate(Bundle savedInstanceState) {
+   protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
 
       // Initialize Authentication Manager
-      mAuthManager = AuthenticationManager.getInstance(getApplicationContext());
+      mAuthManager = AuthenticationManager.getInstance(this);
       mAuthManager.registerCallback(this::backToMain);
 
       setContentView(R.layout.activity_login);
@@ -57,11 +58,8 @@ public class LoginActivity extends AppCompatActivity {
       mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
    }
 
-   private void backToMain(String profileImageUrl, String name, String email) {
+   private void backToMain() {
       Intent mainIntent = new Intent(this, MainActivity.class);
-      mainIntent.putExtra("profileImageUrl", profileImageUrl);
-      mainIntent.putExtra("name", name);
-      mainIntent.putExtra("email", email);
       startActivity(mainIntent);
    }
 

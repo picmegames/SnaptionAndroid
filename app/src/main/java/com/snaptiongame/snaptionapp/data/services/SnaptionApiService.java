@@ -19,14 +19,14 @@ public interface SnaptionApiService {
    @GET("/games")
    Observable<List<Snaption>> getSnaptions();
 
+   @POST("/games")
+   Observable<Void> addSnaption(@Body Snaption snaption);
+
    @GET("/api/snaptions/{id}")
    Observable<Snaption> getSnaption(@Path("id") String id);
 
    @GET("/api/snaptions/{id}/captions")
    Observable<List<Caption>> getCaptions(@Path("id") String id);
-
-   @POST("/api/snaptions/new")
-   Observable<Void> addSnaption(@Body Snaption snaption);
 
    @POST("/api/snaptions/{id}/caption")
    Observable<Void> addCaption(String id, @Body Caption caption);

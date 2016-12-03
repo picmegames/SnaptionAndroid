@@ -3,7 +3,6 @@ package com.snaptiongame.snaptionapp.data.authentication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -32,12 +31,12 @@ import org.json.JSONObject;
  */
 
 public final class AuthenticationManager {
-   private static AuthenticationManager mAuthManager;
+   private static AuthenticationManager authManager;
 
-   private CallbackManager mCallbackManager;
-   private GoogleApiClient mGoogleApiClient;
-   private SharedPreferences mPreferences;
-   private AuthenticationCallback mAuthCallback;
+   private CallbackManager callbackManager;
+   private GoogleApiClient googleApiClient;
+   private SharedPreferences preferences;
+   private AuthenticationCallback authCallback;
 
    private static final String LOGGED_IN = "logged in";
    private static final String FACEBOOK_LOGIN = "facebook";
@@ -46,16 +45,20 @@ public final class AuthenticationManager {
    private static final String FB_FIELDS = "fields";
    private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large)";
 
+   private static final String PROFILE_IMAGE_URL = "image_url";
+   private static final String FULL_NAME = "full_name";
+   private static final String EMAIL = "email";
+
    private AuthenticationManager(Context context) {
       // Init Facebook SDK
       FacebookSdk.sdkInitialize(context);
 
       // Get Shared Preferences Editor
-      mPreferences = context.getSharedPreferences(context.getPackageName(),
+      preferences = context.getSharedPreferences(context.getPackageName(),
             Context.MODE_PRIVATE);
 
       // Init Facebook Login Callbacks
-      mCallbackManager = CallbackManager.Factory.create();
+      callbackManager = CallbackManager.Factory.create();
 
       // Init Google Sign In APIs
       GoogleSignInOptions signInOptions = new GoogleSignInOptions
@@ -63,7 +66,7 @@ public final class AuthenticationManager {
             .requestEmail()
             .build();
 
-      mGoogleApiClient = new GoogleApiClient.Builder(context)
+      googleApiClient = new GoogleApiClient.Builder(context)
             .enableAutoManage((FragmentActivity) context, connectionResult -> {
             })
             .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
@@ -71,11 +74,11 @@ public final class AuthenticationManager {
    }
 
    public static AuthenticationManager getInstance(Context context) {
-      if (mAuthManager == null) {
-         mAuthManager = new AuthenticationManager(context);
+      if (authManager == null) {
+         authManager = new AuthenticationManager(context);
       }
 
-      return mAuthManager;
+      return authManager;
    }
 
    public void googleActivityResult(Intent data) {
@@ -84,7 +87,7 @@ public final class AuthenticationManager {
    }
 
    public void facebookActivityResult(int requestCode, int resultCode, Intent data) {
-      mCallbackManager.onActivityResult(requestCode, resultCode, data);
+      callbackManager.onActivityResult(requestCode, resultCode, data);
    }
 
    public void setFacebookCallback(Context context, LoginButton facebookButton) {
@@ -94,11 +97,8 @@ public final class AuthenticationManager {
             context.getString(R.string.fb_permission_friends),
             context.getString(R.string.fb_permission_email)
       );
-//      mFacebookLoginButton.setPublishPermissions(
-//            context.getString(R.string.fb_permission_publish)
-//      );
 
-      facebookButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+      facebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
          @Override
          public void onSuccess(LoginResult loginResult) {
             System.out.println("Success! Logged in with access token: " + loginResult.getAccessToken());
@@ -119,13 +119,15 @@ public final class AuthenticationManager {
                               .getString("url");
                         name = object.getString("name");
                         email = object.getString("email");
+
+                        saveLoginInfo(profileImageUrl, name, email);
                      }
                      catch (JSONException e) {
                         Log.v("Exception!", "Couldn't complete Graph Request");
                      }
 
-                     if (mAuthCallback != null) {
-                        mAuthCallback.onSuccess(profileImageUrl, name, email);
+                     if (authCallback != null) {
+                        authCallback.onSuccess();
                      }
                   }
             );
@@ -148,39 +150,39 @@ public final class AuthenticationManager {
    }
 
    public Intent getGoogleIntent() {
-      return Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+      return Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
    }
 
    public void connectGoogleApi() {
-      mGoogleApiClient.connect();
+      googleApiClient.connect();
    }
 
    public void disconnectGoogleApi() {
-      mGoogleApiClient.disconnect();
+      googleApiClient.disconnect();
    }
 
    public boolean isLoggedIn() {
-      return mPreferences.getBoolean(LOGGED_IN, false);
+      return preferences.getBoolean(LOGGED_IN, false);
    }
 
    public void registerCallback(AuthenticationCallback callback) {
-      this.mAuthCallback = callback;
+      this.authCallback = callback;
    }
 
    public void unregisterCallback() {
-      this.mAuthCallback = null;
+      this.authCallback = null;
    }
 
    public void logout() {
-      SharedPreferences.Editor editor = mPreferences.edit();
-      boolean isFacebook = mPreferences.getBoolean(FACEBOOK_LOGIN, false);
-      boolean isGoogle = mPreferences.getBoolean(GOOGLE_SIGN_IN, false);
+      SharedPreferences.Editor editor = preferences.edit();
+      boolean isFacebook = preferences.getBoolean(FACEBOOK_LOGIN, false);
+      boolean isGoogle = preferences.getBoolean(GOOGLE_SIGN_IN, false);
 
       if (isFacebook && !isGoogle) {
          LoginManager.getInstance().logOut();
       }
       else if (isGoogle && !isFacebook) {
-         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
+         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
             if (status.isSuccess()) {
                System.out.println("Logged out!");
             }
@@ -192,13 +194,43 @@ public final class AuthenticationManager {
       editor.putBoolean(LOGGED_IN, false);
       editor.apply();
 
-      if (mAuthCallback != null) {
-         mAuthCallback.onSuccess("", "", "");
+      clearLoginInfo();
+
+      if (authCallback != null) {
+         authCallback.onSuccess();
       }
    }
 
+   private void saveLoginInfo(String imageUrl, String name, String email) {
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.putString(PROFILE_IMAGE_URL, imageUrl);
+      editor.putString(FULL_NAME, name);
+      editor.putString(EMAIL, email);
+      editor.apply();
+   }
+
+   private void clearLoginInfo() {
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.putString(PROFILE_IMAGE_URL, "");
+      editor.putString(FULL_NAME, "");
+      editor.putString(EMAIL, "");
+      editor.apply();
+   }
+
+   public String getProfileImageUrl() {
+      return preferences.getString(PROFILE_IMAGE_URL, "");
+   }
+
+   public String getUserFullName() {
+      return preferences.getString(FULL_NAME, "");
+   }
+
+   public String getEmail() {
+      return preferences.getString(EMAIL, "");
+   }
+
    private void setFacebookLoginState() {
-      SharedPreferences.Editor editor = mPreferences.edit();
+      SharedPreferences.Editor editor = preferences.edit();
       editor.putBoolean(LOGGED_IN, true);
       editor.putBoolean(FACEBOOK_LOGIN, true);
       editor.putBoolean(GOOGLE_SIGN_IN, false);
@@ -206,7 +238,7 @@ public final class AuthenticationManager {
    }
 
    private void setGoogleLoginState() {
-      SharedPreferences.Editor editor = mPreferences.edit();
+      SharedPreferences.Editor editor = preferences.edit();
       editor.putBoolean(LOGGED_IN, true);
       editor.putBoolean(FACEBOOK_LOGIN, false);
       editor.putBoolean(GOOGLE_SIGN_IN, true);
@@ -219,19 +251,24 @@ public final class AuthenticationManager {
          // Send user e-mail and other info to server?
          // Send some access token?
          GoogleSignInAccount profileResult = result.getSignInAccount();
-         Uri profileImageUri = profileResult.getPhotoUrl();
          String profileImageUrl = "";
+         String username = "";
+         String email = "";
 
-         if (profileImageUri != null) {
-            profileImageUrl = profileResult.getPhotoUrl().toString();
+         if (profileResult != null) {
+            if (profileResult.getPhotoUrl() != null) {
+               profileImageUrl = profileResult.getPhotoUrl().toString();
+            }
+
+            username = profileResult.getDisplayName();
+            email = profileResult.getEmail();
          }
 
-         String username = profileResult.getDisplayName();
-         String email = profileResult.getEmail();
-
+         saveLoginInfo(profileImageUrl, username, email);
          setGoogleLoginState();
-         if (mAuthCallback != null) {
-            mAuthCallback.onSuccess(profileImageUrl, username, email);
+
+         if (authCallback != null) {
+            authCallback.onSuccess();
          }
       }
       else {
@@ -240,6 +277,6 @@ public final class AuthenticationManager {
    }
 
    public interface AuthenticationCallback {
-      void onSuccess(String profileImageUrl, String name, String email);
+      void onSuccess();
    }
 }

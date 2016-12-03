@@ -13,9 +13,15 @@ import rx.Observable;
  */
 
 public class SnaptionProvider {
-   private static SnaptionApiService mApiService = SnaptionApiProvider.getApiService();
+   private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
 
    public static Observable<List<Snaption>> getAllSnaptions() {
-      return mApiService.getSnaptions();
+      return apiService.getSnaptions()
+               .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+   }
+
+   public static void addSnaption(Snaption snaption) {
+      apiService.addSnaption(snaption)
+               .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
    }
 }

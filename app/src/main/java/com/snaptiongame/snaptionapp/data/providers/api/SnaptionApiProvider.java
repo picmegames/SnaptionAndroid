@@ -53,4 +53,8 @@ public class SnaptionApiProvider {
       apiService = builder.build().create(SnaptionApiService.class);
       return builder;
    }
+
+   public static Scheduler getNetworkScheduler() {
+      return networkScheduler;
+   }
 }

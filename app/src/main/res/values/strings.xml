@@ -11,6 +11,7 @@
 
     <!-- Titles -->
     <string name="top_caption">Top Caption</string>
+    <string name="welcome_message">Welcome to Snaption!</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>

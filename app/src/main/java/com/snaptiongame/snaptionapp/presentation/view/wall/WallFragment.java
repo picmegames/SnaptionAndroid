@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,7 @@ import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
-import com.snaptiongame.snaptionapp.presentation.view.CreateGame;
+import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGame;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public class WallFragment extends Fragment {
    FloatingActionButton mFab;
    @BindView(R.id.wall)
    RecyclerView mWall;
+   @BindView(R.id.refresh_layout)
+   SwipeRefreshLayout mRefreshLayout;
 
    private AuthenticationManager mAuthManager;
    private WallAdapter mAdapter;
@@ -65,6 +68,8 @@ public class WallFragment extends Fragment {
       mAdapter = new WallAdapter(getContext(), new ArrayList<>());
       mWall.setAdapter(mAdapter);
 
+      mRefreshLayout.setOnRefreshListener(this::loadSnaptions);
+
       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {
          actionBar.setTitle(R.string.wall_label);
@@ -74,7 +79,6 @@ public class WallFragment extends Fragment {
    @Override
    public void onResume() {
       super.onResume();
-
       loadSnaptions();
    }
 
@@ -96,6 +100,7 @@ public class WallFragment extends Fragment {
                @Override
                public void onNext(List<Snaption> snaptions) {
                   mAdapter.setSnaptions(snaptions);
+                  mRefreshLayout.setRefreshing(false);
                }
             });
    }
@@ -103,14 +108,15 @@ public class WallFragment extends Fragment {
    @OnClick(R.id.fab)
    public void createGame() {
       if (!mAuthManager.isLoggedIn()) {
+         mAuthManager.registerCallback(this::goToCreateGame);
          goToLogin();
       }
       else {
-         goToCreateGame("", "", "");
+         goToCreateGame();
       }
    }
 
-   private void goToCreateGame(String profileImageUrl, String name, String email) {
+   private void goToCreateGame() {
       Intent createGameIntent = new Intent(getContext(), CreateGame.class);
       startActivity(createGameIntent);
    }
@@ -119,21 +125,6 @@ public class WallFragment extends Fragment {
       Intent loginIntent = new Intent(getContext(), LoginActivity.class);
       startActivity(loginIntent);
    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2) {
-            Bundle returnData = data.getExtras();
-            Snaption snaption = returnData.getParcelable("Snaption");
-
-            mAdapter.getSnaptions().add(0, snaption);
-
-           
-            mAdapter.notifyDataSetChanged();
-
-        }
-    }
 
    @Override
    public void onDestroyView() {
