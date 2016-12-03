@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.icu.util.Output;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -17,7 +21,23 @@ import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +60,10 @@ public class CreateGame extends AppCompatActivity {
     Spinner mCategorySpinner;
 
     private Uri mChosenImageUri;
+
+    private String mBase64EncodedImage;
+
+    final private String REST_ENDPOINT = "http://104.198.36.194/games";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +96,9 @@ public class CreateGame extends AppCompatActivity {
                   false, username, 30, imageByteArray, null, fakeCaptions);
 
             // Mock send to server
+
             SnaptionProvider.testSnaptions.add(0, newSnaption);
+            new PostImages().execute();
 
             onBackPressed();
         }
@@ -103,9 +129,72 @@ public class CreateGame extends AppCompatActivity {
 
     private byte[] convertImageToByteArray() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] arr;
         Drawable imageDrawable = mNewGameImage.getDrawable();
         Bitmap bmp = ((BitmapDrawable) imageDrawable).getBitmap();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
+        arr = byteArrayOutputStream.toByteArray();
+        mBase64EncodedImage = Base64.encodeToString(arr, Base64.DEFAULT);
+
+
+        return arr;
+    }
+
+    private class PostImages extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                JSONObject gameJSON = new JSONObject();
+                String dataToSend;
+                String urlString = REST_ENDPOINT;
+                URL url = new URL(urlString);
+
+                gameJSON.put("pictureEncoded", mBase64EncodedImage);
+                gameJSON.put("id", "chinchillaaa");
+                gameJSON.put("type", "image/jpeg");
+
+                dataToSend = gameJSON.toString();
+
+
+
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setReadTimeout(10000);
+                connection.setConnectTimeout(15000);
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+
+                connection.setFixedLengthStreamingMode(dataToSend.getBytes().length);
+                connection.setRequestProperty("Connection", "Keep-Alive");
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+                OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "utf-8"));
+
+                writer.write(dataToSend);
+                writer.flush();
+                writer.close();
+                outputStream.close();
+                connection.disconnect();
+
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
     }
 }
