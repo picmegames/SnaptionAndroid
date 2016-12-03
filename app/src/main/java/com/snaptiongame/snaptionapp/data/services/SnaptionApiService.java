@@ -16,7 +16,7 @@ import rx.Observable;
  */
 
 public interface SnaptionApiService {
-   @GET("/api/snaptions")
+   @GET("/games")
    Observable<List<Snaption>> getSnaptions();
 
    @GET("/api/snaptions/{id}")

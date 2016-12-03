@@ -14,7 +14,7 @@ import java.util.List;
  * @author Tyler Wong
  */
 @Parcel()
-public final class Snaption implements Parcelable{
+public final class Snaption implements Parcelable {
    public static final String sId = "id";
    public static final String sStartDate = "start_date";
    public static final String sEndDate = "end_date";
@@ -22,7 +22,7 @@ public final class Snaption implements Parcelable{
    public static final String sPickerId = "picker_id";
    public static final String sPickerName = "picker_name";
    public static final String sImage = "image";
-   public static final String sImageUrl = "image_url";
+   public static final String sImageUrl = "picture";
    public static final String sCaptions = "captions";
 
    @SerializedName(sId) public int id;
@@ -32,12 +32,12 @@ public final class Snaption implements Parcelable{
    @SerializedName(sPickerName) public String pickerName;
    @SerializedName(sPickerId) public int pickerId;
    @SerializedName(sImage) public byte[] image;
-   @SerializedName(sImageUrl) public String imageUrl;
+   @SerializedName(sImageUrl) public String picture;
    @SerializedName(sCaptions) public List<Caption> captions;
 
    @ParcelConstructor
    public Snaption(int id, long startDate, long endDate, boolean isPrivate, String pickerName,
-                   int pickerId, byte[] image, String imageUrl, List<Caption> captions) {
+                   int pickerId, byte[] image, String picture, List<Caption> captions) {
       this.id = id;
       this.startDate = startDate;
       this.endDate = endDate;
@@ -45,7 +45,7 @@ public final class Snaption implements Parcelable{
       this.pickerName = pickerName;
       this.pickerId = pickerId;
       this.image = image;
-      this.imageUrl = imageUrl;
+      this.picture = picture;
       this.captions = captions;
    }
 
@@ -59,7 +59,7 @@ public final class Snaption implements Parcelable{
       this.image = new byte[in.readInt()];
 
       in.readByteArray(this.image);
-      this.imageUrl = in.readString();
+      this.picture = in.readString();
       if (in.readByte() == 0x01) {
          this.captions = new ArrayList<>();
          in.readList(captions, Caption.class.getClassLoader());
@@ -104,7 +104,7 @@ public final class Snaption implements Parcelable{
       dest.writeInt(image.length);
 
       dest.writeByteArray(image);
-      dest.writeString(imageUrl);
+      dest.writeString(picture);
 
       if (captions == null) {
          dest.writeByte((byte) (0x00));
