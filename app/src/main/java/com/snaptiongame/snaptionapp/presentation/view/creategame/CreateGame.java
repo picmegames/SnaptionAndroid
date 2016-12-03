@@ -46,6 +46,8 @@ public class CreateGame extends AppCompatActivity {
     @BindView(R.id.categorySpinner)
     Spinner mCategorySpinner;
 
+    private String mEncodedImage;
+
     private static final String REST_ENDPOINT = "http://104.198.36.194/games";
 
     @Override
@@ -67,9 +69,8 @@ public class CreateGame extends AppCompatActivity {
     @OnClick(R.id.createGameButton)
     public void createGame() {
         if (mNewGameImage.getDrawable() != null) {
-//            convertImageToBase64();
 //            Snaption newSnaption = new Snaption("woooo", 0, 0,
-//                  false, "", 0, mBase64EncodedImage, null, "image/jpeg", null);
+//                  false, "", 0, mEncodedImage, null, "image/jpeg", null);
 //
 //            SnaptionProvider.addSnaption(newSnaption);
             new PostImage().execute();
@@ -82,6 +83,7 @@ public class CreateGame extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             mNewGameImage.setImageURI(data.getData());
+            mEncodedImage = convertImageToBase64();
         }
     }
 
@@ -105,9 +107,8 @@ public class CreateGame extends AppCompatActivity {
         Drawable imageDrawable = mNewGameImage.getDrawable();
         Bitmap bmp = ((BitmapDrawable) imageDrawable).getBitmap();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-
         arr = byteArrayOutputStream.toByteArray();
-        return  Base64.encodeToString(arr, Base64.DEFAULT);
+        return Base64.encodeToString(arr, Base64.DEFAULT);
     }
 
     private class PostImage extends AsyncTask<Void, Void, String> {
@@ -115,12 +116,14 @@ public class CreateGame extends AppCompatActivity {
         protected String doInBackground(Void... voids) {
             try {
                 JSONObject gameJSON = new JSONObject();
-                String dataToSend = gameJSON.toString();
+                String dataToSend;
                 URL url = new URL(REST_ENDPOINT);
 
-                gameJSON.put("pictureEncoded",  convertImageToBase64());
+                gameJSON.put("pictureEncoded",  mEncodedImage);
                 gameJSON.put("id", "tester");
                 gameJSON.put("type", "image/jpeg");
+
+                dataToSend = gameJSON.toString();
 
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
