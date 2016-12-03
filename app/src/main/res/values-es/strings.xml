@@ -19,5 +19,6 @@
     <string name="mature_label">Maduro</string>
     <string name="privacy_label">Juego privado</string>
     <string name="timer_label">Minutero</string>
+    <string name="welcome_message">¡Bienvenido a Snaption!</string>
 
 </resources>

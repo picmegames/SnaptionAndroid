@@ -18,6 +18,10 @@
             android:id="@+id/profile"
             android:checked="false"
             android:title="@string/profile_label"/>
+    </group>
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/settings"

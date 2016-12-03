@@ -1,10 +1,9 @@
-package com.snaptiongame.snaptionapp.presentation.view;
+package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,11 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,11 +45,7 @@ public class CreateGame extends AppCompatActivity {
     @BindView(R.id.categorySpinner)
     Spinner mCategorySpinner;
 
-    private Uri mChosenImageUri;
-
-    private String mBase64EncodedImage;
-
-    final private String REST_ENDPOINT = "http://104.198.36.194/games";
+    private static final String REST_ENDPOINT = "http://104.198.36.194/games";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,22 +65,13 @@ public class CreateGame extends AppCompatActivity {
 
     @OnClick(R.id.createGameButton)
     public void createGame() {
-        String username = mUsernameView.getText().toString();
-
         if (mNewGameImage.getDrawable() != null) {
-            byte[] imageByteArray = convertImageToByteArray();
-
-            Caption fakeCaption = new Caption(30, 30, 30, username, 0, "Here is a caption");
-            List<Caption> fakeCaptions = new ArrayList<>();
-            fakeCaptions.add(0, fakeCaption);
-
-            Snaption newSnaption = new Snaption(30, java.util.Calendar.DATE, java.util.Calendar.DATE,
-                  false, username, 30, imageByteArray, null, fakeCaptions);
-
-            // Mock send to server
-
-            new PostImages().execute();
-
+//            convertImageToBase64();
+//            Snaption newSnaption = new Snaption("woooo", 0, 0,
+//                  false, "", 0, mBase64EncodedImage, null, "image/jpeg", null);
+//
+//            SnaptionProvider.addSnaption(newSnaption);
+            new PostImage().execute();
             onBackPressed();
         }
     }
@@ -100,8 +80,7 @@ public class CreateGame extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            mChosenImageUri = data.getData();
-            mNewGameImage.setImageURI(mChosenImageUri);
+            mNewGameImage.setImageURI(data.getData());
         }
     }
 
@@ -119,7 +98,7 @@ public class CreateGame extends AppCompatActivity {
         mCategorySpinner.setAdapter(categoryAdapter);
     }
 
-    private byte[] convertImageToByteArray() {
+    private String convertImageToBase64() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] arr;
         Drawable imageDrawable = mNewGameImage.getDrawable();
@@ -127,30 +106,20 @@ public class CreateGame extends AppCompatActivity {
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
         arr = byteArrayOutputStream.toByteArray();
-        mBase64EncodedImage = Base64.encodeToString(arr, Base64.DEFAULT);
-
-
-        return arr;
+        return  Base64.encodeToString(arr, Base64.DEFAULT);
     }
 
-    private class PostImages extends AsyncTask<Void, Void, Void> {
-
-
+    private class PostImage extends AsyncTask<Void, Void, String> {
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
             try {
                 JSONObject gameJSON = new JSONObject();
-                String dataToSend;
-                String urlString = REST_ENDPOINT;
-                URL url = new URL(urlString);
+                String dataToSend = gameJSON.toString();
+                URL url = new URL(REST_ENDPOINT);
 
-                gameJSON.put("pictureEncoded", mBase64EncodedImage);
-                gameJSON.put("id", "chinchillaaa");
+                gameJSON.put("pictureEncoded",  convertImageToBase64());
+                gameJSON.put("id", "tester");
                 gameJSON.put("type", "image/jpeg");
-
-                dataToSend = gameJSON.toString();
-
-
 
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
@@ -171,20 +140,10 @@ public class CreateGame extends AppCompatActivity {
                 writer.close();
                 outputStream.close();
                 connection.disconnect();
-
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            }
+            catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-
 
             return null;
         }

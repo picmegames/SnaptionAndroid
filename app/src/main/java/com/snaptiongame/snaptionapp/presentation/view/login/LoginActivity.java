@@ -57,11 +57,8 @@ public class LoginActivity extends AppCompatActivity {
       mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
    }
 
-   private void backToMain(String profileImageUrl, String name, String email) {
+   private void backToMain() {
       Intent mainIntent = new Intent(this, MainActivity.class);
-      mainIntent.putExtra("profileImageUrl", profileImageUrl);
-      mainIntent.putExtra("name", name);
-      mainIntent.putExtra("email", email);
       startActivity(mainIntent);
    }
 

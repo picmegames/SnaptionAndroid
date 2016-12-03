@@ -3,7 +3,6 @@ package com.snaptiongame.snaptionapp.data.authentication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -45,6 +44,10 @@ public final class AuthenticationManager {
 
    private static final String FB_FIELDS = "fields";
    private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large)";
+
+   private static final String PROFILE_IMAGE_URL = "image_url";
+   private static final String FULL_NAME = "full_name";
+   private static final String EMAIL = "email";
 
    private AuthenticationManager(Context context) {
       // Init Facebook SDK
@@ -94,9 +97,6 @@ public final class AuthenticationManager {
             context.getString(R.string.fb_permission_friends),
             context.getString(R.string.fb_permission_email)
       );
-//      mFacebookLoginButton.setPublishPermissions(
-//            context.getString(R.string.fb_permission_publish)
-//      );
 
       facebookButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
          @Override
@@ -119,13 +119,15 @@ public final class AuthenticationManager {
                               .getString("url");
                         name = object.getString("name");
                         email = object.getString("email");
+
+                        saveLoginInfo(profileImageUrl, name, email);
                      }
                      catch (JSONException e) {
                         Log.v("Exception!", "Couldn't complete Graph Request");
                      }
 
                      if (mAuthCallback != null) {
-                        mAuthCallback.onSuccess(profileImageUrl, name, email);
+                        mAuthCallback.onSuccess();
                      }
                   }
             );
@@ -192,9 +194,39 @@ public final class AuthenticationManager {
       editor.putBoolean(LOGGED_IN, false);
       editor.apply();
 
+      clearLoginInfo();
+
       if (mAuthCallback != null) {
-         mAuthCallback.onSuccess("", "", "");
+         mAuthCallback.onSuccess();
       }
+   }
+
+   private void saveLoginInfo(String imageUrl, String name, String email) {
+      SharedPreferences.Editor editor = mPreferences.edit();
+      editor.putString(PROFILE_IMAGE_URL, imageUrl);
+      editor.putString(FULL_NAME, name);
+      editor.putString(EMAIL, email);
+      editor.apply();
+   }
+
+   private void clearLoginInfo() {
+      SharedPreferences.Editor editor = mPreferences.edit();
+      editor.putString(PROFILE_IMAGE_URL, "");
+      editor.putString(FULL_NAME, "");
+      editor.putString(EMAIL, "");
+      editor.apply();
+   }
+
+   public String getProfileImageUrl() {
+      return mPreferences.getString(PROFILE_IMAGE_URL, "");
+   }
+
+   public String getUserFullName() {
+      return mPreferences.getString(FULL_NAME, "");
+   }
+
+   public String getEmail() {
+      return mPreferences.getString(EMAIL, "");
    }
 
    private void setFacebookLoginState() {
@@ -219,19 +251,24 @@ public final class AuthenticationManager {
          // Send user e-mail and other info to server?
          // Send some access token?
          GoogleSignInAccount profileResult = result.getSignInAccount();
-         Uri profileImageUri = profileResult.getPhotoUrl();
          String profileImageUrl = "";
+         String username = "";
+         String email = "";
 
-         if (profileImageUri != null) {
-            profileImageUrl = profileResult.getPhotoUrl().toString();
+         if (profileResult != null) {
+            if (profileResult.getPhotoUrl() != null) {
+               profileImageUrl = profileResult.getPhotoUrl().toString();
+            }
+
+            username = profileResult.getDisplayName();
+            email = profileResult.getEmail();
          }
 
-         String username = profileResult.getDisplayName();
-         String email = profileResult.getEmail();
-
+         saveLoginInfo(profileImageUrl, username, email);
          setGoogleLoginState();
+
          if (mAuthCallback != null) {
-            mAuthCallback.onSuccess(profileImageUrl, username, email);
+            mAuthCallback.onSuccess();
          }
       }
       else {
@@ -240,6 +277,6 @@ public final class AuthenticationManager {
    }
 
    public interface AuthenticationCallback {
-      void onSuccess(String profileImageUrl, String name, String email);
+      void onSuccess();
    }
 }

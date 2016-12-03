@@ -64,17 +64,6 @@ public class MainActivity extends AppCompatActivity
       mNameView = (TextView) headerView.findViewById(R.id.username);
       mEmailView = (TextView) headerView.findViewById(R.id.email);
 
-      Intent intent = getIntent();
-      String profileImageUrl = intent.getStringExtra("profileImageUrl");
-      String name = intent.getStringExtra("name");
-      String email = intent.getStringExtra("email");
-
-      Glide.with(this)
-            .load(profileImageUrl)
-            .into(mProfilePicture);
-      mNameView.setText(name);
-      mEmailView.setText(email);
-
       fragTag = WallFragment.class.getSimpleName();
       mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
       if (mCurrentFragment == null) {
@@ -106,6 +95,38 @@ public class MainActivity extends AppCompatActivity
       actionBarDrawerToggle.syncState();
    }
 
+   private void setDefaultHeader() {
+      Glide.with(this)
+            .load(R.mipmap.ic_launcher)
+            .into(mProfilePicture);
+      mNameView.setText(getString(R.string.welcome_message));
+      mEmailView.setText("");
+   }
+
+   private void setUserHeader() {
+      String profileImageUrl = mAuthManager.getProfileImageUrl();
+      String name = mAuthManager.getUserFullName();
+      String email = mAuthManager.getEmail();
+
+      Glide.with(this)
+            .load(profileImageUrl)
+            .into(mProfilePicture);
+      mNameView.setText(name);
+      mEmailView.setText(email);
+   }
+
+   @Override
+   protected void onResume() {
+      super.onResume();
+
+      if (mAuthManager.isLoggedIn()) {
+         setUserHeader();
+      }
+      else {
+         setDefaultHeader();
+      }
+   }
+
    @Override
    protected void onStart() {
       super.onStart();
@@ -130,11 +151,9 @@ public class MainActivity extends AppCompatActivity
 
       switch (item.getItemId()) {
          case R.id.log_out:
-            mAuthManager.logout();
-
-            Glide.clear(mProfilePicture);
-            mNameView.setText("");
-            mEmailView.setText("");
+            if (mAuthManager.isLoggedIn()) {
+               mAuthManager.logout();
+            }
             break;
 
          default:
@@ -158,7 +177,7 @@ public class MainActivity extends AppCompatActivity
       // Don't allow back button in MainActivity
    }
 
-   private void goToLogin(String profileImageUrl, String name, String email) {
+   private void goToLogin() {
       Intent loginIntent = new Intent(this, LoginActivity.class);
       startActivity(loginIntent);
    }
