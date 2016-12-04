@@ -21,7 +21,7 @@ public class NotificationService extends FirebaseMessagingService {
    @Override
    public void onMessageReceived(RemoteMessage remoteMessage) {
       NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_notification)
             .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
             .setContentTitle(remoteMessage.getNotification().getTitle())
             .setContentText(remoteMessage.getNotification().getBody());
