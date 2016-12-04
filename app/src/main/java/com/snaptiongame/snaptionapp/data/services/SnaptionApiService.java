@@ -5,7 +5,6 @@ import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import java.util.List;
 
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -25,12 +24,10 @@ public interface SnaptionApiService {
    @POST("/games")
    Observable<Void> addSnaption(@Field("type") String type, @Field("pictureEncoded") String image);
 
-   @GET("/api/snaptions/{id}")
-   Observable<Snaption> getSnaption(@Path("id") String id);
+   @GET("/captions/{gameId}")
+   Observable<List<Caption>> getCaptions(@Path("gameId") int gameId);
 
-   @GET("/api/snaptions/{id}/captions")
-   Observable<List<Caption>> getCaptions(@Path("id") String id);
-
-   @POST("/api/snaptions/{id}/caption")
-   Observable<Void> addCaption(String id, @Body Caption caption);
+   @FormUrlEncoded
+   @POST("/captions")
+   Observable<Void> addCaption(@Field("message") String message, @Field("gameId") int gameId);
 }

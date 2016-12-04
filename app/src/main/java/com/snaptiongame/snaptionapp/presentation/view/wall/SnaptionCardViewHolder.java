@@ -45,6 +45,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    ImageButton mMenuButton;
 
    private Context mContext;
+   public int mGameId;
    public String mImageUrl;
 
    public SnaptionCardViewHolder(Context context, View itemView) {
@@ -81,6 +82,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          mImage.buildDrawingCache();
          Context cardContext = view.getContext();
          Intent gameIntent = new Intent(cardContext, GameActivity.class);
+         gameIntent.putExtra("gameId", mGameId);
          gameIntent.putExtra("image", mImageUrl);
 
          if (Build.VERSION.SDK_INT >= 21) {

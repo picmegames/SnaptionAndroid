@@ -4,7 +4,9 @@ import android.app.Application;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.snaptiongame.snaptionapp.data.converters.CaptionConverter;
 import com.snaptiongame.snaptionapp.data.converters.SnaptionConverter;
+import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import okhttp3.OkHttpClient;
@@ -35,6 +37,7 @@ public class SnaptionApplication extends Application {
    public static Gson setupGson() {
       GsonBuilder builder = new GsonBuilder();
       builder.registerTypeAdapter(Snaption.class, new SnaptionConverter());
+      builder.registerTypeAdapter(Caption.class, new CaptionConverter());
       builder.excludeFieldsWithoutExposeAnnotation();
       return builder.create();
    }

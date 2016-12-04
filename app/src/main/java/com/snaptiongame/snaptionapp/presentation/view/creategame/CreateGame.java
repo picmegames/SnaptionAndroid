@@ -48,7 +48,7 @@ public class CreateGame extends AppCompatActivity {
 
     private String mEncodedImage;
 
-    private static final String REST_ENDPOINT = "http://104.198.36.194/games";
+    private static final String GAMES_ENDPOINT = "http://104.198.36.194/games";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,7 +116,7 @@ public class CreateGame extends AppCompatActivity {
             try {
                 JSONObject gameJSON = new JSONObject();
                 String dataToSend;
-                URL url = new URL(REST_ENDPOINT);
+                URL url = new URL(GAMES_ENDPOINT);
 
                 gameJSON.put("pictureEncoded",  mEncodedImage);
                 gameJSON.put("type", "image/jpeg");
