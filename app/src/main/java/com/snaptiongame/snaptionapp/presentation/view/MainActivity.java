@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity
    protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       mAuthManager = AuthenticationManager.getInstance(this);
-      mAuthManager.registerCallback(this::goToLogin);
 
       setContentView(R.layout.activity_main);
       ButterKnife.bind(this);
@@ -154,6 +153,7 @@ public class MainActivity extends AppCompatActivity
          case R.id.log_out:
             if (mAuthManager.isLoggedIn()) {
                mAuthManager.logout();
+               goToLogin();
             }
             break;
 

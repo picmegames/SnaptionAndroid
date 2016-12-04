@@ -12,7 +12,6 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
       // Initialize Authentication Manager
       mAuthManager = AuthenticationManager.getInstance(this);
-      mAuthManager.registerCallback(this::backToMain);
+      mAuthManager.registerCallback(this::onBackPressed);
 
       setContentView(R.layout.activity_login);
       ButterKnife.bind(this);
@@ -56,11 +55,6 @@ public class LoginActivity extends AppCompatActivity {
             .into(mLogo);
 
       mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
-   }
-
-   private void backToMain() {
-      Intent mainIntent = new Intent(this, MainActivity.class);
-      startActivity(mainIntent);
    }
 
    @Override

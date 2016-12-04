@@ -69,8 +69,8 @@ public class CreateGame extends AppCompatActivity {
     @OnClick(R.id.createGameButton)
     public void createGame() {
         if (mNewGameImage.getDrawable() != null) {
-//            Snaption newSnaption = new Snaption("woooo", 0, 0,
-//                  false, "", 0, mEncodedImage, null, "image/jpeg", null);
+//            Snaption newSnaption = new Snaption(0, new SnaptionMeta(0, 0,
+//                  false, "", 0, mEncodedImage, null, "image/jpeg"));
 //            SnaptionProvider.addSnaption("image/jpeg", mEncodedImage);
             new PostImage().execute();
             onBackPressed();

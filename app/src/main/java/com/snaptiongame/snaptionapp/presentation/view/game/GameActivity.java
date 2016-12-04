@@ -19,9 +19,11 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionMeta;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
+import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +63,7 @@ public class GameActivity extends AppCompatActivity {
 
    private ActionBar mActionBar;
    private CaptionAdapter mAdapter;
+   private AuthenticationManager mAuthManager;
    private int mGameId;
 
    private static final String CAPTIONS_ENDPOINT = "http://104.198.36.194/captions";
@@ -70,6 +73,8 @@ public class GameActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_game);
       ButterKnife.bind(this);
+
+      mAuthManager = AuthenticationManager.getInstance(this);
 
       LinearLayoutManager layoutManager = new LinearLayoutManager(this);
       layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -103,13 +108,21 @@ public class GameActivity extends AppCompatActivity {
 
    @OnClick(R.id.fab)
    public void showAddCaptionDialog() {
-      new MaterialDialog.Builder(this)
-            .title(R.string.add_caption)
-            .inputType(InputType.TYPE_CLASS_TEXT)
-            .input(R.string.add_caption, R.string.add_caption,
-                  (@NonNull MaterialDialog dialog, CharSequence input) -> {
-               new PostCaptionTask(input.toString(), mGameId).execute();
-            }).show();
+      if (!mAuthManager.isLoggedIn()) {
+         goToLogin();
+      }
+      else {
+         new MaterialDialog.Builder(this)
+               .title(R.string.add_caption)
+               .inputType(InputType.TYPE_CLASS_TEXT)
+               .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
+                     new PostCaptionTask(input.toString(), mGameId).execute()).show();
+      }
+   }
+
+   private void goToLogin() {
+      Intent loginIntent = new Intent(this, LoginActivity.class);
+      startActivity(loginIntent);
    }
 
    private class PostCaptionTask extends AsyncTask<Void, Void, Void> {

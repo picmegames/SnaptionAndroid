@@ -195,10 +195,6 @@ public final class AuthenticationManager {
       editor.apply();
 
       clearLoginInfo();
-
-      if (authCallback != null) {
-         authCallback.onSuccess();
-      }
    }
 
    private void saveLoginInfo(String imageUrl, String name, String email) {
@@ -274,9 +270,5 @@ public final class AuthenticationManager {
       else {
          System.out.println("Google login failed :(");
       }
-   }
-
-   public interface AuthenticationCallback {
-      void onSuccess();
    }
 }

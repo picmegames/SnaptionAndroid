@@ -108,7 +108,6 @@ public class WallFragment extends Fragment {
    @OnClick(R.id.fab)
    public void createGame() {
       if (!mAuthManager.isLoggedIn()) {
-         mAuthManager.registerCallback(this::goToCreateGame);
          goToLogin();
       }
       else {
@@ -130,5 +129,6 @@ public class WallFragment extends Fragment {
    public void onDestroyView() {
       super.onDestroyView();
       mUnbinder.unbind();
+      mAuthManager.unregisterCallback();
    }
 }
