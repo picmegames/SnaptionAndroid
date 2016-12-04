@@ -37,12 +37,14 @@ public class WallAdapter extends RecyclerView.Adapter {
       SnaptionCardViewHolder holder = (SnaptionCardViewHolder) viewHolder;
       Snaption curSnaption = mSnaptions.get(position);
 
-      if (curSnaption.picture != null) {
+      holder.mGameId = curSnaption.id;
+
+      if (curSnaption.meta.picture != null) {
          Glide.with(mContext)
-               .load(curSnaption.picture)
+               .load(curSnaption.meta.picture)
                .centerCrop()
                .into(holder.mImage);
-         holder.mImageUrl = curSnaption.picture;
+         holder.mImageUrl = curSnaption.meta.picture;
       }
       else {
          Glide.clear(holder.mImage);
