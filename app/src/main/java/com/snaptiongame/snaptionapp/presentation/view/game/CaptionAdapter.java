@@ -44,6 +44,11 @@ public class CaptionAdapter extends RecyclerView.Adapter {
       holder.mName.setText(curCaption.meta.username);
    }
 
+   public void addTempCaption(Caption caption) {
+      mCaptions.add(caption);
+      notifyDataSetChanged();
+   }
+
    public void setCaptions(List<Caption> captions) {
       this.mCaptions = captions;
       notifyDataSetChanged();
