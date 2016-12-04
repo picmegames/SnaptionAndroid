@@ -42,7 +42,8 @@
         android:layout_height="350dp"
         android:layout_below="@+id/picker_image"
         android:layout_marginTop="10dp"
-        android:contentDescription="@string/app_name"/>
+        android:contentDescription="@string/app_name"
+        android:transitionName="@string/shared_transition"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/captioner_image"

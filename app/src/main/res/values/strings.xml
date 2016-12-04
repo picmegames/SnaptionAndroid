@@ -5,6 +5,7 @@
     <!-- Tags -->
     <string name="open_drawer" translatable="false">Navigation View Open</string>
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
+    <string name="shared_transition" translatable="false">snaption_transition</string>
 
     <!-- Urls -->
     <string name="snaption_url" translatable="false">http://www.snaptiongame.com/</string>
@@ -12,6 +13,7 @@
     <!-- Titles -->
     <string name="top_caption">Top Caption</string>
     <string name="welcome_message">Welcome to Snaption!</string>
+    <string name="add_caption">Add a Caption!</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
