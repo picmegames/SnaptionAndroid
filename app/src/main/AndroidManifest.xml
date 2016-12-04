@@ -46,6 +46,12 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"/>
 
+        <activity android:name=".presentation.view.game.GameActivity"
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme"
+                  android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

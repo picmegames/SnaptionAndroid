@@ -71,8 +71,7 @@ public class CreateGame extends AppCompatActivity {
         if (mNewGameImage.getDrawable() != null) {
 //            Snaption newSnaption = new Snaption("woooo", 0, 0,
 //                  false, "", 0, mEncodedImage, null, "image/jpeg", null);
-//
-//            SnaptionProvider.addSnaption(newSnaption);
+//            SnaptionProvider.addSnaption("image/jpeg", mEncodedImage);
             new PostImage().execute();
             onBackPressed();
         }
@@ -120,7 +119,6 @@ public class CreateGame extends AppCompatActivity {
                 URL url = new URL(REST_ENDPOINT);
 
                 gameJSON.put("pictureEncoded",  mEncodedImage);
-                gameJSON.put("id", "tester");
                 gameJSON.put("type", "image/jpeg");
 
                 dataToSend = gameJSON.toString();

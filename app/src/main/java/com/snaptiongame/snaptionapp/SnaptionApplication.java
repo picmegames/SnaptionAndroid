@@ -8,6 +8,7 @@ import com.snaptiongame.snaptionapp.data.converters.SnaptionConverter;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * @author Tyler Wong
@@ -23,7 +24,12 @@ public class SnaptionApplication extends Application {
    }
 
    public static OkHttpClient makeOkHttpClient() {
-      return okHttpClient = new OkHttpClient();
+      HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+      interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+      okHttpClient = new OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build();
+      return okHttpClient;
    }
 
    public static Gson setupGson() {

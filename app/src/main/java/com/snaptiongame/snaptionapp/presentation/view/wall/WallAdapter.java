@@ -42,37 +42,27 @@ public class WallAdapter extends RecyclerView.Adapter {
                .load(curSnaption.picture)
                .centerCrop()
                .into(holder.mImage);
+         holder.mImageUrl = curSnaption.picture;
       }
       else {
          Glide.clear(holder.mImage);
       }
 
-      if (curSnaption.pickerName != null) {
-         Glide.with(mContext)
-               .load("http://img42.wallpapercasa.com/uploads/wallpapers/2012/02/20/327247/" +
-                     "thumb_big_hd_e10440b14317b967d73c5ad6467039ae.jpg")
-               .into(holder.mCaptionerImage);
-         Glide.with(mContext)
-               .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
-               .into(holder.mPickerImage);
-      }
-      else {
-         Glide.clear(holder.mCaptionerImage);
-         Glide.clear(holder.mPickerImage);
-      }
+      Glide.with(mContext)
+            .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
+            .into(holder.mCaptionerImage);
+      Glide.with(mContext)
+            .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
+            .into(holder.mPickerImage);
 
-      //holder.mTopCaption.setText(curSnaption.captions.get(0).caption);
-      //holder.mCaptionerName.setText(curSnaption.captions.get(0).username);
-      holder.mPickerName.setText(curSnaption.pickerName);
+      holder.mTopCaption.setText("It's working!");
+      holder.mCaptionerName.setText("test_captioner");
+      holder.mPickerName.setText("test_picker");
    }
 
    public void setSnaptions(List<Snaption> snaptions) {
       this.mSnaptions = snaptions;
       notifyDataSetChanged();
-   }
-
-   public List<Snaption> getSnaptions() {
-      return this.mSnaptions;
    }
 
    @Override

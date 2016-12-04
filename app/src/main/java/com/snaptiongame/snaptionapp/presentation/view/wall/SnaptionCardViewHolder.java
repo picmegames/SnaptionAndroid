@@ -1,6 +1,9 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,8 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
+import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +45,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    ImageButton mMenuButton;
 
    private Context mContext;
+   public String mImageUrl;
 
    public SnaptionCardViewHolder(Context context, View itemView) {
       super(itemView);
@@ -69,6 +75,23 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          });
 
          menu.show();
+      });
+
+      itemView.setOnClickListener(view -> {
+         mImage.buildDrawingCache();
+         Context cardContext = view.getContext();
+         Intent gameIntent = new Intent(cardContext, GameActivity.class);
+         gameIntent.putExtra("image", mImageUrl);
+
+         if (Build.VERSION.SDK_INT >= 21) {
+            String transitionName = mContext.getString(R.string.shared_transition);
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                  (MainActivity) mContext, mImage, transitionName);
+            cardContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
+         }
+         else {
+            cardContext.startActivity(gameIntent);
+         }
       });
    }
 
