@@ -19,4 +19,9 @@ public class CaptionProvider {
       return apiService.getCaptions(gameId)
             .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
    }
+
+   public static Observable<Void> addCaption(String message, int gameId) {
+      return apiService.addCaption(message, gameId)
+            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+   }
 }
