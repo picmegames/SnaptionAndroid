@@ -3,13 +3,62 @@
     <string name="app_name">Snaption</string>
 
     <!-- Tags -->
-    <string name="open_drawer">Navigation View Open</string>
-    <string name="close_drawer">Navigation View Closed</string>
+    <string name="open_drawer" translatable="false">Navigation View Open</string>
+    <string name="close_drawer" translatable="false">Navigation View Closed</string>
+    <string name="shared_transition" translatable="false">snaption_transition</string>
+
+    <!-- Urls -->
+    <string name="snaption_url" translatable="false">http://www.snaptiongame.com/</string>
+
+    <!-- Titles -->
+    <string name="top_caption">Top Caption</string>
+    <string name="welcome_message">Welcome to Snaption!</string>
+    <string name="add_caption">Add a Caption!</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
     <string name="friends_label">Friends</string>
     <string name="profile_label">Profile</string>
     <string name="settings_label">Settings</string>
+    <string name="log_out_label">Log Out</string>
+    <string name="share">Share</string>
+    <string name="create_game">Create Game</string>
+    <string name="flag">Flag As Inappropriate</string>
+
+    <!-- Facebook Login -->
+    <string name="facebook_app_id" translatable="false">359612531056210</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb359612531056210</string>
+    <string name="fb_permission_profile" translatable="false">public_profile</string>
+    <string name="fb_permission_friends" translatable="false">user_friends</string>
+    <string name="fb_permission_email" translatable="false">email</string>
+    <string name="fb_permission_publish" translatable="false">publish_actions</string>
+
+
+    <!-- Create New Game Labels -->
+    <string name="content_level_label">Content Level</string>
+    <string name="category_label">Category</string>
+    <string name="privacy_label">Private Game</string>
+    <string name="timer_label">Timer</string>
+
+
+    <!-- Content Rating Labels-->
+    <string name="family_label">Family</string>
+    <string name="mature_label">Mature</string>
+
+
+    <string-array name="content_ratings_array">
+        <item>Family</item>
+        <item>Mature</item>
+    </string-array>
+
+    <string-array name="categories_array">
+        <item>Animals</item>
+        <item>Nature</item>
+        <item>People</item>
+        <item>Funny</item>
+        <item>Crazy</item>
+    </string-array>
+
+
 
 </resources>

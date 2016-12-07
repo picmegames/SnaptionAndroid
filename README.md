@@ -1,6 +1,6 @@
 # Snaption Android Application - Fightin' Puffins
 
-[![Build Status](https://travis-ci.com/tylerbwong/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=master)](https://travis-ci.com/tylerbwong/SnaptionAndroid)
+[![Build Status](https://travis-ci.com/tylerbwong/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=develop)](https://travis-ci.com/tylerbwong/SnaptionAndroid)
 
 This is the Snaption Android Application.
 

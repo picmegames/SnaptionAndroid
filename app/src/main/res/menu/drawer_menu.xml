@@ -7,28 +7,31 @@
         <item
             android:id="@+id/wall"
             android:checked="false"
-            android:title="@string/wall_label" />
+            android:title="@string/wall_label"/>
 
         <item
             android:id="@+id/friends"
             android:checked="false"
-            android:title="@string/friends_label" />
+            android:title="@string/friends_label"/>
 
         <item
             android:id="@+id/profile"
             android:checked="false"
-            android:title="@string/profile_label" />
-
+            android:title="@string/profile_label"/>
     </group>
-
     <group
         android:id="@+id/menu_bottom"
-        android:checkableBehavior="none">
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/settings"
             android:checked="false"
-            android:title="@string/settings_label" />
+            android:title="@string/settings_label"/>
+
+        <item
+            android:id="@+id/log_out"
+            android:checked="false"
+            android:title="@string/log_out_label"/>
 
     </group>
 </menu>
