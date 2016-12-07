@@ -12,3 +12,5 @@ android:
     - extra-google-m2repository
     - extra-android-support
     - addon-google_apis-google-24
+notifications:
+  slack: capstone-snaption:uLoSExpS3w6h7MWDHQfExWth
