@@ -33,12 +33,6 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    ImageView mImage;
    @BindView(R.id.captioner_image)
    CircleImageView mCaptionerImage;
-   @BindView(R.id.captioner_name)
-   TextView mCaptionerName;
-   @BindView(R.id.picker_image)
-   CircleImageView mPickerImage;
-   @BindView(R.id.picker_name)
-   TextView mPickerName;
    @BindView(R.id.top_caption)
    TextView mTopCaption;
    @BindView(R.id.menu_button)
@@ -52,6 +46,10 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
       super(itemView);
       mContext = context;
       ButterKnife.bind(this, itemView);
+
+      if (Build.VERSION.SDK_INT >= 21) {
+         itemView.setClipToOutline(true);
+      }
 
       mMenuButton.setOnClickListener(view -> {
          PopupMenu menu = new PopupMenu(mContext, mMenuButton);

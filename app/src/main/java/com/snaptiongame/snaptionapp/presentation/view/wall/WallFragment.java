@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +51,9 @@ public class WallFragment extends Fragment {
    private WallAdapter mAdapter;
    private Unbinder mUnbinder;
 
+   public static final int NUM_COLUMNS = 2;
+   public static final int ITEM_SPACING = 16;
+
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +67,10 @@ public class WallFragment extends Fragment {
       mAuthManager = AuthenticationManager.getInstance(getContext());
       mUnbinder = ButterKnife.bind(this, view);
 
-      mWall.setLayoutManager(new LinearLayoutManager(getContext()));
+      mWall.setHasFixedSize(true);
+      mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
+      mWall.addItemDecoration(new SpacesItemDecoration(ITEM_SPACING));
+
       mAdapter = new WallAdapter(getContext(), new ArrayList<>());
       mWall.setAdapter(mAdapter);
 
@@ -103,6 +109,13 @@ public class WallFragment extends Fragment {
                   mRefreshLayout.setRefreshing(false);
                }
             });
+//      List<Snaption> snaptions = new ArrayList<>();
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn.com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864-959818851016.jpg", "")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload.wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://www.smashbros.com/us/images/index/image/main-3ds-logo.png", "")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www.sideshowtoy.com/photo_902292_thumb.jpg", "")));
+//      mAdapter.setSnaptions(snaptions);
+//      mRefreshLayout.setRefreshing(false);
    }
 
    @OnClick(R.id.fab)

@@ -42,7 +42,6 @@ public class WallAdapter extends RecyclerView.Adapter {
       if (curSnaption.meta.picture != null) {
          Glide.with(mContext)
                .load(curSnaption.meta.picture)
-               .centerCrop()
                .into(holder.mImage);
          holder.mImageUrl = curSnaption.meta.picture;
       }
@@ -53,13 +52,8 @@ public class WallAdapter extends RecyclerView.Adapter {
       Glide.with(mContext)
             .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
             .into(holder.mCaptionerImage);
-      Glide.with(mContext)
-            .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
-            .into(holder.mPickerImage);
 
       holder.mTopCaption.setText("It's working!");
-      holder.mCaptionerName.setText("test_captioner");
-      holder.mPickerName.setText("test_picker");
    }
 
    public void setSnaptions(List<Snaption> snaptions) {
