@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.models.SnaptionMeta;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGame;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
@@ -109,13 +110,20 @@ public class WallFragment extends Fragment {
                   mRefreshLayout.setRefreshing(false);
                }
             });
-//      List<Snaption> snaptions = new ArrayList<>();
-//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn.com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864-959818851016.jpg", "")));
-//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload.wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "")));
-//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://www.smashbros.com/us/images/index/image/main-3ds-logo.png", "")));
-//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www.sideshowtoy.com/photo_902292_thumb.jpg", "")));
-//      mAdapter.setSnaptions(snaptions);
-//      mRefreshLayout.setRefreshing(false);
+      List<Snaption> snaptions = new ArrayList<>();
+      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
+              ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
+              "-959818851016.jpg", "", "Wow thats a " +
+              "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
+      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
+              ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "6/10 Moustache")));
+      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://www" +
+              ".smashbros.com/us/images/index/image/main-3ds-logo.png", "", " I want to play as " +
+              "the little rat")));
+      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
+              ".sideshowtoy.com/photo_902292_thumb.jpg", "", "When the weed hits you")));
+      mAdapter.setSnaptions(snaptions);
+      mRefreshLayout.setRefreshing(false);
    }
 
    @OnClick(R.id.fab)
