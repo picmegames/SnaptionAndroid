@@ -18,7 +18,7 @@ public class SnaptionMeta {
    public static final String sType = "type";
    public static final String sImage = "pictureEncoded";
    public static final String sImageUrl = "picture";
-   public static final String sTopComment = "comment";
+   public static final String sTopCaption = "caption";
 
    @SerializedName(sStartDate) public long startDate;
    @SerializedName(sEndDate) public long endDate;
@@ -28,12 +28,12 @@ public class SnaptionMeta {
    @SerializedName(sPickerId) public int pickerId;
    @SerializedName(sImage) public String encodedImage;
    @SerializedName(sImageUrl) public String picture;
-   @SerializedName(sTopComment) public String comment;
+   @SerializedName(sTopCaption) public String caption;
 
    @ParcelConstructor
    public SnaptionMeta(long startDate, long endDate, boolean isPrivate, String pickerName,
                        int pickerId, String encodedImage, String picture, String type, String
-                                  comment) {
+                                  caption) {
       this.startDate = startDate;
       this.endDate = endDate;
       this.isPrivate = isPrivate;
@@ -42,6 +42,6 @@ public class SnaptionMeta {
       this.encodedImage = encodedImage;
       this.picture = picture;
       this.type = type;
-      this.comment = comment;
+      this.caption = caption;
    }
 }

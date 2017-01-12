@@ -53,12 +53,7 @@ public class WallAdapter extends RecyclerView.Adapter {
             .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
             .into(holder.mCaptionerImage);
 
-      if (curSnaption.meta.comment.length() <= 60) {
-         holder.mTopCaption.setText(curSnaption.meta.comment);
-      } else {
-         String shortened = curSnaption.meta.comment.substring(0, 60) + "...";
-         holder.mTopCaption.setText(shortened);
-      }
+      holder.mTopCaption.setText(curSnaption.getDisplayCaption());
    }
 
    public void setSnaptions(List<Snaption> snaptions) {

@@ -21,4 +21,12 @@ public final class Snaption {
       this.id = id;
       this.meta = meta;
    }
+
+   public String getDisplayCaption() {
+      if (meta.caption.length() <= 60) {
+         return meta.caption;
+      } else {
+         return meta.caption.substring(0, 57) + "...";
+      }
+   }
 }

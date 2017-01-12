@@ -121,7 +121,7 @@ public class WallFragment extends Fragment {
               ".smashbros.com/us/images/index/image/main-3ds-logo.png", "", " I want to play as " +
               "the little rat")));
       snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
-              ".sideshowtoy.com/photo_902292_thumb.jpg", "", "When the weed hits you")));
+              ".sideshowtoy.com/photo_902292_thumb.jpg", "", "What a cool storm trooper")));
       mAdapter.setSnaptions(snaptions);
       mRefreshLayout.setRefreshing(false);
    }
