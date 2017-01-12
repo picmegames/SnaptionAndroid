@@ -12,5 +12,11 @@ android:
     - extra-google-m2repository
     - extra-android-support
     - addon-google_apis-google-24
+before_script:
+  - echo no | android create avd --force -n test -t android-25 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+script:
+    - ./gradlew connectedAndroidTest
 notifications:
   slack: capstone-snaption:uLoSExpS3w6h7MWDHQfExWth
