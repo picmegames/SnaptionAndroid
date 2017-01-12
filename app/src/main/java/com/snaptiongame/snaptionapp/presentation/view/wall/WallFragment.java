@@ -113,15 +113,17 @@ public class WallFragment extends Fragment {
       List<Snaption> snaptions = new ArrayList<>();
       snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
               ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
-              "-959818851016.jpg", "", "Wow thats a " +
+              "-959818851016.jpg", "", "", "Brian Gouldsberry", "Wow thats a " +
               "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
       snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
-              ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "6/10 Moustache")));
+              ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "", "Nick Romero", "6/10 Moustache")));
       snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://www" +
-              ".smashbros.com/us/images/index/image/main-3ds-logo.png", "", " I want to play as " +
+              ".smashbros.com/us/images/index/image/main-3ds-logo.png", "", "", "Tyler Wong", "I want to play as " +
               "the little rat")));
       snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
-              ".sideshowtoy.com/photo_902292_thumb.jpg", "", "What a cool storm trooper")));
+              ".sideshowtoy.com/photo_902292_thumb.jpg", "", "", "Quang Ngo", "What a cool storm trooper")));
+      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://cdn.bulbagarden" +
+            ".net/upload/thumb/2/21/001Bulbasaur.png/250px-001Bulbasaur.png", "", "", "", "")));
       mAdapter.setSnaptions(snaptions);
       mRefreshLayout.setRefreshing(false);
    }

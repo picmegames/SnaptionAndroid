@@ -2,13 +2,9 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
-
 /**
  * @author Tyler Wong
  */
-@Parcel()
 public class CaptionMeta {
    public static final String sSnaptionId = "gameId";
    public static final String sUserId = "user_id";
@@ -22,7 +18,6 @@ public class CaptionMeta {
    @SerializedName(sUpvotes) public int upvotes;
    @SerializedName(sCaption) public String caption;
 
-   @ParcelConstructor
    public CaptionMeta(int snaptionId, int userId, String username, int upvotes, String caption) {
       this.snaptionId = snaptionId;
       this.userId = userId;

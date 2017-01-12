@@ -2,13 +2,9 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
-
 /**
  * @author Tyler Wong
  */
-@Parcel()
 public class SnaptionMeta {
    public static final String sStartDate = "start_date";
    public static final String sEndDate = "end_date";
@@ -18,7 +14,9 @@ public class SnaptionMeta {
    public static final String sType = "type";
    public static final String sImage = "pictureEncoded";
    public static final String sImageUrl = "picture";
-   public static final String sTopCaption = "caption";
+   public static final String sTopCaptioner = "topCaptioner";
+   public static final String sTopCaption = "topCaption";
+   public static final String sTopCaptionerImage = "topCaptionerImage";
 
    @SerializedName(sStartDate) public long startDate;
    @SerializedName(sEndDate) public long endDate;
@@ -28,12 +26,13 @@ public class SnaptionMeta {
    @SerializedName(sPickerId) public int pickerId;
    @SerializedName(sImage) public String encodedImage;
    @SerializedName(sImageUrl) public String picture;
-   @SerializedName(sTopCaption) public String caption;
+   @SerializedName(sTopCaptionerImage) public String topCaptionerImage;
+   @SerializedName(sTopCaptioner) public String topCaptioner;
+   @SerializedName(sTopCaption) public String topCaption;
 
-   @ParcelConstructor
    public SnaptionMeta(long startDate, long endDate, boolean isPrivate, String pickerName,
-                       int pickerId, String encodedImage, String picture, String type, String
-                                  caption) {
+                       int pickerId, String encodedImage, String picture, String type,
+                       String topCaptionerImage, String topCaptioner, String topCaption) {
       this.startDate = startDate;
       this.endDate = endDate;
       this.isPrivate = isPrivate;
@@ -42,6 +41,8 @@ public class SnaptionMeta {
       this.encodedImage = encodedImage;
       this.picture = picture;
       this.type = type;
-      this.caption = caption;
+      this.topCaptionerImage = topCaptionerImage;
+      this.topCaptioner = topCaptioner;
+      this.topCaption = topCaption;
    }
 }
