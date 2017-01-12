@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.presentation.view.wall;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,8 @@ public class WallAdapter extends RecyclerView.Adapter {
             .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
             .into(holder.mCaptionerImage);
 
-      holder.mTopCaption.setText(curSnaption.getDisplayCaption());
+      holder.mTopCaption.setEllipsize(TextUtils.TruncateAt.END);
+      holder.mTopCaption.setText(curSnaption.meta.caption);
    }
 
    public void setSnaptions(List<Snaption> snaptions) {
