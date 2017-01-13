@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.presentation.view.wall;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 /**
@@ -11,18 +12,26 @@ import android.view.View;
 public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
    private final int mSpace;
 
+   private static final int RIGHT = 1;
+
    public SpacesItemDecoration(int space) {
       this.mSpace = space;
    }
 
    @Override
    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-      outRect.left = mSpace;
-      outRect.right = mSpace;
-      outRect.bottom = mSpace;
-      // Add top margin only for the first item to avoid double space between items
-      if (parent.getChildAdapterPosition(view) == 0) {
-         outRect.top = mSpace;
+      int spanIndex = ((StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams()).getSpanIndex();
+
+      if (spanIndex == RIGHT) {
+         outRect.left = mSpace / 2;
+         outRect.right = mSpace;
       }
+      else {
+         outRect.left = mSpace;
+         outRect.right = mSpace / 2;
+      }
+
+      outRect.bottom = 0;
+      outRect.top = mSpace;
    }
 }

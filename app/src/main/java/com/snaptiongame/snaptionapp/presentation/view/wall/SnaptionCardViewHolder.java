@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,12 +30,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    @BindView(R.id.image)
    ImageView mImage;
-   @BindView(R.id.captioner_image)
-   CircleImageView mCaptionerImage;
    @BindView(R.id.top_caption)
    TextView mTopCaption;
-   @BindView(R.id.menu_button)
-   ImageButton mMenuButton;
+   @BindView(R.id.captioner_image)
+   CircleImageView mCaptionerImage;
+   @BindView(R.id.captioner_name)
+   TextView mCaptionerName;
 
    private Context mContext;
    public int mGameId;
@@ -48,11 +47,11 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
       ButterKnife.bind(this, itemView);
 
       if (Build.VERSION.SDK_INT >= 21) {
-         itemView.setClipToOutline(true);
+         mImage.setClipToOutline(true);
       }
 
-      mMenuButton.setOnClickListener(view -> {
-         PopupMenu menu = new PopupMenu(mContext, mMenuButton);
+      itemView.setOnLongClickListener(view -> {
+         PopupMenu menu = new PopupMenu(mContext, itemView);
          menu.getMenuInflater().inflate(R.menu.snaption_card_menu, menu.getMenu());
 
          menu.setOnMenuItemClickListener(item -> {
@@ -74,6 +73,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          });
 
          menu.show();
+         return true;
       });
 
       itemView.setOnClickListener(view -> {

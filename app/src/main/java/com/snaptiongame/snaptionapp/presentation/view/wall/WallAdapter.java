@@ -42,6 +42,7 @@ public class WallAdapter extends RecyclerView.Adapter {
       holder.mGameId = curSnaption.id;
 
       if (curSnaption.meta.picture != null) {
+         holder.mImage.layout(0, 0, 0, 0);
          Glide.with(mContext)
                .load(curSnaption.meta.picture)
                .into(holder.mImage);
@@ -60,13 +61,14 @@ public class WallAdapter extends RecyclerView.Adapter {
          else {
             holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
                   .beginConfig()
-                  .width(30)
-                  .height(30)
+                  .width(40)
+                  .height(40)
                   .toUpperCase()
                   .endConfig()
                   .buildRound(curSnaption.meta.topCaptioner.substring(0, 1),
                         ColorGenerator.MATERIAL.getRandomColor()));
          }
+         holder.mCaptionerName.setText(curSnaption.meta.topCaptioner);
          holder.mTopCaption.setText(curSnaption.meta.topCaption);
       }
       else {
