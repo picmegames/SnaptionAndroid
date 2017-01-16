@@ -6,14 +6,58 @@ import com.google.gson.annotations.SerializedName;
  * @author Tyler Wong
  */
 public final class Snaption {
-   public static final String sId = "pk";
-   public static final String sFields = "fields";
+   public static final String sId = "id";
+   public static final String sStartDate = "start_date";
+   public static final String sEndDate = "end_date";
+   public static final String sIsPublic = "isPublic";
+   public static final String sPickerId = "picker_id";
+   public static final String sPickerName = "picker_name";
+   public static final String sType = "type";
+   public static final String sImage = "pictureEncoded";
+   public static final String sImageUrl = "picture";
+   public static final String sTopCaptioner = "topCaptioner";
+   public static final String sTopCaption = "topCaption";
+   public static final String sTopCaptionerImage = "topCaptionerImage";
 
-   @SerializedName(sId) public int id;
-   @SerializedName(sFields) public SnaptionMeta meta;
+   @SerializedName(sId)
+   public int id;
+   @SerializedName(sStartDate)
+   public long startDate;
+   @SerializedName(sEndDate)
+   public long endDate;
+   @SerializedName(sIsPublic)
+   public boolean isPublic;
+   @SerializedName(sType)
+   public String type;
+   @SerializedName(sPickerName)
+   public String pickerName;
+   @SerializedName(sPickerId)
+   public int pickerId;
+   @SerializedName(sImage)
+   public String encodedImage;
+   @SerializedName(sImageUrl)
+   public String picture;
+   @SerializedName(sTopCaptionerImage)
+   public String topCaptionerImage;
+   @SerializedName(sTopCaptioner)
+   public String topCaptioner;
+   @SerializedName(sTopCaption)
+   public String topCaption;
 
-   public Snaption(int id, SnaptionMeta meta) {
+   public Snaption(int id, long startDate, long endDate, boolean isPublic, String pickerName,
+                   int pickerId, String encodedImage, String picture, String type,
+                   String topCaptionerImage, String topCaptioner, String topCaption) {
       this.id = id;
-      this.meta = meta;
+      this.startDate = startDate;
+      this.endDate = endDate;
+      this.isPublic = isPublic;
+      this.pickerName = pickerName;
+      this.pickerId = pickerId;
+      this.encodedImage = encodedImage;
+      this.picture = picture;
+      this.type = type;
+      this.topCaptionerImage = topCaptionerImage;
+      this.topCaptioner = topCaptioner;
+      this.topCaption = topCaption;
    }
 }

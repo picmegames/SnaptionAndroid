@@ -41,19 +41,19 @@ public class WallAdapter extends RecyclerView.Adapter {
 
       holder.mGameId = curSnaption.id;
 
-      if (curSnaption.meta.picture != null) {
+      if (curSnaption.picture != null) {
          holder.mImage.layout(0, 0, 0, 0);
          Glide.with(mContext)
-               .load(curSnaption.meta.picture)
+               .load(curSnaption.picture)
                .into(holder.mImage);
-         holder.mImageUrl = curSnaption.meta.picture;
+         holder.mImageUrl = curSnaption.picture;
       }
       else {
          Glide.clear(holder.mImage);
       }
 
-      if (!curSnaption.meta.topCaption.isEmpty()) {
-         if (!curSnaption.meta.topCaptionerImage.isEmpty()) {
+      if (curSnaption.topCaption != null) {
+         if (curSnaption.topCaptionerImage != null) {
             Glide.with(mContext)
                   .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
                   .into(holder.mCaptionerImage);
@@ -65,11 +65,11 @@ public class WallAdapter extends RecyclerView.Adapter {
                   .height(40)
                   .toUpperCase()
                   .endConfig()
-                  .buildRound(curSnaption.meta.topCaptioner.substring(0, 1),
+                  .buildRound(curSnaption.topCaptioner.substring(0, 1),
                         ColorGenerator.MATERIAL.getRandomColor()));
          }
-         holder.mCaptionerName.setText(curSnaption.meta.topCaptioner);
-         holder.mTopCaption.setText(curSnaption.meta.topCaption);
+         holder.mCaptionerName.setText(curSnaption.topCaptioner);
+         holder.mTopCaption.setText(curSnaption.topCaption);
       }
       else {
          Glide.with(mContext)

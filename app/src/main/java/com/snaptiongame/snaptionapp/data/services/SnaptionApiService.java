@@ -17,7 +17,7 @@ import rx.Observable;
  */
 
 public interface SnaptionApiService {
-   @GET("/games")
+   @GET("/Games")
    Observable<List<Snaption>> getSnaptions();
 
    @FormUrlEncoded

@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.models.SnaptionMeta;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGame;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
@@ -109,51 +108,51 @@ public class WallFragment extends Fragment {
                   mRefreshLayout.setRefreshing(false);
                }
             });
-      List<Snaption> snaptions = new ArrayList<>();
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
-              ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
-              "-959818851016.jpg", "", "", "Brian Gouldsberry", "Wow thats a " +
-              "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
-              ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "", "Nick Romero", "6/10 Moustache")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/vi" +
-            "/3soHkrdTdRQ/maxresdefault.jpg", "", "", "Tyler Wong", "I want to play as " +
-              "the little rat")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
-              ".sideshowtoy.com/photo_902292_thumb.jpg", "", "", "Quang Ngo", "What a cool storm trooper")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "",
-            "https://i.ytimg.com/vi/Ci3uHxJE59I/hqdefault.jpg", "", "", "", "")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
-            ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
-            "-959818851016.jpg", "", "", "Brian Gouldsberry", "Wow thats a " +
-            "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
-            ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "", "Nick Romero", "6/10 Moustache")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/vi" +
-            "/3soHkrdTdRQ/maxresdefault.jpg", "", "", "Tyler Wong", "I want to play as " +
-            "the little rat")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
-            ".sideshowtoy.com/photo_902292_thumb.jpg", "", "", "Quang Ngo", "What a cool storm trooper")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/" +
-            "vi/Ci3uHxJE59I/hqdefault.jpg", "", "", "", "")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
-            ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
-            "-959818851016.jpg", "", "", "Brian Gouldsberry", "Wow thats a " +
-            "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
-            ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "", "Nick Romero", "6/10 Moustache")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/vi" +
-            "/3soHkrdTdRQ/maxresdefault.jpg", "", "", "Tyler Wong", "I want to play as " +
-            "the little rat")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
-            ".sideshowtoy.com/photo_902292_thumb.jpg", "", "", "Quang Ngo", "What a cool storm trooper")));
-      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "",
-            "https://i.ytimg.com/vi/Ci3uHxJE59I/hqdefault.jpg", "", "", "", "")));
-      mAdapter.setSnaptions(snaptions);
-      mRefreshLayout.setRefreshing(false);
+//      List<Snaption> snaptions = new ArrayList<>();
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
+//              ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
+//              "-959818851016.jpg", "", "", "Brian Gouldsberry", "Wow thats a " +
+//              "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+//            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
+//              ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "", "Nick Romero", "6/10 Moustache")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/vi" +
+//            "/3soHkrdTdRQ/maxresdefault.jpg", "", "", "Tyler Wong", "I want to play as " +
+//              "the little rat")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
+//              ".sideshowtoy.com/photo_902292_thumb.jpg", "", "", "Quang Ngo", "What a cool storm trooper")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "",
+//            "https://i.ytimg.com/vi/Ci3uHxJE59I/hqdefault.jpg", "", "", "", "")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
+//            ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
+//            "-959818851016.jpg", "", "", "Brian Gouldsberry", "Wow thats a " +
+//            "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+//            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
+//            ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "", "Nick Romero", "6/10 Moustache")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/vi" +
+//            "/3soHkrdTdRQ/maxresdefault.jpg", "", "", "Tyler Wong", "I want to play as " +
+//            "the little rat")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
+//            ".sideshowtoy.com/photo_902292_thumb.jpg", "", "", "Quang Ngo", "What a cool storm trooper")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/" +
+//            "vi/Ci3uHxJE59I/hqdefault.jpg", "", "", "", "")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "http://a.dilcdn" +
+//            ".com/bl/wp-content/uploads/sites/6/2015/10/tfa_poster_wide_header-1536x864" +
+//            "-959818851016.jpg", "", "", "Brian Gouldsberry", "Wow thats a " +
+//            "reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+//            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaallly cool lightning sword")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://upload" +
+//            ".wikimedia.org/wikipedia/en/9/99/MarioSMBW.png", "", "", "Nick Romero", "6/10 Moustache")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://i.ytimg.com/vi" +
+//            "/3soHkrdTdRQ/maxresdefault.jpg", "", "", "Tyler Wong", "I want to play as " +
+//            "the little rat")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "", "https://www" +
+//            ".sideshowtoy.com/photo_902292_thumb.jpg", "", "", "Quang Ngo", "What a cool storm trooper")));
+//      snaptions.add(new Snaption(0, new SnaptionMeta(0, 0, false, "", 0, "",
+//            "https://i.ytimg.com/vi/Ci3uHxJE59I/hqdefault.jpg", "", "", "", "")));
+//      mAdapter.setSnaptions(snaptions);
+//      mRefreshLayout.setRefreshing(false);
    }
 
    @OnClick(R.id.fab)
