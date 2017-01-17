@@ -9,6 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -21,13 +22,17 @@ public interface SnaptionApiService {
    Observable<List<Snaption>> getSnaptions();
 
    @FormUrlEncoded
-   @POST("/games")
+   @PUT("/Games/{gameId}")
+   Observable<Void> upvoteSnaption(@Path("gameId") int gameId, @Field("upvote") boolean upvote, @Field("userId") int userId);
+
+   @FormUrlEncoded
+   @POST("/Games")
    Observable<Void> addSnaption(@Field("type") String type, @Field("pictureEncoded") String image);
 
-   @GET("/captions/{gameId}")
+   @GET("/Games/{gameId}/Captions")
    Observable<List<Caption>> getCaptions(@Path("gameId") int gameId);
 
    @FormUrlEncoded
-   @POST("/captions")
+   @POST("/Captions")
    Observable<Void> addCaption(@Field("message") String message, @Field("gameId") int gameId);
 }

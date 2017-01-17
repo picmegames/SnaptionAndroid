@@ -15,9 +15,7 @@ public final class Snaption {
    public static final String sType = "type";
    public static final String sImage = "pictureEncoded";
    public static final String sImageUrl = "picture";
-   public static final String sTopCaptioner = "topCaptioner";
    public static final String sTopCaption = "topCaption";
-   public static final String sTopCaptionerImage = "topCaptionerImage";
 
    @SerializedName(sId)
    public int id;
@@ -37,16 +35,11 @@ public final class Snaption {
    public String encodedImage;
    @SerializedName(sImageUrl)
    public String picture;
-   @SerializedName(sTopCaptionerImage)
-   public String topCaptionerImage;
-   @SerializedName(sTopCaptioner)
-   public String topCaptioner;
    @SerializedName(sTopCaption)
-   public String topCaption;
+   public Caption topCaption;
 
    public Snaption(int id, long startDate, long endDate, boolean isPublic, String pickerName,
-                   int pickerId, String encodedImage, String picture, String type,
-                   String topCaptionerImage, String topCaptioner, String topCaption) {
+                   int pickerId, String encodedImage, String picture, String type) {
       this.id = id;
       this.startDate = startDate;
       this.endDate = endDate;
@@ -56,8 +49,5 @@ public final class Snaption {
       this.encodedImage = encodedImage;
       this.picture = picture;
       this.type = type;
-      this.topCaptionerImage = topCaptionerImage;
-      this.topCaptioner = topCaptioner;
-      this.topCaption = topCaption;
    }
 }

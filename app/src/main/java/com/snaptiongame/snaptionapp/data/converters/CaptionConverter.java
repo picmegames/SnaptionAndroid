@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.CaptionMeta;
 
 import java.lang.reflect.Type;
 
@@ -21,8 +20,8 @@ public class CaptionConverter implements JsonDeserializer<Caption> {
          throws JsonParseException {
       JsonObject content = json.getAsJsonObject();
       Caption caption = new Gson().fromJson(json, typeOfT);
-      JsonElement fields = content.get("fields");
-      caption.meta = new Gson().fromJson(fields, CaptionMeta.class);
+//      JsonElement fields = content.get("fields");
+//      caption.meta = new Gson().fromJson(fields, CaptionMeta.class);
       return caption;
    }
 }

@@ -53,7 +53,7 @@ public class WallAdapter extends RecyclerView.Adapter {
       }
 
       if (curSnaption.topCaption != null) {
-         if (curSnaption.topCaptionerImage != null) {
+         if (curSnaption.topCaption.picture != null) {
             Glide.with(mContext)
                   .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
                   .into(holder.mCaptionerImage);
@@ -65,11 +65,10 @@ public class WallAdapter extends RecyclerView.Adapter {
                   .height(40)
                   .toUpperCase()
                   .endConfig()
-                  .buildRound(curSnaption.topCaptioner.substring(0, 1),
+                  .buildRound(curSnaption.topCaption.caption.substring(0, 1),
                         ColorGenerator.MATERIAL.getRandomColor()));
          }
-         holder.mCaptionerName.setText(curSnaption.topCaptioner);
-         holder.mTopCaption.setText(curSnaption.topCaption);
+         holder.mTopCaption.setText(curSnaption.topCaption.caption);
       }
       else {
          Glide.with(mContext)

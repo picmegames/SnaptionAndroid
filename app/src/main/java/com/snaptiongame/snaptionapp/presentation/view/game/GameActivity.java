@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.CaptionMeta;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
@@ -175,7 +174,7 @@ public class GameActivity extends AppCompatActivity {
       @Override
       protected void onPostExecute(Void aVoid) {
          super.onPostExecute(aVoid);
-         mAdapter.addTempCaption(new Caption(-1, new CaptionMeta(gameId, 0, "", 0, input)));
+         //mAdapter.addTempCaption(new Caption(-1, new CaptionMeta(gameId, 0, "", 0, input)));
       }
    }
 

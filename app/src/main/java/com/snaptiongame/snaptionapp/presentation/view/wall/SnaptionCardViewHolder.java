@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +17,15 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -34,12 +38,14 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    TextView mTopCaption;
    @BindView(R.id.captioner_image)
    CircleImageView mCaptionerImage;
-   @BindView(R.id.captioner_name)
-   TextView mCaptionerName;
+   @BindView(R.id.upvote)
+   ImageView mUpvoteButton;
 
    private Context mContext;
+
    public int mGameId;
    public String mImageUrl;
+   public boolean isUpvoted = false;
 
    public SnaptionCardViewHolder(Context context, View itemView) {
       super(itemView);
@@ -49,6 +55,21 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
       if (Build.VERSION.SDK_INT >= 21) {
          mImage.setClipToOutline(true);
       }
+
+      mUpvoteButton.setOnClickListener(view -> {
+         if (isUpvoted) {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_keyboard_arrow_up_grey_500_24dp));
+            isUpvoted = false;
+         }
+         else {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_keyboard_arrow_up_green_a400_24dp));
+            isUpvoted = true;
+            Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
+         }
+         SnaptionProvider.upvoteSnaption(mGameId, isUpvoted, 1)
+               .subscribeOn(Schedulers.newThread())
+               .observeOn(AndroidSchedulers.mainThread());
+      });
 
       itemView.setOnLongClickListener(view -> {
          PopupMenu menu = new PopupMenu(mContext, itemView);
