@@ -21,5 +21,7 @@
     <string name="timer_label">Minutero</string>
     <string name="welcome_message">¡Bienvenido a Snaption!</string>
     <string name="add_caption">¡Agrega un subtítulo!</string>
+    <string name="game_open">¡Abierto!</string>
+    <string name="game_closed">Cerrado</string>
 
 </resources>

@@ -29,8 +29,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:gravity="center"
         android:layout_toEndOf="@+id/name"
+        android:layout_toStartOf="@+id/like"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:lines="3"
+        android:textAlignment="textStart"
         android:textSize="14sp"/>
 
+    <ImageView
+        android:id="@+id/like"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_favorite_border_grey_400_24dp"/>
+
+    <TextView
+        android:id="@+id/number_of_likes"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/like"
+        android:layout_marginTop="10dp"/>
 </RelativeLayout>

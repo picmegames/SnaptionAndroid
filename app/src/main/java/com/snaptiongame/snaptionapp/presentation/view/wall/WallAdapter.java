@@ -76,6 +76,13 @@ public class WallAdapter extends RecyclerView.Adapter {
                .into(holder.mCaptionerImage);
          holder.mTopCaption.setText(mContext.getString(R.string.default_caption));
       }
+
+      if (curSnaption.id < 5) {
+         holder.mGameStatus.setText(mContext.getString(R.string.game_closed));
+      }
+      else {
+         holder.mGameStatus.setText(mContext.getString(R.string.game_open));
+      }
    }
 
    public void setSnaptions(List<Snaption> snaptions) {

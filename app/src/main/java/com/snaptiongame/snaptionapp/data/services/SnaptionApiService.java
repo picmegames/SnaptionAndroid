@@ -18,19 +18,23 @@ import rx.Observable;
  */
 
 public interface SnaptionApiService {
-   @GET("/Games")
+   @GET("/Games/")
    Observable<List<Snaption>> getSnaptions();
 
    @FormUrlEncoded
-   @PUT("/Games/{gameId}")
+   @PUT("/Games/{gameId}/")
    Observable<Void> upvoteSnaption(@Path("gameId") int gameId, @Field("upvote") boolean upvote, @Field("userId") int userId);
 
    @FormUrlEncoded
-   @POST("/Games")
+   @POST("/Games/")
    Observable<Void> addSnaption(@Field("type") String type, @Field("pictureEncoded") String image);
 
-   @GET("/Games/{gameId}/Captions")
+   @GET("/Games/{gameId}/Captions/")
    Observable<List<Caption>> getCaptions(@Path("gameId") int gameId);
+
+   @FormUrlEncoded
+   @PUT("/Captions/{captionId}/")
+   Observable<Void> upvoteCaption(@Path("captionId") int captionId, @Field("upvote") boolean upvote);
 
    @FormUrlEncoded
    @POST("/Captions")

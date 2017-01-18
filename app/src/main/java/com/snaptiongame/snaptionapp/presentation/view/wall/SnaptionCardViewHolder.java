@@ -40,6 +40,8 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    CircleImageView mCaptionerImage;
    @BindView(R.id.upvote)
    ImageView mUpvoteButton;
+   @BindView(R.id.game_status)
+   TextView mGameStatus;
 
    private Context mContext;
 
@@ -58,11 +60,11 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
 
       mUpvoteButton.setOnClickListener(view -> {
          if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_keyboard_arrow_up_grey_500_24dp));
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
             isUpvoted = false;
          }
          else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_keyboard_arrow_up_green_a400_24dp));
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
             isUpvoted = true;
             Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
          }

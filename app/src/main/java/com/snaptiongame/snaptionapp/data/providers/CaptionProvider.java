@@ -20,6 +20,11 @@ public class CaptionProvider {
             .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
    }
 
+   public static Observable<Void> upvoteCaption(int captionId, boolean upvote) {
+      return apiService.upvoteCaption(captionId, upvote)
+            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+   }
+
    public static Observable<Void> addCaption(String message, int gameId) {
       return apiService.addCaption(message, gameId)
             .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));

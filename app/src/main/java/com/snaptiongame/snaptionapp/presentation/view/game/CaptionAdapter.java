@@ -40,8 +40,10 @@ public class CaptionAdapter extends RecyclerView.Adapter {
       Glide.with(mContext)
             .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
             .into(holder.mUserImage);
+      holder.captionId = curCaption.id;
       holder.mCaption.setText(curCaption.caption);
       holder.mName.setText(curCaption.picture);
+      holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
    }
 
    public void addTempCaption(Caption caption) {
