@@ -1,7 +1,9 @@
 package com.snaptiongame.snaptionapp.presentation.view;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
+import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.snaptionapp.presentation.view.wall.WallFragment;
 
 import butterknife.BindView;
@@ -63,6 +66,20 @@ public class MainActivity extends AppCompatActivity
       mProfilePicture = (CircleImageView) headerView.findViewById(R.id.profile_image);
       mNameView = (TextView) headerView.findViewById(R.id.username);
       mEmailView = (TextView) headerView.findViewById(R.id.email);
+
+      mProfilePicture.setOnClickListener(view -> {
+         Intent profileIntent = new Intent(this, ProfileActivity.class);
+
+         if (Build.VERSION.SDK_INT >= 21) {
+            String transitionName = getString(R.string.shared_transition);
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this,
+                  mProfilePicture, transitionName);
+            startActivity(profileIntent, transitionActivityOptions.toBundle());
+         }
+         else {
+            startActivity(profileIntent);
+         }
+      });
 
       fragTag = WallFragment.class.getSimpleName();
       mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);

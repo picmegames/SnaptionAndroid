@@ -43,9 +43,10 @@ public final class AuthenticationManager {
    private static final String GOOGLE_SIGN_IN = "google";
 
    private static final String FB_FIELDS = "fields";
-   private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large)";
+   private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large), cover.type(large)";
 
    private static final String PROFILE_IMAGE_URL = "image_url";
+   private static final String COVER_PHOTO_URL = "cover_photo";
    private static final String FULL_NAME = "full_name";
    private static final String EMAIL = "email";
 
@@ -110,6 +111,7 @@ public final class AuthenticationManager {
             GraphRequest request = GraphRequest.newMeRequest(
                   loginResult.getAccessToken(), (JSONObject object, GraphResponse response) -> {
                      String profileImageUrl = "";
+                     String coverPhotoUrl = "";
                      String name = "";
                      String email = "";
 
@@ -117,10 +119,12 @@ public final class AuthenticationManager {
                         profileImageUrl = object.getJSONObject("picture")
                               .getJSONObject("data")
                               .getString("url");
+                        coverPhotoUrl = object.getJSONObject("cover")
+                              .getString("source");
                         name = object.getString("name");
                         email = object.getString("email");
 
-                        saveLoginInfo(profileImageUrl, name, email);
+                        saveLoginInfo(profileImageUrl, coverPhotoUrl, name, email);
                      }
                      catch (JSONException e) {
                         Log.v("Exception!", "Couldn't complete Graph Request");
@@ -197,9 +201,10 @@ public final class AuthenticationManager {
       clearLoginInfo();
    }
 
-   private void saveLoginInfo(String imageUrl, String name, String email) {
+   private void saveLoginInfo(String imageUrl, String coverUrl, String name, String email) {
       SharedPreferences.Editor editor = preferences.edit();
       editor.putString(PROFILE_IMAGE_URL, imageUrl);
+      editor.putString(COVER_PHOTO_URL, coverUrl);
       editor.putString(FULL_NAME, name);
       editor.putString(EMAIL, email);
       editor.apply();
@@ -208,6 +213,7 @@ public final class AuthenticationManager {
    private void clearLoginInfo() {
       SharedPreferences.Editor editor = preferences.edit();
       editor.putString(PROFILE_IMAGE_URL, "");
+      editor.putString(COVER_PHOTO_URL, "");
       editor.putString(FULL_NAME, "");
       editor.putString(EMAIL, "");
       editor.apply();
@@ -215,6 +221,10 @@ public final class AuthenticationManager {
 
    public String getProfileImageUrl() {
       return preferences.getString(PROFILE_IMAGE_URL, "");
+   }
+
+   public String getCoverPhotoUrl() {
+      return preferences.getString(COVER_PHOTO_URL, "");
    }
 
    public String getUserFullName() {
@@ -260,7 +270,7 @@ public final class AuthenticationManager {
             email = profileResult.getEmail();
          }
 
-         saveLoginInfo(profileImageUrl, username, email);
+         saveLoginInfo(profileImageUrl, "", username, email);
          setGoogleLoginState();
 
          if (authCallback != null) {

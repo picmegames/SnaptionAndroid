@@ -23,5 +23,7 @@
     <string name="add_caption">¡Agrega un subtítulo!</string>
     <string name="game_open">¡Abierto!</string>
     <string name="game_closed">Cerrado</string>
+    <string name="edit">Editar</string>
+    <string name="default_caption">¡Sea el primero en subtítulos esta imagen!</string>
 
 </resources>

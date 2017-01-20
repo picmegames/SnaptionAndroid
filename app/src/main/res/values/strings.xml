@@ -27,6 +27,7 @@
     <string name="default_caption">Be the first to caption this image!</string>
     <string name="game_open">Open!</string>
     <string name="game_closed">Closed</string>
+    <string name="edit">Edit</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
