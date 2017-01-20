@@ -138,12 +138,12 @@ public class ImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
       }
    }
 
-   public int getStatusBarHeight() {
+   public static int getStatusBarHeight(Context context) {
       int result = 0;
-      int resourceId = mContext.getResources().getIdentifier(STATUS_BAR_HEIGHT, DIMEN, ANDROID);
+      int resourceId = context.getResources().getIdentifier(STATUS_BAR_HEIGHT, DIMEN, ANDROID);
 
       if (resourceId > 0) {
-         result = mContext.getResources().getDimensionPixelSize(resourceId);
+         result = context.getResources().getDimensionPixelSize(resourceId);
       }
       return result;
    }

@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
       mProfilePicture.setOnClickListener(view -> {
          Intent profileIntent = new Intent(this, ProfileActivity.class);
 
-         if (Build.VERSION.SDK_INT >= 21) {
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String transitionName = getString(R.string.shared_transition);
             ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this,
                   mProfilePicture, transitionName);

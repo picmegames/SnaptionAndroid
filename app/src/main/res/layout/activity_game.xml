@@ -6,6 +6,7 @@
                                                  android:layout_height="match_parent"
                                                  android:background="@null"
                                                  android:descendantFocusability="beforeDescendants"
+                                                 android:fitsSystemWindows="true"
                                                  android:focusableInTouchMode="true">
 
     <android.support.design.widget.AppBarLayout
@@ -32,6 +33,7 @@
                 android:layout_height="350dp"
                 android:contentDescription="@string/app_name"
                 android:orientation="vertical"
+                android:fitsSystemWindows="true"
                 android:transitionName="@string/shared_transition"/>
 
             <android.support.v7.widget.Toolbar

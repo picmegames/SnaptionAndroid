@@ -106,7 +106,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          gameIntent.putExtra("gameId", mGameId);
          gameIntent.putExtra("image", mImageUrl);
 
-         if (Build.VERSION.SDK_INT >= 21) {
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String transitionName = mContext.getString(R.string.shared_transition);
             ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
                   (MainActivity) mContext, mImage, transitionName);
