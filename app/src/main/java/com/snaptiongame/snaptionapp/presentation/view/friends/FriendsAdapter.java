@@ -10,8 +10,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.presentation.view.wall.SnaptionCardViewHolder;
+import com.snaptiongame.snaptionapp.data.models.Friend;
 
 import java.util.List;
 
@@ -21,79 +20,53 @@ import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter {
     private Context mContext;
-    private List<Snaption> mSnaptions;
+    private List<Friend> mFriends;
 
-    public FriendsAdapter(Context context, List<Snaption> snaptions) {
+    public FriendsAdapter(Context context, List<Friend> friends) {
         this.mContext = context;
-        this.mSnaptions = snaptions;
+        this.mFriends = friends;
     }
 
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.snaption_card, parent, false);
+                .inflate(R.layout.list_item_with_image, parent, false);
         return new FriendViewHolder(mContext, view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         FriendViewHolder holder = (FriendViewHolder) viewHolder;
-        Snaption curSnaption = mSnaptions.get(position);
+        Friend curFriend = mFriends.get(position);
 
-        holder.mGameId = curSnaption.id;
-
-        if (curSnaption.picture != null) {
-            holder.mImage.layout(0, 0, 0, 0);
+        holder.mName.setText(curFriend.firstName + " " + curFriend.lastName);
+        holder.mUserName.setText(curFriend.userName);
+        if (curFriend.imageUrl != null && curFriend.imageUrl.length() > 0) {
             Glide.with(mContext)
-                    .load(curSnaption.picture)
+                    .load(curFriend.imageUrl)
                     .into(holder.mImage);
-            holder.mImageUrl = curSnaption.picture;
         }
         else {
-            Glide.clear(holder.mImage);
-        }
-
-        if (curSnaption.topCaption != null) {
-            if (curSnaption.topCaption.picture != null) {
-                Glide.with(mContext)
-                        .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
-                        .into(holder.mCaptionerImage);
-            }
-            else {
-                holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
-                        .beginConfig()
-                        .width(40)
-                        .height(40)
-                        .toUpperCase()
-                        .endConfig()
-                        .buildRound(curSnaption.topCaption.caption.substring(0, 1),
-                                ColorGenerator.MATERIAL.getRandomColor()));
-            }
-            holder.mTopCaption.setText(curSnaption.topCaption.caption);
-        }
-        else {
-            Glide.with(mContext)
-                    .load(R.mipmap.ic_launcher)
-                    .into(holder.mCaptionerImage);
-            holder.mTopCaption.setText(mContext.getString(R.string.default_caption));
-        }
-
-        if (curSnaption.id < 5) {
-            holder.mGameStatus.setText(mContext.getString(R.string.game_closed));
-        }
-        else {
-            holder.mGameStatus.setText(mContext.getString(R.string.game_open));
+            holder.mImage.setImageDrawable(TextDrawable.builder()
+                    .beginConfig()
+                    .width(40)
+                    .height(40)
+                    .toUpperCase()
+                    .endConfig()
+                    .buildRound(curFriend.firstName.substring(0, 1) + curFriend.lastName
+                            .substring(0, 1),
+                            ColorGenerator.MATERIAL.getRandomColor()));
         }
     }
 
-    public void setSnaptions(List<Snaption> snaptions) {
-        this.mSnaptions = snaptions;
+    public void setFriends(List<Friend> friends) {
+        this.mFriends = friends;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return mSnaptions.size();
+        return mFriends.size();
     }
 
     @Override

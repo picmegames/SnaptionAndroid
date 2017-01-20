@@ -22,12 +22,7 @@ import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
-import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGame;
-import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
-import com.snaptiongame.snaptionapp.presentation.view.wall.SpacesItemDecoration;
-import com.snaptiongame.snaptionapp.presentation.view.wall.WallAdapter;
+import com.snaptiongame.snaptionapp.data.models.Friend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * @author Tyler Wong
@@ -53,7 +43,7 @@ public class FriendsFragment extends Fragment {
     RecyclerView mFriends;
 
     private AuthenticationManager mAuthManager;
-    private WallAdapter mAdapter;
+    private FriendsAdapter mAdapter;
     private Unbinder mUnbinder;
 
     @Nullable
@@ -70,10 +60,8 @@ public class FriendsFragment extends Fragment {
         mUnbinder = ButterKnife.bind(this, view);
 
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-//        mFriends.addItemDecoration(new SpacesItemDecoration(
-//                getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
 
-        mAdapter = new WallAdapter(getContext(), new ArrayList<>());
+        mAdapter = new FriendsAdapter(getContext(), new ArrayList<>());
         mFriends.setAdapter(mAdapter);
 
 
@@ -86,29 +74,14 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadSnaptions();
+        loadFriends();
     }
 
-    private void loadSnaptions() {
-        SnaptionProvider.getAllSnaptions()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Snaption>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Nope :(");
-                    }
-
-                    @Override
-                    public void onNext(List<Snaption> snaptions) {
-                        mAdapter.setSnaptions(snaptions);
-                    }
-                });
+    private void loadFriends() {
+        List<Friend> friends = new ArrayList<Friend>();
+        friends.add(new Friend(1, "Quang", "Ngo", "QuincyQuangySomething", "", "", ""));
+        friends.add(new Friend(2, "Nick", "Romero", "NotNickRomero", "", "", ""));
+        mAdapter.setFriends(friends);
     }
 
     @OnClick(R.id.fab)
