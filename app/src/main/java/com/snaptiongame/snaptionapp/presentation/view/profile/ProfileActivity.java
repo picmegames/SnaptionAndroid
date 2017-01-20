@@ -1,12 +1,11 @@
 package com.snaptiongame.snaptionapp.presentation.view.profile;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +45,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
    CoordinatorLayout mLayout;
    @BindView(R.id.app_bar)
    AppBarLayout mAppBar;
+   @BindView(R.id.collapsing_toolbar)
+   CollapsingToolbarLayout mCollapsingLayout;
 
    private ActionBar mActionBar;
 
@@ -87,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
                .into(mCoverPhoto);
       }
 
-      if (Build.VERSION.SDK_INT >= 21) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
          mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
       }
 
@@ -138,8 +139,6 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
             TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics())) {
          mActionBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                getResources().getDisplayMetrics()));
-         mActionBar.setBackgroundDrawable(new ColorDrawable(
-               ContextCompat.getColor(this, R.color.colorPrimary)));
       }
       else {
          mActionBar.setElevation(0);
