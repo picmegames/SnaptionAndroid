@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.snaptionapp.presentation.view.wall.WallFragment;
@@ -171,6 +172,14 @@ public class MainActivity extends AppCompatActivity
             if (mAuthManager.isLoggedIn()) {
                mAuthManager.logout();
                goToLogin();
+            }
+            break;
+
+         case R.id.friends:
+            fragTag = FriendsFragment.class.getSimpleName();
+            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+            if (mCurrentFragment == null) {
+               mCurrentFragment = new FriendsFragment();
             }
             break;
 
