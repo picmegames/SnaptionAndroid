@@ -1,47 +1,32 @@
 package com.snaptiongame.snaptionapp.data.models;
 
-import com.google.gson.annotations.SerializedName;
+import io.realm.RealmObject;
 
 /**
- * Created by BrianGouldsberry on 1/20/17.
+ * @author Brian Gouldsberry
  */
 
-public class Friend {
-    public static final String sId = "id";
-    public static final String sStartDate = "start_date";
-    public static final String sEndDate = "end_date";
-    public static final String sIsPublic = "isPublic";
-    public static final String sPickerId = "picker_id";
-    public static final String sPickerName = "picker_name";
-    public static final String sType = "type";
-    public static final String sImage = "pictureEncoded";
-    public static final String sImageUrl = "picture";
-    public static final String sTopCaption = "topCaption";
-
-    @SerializedName(sId)
-    public int id;
-    @SerializedName(sStartDate)
+public class Friend extends RealmObject {
+    public String id;
     public String firstName;
-    @SerializedName(sEndDate)
     public String lastName;
-    @SerializedName(sIsPublic)
-    public String userName;
-    @SerializedName(sIsPublic)
-    public String imageUrl;
-    @SerializedName(sIsPublic)
-    public String phoneNumber;
-    @SerializedName(sIsPublic)
+    public String fullName;
+    public String picture;
+    public String cover;
     public String email;
 
-    public Friend(int id, String first, String last, String userName, String imageUrl, String
-            phoneNumber, String
-            email) {
+    public Friend() {
+
+    }
+
+    public Friend(String id, String first, String last, String fullName, String picture,
+                  String cover, String email) {
         this.id = id;
         this.firstName = first;
         this.lastName = last;
-        this.userName = userName;
-        this.imageUrl = imageUrl;
-        this.phoneNumber = phoneNumber;
+        this.fullName = fullName;
+        this.picture = picture;
+        this.cover = cover;
         this.email = email;
     }
 }

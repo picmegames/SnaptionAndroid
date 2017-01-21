@@ -8,7 +8,9 @@ import com.snaptiongame.snaptionapp.data.converters.CaptionConverter;
 import com.snaptiongame.snaptionapp.data.converters.SnaptionConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.squareup.leakcanary.LeakCanary;
 
+import io.realm.Realm;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -23,6 +25,12 @@ public class SnaptionApplication extends Application {
    @Override
    public void onCreate() {
       super.onCreate();
+
+      if (LeakCanary.isInAnalyzerProcess(this)) {
+         return;
+      }
+      LeakCanary.install(this);
+      Realm.init(this);
    }
 
    public static OkHttpClient makeOkHttpClient() {

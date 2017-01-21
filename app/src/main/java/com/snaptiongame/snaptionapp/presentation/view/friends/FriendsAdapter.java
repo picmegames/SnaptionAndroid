@@ -15,7 +15,7 @@ import com.snaptiongame.snaptionapp.data.models.Friend;
 import java.util.List;
 
 /**
- * Created by BrianGouldsberry on 1/19/17.
+ * @author Brian Gouldsberry
  */
 
 public class FriendsAdapter extends RecyclerView.Adapter {
@@ -30,7 +30,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.list_item_with_image, parent, false);
+                .inflate(R.layout.friend_card, parent, false);
         return new FriendViewHolder(mContext, view);
     }
 
@@ -39,11 +39,11 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         FriendViewHolder holder = (FriendViewHolder) viewHolder;
         Friend curFriend = mFriends.get(position);
 
-        holder.mName.setText(curFriend.firstName + " " + curFriend.lastName);
-        holder.mUserName.setText(curFriend.userName);
-        if (curFriend.imageUrl != null && curFriend.imageUrl.length() > 0) {
+        holder.mName.setText(curFriend.fullName);
+        holder.mUserName.setText(curFriend.fullName);
+        if (curFriend.picture != null && !curFriend.picture.isEmpty()) {
             Glide.with(mContext)
-                    .load(curFriend.imageUrl)
+                    .load(curFriend.picture)
                     .into(holder.mImage);
         }
         else {

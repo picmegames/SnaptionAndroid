@@ -11,7 +11,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by BrianGouldsberry on 1/19/17.
+ * @author Brian Gouldsberry
  */
 
 public class FriendViewHolder extends RecyclerView.ViewHolder {
@@ -23,8 +23,6 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     TextView mUserName;
 
     private Context mContext;
-
-    public int mGameId;
 
     public FriendViewHolder(Context context, View itemView) {
         super(itemView);

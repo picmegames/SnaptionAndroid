@@ -50,8 +50,6 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
    private ActionBar mActionBar;
 
-   private AuthenticationManager mAuthManager;
-
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
 
@@ -63,16 +61,15 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      mAuthManager = AuthenticationManager.getInstance(this);
 
       setContentView(R.layout.activity_profile);
       ButterKnife.bind(this);
 
-      String coverPhoto = mAuthManager.getCoverPhotoUrl();
-      String name = mAuthManager.getUserFullName();
+      String coverPhoto = getIntent().getStringExtra(AuthenticationManager.COVER_PHOTO_URL);
+      String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);
 
       Glide.with(this)
-            .load(mAuthManager.getProfileImageUrl())
+            .load(getIntent().getStringExtra(AuthenticationManager.PROFILE_IMAGE_URL))
             .into(mProfileImg);
 
       if (!coverPhoto.isEmpty()) {

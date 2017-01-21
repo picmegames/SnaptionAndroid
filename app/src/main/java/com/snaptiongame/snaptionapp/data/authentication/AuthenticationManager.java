@@ -26,13 +26,14 @@ import com.snaptiongame.snaptionapp.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.realm.Realm;
+
 /**
  * @author Tyler Wong
  */
 
 public final class AuthenticationManager {
    private static AuthenticationManager authManager;
-
    private CallbackManager callbackManager;
    private GoogleApiClient googleApiClient;
    private SharedPreferences preferences;
@@ -45,10 +46,10 @@ public final class AuthenticationManager {
    private static final String FB_FIELDS = "fields";
    private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large), cover.type(large)";
 
-   private static final String PROFILE_IMAGE_URL = "image_url";
-   private static final String COVER_PHOTO_URL = "cover_photo";
-   private static final String FULL_NAME = "full_name";
-   private static final String EMAIL = "email";
+   public static final String PROFILE_IMAGE_URL = "image_url";
+   public static final String COVER_PHOTO_URL = "cover_photo";
+   public static final String FULL_NAME = "full_name";
+   public static final String EMAIL = "email";
 
    private AuthenticationManager(Context context) {
       // Init Facebook SDK
@@ -217,6 +218,10 @@ public final class AuthenticationManager {
       editor.putString(FULL_NAME, "");
       editor.putString(EMAIL, "");
       editor.apply();
+      Realm realm = Realm.getDefaultInstance();
+      realm.beginTransaction();
+      realm.deleteAll();
+      realm.commitTransaction();
    }
 
    public String getProfileImageUrl() {

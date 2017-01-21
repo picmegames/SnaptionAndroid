@@ -69,16 +69,24 @@ public class MainActivity extends AppCompatActivity
       mEmailView = (TextView) headerView.findViewById(R.id.email);
 
       mProfilePicture.setOnClickListener(view -> {
-         Intent profileIntent = new Intent(this, ProfileActivity.class);
+         if (mAuthManager.isLoggedIn()) {
+            Intent profileIntent = new Intent(this, ProfileActivity.class);
+            profileIntent.putExtra(AuthenticationManager.PROFILE_IMAGE_URL, mAuthManager.getProfileImageUrl());
+            profileIntent.putExtra(AuthenticationManager.COVER_PHOTO_URL, mAuthManager.getCoverPhotoUrl());
+            profileIntent.putExtra(AuthenticationManager.FULL_NAME, mAuthManager.getUserFullName());
 
-         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String transitionName = getString(R.string.shared_transition);
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this,
-                  mProfilePicture, transitionName);
-            startActivity(profileIntent, transitionActivityOptions.toBundle());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+               String transitionName = getString(R.string.shared_transition);
+               ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this,
+                     mProfilePicture, transitionName);
+               startActivity(profileIntent, transitionActivityOptions.toBundle());
+            }
+            else {
+               startActivity(profileIntent);
+            }
          }
          else {
-            startActivity(profileIntent);
+            goToLogin();
          }
       });
 
@@ -168,10 +176,11 @@ public class MainActivity extends AppCompatActivity
       mDrawerLayout.closeDrawers();
 
       switch (item.getItemId()) {
-         case R.id.log_out:
-            if (mAuthManager.isLoggedIn()) {
-               mAuthManager.logout();
-               goToLogin();
+         case R.id.wall:
+            fragTag = WallFragment.class.getSimpleName();
+            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+            if (mCurrentFragment == null) {
+               mCurrentFragment = new WallFragment();
             }
             break;
 
@@ -183,13 +192,14 @@ public class MainActivity extends AppCompatActivity
             }
             break;
 
-         default:
-            fragTag = WallFragment.class.getSimpleName();
-            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-            if (mCurrentFragment == null) {
-               mCurrentFragment = new WallFragment();
+         case R.id.log_out:
+            if (mAuthManager.isLoggedIn()) {
+               mAuthManager.logout();
+               goToLogin();
             }
+            break;
 
+         default:
             break;
       }
 

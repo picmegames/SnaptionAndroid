@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -58,6 +59,11 @@ dependencies {
     // Android Support Libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
     compile "com.android.support:design:$rootProject.supportLibVersion"
+
+    // Leak Canary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     // Circle ImageView
     compile 'de.hdodenhof:circleimageview:2.1.0'
