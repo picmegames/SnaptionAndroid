@@ -140,6 +140,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
       else {
          mActionBar.setElevation(0);
       }
+
+      mLayout.setPadding(0, (int) Math.floor(ImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);
    }
 
    private void handleToolbarTitleVisibility(float percentage) {
