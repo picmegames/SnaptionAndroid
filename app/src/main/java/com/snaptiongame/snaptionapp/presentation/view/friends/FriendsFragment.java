@@ -17,10 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +36,8 @@ public class FriendsFragment extends Fragment {
     RecyclerView mFriends;
 
     private FriendsAdapter mAdapter;
+
+    private AuthenticationManager  mAuthManager;
     private Unbinder mUnbinder;
 
     @Nullable
@@ -49,6 +50,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAuthManager = AuthenticationManager.getInstance(getContext());
         mUnbinder = ButterKnife.bind(this, view);
 
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -69,15 +71,15 @@ public class FriendsFragment extends Fragment {
     }
 
     private void loadFriends() {
-        List<Friend> friends = new ArrayList<>();
-        friends.add(new Friend("1", "Quang", "Ngo", "QuincyQuangySomething", "", "", ""));
-        friends.add(new Friend("1", "Nick", "Romero", "NotNickRomero", "", "", ""));
-        mAdapter.setFriends(friends);
+        if (mAuthManager.isLoggedIn()) {
+           // get friends!
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+        mAuthManager.disconnectGoogleApi();
     }
 }
