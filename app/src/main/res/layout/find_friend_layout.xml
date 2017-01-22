@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
+
+    <EditText
+        android:id="@+id/friendSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ex. Phone - 9258183713"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="HERE goes the list of people matching the search?
+        Maybe use a dynamic list view?"/>
+
+</LinearLayout>
