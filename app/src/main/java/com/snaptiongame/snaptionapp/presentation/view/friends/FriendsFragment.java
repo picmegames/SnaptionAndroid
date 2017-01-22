@@ -4,6 +4,7 @@ package com.snaptiongame.snaptionapp.presentation.view.friends;
  * @author Brian Gouldsberry
  */
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -39,6 +41,9 @@ public class FriendsFragment extends Fragment {
 
     private AuthenticationManager  mAuthManager;
     private Unbinder mUnbinder;
+    private DialogFragment mDialogFragmentDefault;
+    private DialogFragment mDialogFragmentFriendSearch;
+
 
     @Nullable
     @Override
@@ -67,19 +72,57 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadFriends();
+        //loadFriends();
     }
 
     private void loadFriends() {
         if (mAuthManager.isLoggedIn()) {
-           // get friends!
+
         }
     }
+
+    @OnClick(R.id.fab)
+    public void inviteFriends() {
+
+
+        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(0, this);
+        mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
+
+
+    }
+
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
         mAuthManager.disconnectGoogleApi();
+    }
+
+    public void updateFriendsDialog(int whichOptionSelected) {
+
+
+        android.support.v4.app.FragmentTransaction transaction =
+                getActivity().getSupportFragmentManager().beginTransaction();
+        mDialogFragmentDefault.dismiss();
+        mDialogFragmentFriendSearch = new FriendsDialogFragment().newInstance(whichOptionSelected + 1, this);
+
+
+        mDialogFragmentFriendSearch.show(getActivity().getFragmentManager(), "dialog");
+    }
+
+    public void negativeButtonClicked(int whichDialog) {
+
+        switch (whichDialog) {
+
+            //Default dialog with all options present
+            case 0:
+                mDialogFragmentDefault.dismiss();
+                break;
+            default:
+                mDialogFragmentFriendSearch.dismiss();
+                mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
+        }
     }
 }

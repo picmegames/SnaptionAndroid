@@ -59,4 +59,13 @@
         <item>Funny</item>
         <item>Crazy</item>
     </string-array>
+
+    <!-- Invite Friends Dialog -->
+    <string name="add_a_friend">Add a friend!</string>
+    <string name="via_phone">via Phone #</string>
+    <string name="via_facebook">via Facebook</string>
+    <string name="via_email">via Email</string>
+    <string name="friendDialogTitle">Add a Friend!</string>
+
+
 </resources>
