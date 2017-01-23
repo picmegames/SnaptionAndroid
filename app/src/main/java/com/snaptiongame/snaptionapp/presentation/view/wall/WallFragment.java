@@ -57,15 +57,10 @@ public class WallFragment extends Fragment {
    @Override
    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
       super.onCreateView(inflater, container, savedInstanceState);
-      return inflater.inflate(R.layout.wall_fragment, container, false);
-   }
-
-   @Override
-   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-      mAuthManager = AuthenticationManager.getInstance(getContext());
+      View view = inflater.inflate(R.layout.wall_fragment, container, false);
       mUnbinder = ButterKnife.bind(this, view);
 
+      mWall.setHasFixedSize(true);
       mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
       mWall.addItemDecoration(new SpacesItemDecoration(
             getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
@@ -74,6 +69,14 @@ public class WallFragment extends Fragment {
       mWall.setAdapter(mAdapter);
 
       mRefreshLayout.setOnRefreshListener(this::loadSnaptions);
+
+      return view;
+   }
+
+   @Override
+   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+      super.onViewCreated(view, savedInstanceState);
+      mAuthManager = AuthenticationManager.getInstance(getContext());
 
       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {

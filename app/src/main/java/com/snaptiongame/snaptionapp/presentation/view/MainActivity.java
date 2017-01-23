@@ -31,13 +31,10 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * The Main Activity and entry point for the application.
- *
  * @author Tyler Wong
  */
 
-public class MainActivity extends AppCompatActivity
-      implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
    @BindView(R.id.toolbar)
    Toolbar mToolbar;
    @BindView(R.id.drawer)
@@ -98,6 +95,7 @@ public class MainActivity extends AppCompatActivity
 
       getSupportFragmentManager().beginTransaction()
             .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+      mNavigationView.getMenu().getItem(0).setChecked(true);
 
       mNavigationView.setNavigationItemSelectedListener(this);
 

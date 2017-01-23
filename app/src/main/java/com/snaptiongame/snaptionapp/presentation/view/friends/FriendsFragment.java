@@ -45,19 +45,22 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.friends_fragment, container, false);
+        View view = inflater.inflate(R.layout.friends_fragment, container, false);
+        mUnbinder = ButterKnife.bind(this, view);
+
+        mFriends.setHasFixedSize(true);
+        mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mAdapter = new FriendsAdapter(getContext(), new ArrayList<>());
+        mFriends.setAdapter(mAdapter);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAuthManager = AuthenticationManager.getInstance(getContext());
-        mUnbinder = ButterKnife.bind(this, view);
-
-        mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mAdapter = new FriendsAdapter(getContext(), new ArrayList<>());
-        mFriends.setAdapter(mAdapter);
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {

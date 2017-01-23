@@ -7,11 +7,13 @@
         <item
             android:id="@+id/wall"
             android:checked="false"
+            android:icon="@drawable/ic_dashboard_grey_900_24dp"
             android:title="@string/wall_label"/>
 
         <item
             android:id="@+id/friends"
             android:checked="false"
+            android:icon="@drawable/ic_group_grey_900_24dp"
             android:title="@string/friends_label"/>
     </group>
     <group
@@ -21,11 +23,14 @@
         <item
             android:id="@+id/settings"
             android:checked="false"
+            android:icon="@drawable/ic_settings_grey_900_24dp"
             android:title="@string/settings_label"/>
 
         <item
             android:id="@+id/log_out"
             android:checked="false"
+            android:checkable="false"
+            android:icon="@drawable/ic_exit_to_app_grey_900_24dp"
             android:title="@string/log_out_label"/>
 
     </group>
