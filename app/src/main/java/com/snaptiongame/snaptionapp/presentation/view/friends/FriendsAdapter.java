@@ -40,7 +40,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         Friend curFriend = mFriends.get(position);
 
         holder.mName.setText(curFriend.fullName);
-        holder.mUserName.setText(curFriend.fullName);
+        holder.mUserName.setText(curFriend.userName);
         if (curFriend.picture != null && !curFriend.picture.isEmpty()) {
             Glide.with(mContext)
                     .load(curFriend.picture)

@@ -1,29 +1,33 @@
 package com.snaptiongame.snaptionapp.presentation.view.friends;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by nickromero on 1/20/17.
@@ -43,6 +47,7 @@ public class FriendsDialogFragment extends DialogFragment {
     private int mHeaderIcon;
 
     private static FriendsFragment mFragmentActivity;
+    private static String TAG = "FRIEND_DIALOGUE";
 
 
     private String sNegativeButtonText;
@@ -55,6 +60,10 @@ public class FriendsDialogFragment extends DialogFragment {
     private final String FIND_FRIEND = "Find your friends!";
     private final String INVITE_FRIEND_LONG = "Invite a friend to Snaption!";
     private final String INVITE_FRIEND_SHORT = "Invite Friend";
+    private final String[] mHints = {"Ex: (555)-444-3333", "Ex: Bill Johnson", "Ex: sk8rdude@aol" +
+            ".com"};
+    private FriendsAdapter mAdapter;
+    private RecyclerView mResults;
 
 
     public FriendsDialogFragment() {
@@ -135,13 +144,26 @@ public class FriendsDialogFragment extends DialogFragment {
         if (mWhichDialog == 0) {
             ListView friendList = (ListView) inflater.inflate(R.layout.custom_friend_dialog, null);
             mDialogBuilder.setView(friendList);
-            friendList.setAdapter(new FriendsAdapter(getActivity()));
+            friendList.setAdapter(new AddFriendsAdapter(getActivity()));
         }
         /**
          * Change the following for your own screen on the invite dialog
          */
         else {
-            mDialogBuilder.setView(inflater.inflate(R.layout.find_friend_layout, null));
+            View view = inflater.inflate(R.layout.find_friend_layout, null);
+            mDialogBuilder.setView(view);
+            EditText search = (EditText) view.findViewById(R.id.friendSearchView);
+            search.setHint(mHints[mWhichDialog - 1]); //Sets the hint based off of which method
+            // the user is adding a friend
+             mResults = (RecyclerView) view.findViewById(R.id.search_results);
+             mResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
+            ArrayList<Friend> friends = new ArrayList<>();
+            if (mWhichDialog == 2) {
+                //provide friends
+                loadFacebookFriends();
+            }
+            mAdapter = new FriendsAdapter(view.getContext(), friends);
+             mResults.setAdapter(mAdapter);
         }
 
 
@@ -163,7 +185,29 @@ public class FriendsDialogFragment extends DialogFragment {
 
     }
 
-    private class FriendsAdapter extends BaseAdapter {
+    private void loadFacebookFriends() {
+        FriendProvider.getFacebookFriends()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Friend>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "Nope :(");
+                    }
+
+                    @Override
+                    public void onNext(List<Friend> friends) {
+                        mAdapter.setFriends(friends);
+                    }
+                });
+    }
+
+    private class AddFriendsAdapter extends BaseAdapter {
 
         private Context mContext;
 
@@ -174,7 +218,7 @@ public class FriendsDialogFragment extends DialogFragment {
                 R.drawable.ic_facebook,
                 R.drawable.ic_email};
 
-        private FriendsAdapter(Context context) {
+        private AddFriendsAdapter(Context context) {
             this.mContext = context;
 
         }

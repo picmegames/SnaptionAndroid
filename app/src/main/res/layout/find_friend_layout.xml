@@ -8,13 +8,12 @@
     <EditText
         android:id="@+id/friendSearchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Ex. Phone - 9258183713"/>
+        android:layout_height="wrap_content"/>
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_results"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="HERE goes the list of people matching the search?
-        Maybe use a dynamic list view?"/>
+        android:layout_height="200dp"
+        android:scrollbars="vertical"/>
 
 </LinearLayout>

@@ -1,9 +1,5 @@
 package com.snaptiongame.snaptionapp.presentation.view.friends;
 
-/**
- * @author Brian Gouldsberry
- */
-
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,7 +24,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
- * @author Tyler Wong
+ * @author Brian Gouldsberry
  */
 
 public class FriendsFragment extends Fragment {

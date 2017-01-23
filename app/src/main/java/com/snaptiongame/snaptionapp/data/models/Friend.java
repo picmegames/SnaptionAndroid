@@ -11,6 +11,7 @@ public class Friend extends RealmObject {
     public String firstName;
     public String lastName;
     public String fullName;
+    public String userName;
     public String picture;
     public String cover;
     public String email;
@@ -19,12 +20,13 @@ public class Friend extends RealmObject {
 
     }
 
-    public Friend(String id, String first, String last, String fullName, String picture,
+    public Friend(String id, String first, String last, String fullName, String userName, String picture,
                   String cover, String email) {
         this.id = id;
         this.firstName = first;
         this.lastName = last;
         this.fullName = fullName;
+        this.userName = userName;
         this.picture = picture;
         this.cover = cover;
         this.email = email;
