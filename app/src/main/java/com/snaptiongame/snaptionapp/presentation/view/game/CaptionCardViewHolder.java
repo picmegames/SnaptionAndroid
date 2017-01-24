@@ -13,8 +13,6 @@ import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -53,9 +51,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             isLiked = true;
             mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
          }
-         CaptionProvider.upvoteCaption(captionId, isLiked)
-               .subscribeOn(Schedulers.newThread())
-               .observeOn(AndroidSchedulers.mainThread());
+         CaptionProvider.upvoteCaption(captionId, isLiked, 1);
       });
    }
 }

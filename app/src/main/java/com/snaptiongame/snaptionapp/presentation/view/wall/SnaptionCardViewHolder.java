@@ -24,8 +24,6 @@ import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -68,9 +66,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             isUpvoted = true;
             Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
          }
-         SnaptionProvider.upvoteSnaption(mGameId, isUpvoted, 1)
-               .subscribeOn(Schedulers.newThread())
-               .observeOn(AndroidSchedulers.mainThread());
+         SnaptionProvider.upvoteSnaption(mGameId, isUpvoted, 1);
       });
 
       itemView.setOnLongClickListener(view -> {

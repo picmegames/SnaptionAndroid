@@ -31,8 +31,8 @@ import butterknife.Unbinder;
 import io.realm.Realm;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -50,6 +50,7 @@ public class WallFragment extends Fragment {
    private AuthenticationManager mAuthManager;
    private WallAdapter mAdapter;
    private Unbinder mUnbinder;
+   private Subscription mSubscription;
 
    public static final int NUM_COLUMNS = 2;
 
@@ -91,13 +92,12 @@ public class WallFragment extends Fragment {
    }
 
    private void loadSnaptions() {
-      SnaptionProvider.getAllSnaptions()
+      mSubscription = SnaptionProvider.getAllSnaptions()
             .publish(network ->
                   Observable.merge(network,
                         SnaptionProvider.getAllLocalSnaptions()
                               .takeUntil(network))
             )
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<Snaption>>() {
                @Override
@@ -148,6 +148,7 @@ public class WallFragment extends Fragment {
    public void onDestroyView() {
       super.onDestroyView();
       mUnbinder.unbind();
+      mSubscription.unsubscribe();
       mAuthManager.unregisterCallback();
    }
 }

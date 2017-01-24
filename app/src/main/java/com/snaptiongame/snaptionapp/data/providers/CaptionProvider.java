@@ -18,8 +18,7 @@ public class CaptionProvider {
    private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
 
    public static Observable<List<Caption>> getCaptions(int gameId) {
-      return apiService.getCaptions(gameId)
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+      return apiService.getCaptions(gameId);
    }
 
    public static Observable<List<Caption>> getLocalCaptions(int gameId) {
@@ -34,13 +33,11 @@ public class CaptionProvider {
       });
    }
 
-   public static Observable<Void> upvoteCaption(int captionId, boolean upvote) {
-      return apiService.upvoteCaption(captionId, upvote)
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+   public static Observable<Void> upvoteCaption(int captionId, boolean upvote, int userId) {
+      return apiService.upvoteCaption(captionId, upvote, userId);
    }
 
    public static Observable<Void> addCaption(String message, int gameId) {
-      return apiService.addCaption(message, gameId)
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+      return apiService.addCaption(message, gameId);
    }
 }

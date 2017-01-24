@@ -28,6 +28,7 @@
     <string name="game_open">Open!</string>
     <string name="game_closed">Closed</string>
     <string name="edit">Edit</string>
+    <string name="email">E-mail</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

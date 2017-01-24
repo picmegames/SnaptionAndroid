@@ -31,7 +31,6 @@ public class SnaptionProvider {
 
    public static Observable<List<Snaption>> getAllSnaptions() {
       return apiService.getSnaptions()
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()))
             .compose(sortSnaptions());
    }
 
@@ -47,12 +46,10 @@ public class SnaptionProvider {
    }
 
    public static Observable<Void> upvoteSnaption(int gameId, boolean upvote, int userId) {
-      return apiService.upvoteSnaption(gameId, upvote, userId)
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+      return apiService.upvoteSnaption(gameId, upvote, userId);
    }
 
    public static void addSnaption(String type, String image) {
-      apiService.addSnaption(type, image)
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+      apiService.addSnaption(type, image);
    }
 }

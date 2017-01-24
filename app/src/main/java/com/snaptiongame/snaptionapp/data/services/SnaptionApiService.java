@@ -34,7 +34,7 @@ public interface SnaptionApiService {
 
    @FormUrlEncoded
    @PUT("/Captions/{captionId}/")
-   Observable<Void> upvoteCaption(@Path("captionId") int captionId, @Field("upvote") boolean upvote);
+   Observable<Void> upvoteCaption(@Path("captionId") int captionId, @Field("upvote") boolean upvote, @Field("userId") int userId);
 
    @FormUrlEncoded
    @POST("/Captions")

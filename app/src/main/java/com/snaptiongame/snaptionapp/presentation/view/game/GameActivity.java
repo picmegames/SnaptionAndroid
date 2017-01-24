@@ -42,8 +42,8 @@ import butterknife.OnClick;
 import io.realm.Realm;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -63,6 +63,7 @@ public class GameActivity extends AppCompatActivity {
    private ActionBar mActionBar;
    private CaptionAdapter mAdapter;
    private AuthenticationManager mAuthManager;
+   private Subscription mSubscription;
    private int mGameId;
 
    private static final String CAPTIONS_ENDPOINT = "http://104.198.36.194/captions";
@@ -179,14 +180,13 @@ public class GameActivity extends AppCompatActivity {
    }
 
    private void loadCaptions() {
-      CaptionProvider.getCaptions(mGameId)
+      mSubscription = CaptionProvider.getCaptions(mGameId)
             .publish(network ->
                   Observable.merge(network,
                         CaptionProvider.getLocalCaptions(mGameId)
                               .takeUntil(network)
                   )
             )
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<Caption>>() {
                @Override
@@ -209,6 +209,12 @@ public class GameActivity extends AppCompatActivity {
                   mAdapter.setCaptions(captions);
                }
             });
+   }
+
+   @Override
+   protected void onDestroy() {
+      super.onDestroy();
+      mSubscription.unsubscribe();
    }
 
    @Override
