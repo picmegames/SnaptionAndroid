@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 android:id="@+id/layout"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent">
+<RelativeLayout
+         xmlns:android="http://schemas.android.com/apk/res/android"
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:orientation="horizontal"
+                  android:id="@+id/search_layout">
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9">
+            <EditText
+                android:id="@+id/query_field"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"/>
+
+            <Button
+                android:id="@+id/clear_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/ic_highlight_off_pink_24dp" />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="2dp"
+            android:layout_weight="2"
+            android:src="@drawable/ic_search_pink_24dp"/>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friend_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:layout_below="@+id/search_layout"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -21,8 +54,6 @@
         android:src="@drawable/ic_add_white_24dp"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="normal"
-        app:layout_anchor="@+id/friend_list"
-        app:layout_anchorGravity="bottom|end"
         app:rippleColor="@color/colorAccent"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

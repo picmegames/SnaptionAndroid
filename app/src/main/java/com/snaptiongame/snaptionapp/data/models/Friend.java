@@ -22,6 +22,16 @@ public class Friend extends RealmObject {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof  Friend) {
+            Friend other = (Friend) o;
+            return (id.equals(other.id) && firstName.equals(other.fullName) && lastName.equals(other
+                    .lastName) && fullName.equals(other.fullName) && userName.equals(other.userName));
+        }
+        return false;
+    }
+
     public Friend(String id, String first, String last, String fullName, String userName, String picture,
                   String cover, String email) {
         this.id = id;

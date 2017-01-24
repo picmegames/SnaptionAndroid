@@ -9,13 +9,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsDialogFragment;
+import com.snaptiongame.snaptionapp.data.models.Friend;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -32,13 +38,21 @@ public class FriendsFragment extends Fragment {
     FloatingActionButton mFab;
     @BindView(R.id.friend_list)
     RecyclerView mFriends;
+    @BindView(R.id.search_icon)
+    ImageView mSearch;
+    @BindView(R.id.query_field)
+    EditText mQuery;
+    @BindView(R.id.clear_button)
+    Button clear;
 
     private FriendsAdapter mAdapter;
+    private ArrayList<Friend> friends = new ArrayList<>();
 
     private AuthenticationManager  mAuthManager;
     private Unbinder mUnbinder;
     private DialogFragment mDialogFragmentDefault;
     private DialogFragment mDialogFragmentFriendSearch;
+    private String TAG = "FRIEND_LIST";
 
 
     @Nullable
@@ -50,9 +64,20 @@ public class FriendsFragment extends Fragment {
 
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mAdapter = new FriendsAdapter(getContext(), new ArrayList<>());
+        mAdapter = new FriendsAdapter(getContext(), friends);
         mFriends.setAdapter(mAdapter);
+
+        mSearch.setOnClickListener(theview -> {
+            ArrayList<Friend> results = filterList(friends, mQuery.getText().toString());
+            mAdapter.setFriends(results);
+            mAdapter.notifyDataSetChanged();
+        });
+
+        clear.setOnClickListener(theview -> {
+            mQuery.setText("");
+            mAdapter.setFriends(friends);
+            mAdapter.notifyDataSetChanged();
+        });
 
         return view;
     }
@@ -78,6 +103,19 @@ public class FriendsFragment extends Fragment {
         if (mAuthManager.isLoggedIn()) {
 
         }
+    }
+
+    public static ArrayList<Friend> filterList(ArrayList<Friend> friends, String query) {
+        if (query != null && query.length() > 0) {
+            ArrayList<Friend> filtered = new ArrayList<>();
+            for (Friend pal : friends) {
+                if (pal.fullName.toLowerCase().contains(query.toLowerCase())) {
+                    filtered.add(pal);
+                }
+            }
+            return filtered;
+        }
+        return friends;
     }
 
     @OnClick(R.id.fab)
