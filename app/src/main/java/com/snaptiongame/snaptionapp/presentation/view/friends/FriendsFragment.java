@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-
+import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsDialogFragment;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -84,7 +84,7 @@ public class FriendsFragment extends Fragment {
     public void inviteFriends() {
 
 
-        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(0, this);
+        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(FriendsDialogFragment.DialogToShow.STANDARD_DIALOG, this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
 
 
@@ -101,27 +101,51 @@ public class FriendsFragment extends Fragment {
 
     public void updateFriendsDialog(int whichOptionSelected) {
 
-
+        FriendsDialogFragment.DialogToShow dialogToShow = null;
         android.support.v4.app.FragmentTransaction transaction =
                 getActivity().getSupportFragmentManager().beginTransaction();
         mDialogFragmentDefault.dismiss();
-        mDialogFragmentFriendSearch = new FriendsDialogFragment().newInstance(whichOptionSelected + 1, this);
+
+        /**
+         * Depending on which invite option, the user selects, we want to show them the correct
+         * dialog
+         */
+        switch (whichOptionSelected) {
+            case 0:
+                dialogToShow = FriendsDialogFragment.DialogToShow.PHONE_INVITE;
+                break;
+            case 1:
+                dialogToShow = FriendsDialogFragment.DialogToShow.FACEBOOK_INVITE;
+                break;
+            case 2:
+                dialogToShow = FriendsDialogFragment.DialogToShow.EMAIL_INVITE;
+                break;
+        }
+
+        mDialogFragmentFriendSearch = new FriendsDialogFragment().newInstance(dialogToShow, this);
 
 
         mDialogFragmentFriendSearch.show(getActivity().getFragmentManager(), "dialog");
     }
 
-    public void negativeButtonClicked(int whichDialog) {
+    /**
+     * This method determines what should be shown to a user after they click the negative
+     * button on a dialog. For a standard dialog we just want to dismiss the dialog,
+     * otherwise we return to the previous dialog
+     * @param whichDialog holder for the type of dialog currently being shown
+     */
+    public void negativeButtonClicked(FriendsDialogFragment.DialogToShow whichDialog) {
 
         switch (whichDialog) {
 
             //Default dialog with all options present
-            case 0:
+            case STANDARD_DIALOG:
                 mDialogFragmentDefault.dismiss();
                 break;
             default:
                 mDialogFragmentFriendSearch.dismiss();
                 mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
+                break;
         }
     }
 }
