@@ -85,6 +85,10 @@ public class WallAdapter extends RecyclerView.Adapter {
       }
    }
 
+   public void clearSnaptions() {
+      mSnaptions.clear();
+   }
+
    public void setSnaptions(List<Snaption> snaptions) {
       this.mSnaptions = snaptions;
       notifyDataSetChanged();

@@ -7,6 +7,8 @@ import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 import java.util.Collections;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import rx.Observable;
 
 /**
@@ -29,13 +31,24 @@ public class SnaptionProvider {
 
    public static Observable<List<Snaption>> getAllSnaptions() {
       return apiService.getSnaptions()
-               .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()))
-               .compose(sortSnaptions());
+            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()))
+            .compose(sortSnaptions());
+   }
+
+   public static Observable<List<Snaption>> getAllLocalSnaptions() {
+      return Observable.defer(() -> {
+         try (Realm realmInstance = Realm.getDefaultInstance()) {
+            RealmResults<Snaption> realmResults = realmInstance
+                  .where(Snaption.class)
+                  .findAll();
+            return Observable.just(realmInstance.copyFromRealm(realmResults));
+         }
+      });
    }
 
    public static Observable<Void> upvoteSnaption(int gameId, boolean upvote, int userId) {
       return apiService.upvoteSnaption(gameId, upvote, userId)
-               .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
    }
 
    public static void addSnaption(String type, String image) {

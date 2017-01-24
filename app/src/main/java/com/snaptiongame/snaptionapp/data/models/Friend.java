@@ -1,12 +1,14 @@
 package com.snaptiongame.snaptionapp.data.models;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * @author Brian Gouldsberry
  */
 
 public class Friend extends RealmObject {
+    @PrimaryKey
     public String id;
     public String firstName;
     public String lastName;

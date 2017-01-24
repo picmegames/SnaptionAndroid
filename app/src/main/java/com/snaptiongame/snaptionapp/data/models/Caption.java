@@ -2,10 +2,13 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * @author Tyler Wong
  */
-public final class Caption {
+public class Caption extends RealmObject {
    public static final String sId = "id";
    public static final String sGameId = "game_id";
    public static final String sNumVotes = "numVotes";
@@ -15,6 +18,7 @@ public final class Caption {
    public static final String sPicture = "picUrl";
 
    @SerializedName(sId)
+   @PrimaryKey
    public int id;
    @SerializedName(sGameId)
    public int gameId;
@@ -28,6 +32,10 @@ public final class Caption {
    public String caption;
    @SerializedName(sPicture)
    public String picture;
+
+   public Caption() {
+
+   }
 
    public Caption(int id, int gameId, int numVotes, int creatorId, int fitBId,
                   String caption, String picture) {

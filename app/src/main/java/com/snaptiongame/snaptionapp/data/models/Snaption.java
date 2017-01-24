@@ -2,10 +2,13 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * @author Tyler Wong
  */
-public final class Snaption {
+public class Snaption extends RealmObject {
    public static final String sId = "id";
    public static final String sStartDate = "start_date";
    public static final String sEndDate = "end_date";
@@ -18,6 +21,7 @@ public final class Snaption {
    public static final String sTopCaption = "topCaption";
 
    @SerializedName(sId)
+   @PrimaryKey
    public int id;
    @SerializedName(sStartDate)
    public long startDate;
@@ -37,6 +41,10 @@ public final class Snaption {
    public String picture;
    @SerializedName(sTopCaption)
    public Caption topCaption;
+
+   public Snaption() {
+
+   }
 
    public Snaption(int id, long startDate, long endDate, boolean isPublic, String pickerName,
                    int pickerId, String encodedImage, String picture, String type) {

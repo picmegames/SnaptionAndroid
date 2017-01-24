@@ -24,7 +24,7 @@ import rx.Observable;
 
 public class FriendProvider {
 
-   private static void getUserFriends() {
+   public static void loadUserFriends() {
       AccessToken token = AccessToken.getCurrentAccessToken();
       GraphRequest graphRequest = GraphRequest.newMeRequest(token, (JSONObject object, GraphResponse response) -> {
          try {
@@ -54,16 +54,10 @@ public class FriendProvider {
             String picture = object.getJSONObject("picture").getJSONObject("data").getString("url");
             String cover = object.getJSONObject("cover").getString("source");
 
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            Friend friend = realm.createObject(Friend.class);
-            friend.id = id;
-            friend.fullName = fullName;
-            friend.firstName = firstName;
-            friend.lastName = lastName;
-            friend.picture = picture;
-            friend.cover = cover;
-            realm.commitTransaction();
+            Friend newFriend = new Friend(id, firstName, lastName, fullName, "", picture, cover, "");
+            try (Realm realmInstance = Realm.getDefaultInstance()) {
+               realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(newFriend));
+            }
          }
          catch (JSONException e) {
             e.printStackTrace();
@@ -76,12 +70,13 @@ public class FriendProvider {
    }
 
    public static Observable<List<Friend>> getFacebookFriends() {
-      Realm realm = Realm.getDefaultInstance();
-      if (realm.isEmpty()) {
-         getUserFriends();
-      }
-      RealmResults<Friend> friendResults = Realm.getDefaultInstance().where(Friend.class).findAll();
-      List<Friend> friends = friendResults.subList(0, friendResults.size());
-      return Observable.just(friends);
+      return Observable.defer(() -> {
+         try (Realm realmInstance = Realm.getDefaultInstance()) {
+            RealmResults<Friend> realmResults = realmInstance
+                  .where(Friend.class)
+                  .findAll();
+            return Observable.just(realmInstance.copyFromRealm(realmResults));
+         }
+      });
    }
 }

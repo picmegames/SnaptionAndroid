@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,6 +127,7 @@ public final class AuthenticationManager {
                         email = object.getString("email");
 
                         saveLoginInfo(profileImageUrl, coverPhotoUrl, name, email);
+                        FriendProvider.loadUserFriends();
                      }
                      catch (JSONException e) {
                         Log.v("Exception!", "Couldn't complete Graph Request");

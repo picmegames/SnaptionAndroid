@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +28,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.realm.Realm;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * @author Tyler Wong
@@ -92,6 +91,11 @@ public class WallFragment extends Fragment {
 
    private void loadSnaptions() {
       SnaptionProvider.getAllSnaptions()
+            .publish(network ->
+                  Observable.merge(network,
+                        SnaptionProvider.getAllLocalSnaptions()
+                              .takeUntil(network))
+            )
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<Snaption>>() {
@@ -102,11 +106,17 @@ public class WallFragment extends Fragment {
 
                @Override
                public void onError(Throwable e) {
-                  Log.e(TAG, "Nope :(");
+                  e.printStackTrace();
                }
 
                @Override
                public void onNext(List<Snaption> snaptions) {
+                  try (Realm realmInstance = Realm.getDefaultInstance()) {
+                     realmInstance.executeTransaction(realm ->
+                           realmInstance.copyToRealmOrUpdate(snaptions));
+                  }
+
+                  mAdapter.clearSnaptions();
                   mAdapter.setSnaptions(snaptions);
                   mRefreshLayout.setRefreshing(false);
                }
