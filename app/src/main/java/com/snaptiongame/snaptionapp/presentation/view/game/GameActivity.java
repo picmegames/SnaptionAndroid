@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -40,11 +39,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static android.content.ContentValues.TAG;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -180,21 +180,32 @@ public class GameActivity extends AppCompatActivity {
 
    private void loadCaptions() {
       CaptionProvider.getCaptions(mGameId)
+            .publish(network ->
+                  Observable.merge(network,
+                        CaptionProvider.getLocalCaptions(mGameId)
+                              .takeUntil(network)
+                  )
+            )
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<Caption>>() {
                @Override
                public void onCompleted() {
-
+                  Timber.i("Loading captions completed successfully.");
                }
 
                @Override
                public void onError(Throwable e) {
-                  Log.e(TAG, "Nope :(");
+                  Timber.e(e, "Loading captions errored.");
                }
 
                @Override
                public void onNext(List<Caption> captions) {
+                  try (Realm realmInstance = Realm.getDefaultInstance()) {
+                     realmInstance.executeTransaction(realm ->
+                        realm.copyToRealmOrUpdate(captions)
+                     );
+                  }
                   mAdapter.setCaptions(captions);
                }
             });

@@ -13,6 +13,7 @@ import com.squareup.leakcanary.LeakCanary;
 import io.realm.Realm;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -31,6 +32,7 @@ public class SnaptionApplication extends Application {
       }
       LeakCanary.install(this);
       Realm.init(this);
+      Timber.plant(new Timber.DebugTree());
    }
 
    public static OkHttpClient makeOkHttpClient() {

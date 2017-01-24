@@ -112,6 +112,7 @@ gotten the project to build successfully!
 * [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 * [square/leakcanary](https://github.com/square/leakcanary)
 * [artem-zinnatullin/RxJavaProGuardRules](https://github.com/artem-zinnatullin/RxJavaProGuardRules)
+* [JakeWharton/timber](https://github.com/JakeWharton/timber)
 
 ### Application Dependencies
 * [hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)

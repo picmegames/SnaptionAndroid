@@ -33,6 +33,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -101,12 +102,13 @@ public class WallFragment extends Fragment {
             .subscribe(new Subscriber<List<Snaption>>() {
                @Override
                public void onCompleted() {
-
+                  Timber.i("Getting Snaptions completed successfully");
                }
 
                @Override
                public void onError(Throwable e) {
                   e.printStackTrace();
+                  Timber.e(e, "Getting Snaptions errored.");
                }
 
                @Override
@@ -115,7 +117,6 @@ public class WallFragment extends Fragment {
                      realmInstance.executeTransaction(realm ->
                            realmInstance.copyToRealmOrUpdate(snaptions));
                   }
-
                   mAdapter.clearSnaptions();
                   mAdapter.setSnaptions(snaptions);
                   mRefreshLayout.setRefreshing(false);
