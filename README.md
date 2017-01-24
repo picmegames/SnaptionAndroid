@@ -2,11 +2,7 @@
 
 [![Build Status](https://travis-ci.com/tylerbwong/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=develop)](https://travis-ci.com/tylerbwong/SnaptionAndroid)
 
-This is the Snaption Android Application.
-
-## Features
-* Login (Facebook and Google)
-* Snaption Picture Upload and Game Creation
+This is repository for the Snaption Android Application developed by Team Fightin' Puffins for CPE 402, 405, and 406 at Cal Poly San Luis Obispo.
 
 ## Building
 
@@ -112,18 +108,18 @@ be ready to run your app on your own device!
 If you have any questions feel free to ask me or anyone else who has
 gotten the project to build successfully!
 
-### Libraries
+### Developer Dependencies
 * [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
-* [bumptech/glide](https://github.com/bumptech/glide)
-* [square/retrofit](https://github.com/square/retrofit)
-* [ReactiveX/RxJava](https://github.com/ReactiveX/RxJava)
-* [ReactiveX/RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [square/leakcanary](https://github.com/square/leakcanary)
 * [artem-zinnatullin/RxJavaProGuardRules](https://github.com/artem-zinnatullin/RxJavaProGuardRules)
 
-### Successful Builders
-* Tyler Wong (Rebuild)
-* Javon Negahban (Rebuild)
-* Nick Romero (Rebuild - 2)
-* Jacob Boyles
-* Brian Gouldsberry
-* Quang Ngo
+### Application Dependencies
+* [hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
+* [facebook/facebook-android-sdk](https://github.com/facebook/facebook-android-sdk)
+* [bumptech/glide](https://github.com/bumptech/glide)
+* [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs)
+* [square/okhttp](https://github.com/square/okhttp)
+* [square/retrofit](https://github.com/square/retrofit)
+* [ReactiveX/RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [ReactiveX/RxJava](https://github.com/ReactiveX/RxJava)
+* [amulyakhare/TextDrawable](https://github.com/amulyakhare/TextDrawable)
