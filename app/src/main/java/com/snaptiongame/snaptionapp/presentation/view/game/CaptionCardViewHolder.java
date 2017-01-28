@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.LikeRequest;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 
 import butterknife.BindView;
@@ -31,6 +33,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
    TextView mNumberOfLikes;
 
    private Context mContext;
+   private AuthenticationManager mAuthManager;
 
    public boolean isLiked = false;
    public int captionId;
@@ -39,6 +42,8 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
       super(itemView);
       this.mContext = context;
       ButterKnife.bind(this, itemView);
+
+      mAuthManager = AuthenticationManager.getInstance(mContext);
 
       mLike.setOnClickListener(view -> {
          if (isLiked) {
@@ -51,7 +56,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             isLiked = true;
             mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
          }
-         CaptionProvider.upvoteCaption(captionId, isLiked, 1);
+         CaptionProvider.upvoteCaption(captionId, new LikeRequest(mAuthManager.getSnaptionUserId(), isLiked));
       });
    }
 }

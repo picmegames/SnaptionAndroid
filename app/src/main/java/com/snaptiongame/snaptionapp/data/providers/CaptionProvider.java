@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.LikeRequest;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
@@ -33,8 +34,8 @@ public class CaptionProvider {
       });
    }
 
-   public static Observable<Void> upvoteCaption(int captionId, boolean upvote, int userId) {
-      return apiService.upvoteCaption(captionId, upvote, userId);
+   public static void upvoteCaption(int captionId, LikeRequest request) {
+      apiService.upvoteCaption(captionId, request);
    }
 
    public static Observable<Void> addCaption(String message, int gameId) {

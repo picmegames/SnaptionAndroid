@@ -24,7 +24,8 @@ public class SnaptionApiProvider {
                .client(SnaptionApplication.makeOkHttpClient())
                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
                .addConverterFactory(GsonConverterFactory.create(SnaptionApplication.gson))
-               .build().create(SnaptionApiService.class);
+               .build()
+               .create(SnaptionApiService.class);
       }
 
       return apiService;

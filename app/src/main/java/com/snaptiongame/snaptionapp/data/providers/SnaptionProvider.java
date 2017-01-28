@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.models.LikeRequest;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
@@ -45,8 +46,8 @@ public class SnaptionProvider {
       });
    }
 
-   public static Observable<Void> upvoteSnaption(int gameId, boolean upvote, int userId) {
-      return apiService.upvoteSnaption(gameId, upvote, userId);
+   public static void upvoteSnaption(int gameId, LikeRequest request) {
+      apiService.upvoteSnaption(gameId, request);
    }
 
    public static void addSnaption(String type, String image) {
