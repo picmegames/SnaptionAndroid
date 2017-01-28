@@ -145,6 +145,7 @@
                 android:paddingEnd="0dp"/>
 
             <Switch
+                android:id="@+id/public_switch"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".5"

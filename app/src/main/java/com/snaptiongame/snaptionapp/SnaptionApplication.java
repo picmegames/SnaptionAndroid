@@ -14,7 +14,7 @@ import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.models.LikeRequest;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.squareup.leakcanary.LeakCanary;
 
 import io.realm.Realm;
@@ -66,7 +66,7 @@ public class SnaptionApplication extends Application {
       builder.registerTypeAdapter(Session.class, new SessionConverter());
       builder.registerTypeAdapter(Snaption.class, new SnaptionConverter());
       builder.registerTypeAdapter(Caption.class, new CaptionConverter());
-      builder.registerTypeAdapter(LikeRequest.class, new LikeConverter());
+      builder.registerTypeAdapter(Like.class, new LikeConverter());
       builder.excludeFieldsWithoutExposeAnnotation();
       return builder.create();
    }

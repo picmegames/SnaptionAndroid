@@ -13,10 +13,9 @@ import java.lang.reflect.Type;
  */
 
 public class SessionConverter implements JsonDeserializer<Session> {
-   private static final String USER = "user";
 
    @Override
    public Session deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-      return new Session(json.getAsJsonObject().get(USER).getAsInt());
+      return new Session(json.getAsJsonObject().get(Session.USER).getAsInt());
    }
 }

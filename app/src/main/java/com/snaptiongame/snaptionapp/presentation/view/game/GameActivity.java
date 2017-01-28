@@ -1,7 +1,6 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,16 +22,6 @@ import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,67 +105,32 @@ public class GameActivity extends AppCompatActivity {
                .title(R.string.add_caption)
                .inputType(InputType.TYPE_CLASS_TEXT)
                .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
-                     new PostCaptionTask(input.toString(), mGameId).execute()).show();
+                     CaptionProvider.addCaption(mGameId,
+                           new Caption(1, input.toString()))
+                           .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(new Subscriber<Caption>() {
+                              @Override
+                              public void onCompleted() {
+                                 Timber.i("Added caption");
+                              }
+
+                              @Override
+                              public void onError(Throwable e) {
+                                 Timber.e(e);
+                              }
+
+                              @Override
+                              public void onNext(Caption caption) {
+
+                              }
+                           }))
+               .show();
       }
    }
 
    private void goToLogin() {
       Intent loginIntent = new Intent(this, LoginActivity.class);
       startActivity(loginIntent);
-   }
-
-   private class PostCaptionTask extends AsyncTask<Void, Void, Void> {
-      private String input;
-      private int gameId;
-
-      public PostCaptionTask(String input, int gameId) {
-         this.input = input;
-         this.gameId = gameId;
-      }
-
-      @Override
-      protected Void doInBackground(Void... voids) {
-         try {
-            JSONObject gameJSON = new JSONObject();
-            String dataToSend;
-            URL url = new URL(CAPTIONS_ENDPOINT);
-
-            gameJSON.put("message", input);
-            gameJSON.put("gameId", gameId);
-
-            dataToSend = gameJSON.toString();
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setReadTimeout(10000);
-            connection.setConnectTimeout(15000);
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-
-            connection.setFixedLengthStreamingMode(dataToSend.getBytes().length);
-            connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-
-            OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "utf-8"));
-
-            writer.write(dataToSend);
-            writer.flush();
-            writer.close();
-            outputStream.close();
-            connection.disconnect();
-         }
-         catch (IOException | JSONException e) {
-            e.printStackTrace();
-         }
-         return null;
-      }
-
-      @Override
-      protected void onPostExecute(Void aVoid) {
-         super.onPostExecute(aVoid);
-         //mAdapter.addTempCaption(new Caption(-1, new CaptionMeta(gameId, 0, "", 0, input)));
-      }
    }
 
    private void loadCaptions() {
@@ -203,7 +157,7 @@ public class GameActivity extends AppCompatActivity {
                public void onNext(List<Caption> captions) {
                   try (Realm realmInstance = Realm.getDefaultInstance()) {
                      realmInstance.executeTransaction(realm ->
-                        realm.copyToRealmOrUpdate(captions)
+                           realm.copyToRealmOrUpdate(captions)
                      );
                   }
                   mAdapter.setCaptions(captions);

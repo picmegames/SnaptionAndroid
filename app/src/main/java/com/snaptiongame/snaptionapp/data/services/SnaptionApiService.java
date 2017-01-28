@@ -1,7 +1,7 @@
 package com.snaptiongame.snaptionapp.data.services;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.LikeRequest;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
@@ -9,8 +9,6 @@ import com.snaptiongame.snaptionapp.data.models.Snaption;
 import java.util.List;
 
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -33,23 +31,19 @@ public interface SnaptionApiService {
    Observable<List<Snaption>> getSnaptions();
 
    @PUT("/Games/{gameId}/")
-   Observable<Void> upvoteSnaption(@Path("gameId") int gameId,
-                                   @Body LikeRequest request);
+   Observable<Like> upvoteSnaption(@Path("gameId") int gameId,
+                                   @Body Like request);
 
-   @FormUrlEncoded
    @POST("/Games/")
-   Observable<Void> addSnaption(@Field("type") String type,
-                                @Field("pictureEncoded") String image);
+   Observable<Snaption> addSnaption(@Body Snaption snaption);
 
    @GET("/Games/{gameId}/Captions/")
    Observable<List<Caption>> getCaptions(@Path("gameId") int gameId);
 
-   @PUT("/Captions/{captionId}/")
-   Observable<Void> upvoteCaption(@Path("captionId") int captionId,
-                                  @Body LikeRequest request);
+   @POST("/Games/{game_id}/Captions/")
+   Observable<Caption> addCaption(@Path("game_id") int gameId, @Body Caption caption);
 
-   @FormUrlEncoded
-   @POST("/Captions/")
-   Observable<Void> addCaption(@Field("message") String message,
-                               @Field("gameId") int gameId);
+   @PUT("/Captions/{captionId}/")
+   Observable<Like> upvoteCaption(@Path("captionId") int captionId,
+                                  @Body Like request);
 }

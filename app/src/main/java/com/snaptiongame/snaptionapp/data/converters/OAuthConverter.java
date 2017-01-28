@@ -14,22 +14,18 @@ import java.lang.reflect.Type;
  */
 
 public class OAuthConverter implements JsonSerializer<OAuthRequest> {
-   private static final String FACEBOOK_TOKEN = "accessToken";
-   private static final String GOOGLE_TOKEN = "token";
-   private static final String DEVICE_TOKEN = "device_token";
-   private static final String PROVIDER = "provider";
 
    @Override
    public JsonElement serialize(OAuthRequest src, Type typeOfSrc, JsonSerializationContext context) {
       JsonObject json = new JsonObject();
       if (src.provider.equals(AuthenticationManager.FACEBOOK_LOGIN)) {
-         json.addProperty(FACEBOOK_TOKEN, src.token);
+         json.addProperty(OAuthRequest.FACEBOOK_TOKEN, src.token);
       }
       else {
-         json.addProperty(GOOGLE_TOKEN, src.token);
+         json.addProperty(OAuthRequest.GOOGLE_TOKEN, src.token);
       }
-      json.addProperty(DEVICE_TOKEN, src.deviceToken);
-      json.addProperty(PROVIDER, src.provider);
+      json.addProperty(OAuthRequest.DEVICE_TOKEN, src.deviceToken);
+      json.addProperty(OAuthRequest.PROVIDER, src.provider);
       return json;
    }
 }

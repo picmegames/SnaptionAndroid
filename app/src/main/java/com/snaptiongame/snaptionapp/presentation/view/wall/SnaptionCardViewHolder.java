@@ -18,7 +18,7 @@ import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.LikeRequest;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
@@ -71,7 +71,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             isUpvoted = true;
             Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
          }
-         SnaptionProvider.upvoteSnaption(mGameId, new LikeRequest(mAuthManager.getSnaptionUserId(), isUpvoted));
+         SnaptionProvider.upvoteSnaption(mGameId, new Like(mAuthManager.getSnaptionUserId(), isUpvoted));
       });
 
       itemView.setOnLongClickListener(view -> {
