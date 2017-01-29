@@ -74,24 +74,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             isUpvoted = true;
             Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
          }
-         SnaptionProvider.upvoteSnaption(mGameId, new Like(mAuthManager.getSnaptionUserId(), isUpvoted))
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Subscriber<Like>() {
-                  @Override
-                  public void onCompleted() {
-                     Timber.i("Successfully liked snaption!");
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-                     Timber.e(e);
-                  }
-
-                  @Override
-                  public void onNext(Like like) {
-
-                  }
-               });
+         upvoteSnaption(mGameId, mAuthManager.getSnaptionUserId(), isUpvoted);
       });
 
       itemView.setOnLongClickListener(view -> {
@@ -137,6 +120,27 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             cardContext.startActivity(gameIntent);
          }
       });
+   }
+
+   private void upvoteSnaption(int gameId, int userId, boolean isUpvoted) {
+      SnaptionProvider.upvoteSnaption(gameId, new Like(userId, isUpvoted))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Like>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("Successfully liked snaption!");
+               }
+
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(Like like) {
+
+               }
+            });
    }
 
    private void shareToFacebook() {

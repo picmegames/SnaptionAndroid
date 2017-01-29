@@ -141,26 +141,8 @@ public final class AuthenticationManager {
                         Timber.e(e);
                      }
 
-                     SessionProvider.userOAuthFacebook(new OAuthRequest(loginResult.getAccessToken().getToken(),
-                           FirebaseInstanceId.getInstance().getToken(), FACEBOOK_LOGIN))
-                           .observeOn(AndroidSchedulers.mainThread())
-                           .subscribe(new Subscriber<Session>() {
-                              @Override
-                              public void onCompleted() {
-                                 Timber.i("OAuth session successful");
-                                 handleSnaptionLogIn(getSnaptionUserId());
-                              }
-
-                              @Override
-                              public void onError(Throwable e) {
-                                 Timber.e(e);
-                              }
-
-                              @Override
-                              public void onNext(Session session) {
-                                 saveSnaptionUserId(session.userId);
-                              }
-                           });
+                     handleOAuthFacebook(loginResult.getAccessToken().getToken(),
+                           FirebaseInstanceId.getInstance().getToken(), FACEBOOK_LOGIN);
 
                      if (authCallback != null) {
                         authCallback.onSuccess();
@@ -183,6 +165,28 @@ public final class AuthenticationManager {
             Timber.e(error);
          }
       });
+   }
+
+   private void handleOAuthFacebook(String accessToken, String deviceToken, String provider) {
+      SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, provider))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Session>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("OAuth session successful");
+                  handleSnaptionLogIn(getSnaptionUserId());
+               }
+
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(Session session) {
+                  saveSnaptionUserId(session.userId);
+               }
+            });
    }
 
    public Intent getGoogleIntent() {
@@ -332,6 +336,28 @@ public final class AuthenticationManager {
             });
    }
 
+   private void handleOAuthGoogle(String token, String deviceToken, String provider) {
+      SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, provider))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Session>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("OAuth session successful");
+                  handleSnaptionLogIn(getSnaptionUserId());
+               }
+
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(Session session) {
+                  saveSnaptionUserId(session.userId);
+               }
+            });
+   }
+
    private void handleGoogleSignInResult(GoogleSignInResult result) {
       if (result.isSuccess()) {
          GoogleSignInAccount profileResult = result.getSignInAccount();
@@ -347,26 +373,8 @@ public final class AuthenticationManager {
             username = profileResult.getDisplayName();
             email = profileResult.getEmail();
 
-            SessionProvider.userOAuthGoogle(new OAuthRequest(profileResult.getIdToken(),
-                  FirebaseInstanceId.getInstance().getToken(), GOOGLE_SIGN_IN))
-                  .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(new Subscriber<Session>() {
-                     @Override
-                     public void onCompleted() {
-                        Timber.i("OAuth session successful");
-                        handleSnaptionLogIn(getSnaptionUserId());
-                     }
-
-                     @Override
-                     public void onError(Throwable e) {
-                        Timber.e(e);
-                     }
-
-                     @Override
-                     public void onNext(Session session) {
-                        saveSnaptionUserId(session.userId);
-                     }
-                  });
+            handleOAuthGoogle(profileResult.getIdToken(),
+                  FirebaseInstanceId.getInstance().getToken(), GOOGLE_SIGN_IN);
          }
 
          saveLoginInfo(profileImageUrl, "", username, email);

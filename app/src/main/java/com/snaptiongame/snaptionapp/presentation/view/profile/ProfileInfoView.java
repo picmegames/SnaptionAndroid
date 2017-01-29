@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.presentation.view.profile;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.text.InputType;
@@ -36,8 +37,8 @@ public class ProfileInfoView extends NestedScrollView {
    TextView mUsername;
 
    private Context mContext;
-
    private AuthenticationManager mAuthManager;
+   private String mOldUsername;
 
    public ProfileInfoView(Context context) {
       super(context, null);
@@ -70,27 +71,39 @@ public class ProfileInfoView extends NestedScrollView {
                .title(R.string.edit_username)
                .inputType(InputType.TYPE_CLASS_TEXT)
                .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
-                     UserProvider.updateUser(mAuthManager.getSnaptionUserId(), new User(input.toString()))
-                           .observeOn(AndroidSchedulers.mainThread())
-                           .subscribe(new Subscriber<User>() {
-                              @Override
-                              public void onCompleted() {
-                                 Timber.i("Username updated successfully");
-                              }
-
-                              @Override
-                              public void onError(Throwable e) {
-                                 Timber.e(e);
-                              }
-
-                              @Override
-                              public void onNext(User user) {
-                                 mUsername.setText(user.username);
-                                 mAuthManager.saveSnaptionUsername(user.username);
-                              }
-                           })
+                  updateUsername(view, mAuthManager.getSnaptionUserId(), input.toString())
                )
                .show();
       });
+   }
+
+   private void updateUsername(View view, int userId, String name) {
+      mOldUsername = mUsername.getText().toString();
+      UserProvider.updateUser(userId, new User(name))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<User>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("Username updated successfully");
+                  if (!name.equals(mOldUsername)) {
+                     Snackbar
+                           .make(view, mContext.getString(R.string.update_success), Snackbar.LENGTH_LONG)
+                           .setAction(mContext.getString(R.string.undo), view ->
+                                 updateUsername(view, userId, mOldUsername))
+                           .show();
+                  }
+               }
+
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(User user) {
+                  mUsername.setText(user.username);
+                  mAuthManager.saveSnaptionUsername(user.username);
+               }
+            });
    }
 }

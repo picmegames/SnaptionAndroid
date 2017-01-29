@@ -59,24 +59,28 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             isLiked = true;
             mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
          }
-         CaptionProvider.upvoteCaption(captionId, new Like(mAuthManager.getSnaptionUserId(), isLiked))
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Subscriber<Like>() {
-                  @Override
-                  public void onCompleted() {
-                     Timber.i("Caption liked successfully");
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-                     Timber.e(e);
-                  }
-
-                  @Override
-                  public void onNext(Like like) {
-
-                  }
-               });
+         upvoteCaption(captionId, mAuthManager.getSnaptionUserId(), isLiked);
       });
+   }
+
+   private void upvoteCaption(int captionId, int userId, boolean isLiked) {
+      CaptionProvider.upvoteCaption(captionId, new Like(userId, isLiked))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Like>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("Successfully liked caption!");
+               }
+
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(Like like) {
+
+               }
+            });
    }
 }
