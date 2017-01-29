@@ -42,8 +42,8 @@ public class SnaptionProvider {
       });
    }
 
-   public static void upvoteSnaption(int gameId, Like request) {
-      apiService.upvoteSnaption(gameId, request);
+   public static Observable<Like> upvoteSnaption(int gameId, Like request) {
+      return apiService.upvoteSnaption(gameId, request);
    }
 
    public static Observable<Snaption> addSnaption(Snaption snaption) {

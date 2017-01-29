@@ -121,7 +121,7 @@ public class GameActivity extends AppCompatActivity {
 
                               @Override
                               public void onNext(Caption caption) {
-
+                                 mAdapter.addTempCaption(caption);
                               }
                            }))
                .show();

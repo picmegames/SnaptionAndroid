@@ -34,8 +34,8 @@ public class CaptionProvider {
       });
    }
 
-   public static void upvoteCaption(int captionId, Like request) {
-      apiService.upvoteCaption(captionId, request);
+   public static Observable<Like> upvoteCaption(int captionId, Like request) {
+      return apiService.upvoteCaption(captionId, request);
    }
 
    public static Observable<Caption> addCaption(int gameId, Caption caption) {

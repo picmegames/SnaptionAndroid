@@ -5,6 +5,7 @@ import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.models.User;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public interface SnaptionApiService {
 
    @POST("/OAuth/Google/")
    Observable<Session> userOAuthGoogle(@Body OAuthRequest request);
+
+   @PUT("/Users/{userId}/")
+   Observable<User> updateUser(@Path("userId") int userId, @Body User user);
 
    @GET("/Games/")
    Observable<List<Snaption>> getSnaptions();

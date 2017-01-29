@@ -1,24 +1,39 @@
 package com.snaptiongame.snaptionapp.presentation.view.profile;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.User;
+import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
  */
 
 public class ProfileInfoView extends NestedScrollView {
+   @BindView(R.id.email_card)
+   CardView mEmailView;
    @BindView(R.id.email)
    TextView mEmail;
+   @BindView(R.id.username_card)
+   CardView mUsernameView;
+   @BindView(R.id.username)
+   TextView mUsername;
 
    private Context mContext;
 
@@ -48,5 +63,33 @@ public class ProfileInfoView extends NestedScrollView {
       mAuthManager = AuthenticationManager.getInstance(mContext);
 
       mEmail.setText(mAuthManager.getEmail());
+      mUsername.setText(String.valueOf(mAuthManager.getSnaptionUserId()));
+
+      mUsernameView.setOnClickListener(userView -> {
+         new MaterialDialog.Builder(mContext)
+               .title(R.string.edit_username)
+               .inputType(InputType.TYPE_CLASS_TEXT)
+               .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
+                     UserProvider.updateUser(mAuthManager.getSnaptionUserId(), new User(input.toString()))
+                           .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(new Subscriber<User>() {
+                              @Override
+                              public void onCompleted() {
+                                 Timber.i("Username updated successfully");
+                              }
+
+                              @Override
+                              public void onError(Throwable e) {
+                                 Timber.e(e);
+                              }
+
+                              @Override
+                              public void onNext(User user) {
+                                 mUsername.setText(user.username);
+                              }
+                           })
+               )
+               .show();
+      });
    }
 }

@@ -25,5 +25,8 @@
     <string name="game_closed">Cerrado</string>
     <string name="edit">Editar</string>
     <string name="default_caption">¡Sea el primero en subtítulos esta imagen!</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="edit_username">Introduzca un nuevo nombre de usuario</string>
+    <string name="friendDialogTitle">¡Añade un amigo!</string>
 
 </resources>

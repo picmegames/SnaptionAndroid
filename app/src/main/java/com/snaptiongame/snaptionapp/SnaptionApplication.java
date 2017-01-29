@@ -6,15 +6,17 @@ import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.snaptiongame.snaptionapp.data.converters.CaptionConverter;
+import com.snaptiongame.snaptionapp.data.converters.LikeConverter;
 import com.snaptiongame.snaptionapp.data.converters.OAuthConverter;
 import com.snaptiongame.snaptionapp.data.converters.SessionConverter;
 import com.snaptiongame.snaptionapp.data.converters.SnaptionConverter;
-import com.snaptiongame.snaptionapp.data.converters.LikeConverter;
+import com.snaptiongame.snaptionapp.data.converters.UserConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.models.Like;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.squareup.leakcanary.LeakCanary;
 
 import io.realm.Realm;
@@ -64,6 +66,7 @@ public class SnaptionApplication extends Application {
       GsonBuilder builder = new GsonBuilder();
       builder.registerTypeAdapter(OAuthRequest.class, new OAuthConverter());
       builder.registerTypeAdapter(Session.class, new SessionConverter());
+      builder.registerTypeAdapter(User.class, new UserConverter());
       builder.registerTypeAdapter(Snaption.class, new SnaptionConverter());
       builder.registerTypeAdapter(Caption.class, new CaptionConverter());
       builder.registerTypeAdapter(Like.class, new LikeConverter());

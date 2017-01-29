@@ -50,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
    private ActionBar mActionBar;
 
+   private AuthenticationManager mAuthManager;
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
 
@@ -64,6 +65,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
       setContentView(R.layout.activity_profile);
       ButterKnife.bind(this);
+
+      mAuthManager = AuthenticationManager.getInstance(this);
 
       String coverPhoto = getIntent().getStringExtra(AuthenticationManager.COVER_PHOTO_URL);
       String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);

@@ -14,6 +14,7 @@
     <string name="top_caption">Top Caption</string>
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="add_caption">Add a Caption!</string>
+    <string name="edit_username">Enter a New Username</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
@@ -28,7 +29,8 @@
     <string name="game_open">Open!</string>
     <string name="game_closed">Closed</string>
     <string name="edit">Edit</string>
-    <string name="email">E-mail</string>
+    <string name="email" translatable="false">E-mail</string>
+    <string name="username">Username</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

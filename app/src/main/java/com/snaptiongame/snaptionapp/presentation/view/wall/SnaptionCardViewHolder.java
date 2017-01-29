@@ -26,6 +26,9 @@ import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -71,7 +74,24 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             isUpvoted = true;
             Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
          }
-         SnaptionProvider.upvoteSnaption(mGameId, new Like(mAuthManager.getSnaptionUserId(), isUpvoted));
+         SnaptionProvider.upvoteSnaption(mGameId, new Like(mAuthManager.getSnaptionUserId(), isUpvoted))
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(new Subscriber<Like>() {
+                  @Override
+                  public void onCompleted() {
+                     Timber.i("Successfully liked snaption!");
+                  }
+
+                  @Override
+                  public void onError(Throwable e) {
+                     Timber.e(e);
+                  }
+
+                  @Override
+                  public void onNext(Like like) {
+
+                  }
+               });
       });
 
       itemView.setOnLongClickListener(view -> {
@@ -79,7 +99,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          menu.getMenuInflater().inflate(R.menu.snaption_card_menu, menu.getMenu());
 
          menu.setOnMenuItemClickListener(item -> {
-            switch(item.getItemId()) {
+            switch (item.getItemId()) {
                case R.id.flag:
                   Toast.makeText(mContext, "This will flag a photo as inappropriate!",
                         Toast.LENGTH_LONG).show();
