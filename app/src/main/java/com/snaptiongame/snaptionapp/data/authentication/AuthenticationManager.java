@@ -23,8 +23,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SessionProvider;
+import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +53,7 @@ public final class AuthenticationManager {
    private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large), cover.type(large)";
 
    public static final String SNAPTION_USER_ID = "snaption_user_id";
+   public static final String SNAPTION_USERNAME = "snaption_username";
    public static final String PROFILE_IMAGE_URL = "image_url";
    public static final String COVER_PHOTO_URL = "cover_photo";
    public static final String FULL_NAME = "full_name";
@@ -145,6 +148,7 @@ public final class AuthenticationManager {
                               @Override
                               public void onCompleted() {
                                  Timber.i("OAuth session successful");
+                                 handleSnaptionLogIn(getSnaptionUserId());
                               }
 
                               @Override
@@ -237,6 +241,12 @@ public final class AuthenticationManager {
       editor.apply();
    }
 
+   public void saveSnaptionUsername(String username) {
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.putString(SNAPTION_USERNAME, username);
+      editor.apply();
+   }
+
    private void saveLoginInfo(String imageUrl, String coverUrl, String name, String email) {
       SharedPreferences.Editor editor = preferences.edit();
       editor.putString(PROFILE_IMAGE_URL, imageUrl);
@@ -249,6 +259,7 @@ public final class AuthenticationManager {
    private void clearLoginInfo() {
       SharedPreferences.Editor editor = preferences.edit();
       editor.putString(SNAPTION_USER_ID, "");
+      editor.putString(SNAPTION_USERNAME, "");
       editor.putString(PROFILE_IMAGE_URL, "");
       editor.putString(COVER_PHOTO_URL, "");
       editor.putString(FULL_NAME, "");
@@ -262,6 +273,10 @@ public final class AuthenticationManager {
 
    public int getSnaptionUserId() {
       return preferences.getInt(SNAPTION_USER_ID, 0);
+   }
+
+   public String getSnaptionUsername() {
+      return preferences.getString(SNAPTION_USERNAME, "");
    }
 
    public String getProfileImageUrl() {
@@ -296,6 +311,27 @@ public final class AuthenticationManager {
       editor.apply();
    }
 
+   private void handleSnaptionLogIn(int snaptionUserId) {
+      UserProvider.getUser(snaptionUserId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<User>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("Successfully got user info");
+               }
+
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(User user) {
+                  saveSnaptionUsername(user.username);
+               }
+            });
+   }
+
    private void handleGoogleSignInResult(GoogleSignInResult result) {
       if (result.isSuccess()) {
          GoogleSignInAccount profileResult = result.getSignInAccount();
@@ -318,6 +354,7 @@ public final class AuthenticationManager {
                      @Override
                      public void onCompleted() {
                         Timber.i("OAuth session successful");
+                        handleSnaptionLogIn(getSnaptionUserId());
                      }
 
                      @Override

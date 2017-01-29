@@ -24,6 +24,9 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
    @Override
    public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+      if (json.isJsonArray()) {
+         return new Gson().fromJson(json.getAsJsonArray().get(0), typeOfT);
+      }
       return new Gson().fromJson(json, typeOfT);
    }
 }

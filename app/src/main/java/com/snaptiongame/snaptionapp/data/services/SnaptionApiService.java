@@ -28,6 +28,9 @@ public interface SnaptionApiService {
    @POST("/OAuth/Google/")
    Observable<Session> userOAuthGoogle(@Body OAuthRequest request);
 
+   @GET("Users/{userId}/")
+   Observable<User> getUser(@Path("userId") int userId);
+
    @PUT("/Users/{userId}/")
    Observable<User> updateUser(@Path("userId") int userId, @Body User user);
 

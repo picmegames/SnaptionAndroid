@@ -63,7 +63,7 @@ public class ProfileInfoView extends NestedScrollView {
       mAuthManager = AuthenticationManager.getInstance(mContext);
 
       mEmail.setText(mAuthManager.getEmail());
-      mUsername.setText(String.valueOf(mAuthManager.getSnaptionUserId()));
+      mUsername.setText(mAuthManager.getSnaptionUsername());
 
       mUsernameView.setOnClickListener(userView -> {
          new MaterialDialog.Builder(mContext)
@@ -86,6 +86,7 @@ public class ProfileInfoView extends NestedScrollView {
                               @Override
                               public void onNext(User user) {
                                  mUsername.setText(user.username);
+                                 mAuthManager.saveSnaptionUsername(user.username);
                               }
                            })
                )

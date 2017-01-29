@@ -13,6 +13,10 @@ import rx.Observable;
 public class UserProvider {
    private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
 
+   public static Observable<User> getUser(int userId) {
+      return apiService.getUser(userId);
+   }
+
    public static Observable<User> updateUser(int userId, User user) {
       return apiService.updateUser(userId, user);
    }
