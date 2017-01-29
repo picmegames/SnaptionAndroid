@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -254,6 +256,7 @@ public class FriendsDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Not hooked up yet. Quang and or Brian and or me will add code here
+                sendInviteIntent();
             }
         }).setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
@@ -265,6 +268,20 @@ public class FriendsDialogFragment extends DialogFragment {
 
         return mDialogBuilder.create();
 
+    }
+
+    private void sendInviteIntent() {
+        String title = "Invite friend via";
+        String smsBody = "Hey there download this nifty app called Snaption :^) \n" +
+                "https://goo.gl/FWrtSX";
+
+        Intent inviteIntent = new Intent();
+        inviteIntent.setAction(Intent.ACTION_SEND);
+        inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
+        inviteIntent.setType("text/plain");
+
+        Intent chooser = Intent.createChooser(inviteIntent, title);
+        startActivity(chooser);
     }
 
     private void loadFacebookFriends() {
