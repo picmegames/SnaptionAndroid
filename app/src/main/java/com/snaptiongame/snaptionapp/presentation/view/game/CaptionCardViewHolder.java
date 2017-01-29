@@ -8,13 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -33,6 +33,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
    TextView mNumberOfLikes;
 
    private Context mContext;
+   private AuthenticationManager mAuthManager;
 
    public boolean isLiked = false;
    public int captionId;
@@ -41,6 +42,8 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
       super(itemView);
       this.mContext = context;
       ButterKnife.bind(this, itemView);
+
+      mAuthManager = AuthenticationManager.getInstance(mContext);
 
       mLike.setOnClickListener(view -> {
          if (isLiked) {
@@ -53,9 +56,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             isLiked = true;
             mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
          }
-         CaptionProvider.upvoteCaption(captionId, isLiked)
-               .subscribeOn(Schedulers.newThread())
-               .observeOn(AndroidSchedulers.mainThread());
+         CaptionProvider.upvoteCaption(captionId, new Like(mAuthManager.getSnaptionUserId(), isLiked));
       });
    }
 }

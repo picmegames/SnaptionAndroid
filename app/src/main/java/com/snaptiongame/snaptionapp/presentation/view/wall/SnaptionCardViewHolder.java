@@ -17,6 +17,8 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
@@ -24,8 +26,6 @@ import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -44,6 +44,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    TextView mGameStatus;
 
    private Context mContext;
+   private AuthenticationManager mAuthManager;
 
    public int mGameId;
    public String mImageUrl;
@@ -53,6 +54,8 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
       super(itemView);
       mContext = context;
       ButterKnife.bind(this, itemView);
+
+      mAuthManager = AuthenticationManager.getInstance(mContext);
 
       if (Build.VERSION.SDK_INT >= 21) {
          mImage.setClipToOutline(true);
@@ -68,9 +71,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             isUpvoted = true;
             Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
          }
-         SnaptionProvider.upvoteSnaption(mGameId, isUpvoted, 1)
-               .subscribeOn(Schedulers.newThread())
-               .observeOn(AndroidSchedulers.mainThread());
+         SnaptionProvider.upvoteSnaption(mGameId, new Like(mAuthManager.getSnaptionUserId(), isUpvoted));
       });
 
       itemView.setOnLongClickListener(view -> {

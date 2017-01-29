@@ -15,6 +15,41 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
+            android:id="@+id/email_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="7dp"
+            android:background="@null"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/email_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/email"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/email_label"
+                    android:textSize="14sp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,22 +67,20 @@
                 android:padding="20dp">
 
                 <TextView
-                    android:id="@+id/description_label"
+                    android:id="@+id/stuff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="TEST"
+                    android:text="@string/email"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/description"
+                    android:id="@+id/other_stuff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/description_label"
-                    android:textSize="14sp"
-                    android:text="A;LSDKFJA;LSDKFJ;ADKLSFJA;LSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJ;ASLDKFJ;ALSDKFJA;LSDKFJA;LSDKFJ;ALSDKFJA;SLDKFJ;ASLDKFJA;LSDKFJ;ALSDKFJ;ALSDKFJ;DLSAKFJ"/>
-
+                    android:layout_below="@+id/stuff"
+                    android:textSize="14sp"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -69,22 +102,20 @@
                 android:padding="20dp">
 
                 <TextView
-                    android:id="@+id/description_label1"
+                    android:id="@+id/stuff1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="TEST"
+                    android:text="@string/email"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/description1"
+                    android:id="@+id/other_stuff1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/description_label1"
-                    android:textSize="14sp"
-                    android:text="A;LSDKFJA;LSDKFJ;ADKLSFJA;LSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJ;ASLDKFJ;ALSDKFJA;LSDKFJA;LSDKFJ;ALSDKFJA;SLDKFJ;ASLDKFJA;LSDKFJ;ALSDKFJ;ALSDKFJ;DLSAKFJ"/>
-
+                    android:layout_below="@+id/stuff1"
+                    android:textSize="14sp"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -106,59 +137,20 @@
                 android:padding="20dp">
 
                 <TextView
-                    android:id="@+id/description_label2"
+                    android:id="@+id/stuff2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="TEST"
+                    android:text="@string/email"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/description2"
+                    android:id="@+id/other_stuff2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/description_label2"
-                    android:textSize="14sp"
-                    android:text="A;LSDKFJA;LSDKFJ;ADKLSFJA;LSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJ;ASLDKFJ;ALSDKFJA;LSDKFJA;LSDKFJ;ALSDKFJA;SLDKFJ;ASLDKFJA;LSDKFJ;ALSDKFJ;ALSDKFJ;DLSAKFJ"/>
-
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/more_info3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="7dp"
-            android:background="@null"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:padding="20dp">
-
-                <TextView
-                    android:id="@+id/description_label3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="TEST"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/description3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/description_label3"
-                    android:textSize="14sp"
-                    android:text="A;LSDKFJA;LSDKFJ;ADKLSFJA;LSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJA;LSDKFJ;ALSDKFJ;ASLDKFJ;ALSDKFJA;LSDKFJA;LSDKFJ;ALSDKFJA;SLDKFJ;ASLDKFJA;LSDKFJ;ALSDKFJ;ALSDKFJ;DLSAKFJ"/>
-
+                    android:layout_below="@+id/stuff"
+                    android:textSize="14sp"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>

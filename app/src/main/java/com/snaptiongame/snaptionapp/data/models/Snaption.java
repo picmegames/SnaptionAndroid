@@ -9,52 +9,60 @@ import io.realm.annotations.PrimaryKey;
  * @author Tyler Wong
  */
 public class Snaption extends RealmObject {
-   public static final String sId = "id";
-   public static final String sStartDate = "start_date";
-   public static final String sEndDate = "end_date";
-   public static final String sIsPublic = "isPublic";
-   public static final String sPickerId = "picker_id";
-   public static final String sPickerName = "picker_name";
-   public static final String sType = "type";
-   public static final String sImage = "pictureEncoded";
-   public static final String sImageUrl = "picture";
-   public static final String sTopCaption = "topCaption";
 
-   @SerializedName(sId)
+   @SerializedName(ID)
    @PrimaryKey
    public int id;
-   @SerializedName(sStartDate)
+   @SerializedName(START_DATE)
    public long startDate;
-   @SerializedName(sEndDate)
+   @SerializedName(END_DATE)
    public long endDate;
-   @SerializedName(sIsPublic)
+   @SerializedName(IS_PUBLIC)
    public boolean isPublic;
-   @SerializedName(sType)
+   @SerializedName(IMG_TYPE)
    public String type;
-   @SerializedName(sPickerName)
+   @SerializedName(RATING)
+   public int rating;
+   @SerializedName(PICKER_NAME)
    public String pickerName;
-   @SerializedName(sPickerId)
+   @SerializedName(PICKER_ID)
    public int pickerId;
-   @SerializedName(sImage)
-   public String encodedImage;
-   @SerializedName(sImageUrl)
+   @SerializedName(PICTURE)
    public String picture;
-   @SerializedName(sTopCaption)
+   @SerializedName(TOP_CAPTION)
    public Caption topCaption;
+
+   public static final String ID = "id";
+   public static final String START_DATE = "start_date";
+   public static final String END_DATE = "end_date";
+   public static final String IS_PUBLIC = "isPublic";
+   public static final String PICKER_ID = "picker_id";
+   public static final String PICKER_NAME = "picker_name";
+   public static final String RATING = "rating";
+   public static final String IMG_TYPE = "imgType";
+   public static final String PICTURE = "picture";
+   public static final String TOP_CAPTION = "topCaption";
 
    public Snaption() {
 
    }
 
-   public Snaption(int id, long startDate, long endDate, boolean isPublic, String pickerName,
-                   int pickerId, String encodedImage, String picture, String type) {
+   public Snaption(boolean isPublic, int rating, String picture, String type) {
+      this.isPublic = isPublic;
+      this.rating = rating;
+      this.picture = picture;
+      this.type = type;
+   }
+
+   public Snaption(int id, long startDate, long endDate, boolean isPublic, int rating,
+                   String pickerName, int pickerId, String picture, String type) {
       this.id = id;
       this.startDate = startDate;
       this.endDate = endDate;
       this.isPublic = isPublic;
+      this.rating = rating;
       this.pickerName = pickerName;
       this.pickerId = pickerId;
-      this.encodedImage = encodedImage;
       this.picture = picture;
       this.type = type;
    }

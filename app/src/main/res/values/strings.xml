@@ -28,6 +28,7 @@
     <string name="game_open">Open!</string>
     <string name="game_closed">Closed</string>
     <string name="edit">Edit</string>
+    <string name="email">E-mail</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -36,6 +37,9 @@
     <string name="fb_permission_friends" translatable="false">user_friends</string>
     <string name="fb_permission_email" translatable="false">email</string>
     <string name="fb_permission_publish" translatable="false">publish_actions</string>
+
+    <!-- Google Login -->
+    <string name="google_client_id" translatable="false">346066457840-g7fg2s2283kb7le97fga5pd0sb4hv86d.apps.googleusercontent.com</string>
 
     <!-- Create New Game Labels -->
     <string name="content_level_label">Content Level</string>

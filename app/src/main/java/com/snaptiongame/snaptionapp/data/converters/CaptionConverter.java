@@ -6,6 +6,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 
 import java.lang.reflect.Type;
@@ -14,14 +16,19 @@ import java.lang.reflect.Type;
  * @author Tyler Wong
  */
 
-public class CaptionConverter implements JsonDeserializer<Caption> {
+public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializer<Caption> {
+
+   @Override
+   public JsonElement serialize(Caption src, Type typeOfSrc, JsonSerializationContext context) {
+      JsonObject json = new JsonObject();
+      json.addProperty(Caption.FITB_ID_SEND, src.fitBId);
+      json.addProperty(Caption.CAPTION, src.caption);
+      return json;
+   }
+
    @Override
    public Caption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
          throws JsonParseException {
-      JsonObject content = json.getAsJsonObject();
-      Caption caption = new Gson().fromJson(json, typeOfT);
-//      JsonElement fields = content.get("fields");
-//      caption.meta = new Gson().fromJson(fields, CaptionMeta.class);
-      return caption;
+      return new Gson().fromJson(json, typeOfT);
    }
 }

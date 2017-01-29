@@ -91,8 +91,7 @@ public class FriendsDialogFragment extends DialogFragment {
     private final String FIND_FRIEND = "Find your friends!";
     private final String INVITE_FRIEND_LONG = "Invite a friend to Snaption!";
     private final String INVITE_FRIEND_SHORT = "Invite Friend";
-    private final String[] mHints = {"Ex: (555)-444-3333", "Ex: Bill Johnson", "Ex: sk8rdude@aol" +
-            ".com"};
+    private final String[] mHints = {"Ex: (555)-444-3333", "Ex: Bill Johnson", "Ex: sk8rdude@aol.com"};
 
     /**
      * Custom adapter used to display the various options to invite friends

@@ -4,9 +4,12 @@ import android.content.Context;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -14,8 +17,12 @@ import butterknife.ButterKnife;
  */
 
 public class ProfileInfoView extends NestedScrollView {
+   @BindView(R.id.email)
+   TextView mEmail;
 
    private Context mContext;
+
+   private AuthenticationManager mAuthManager;
 
    public ProfileInfoView(Context context) {
       super(context, null);
@@ -38,5 +45,8 @@ public class ProfileInfoView extends NestedScrollView {
    private void init() {
       View view = inflate(mContext, R.layout.profile_info, this);
       ButterKnife.bind(this, view);
+      mAuthManager = AuthenticationManager.getInstance(mContext);
+
+      mEmail.setText(mAuthManager.getEmail());
    }
 }

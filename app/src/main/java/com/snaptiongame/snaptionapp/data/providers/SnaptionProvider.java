@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
@@ -25,13 +26,8 @@ public class SnaptionProvider {
       });
    }
 
-   protected static Observable.Transformer<List<Snaption>, List<Snaption>> mockSnaptions() {
-      return null;
-   }
-
    public static Observable<List<Snaption>> getAllSnaptions() {
       return apiService.getSnaptions()
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()))
             .compose(sortSnaptions());
    }
 
@@ -46,13 +42,11 @@ public class SnaptionProvider {
       });
    }
 
-   public static Observable<Void> upvoteSnaption(int gameId, boolean upvote, int userId) {
-      return apiService.upvoteSnaption(gameId, upvote, userId)
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+   public static void upvoteSnaption(int gameId, Like request) {
+      apiService.upvoteSnaption(gameId, request);
    }
 
-   public static void addSnaption(String type, String image) {
-      apiService.addSnaption(type, image)
-            .compose(o -> o.subscribeOn(SnaptionApiProvider.getNetworkScheduler()));
+   public static Observable<Snaption> addSnaption(Snaption snaption) {
+      return apiService.addSnaption(snaption);
    }
 }
