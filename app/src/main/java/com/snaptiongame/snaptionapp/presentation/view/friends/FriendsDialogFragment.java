@@ -10,6 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,8 @@ import android.widget.TextView;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
+import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +82,13 @@ public class FriendsDialogFragment extends DialogFragment {
     private static FriendsFragment mFragmentActivity;
     private static String TAG = "FRIEND_DIALOGUE";
 
+    SnaptionApiProvider friendProvider;
+
+    /**
+     * Reference to the search view that is shown on the second dialog. Pulled out of local scope
+     * from within the dialog to show option. This way we can access the field in any dialof or method.
+     */
+    private EditText search;
 
     /**
      * Member variables used to create the two buttons at the bottom of a dialog
@@ -92,6 +104,9 @@ public class FriendsDialogFragment extends DialogFragment {
     private final String INVITE_FRIEND_LONG = "Invite a friend to Snaption!";
     private final String INVITE_FRIEND_SHORT = "Invite Friend";
     private final String[] mHints = {"Ex: (555)-444-3333", "Ex: Bill Johnson", "Ex: sk8rdude@aol.com"};
+
+    //private final InputType EMAIL_INPUT = InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS;
+
 
     /**
      * Custom adapter used to display the various options to invite friends
@@ -113,6 +128,7 @@ public class FriendsDialogFragment extends DialogFragment {
      * Empty constructor for the dialog. Expected from a DialogFragment
      */
     public FriendsDialogFragment() {
+        friendProvider = new SnaptionApiProvider();
     }
 
     /**
@@ -227,8 +243,41 @@ public class FriendsDialogFragment extends DialogFragment {
         else {
             View view = inflater.inflate(R.layout.find_friend_layout, null);
             mDialogBuilder.setView(view);
-            EditText search = (EditText) view.findViewById(R.id.friendSearchView);
+            search = (EditText) view.findViewById(R.id.friendSearchView);
 
+            /**
+            search.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    int len = search.getText().length();
+                    if(len == 1) {
+                        search.setText("(" + search.getText());
+                        search.setSelection(search.getText().length());
+
+                    }
+                    if (len == 4) {
+                        search.setText(search.getText() + ") ");
+                        search.setSelection(search.getText().length());
+                    }
+                    if (len == 9) {
+                        search.setText(search.getText() + "-");
+                        search.setSelection(search.getText().length());
+                    }
+                    if (len == 14)
+                        findFriend();
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+**/
             //hint is assigned above when the dialog to display is chosen
             search.setHint(sHint); //Sets the hint based off of which method
             // the user is adding a friend
@@ -254,8 +303,13 @@ public class FriendsDialogFragment extends DialogFragment {
 
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Not hooked up yet. Quang and or Brian and or me will add code here
-                sendInviteIntent();
+
+                //Only send an outer app if we are still on the first dialog screen. Otherwise
+                //we handle the friend invite in app
+                if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE))
+                    sendInviteIntent();
+                else
+                    findFriend();
             }
         }).setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
@@ -281,6 +335,19 @@ public class FriendsDialogFragment extends DialogFragment {
 
         Intent chooser = Intent.createChooser(inviteIntent, title);
         startActivity(chooser);
+    }
+
+
+    private void findFriend() {
+
+
+        if (mWhichDialog == DialogToShow.PHONE_INVITE) {
+
+        }
+        else {
+           
+        }
+
     }
 
     private void loadFacebookFriends() {

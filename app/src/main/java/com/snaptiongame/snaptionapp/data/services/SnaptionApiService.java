@@ -31,6 +31,9 @@ public interface SnaptionApiService {
    @GET("Users/{userId}/")
    Observable<User> getUser(@Path("userId") int userId);
 
+   @GET("Users/email?={email}")
+   Observable<User> findUserEmail(@Path("userEmail") String userEmail);
+
    @PUT("/Users/{userId}/")
    Observable<User> updateUser(@Path("userId") int userId, @Body User user);
 
