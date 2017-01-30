@@ -18,27 +18,25 @@ public class User extends RealmObject {
    public String username;
    @SerializedName(PICTURE)
    public String picture;
+   @SerializedName(TYPE)
+   public String type;
 
    public static final String ID = "id";
    public static final String USERNAME = "username";
    public static final String PICTURE = "picture";
+   public static final String TYPE = "imgType";
    public static final int MAX_NAME_LENGTH = 15;
 
    public User() {
 
    }
 
-   public User(String change) {
-      if (change.length() > MAX_NAME_LENGTH) {
-         this.picture = change;
-      }
-      else {
-         this.username = change;
-      }
+   public User(String username) {
+      this.username = username;
    }
 
-   public User(String username, String picture) {
-      this.username = username;
+   public User(String picture, String type) {
       this.picture = picture;
+      this.type = type;
    }
 }

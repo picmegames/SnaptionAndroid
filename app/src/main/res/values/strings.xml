@@ -32,7 +32,8 @@
     <string name="email" translatable="false">E-mail</string>
     <string name="username">Username</string>
     <string name="undo">Undo</string>
-    <string name="update_success">Username update successfully</string>
+    <string name="update_success">Username updated successfully</string>
+    <string name="update_profile_picture">Profile picture updated successfully</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

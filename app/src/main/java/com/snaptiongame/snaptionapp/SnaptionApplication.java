@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp;
 
 import android.app.Application;
+import android.os.Build;
 
 import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
@@ -49,16 +50,24 @@ public class SnaptionApplication extends Application {
       // INIT Realm (Local database)
       Realm.init(this);
 
-      // INIT Timber (Logger for debug builds)
-      Timber.plant(new Timber.DebugTree());
+      if (BuildConfig.DEBUG) {
+         // INIT Timber (Logger for debug builds)
+         Timber.plant(new Timber.DebugTree());
+      }
    }
 
    public static OkHttpClient makeOkHttpClient() {
-      HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-      interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-      okHttpClient = new OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build();
+      if (BuildConfig.DEBUG) {
+         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+         okHttpClient = new OkHttpClient.Builder()
+               .addInterceptor(interceptor)
+               .build();
+      }
+      else {
+         okHttpClient = new OkHttpClient.Builder()
+               .build();
+      }
       return okHttpClient;
    }
 

@@ -28,5 +28,12 @@
     <string name="username">Nombre de usuario</string>
     <string name="edit_username">Introduzca un nuevo nombre de usuario</string>
     <string name="friendDialogTitle">¡Añade un amigo!</string>
+    <string name="add_a_friend">¡Añade un amigo!</string>
+    <string name="undo">Deshacer</string>
+    <string name="update_profile_picture">Imagen de perfil actualizada con éxito</string>
+    <string name="update_success">Nombre de usuario actualizado con éxito</string>
+    <string name="via_email">vía correo electrónico</string>
+    <string name="via_facebook">vía Facebook</string>
+    <string name="via_phone">vía número de teléfono</string>
 
 </resources>

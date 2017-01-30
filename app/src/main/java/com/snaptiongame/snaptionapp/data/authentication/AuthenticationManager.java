@@ -251,6 +251,12 @@ public final class AuthenticationManager {
       editor.apply();
    }
 
+   public void saveSnaptionProfileImage(String profileImage) {
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.putString(PROFILE_IMAGE_URL, profileImage);
+      editor.apply();
+   }
+
    private void saveLoginInfo(String imageUrl, String coverUrl, String name, String email) {
       SharedPreferences.Editor editor = preferences.edit();
       editor.putString(PROFILE_IMAGE_URL, imageUrl);
@@ -332,6 +338,10 @@ public final class AuthenticationManager {
                @Override
                public void onNext(User user) {
                   saveSnaptionUsername(user.username);
+
+                  if(user.picture != null) {
+                     saveSnaptionProfileImage(user.picture);
+                  }
                }
             });
    }

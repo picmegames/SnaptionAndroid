@@ -1,11 +1,14 @@
 package com.snaptiongame.snaptionapp.presentation.view.profile;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,9 +25,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.User;
+import com.snaptiongame.snaptionapp.data.providers.UserProvider;
+import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -50,6 +60,9 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
    private ActionBar mActionBar;
 
+   private String mEncodedImage;
+   private String mType;
+
    private AuthenticationManager mAuthManager;
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
@@ -58,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
    private static final int ALPHA_ANIMATIONS_DURATION = 200;
+
+   private static final int IMAGE_PICKER = 1111;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +118,66 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
       mTitle.setText(name);
       mMainTitle.setText(name);
+
+      mProfileImg.setOnClickListener(view -> {
+         Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
+         imagePickerIntent.setType("image/*");
+         startActivityForResult(imagePickerIntent, 1);
+      });
+   }
+
+   @Override
+   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+
+      if (resultCode == RESULT_OK) {
+         Uri uri = data.getData();
+         mProfileImg.setImageURI(uri);
+         mType = getContentResolver().getType(uri);
+
+         ImageConverter.convertImage(mProfileImg.getDrawable())
+               .subscribeOn(Schedulers.newThread())
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribe(new Subscriber<String>() {
+                  @Override
+                  public void onCompleted() {
+                     Timber.i("Successfully encoded image.");
+                     changeProfilePicture();
+                  }
+
+                  @Override
+                  public void onError(Throwable e) {
+                     Timber.e(e);
+                  }
+
+                  @Override
+                  public void onNext(String s) {
+                     mEncodedImage = s;
+                  }
+               });
+      }
+   }
+
+   private void changeProfilePicture() {
+      UserProvider.updateUser(mAuthManager.getSnaptionUserId(), new User(mEncodedImage, mType))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<User>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("Updated profile picture successfully");
+                  Snackbar.make(mLayout, getString(R.string.update_profile_picture), Snackbar.LENGTH_LONG).show();
+               }
+
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(User user) {
+
+               }
+            });
    }
 
    @Override

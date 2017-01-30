@@ -1,14 +1,10 @@
 package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -18,14 +14,11 @@ import android.widget.TextView;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -100,7 +93,7 @@ public class CreateGame extends AppCompatActivity {
          mNewGameImage.setImageURI(uri);
          mType = getContentResolver().getType(uri);
 
-         convertImageToBase64()
+         ImageConverter.convertImage(mNewGameImage.getDrawable())
                .subscribeOn(Schedulers.newThread())
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(new Subscriber<String>() {
@@ -134,22 +127,5 @@ public class CreateGame extends AppCompatActivity {
 
       mContentSpinner.setAdapter(contentAdapter);
       mCategorySpinner.setAdapter(categoryAdapter);
-   }
-
-   private Observable<String> convertImageToBase64() {
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      Drawable imageDrawable = mNewGameImage.getDrawable();
-      Bitmap bmp = ((BitmapDrawable) imageDrawable).getBitmap();
-      bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-      String picture = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-
-      try {
-         byteArrayOutputStream.close();
-      }
-      catch (IOException e) {
-         Timber.e(e);
-      }
-
-      return Observable.just(picture);
    }
 }
