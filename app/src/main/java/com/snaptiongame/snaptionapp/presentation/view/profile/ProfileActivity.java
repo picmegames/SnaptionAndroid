@@ -136,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
          mType = getContentResolver().getType(uri);
 
          ImageConverter.convertImage(mProfileImg.getDrawable())
-               .subscribeOn(Schedulers.newThread())
+               .subscribeOn(Schedulers.computation())
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(new Subscriber<String>() {
                   @Override

@@ -94,7 +94,7 @@ public class CreateGame extends AppCompatActivity {
          mType = getContentResolver().getType(uri);
 
          ImageConverter.convertImage(mNewGameImage.getDrawable())
-               .subscribeOn(Schedulers.newThread())
+               .subscribeOn(Schedulers.computation())
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(new Subscriber<String>() {
                   @Override
