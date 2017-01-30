@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.data.services;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
@@ -46,6 +47,9 @@ public interface SnaptionApiService {
 
    @POST("/Games/")
    Observable<Snaption> addSnaption(@Body Snaption snaption);
+
+   @GET("/UserFriends/{userId}/")
+   Observable<List<Friend>> getFriends(@Path("userId") int userId);
 
    @GET("/Games/{gameId}/Captions/")
    Observable<List<Caption>> getCaptions(@Path("gameId") int gameId);

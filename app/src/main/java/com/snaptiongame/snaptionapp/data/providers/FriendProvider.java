@@ -1,28 +1,39 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
  */
 
 public class FriendProvider {
+   private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
 
    public static void loadUserFriends() {
       AccessToken token = AccessToken.getCurrentAccessToken();
@@ -69,11 +80,64 @@ public class FriendProvider {
       graphRequest.executeAsync();
    }
 
+   public static void loadFriends(int userId) {
+      apiService.getFriends(userId)
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(new Subscriber<List<Friend>>() {
+                 @Override
+                 public void onCompleted() {
+                    Timber.i("Getting Snaption Friends completed successfully");
+                 }
+
+                 @Override
+                 public void onError(Throwable e) {
+                    e.printStackTrace();
+                    Timber.e(e, "Getting Snaption Friends errored.");
+                 }
+
+                 @Override
+                 public void onNext(List<Friend> friends) {
+                    for (Friend friend : friends) {
+                       friend.isSnaptionFriend = true;
+                       Timber.i(friend.toString());
+                    }
+                    try (Realm realmInstance = Realm.getDefaultInstance()) {
+                       realmInstance.executeTransaction(realm ->
+                               realmInstance.copyToRealmOrUpdate(friends));
+                    }
+                 }
+              });
+   }
+
+   public static Observable<List<Friend>> getSnaptionFriends() {
+      return Observable.defer(() -> {
+         try (Realm realmInstance = Realm.getDefaultInstance()) {
+            RealmResults<Friend> realmResults = realmInstance
+                    .where(Friend.class)
+                    .equalTo("isSnaptionFriend", true)
+                    .findAll();
+            return Observable.just(realmInstance.copyFromRealm(realmResults));
+         }
+      });
+   }
+
+   public static Observable<List<Friend>> getSnaptionFriendsOffline() {
+      return Observable.defer(() -> {
+         try (Realm realmInstance = Realm.getDefaultInstance()) {
+            RealmResults<Friend> realmResults = realmInstance
+                    .where(Friend.class)
+                    .equalTo("isSnaptionFriend", true)
+                    .findAll();
+            return Observable.just(realmInstance.copyFromRealm(realmResults));
+         }
+      });
+   }
+
    public static Observable<List<Friend>> getFacebookFriends() {
       return Observable.defer(() -> {
          try (Realm realmInstance = Realm.getDefaultInstance()) {
             RealmResults<Friend> realmResults = realmInstance
-                  .where(Friend.class)
+                  .where(Friend.class).equalTo("isSnaptionFriend", false)
                   .findAll();
             return Observable.just(realmInstance.copyFromRealm(realmResults));
          }

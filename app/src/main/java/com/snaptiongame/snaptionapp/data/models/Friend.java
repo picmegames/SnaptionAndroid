@@ -1,5 +1,7 @@
 package com.snaptiongame.snaptionapp.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -13,10 +15,12 @@ public class Friend extends RealmObject {
     public String firstName;
     public String lastName;
     public String fullName;
+    @SerializedName("username")
     public String userName;
     public String picture;
     public String cover;
     public String email;
+    public boolean isSnaptionFriend;
 
     public Friend() {
 
@@ -42,5 +46,6 @@ public class Friend extends RealmObject {
         this.picture = picture;
         this.cover = cover;
         this.email = email;
+        isSnaptionFriend = false;
     }
 }

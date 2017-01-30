@@ -19,15 +19,25 @@ import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
+import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsDialogFragment;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.realm.Realm;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * @author Brian Gouldsberry
@@ -46,9 +56,10 @@ public class FriendsFragment extends Fragment {
     Button clear;
 
     private FriendsAdapter mAdapter;
-    private ArrayList<Friend> friends = new ArrayList<>();
+    private List<Friend> friends = new ArrayList<>();
 
     private AuthenticationManager  mAuthManager;
+    private static SnaptionApiService mApiService;
     private Unbinder mUnbinder;
     private DialogFragment mDialogFragmentDefault;
     private DialogFragment mDialogFragmentFriendSearch;
@@ -61,14 +72,16 @@ public class FriendsFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.friends_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
-
+        mAuthManager = AuthenticationManager.getInstance(getContext());
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(getContext(), friends);
         mFriends.setAdapter(mAdapter);
+        mApiService = SnaptionApiProvider.getApiService();
+        loadFriends();
 
         mSearch.setOnClickListener(theview -> {
-            ArrayList<Friend> results = filterList(friends, mQuery.getText().toString());
+            List<Friend> results = filterList(friends, mQuery.getText().toString());
             mAdapter.setFriends(results);
             mAdapter.notifyDataSetChanged();
         });
@@ -85,7 +98,6 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAuthManager = AuthenticationManager.getInstance(getContext());
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -99,17 +111,13 @@ public class FriendsFragment extends Fragment {
         //loadFriends();
     }
 
-    private void loadFriends() {
-        if (mAuthManager.isLoggedIn()) {
-
-        }
-    }
-
-    public static ArrayList<Friend> filterList(ArrayList<Friend> friends, String query) {
+    //Returns a subset of friends where each friend has the query in either their name or username
+    public static List<Friend> filterList(List<Friend> friends, String query) {
         if (query != null && query.length() > 0) {
             ArrayList<Friend> filtered = new ArrayList<>();
             for (Friend pal : friends) {
-                if (pal.fullName.toLowerCase().contains(query.toLowerCase())) {
+                String mashedNames = pal.fullName + " " + pal.userName;
+                if (mashedNames != null && mashedNames.toLowerCase().contains(query.toLowerCase())) {
                     filtered.add(pal);
                 }
             }
@@ -185,5 +193,33 @@ public class FriendsFragment extends Fragment {
                 mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
                 break;
         }
+    }
+
+    private void loadFriends() {
+        mApiService.getFriends(mAuthManager.getSnaptionUserId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Friend>>() {
+                    @Override
+                    public void onCompleted() {
+                        Timber.i("Getting Snaption Friends completed successfully");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Timber.e(e, "Getting Snaption Friends errored.");
+                    }
+
+                    @Override
+                    public void onNext(List<Friend> results) {
+                        for (Friend friend : results) {
+                            friend.isSnaptionFriend = true;
+                            Timber.i(friend.toString());
+                        }
+                        friends = results;
+                        mAdapter.setFriends(friends);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 }

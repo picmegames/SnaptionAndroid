@@ -46,7 +46,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     .load(curFriend.picture)
                     .into(holder.mImage);
         }
-        else {
+        else if (curFriend.lastName != null) {
             holder.mImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(40)

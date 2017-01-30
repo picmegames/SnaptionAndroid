@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SessionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.realm.Realm;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -307,16 +309,26 @@ public final class AuthenticationManager {
    private void handleSnaptionLogIn(int snaptionUserId) {
       UserProvider.getUser(snaptionUserId)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(user -> {
-                     saveSnaptionUsername(user.username);
+            .subscribe(new Subscriber<User>() {
+               @Override
+               public void onCompleted() {
+                  Timber.i("Successfully got user info");
+               }
 
-                     if (user.picture != null) {
-                        saveSnaptionProfileImage(user.picture);
-                     }
-                  },
-                  Timber::e,
-                  () -> {
-                  });
+               @Override
+               public void onError(Throwable e) {
+                  Timber.e(e);
+               }
+
+               @Override
+               public void onNext(User user) {
+                  saveSnaptionUsername(user.username);
+                  FriendProvider.loadFriends(snaptionUserId); //loads the user's friends to realm
+                  if(user.picture != null) {
+                     saveSnaptionProfileImage(user.picture);
+                  }
+               }
+            });
    }
 
    private void handleOAuthGoogle(String token, String deviceToken, String provider) {

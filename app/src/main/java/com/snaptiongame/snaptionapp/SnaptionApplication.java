@@ -7,12 +7,14 @@ import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.snaptiongame.snaptionapp.data.converters.CaptionConverter;
+import com.snaptiongame.snaptionapp.data.converters.FriendConverter;
 import com.snaptiongame.snaptionapp.data.converters.LikeConverter;
 import com.snaptiongame.snaptionapp.data.converters.OAuthConverter;
 import com.snaptiongame.snaptionapp.data.converters.SessionConverter;
 import com.snaptiongame.snaptionapp.data.converters.SnaptionConverter;
 import com.snaptiongame.snaptionapp.data.converters.UserConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
@@ -79,6 +81,7 @@ public class SnaptionApplication extends Application {
       builder.registerTypeAdapter(Snaption.class, new SnaptionConverter());
       builder.registerTypeAdapter(Caption.class, new CaptionConverter());
       builder.registerTypeAdapter(Like.class, new LikeConverter());
+      builder.registerTypeAdapter(Friend.class, new FriendConverter());
       builder.excludeFieldsWithoutExposeAnnotation();
       return builder.create();
    }
