@@ -6,6 +6,7 @@ import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class FriendsTest {
     @Test //mock test
     public void filter_isCorrect() throws Exception {
-        ArrayList<Friend> inst = new ArrayList<>(), check;
+        List<Friend> inst = new ArrayList<>(), check;
         assertEquals(FriendsFragment.filterList(inst, "some filter category"), new
                 ArrayList<Friend>());
         inst.add(new Friend("1" , "John", "Cena", "John Cena", "jcena1234", "", "", ""));
