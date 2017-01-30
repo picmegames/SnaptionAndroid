@@ -306,7 +306,7 @@ public class FriendsDialogFragment extends DialogFragment {
 
                 //Only send an outer app if we are still on the first dialog screen. Otherwise
                 //we handle the friend invite in app
-                if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE))
+                if (mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
                     sendInviteIntent();
                 else
                     findFriend();
