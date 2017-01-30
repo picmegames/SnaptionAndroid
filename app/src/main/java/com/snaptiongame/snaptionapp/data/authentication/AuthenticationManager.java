@@ -22,8 +22,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
-import com.snaptiongame.snaptionapp.data.models.Session;
-import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SessionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
@@ -32,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.realm.Realm;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -170,23 +167,9 @@ public final class AuthenticationManager {
    private void handleOAuthFacebook(String accessToken, String deviceToken, String provider) {
       SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, provider))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Session>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("OAuth session successful");
-                  handleSnaptionLogIn(getSnaptionUserId());
-               }
-
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(Session session) {
-                  saveSnaptionUserId(session.userId);
-               }
-            });
+            .subscribe(session -> saveSnaptionUserId(session.userId),
+                  Timber::e,
+                  () -> handleSnaptionLogIn(getSnaptionUserId()));
    }
 
    public Intent getGoogleIntent() {
@@ -324,48 +307,24 @@ public final class AuthenticationManager {
    private void handleSnaptionLogIn(int snaptionUserId) {
       UserProvider.getUser(snaptionUserId)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<User>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Successfully got user info");
-               }
+            .subscribe(user -> {
+                     saveSnaptionUsername(user.username);
 
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(User user) {
-                  saveSnaptionUsername(user.username);
-
-                  if(user.picture != null) {
-                     saveSnaptionProfileImage(user.picture);
-                  }
-               }
-            });
+                     if (user.picture != null) {
+                        saveSnaptionProfileImage(user.picture);
+                     }
+                  },
+                  Timber::e,
+                  () -> {
+                  });
    }
 
    private void handleOAuthGoogle(String token, String deviceToken, String provider) {
       SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, provider))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Session>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("OAuth session successful");
-                  handleSnaptionLogIn(getSnaptionUserId());
-               }
-
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(Session session) {
-                  saveSnaptionUserId(session.userId);
-               }
-            });
+            .subscribe(session -> saveSnaptionUserId(session.userId),
+                  Timber::e,
+                  () -> handleSnaptionLogIn(getSnaptionUserId()));
    }
 
    private void handleGoogleSignInResult(GoogleSignInResult result) {

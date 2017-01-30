@@ -2,7 +2,6 @@ package com.snaptiongame.snaptionapp.presentation.view.profile;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.text.InputType;
@@ -14,13 +13,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.User;
-import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -38,7 +33,7 @@ public class ProfileInfoView extends NestedScrollView {
 
    private Context mContext;
    private AuthenticationManager mAuthManager;
-   private String mOldUsername;
+   private ProfileContract.Presenter mPresenter;
 
    public ProfileInfoView(Context context) {
       super(context, null);
@@ -71,39 +66,19 @@ public class ProfileInfoView extends NestedScrollView {
                .title(R.string.edit_username)
                .inputType(InputType.TYPE_CLASS_TEXT)
                .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
-                  updateUsername(view, mAuthManager.getSnaptionUserId(), input.toString())
+                  mPresenter.updateUsername(mAuthManager.getSnaptionUserId(),
+                        mAuthManager.getSnaptionUsername(), new User(input.toString()))
                )
                .show();
       });
    }
 
-   private void updateUsername(View view, int userId, String name) {
-      mOldUsername = mUsername.getText().toString();
-      UserProvider.updateUser(userId, new User(name))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<User>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Username updated successfully");
-                  if (!name.equals(mOldUsername)) {
-                     Snackbar
-                           .make(view, mContext.getString(R.string.update_success), Snackbar.LENGTH_LONG)
-                           .setAction(mContext.getString(R.string.undo), view ->
-                                 updateUsername(view, userId, mOldUsername))
-                           .show();
-                  }
-               }
+   public void saveUsername(String username) {
+      mUsername.setText(username);
+      mAuthManager.saveSnaptionUsername(username);
+   }
 
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(User user) {
-                  mUsername.setText(user.username);
-                  mAuthManager.saveSnaptionUsername(user.username);
-               }
-            });
+   public void setPresenter(ProfileContract.Presenter presenter) {
+      mPresenter = presenter;
    }
 }

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGame;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
@@ -28,18 +27,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.realm.Realm;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 /**
  * @author Tyler Wong
  */
 
-public class WallFragment extends Fragment {
+public class WallFragment extends Fragment implements WallContract.View {
    @BindView(R.id.fab)
    FloatingActionButton mFab;
    @BindView(R.id.wall)
@@ -47,10 +40,11 @@ public class WallFragment extends Fragment {
    @BindView(R.id.refresh_layout)
    SwipeRefreshLayout mRefreshLayout;
 
+   private WallContract.Presenter mPresenter;
+
    private AuthenticationManager mAuthManager;
    private WallAdapter mAdapter;
    private Unbinder mUnbinder;
-   private Subscription mSubscription;
 
    public static final int NUM_COLUMNS = 2;
 
@@ -60,6 +54,7 @@ public class WallFragment extends Fragment {
       super.onCreateView(inflater, container, savedInstanceState);
       View view = inflater.inflate(R.layout.wall_fragment, container, false);
       mUnbinder = ButterKnife.bind(this, view);
+      mPresenter = new WallPresenter(this);
 
       mWall.setHasFixedSize(true);
       mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
@@ -69,7 +64,7 @@ public class WallFragment extends Fragment {
       mAdapter = new WallAdapter(getContext(), new ArrayList<>());
       mWall.setAdapter(mAdapter);
 
-      mRefreshLayout.setOnRefreshListener(this::loadSnaptions);
+      mRefreshLayout.setOnRefreshListener(mPresenter::loadGames);
 
       return view;
    }
@@ -88,40 +83,25 @@ public class WallFragment extends Fragment {
    @Override
    public void onResume() {
       super.onResume();
-      loadSnaptions();
+      mPresenter.subscribe();
    }
 
-   private void loadSnaptions() {
-      mSubscription = SnaptionProvider.getAllSnaptions()
-            .publish(network ->
-                  Observable.merge(network,
-                        SnaptionProvider.getAllLocalSnaptions()
-                              .takeUntil(network))
-            )
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<List<Snaption>>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Getting Snaptions completed successfully");
-               }
+   @Override
+   public void onPause() {
+      super.onPause();
+      mPresenter.unsubscribe();
+   }
 
-               @Override
-               public void onError(Throwable e) {
-                  e.printStackTrace();
-                  Timber.e(e, "Getting Snaptions errored.");
-               }
+   @Override
+   public void showGames(List<Snaption> snaptions) {
+      mAdapter.clearSnaptions();
+      mAdapter.setSnaptions(snaptions);
+      mRefreshLayout.setRefreshing(false);
+   }
 
-               @Override
-               public void onNext(List<Snaption> snaptions) {
-                  try (Realm realmInstance = Realm.getDefaultInstance()) {
-                     realmInstance.executeTransaction(realm ->
-                           realmInstance.copyToRealmOrUpdate(snaptions));
-                  }
-                  mAdapter.clearSnaptions();
-                  mAdapter.setSnaptions(snaptions);
-                  mRefreshLayout.setRefreshing(false);
-               }
-            });
+   @Override
+   public void setPresenter(WallContract.Presenter presenter) {
+      mPresenter = presenter;
    }
 
    @OnClick(R.id.fab)
@@ -148,7 +128,6 @@ public class WallFragment extends Fragment {
    public void onDestroyView() {
       super.onDestroyView();
       mUnbinder.unbind();
-      mSubscription.unsubscribe();
       mAuthManager.unregisterCallback();
    }
 }

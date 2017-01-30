@@ -26,12 +26,10 @@ import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.User;
-import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -40,7 +38,8 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 
-public class ProfileActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class ProfileActivity extends AppCompatActivity
+      implements AppBarLayout.OnOffsetChangedListener, ProfileContract.View {
    @BindView(R.id.toolbar)
    Toolbar mToolbar;
    @BindView(R.id.cover_photo)
@@ -57,6 +56,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
    AppBarLayout mAppBar;
    @BindView(R.id.collapsing_toolbar)
    CollapsingToolbarLayout mCollapsingLayout;
+   @BindView(R.id.info_view)
+   ProfileInfoView mInfoView;
 
    private ActionBar mActionBar;
 
@@ -64,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
    private String mType;
 
    private AuthenticationManager mAuthManager;
+   private ProfileContract.Presenter mPresenter;
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
 
@@ -71,8 +73,6 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
    private static final int ALPHA_ANIMATIONS_DURATION = 200;
-
-   private static final int IMAGE_PICKER = 1111;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +82,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
       ButterKnife.bind(this);
 
       mAuthManager = AuthenticationManager.getInstance(this);
+      mPresenter = new ProfilePresenter(this);
+      mInfoView.setPresenter(mPresenter);
 
       String coverPhoto = getIntent().getStringExtra(AuthenticationManager.COVER_PHOTO_URL);
       String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);
@@ -127,6 +129,33 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
    }
 
    @Override
+   public void onResume() {
+      super.onResume();
+      mPresenter.subscribe();
+   }
+
+   @Override
+   public void onPause() {
+      super.onPause();
+      mPresenter.unsubscribe();
+   }
+
+   @Override
+   public void setPresenter(ProfileContract.Presenter presenter) {
+      mPresenter = presenter;
+   }
+
+   @Override
+   public void saveProfilePicture(String picture) {
+      mAuthManager.saveSnaptionProfileImage(picture);
+   }
+
+   @Override
+   public void saveUsername(String username) {
+      mInfoView.saveUsername(username);
+   }
+
+   @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
 
@@ -138,46 +167,26 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
          ImageConverter.convertImage(mProfileImg.getDrawable())
                .subscribeOn(Schedulers.computation())
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Subscriber<String>() {
-                  @Override
-                  public void onCompleted() {
-                     Timber.i("Successfully encoded image.");
-                     changeProfilePicture();
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-                     Timber.e(e);
-                  }
-
-                  @Override
-                  public void onNext(String s) {
-                     mEncodedImage = s;
-                  }
-               });
+               .subscribe(s -> mEncodedImage = s,
+                     Timber::e,
+                     () -> mPresenter.updateProfilePicture(
+                           mAuthManager.getSnaptionUserId(), new User(mEncodedImage, mType)));
       }
    }
 
-   private void changeProfilePicture() {
-      UserProvider.updateUser(mAuthManager.getSnaptionUserId(), new User(mEncodedImage, mType))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<User>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Updated profile picture successfully");
-                  Snackbar.make(mLayout, getString(R.string.update_profile_picture), Snackbar.LENGTH_LONG).show();
-               }
+   @Override
+   public void showProfilePictureSuccess() {
+      Snackbar.make(mLayout, getString(R.string.update_profile_picture), Snackbar.LENGTH_LONG).show();
+   }
 
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(User user) {
-
-               }
-            });
+   @Override
+   public void showUsernameSuccess(String oldUsername, User user) {
+      Snackbar
+            .make(mLayout, getString(R.string.update_success), Snackbar.LENGTH_LONG)
+            .setAction(getString(R.string.undo), view ->
+                  mPresenter.updateUsername(
+                        mAuthManager.getSnaptionUserId(), user.username, new User(oldUsername)))
+            .show();
    }
 
    @Override
