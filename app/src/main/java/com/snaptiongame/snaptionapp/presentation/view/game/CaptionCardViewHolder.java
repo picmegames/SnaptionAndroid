@@ -15,8 +15,7 @@ import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -66,21 +65,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
    private void upvoteCaption(int captionId, int userId, boolean isLiked) {
       CaptionProvider.upvoteCaption(captionId, new Like(userId, isLiked))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Like>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Successfully liked caption!");
-               }
-
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(Like like) {
-
-               }
-            });
+            .subscribe(like -> {
+            }, Timber::e, () -> Timber.i("Successfully liked caption!"));
    }
 }

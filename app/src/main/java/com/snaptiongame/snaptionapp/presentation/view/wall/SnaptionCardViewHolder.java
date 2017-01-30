@@ -26,8 +26,7 @@ import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -125,22 +124,8 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    private void upvoteSnaption(int gameId, int userId, boolean isUpvoted) {
       SnaptionProvider.upvoteSnaption(gameId, new Like(userId, isUpvoted))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Like>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Successfully liked snaption!");
-               }
-
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(Like like) {
-
-               }
-            });
+            .subscribe(like -> {
+            }, Timber::e, () -> Timber.i("Successfully liked snaption!"));
    }
 
    private void shareToFacebook() {

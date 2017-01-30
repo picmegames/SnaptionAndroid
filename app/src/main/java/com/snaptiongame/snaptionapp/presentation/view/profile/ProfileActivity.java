@@ -26,13 +26,9 @@ import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.User;
-import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -60,9 +56,6 @@ public class ProfileActivity extends AppCompatActivity
    ProfileInfoView mInfoView;
 
    private ActionBar mActionBar;
-
-   private String mEncodedImage;
-   private String mType;
 
    private AuthenticationManager mAuthManager;
    private ProfileContract.Presenter mPresenter;
@@ -162,15 +155,9 @@ public class ProfileActivity extends AppCompatActivity
       if (resultCode == RESULT_OK) {
          Uri uri = data.getData();
          mProfileImg.setImageURI(uri);
-         mType = getContentResolver().getType(uri);
 
-         ImageConverter.convertImage(mProfileImg.getDrawable())
-               .subscribeOn(Schedulers.computation())
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(s -> mEncodedImage = s,
-                     Timber::e,
-                     () -> mPresenter.updateProfilePicture(
-                           mAuthManager.getSnaptionUserId(), new User(mEncodedImage, mType)));
+         mPresenter.convertImage(mAuthManager.getSnaptionUserId(), mProfileImg.getDrawable(),
+               getContentResolver().getType(uri));
       }
    }
 

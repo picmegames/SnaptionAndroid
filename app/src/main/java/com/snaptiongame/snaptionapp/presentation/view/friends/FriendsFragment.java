@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,8 @@ import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
-import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsDialogFragment;
 import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.realm.Realm;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -59,12 +51,9 @@ public class FriendsFragment extends Fragment {
     private List<Friend> friends = new ArrayList<>();
 
     private AuthenticationManager  mAuthManager;
-    private static SnaptionApiService mApiService;
     private Unbinder mUnbinder;
     private DialogFragment mDialogFragmentDefault;
     private DialogFragment mDialogFragmentFriendSearch;
-    private String TAG = "FRIEND_LIST";
-
 
     @Nullable
     @Override
@@ -77,16 +66,15 @@ public class FriendsFragment extends Fragment {
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(getContext(), friends);
         mFriends.setAdapter(mAdapter);
-        mApiService = SnaptionApiProvider.getApiService();
         loadFriends();
 
-        mSearch.setOnClickListener(theview -> {
+        mSearch.setOnClickListener(theView -> {
             List<Friend> results = filterList(friends, mQuery.getText().toString());
             mAdapter.setFriends(results);
             mAdapter.notifyDataSetChanged();
         });
 
-        clear.setOnClickListener(theview -> {
+        clear.setOnClickListener(theView -> {
             mQuery.setText("");
             mAdapter.setFriends(friends);
             mAdapter.notifyDataSetChanged();
@@ -136,8 +124,6 @@ public class FriendsFragment extends Fragment {
 
     }
 
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -146,7 +132,6 @@ public class FriendsFragment extends Fragment {
     }
 
     public void updateFriendsDialog(int whichOptionSelected) {
-
         FriendsDialogFragment.DialogToShow dialogToShow = null;
         android.support.v4.app.FragmentTransaction transaction =
                 getActivity().getSupportFragmentManager().beginTransaction();
@@ -196,30 +181,16 @@ public class FriendsFragment extends Fragment {
     }
 
     private void loadFriends() {
-        mApiService.getFriends(mAuthManager.getSnaptionUserId())
+        FriendProvider.loadFriends(mAuthManager.getSnaptionUserId())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Friend>>() {
-                    @Override
-                    public void onCompleted() {
-                        Timber.i("Getting Snaption Friends completed successfully");
+                .subscribe(results -> {
+                    for (Friend friend : results) {
+                        friend.isSnaptionFriend = true;
+                        Timber.i(friend.toString());
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        Timber.e(e, "Getting Snaption Friends errored.");
-                    }
-
-                    @Override
-                    public void onNext(List<Friend> results) {
-                        for (Friend friend : results) {
-                            friend.isSnaptionFriend = true;
-                            Timber.i(friend.toString());
-                        }
-                        friends = results;
-                        mAdapter.setFriends(friends);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                    friends = results;
+                    mAdapter.setFriends(friends);
+                    mAdapter.notifyDataSetChanged();
+                }, Timber::e, () -> Timber.i("Getting Snaption Friends completed successfully"));
     }
 }

@@ -1,12 +1,12 @@
 package com.snaptiongame.snaptionapp.data.providers.api;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.snaptiongame.snaptionapp.SnaptionApplication;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -22,7 +22,7 @@ public class SnaptionApiProvider {
          apiService = new Retrofit.Builder()
                .baseUrl(SNAPTION_SERVER_URL)
                .client(SnaptionApplication.makeOkHttpClient())
-               .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+               .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                .addConverterFactory(GsonConverterFactory.create(SnaptionApplication.gson))
                .build()
                .create(SnaptionApiService.class);

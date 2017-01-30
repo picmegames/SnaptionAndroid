@@ -7,11 +7,11 @@ import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.realm.Realm;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 /**
@@ -22,18 +22,18 @@ public class WallPresenter implements WallContract.Presenter {
    @NonNull
    private final WallContract.View mWallView;
    @NonNull
-   private CompositeSubscription mSubscriptions;
+   private CompositeDisposable mDisposables;
 
    public WallPresenter(@NonNull WallContract.View wallView) {
       mWallView = wallView;
-      mSubscriptions = new CompositeSubscription();
+      mDisposables = new CompositeDisposable();
       mWallView.setPresenter(this);
    }
 
    @Override
    public void loadGames() {
-      mSubscriptions.clear();
-      Subscription subscription = SnaptionProvider.getAllSnaptions()
+      mDisposables.clear();
+      Disposable disposable = SnaptionProvider.getAllSnaptions()
             .publish(network ->
                   Observable.merge(network,
                         SnaptionProvider.getAllLocalSnaptions()
@@ -42,10 +42,10 @@ public class WallPresenter implements WallContract.Presenter {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                   this::processSnaptions,
-                  throwable -> Timber.e(throwable, "Getting Snaptions errored."),
+                  Timber::e,
                   () -> Timber.i("Getting Snaptions completed successfully")
             );
-      mSubscriptions.add(subscription);
+      mDisposables.add(disposable);
    }
 
    private void processSnaptions(List<Snaption> snaptions) {
@@ -63,6 +63,6 @@ public class WallPresenter implements WallContract.Presenter {
 
    @Override
    public void unsubscribe() {
-      mSubscriptions.clear();
+      mDisposables.clear();
    }
 }

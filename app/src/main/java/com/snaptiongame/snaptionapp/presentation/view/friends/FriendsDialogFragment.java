@@ -3,17 +3,11 @@ package com.snaptiongame.snaptionapp.presentation.view.friends;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +21,12 @@ import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by nickromero on 1/20/17.
@@ -354,22 +346,7 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.getFacebookFriends()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Friend>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Nope :(");
-                    }
-
-                    @Override
-                    public void onNext(List<Friend> friends) {
-                        mAdapter.setFriends(friends);
-                    }
-                });
+                .subscribe(friends -> mAdapter.setFriends(friends), Timber::e, () -> {});
     }
 
     /**

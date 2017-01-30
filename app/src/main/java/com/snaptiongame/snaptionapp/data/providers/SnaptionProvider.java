@@ -1,16 +1,16 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
-import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.Like;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * @author Tyler Wong
@@ -19,16 +19,12 @@ import rx.Observable;
 public class SnaptionProvider {
    private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
 
-   private static Observable.Transformer<List<Snaption>, List<Snaption>> sortSnaptions() {
-      return (Observable<List<Snaption>> o) -> o.filter(snaptions -> {
-         Collections.reverse(snaptions);
-         return true;
-      });
-   }
-
    public static Observable<List<Snaption>> getAllSnaptions() {
       return apiService.getSnaptions()
-            .compose(sortSnaptions());
+            .filter(snaptions -> {
+               Collections.reverse(snaptions);
+               return true;
+            });
    }
 
    public static Observable<List<Snaption>> getAllLocalSnaptions() {

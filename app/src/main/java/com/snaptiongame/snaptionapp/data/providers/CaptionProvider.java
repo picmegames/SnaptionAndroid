@@ -9,7 +9,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Tyler Wong

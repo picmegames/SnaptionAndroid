@@ -15,7 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Tyler Wong

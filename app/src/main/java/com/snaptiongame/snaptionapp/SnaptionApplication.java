@@ -1,9 +1,7 @@
 package com.snaptiongame.snaptionapp;
 
 import android.app.Application;
-import android.os.Build;
 
-import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.snaptiongame.snaptionapp.data.converters.CaptionConverter;
@@ -45,9 +43,6 @@ public class SnaptionApplication extends Application {
       }
 
       LeakCanary.install(this);
-
-      // INIT Facebook SDK (Facebook login)
-      FacebookSdk.sdkInitialize(this);
 
       // INIT Realm (Local database)
       Realm.init(this);

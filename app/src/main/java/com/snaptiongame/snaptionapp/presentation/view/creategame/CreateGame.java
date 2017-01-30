@@ -19,9 +19,8 @@ import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -65,23 +64,8 @@ public class CreateGame extends AppCompatActivity {
          SnaptionProvider.addSnaption(
                new Snaption(!mPublicSwitch.isChecked(), 1, mEncodedImage, mType))
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Subscriber<Snaption>() {
-                  @Override
-                  public void onCompleted() {
-                     Timber.i("Posted successfully");
-                     onBackPressed();
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-                     Timber.e(e);
-                  }
-
-                  @Override
-                  public void onNext(Snaption snaption) {
-
-                  }
-               });
+               .subscribe(snaption -> {
+               }, Timber::e, this::onBackPressed);
       }
    }
 
@@ -96,22 +80,7 @@ public class CreateGame extends AppCompatActivity {
          ImageConverter.convertImage(mNewGameImage.getDrawable())
                .subscribeOn(Schedulers.computation())
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Subscriber<String>() {
-                  @Override
-                  public void onCompleted() {
-                     Timber.i("Successfully encoded image.");
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-                     Timber.e(e);
-                  }
-
-                  @Override
-                  public void onNext(String s) {
-                     mEncodedImage = s;
-                  }
-               });
+               .subscribe(s -> mEncodedImage = s, Timber::e, () -> Timber.i("Successfully encoded image."));
       }
    }
 

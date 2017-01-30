@@ -128,6 +128,5 @@ public class WallFragment extends Fragment implements WallContract.View {
    public void onDestroyView() {
       super.onDestroyView();
       mUnbinder.unbind();
-      mAuthManager.unregisterCallback();
    }
 }

@@ -8,7 +8,7 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import timber.log.Timber;
 
 /**

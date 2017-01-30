@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import java.util.ArrayList;
@@ -28,18 +27,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.Realm;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 /**
  * @author Tyler Wong
  */
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements GameContract.View {
    @BindView(R.id.toolbar)
    Toolbar mToolbar;
    @BindView(R.id.fab)
@@ -52,17 +45,13 @@ public class GameActivity extends AppCompatActivity {
    private ActionBar mActionBar;
    private CaptionAdapter mAdapter;
    private AuthenticationManager mAuthManager;
-   private Subscription mSubscription;
-   private int mGameId;
-
-   private static final String CAPTIONS_ENDPOINT = "http://104.198.36.194/captions";
+   private GameContract.Presenter mPresenter;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_game);
       ButterKnife.bind(this);
-
       mAuthManager = AuthenticationManager.getInstance(this);
 
       LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -86,13 +75,24 @@ public class GameActivity extends AppCompatActivity {
             .centerCrop()
             .into(mImage);
 
-      mGameId = intent.getIntExtra("gameId", 0);
+      mPresenter = new GamePresenter(intent.getIntExtra("gameId", 0), this);
+   }
+
+   @Override
+   public void setPresenter(GameContract.Presenter presenter) {
+      mPresenter = presenter;
    }
 
    @Override
    protected void onResume() {
       super.onResume();
-      loadCaptions();
+      mPresenter.subscribe();
+   }
+
+   @Override
+   protected void onPause() {
+      super.onPause();
+      mPresenter.unsubscribe();
    }
 
    @OnClick(R.id.fab)
@@ -105,25 +105,7 @@ public class GameActivity extends AppCompatActivity {
                .title(R.string.add_caption)
                .inputType(InputType.TYPE_CLASS_TEXT)
                .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
-                     CaptionProvider.addCaption(mGameId,
-                           new Caption(1, input.toString()))
-                           .observeOn(AndroidSchedulers.mainThread())
-                           .subscribe(new Subscriber<Caption>() {
-                              @Override
-                              public void onCompleted() {
-                                 Timber.i("Added caption");
-                              }
-
-                              @Override
-                              public void onError(Throwable e) {
-                                 Timber.e(e);
-                              }
-
-                              @Override
-                              public void onNext(Caption caption) {
-                                 mAdapter.addTempCaption(caption);
-                              }
-                           }))
+                     mPresenter.addCaption(input.toString()))
                .show();
       }
    }
@@ -133,42 +115,14 @@ public class GameActivity extends AppCompatActivity {
       startActivity(loginIntent);
    }
 
-   private void loadCaptions() {
-      mSubscription = CaptionProvider.getCaptions(mGameId)
-            .publish(network ->
-                  Observable.merge(network,
-                        CaptionProvider.getLocalCaptions(mGameId)
-                              .takeUntil(network)
-                  )
-            )
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<List<Caption>>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Loading captions completed successfully.");
-               }
-
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e, "Loading captions errored.");
-               }
-
-               @Override
-               public void onNext(List<Caption> captions) {
-                  try (Realm realmInstance = Realm.getDefaultInstance()) {
-                     realmInstance.executeTransaction(realm ->
-                           realm.copyToRealmOrUpdate(captions)
-                     );
-                  }
-                  mAdapter.setCaptions(captions);
-               }
-            });
+   @Override
+   public void showCaptions(List<Caption> captions) {
+      mAdapter.setCaptions(captions);
    }
 
    @Override
-   protected void onDestroy() {
-      super.onDestroy();
-      mSubscription.unsubscribe();
+   public void addCaption(Caption caption) {
+      mAdapter.addTempCaption(caption);
    }
 
    @Override

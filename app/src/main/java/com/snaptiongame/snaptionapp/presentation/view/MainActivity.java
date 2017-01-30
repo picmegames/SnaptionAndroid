@@ -164,12 +164,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    }
 
    @Override
-   protected void onDestroy() {
-      super.onStop();
-      mAuthManager.unregisterCallback();
-   }
-
-   @Override
    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
       mDrawerLayout.closeDrawers();
 

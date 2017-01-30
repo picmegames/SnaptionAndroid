@@ -21,7 +21,7 @@ import butterknife.OnClick;
  * @author Tyler Wong
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginContract.View {
    @BindView(R.id.logo)
    ImageView mLogo;
    @BindView(R.id.facebook_login_button)
@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
    SignInButton mGoogleSignInButton;
 
    private AuthenticationManager mAuthManager;
+   private LoginContract.Presenter mPresenter;
 
    private static final int RC_SIGN_IN = 2222;
 
@@ -39,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
 
       // Initialize Authentication Manager
       mAuthManager = AuthenticationManager.getInstance(this);
-      mAuthManager.registerCallback(this::onBackPressed);
 
       setContentView(R.layout.activity_login);
       ButterKnife.bind(this);
@@ -55,12 +55,13 @@ public class LoginActivity extends AppCompatActivity {
             .into(mLogo);
 
       mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
+
+      mPresenter = new LoginPresenter(this);
    }
 
    @Override
-   protected void onDestroy() {
-      super.onStop();
-      mAuthManager.unregisterCallback();
+   public void setPresenter(LoginContract.Presenter presenter) {
+      mPresenter = presenter;
    }
 
    @OnClick(R.id.google_sign_in_button)
@@ -78,5 +79,7 @@ public class LoginActivity extends AppCompatActivity {
       else {
          mAuthManager.facebookActivityResult(requestCode, resultCode, data);
       }
+
+      onBackPressed();
    }
 }

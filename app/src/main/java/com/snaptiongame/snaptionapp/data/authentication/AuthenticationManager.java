@@ -21,8 +21,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
-import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SessionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
@@ -30,9 +30,8 @@ import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.realm.Realm;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -44,7 +43,6 @@ public final class AuthenticationManager {
    private CallbackManager callbackManager;
    private GoogleApiClient googleApiClient;
    private SharedPreferences preferences;
-   private AuthenticationCallback authCallback;
 
    private static final String LOGGED_IN = "logged in";
 
@@ -142,10 +140,6 @@ public final class AuthenticationManager {
 
                      handleOAuthFacebook(loginResult.getAccessToken().getToken(),
                            FirebaseInstanceId.getInstance().getToken(), FACEBOOK_LOGIN);
-
-                     if (authCallback != null) {
-                        authCallback.onSuccess();
-                     }
                   }
             );
             Bundle parameters = new Bundle();
@@ -188,14 +182,6 @@ public final class AuthenticationManager {
 
    public boolean isLoggedIn() {
       return preferences.getBoolean(LOGGED_IN, false);
-   }
-
-   public void registerCallback(AuthenticationCallback callback) {
-      this.authCallback = callback;
-   }
-
-   public void unregisterCallback() {
-      this.authCallback = null;
    }
 
    public void logout() {
@@ -309,26 +295,30 @@ public final class AuthenticationManager {
    private void handleSnaptionLogIn(int snaptionUserId) {
       UserProvider.getUser(snaptionUserId)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<User>() {
-               @Override
-               public void onCompleted() {
-                  Timber.i("Successfully got user info");
-               }
+            .subscribe(user -> {
+                     saveSnaptionUsername(user.username);
+                     FriendProvider.loadFriends(snaptionUserId)
+                           .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(friends -> {
+                                    for (Friend friend : friends) {
+                                       friend.isSnaptionFriend = true;
+                                       Timber.i(friend.toString());
+                                    }
+                                    try (Realm realmInstance = Realm.getDefaultInstance()) {
+                                       realmInstance.executeTransaction(realm ->
+                                             realmInstance.copyToRealmOrUpdate(friends));
+                                    }
+                                 },
+                                 e -> Timber.e(e, "Getting Snaption Friends errored."),
+                                 () -> Timber.i("Getting Snaption Friends completed successfully"));
 
-               @Override
-               public void onError(Throwable e) {
-                  Timber.e(e);
-               }
-
-               @Override
-               public void onNext(User user) {
-                  saveSnaptionUsername(user.username);
-                  FriendProvider.loadFriends(snaptionUserId); //loads the user's friends to realm
-                  if(user.picture != null) {
-                     saveSnaptionProfileImage(user.picture);
-                  }
-               }
-            });
+                     if (user.picture != null) {
+                        saveSnaptionProfileImage(user.picture);
+                     }
+                  },
+                  Timber::e,
+                  () -> {
+                  });
    }
 
    private void handleOAuthGoogle(String token, String deviceToken, String provider) {
@@ -360,10 +350,6 @@ public final class AuthenticationManager {
 
          saveLoginInfo(profileImageUrl, "", username, email);
          setGoogleLoginState();
-
-         if (authCallback != null) {
-            authCallback.onSuccess();
-         }
       }
       else {
          Timber.e("Google login failed :(");

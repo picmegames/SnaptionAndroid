@@ -1,5 +1,7 @@
 package com.snaptiongame.snaptionapp.presentation.view.profile;
 
+import android.graphics.drawable.Drawable;
+
 import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.presentation.BasePresenter;
 import com.snaptiongame.snaptionapp.presentation.BaseView;
@@ -19,5 +21,6 @@ public class ProfileContract {
    interface Presenter extends BasePresenter {
       void updateProfilePicture(int snaptionUserId, User user);
       void updateUsername(int snaptionUserId, String oldUsername, User user);
+      void convertImage(int snaptionUserId, Drawable drawable, String type);
    }
 }
