@@ -8,7 +8,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.snaptiongame.snaptionapp.data.models.Friend;
-import com.snaptiongame.snaptionapp.data.models.User;
 
 import java.lang.reflect.Type;
 
@@ -17,9 +16,6 @@ import java.lang.reflect.Type;
  */
 
 public class FriendConverter implements JsonSerializer<Friend>, JsonDeserializer<Friend> {
-
-    public FriendConverter() {
-    }
 
     @Override
     public JsonElement serialize(Friend src, Type typeOfSrc, JsonSerializationContext context) {

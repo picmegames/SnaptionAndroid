@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -60,7 +59,6 @@ public final class AuthenticationManager {
    public static final String GOOGLE_SIGN_IN = "google";
 
    private AuthenticationManager(Context context) {
-
       // INIT Shared Preferences Editor
       preferences = context.getSharedPreferences(context.getPackageName(),
             Context.MODE_PRIVATE);
@@ -77,8 +75,6 @@ public final class AuthenticationManager {
 
       // INIT Google API Client
       googleApiClient = new GoogleApiClient.Builder(context)
-            .enableAutoManage((FragmentActivity) context, connectionResult -> {
-            })
             .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
             .build();
    }
@@ -195,14 +191,16 @@ public final class AuthenticationManager {
       }
       else if (isGoogle && !isFacebook) {
          // ELSE Call Google's sign out method
-         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
-            if (status.isSuccess()) {
-               Timber.i("Sign out of Google success");
-            }
-            else {
-               Timber.e("Could not sign out of Google");
-            }
-         });
+         if (googleApiClient.isConnected()) {
+            Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
+               if (status.isSuccess()) {
+                  Timber.i("Sign out of Google success");
+               }
+               else {
+                  Timber.e("Could not sign out of Google");
+               }
+            });
+         }
       }
       editor.putBoolean(LOGGED_IN, false);
       editor.apply();

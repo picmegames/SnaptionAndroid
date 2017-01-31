@@ -17,9 +17,9 @@ public class UserProvider {
       return apiService.getUser(userId);
    }
 
-   public static Observable<User> getUserWithEmail(String email) {return apiService.findUserEmail(email);}
-
-
+   public static Observable<User> getUserWithEmail(String email) {
+      return apiService.findUserEmail(email);
+   }
 
    public static Observable<User> updateUser(int userId, User user) {
       return apiService.updateUser(userId, user);

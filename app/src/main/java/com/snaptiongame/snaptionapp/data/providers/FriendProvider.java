@@ -6,7 +6,6 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
@@ -116,5 +115,4 @@ public class FriendProvider {
    public static Observable<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {
       return apiService.addUser(myId, request);
    }
-
 }

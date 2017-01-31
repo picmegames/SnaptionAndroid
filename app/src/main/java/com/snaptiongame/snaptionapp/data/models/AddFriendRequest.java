@@ -5,7 +5,7 @@ package com.snaptiongame.snaptionapp.data.models;
  */
 
 public class AddFriendRequest {
-    public static int mFriendId;
+    public int mFriendId;
 
     public static final String FRIEND_ID = "friendId";
 

@@ -37,7 +37,6 @@ public interface SnaptionApiService {
    @POST("/UserFriends/{userId}/")
    Observable<AddFriendRequest> addUser(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
-
    @GET("Users?email=")
    Observable<User> findUserEmail(@Query("email") String userEmail);
 

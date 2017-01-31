@@ -6,7 +6,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -25,12 +24,10 @@ import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Friend;
-import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -406,9 +403,10 @@ public class FriendsDialogFragment extends DialogFragment {
         //Using email to find a friend
         else {
             UserProvider.getUserWithEmail(search.getText().toString())
-                    .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(user -> showFriend(user));
+                    .subscribe(this::showFriend,
+                          Timber::e,
+                          () -> Timber.i("Found user successfully"));
         }
 
     }
@@ -438,14 +436,10 @@ public class FriendsDialogFragment extends DialogFragment {
      * Add a friendId to our list of users
      */
     private void addFriend() {
-
-        FriendProvider
-                .addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(sUserID))
+        FriendProvider.addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(sUserID))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(like -> {
+                .subscribe(request -> {
                 }, Timber::e, () -> Timber.i("Successfully added friend!"));
-        ;
-
     }
 
     private void loadFacebookFriends() {
