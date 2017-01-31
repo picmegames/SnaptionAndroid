@@ -1,5 +1,6 @@
 package com.snaptiongame.snaptionapp.data.services;
 
+import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Like;
@@ -33,8 +34,8 @@ public interface SnaptionApiService {
    @GET("Users/{userId}/")
    Observable<User> getUser(@Path("userId") int userId);
 
-   @POST("/UserFriends/{userId}")
-   Observable<String> addUser(@Path("userId") String userID, @Body String friendId);
+   @POST("/UserFriends/{userId}/")
+   Observable<AddFriendRequest> addUser(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
 
    @GET("Users?email=")

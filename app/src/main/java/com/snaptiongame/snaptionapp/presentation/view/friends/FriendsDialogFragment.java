@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.User;
@@ -131,7 +132,7 @@ public class FriendsDialogFragment extends DialogFragment {
     /**
      * ID of a user to possibly add as a friend
      */
-    private String sUserID;
+    private int sUserID;
 
     private AuthenticationManager mAuthManager;
 
@@ -424,7 +425,10 @@ public class FriendsDialogFragment extends DialogFragment {
         tmpFriend.userName = user.username;
         tmpFriend.picture = user.picture;
         tmpFriend.email = search.getText().toString();
-        sUserID = String.valueOf(user.id);
+
+        sUserID = user.id;
+        System.out.println(sUserID);
+        System.out.println(mAuthManager.getSnaptionUserId());
         friendList.add(tmpFriend);
         mAdapter.setFriends(friendList);
 
@@ -434,8 +438,13 @@ public class FriendsDialogFragment extends DialogFragment {
      * Add a friendId to our list of users
      */
     private void addFriend() {
-        FriendProvider.addFriend(String.valueOf(mAuthManager.getSnaptionUserId()),
-                sUserID);
+
+        FriendProvider
+                .addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(sUserID))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(like -> {
+                }, Timber::e, () -> Timber.i("Successfully added friend!"));
+        ;
 
     }
 
