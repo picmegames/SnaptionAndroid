@@ -23,12 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * @author Tyler Wong
@@ -66,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity
    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
    private static final int ALPHA_ANIMATIONS_DURATION = 200;
+   private static final int BLUR_RADIUS = 25;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,25 +81,17 @@ public class ProfileActivity extends AppCompatActivity
       mPresenter = new ProfilePresenter(this);
       mInfoView.setPresenter(mPresenter);
 
-      String coverPhoto = getIntent().getStringExtra(AuthenticationManager.COVER_PHOTO_URL);
       String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);
+      String profileUrl = getIntent().getStringExtra(AuthenticationManager.PROFILE_IMAGE_URL);
 
       Glide.with(this)
-            .load(getIntent().getStringExtra(AuthenticationManager.PROFILE_IMAGE_URL))
+            .load(profileUrl)
             .into(mProfileImg);
 
-      if (!coverPhoto.isEmpty()) {
-         Glide.with(this)
-               .load(coverPhoto)
-               .centerCrop()
-               .into(mCoverPhoto);
-      }
-      else {
-         Glide.with(this)
-               .load(R.drawable.snaption_background)
-               .centerCrop()
-               .into(mCoverPhoto);
-      }
+      Glide.with(this)
+            .load(profileUrl)
+            .bitmapTransform(new CenterCrop(this), new BlurTransformation(this, BLUR_RADIUS))
+            .into(mCoverPhoto);
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
          mProfileImg.setElevation(PROFILE_IMG_ELEVATION);

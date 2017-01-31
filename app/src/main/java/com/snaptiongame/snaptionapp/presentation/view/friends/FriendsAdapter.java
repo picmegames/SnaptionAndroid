@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -47,15 +46,14 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     .load(curFriend.picture)
                     .into(holder.mImage);
         }
-        else if (curFriend.lastName != null) {
+        else if (curFriend.picture == null) {
             holder.mImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(40)
                     .height(40)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(curFriend.firstName.substring(0, 1) + curFriend.lastName
-                            .substring(0, 1),
+                    .buildRound(curFriend.userName.substring(0, 1),
                             ColorGenerator.MATERIAL.getRandomColor()));
         }
     }

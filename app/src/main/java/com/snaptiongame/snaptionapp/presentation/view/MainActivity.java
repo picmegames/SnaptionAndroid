@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          if (mAuthManager.isLoggedIn()) {
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             profileIntent.putExtra(AuthenticationManager.PROFILE_IMAGE_URL, mAuthManager.getProfileImageUrl());
-            profileIntent.putExtra(AuthenticationManager.COVER_PHOTO_URL, mAuthManager.getCoverPhotoUrl());
             profileIntent.putExtra(AuthenticationManager.FULL_NAME, mAuthManager.getUserFullName());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
