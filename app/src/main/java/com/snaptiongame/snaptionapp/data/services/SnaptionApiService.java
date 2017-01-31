@@ -16,6 +16,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import io.reactivex.Observable;
+import retrofit2.http.Query;
 
 /**
  * @author Tyler Wong
@@ -32,8 +33,12 @@ public interface SnaptionApiService {
    @GET("Users/{userId}/")
    Observable<User> getUser(@Path("userId") int userId);
 
-   @GET("Users/email?={email}")
-   Observable<User> findUserEmail(@Path("userEmail") String userEmail);
+   @POST("/UserFriends/{userId}")
+   Observable<String> addUser(@Path("userId") String userID, @Body String friendId);
+
+
+   @GET("Users?email=")
+   Observable<User> findUserEmail(@Query("email") String userEmail);
 
    @PUT("/Users/{userId}/")
    Observable<User> updateUser(@Path("userId") int userId, @Body User user);

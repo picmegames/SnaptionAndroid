@@ -110,4 +110,9 @@ public class FriendProvider {
          }
       });
    }
+
+   public static void addFriend(String myId, String friendId) {
+      apiService.addUser(myId, friendId);
+   }
+
 }

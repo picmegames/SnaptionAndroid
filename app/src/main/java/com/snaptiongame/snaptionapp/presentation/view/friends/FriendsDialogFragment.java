@@ -6,8 +6,12 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +22,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
+import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
 
 /**
  * Created by nickromero on 1/20/17.
@@ -117,11 +129,19 @@ public class FriendsDialogFragment extends DialogFragment {
     private String sHint;
 
     /**
+     * ID of a user to possibly add as a friend
+     */
+    private String sUserID;
+
+    private AuthenticationManager mAuthManager;
+
+    /**
      * Empty constructor for the dialog. Expected from a DialogFragment
      */
     public FriendsDialogFragment() {
         friendProvider = new SnaptionApiProvider();
     }
+
 
     /**
      * User to instantiate a new instance of the FriendsDialogFragment class
@@ -152,7 +172,7 @@ public class FriendsDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mAuthManager = AuthenticationManager.getInstance(mFragmentActivity.getContext());
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
         sNegativeButtonText = BACK;
         sPositiveButtonText = INVITE_FRIEND_SHORT;
@@ -238,38 +258,82 @@ public class FriendsDialogFragment extends DialogFragment {
             search = (EditText) view.findViewById(R.id.friendSearchView);
 
             /**
-            search.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+             * Determine what dialog is being shown.
+             */
+            if (mWhichDialog == DialogToShow.EMAIL_INVITE) {
+                search.setInputType(TYPE_TEXT_VARIATION_EMAIL_ADDRESS);//Different type fo keyboard for emails
+                search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
-                }
+                        /**
+                         * Not totally sure what KeyEvent is the NEXT button on the keyboard.
+                         * Will fix
+                         */
+                        if (i == 5) {
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    int len = search.getText().length();
-                    if(len == 1) {
-                        search.setText("(" + search.getText());
-                        search.setSelection(search.getText().length());
-
+                            findFriend();
+                            return true;
+                        }
+                        return false;
                     }
-                    if (len == 4) {
-                        search.setText(search.getText() + ") ");
-                        search.setSelection(search.getText().length());
-                    }
-                    if (len == 9) {
-                        search.setText(search.getText() + "-");
-                        search.setSelection(search.getText().length());
-                    }
-                    if (len == 14)
-                        findFriend();
-                }
+                });
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+                search.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
-                }
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        /**
+                         * If the text contains an email we should try and find a user
+                         */
+                        if (search.getText().toString().contains(".com") ||
+                                search.getText().toString().contains(".net") ||
+                                search.getText().toString().contains(".org")) {
+                            findFriend();
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {}
+                });
+            }
+
+
+            //The following is a fancy listener for number inputs.
+            //CURRENTLY WERE NOT USING THIS BECAUSE OF SOME REASON UNKNOWN TO ME
+            /**
+             search.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            int len = search.getText().length();
+            if(len == 1) {
+            search.setText("(" + search.getText());
+            search.setSelection(search.getText().length());
+
+            }
+            if (len == 4) {
+            search.setText(search.getText() + ") ");
+            search.setSelection(search.getText().length());
+            }
+            if (len == 9) {
+            search.setText(search.getText() + "-");
+            search.setSelection(search.getText().length());
+            }
+            if (len == 14)
+            findFriend();
+            }
+
+            @Override public void afterTextChanged(Editable editable) {
+
+            }
             });
-**/
+             **/
             //hint is assigned above when the dialog to display is chosen
             search.setHint(sHint); //Sets the hint based off of which method
             // the user is adding a friend
@@ -280,6 +344,7 @@ public class FriendsDialogFragment extends DialogFragment {
                 //provide friends
                 loadFacebookFriends();
             }
+
             mAdapter = new FriendsAdapter(view.getContext(), friends);
             mResults.setAdapter(mAdapter);
         }
@@ -301,7 +366,7 @@ public class FriendsDialogFragment extends DialogFragment {
                 if (mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
                     sendInviteIntent();
                 else
-                    findFriend();
+                    addFriend();
             }
         }).setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
@@ -330,15 +395,47 @@ public class FriendsDialogFragment extends DialogFragment {
     }
 
 
+    /**
+     * Find a friend after a user has entered an email in the search bar
+     */
     private void findFriend() {
-
-
         if (mWhichDialog == DialogToShow.PHONE_INVITE) {
-
+            //Lol
         }
+        //Using email to find a friend
         else {
-           
+            UserProvider.getUserWithEmail(search.getText().toString())
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(user -> showFriend(user));
         }
+
+    }
+
+
+    /**
+     * Update the recycler view with found friend
+     *
+     * @param user User returned from the database
+     */
+    private void showFriend(User user) {
+        Friend tmpFriend = new Friend();
+        List<Friend> friendList = new ArrayList<Friend>();
+        tmpFriend.userName = user.username;
+        tmpFriend.picture = user.picture;
+        tmpFriend.email = search.getText().toString();
+        sUserID = String.valueOf(user.id);
+        friendList.add(tmpFriend);
+        mAdapter.setFriends(friendList);
+
+    }
+
+    /**
+     * Add a friendId to our list of users
+     */
+    private void addFriend() {
+        FriendProvider.addFriend(String.valueOf(mAuthManager.getSnaptionUserId()),
+                sUserID);
 
     }
 
@@ -346,7 +443,8 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.getFacebookFriends()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(friends -> mAdapter.setFriends(friends), Timber::e, () -> {});
+                .subscribe(friends -> mAdapter.setFriends(friends), Timber::e, () -> {
+                });
     }
 
     /**
@@ -370,7 +468,8 @@ public class FriendsDialogFragment extends DialogFragment {
         /**
          * Empty constructor.
          */
-        private AddFriendsAdapter() {}
+        private AddFriendsAdapter() {
+        }
 
         /**
          * Getter for the length of the friends adapter
