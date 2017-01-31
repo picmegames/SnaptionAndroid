@@ -1,8 +1,9 @@
 package com.snaptiongame.snaptionapp.data.utils;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -16,13 +17,12 @@ import timber.log.Timber;
  */
 
 public class ImageConverter {
-   public static Observable<String> convertImage(Drawable drawable) {
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-      Bitmap bmp = ((BitmapDrawable) drawable).getBitmap();
-      bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-      String picture = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-
+   public static Observable<String> convertImage(ContentResolver resolver, Uri uri) {
+      String picture = "";
       try {
+         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+         MediaStore.Images.Media.getBitmap(resolver, uri).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+         picture = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
          byteArrayOutputStream.close();
       }
       catch (IOException e) {

@@ -77,7 +77,7 @@ public class CreateGame extends AppCompatActivity {
          mNewGameImage.setImageURI(uri);
          mType = getContentResolver().getType(uri);
 
-         ImageConverter.convertImage(mNewGameImage.getDrawable())
+         ImageConverter.convertImage(getContentResolver(), uri)
                .subscribeOn(Schedulers.computation())
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(s -> mEncodedImage = s, Timber::e, () -> Timber.i("Successfully encoded image."));

@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.presentation.view.profile;
 
-import android.graphics.drawable.Drawable;
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.snaptiongame.snaptionapp.data.models.User;
@@ -37,7 +38,10 @@ public class ProfilePresenter implements ProfileContract.Presenter {
       Disposable disposable = UserProvider.updateUser(snaptionUserId, user)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(newUser -> mProfileView.saveProfilePicture(newUser.picture),
-                  Timber::e,
+                  e -> {
+                     Timber.e(e);
+                     mProfileView.showProfilePictureFailure();
+                  },
                   () -> mProfileView.showProfilePictureSuccess());
       mDisposables.add(disposable);
    }
@@ -48,20 +52,24 @@ public class ProfilePresenter implements ProfileContract.Presenter {
       Disposable disposable = UserProvider.updateUser(snaptionUserId, user)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(nextUser -> mProfileView.saveUsername(nextUser.username),
-                  Timber::e,
+                  e -> {
+                     Timber.e(e);
+                     mProfileView.showUsernameFailure(oldUsername, user);
+                  },
                   () -> mProfileView.showUsernameSuccess(oldUsername, user));
       mDisposables.add(disposable);
    }
 
    @Override
-   public void convertImage(int snaptionUserId, Drawable drawable, String type) {
+   public void convertImage(int snaptionUserId, ContentResolver resolver, Uri uri) {
       mDisposables.clear();
-      Disposable disposable = ImageConverter.convertImage(drawable)
+      Disposable disposable = ImageConverter.convertImage(resolver, uri)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(s -> mEncodedImage = s,
                   Timber::e,
-                  () -> updateProfilePicture(snaptionUserId, new User(mEncodedImage, type)));
+                  () -> updateProfilePicture(snaptionUserId,
+                        new User(mEncodedImage, resolver.getType(uri))));
       mDisposables.add(disposable);
    }
 

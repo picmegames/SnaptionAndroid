@@ -84,14 +84,7 @@ public class ProfileActivity extends AppCompatActivity
       String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);
       String profileUrl = getIntent().getStringExtra(AuthenticationManager.PROFILE_IMAGE_URL);
 
-      Glide.with(this)
-            .load(profileUrl)
-            .into(mProfileImg);
-
-      Glide.with(this)
-            .load(profileUrl)
-            .bitmapTransform(new CenterCrop(this), new BlurTransformation(this, BLUR_RADIUS))
-            .into(mCoverPhoto);
+      updateProfilePicture(profileUrl);
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
          mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
@@ -149,16 +142,33 @@ public class ProfileActivity extends AppCompatActivity
 
       if (resultCode == RESULT_OK) {
          Uri uri = data.getData();
-         mProfileImg.setImageURI(uri);
-
-         mPresenter.convertImage(mAuthManager.getSnaptionUserId(), mProfileImg.getDrawable(),
-               getContentResolver().getType(uri));
+         mPresenter.convertImage(mAuthManager.getSnaptionUserId(), getContentResolver(), uri);
       }
+   }
+
+   private void updateProfilePicture(String profileUrl) {
+      Glide.with(this)
+            .load(profileUrl)
+            .into(mProfileImg);
+
+      Glide.with(this)
+            .load(profileUrl)
+            .bitmapTransform(new CenterCrop(this),
+                  new BlurTransformation(this, BLUR_RADIUS))
+            .into(mCoverPhoto);
    }
 
    @Override
    public void showProfilePictureSuccess() {
-      Snackbar.make(mLayout, getString(R.string.update_profile_picture), Snackbar.LENGTH_LONG).show();
+      Snackbar.make(
+            mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
+      updateProfilePicture(mAuthManager.getProfileImageUrl());
+   }
+
+   @Override
+   public void showProfilePictureFailure() {
+      Snackbar.make(
+            mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
    }
 
    @Override
@@ -168,6 +178,16 @@ public class ProfileActivity extends AppCompatActivity
             .setAction(getString(R.string.undo), view ->
                   mPresenter.updateUsername(
                         mAuthManager.getSnaptionUserId(), user.username, new User(oldUsername)))
+            .show();
+   }
+
+   @Override
+   public void showUsernameFailure(String oldUsername, User user) {
+      Snackbar
+            .make(mLayout, getString(R.string.update_failure), Snackbar.LENGTH_LONG)
+            .setAction(getString(R.string.try_again), view ->
+                  mPresenter.updateUsername(
+                        mAuthManager.getSnaptionUserId(), oldUsername, user))
             .show();
    }
 
