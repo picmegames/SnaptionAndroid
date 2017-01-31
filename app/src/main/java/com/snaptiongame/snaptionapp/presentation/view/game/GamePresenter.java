@@ -7,7 +7,6 @@ import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -36,12 +35,6 @@ public class GamePresenter implements GameContract.Presenter {
    public void loadCaptions() {
       mDisposables.clear();
       Disposable disposable = CaptionProvider.getCaptions(mGameId)
-            .publish(network ->
-                  Observable.merge(network,
-                        CaptionProvider.getLocalCaptions(mGameId)
-                              .takeUntil(network)
-                  )
-            )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                   this::processCaptions,
