@@ -7,7 +7,6 @@ import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -34,11 +33,6 @@ public class WallPresenter implements WallContract.Presenter {
    public void loadGames() {
       mDisposables.clear();
       Disposable disposable = SnaptionProvider.getAllSnaptions()
-            .publish(network ->
-                  Observable.merge(network,
-                        SnaptionProvider.getAllLocalSnaptions()
-                              .takeUntil(network))
-            )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                   this::processSnaptions,
