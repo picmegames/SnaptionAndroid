@@ -1,5 +1,6 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
-import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 
 import butterknife.BindView;
@@ -112,7 +112,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String transitionName = mContext.getString(R.string.shared_transition);
             ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                  (MainActivity) mContext, mImage, transitionName);
+                  (Activity) mContext, mImage, transitionName);
             cardContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
          }
          else {

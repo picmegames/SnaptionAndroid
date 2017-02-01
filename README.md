@@ -111,13 +111,13 @@ gotten the project to build successfully!
 ### Developer Dependencies
 * [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 * [square/leakcanary](https://github.com/square/leakcanary)
-* [artem-zinnatullin/RxJavaProGuardRules](https://github.com/artem-zinnatullin/RxJavaProGuardRules)
 * [JakeWharton/timber](https://github.com/JakeWharton/timber)
 
 ### Application Dependencies
 * [hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
 * [facebook/facebook-android-sdk](https://github.com/facebook/facebook-android-sdk)
 * [bumptech/glide](https://github.com/bumptech/glide)
+* [wasabeef/glide-transformations](https://github.com/wasabeef/glide-transformations)
 * [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs)
 * [square/okhttp](https://github.com/square/okhttp)
 * [square/retrofit](https://github.com/square/retrofit)

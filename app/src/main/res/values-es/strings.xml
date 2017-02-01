@@ -38,5 +38,8 @@
     <string name="update_profile_picture_success">Imagen de perfil actualizada con éxito</string>
     <string name="update_profile_picture_failure">No se puede actualizar la imagen de perfil</string>
     <string name="try_again">Inténtalo de nuevo</string>
+    <string name="update_info">Actualizar información</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 
 </resources>

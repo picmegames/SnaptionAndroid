@@ -4,24 +4,28 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.snaptionapp.R;
@@ -30,7 +34,11 @@ import com.snaptiongame.snaptionapp.data.models.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
+
+import static android.R.color.transparent;
 
 /**
  * @author Tyler Wong
@@ -54,10 +62,18 @@ public class ProfileActivity extends AppCompatActivity
    AppBarLayout mAppBar;
    @BindView(R.id.collapsing_toolbar)
    CollapsingToolbarLayout mCollapsingLayout;
-   @BindView(R.id.info_view)
-   ProfileInfoView mInfoView;
+   @BindView(R.id.tab_layout)
+   TabLayout mTabLayout;
+   @BindView(R.id.view_pager)
+   ViewPager mViewPager;
 
+   private MaterialDialog mEditDialog;
+   private EditProfileView mEditView;
    private ActionBar mActionBar;
+   private Uri mUri;
+
+   private int mColorPrimary;
+   private int mTransparent;
 
    private AuthenticationManager mAuthManager;
    private ProfileContract.Presenter mPresenter;
@@ -68,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity
    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
    private static final int ALPHA_ANIMATIONS_DURATION = 200;
-   private static final int BLUR_RADIUS = 25;
+   private static final int BLUR_RADIUS = 40;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +95,6 @@ public class ProfileActivity extends AppCompatActivity
 
       mAuthManager = AuthenticationManager.getInstance(this);
       mPresenter = new ProfilePresenter(this);
-      mInfoView.setPresenter(mPresenter);
 
       String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);
       String profileUrl = getIntent().getStringExtra(AuthenticationManager.PROFILE_IMAGE_URL);
@@ -90,6 +105,7 @@ public class ProfileActivity extends AppCompatActivity
          mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
       }
 
+      mToolbar.showOverflowMenu();
       setSupportActionBar(mToolbar);
       mActionBar = getSupportActionBar();
       if (mActionBar != null) {
@@ -99,14 +115,37 @@ public class ProfileActivity extends AppCompatActivity
       mAppBar.addOnOffsetChangedListener(this);
       startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
+      mViewPager.setAdapter(
+            new ProfileInfoPageAdapter(getSupportFragmentManager(), this));
+
+      mTabLayout.setupWithViewPager(mViewPager);
+      int white = ContextCompat.getColor(this, android.R.color.white);
+      mTabLayout.setTabTextColors(white, white);
+
       mTitle.setText(name);
       mMainTitle.setText(name);
 
-      mProfileImg.setOnClickListener(view -> {
-         Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
-         imagePickerIntent.setType("image/*");
-         startActivityForResult(imagePickerIntent, 1);
-      });
+      mColorPrimary  = ContextCompat.getColor(this, R.color.colorPrimary);
+      mTransparent = ContextCompat.getColor(this, transparent);
+   }
+
+   @OnClick(R.id.fab)
+   public void showEditDialog() {
+      mEditView = new EditProfileView(this, mAuthManager);
+
+      mEditDialog = new MaterialDialog.Builder(this)
+            .title(getString(R.string.update_info))
+            .customView(mEditView, false)
+            .positiveText(getString(R.string.confirm))
+            .negativeText(R.string.cancel)
+            .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
+               mPresenter.updateUsername(mAuthManager.getSnaptionUserId(),
+                     mAuthManager.getSnaptionUsername(), new User(mEditView.getNewUsername()));
+            })
+            .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
+
+            })
+            .show();
    }
 
    @Override
@@ -133,7 +172,7 @@ public class ProfileActivity extends AppCompatActivity
 
    @Override
    public void saveUsername(String username) {
-      mInfoView.saveUsername(username);
+      mAuthManager.saveSnaptionUsername(username);
    }
 
    @Override
@@ -141,12 +180,16 @@ public class ProfileActivity extends AppCompatActivity
       super.onActivityResult(requestCode, resultCode, data);
 
       if (resultCode == RESULT_OK) {
-         Uri uri = data.getData();
-         mPresenter.convertImage(mAuthManager.getSnaptionUserId(), getContentResolver(), uri);
+         mUri = data.getData();
+         mPresenter.convertImage(mAuthManager.getSnaptionUserId(), getContentResolver(), mUri);
       }
    }
 
    private void updateProfilePicture(String profileUrl) {
+      if (mEditView != null) {
+         mEditView.updateProfilePicture(profileUrl);
+      }
+
       Glide.with(this)
             .load(profileUrl)
             .into(mProfileImg);
@@ -154,7 +197,8 @@ public class ProfileActivity extends AppCompatActivity
       Glide.with(this)
             .load(profileUrl)
             .bitmapTransform(new CenterCrop(this),
-                  new BlurTransformation(this, BLUR_RADIUS))
+                  new BlurTransformation(this, BLUR_RADIUS),
+                  new ColorFilterTransformation(this, R.color.colorPrimary))
             .into(mCoverPhoto);
    }
 
@@ -185,16 +229,13 @@ public class ProfileActivity extends AppCompatActivity
    public void showUsernameFailure(String oldUsername, User user) {
       Snackbar
             .make(mLayout, getString(R.string.update_failure), Snackbar.LENGTH_LONG)
-            .setAction(getString(R.string.try_again), view ->
-                  mPresenter.updateUsername(
-                        mAuthManager.getSnaptionUserId(), oldUsername, user))
+            .setAction(getString(R.string.try_again), view -> mEditDialog.show())
             .show();
    }
 
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
-      MenuInflater inflater = getMenuInflater();
-      inflater.inflate(R.menu.menu_edit, menu);
+      getMenuInflater().inflate(R.menu.profile_menu, menu);
       return true;
    }
 
@@ -203,9 +244,6 @@ public class ProfileActivity extends AppCompatActivity
       switch (item.getItemId()) {
          case android.R.id.home:
             onBackPressed();
-            break;
-         case R.id.edit_action:
-            Toast.makeText(this, "Edit pressed!", Toast.LENGTH_LONG).show();
             break;
          default:
             break;
@@ -225,9 +263,11 @@ public class ProfileActivity extends AppCompatActivity
             TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics())) {
          mActionBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                getResources().getDisplayMetrics()));
+         mToolbar.setBackgroundColor(mColorPrimary);
       }
       else {
          mActionBar.setElevation(0);
+         mToolbar.setBackgroundColor(mTransparent);
       }
 
       mLayout.setPadding(0, (int) Math.floor(ImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);

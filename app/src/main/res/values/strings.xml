@@ -6,6 +6,7 @@
     <string name="open_drawer" translatable="false">Navigation View Open</string>
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
     <string name="shared_transition" translatable="false">snaption_transition</string>
+    <string name="image_behavior" translatable="false">com.snaptiongame.snaptionapp.presentation.view.profile.ImageBehavior</string>
 
     <!-- Urls -->
     <string name="snaption_url" translatable="false">http://www.snaptiongame.com/</string>
@@ -15,6 +16,7 @@
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="add_caption">Add a Caption!</string>
     <string name="edit_username">Enter a New Username</string>
+    <string name="update_info">Update Information</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
@@ -36,6 +38,10 @@
     <string name="update_profile_picture_success">Profile picture updated successfully</string>
     <string name="update_profile_picture_failure">Unable to update profile picture</string>
     <string name="try_again">Try Again</string>
+    <string name="count" translatable="false">0/15</string>
+    <string name="count_format" translatable="false">%1$d/15</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

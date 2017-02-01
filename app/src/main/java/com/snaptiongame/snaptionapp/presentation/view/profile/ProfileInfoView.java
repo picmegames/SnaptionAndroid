@@ -1,18 +1,14 @@
 package com.snaptiongame.snaptionapp.presentation.view.profile;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.CardView;
-import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,17 +18,12 @@ import butterknife.ButterKnife;
  */
 
 public class ProfileInfoView extends NestedScrollView {
-   @BindView(R.id.email_card)
-   CardView mEmailView;
-   @BindView(R.id.email)
-   TextView mEmail;
-   @BindView(R.id.username_card)
-   CardView mUsernameView;
-   @BindView(R.id.username)
-   TextView mUsername;
+   @BindView(R.id.tab_layout)
+   TabLayout mTabLayout;
+   @BindView(R.id.view_pager)
+   ViewPager mViewPager;
 
    private Context mContext;
-   private AuthenticationManager mAuthManager;
    private ProfileContract.Presenter mPresenter;
 
    public ProfileInfoView(Context context) {
@@ -56,26 +47,13 @@ public class ProfileInfoView extends NestedScrollView {
    private void init() {
       View view = inflate(mContext, R.layout.profile_info, this);
       ButterKnife.bind(this, view);
-      mAuthManager = AuthenticationManager.getInstance(mContext);
 
-      mEmail.setText(mAuthManager.getEmail());
-      mUsername.setText(mAuthManager.getSnaptionUsername());
+      mViewPager.setAdapter(
+            new ProfileInfoPageAdapter(((ProfileActivity) mContext).getSupportFragmentManager(), mContext));
 
-      mUsernameView.setOnClickListener(userView -> {
-         new MaterialDialog.Builder(mContext)
-               .title(R.string.edit_username)
-               .inputType(InputType.TYPE_CLASS_TEXT)
-               .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
-                  mPresenter.updateUsername(mAuthManager.getSnaptionUserId(),
-                        mAuthManager.getSnaptionUsername(), new User(input.toString()))
-               )
-               .show();
-      });
-   }
-
-   public void saveUsername(String username) {
-      mUsername.setText(username);
-      mAuthManager.saveSnaptionUsername(username);
+      mTabLayout.setupWithViewPager(mViewPager);
+      int white = ContextCompat.getColor(mContext, android.R.color.white);
+      mTabLayout.setTabTextColors(white, white);
    }
 
    public void setPresenter(ProfileContract.Presenter presenter) {
