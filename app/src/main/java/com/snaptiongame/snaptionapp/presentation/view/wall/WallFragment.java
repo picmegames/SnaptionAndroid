@@ -48,16 +48,6 @@ public class WallFragment extends Fragment implements WallContract.View {
 
    public static final int NUM_COLUMNS = 2;
 
-   public static final String ARG_PAGE = "ARG_PAGE";
-
-   public static WallFragment newInstance(int page) {
-      Bundle args = new Bundle();
-      args.putInt(ARG_PAGE, page);
-      WallFragment fragment = new WallFragment();
-      fragment.setArguments(args);
-      return fragment;
-   }
-
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
