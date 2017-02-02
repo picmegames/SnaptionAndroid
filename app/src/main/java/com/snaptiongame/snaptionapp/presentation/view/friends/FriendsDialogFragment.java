@@ -343,7 +343,7 @@ public class FriendsDialogFragment extends DialogFragment {
                 loadFacebookFriends();
             }
 
-            mAdapter = new FriendsAdapter(view.getContext(), friends);
+            mAdapter = new FriendsAdapter(friends);
             mResults.setAdapter(mAdapter);
         }
 

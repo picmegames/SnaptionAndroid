@@ -41,5 +41,6 @@
     <string name="update_info">Actualizar información</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-
+    <string name="create_success">Juego creado con éxito!</string>
+    <string name="create_failure">No se puede crear juego</string>
 </resources>

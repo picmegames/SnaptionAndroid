@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
 import com.snaptiongame.snaptionapp.R;
 
 import butterknife.BindView;
@@ -22,11 +23,11 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.secondary_text)
     TextView mUserName;
 
-    private Context mContext;
+    public Context mContext;
 
-    public FriendViewHolder(Context context, View itemView) {
+    public FriendViewHolder(View itemView) {
         super(itemView);
-        mContext = context;
+        mContext = itemView.getContext();
         ButterKnife.bind(this, itemView);
     }
 }

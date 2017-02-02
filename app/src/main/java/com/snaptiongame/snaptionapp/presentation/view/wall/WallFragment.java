@@ -61,7 +61,7 @@ public class WallFragment extends Fragment implements WallContract.View {
       mWall.addItemDecoration(new SpacesItemDecoration(
             getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
 
-      mAdapter = new WallAdapter(getContext(), new ArrayList<>());
+      mAdapter = new WallAdapter(new ArrayList<>());
       mWall.setAdapter(mAdapter);
 
       mRefreshLayout.setOnRefreshListener(mPresenter::loadGames);

@@ -16,9 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
@@ -29,6 +31,8 @@ import com.snaptiongame.snaptionapp.presentation.view.wall.WallFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 
 /**
  * @author Tyler Wong
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    @BindView(R.id.navigation_view)
    NavigationView mNavigationView;
 
+   ImageView mCoverPhoto;
    CircleImageView mProfilePicture;
    TextView mNameView;
    TextView mEmailView;
@@ -49,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    private AuthenticationManager mAuthManager;
    private Fragment mCurrentFragment;
    private String fragTag;
+
+   private static final int BLUR_RADIUS = 40;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
       setSupportActionBar(mToolbar);
 
       View headerView = mNavigationView.getHeaderView(0);
+      mCoverPhoto = (ImageView) headerView.findViewById(R.id.cover_photo);
       mProfilePicture = (CircleImageView) headerView.findViewById(R.id.profile_image);
       mNameView = (TextView) headerView.findViewById(R.id.username);
       mEmailView = (TextView) headerView.findViewById(R.id.email);
@@ -122,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
       Glide.with(this)
             .load(R.mipmap.ic_launcher)
             .into(mProfilePicture);
+      Glide.clear(mCoverPhoto);
       mNameView.setText(getString(R.string.welcome_message));
       mEmailView.setText("");
    }
@@ -134,6 +143,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
       Glide.with(this)
             .load(profileImageUrl)
             .into(mProfilePicture);
+      Glide.with(this)
+            .load(profileImageUrl)
+            .bitmapTransform(
+                  new CenterCrop(this),
+                  new BlurTransformation(this, BLUR_RADIUS),
+                  new ColorFilterTransformation(this, R.color.colorPrimary))
+            .into(mCoverPhoto);
       mNameView.setText(name);
       mEmailView.setText(email);
    }

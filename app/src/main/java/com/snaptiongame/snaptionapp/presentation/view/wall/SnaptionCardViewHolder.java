@@ -1,6 +1,5 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -45,16 +44,17 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    @BindView(R.id.game_status)
    TextView mGameStatus;
 
-   private Context mContext;
    private AuthenticationManager mAuthManager;
+
+   public Context mContext;
 
    public int mGameId;
    public String mImageUrl;
    public boolean isUpvoted = false;
 
-   public SnaptionCardViewHolder(Context context, View itemView) {
+   public SnaptionCardViewHolder(View itemView) {
       super(itemView);
-      mContext = context;
+      mContext = itemView.getContext();
       ButterKnife.bind(this, itemView);
 
       mAuthManager = AuthenticationManager.getInstance(mContext);
@@ -112,7 +112,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String transitionName = mContext.getString(R.string.shared_transition);
             ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                  (Activity) mContext, mImage, transitionName);
+                  (AppCompatActivity) mContext, mImage, transitionName);
             cardContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
          }
          else {

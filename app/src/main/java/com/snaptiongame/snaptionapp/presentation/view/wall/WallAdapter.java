@@ -1,6 +1,5 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,19 +18,17 @@ import java.util.List;
  */
 
 public class WallAdapter extends RecyclerView.Adapter {
-   private Context mContext;
    private List<Snaption> mSnaptions;
 
-   public WallAdapter(Context context, List<Snaption> snaptions) {
-      this.mContext = context;
+   public WallAdapter(List<Snaption> snaptions) {
       this.mSnaptions = snaptions;
    }
 
    @Override
    public SnaptionCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(mContext)
+      View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.snaption_card, parent, false);
-      return new SnaptionCardViewHolder(mContext, view);
+      return new SnaptionCardViewHolder(view);
    }
 
    @Override
@@ -43,7 +40,7 @@ public class WallAdapter extends RecyclerView.Adapter {
 
       if (curSnaption.picture != null) {
          holder.mImage.layout(0, 0, 0, 0);
-         Glide.with(mContext)
+         Glide.with(holder.mContext)
                .load(curSnaption.picture)
                .into(holder.mImage);
          holder.mImageUrl = curSnaption.picture;
@@ -54,7 +51,7 @@ public class WallAdapter extends RecyclerView.Adapter {
 
       if (curSnaption.topCaption != null) {
          if (curSnaption.topCaption.picture != null) {
-            Glide.with(mContext)
+            Glide.with(holder.mContext)
                   .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
                   .into(holder.mCaptionerImage);
          }
@@ -71,17 +68,17 @@ public class WallAdapter extends RecyclerView.Adapter {
          holder.mTopCaption.setText(curSnaption.topCaption.caption);
       }
       else {
-         Glide.with(mContext)
+         Glide.with(holder.mContext)
                .load(R.mipmap.ic_launcher)
                .into(holder.mCaptionerImage);
-         holder.mTopCaption.setText(mContext.getString(R.string.default_caption));
+         holder.mTopCaption.setText(holder.mContext.getString(R.string.default_caption));
       }
 
       if (curSnaption.id < 5) {
-         holder.mGameStatus.setText(mContext.getString(R.string.game_closed));
+         holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
       }
       else {
-         holder.mGameStatus.setText(mContext.getString(R.string.game_open));
+         holder.mGameStatus.setText(holder.mContext.getString(R.string.game_open));
       }
    }
 

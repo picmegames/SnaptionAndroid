@@ -64,7 +64,7 @@ public class FriendsFragment extends Fragment {
         mAuthManager = AuthenticationManager.getInstance(getContext());
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new FriendsAdapter(getContext(), friends);
+        mAdapter = new FriendsAdapter(friends);
         mFriends.setAdapter(mAdapter);
         loadFriends();
 

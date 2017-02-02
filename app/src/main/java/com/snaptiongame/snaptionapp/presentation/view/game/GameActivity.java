@@ -57,7 +57,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
       LinearLayoutManager layoutManager = new LinearLayoutManager(this);
       layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
       mCaptionList.setLayoutManager(layoutManager);
-      mAdapter = new CaptionAdapter(this, new ArrayList<>());
+      mAdapter = new CaptionAdapter(new ArrayList<>());
       mCaptionList.setAdapter(mAdapter);
 
       setSupportActionBar(mToolbar);

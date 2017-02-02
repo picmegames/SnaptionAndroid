@@ -4,43 +4,42 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
-import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 /**
  * @author Nick Romero
  */
 
-public class CreateGame extends AppCompatActivity {
-   @BindView(R.id.newGameImage)
+public class CreateGame extends AppCompatActivity implements CreateGameContract.View {
+   @BindView(R.id.layout)
+   CoordinatorLayout mLayout;
+   @BindView(R.id.image)
    ImageView mNewGameImage;
-   @BindView(R.id.createGameUser)
-   TextView mUsernameView;
-   @BindView(R.id.contentRatingsSpinner)
+   @BindView(R.id.content_spinner)
    Spinner mContentSpinner;
-   @BindView(R.id.categorySpinner)
+   @BindView(R.id.category_spinner)
    Spinner mCategorySpinner;
    @BindView(R.id.public_switch)
    Switch mPublicSwitch;
 
-   private String mEncodedImage;
-   private String mType;
+   private CreateGameContract.Presenter mPresenter;
+
+   private Uri mUri;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,39 +48,64 @@ public class CreateGame extends AppCompatActivity {
       ButterKnife.bind(this);
 
       assignSpinnerValues();
+
+      mPresenter = new CreateGamePresenter(this);
    }
 
-   @OnClick(R.id.newGameImage)
+   @Override
+   public void setPresenter(CreateGameContract.Presenter presenter) {
+      mPresenter = presenter;
+   }
+
+   @OnClick(R.id.image)
    public void getImage() {
       Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
       imagePickerIntent.setType("image/*");
       startActivityForResult(imagePickerIntent, 1);
    }
 
-   @OnClick(R.id.createGameButton)
+   @OnClick(R.id.create_game)
    public void createGame() {
-      if (mNewGameImage.getDrawable() != null) {
-         SnaptionProvider.addSnaption(
-               new Snaption(!mPublicSwitch.isChecked(), 1, mEncodedImage, mType))
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(snaption -> {
-               }, Timber::e, this::onBackPressed);
-      }
+      mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(), !mPublicSwitch.isChecked());
+   }
+
+   @Override
+   public void showCreateFailure() {
+      Snackbar.make(mLayout, getString(R.string.create_failure), Snackbar.LENGTH_LONG).show();
+   }
+
+   @Override
+   public void showCreateSuccess() {
+      Toast.makeText(this, getString(R.string.create_success), Toast.LENGTH_LONG).show();
    }
 
    @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
       if (resultCode == RESULT_OK) {
-         Uri uri = data.getData();
-         mNewGameImage.setImageURI(uri);
-         mType = getContentResolver().getType(uri);
-
-         ImageConverter.convertImage(getContentResolver(), uri)
-               .subscribeOn(Schedulers.computation())
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(s -> mEncodedImage = s, Timber::e, () -> Timber.i("Successfully encoded image."));
+         mUri = data.getData();
+         Glide.with(this)
+               .load(mUri)
+               .bitmapTransform(new FitCenter(this))
+               .into(mNewGameImage);
       }
+   }
+
+   @Override
+   public void onResume() {
+      super.onResume();
+      mPresenter.subscribe();
+   }
+
+   @Override
+   public void onPause() {
+      super.onPause();
+      mPresenter.unsubscribe();
+   }
+
+   @Override
+   public void onBackPressed() {
+      super.onBackPressed();
    }
 
    private void assignSpinnerValues() {

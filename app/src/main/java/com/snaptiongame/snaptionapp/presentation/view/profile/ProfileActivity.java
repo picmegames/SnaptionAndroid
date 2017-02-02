@@ -196,7 +196,8 @@ public class ProfileActivity extends AppCompatActivity
 
       Glide.with(this)
             .load(profileUrl)
-            .bitmapTransform(new CenterCrop(this),
+            .bitmapTransform(
+                  new CenterCrop(this),
                   new BlurTransformation(this, BLUR_RADIUS),
                   new ColorFilterTransformation(this, R.color.colorPrimary))
             .into(mCoverPhoto);

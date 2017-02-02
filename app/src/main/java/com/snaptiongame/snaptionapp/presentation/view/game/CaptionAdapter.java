@@ -1,6 +1,5 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +16,17 @@ import java.util.List;
  */
 
 public class CaptionAdapter extends RecyclerView.Adapter {
-   private Context mContext;
    private List<Caption> mCaptions;
 
-   public CaptionAdapter(Context context, List<Caption> captions) {
-      this.mContext = context;
+   public CaptionAdapter(List<Caption> captions) {
       this.mCaptions = captions;
    }
 
    @Override
    public CaptionCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(mContext)
+      View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.caption_card, parent, false);
-      return new CaptionCardViewHolder(mContext, view);
+      return new CaptionCardViewHolder(view);
    }
 
    @Override
@@ -37,7 +34,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
       CaptionCardViewHolder holder = (CaptionCardViewHolder) viewHolder;
       Caption curCaption = mCaptions.get(position);
 
-      Glide.with(mContext)
+      Glide.with(holder.mContext)
             .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
             .into(holder.mUserImage);
       holder.captionId = curCaption.id;

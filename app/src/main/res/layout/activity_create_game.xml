@@ -1,170 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 android:id="@+id/layout"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:background="@color/colorPrimary"
+                                                 android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/newGameImageCardHolder"
-
-
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_alignParentTop="true"
-
-        app:cardElevation="1dp">
-
-        <ImageView
-            android:id="@+id/newGameImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
-
-    </android.support.v7.widget.CardView>
-
-
-
-    <LinearLayout
-        android:id="@+id/gameSettingsView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/newGameImageCardHolder"
-        android:orientation="vertical">
+        android:background="@null">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_insert_photo_white_48dp"/>
+
         <TextView
-            android:id="@+id/createGameUser"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Example User's Game"
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/timerTextView"
+            android:id="@+id/content_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_margin="16dp"
+            android:text="@string/content_level_label"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
 
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/timer_label"
-                android:paddingStart="40dp"
-                android:paddingEnd="0dp"/>
-            <TextView
-                android:id="@+id/timerPickerView"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/timer_label"
-                android:paddingStart="40dp"
-                android:paddingEnd="0dp"/>
+        <Spinner
+            android:id="@+id/content_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/image"
+            android:layout_margin="16dp"
+            android:textSize="16sp"/>
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/category_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/content_label"
+            android:layout_margin="16dp"
+            android:text="@string/category_label"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/contentSettingTextView"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight=".5"
-                android:layout_height="wrap_content"
-                android:text="@string/content_level_label"
-                android:paddingLeft="40dp"
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/content_spinner"
+            android:layout_margin="16dp"
+            android:textSize="16sp"/>
 
-                />
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight=".5"
-                android:layout_height="match_parent"
-                android:weightSum="2">
+        <TextView
+            android:id="@+id/privacy_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/category_label"
+            android:layout_margin="16dp"
+            android:text="@string/privacy_label"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
 
-                <Spinner
-                    android:id="@+id/contentRatingsSpinner"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_height="match_parent"
-                    />
+        <Switch
+            android:id="@+id/public_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/privacy_label"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/category_spinner"
+            android:layout_margin="16dp"
+            android:textSize="16sp"/>
 
-            </LinearLayout>
-
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/categorySettingTextView"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_weight=".5"
-                android:layout_height="wrap_content"
-                android:text="@string/category_label"
-                android:paddingStart="40dp"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight=".5"
-                android:layout_height="match_parent"
-                android:weightSum="2">
-
-                <Spinner
-                    android:id="@+id/categorySpinner"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_height="match_parent"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:weightSum="2"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/privacySettingTextView"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:text="@string/privacy_label"
-                android:layout_height="wrap_content"
-                android:paddingStart="40dp"
-                android:paddingEnd="0dp"/>
-
-            <Switch
-                android:id="@+id/public_switch"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".5"
-                android:layout_gravity="start"/>
-
-        </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/createGameButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="@string/create_game"/>
-
-        </RelativeLayout>
-    </LinearLayout>
-</RelativeLayout>
+        <Button
+            android:id="@+id/create_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"
+            android:background="@null"
+            android:padding="10dp"
+            android:text="@string/create_game"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,5 @@
 package com.snaptiongame.snaptionapp.presentation.view.friends;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,19 +18,17 @@ import java.util.List;
  */
 
 public class FriendsAdapter extends RecyclerView.Adapter {
-    private Context mContext;
     private List<Friend> mFriends;
 
-    public FriendsAdapter(Context context, List<Friend> friends) {
-        this.mContext = context;
+    public FriendsAdapter(List<Friend> friends) {
         this.mFriends = friends;
     }
 
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext)
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.friend_card, parent, false);
-        return new FriendViewHolder(mContext, view);
+        return new FriendViewHolder(view);
     }
 
     @Override
@@ -42,7 +39,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         holder.mName.setText(curFriend.fullName);
         holder.mUserName.setText(curFriend.userName);
         if (curFriend.picture != null && !curFriend.picture.isEmpty()) {
-            Glide.with(mContext)
+            Glide.with(holder.mContext)
                     .load(curFriend.picture)
                     .into(holder.mImage);
         }

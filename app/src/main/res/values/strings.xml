@@ -42,6 +42,8 @@
     <string name="count_format" translatable="false">%1$d/15</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="create_success">Successfully created game!</string>
+    <string name="create_failure">Unable to create game</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

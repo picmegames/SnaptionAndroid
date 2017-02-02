@@ -34,15 +34,16 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
    @BindView(R.id.number_of_likes)
    TextView mNumberOfLikes;
 
-   private Context mContext;
    private AuthenticationManager mAuthManager;
+
+   public Context mContext;
 
    public boolean isLiked = false;
    public int captionId;
 
-   public CaptionCardViewHolder(Context context, View itemView) {
+   public CaptionCardViewHolder(View itemView) {
       super(itemView);
-      this.mContext = context;
+      this.mContext = itemView.getContext();
       ButterKnife.bind(this, itemView);
 
       mAuthManager = AuthenticationManager.getInstance(mContext);
