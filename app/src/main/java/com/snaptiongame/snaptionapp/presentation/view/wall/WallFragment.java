@@ -47,6 +47,7 @@ public class WallFragment extends Fragment implements WallContract.View {
    private Unbinder mUnbinder;
 
    public static final int NUM_COLUMNS = 2;
+   public static final int ITEM_VIEW_CACHE_SIZE = 20;
 
    public static WallFragment getInstance() {
       return new WallFragment();
@@ -60,10 +61,14 @@ public class WallFragment extends Fragment implements WallContract.View {
       mUnbinder = ButterKnife.bind(this, view);
       mPresenter = new WallPresenter(this);
 
-      mWall.setHasFixedSize(true);
       mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
       mWall.addItemDecoration(new SpacesItemDecoration(
             getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
+
+      mWall.setHasFixedSize(true);
+      mWall.setItemViewCacheSize(ITEM_VIEW_CACHE_SIZE);
+      mWall.setDrawingCacheEnabled(true);
+      mWall.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
       mAdapter = new WallAdapter(new ArrayList<>());
       mWall.setAdapter(mAdapter);
