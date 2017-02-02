@@ -52,33 +52,33 @@ dependencies {
 
     // Unit Testing Libraries
     androidTestCompile "com.android.support:support-annotations:$rootProject.supportLibVersion"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    testCompile 'junit:junit:4.12'
+    androidTestCompile "com.android.support.test:runner:$rootProject.androidTestVersion"
+    androidTestCompile "com.android.support.test:rules:$rootProject.androidTestVersion"
+    testCompile "junit:junit:$rootProject.junitVersion"
 
     // Android Support Libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
     compile "com.android.support:design:$rootProject.supportLibVersion"
 
     // Leak Canary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
 
     // Timber
-    compile 'com.jakewharton.timber:timber:4.5.1'
+    compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
 
     // Circle ImageView
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
 
     // Text Drawable
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile "com.amulyakhare:com.amulyakhare.textdrawable:$rootProject.textDrawableVersion"
 
     // Material Dialogs
-    compile 'com.afollestad.material-dialogs:core:0.9.2.3'
+    compile "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
 
     // Facebook Login
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile "com.facebook.android:facebook-android-sdk:$rootProject.facebookSdkVersion"
 
     // Google Login
     compile "com.google.android.gms:play-services-auth:$rootProject.playServicesVersion"
@@ -89,24 +89,24 @@ dependencies {
     compile "com.google.firebase:firebase-crash:$rootProject.playServicesVersion"
 
     // Butterknife
-    compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 
     // Glide
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    compile "jp.wasabeef:glide-transformations:$rootProject.glideTransformationsVersion"
 
     // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.retrofitAdapterVersion"
 
     // Logging
-    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.retrofitLoggingVersion"
 
     // RxJava
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.5'
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -15,6 +15,10 @@ import com.snaptiongame.snaptionapp.R;
 
 public class MoreInfoFragment extends Fragment {
 
+   public static MoreInfoFragment getInstance() {
+      return new MoreInfoFragment();
+   }
+
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

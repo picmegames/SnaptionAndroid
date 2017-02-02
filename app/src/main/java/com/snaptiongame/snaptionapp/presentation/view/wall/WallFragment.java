@@ -48,6 +48,10 @@ public class WallFragment extends Fragment implements WallContract.View {
 
    public static final int NUM_COLUMNS = 2;
 
+   public static WallFragment getInstance() {
+      return new WallFragment();
+   }
+
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

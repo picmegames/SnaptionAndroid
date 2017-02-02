@@ -55,6 +55,10 @@ public class FriendsFragment extends Fragment {
     private DialogFragment mDialogFragmentDefault;
     private DialogFragment mDialogFragmentFriendSearch;
 
+    public static FriendsFragment getInstance() {
+        return new FriendsFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

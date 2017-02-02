@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragTag = WallFragment.class.getSimpleName();
             mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
-               mCurrentFragment = new WallFragment();
+               mCurrentFragment = WallFragment.getInstance();
             }
             break;
 
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragTag = FriendsFragment.class.getSimpleName();
             mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
-               mCurrentFragment = new FriendsFragment();
+               mCurrentFragment = FriendsFragment.getInstance();
             }
             break;
 

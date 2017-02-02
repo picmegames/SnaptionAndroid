@@ -42,7 +42,7 @@ public class ProfileInfoPageAdapter extends FragmentPagerAdapter {
             fragTag = WallFragment.class.getSimpleName();
             mCurrentFragment = mManager.findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
-               mCurrentFragment = new WallFragment();
+               mCurrentFragment = WallFragment.getInstance();
             }
             break;
 
@@ -50,12 +50,12 @@ public class ProfileInfoPageAdapter extends FragmentPagerAdapter {
 //            fragTag = MoreInfoFragment.class.getSimpleName();
 //            mCurrentFragment = mManager.findFragmentByTag(fragTag);
 //            if (mCurrentFragment == null) {
-//               mCurrentFragment = new MoreInfoFragment();
+//               mCurrentFragment = MoreInfoFragment.getInstance();
 //            }
             fragTag = WallFragment.class.getSimpleName();
             mCurrentFragment = mManager.findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
-               mCurrentFragment = new WallFragment();
+               mCurrentFragment = WallFragment.getInstance();
             }
             break;
       }
