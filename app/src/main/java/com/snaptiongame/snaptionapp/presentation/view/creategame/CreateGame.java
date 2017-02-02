@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +40,7 @@ public class CreateGame extends AppCompatActivity implements CreateGameContract.
 
    private CreateGameContract.Presenter mPresenter;
 
+   private AuthenticationManager mAuthManager;
    private Uri mUri;
 
    @Override
@@ -46,6 +48,8 @@ public class CreateGame extends AppCompatActivity implements CreateGameContract.
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_create_game);
       ButterKnife.bind(this);
+
+      mAuthManager = AuthenticationManager.getInstance(this);
 
       assignSpinnerValues();
 
@@ -66,7 +70,8 @@ public class CreateGame extends AppCompatActivity implements CreateGameContract.
 
    @OnClick(R.id.create_game)
    public void createGame() {
-      mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(), !mPublicSwitch.isChecked());
+      mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(),
+            mAuthManager.getSnaptionUserId(), !mPublicSwitch.isChecked());
    }
 
    @Override

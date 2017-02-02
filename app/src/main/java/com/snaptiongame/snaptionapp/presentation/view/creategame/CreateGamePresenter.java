@@ -34,11 +34,11 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
    }
 
    @Override
-   public void createGame(Drawable drawable, String type, boolean isPublic) {
+   public void createGame(Drawable drawable, String type, int userId, boolean isPublic) {
       if (drawable != null) {
          mDisposables.clear();
          Disposable disposable = SnaptionProvider.addSnaption(
-               new Snaption(!isPublic, 1, mEncodedImage, type))
+               new Snaption(userId, !isPublic, 1, mEncodedImage, type))
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(snaption -> {
                }, e -> {
@@ -53,13 +53,13 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
    }
 
    @Override
-   public void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, boolean isPublic) {
+   public void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
       ImageConverter.convertImage(resolver, uri)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(s -> mEncodedImage = s,
                   Timber::e,
-                  () -> createGame(drawable, resolver.getType(uri), isPublic));
+                  () -> createGame(drawable, resolver.getType(uri), userId, isPublic));
    }
 
    @Override

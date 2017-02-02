@@ -22,6 +22,7 @@ public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserial
    @Override
    public JsonElement serialize(Snaption src, Type typeOfSrc, JsonSerializationContext context) {
       JsonObject json = new JsonObject();
+      json.addProperty(Snaption.USER_ID, src.userId);
       json.addProperty(Snaption.IS_PUBLIC, src.isPublic);
       json.addProperty(Snaption.RATING, src.rating);
       json.addProperty(Snaption.PICTURE, src.picture);

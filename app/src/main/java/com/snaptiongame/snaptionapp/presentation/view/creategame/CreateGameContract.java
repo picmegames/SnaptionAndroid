@@ -20,7 +20,7 @@ public class CreateGameContract {
    }
 
    interface Presenter extends BasePresenter {
-      void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, boolean isPublic);
-      void createGame(Drawable drawable, String type, boolean isPublic);
+      void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic);
+      void createGame(Drawable drawable, String type, int userId, boolean isPublic);
    }
 }

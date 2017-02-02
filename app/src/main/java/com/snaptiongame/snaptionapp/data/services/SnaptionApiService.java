@@ -11,12 +11,12 @@ import com.snaptiongame.snaptionapp.data.models.User;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import io.reactivex.Observable;
 import retrofit2.http.Query;
 
 /**
@@ -46,9 +46,8 @@ public interface SnaptionApiService {
    @GET("/Games/")
    Observable<List<Snaption>> getSnaptions();
 
-   @PUT("/Games/{gameId}/")
-   Observable<Like> upvoteSnaption(@Path("gameId") int gameId,
-                                   @Body Like request);
+   @PUT("/UserXGame/")
+   Observable<Like> upvoteSnaption(@Body Like request);
 
    @POST("/Games/")
    Observable<Snaption> addSnaption(@Body Snaption snaption);
@@ -62,7 +61,6 @@ public interface SnaptionApiService {
    @POST("/Games/{game_id}/Captions/")
    Observable<Caption> addCaption(@Path("game_id") int gameId, @Body Caption caption);
 
-   @PUT("/Captions/{captionId}/")
-   Observable<Like> upvoteCaption(@Path("captionId") int captionId,
-                                  @Body Like request);
+   @PUT("/UserXCaption/")
+   Observable<Like> upvoteCaption(@Body Like request);
 }

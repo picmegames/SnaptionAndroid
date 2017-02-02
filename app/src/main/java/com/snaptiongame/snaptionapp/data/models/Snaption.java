@@ -13,6 +13,8 @@ public class Snaption extends RealmObject {
    @SerializedName(ID)
    @PrimaryKey
    public int id;
+   @SerializedName(USER_ID)
+   public int userId;
    @SerializedName(START_DATE)
    public long startDate;
    @SerializedName(END_DATE)
@@ -33,6 +35,7 @@ public class Snaption extends RealmObject {
    public Caption topCaption;
 
    public static final String ID = "id";
+   public static final String USER_ID = "userId";
    public static final String START_DATE = "start_date";
    public static final String END_DATE = "end_date";
    public static final String IS_PUBLIC = "isPublic";
@@ -47,7 +50,8 @@ public class Snaption extends RealmObject {
 
    }
 
-   public Snaption(boolean isPublic, int rating, String picture, String type) {
+   public Snaption(int userId, boolean isPublic, int rating, String picture, String type) {
+      this.userId = userId;
       this.isPublic = isPublic;
       this.rating = rating;
       this.picture = picture;

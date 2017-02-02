@@ -73,7 +73,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             isUpvoted = true;
             Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
          }
-         upvoteSnaption(mGameId, mAuthManager.getSnaptionUserId(), isUpvoted);
+         upvoteSnaption(mAuthManager.getSnaptionUserId(), mGameId, isUpvoted);
       });
 
       itemView.setOnLongClickListener(view -> {
@@ -121,8 +121,8 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
       });
    }
 
-   private void upvoteSnaption(int gameId, int userId, boolean isUpvoted) {
-      SnaptionProvider.upvoteSnaption(gameId, new Like(userId, isUpvoted))
+   private void upvoteSnaption(int userId, int gameId, boolean isUpvoted) {
+      SnaptionProvider.upvoteSnaption(new Like(userId, gameId, isUpvoted, false, Like.GAME_ID))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(like -> {
             }, Timber::e, () -> Timber.i("Successfully liked snaption!"));

@@ -7,9 +7,9 @@ import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import io.reactivex.Observable;
 
 /**
  * @author Tyler Wong
@@ -34,8 +34,8 @@ public class CaptionProvider {
       });
    }
 
-   public static Observable<Like> upvoteCaption(int captionId, Like request) {
-      return apiService.upvoteCaption(captionId, request);
+   public static Observable<Like> upvoteCaption(Like request) {
+      return apiService.upvoteCaption(request);
    }
 
    public static Observable<Caption> addCaption(int gameId, Caption caption) {

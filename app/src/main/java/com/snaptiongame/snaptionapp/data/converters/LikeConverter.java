@@ -18,7 +18,9 @@ public class LikeConverter implements JsonSerializer<Like> {
    public JsonElement serialize(Like src, Type typeOfSrc, JsonSerializationContext context) {
       JsonObject json = new JsonObject();
       json.addProperty(Like.USER_ID, src.userId);
+      json.addProperty(src.type, src.targetId);
       json.addProperty(Like.UPVOTE, src.upvote);
+      json.addProperty(Like.FLAGGED, src.flagged);
       return json;
    }
 }
