@@ -16,8 +16,6 @@ public class Like {
    public static final String CAPTION_ID = "captionId";
    public static final String UPVOTE = "upvote";
    public static final String FLAGGED = "flagged";
-   public static final String BEEN_UPVOTED = "beenUpvoted";
-   public static final String BEEN_FLAGGED = "beenFlagged";
 
    public Like(int userId, int targetId, boolean upvote, boolean flagged, String type) {
       this.userId = userId;

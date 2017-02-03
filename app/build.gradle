@@ -52,9 +52,13 @@ dependencies {
 
     // Unit Testing Libraries
     androidTestCompile "com.android.support:support-annotations:$rootProject.supportLibVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test:runner:$rootProject.androidTestVersion"
     androidTestCompile "com.android.support.test:rules:$rootProject.androidTestVersion"
     testCompile "junit:junit:$rootProject.junitVersion"
+    testCompile "org.assertj:assertj-core:$rootProject.assertjVersion"
+    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
 
     // Android Support Libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
