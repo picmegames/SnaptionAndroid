@@ -12,5 +12,9 @@ android:
         - extra-google-m2repository
         - extra-android-support
         - addon-google_apis-google-25
+script:
+    ./gradlew build jacocoTestReport assembleAndroidTest
 notifications:
     slack: capstone-snaption:uLoSExpS3w6h7MWDHQfExWth
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
