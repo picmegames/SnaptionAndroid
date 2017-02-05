@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Friend;
-import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 /**
  * @author Brian Gouldsberry
@@ -113,7 +110,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     public void onResume() {
         super.onResume();
         mPresenter.subscribe();
-        //loadFriends();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
     }
 
     //Returns a subset of friends where each friend has the query in either their name or username
@@ -201,15 +203,9 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @Override
     public void showFriends(List<Friend> friends) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.clearFriends();
-                mAdapter.setFriends(friends);
-                mRefreshLayout.setRefreshing(false);
-            }
-        });
-
+        mAdapter.clearFriends();
+        mAdapter.setFriends(friends);
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override

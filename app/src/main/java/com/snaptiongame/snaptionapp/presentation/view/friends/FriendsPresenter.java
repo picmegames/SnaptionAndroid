@@ -2,13 +2,9 @@ package com.snaptiongame.snaptionapp.presentation.view.friends;
 
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.auth.api.Auth;
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 
-import java.util.List;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -37,18 +33,15 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void loadFriends() {
-
         mDisposables.clear();
         Disposable disposable = FriendProvider
                 .loadFriends(mSnaptionUserId)
-                .subscribe(this::processFriends,
-                Timber::e,
-                        () -> Timber.i("Getting friends was successful"));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                      mFriendView::showFriends,
+                      Timber::e,
+                      () -> Timber.i("Getting friends was successful"));
         mDisposables.add(disposable);
-    }
-
-    private void processFriends(List<Friend> friends) {
-        mFriendView.showFriends(friends);
     }
 
     @Override
