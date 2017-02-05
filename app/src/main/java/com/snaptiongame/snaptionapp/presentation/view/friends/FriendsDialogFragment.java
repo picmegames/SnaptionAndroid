@@ -101,7 +101,7 @@ public class FriendsDialogFragment extends DialogFragment {
 
     private final String CANCEL = "Cancel";
     private final String BACK = "Back";
-    private final String ADD_FRIEND_TITLE = "Add a friend!";
+    private final String ADD_FRIEND_TITLE = "Add A Friend!";
     private final String FIND_FRIEND = "Find your friends!";
     private final String INVITE_FRIEND_LONG = "Invite a friend to Snaption!";
     private final String INVITE_FRIEND_SHORT = "Invite Friend";
@@ -186,8 +186,8 @@ public class FriendsDialogFragment extends DialogFragment {
             case STANDARD_DIALOG:
                 mDialogTitle = ADD_FRIEND_TITLE;
                 mHeaderIcon = R.drawable.snaption_icon;
+                sPositiveButtonText = "";
                 sNegativeButtonText = CANCEL;
-                sPositiveButtonText = INVITE_FRIEND_LONG;
                 break;
             //User selected to invite friends via phone #
             case PHONE_INVITE:
@@ -361,14 +361,13 @@ public class FriendsDialogFragment extends DialogFragment {
 
                 //Only send an outer app if we are still on the first dialog screen. Otherwise
                 //we handle the friend invite in app
-                if (mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
-                    sendInviteIntent();
-                else
+                if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
                     addFriend();
             }
         }).setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 ((FriendsFragment) mFragmentActivity).negativeButtonClicked(mWhichDialog);
             }
         });
@@ -458,7 +457,8 @@ public class FriendsDialogFragment extends DialogFragment {
         /**
          * Container for the various options to invite a friend to snaption
          */
-        private final String[] mInviteOptions = {"via Phone #", "via Facebook", "via Email"};
+        private final String[] mInviteOptions = {"Add via Phone #",
+                "Add via Facebook", "Add via Email", "Invite to Snaption!"};
 
 
         /**
@@ -466,7 +466,8 @@ public class FriendsDialogFragment extends DialogFragment {
          */
         private int[] mIconData = {R.drawable.ic_phone,
                 R.drawable.ic_facebook,
-                R.drawable.ic_email};
+                R.drawable.ic_email,
+                R.drawable.snaption_icon};
 
         /**
          * Empty constructor.
@@ -538,8 +539,10 @@ public class FriendsDialogFragment extends DialogFragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    ((FriendsFragment) mFragmentActivity).updateFriendsDialog(position);
+                    if (position == 3)
+                        sendInviteIntent();
+                    else
+                        ((FriendsFragment) mFragmentActivity).updateFriendsDialog(position);
                 }
             });
 

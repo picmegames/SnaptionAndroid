@@ -1,5 +1,6 @@
 package com.snaptiongame.snaptionapp.presentation.view.friends;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,9 +57,12 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void setFriends(List<Friend> friends) {
+
         this.mFriends = friends;
         notifyDataSetChanged();
     }
+
+    public void clearFriends() {mFriends.clear();}
 
 
     @Override
