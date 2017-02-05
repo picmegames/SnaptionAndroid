@@ -80,7 +80,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(friends);
         mFriends.setAdapter(mAdapter);
-        mPresenter.loadFriends();
+        
 
         mSearch.setOnClickListener(theView -> {
             List<Friend> results = filterList(friends, mQuery.getText().toString());
