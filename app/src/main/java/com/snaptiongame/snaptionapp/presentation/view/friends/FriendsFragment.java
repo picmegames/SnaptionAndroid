@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +36,7 @@ import timber.log.Timber;
  * @author Brian Gouldsberry
  */
 
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment implements FriendsContract.View {
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.friend_list)
@@ -46,6 +47,10 @@ public class FriendsFragment extends Fragment {
     EditText mQuery;
     @BindView(R.id.clear_button)
     Button clear;
+    @BindView(R.id.refresh_layout_friends)
+    SwipeRefreshLayout mRefreshLayout;
+
+    private FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
     private List<Friend> friends = new ArrayList<>();
@@ -64,13 +69,18 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.friends_fragment, container, false);
+
+
         mUnbinder = ButterKnife.bind(this, view);
+
         mAuthManager = AuthenticationManager.getInstance(getContext());
+        mPresenter = new FriendsPresenter(this, mAuthManager.getSnaptionUserId());
+
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(friends);
         mFriends.setAdapter(mAdapter);
-        loadFriends();
+        
 
         mSearch.setOnClickListener(theView -> {
             List<Friend> results = filterList(friends, mQuery.getText().toString());
@@ -83,6 +93,8 @@ public class FriendsFragment extends Fragment {
             mAdapter.setFriends(friends);
             mAdapter.notifyDataSetChanged();
         });
+
+        mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
 
         return view;
     }
@@ -100,6 +112,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mPresenter.subscribe();
         //loadFriends();
     }
 
@@ -184,17 +197,25 @@ public class FriendsFragment extends Fragment {
         }
     }
 
-    private void loadFriends() {
-        FriendProvider.loadFriends(mAuthManager.getSnaptionUserId())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(results -> {
-                    for (Friend friend : results) {
-                        friend.isSnaptionFriend = true;
-                        Timber.i(friend.toString());
-                    }
-                    friends = results;
-                    mAdapter.setFriends(friends);
-                    mAdapter.notifyDataSetChanged();
-                }, Timber::e, () -> Timber.i("Getting Snaption Friends completed successfully"));
+
+
+    @Override
+    public void showFriends(List<Friend> friends) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.clearFriends();
+                mAdapter.setFriends(friends);
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+
     }
+
+    @Override
+    public void setPresenter(FriendsContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+
 }
