@@ -17,4 +17,4 @@ script:
 notifications:
     slack: capstone-snaption:uLoSExpS3w6h7MWDHQfExWth
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - bash <(curl -s https://codecov.io/bash) -t 6fab7ae1-f07e-46bf-a6f2-aebc5b8adc78
