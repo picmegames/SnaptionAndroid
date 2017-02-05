@@ -80,7 +80,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(friends);
         mFriends.setAdapter(mAdapter);
-        loadFriends();
+        mPresenter.loadFriends();
 
         mSearch.setOnClickListener(theView -> {
             List<Friend> results = filterList(friends, mQuery.getText().toString());
@@ -197,21 +197,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         }
     }
 
-    private void loadFriends() {
 
-
-        FriendProvider.loadFriends(mAuthManager.getSnaptionUserId())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(results -> {
-                    for (Friend friend : results) {
-                        friend.isSnaptionFriend = true;
-                        Timber.i(friend.toString());
-                    }
-                    friends = results;
-                    mAdapter.setFriends(friends);
-                    mAdapter.notifyDataSetChanged();
-                }, Timber::e, () -> Timber.i("Getting Snaption Friends completed successfully"));
-    }
 
     @Override
     public void showFriends(List<Friend> friends) {

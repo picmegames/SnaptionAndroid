@@ -424,8 +424,7 @@ public class FriendsDialogFragment extends DialogFragment {
         tmpFriend.email = search.getText().toString();
 
         sUserID = user.id;
-        System.out.println(sUserID);
-        System.out.println(mAuthManager.getSnaptionUserId());
+
         friendList.add(tmpFriend);
         mAdapter.setFriends(friendList);
 

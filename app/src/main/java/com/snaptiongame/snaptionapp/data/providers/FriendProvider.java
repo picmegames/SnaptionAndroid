@@ -74,7 +74,6 @@ public class FriendProvider {
    }
 
    public static Observable<List<Friend>> loadFriends(int userId) {
-      System.out.println("HERHEHREHRH  " + userId);
       return apiService.getFriends(userId);
    }
 
