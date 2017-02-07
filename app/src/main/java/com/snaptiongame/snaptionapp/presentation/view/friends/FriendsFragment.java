@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +47,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     FloatingActionButton mFab;
     @BindView(R.id.friend_list)
     RecyclerView mFriends;
-    @BindView(R.id.search_icon)
-    ImageView mSearch;
     @BindView(R.id.query_field)
     EditText mQuery;
     @BindView(R.id.clear_button)
@@ -85,13 +85,22 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(friends);
         mFriends.setAdapter(mAdapter);
-        
 
-        mSearch.setOnClickListener(theView -> {
-            query = mQuery.getText().toString();
-            List<Friend> results = filterList(friends, mQuery.getText().toString());
-            mAdapter.setFriends(results);
-            mAdapter.notifyDataSetChanged();
+        mQuery.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                List<Friend> results = filterList(friends, mQuery.getText().toString());
+                mAdapter.setFriends(results);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         clear.setOnClickListener(theView -> {
