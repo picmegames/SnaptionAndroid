@@ -40,8 +40,7 @@ public interface SnaptionApiService {
    @POST("/UserFriends/{userId}/")
    Observable<AddFriendRequest> addUser(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
-   //You must specify that the method has a body if you are performing a delete (also that
-   // closing slash is needed
+   //You must specify that the method has a body if you are performing a delete
    @HTTP(method = "DELETE", path = "/UserFriends/{userId}/", hasBody = true)
    Observable<AddFriendRequest> removeFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 

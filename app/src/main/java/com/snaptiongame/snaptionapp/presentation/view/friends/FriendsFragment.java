@@ -58,6 +58,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     private FriendsAdapter mAdapter;
     private List<Friend> friends = new ArrayList<>();
+    private String query = null;
 
     private AuthenticationManager  mAuthManager;
     private Unbinder mUnbinder;
@@ -87,12 +88,14 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         
 
         mSearch.setOnClickListener(theView -> {
+            query = mQuery.getText().toString();
             List<Friend> results = filterList(friends, mQuery.getText().toString());
             mAdapter.setFriends(results);
             mAdapter.notifyDataSetChanged();
         });
 
         clear.setOnClickListener(theView -> {
+            query = null;
             mQuery.setText("");
             mAdapter.setFriends(friends);
             mAdapter.notifyDataSetChanged();
@@ -254,7 +257,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     public void processFriends(List<Friend> friends) {
         this.friends = friends;
         mAdapter.clearFriends();
-        mAdapter.setFriends(friends);
+        mAdapter.setFriends(filterList(this.friends, query));
         mRefreshLayout.setRefreshing(false);
     }
 
