@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
       mNameView = (TextView) headerView.findViewById(R.id.username);
       mEmailView = (TextView) headerView.findViewById(R.id.email);
 
-      mProfilePicture.setOnClickListener(view -> {
+      headerView.setOnClickListener(view -> {
          if (mAuthManager.isLoggedIn()) {
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             profileIntent.putExtra(AuthenticationManager.PROFILE_IMAGE_URL, mAuthManager.getProfileImageUrl());
