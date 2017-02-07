@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,7 +168,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
             ArrayList<Friend> filtered = new ArrayList<>();
             for (Friend pal : friends) {
                 String mashedNames = pal.fullName + " " + pal.userName;
-                if (mashedNames != null && mashedNames.toLowerCase().contains(query.toLowerCase())) {
+                if (mashedNames.toLowerCase().contains(query.toLowerCase())) {
                     filtered.add(pal);
                 }
             }
@@ -253,7 +251,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     }
 
     @Override
-    public void showFriends(List<Friend> friends) {
+    public void processFriends(List<Friend> friends) {
+        this.friends = friends;
         mAdapter.clearFriends();
         mAdapter.setFriends(friends);
         mRefreshLayout.setRefreshing(false);

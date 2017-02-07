@@ -38,7 +38,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .loadFriends(mSnaptionUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                      mFriendView::showFriends,
+                      mFriendView::processFriends,
                       Timber::e,
                       () -> Timber.i("Getting friends was successful"));
         mDisposables.add(disposable);

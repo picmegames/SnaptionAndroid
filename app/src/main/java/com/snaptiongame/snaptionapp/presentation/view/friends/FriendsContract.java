@@ -12,7 +12,7 @@ import java.util.List;
 
 public class FriendsContract {
     interface View extends BaseView<Presenter> {
-        void showFriends(List<Friend> friends);
+        void processFriends(List<Friend> friends);
     }
 
     interface Presenter extends BasePresenter {
