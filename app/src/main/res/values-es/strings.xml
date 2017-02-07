@@ -43,4 +43,10 @@
     <string name="cancel">Cancelar</string>
     <string name="create_success">Juego creado con éxito!</string>
     <string name="create_failure">No se puede crear juego</string>
+
+    <!-- Delete Friend Dialog -->
+    <string name="delete_pre">¿Estás seguro de que desea eliminar </string>
+    <string name="delete_post"> como amigo?</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 </resources>

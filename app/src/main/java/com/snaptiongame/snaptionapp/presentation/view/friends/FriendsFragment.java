@@ -1,15 +1,20 @@
 package com.snaptiongame.snaptionapp.presentation.view.friends;
 
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +24,9 @@ import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +35,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 /**
  * @author Brian Gouldsberry
@@ -92,6 +101,43 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         });
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.LEFT) {
+                    int index = viewHolder.getAdapterPosition();
+                    DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE: //yes clicked
+                                int id = Integer.parseInt(mAdapter.getFriends().get(index).id);
+                                removeFriend(id);
+                                mAdapter.getFriends().remove(index);
+                                mAdapter.notifyItemRemoved(index);
+                                //Delete on backend
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE: //no clicked
+                                //No button clicked
+                                mAdapter.notifyItemChanged(index);
+                                break;
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(getString(R.string.delete_pre) + " " + mAdapter.getFriends()
+                            .get(index).userName + " " + getString(R.string.delete_post))
+                            .setPositiveButton(getString(R.string.yes), dialogClickListener)
+                            .setNegativeButton(getString(R.string.no), dialogClickListener).show();
+                }
+            }
+        };
+
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(mFriends);
 
         return view;
     }
@@ -199,7 +245,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         }
     }
 
-
+    private void removeFriend(int id) {
+        FriendProvider.removeFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(id))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(request -> {
+                }, Timber::e, () -> Timber.i("Successfully removed friend!"));
+    }
 
     @Override
     public void showFriends(List<Friend> friends) {

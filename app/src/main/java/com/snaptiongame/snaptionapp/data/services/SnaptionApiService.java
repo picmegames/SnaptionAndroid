@@ -13,7 +13,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -36,6 +39,11 @@ public interface SnaptionApiService {
 
    @POST("/UserFriends/{userId}/")
    Observable<AddFriendRequest> addUser(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
+
+   //You must specify that the method has a body if you are performing a delete (also that
+   // closing slash is needed
+   @HTTP(method = "DELETE", path = "/UserFriends/{userId}/", hasBody = true)
+   Observable<AddFriendRequest> removeFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
    @GET("Users?email=")
    Observable<User> findUserEmail(@Query("email") String userEmail);

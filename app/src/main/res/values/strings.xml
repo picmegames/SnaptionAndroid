@@ -87,5 +87,11 @@
     <string name="friendDialogTitle">Add a Friend!</string>
     <string name="update_failure">Duplicate username</string>
 
+    <!-- Delete Friend Dialog -->
+    <string name="delete_pre">Are you sure you want to remove</string>
+    <string name="delete_post">as a friend?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 
 </resources>

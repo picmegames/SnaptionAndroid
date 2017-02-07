@@ -62,6 +62,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public List<Friend> getFriends() {
+        return mFriends;
+    }
+
     public void clearFriends() {mFriends.clear();}
 
 
