@@ -28,9 +28,13 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
 /**
+ * This is the entry point for the application.
+ * When the application is started up, LeakCanary, Realm, Gson,
+ * and Timber are initialized.
+ *
  * @author Tyler Wong
+ * @version 1.0
  */
-
 public class SnaptionApplication extends Application {
    public static Gson gson = setupGson();
    public static OkHttpClient okHttpClient;
@@ -55,6 +59,13 @@ public class SnaptionApplication extends Application {
       }
    }
 
+   /**
+    * This method provides and handles the creation of an OkHttpClient.
+    * If we are an a debug build, add a logging interceptor,
+    * otherwise provide no logging interceptor.
+    *
+    * @return The development or production OkHttpClient
+    */
    public static OkHttpClient makeOkHttpClient() {
       if (BuildConfig.DEBUG) {
          HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -70,6 +81,13 @@ public class SnaptionApplication extends Application {
       return okHttpClient;
    }
 
+   /**
+    * This method provides and handles the creation of a Gson parser.
+    * It will add all of the necessary Type Adapters to serialize and
+    * deserialize objects passed to and from the server.
+    *
+    * @return The Gson parser to be used with a Retrofit instance
+    */
    public static Gson setupGson() {
       GsonBuilder builder = new GsonBuilder();
       builder.registerTypeAdapter(OAuthRequest.class, new OAuthConverter());

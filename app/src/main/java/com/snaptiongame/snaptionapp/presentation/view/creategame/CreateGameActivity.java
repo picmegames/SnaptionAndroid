@@ -26,7 +26,7 @@ import butterknife.OnClick;
  * @author Nick Romero
  */
 
-public class CreateGame extends AppCompatActivity implements CreateGameContract.View {
+public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
    @BindView(R.id.layout)
    CoordinatorLayout mLayout;
    @BindView(R.id.image)

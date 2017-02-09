@@ -9,14 +9,23 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
+ * The Snaption API Provider provides an instance of
+ * the API service built by Retrofit.
+ *
  * @author Tyler Wong
+ * @version 1.0
  */
-
 public class SnaptionApiProvider {
    private static SnaptionApiService apiService;
 
    private static final String SNAPTION_SERVER_URL = "http://104.198.36.194";
 
+   /**
+    * This method provides and handles the creation of
+    * the Snaption API service.
+    *
+    * @return An instance of a Snaption API service
+    */
    public static SnaptionApiService getApiService() {
       if (apiService == null) {
          apiService = new Retrofit.Builder()
