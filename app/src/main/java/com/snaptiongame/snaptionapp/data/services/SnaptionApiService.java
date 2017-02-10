@@ -90,6 +90,15 @@ public interface SnaptionApiService {
    Observable<User> findUserEmail(@Query("email") String userEmail);
 
    /**
+    * This method sends a request for a user with a GET request.
+    *
+    * @param facebookID The desired user's facebookID
+    * @return An observable that emits a User object
+    */
+   @GET("Users?facebookID=")
+   Observable<User> findUserFB(@Query("facebookID") String facebookID);
+
+   /**
     * This method sends a request to update a user with a PUT request.
     *
     * @param userId The id of the user to be updated

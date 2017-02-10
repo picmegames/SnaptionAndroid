@@ -191,12 +191,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @OnClick(R.id.fab)
     public void inviteFriends() {
-
-
         mDialogFragmentDefault = new FriendsDialogFragment().newInstance(FriendsDialogFragment.DialogToShow.STANDARD_DIALOG, this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
-
-
     }
 
     @Override
@@ -267,6 +263,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         this.friends = friends;
         mAdapter.clearFriends();
         mAdapter.setFriends(filterList(this.friends, query));
+        mAdapter.notifyDataSetChanged();
         mRefreshLayout.setRefreshing(false);
     }
 

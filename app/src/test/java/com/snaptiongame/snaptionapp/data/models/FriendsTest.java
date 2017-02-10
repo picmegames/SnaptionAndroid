@@ -1,6 +1,5 @@
 package com.snaptiongame.snaptionapp.data.models;
 
-import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 
 import org.junit.Test;
@@ -18,7 +17,7 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class FriendsTest {
-    @Test //mock test
+    @Test
     public void filter_isCorrect() throws Exception {
         List<Friend> inst = new ArrayList<>(), check;
         assertEquals(FriendsFragment.filterList(inst, "some filter category"), new

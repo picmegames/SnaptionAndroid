@@ -427,7 +427,7 @@ public class FriendsDialogFragment extends DialogFragment {
 
         friendList.add(tmpFriend);
         mAdapter.setFriends(friendList);
-
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -444,7 +444,8 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.getFacebookFriends()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(friends -> mAdapter.setFriends(friends), Timber::e, () -> {
+                .subscribe(friends -> { mAdapter.setFriends(friends);
+                                        mAdapter.notifyDataSetChanged(); }, Timber::e, () -> {
                 });
     }
 

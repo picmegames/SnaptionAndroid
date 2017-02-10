@@ -21,6 +21,10 @@ public class UserProvider {
       return apiService.findUserEmail(email);
    }
 
+   public static Observable<User> getUserWithFacebook(String id) {
+      return apiService.findUserFB(id);
+   }
+
    public static Observable<User> updateUser(int userId, User user) {
       return apiService.updateUser(userId, user);
    }
