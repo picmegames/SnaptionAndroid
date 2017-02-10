@@ -51,8 +51,10 @@ public class CaptionProviderTest {
             .subscribeOn(Schedulers.io())
             .subscribe(
                   returnedCaptions -> assertTrue(returnedCaptions.containsAll(captions)),
-                  e -> {},
-                  () -> {}
+                  e -> {
+                  },
+                  () -> {
+                  }
             );
    }
 
@@ -62,8 +64,10 @@ public class CaptionProviderTest {
             .subscribeOn(Schedulers.io())
             .subscribe(
                   returnedLike -> assertTrue(returnedLike.equals(like)),
-                  e -> {},
-                  () -> {}
+                  e -> {
+                  },
+                  () -> {
+                  }
             );
    }
 
@@ -73,8 +77,10 @@ public class CaptionProviderTest {
             .subscribeOn(Schedulers.io())
             .subscribe(
                   returnedCaption -> assertTrue(returnedCaption.equals(caption)),
-                  e -> {},
-                  () -> {}
+                  e -> {
+                  },
+                  () -> {
+                  }
             );
    }
 }

@@ -53,6 +53,11 @@ public class WallFragment extends Fragment implements WallContract.View {
    public static final int NUM_COLUMNS = 2;
    public static final int ITEM_VIEW_CACHE_SIZE = 20;
 
+   /**
+    * This method provides a new instance of a Wall Fragment.
+    *
+    * @return An instance of a Wall Fragment
+    */
    public static WallFragment getInstance() {
       return new WallFragment();
    }

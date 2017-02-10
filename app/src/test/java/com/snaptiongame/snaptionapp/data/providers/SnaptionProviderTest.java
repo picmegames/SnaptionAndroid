@@ -48,8 +48,10 @@ public class SnaptionProviderTest {
             .subscribeOn(Schedulers.io())
             .subscribe(
                   returnedSnaptions -> assertTrue(returnedSnaptions.containsAll(snaptions)),
-                  e -> {},
-                  () -> {}
+                  e -> {
+                  },
+                  () -> {
+                  }
             );
    }
 
@@ -59,8 +61,10 @@ public class SnaptionProviderTest {
             .subscribeOn(Schedulers.io())
             .subscribe(
                   returnedLike -> assertTrue(returnedLike.equals(like)),
-                  e -> {},
-                  () -> {}
+                  e -> {
+                  },
+                  () -> {
+                  }
             );
    }
 
@@ -70,8 +74,10 @@ public class SnaptionProviderTest {
             .subscribeOn(Schedulers.io())
             .subscribe(
                   returnedSnaption -> assertTrue(returnedSnaption.equals(snaption)),
-                  e -> {},
-                  () -> {}
+                  e -> {
+                  },
+                  () -> {
+                  }
             );
    }
 }
