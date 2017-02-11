@@ -82,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_below="@+id/public_switch"
             android:layout_marginBottom="24dp"
             android:background="@null"
             android:padding="10dp"

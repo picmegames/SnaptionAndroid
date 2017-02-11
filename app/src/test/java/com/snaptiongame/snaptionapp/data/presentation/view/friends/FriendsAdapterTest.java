@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.presentation.friends;
+package com.snaptiongame.snaptionapp.data.presentation.view.friends;
 
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;

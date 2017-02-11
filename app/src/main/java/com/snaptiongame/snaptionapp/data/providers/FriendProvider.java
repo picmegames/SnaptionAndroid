@@ -113,10 +113,10 @@ public class FriendProvider {
    }
 
    public static Observable<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {
-      return apiService.addUser(myId, request);
+      return apiService.addFriend(myId, request);
    }
 
    public static Observable<AddFriendRequest> removeFriend(int myId, AddFriendRequest request) {
-      return apiService.removeFriend(myId, request);
+      return apiService.deleteFriend(myId, request);
    }
 }

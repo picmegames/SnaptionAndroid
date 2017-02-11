@@ -18,11 +18,11 @@ public class UserProvider {
    }
 
    public static Observable<User> getUserWithEmail(String email) {
-      return apiService.findUserEmail(email);
+      return apiService.getUserByEmail(email);
    }
 
    public static Observable<User> getUserWithFacebook(String id) {
-      return apiService.findUserFB(id);
+      return apiService.getUserByFacebook(id);
    }
 
    public static Observable<User> updateUser(int userId, User user) {

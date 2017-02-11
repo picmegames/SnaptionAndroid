@@ -67,7 +67,7 @@ public interface SnaptionApiService {
     * @return An observable that emits an AddFriendRequest object
     */
    @POST("/UserFriends/{userId}/")
-   Observable<AddFriendRequest> addUser(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
+   Observable<AddFriendRequest> addFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
    /**
     * This method sends a request to delete a friend
@@ -78,7 +78,7 @@ public interface SnaptionApiService {
     * @return An observable that emits an AddFriendRequest object
     */
    @HTTP(method = "DELETE", path = "/UserFriends/{userId}/", hasBody = true)
-   Observable<AddFriendRequest> removeFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
+   Observable<AddFriendRequest> deleteFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
    /**
     * This method sends a request for a user with a GET request.
@@ -87,7 +87,7 @@ public interface SnaptionApiService {
     * @return An observable that emits a User object
     */
    @GET("Users?email=")
-   Observable<User> findUserEmail(@Query("email") String userEmail);
+   Observable<User> getUserByEmail(@Query("email") String userEmail);
 
    /**
     * This method sends a request for a user with a GET request.
@@ -96,7 +96,7 @@ public interface SnaptionApiService {
     * @return An observable that emits a User object
     */
    @GET("Users?facebookID=")
-   Observable<User> findUserFB(@Query("facebookID") String facebookID);
+   Observable<User> getUserByFacebook(@Query("facebookID") String facebookID);
 
    /**
     * This method sends a request to update a user with a PUT request.
