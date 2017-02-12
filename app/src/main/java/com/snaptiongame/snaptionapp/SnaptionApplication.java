@@ -25,6 +25,8 @@ import com.squareup.leakcanary.LeakCanary;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -41,6 +43,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import io.realm.Realm;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
@@ -96,6 +99,9 @@ public class SnaptionApplication extends Application {
     * @return The development or production OkHttpClient
     */
    public static OkHttpClient makeOkHttpClient() {
+      CookieHandler cookieHandler = new CookieManager();
+      JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
+
       try {
          SSLSocketFactory socketFactory = getSSLConfig(context).getSocketFactory();
 
@@ -106,6 +112,7 @@ public class SnaptionApplication extends Application {
                   .sslSocketFactory(socketFactory, trustManager)
                   // TODO Make this more secure
                   .hostnameVerifier((String s, SSLSession sslSession) -> true)
+                  .cookieJar(cookieJar)
                   .addInterceptor(interceptor)
                   .build();
          }
@@ -114,6 +121,7 @@ public class SnaptionApplication extends Application {
                   .sslSocketFactory(socketFactory, trustManager)
                   // TODO Make this more secure
                   .hostnameVerifier((String s, SSLSession sslSession) -> true)
+                  .cookieJar(cookieJar)
                   .build();
          }
       }
@@ -122,6 +130,8 @@ public class SnaptionApplication extends Application {
          Timber.e("Could not initialize OkHttpClient with SSL Certificate", e);
 
          okHttpClient = new OkHttpClient.Builder()
+               .hostnameVerifier((String s, SSLSession sslSession) -> true)
+               .cookieJar(cookieJar)
                .build();
       }
 
