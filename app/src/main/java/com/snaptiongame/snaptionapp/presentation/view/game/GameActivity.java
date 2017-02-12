@@ -46,6 +46,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    private CaptionAdapter mAdapter;
    private AuthenticationManager mAuthManager;
    private GameContract.Presenter mPresenter;
+   private CaptionSelectDialogFragment mCaptionDialogFragment;
+
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,14 +103,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
          goToLogin();
       }
       else {
-         //Replace with Dialog
-         /*
-         new MaterialDialog.Builder(this)
-               .title(R.string.add_caption)
-               .inputType(InputType.TYPE_CLASS_TEXT)
-               .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
-                     mPresenter.addCaption(input.toString()))
-               .show();*/
+         mCaptionDialogFragment = new CaptionSelectDialogFragment().newInstance(
+                 CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
+                 getIntent().getIntExtra("gameId", 0));
+         mCaptionDialogFragment.show(getFragmentManager(), "dialog");
+         //new CaptionSelectDialogFragment().show(getFragmentManager(), "dialog");
+
+
       }
    }
 

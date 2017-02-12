@@ -13,11 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
+import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by nickromero on 2/7/17.
@@ -68,6 +72,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private GameContract.Presenter mPresenter;
     private int mGameId;
 
+    private AuthenticationManager mAuth;
+
     public CaptionSelectDialogFragment() {
     }
 
@@ -85,7 +91,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mAuth = AuthenticationManager.getInstance(getApplicationContext());
         sPositiveButtonText = SUMBIT;
         sNegativeButtonText = CANCEL;
         mDialogToShow = (CaptionDialogToShow) getArguments().getSerializable("whichDialog");
@@ -116,7 +122,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mDialogBuilder.setPositiveButton(sPositiveButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //addCaption("lalala", 1);
+                addCaption(new Caption(1, "LALALAL", mAuth.getSnaptionUserId()));
                 System.out.println("ASJDASJDHASHDHSA");
             }
         });
@@ -194,7 +200,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     @Override
     public void addCaption(Caption caption) {
-
+        CaptionProvider.addCaption(mGameId, caption);
     }
 
     @Override
