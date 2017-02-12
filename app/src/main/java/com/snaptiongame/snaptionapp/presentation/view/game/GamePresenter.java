@@ -24,12 +24,15 @@ public class GamePresenter implements GameContract.Presenter {
    @NonNull
    private CompositeDisposable mDisposables;
    private int mGameId;
+   private AuthenticationManager mAuth;
+
 
    public GamePresenter(int gameId, @NonNull GameContract.View view) {
       mGameId = gameId;
       mGameView = view;
       mDisposables = new CompositeDisposable();
       mGameView.setPresenter(this);
+
    }
 
    @Override
@@ -54,9 +57,12 @@ public class GamePresenter implements GameContract.Presenter {
    }
 
    @Override
-   public void addCaption(String caption) {
+   public void addCaption(String caption, int userId) {
+
+
+
       CaptionProvider.addCaption(mGameId,
-            new Caption(1, caption, Integer.valueOf(AuthenticationManager.SNAPTION_USER_ID)))
+            new Caption(1, caption, userId))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mGameView::addCaption, Timber::e, () -> Timber.i("Added caption"));
    }
