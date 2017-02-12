@@ -18,6 +18,6 @@ public class GameContract {
 
    interface Presenter extends BasePresenter {
       void loadCaptions();
-      void addCaption(String caption);
+      void addCaption(String caption, int userId);
    }
 }

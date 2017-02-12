@@ -101,12 +101,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
          goToLogin();
       }
       else {
+         //Replace with Dialog
+         /*
          new MaterialDialog.Builder(this)
                .title(R.string.add_caption)
                .inputType(InputType.TYPE_CLASS_TEXT)
                .input("", "", (@NonNull MaterialDialog dialog, CharSequence input) ->
                      mPresenter.addCaption(input.toString()))
-               .show();
+               .show();*/
       }
    }
 
