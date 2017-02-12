@@ -131,7 +131,7 @@ public final class AuthenticationManager {
                      }
 
                      handleOAuthFacebook(loginResult.getAccessToken().getToken(),
-                           FirebaseInstanceId.getInstance().getToken(), FACEBOOK_LOGIN);
+                           FirebaseInstanceId.getInstance().getToken());
                   }
             );
             Bundle parameters = new Bundle();
@@ -152,8 +152,8 @@ public final class AuthenticationManager {
       });
    }
 
-   private void handleOAuthFacebook(String accessToken, String deviceToken, String provider) {
-      SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, provider))
+   private void handleOAuthFacebook(String accessToken, String deviceToken) {
+      SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(session -> saveSnaptionUserId(session.userId),
                   Timber::e,
@@ -309,8 +309,8 @@ public final class AuthenticationManager {
                   });
    }
 
-   private void handleOAuthGoogle(String token, String deviceToken, String provider) {
-      SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, provider))
+   private void handleOAuthGoogle(String token, String deviceToken) {
+      SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(session -> saveSnaptionUserId(session.userId),
                   Timber::e,
@@ -333,7 +333,7 @@ public final class AuthenticationManager {
             email = profileResult.getEmail();
 
             handleOAuthGoogle(profileResult.getIdToken(),
-                  FirebaseInstanceId.getInstance().getToken(), GOOGLE_SIGN_IN);
+                  FirebaseInstanceId.getInstance().getToken());
          }
 
          saveLoginInfo(profileImageUrl, username, email);

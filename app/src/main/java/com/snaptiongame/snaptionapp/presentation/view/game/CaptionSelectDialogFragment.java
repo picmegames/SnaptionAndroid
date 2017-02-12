@@ -5,14 +5,12 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Caption;
@@ -26,10 +24,6 @@ import java.util.List;
  */
 
 public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.View {
-
-
-
-
     enum CaptionDialogToShow {
         SET_CHOOSER, CAPTION_CHOOSER
     }
@@ -54,6 +48,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private String sNegativeButtonText;
     private String sPositiveButtonText;
 
+    // TODO Make these string resource files
     private String SUMBIT = "Submit!";
     private String CANCEL = "Cancel";
     private String CREATE_A_CAPTION = "Create a Caption!";
@@ -99,10 +94,10 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         if (mDialogToShow == CaptionDialogToShow.SET_CHOOSER) {
             mDialogTitle = CHOOSE_A_SET;
 
-        } else
+        }
+        else {
             mDialogTitle = CREATE_A_CAPTION;
-
-
+        }
     }
 
     @Override
@@ -114,19 +109,15 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mDialogBuilder = new AlertDialog.Builder(getActivity());
         mFitBAdapter = new FITBCaptionAdapter(mFitBCaptions);
 
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         mDialogBuilder.setTitle(mDialogTitle);
-
 
         mDialogBuilder.setPositiveButton(sPositiveButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //addCaption("lalala", 1);
                 System.out.println("ASJDASJDHASHDHSA");
-
-
             }
         });
         mDialogBuilder.setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
@@ -136,30 +127,25 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             }
         });
 
-
         //Build view for set chooser
         if (mDialogToShow == CaptionDialogToShow.SET_CHOOSER) {
             RecyclerView captionSetView = (RecyclerView)
                     inflater.inflate(R.layout.caption_set_holder, null);
 
             GridLayoutManager g = new GridLayoutManager(getActivity().getApplicationContext(), 3);
-            captionSetView.setAdapter(new CaptionSetAdapter(getActivity().getApplicationContext(),
-                    getActivity()));
+            captionSetView.setAdapter(new CaptionSetAdapter(new ArrayList<>()));
             captionSetView.setLayoutManager(g);
-
 
             mDialogBuilder.setView(captionSetView);
         }
         //Build view for caption chooser
         else {
 
-            mDialogView = (RelativeLayout) inflater.inflate(R.layout.caption_chooser_dialog, null);
+            mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
 
             mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-
             ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder)).setLayoutManager(mLinearLayoutManager);
-
 
             ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder)).setAdapter(mFitBAdapter);
             mDialogBuilder.setView(mDialogView);
@@ -215,5 +201,4 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     public void setPresenter(GameContract.Presenter presenter) {
 
     }
-
 }
