@@ -28,20 +28,7 @@ import java.util.List;
 public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.View {
 
 
-    @Override
-    public void showCaptions(List<Caption> captions) {
 
-    }
-
-    @Override
-    public void addCaption(Caption caption) {
-
-    }
-
-    @Override
-    public void setPresenter(GameContract.Presenter presenter) {
-
-    }
 
     enum CaptionDialogToShow {
         SET_CHOOSER, CAPTION_CHOOSER
@@ -213,5 +200,20 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mPresenter = presenter;
     }
 */
+
+    @Override
+    public void showCaptions(List<Caption> captions) {
+
+    }
+
+    @Override
+    public void addCaption(Caption caption) {
+
+    }
+
+    @Override
+    public void setPresenter(GameContract.Presenter presenter) {
+
+    }
 
 }

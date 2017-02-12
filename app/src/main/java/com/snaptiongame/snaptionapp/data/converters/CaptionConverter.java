@@ -1,6 +1,5 @@
 package com.snaptiongame.snaptionapp.data.converters;
 
-import android.graphics.Paint;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -25,7 +24,7 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
       JsonObject json = new JsonObject();
       json.addProperty(Caption.FITB_ID_SEND, src.fitBId);
       json.addProperty(Caption.CAPTION, src.caption);
-      json.addProperty(Caption.CREATOR_ID, src.creatorId);
+      json.addProperty(Caption.USER_ID, src.creatorId);
       return json;
    }
 

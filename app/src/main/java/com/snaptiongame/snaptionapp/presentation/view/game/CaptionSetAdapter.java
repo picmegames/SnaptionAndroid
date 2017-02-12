@@ -20,6 +20,7 @@ import com.snaptiongame.snaptionapp.presentation.view.friends.FriendViewHolder;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,7 +32,7 @@ public class CaptionSetAdapter extends RecyclerView.Adapter{
     private final Context mContext;
     private final Activity mActivity;
 
-    private ArrayList<CaptionSet> mSets;
+    private List<CaptionSet> mSets;
 
     public CaptionSetAdapter(Context c, Activity a) {
         mContext = c;

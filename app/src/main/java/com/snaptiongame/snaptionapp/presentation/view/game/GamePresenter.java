@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.support.annotation.NonNull;
 
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 
@@ -55,7 +56,7 @@ public class GamePresenter implements GameContract.Presenter {
    @Override
    public void addCaption(String caption) {
       CaptionProvider.addCaption(mGameId,
-            new Caption(1, caption, 1))
+            new Caption(1, caption, Integer.valueOf(AuthenticationManager.SNAPTION_USER_ID)))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mGameView::addCaption, Timber::e, () -> Timber.i("Added caption"));
    }

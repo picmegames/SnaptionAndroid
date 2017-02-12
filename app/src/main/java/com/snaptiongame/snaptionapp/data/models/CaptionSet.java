@@ -2,10 +2,9 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import android.graphics.drawable.Drawable;
 
-import com.snaptiongame.snaptionapp.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nickromero on 2/8/17.
@@ -13,25 +12,28 @@ import java.util.ArrayList;
 
 public class CaptionSet {
 
-    private ArrayList<Caption> mCaptions;
+    private List<Caption> mCaptions;
     private Drawable mSetImage;
     private String mSetName;
     private int mTotalCaptions;
     private int mCaptionsUnlocked;
 
+    static final int MAX_CAPTIONS = 10;
+    static final int MIN_CAPTIONS = 0;
+
 
     public CaptionSet(ArrayList<Caption> captions) {
         mCaptions = captions;
-        mCaptionsUnlocked = 0;
-        mTotalCaptions = 10;
+        mCaptionsUnlocked = MIN_CAPTIONS;
+        mTotalCaptions = MAX_CAPTIONS;
 
     }
 
-    public ArrayList<Caption> getCaptions() {
+    public List<Caption> getCaptions() {
         return mCaptions;
     }
 
-    public void setCaptions(ArrayList<Caption> captions) {
+    public void setCaptions(List<Caption> captions) {
         mCaptions = captions;
     }
 

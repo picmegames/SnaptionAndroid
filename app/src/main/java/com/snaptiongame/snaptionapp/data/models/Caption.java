@@ -17,7 +17,7 @@ public class Caption extends RealmObject {
    public int gameId;
    @SerializedName(NUM_VOTES)
    public int numVotes;
-   @SerializedName(CREATOR_ID)
+   @SerializedName(USER_ID)
    public int creatorId;
    @SerializedName(FITB_ID_RECEIVE)
    public int fitBId;
@@ -29,7 +29,7 @@ public class Caption extends RealmObject {
    public static final String ID = "id";
    public static final String GAME_ID = "game_id";
    public static final String NUM_VOTES = "numVotes";
-   public static final String CREATOR_ID = "userId";
+   public static final String USER_ID = "userId";
    public static final String FITB_ID_RECEIVE = "fitb_id";
    public static final String FITB_ID_SEND = "fitbId";
    public static final String CAPTION = "userEntry";
