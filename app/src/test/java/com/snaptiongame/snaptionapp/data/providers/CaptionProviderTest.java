@@ -33,15 +33,15 @@ public class CaptionProviderTest {
    public void setup() {
       service = mock(SnaptionApiService.class);
       captions = new ArrayList<>();
-      captions.add(new Caption(0, "test0"));
-      captions.add(new Caption(1, "test1"));
-      captions.add(new Caption(2, "test2"));
-      captions.add(new Caption(3, "test3"));
-      captions.add(new Caption(4, "test4"));
+      captions.add(new Caption(0, "test0", 1));
+      captions.add(new Caption(1, "test1", 1));
+      captions.add(new Caption(2, "test2", 1));
+      captions.add(new Caption(3, "test3", 1));
+      captions.add(new Caption(4, "test4", 1));
       when(service.getCaptions(TEST_GAME_ID)).thenReturn(Observable.just(captions));
       like = new Like(0, 0, false, false, "");
       when(service.upvoteCaption(like)).thenReturn(Observable.just(like));
-      caption = new Caption(0, "test0");
+      caption = new Caption(0, "test0", 1);
       when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Observable.just(caption));
    }
 
