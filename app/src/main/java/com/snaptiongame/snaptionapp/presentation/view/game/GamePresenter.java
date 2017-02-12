@@ -55,7 +55,7 @@ public class GamePresenter implements GameContract.Presenter {
    @Override
    public void addCaption(String caption) {
       CaptionProvider.addCaption(mGameId,
-            new Caption(1, caption))
+            new Caption(1, caption, 1))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mGameView::addCaption, Timber::e, () -> Timber.i("Added caption"));
    }

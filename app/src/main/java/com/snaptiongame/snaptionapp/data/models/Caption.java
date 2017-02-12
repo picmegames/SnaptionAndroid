@@ -29,7 +29,7 @@ public class Caption extends RealmObject {
    public static final String ID = "id";
    public static final String GAME_ID = "game_id";
    public static final String NUM_VOTES = "numVotes";
-   public static final String CREATOR_ID = "creator_id";
+   public static final String CREATOR_ID = "userId";
    public static final String FITB_ID_RECEIVE = "fitb_id";
    public static final String FITB_ID_SEND = "fitbId";
    public static final String CAPTION = "userEntry";
@@ -39,9 +39,10 @@ public class Caption extends RealmObject {
 
    }
 
-   public Caption(int fitBId, String caption) {
+   public Caption(int fitBId, String caption, int userId) {
       this.fitBId = fitBId;
       this.caption = caption;
+      this.id = userId;
    }
 
    public Caption(int id, int gameId, int numVotes, int creatorId, int fitBId,
