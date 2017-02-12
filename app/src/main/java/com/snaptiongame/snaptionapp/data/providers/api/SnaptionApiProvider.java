@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SnaptionApiProvider {
    private static SnaptionApiService apiService;
 
-   private static final String SNAPTION_SERVER_URL = "http://104.198.36.194";
+   private static final String SNAPTION_SERVER_URL = "https://104.198.36.194";
 
    /**
     * This method provides and handles the creation of

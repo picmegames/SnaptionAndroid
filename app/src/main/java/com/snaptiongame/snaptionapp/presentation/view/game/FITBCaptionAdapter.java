@@ -19,8 +19,6 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
 
     public FITBCaptionAdapter(List<FitBCaption> captions) {
         mCaptions = captions;
-
-
     }
 
     @Override

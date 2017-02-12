@@ -11,9 +11,8 @@ import static org.junit.Assert.assertTrue;
 public class OAuthRequestTest {
    @Test
    public void testConstructorOAuthRequest() {
-      OAuthRequest request = new OAuthRequest("", "", "");
+      OAuthRequest request = new OAuthRequest("", "");
       assertTrue(request.token.isEmpty());
       assertTrue(request.deviceToken.isEmpty());
-      assertTrue(request.provider.isEmpty());
    }
 }

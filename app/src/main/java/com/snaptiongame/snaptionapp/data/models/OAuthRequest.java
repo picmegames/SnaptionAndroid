@@ -7,16 +7,16 @@ package com.snaptiongame.snaptionapp.data.models;
 public class OAuthRequest {
    public String token;
    public String deviceToken;
-   public String provider;
+   public String deviceType;
 
-   public static final String FACEBOOK_TOKEN = "accessToken";
-   public static final String GOOGLE_TOKEN = "token";
+   public static final String TOKEN = "token";
    public static final String DEVICE_TOKEN = "device_token";
-   public static final String PROVIDER = "provider";
+   public static final String DEVICE_TYPE = "device_type";
+   public static final String ANDROID = "Android";
 
-   public OAuthRequest(String token, String deviceToken, String provider) {
+   public OAuthRequest(String token, String deviceToken) {
       this.token = token;
       this.deviceToken = deviceToken;
-      this.provider = provider;
+      this.deviceType = ANDROID;
    }
 }

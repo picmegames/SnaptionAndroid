@@ -37,7 +37,7 @@ public interface SnaptionApiService {
     * @param request The request for authentication
     * @return An observable that emits a Session
     */
-   @POST("/OAuth/")
+   @POST("/OAuth/Facebook/")
    Observable<Session> userOAuthFacebook(@Body OAuthRequest request);
 
    /**
