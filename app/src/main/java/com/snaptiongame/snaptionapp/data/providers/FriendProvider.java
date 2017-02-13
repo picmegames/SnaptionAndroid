@@ -28,6 +28,7 @@ public class FriendProvider {
    private static SnaptionApiService apiService = ApiProvider.getApiService();
 
    public static void loadUserFriends() {
+      DatabaseProvider.facebookFriends.clear();
       AccessToken token = AccessToken.getCurrentAccessToken();
       GraphRequest graphRequest = GraphRequest.newMeRequest(token, (JSONObject object, GraphResponse response) -> {
          try {
