@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    private AuthenticationManager mAuthManager;
    private GameContract.Presenter mPresenter;
    private CaptionSelectDialogFragment mCaptionDialogFragment;
-
+   private CaptionSelectDialogFragment mCaptionSetDialogFragment;
+   private int mGameId;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,8 +78,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             .load(intent.getStringExtra("image"))
             .centerCrop()
             .into(mImage);
-
-      mPresenter = new GamePresenter(intent.getIntExtra("gameId", 0), this);
+      mGameId = intent.getIntExtra("gameId", 0);
+      mPresenter = new GamePresenter(mGameId, this);
    }
 
    @Override
@@ -103,14 +105,34 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
          goToLogin();
       }
       else {
-         mCaptionDialogFragment = new CaptionSelectDialogFragment().newInstance(
-                 CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
-                 getIntent().getIntExtra("gameId", 0));
-         mCaptionDialogFragment.show(getFragmentManager(), "dialog");
-         //new CaptionSelectDialogFragment().show(getFragmentManager(), "dialog");
+
+         mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
+                 CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
+                 mGameId, -1,  this);
+         mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
 
 
       }
+   }
+
+   public void displayCaptionChoosingDialog(int setChosen) {
+      mCaptionSetDialogFragment.dismiss();
+      mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
+              CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
+              mGameId, setChosen, this);
+      mCaptionDialogFragment.show(getFragmentManager(), "dialog");
+
+   }
+
+   public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
+
+      if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER)
+         mCaptionSetDialogFragment.dismiss();
+      else {
+         mCaptionDialogFragment.dismiss();
+         mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
+      }
+
    }
 
    private void goToLogin() {
@@ -123,10 +145,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
       mAdapter.setCaptions(captions);
    }
 
-   @Override
-   public void addCaption(Caption caption) {
-      mAdapter.addTempCaption(caption);
-   }
+
 
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {

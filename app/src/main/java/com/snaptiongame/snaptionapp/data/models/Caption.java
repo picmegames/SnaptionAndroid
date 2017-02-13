@@ -26,7 +26,7 @@ public class Caption extends RealmObject {
    @SerializedName(PICTURE)
    public String picture;
    @SerializedName(FITB_ID_SEND)
-   public String fitbIdSend;
+   public int fitbIdSend;
 
    public static final String ID = "id";
    public static final String GAME_ID = "game_id";
@@ -42,7 +42,7 @@ public class Caption extends RealmObject {
    }
 
    public Caption(int fitBId, String caption, int userId) {
-      this.fitBId = fitBId;
+      this.fitbIdSend = fitBId;
       this.caption = caption;
       this.id = userId;
    }

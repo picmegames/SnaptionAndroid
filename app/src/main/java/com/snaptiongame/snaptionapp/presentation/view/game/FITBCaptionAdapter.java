@@ -39,14 +39,13 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         holder.mCurFitB = String.valueOf(position);
         holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
 
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
 
-
-    public void addTempCaption(FitBCaption caption) {
-        mCaptions.add(caption);
-        notifyDataSetChanged();
-    }
 
     public void setCaptions(List<FitBCaption> captions) {
         this.mCaptions = captions;

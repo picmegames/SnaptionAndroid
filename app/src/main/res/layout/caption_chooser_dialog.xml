@@ -9,13 +9,12 @@
         android:id="@+id/caption_card_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="40dp"
-        android:paddingBottom="40dp"/>
+        android:paddingTop="20dp"/>
 
 
     <android.support.design.widget.TextInputLayout
 
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/caption_card_holder">
 
@@ -23,7 +22,7 @@
             android:id="@+id/fitbEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Fill in the blank!"/>
+            android:hint="@string/fill_in_the_blank"/>
 
     </android.support.design.widget.TextInputLayout>
 

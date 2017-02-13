@@ -9,7 +9,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_centerInParent="true"
-    android:paddingStart="24dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
     >
 
 </android.support.v7.widget.RecyclerView>

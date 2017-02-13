@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,11 @@ import java.util.List;
 
 public class CaptionSetAdapter extends RecyclerView.Adapter{
     private List<CaptionSet> mSets;
+    private static CaptionSetClickListener mCaptionSetClickListener;
 
-    public CaptionSetAdapter(List<CaptionSet> sets) {
+    public CaptionSetAdapter(List<CaptionSet> sets, CaptionSetClickListener captionSetClickListener) {
         mSets = sets;
-        initData();
+        this.mCaptionSetClickListener = captionSetClickListener;
     }
 
 
@@ -37,11 +39,17 @@ public class CaptionSetAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CaptionSetViewHolder setViewHolder = (CaptionSetViewHolder) holder;
         CaptionSet curSet = mSets.get(position);
-
         setViewHolder.mSetName.setText(curSet.getSetName());
         setViewHolder.mSetImage.setImageResource(R.drawable.snaption_logo);
         setViewHolder.sSetCount.setText(mSets.get(position).getCaptionsUnlocked() + "/" +
                 mSets.get(position).getTotalCaptions());
+
+        setViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCaptionSetClickListener.captionSetClicked(v, position);
+            }
+        });
 
     }
 
@@ -50,31 +58,17 @@ public class CaptionSetAdapter extends RecyclerView.Adapter{
         return 0;
     }
 
+    public void setCaptionSets(List<CaptionSet> captionSets) {
+        mSets.clear();
+        mSets = captionSets;
+        notifyDataSetChanged();
+
+    }
+
     @Override
     public int getItemCount() {
         return mSets.size();
     }
 
-    private void initData() {
-        ArrayList<Caption> newCaptions = new ArrayList<Caption>();
-        newCaptions.add(new Caption(0, "Hello", 1));
-        newCaptions.add(new Caption(1, "HelloHello", 1));
-        newCaptions.add(new Caption(2, "HelloHellllllooo", 1));
 
-        CaptionSet set = new CaptionSet(newCaptions);
-        set.setCaptionsUnlocked(7);
-        set.setSetName("Halloween");
-
-        mSets.add(set);
-        set = new CaptionSet(newCaptions);
-        set.setCaptionsUnlocked(1);
-        set.setSetName("Cal Poly");
-
-        mSets.add(set);
-        set = new CaptionSet(newCaptions);
-        set.setCaptionsUnlocked(5);
-        set.setSetName("2016");
-        mSets.add(set);
-
-    }
 }

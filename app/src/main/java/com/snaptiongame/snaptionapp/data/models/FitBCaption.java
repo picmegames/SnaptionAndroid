@@ -31,8 +31,8 @@ public class FitBCaption {
     public static final String SET_ID = "set_id";
     public static final String USER_ENTRY = "userEntry";
 
-    public FitBCaption(int id, String beforeBlank, String afterBlank, int charLimit,
-                       int setID) {
+    public FitBCaption(int id, int charLimit, String beforeBlank, String afterBlank, int setID) {
+
         this.id = id;
         this.beforeBlank = beforeBlank;
         this.afterBlank = afterBlank;

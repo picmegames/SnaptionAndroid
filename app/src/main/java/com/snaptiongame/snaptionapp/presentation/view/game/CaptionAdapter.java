@@ -43,10 +43,6 @@ public class CaptionAdapter extends RecyclerView.Adapter {
       holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
    }
 
-   public void addTempCaption(Caption caption) {
-      mCaptions.add(caption);
-      notifyDataSetChanged();
-   }
 
    public void setCaptions(List<Caption> captions) {
       this.mCaptions = captions;

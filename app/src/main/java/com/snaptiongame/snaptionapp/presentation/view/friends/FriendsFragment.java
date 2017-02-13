@@ -204,8 +204,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     public void updateFriendsDialog(int whichOptionSelected) {
         FriendsDialogFragment.DialogToShow dialogToShow = null;
-        android.support.v4.app.FragmentTransaction transaction =
-                getActivity().getSupportFragmentManager().beginTransaction();
+        //android.support.v4.app.FragmentTransaction transaction =
+          //      getActivity().getSupportFragmentManager().beginTransaction();
         mDialogFragmentDefault.dismiss();
 
         /**

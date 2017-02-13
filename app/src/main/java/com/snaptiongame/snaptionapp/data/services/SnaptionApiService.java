@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.data.services;
 
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Like;
@@ -181,4 +182,7 @@ public interface SnaptionApiService {
 
    @GET("/FitB/")
    Observable<List<FitBCaption>> getFitBCaptions();
+
+   @GET("/FitBSet")
+   Observable<List<CaptionSet>> getCaptionSets();
 }
