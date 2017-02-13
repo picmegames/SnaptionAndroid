@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +22,11 @@ import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter {
     private List<Friend> mFriends;
+    private List<String> mSelected;
 
     public FriendsAdapter(List<Friend> friends) {
         this.mFriends = friends;
+        mSelected = new ArrayList<>();
     }
 
     @Override
@@ -59,6 +63,16 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void setFriends(List<Friend> friends) {
         this.mFriends = friends;
     }
+
+    public void addFriend(Friend friend) { this.mFriends.add(friend); }
+
+    public void selectFriend(int position) { this.mSelected.add(mFriends.get(position).id); }
+
+    public void deselectFriend(int position) { this.mSelected.remove(mFriends.get(position).id); }
+
+    public boolean isSelected(int position) { return mSelected.contains(mFriends.get(position).id); }
+
+    public List<String> getSelectedFriends() { return mSelected; }
 
     public List<Friend> getFriends() {
         return mFriends;

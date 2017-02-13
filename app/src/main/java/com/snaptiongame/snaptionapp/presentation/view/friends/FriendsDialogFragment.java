@@ -338,13 +338,13 @@ public class FriendsDialogFragment extends DialogFragment {
             mResults = (RecyclerView) view.findViewById(R.id.search_results);
             mResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
             ArrayList<Friend> friends = new ArrayList<>();
-            if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
-                //provide friends
-                loadFacebookFriends();
-            }
-
             mAdapter = new FriendsAdapter(friends);
             mResults.setAdapter(mAdapter);
+            if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
+                //provide friends
+                mResults.addOnItemTouchListener(new FriendsTouchListener(this.getActivity(), mAdapter));
+                loadFacebookFriends();
+            }
         }
 
 
@@ -359,10 +359,17 @@ public class FriendsDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+                //add all selected friends if in the facebook dialog
+                if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE)) {
+                    List<String> friends = mAdapter.getSelectedFriends();
+                    for (String id : friends) {
+                        addFriend(Integer.parseInt(id));
+                    }
+                }
                 //Only send an outer app if we are still on the first dialog screen. Otherwise
                 //we handle the friend invite in app
-                if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
-                    addFriend();
+                else if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
+                    addFriend(sUserID);
             }
         }).setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
@@ -433,8 +440,8 @@ public class FriendsDialogFragment extends DialogFragment {
     /**
      * Add a friendId to our list of users
      */
-    private void addFriend() {
-        FriendProvider.addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(sUserID))
+    private void addFriend(int userId) {
+        FriendProvider.addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(request -> {
                 }, Timber::e, () -> Timber.i("Successfully added friend!"));
@@ -444,9 +451,25 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.getFacebookFriends()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(friends -> { mAdapter.setFriends(friends);
-                                        mAdapter.notifyDataSetChanged(); }, Timber::e, () -> {
+                .subscribe(friends -> { fillFacebookFriends(friends); }, Timber::e, () -> {
                 });
+    }
+
+    //(String id, String first, String last, String fullName, String userName, String picture,
+    //String cover, String email)
+    private void fillFacebookFriends(List<Friend> friends) {
+        for (int i = 0; i < friends.size(); i++) {
+            final Friend friend = friends.get(i);
+            UserProvider.getUserWithFacebook(friends.get(i).id)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(result -> {  mAdapter.addFriend(new Friend(Integer.toString(result.id), friend
+                                    .firstName, friend.lastName, friend.fullName, result.username, friend.picture,
+                                    friend.cover, friend.email));
+                                    mAdapter.notifyDataSetChanged();
+                                },
+                                Timber::e, () -> {});
+        }
     }
 
     /**
