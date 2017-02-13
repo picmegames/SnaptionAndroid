@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -34,7 +36,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.CaptionDialogView,
-        CaptionSetClickListener
+        CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener
 {
 
 
@@ -76,6 +78,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private LinearLayoutManager mLinearLayoutManager;
     private View mDialogView;
+    private TextInputLayout fitBEditTextLayout;
 
     private FITBCaptionAdapter mFitBAdapter;
     private ArrayList<FitBCaption> mFitBCaptions = new ArrayList<>();
@@ -128,12 +131,12 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>());
+
         mPresenter = new GamePresenter(mGameId, this);
 
         //mPresenter.loadFitBCaptions();
         mDialogBuilder = new AlertDialog.Builder(getActivity());
-        mFitBAdapter = new FITBCaptionAdapter(mFitBCaptions);
+        mFitBAdapter = new FITBCaptionAdapter(mFitBCaptions, this);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -172,6 +175,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             captionSetView.setLayoutManager(g);
 
             mDialogBuilder.setView(captionSetView);
+
         }
         //Build view for caption chooser
         else {
@@ -190,6 +194,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             helper.attachToRecyclerView(captionView);
 
             mDialogBuilder.setView(mDialogView);
+            fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
         }
 
 
@@ -221,6 +226,12 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     @Override
     public void captionSetClicked(View v, int position) {
         ((GameActivity) mGameActivity).displayCaptionChoosingDialog(position);
+    }
+
+    @Override
+    public void captionClicked(View v, int position) {
+
+        fitBEditTextLayout.setVisibility(View.VISIBLE);
     }
 
 }

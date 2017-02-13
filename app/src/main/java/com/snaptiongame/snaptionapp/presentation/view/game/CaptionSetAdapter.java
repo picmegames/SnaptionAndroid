@@ -1,16 +1,14 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
+import com.snaptiongame.snaptionapp.presentation.view.game.CaptionContract;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,12 +16,13 @@ import java.util.List;
  */
 
 public class CaptionSetAdapter extends RecyclerView.Adapter{
+    public static final float NON_ACTIVE_SET_FADE = .25f;
     private List<CaptionSet> mSets;
-    private static CaptionSetClickListener mCaptionSetClickListener;
+    private static CaptionContract.CaptionSetClickListener mCaptionSetClickListener;
 
-    public CaptionSetAdapter(List<CaptionSet> sets, CaptionSetClickListener captionSetClickListener) {
+    public CaptionSetAdapter(List<CaptionSet> sets, CaptionContract.CaptionSetClickListener captionSetClickListener) {
         mSets = sets;
-        this.mCaptionSetClickListener = captionSetClickListener;
+        mCaptionSetClickListener = captionSetClickListener;
     }
 
 
@@ -43,11 +42,13 @@ public class CaptionSetAdapter extends RecyclerView.Adapter{
         setViewHolder.mSetImage.setImageResource(R.drawable.snaption_logo);
         setViewHolder.sSetCount.setText(mSets.get(position).getCaptionsUnlocked() + "/" +
                 mSets.get(position).getTotalCaptions());
+        if (!curSet.isCaptionSetActive)
+            holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
 
         setViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCaptionSetClickListener.captionSetClicked(v, position);
+                mCaptionSetClickListener.captionSetClicked(v, setViewHolder.getAdapterPosition());
             }
         });
 
