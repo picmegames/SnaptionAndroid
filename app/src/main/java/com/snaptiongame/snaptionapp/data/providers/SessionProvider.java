@@ -2,7 +2,7 @@ package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
-import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.providers.api.ApiProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import io.reactivex.Observable;
@@ -12,7 +12,7 @@ import io.reactivex.Observable;
  */
 
 public class SessionProvider {
-   private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
+   private static SnaptionApiService apiService = ApiProvider.getApiService();
 
    public static Observable<Session> userOAuthFacebook(OAuthRequest request) {
       return apiService.userOAuthFacebook(request);

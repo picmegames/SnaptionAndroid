@@ -1,12 +1,10 @@
 package com.snaptiongame.snaptionapp.presentation.view.friends;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 
 /**
  * Created by BrianGouldsberry on 2/12/17.

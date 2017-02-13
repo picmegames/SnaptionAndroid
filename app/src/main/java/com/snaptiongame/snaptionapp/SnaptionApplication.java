@@ -46,7 +46,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import io.realm.Realm;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -81,9 +80,6 @@ public class SnaptionApplication extends Application {
       }
 
       LeakCanary.install(this);
-
-      // INIT Realm (Local database)
-      Realm.init(this);
 
       if (BuildConfig.DEBUG) {
          // INIT Timber (Logger for debug builds)
