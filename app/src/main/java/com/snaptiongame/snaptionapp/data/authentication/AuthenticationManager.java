@@ -30,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.realm.Realm;
 import timber.log.Timber;
 
 /**
@@ -238,10 +237,6 @@ public final class AuthenticationManager {
       editor.putString(FULL_NAME, "");
       editor.putString(EMAIL, "");
       editor.apply();
-      Realm realm = Realm.getDefaultInstance();
-      realm.beginTransaction();
-      realm.deleteAll();
-      realm.commitTransaction();
    }
 
    public int getSnaptionUserId() {
@@ -291,10 +286,6 @@ public final class AuthenticationManager {
                                     for (Friend friend : friends) {
                                        friend.isSnaptionFriend = true;
                                        Timber.i(friend.toString());
-                                    }
-                                    try (Realm realmInstance = Realm.getDefaultInstance()) {
-                                       realmInstance.executeTransaction(realm ->
-                                             realmInstance.copyToRealmOrUpdate(friends));
                                     }
                                  },
                                  e -> Timber.e(e, "Getting Snaption Friends errored."),

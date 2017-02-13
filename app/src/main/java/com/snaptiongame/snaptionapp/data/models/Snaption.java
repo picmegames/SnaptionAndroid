@@ -2,16 +2,12 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
  * @author Tyler Wong
  */
-public class Snaption extends RealmObject {
+public class Snaption {
 
    @SerializedName(ID)
-   @PrimaryKey
    public int id;
    @SerializedName(USER_ID)
    public int userId;
