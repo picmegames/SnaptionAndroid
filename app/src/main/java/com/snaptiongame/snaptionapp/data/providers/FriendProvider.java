@@ -77,18 +77,6 @@ public class FriendProvider {
       return apiService.getFriends(userId);
    }
 
-   public static Observable<List<Friend>> getSnaptionFriends() {
-      return Observable.defer(() -> {
-         try (Realm realmInstance = Realm.getDefaultInstance()) {
-            RealmResults<Friend> realmResults = realmInstance
-                    .where(Friend.class)
-                    .equalTo("isSnaptionFriend", true)
-                    .findAll();
-            return Observable.just(realmInstance.copyFromRealm(realmResults));
-         }
-      });
-   }
-
    public static Observable<List<Friend>> getSnaptionFriendsOffline() {
       return Observable.defer(() -> {
          try (Realm realmInstance = Realm.getDefaultInstance()) {
