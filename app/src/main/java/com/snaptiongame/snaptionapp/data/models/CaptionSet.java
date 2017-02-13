@@ -14,7 +14,6 @@ import java.util.List;
 public class CaptionSet {
 
     @SerializedName(ID)
-
     public int id;
     @SerializedName(TITLE)
     public String captionSetTitle;
