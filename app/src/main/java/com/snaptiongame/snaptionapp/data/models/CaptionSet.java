@@ -1,24 +1,20 @@
 package com.snaptiongame.snaptionapp.data.models;
 
-import android.graphics.drawable.Drawable;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by nickromero on 2/8/17.
  */
 
 public class CaptionSet {
-    //private List<Caption> mCaptions;
-    // private Drawable mSetImage;
 
     @SerializedName(ID)
-    @PrimaryKey
+
     public int id;
     @SerializedName(TITLE)
     public String captionSetTitle;

@@ -25,7 +25,6 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
       json.addProperty(Caption.FITB_ID_SEND, 1);
       json.addProperty(Caption.CAPTION, src.caption);
       json.addProperty(Caption.USER_ID, src.creatorId);
-      System.out.println(json.toString());
       return json;
    }
 

@@ -39,6 +39,7 @@ public class GamePresenter implements GameContract.Presenter {
       mDisposables = new CompositeDisposable();
       mGameView.setPresenter(this);
 
+
    }
 
    public GamePresenter(int gameId, @NonNull GameContract.CaptionDialogView view) {

@@ -2,7 +2,6 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by nickromero on 2/10/17.
@@ -11,7 +10,6 @@ import io.realm.annotations.PrimaryKey;
 public class FitBCaption {
 
     @SerializedName(ID)
-    @PrimaryKey
     public int id;
     @SerializedName(BEFORE)
     public String beforeBlank;
