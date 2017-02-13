@@ -2,17 +2,13 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
  * @author Tyler Wong
  */
 
-public class User extends RealmObject {
+public class User {
 
    @SerializedName(ID)
-   @PrimaryKey
    public int id;
    @SerializedName(USERNAME)
    public String username;
@@ -25,7 +21,6 @@ public class User extends RealmObject {
    public static final String USERNAME = "username";
    public static final String PICTURE = "picture";
    public static final String TYPE = "imgType";
-   public static final int MAX_NAME_LENGTH = 15;
 
    public User() {
 

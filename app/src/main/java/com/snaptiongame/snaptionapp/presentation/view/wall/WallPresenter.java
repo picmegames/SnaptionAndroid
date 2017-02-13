@@ -10,7 +10,6 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.realm.Realm;
 import timber.log.Timber;
 
 /**
@@ -58,17 +57,11 @@ public class WallPresenter implements WallContract.Presenter {
    }
 
    /**
-    * This method handles saving a new list of games to
-    * the local database. It also hands off the list to
-    * the view to be shown.
+    * This method hands off the list to the view to be shown.
     *
     * @param snaptions The list of games from the server
     */
    private void processSnaptions(List<Snaption> snaptions) {
-      try (Realm realmInstance = Realm.getDefaultInstance()) {
-         realmInstance.executeTransaction(realm ->
-               realmInstance.copyToRealmOrUpdate(snaptions));
-      }
       mWallView.showGames(snaptions);
    }
 

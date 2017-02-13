@@ -27,7 +27,7 @@ import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
-import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.providers.api.ApiProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +89,7 @@ public class FriendsDialogFragment extends DialogFragment {
     private static FriendsFragment mFragmentActivity;
     private static String TAG = "FRIEND_DIALOGUE";
 
-    SnaptionApiProvider friendProvider;
+    ApiProvider friendProvider;
 
     /**
      * Reference to the search view that is shown on the second dialog. Pulled out of local scope
@@ -142,7 +142,7 @@ public class FriendsDialogFragment extends DialogFragment {
      * Empty constructor for the dialog. Expected from a DialogFragment
      */
     public FriendsDialogFragment() {
-        friendProvider = new SnaptionApiProvider();
+        friendProvider = new ApiProvider();
     }
 
 
@@ -475,8 +475,12 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.getFacebookFriends()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(friends -> { fillFacebookFriends(friends); }, Timber::e, () -> {
-                });
+                .subscribe(
+                      this::fillFacebookFriends,
+                      Timber::e,
+                      () -> {
+                      }
+                );
     }
 
     //(String id, String first, String last, String fullName, String userName, String picture,
