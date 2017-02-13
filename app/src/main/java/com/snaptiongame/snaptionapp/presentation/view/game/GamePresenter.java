@@ -13,7 +13,6 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.realm.Realm;
 import timber.log.Timber;
 
 /**
@@ -62,11 +61,6 @@ public class GamePresenter implements GameContract.Presenter {
    }
 
    private void processCaptions(List<Caption> captions) {
-      try (Realm realmInstance = Realm.getDefaultInstance()) {
-         realmInstance.executeTransaction(realm ->
-               realm.copyToRealmOrUpdate(captions)
-         );
-      }
       mGameView.showCaptions(captions);
    }
 

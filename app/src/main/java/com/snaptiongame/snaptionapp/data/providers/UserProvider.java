@@ -1,7 +1,7 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.User;
-import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.providers.api.ApiProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import io.reactivex.Observable;
@@ -11,7 +11,7 @@ import io.reactivex.Observable;
  */
 
 public class UserProvider {
-   private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
+   private static SnaptionApiService apiService = ApiProvider.getApiService();
 
    public static Observable<User> getUser(int userId) {
       return apiService.getUser(userId);

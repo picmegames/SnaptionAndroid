@@ -8,7 +8,8 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Friend;
-import com.snaptiongame.snaptionapp.data.providers.api.SnaptionApiProvider;
+import com.snaptiongame.snaptionapp.data.providers.api.ApiProvider;
+import com.snaptiongame.snaptionapp.data.providers.database.DatabaseProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
 
 import org.json.JSONArray;
@@ -18,17 +19,16 @@ import org.json.JSONObject;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * @author Tyler Wong
  */
 
 public class FriendProvider {
-   private static SnaptionApiService apiService = SnaptionApiProvider.getApiService();
+   private static SnaptionApiService apiService = ApiProvider.getApiService();
 
    public static void loadUserFriends() {
+      DatabaseProvider.facebookFriends.clear();
       AccessToken token = AccessToken.getCurrentAccessToken();
       GraphRequest graphRequest = GraphRequest.newMeRequest(token, (JSONObject object, GraphResponse response) -> {
          try {
@@ -58,10 +58,8 @@ public class FriendProvider {
             String picture = object.getJSONObject("picture").getJSONObject("data").getString("url");
             String cover = object.getJSONObject("cover").getString("source");
 
-            Friend newFriend = new Friend(id, firstName, lastName, fullName, "", picture, cover, "");
-            try (Realm realmInstance = Realm.getDefaultInstance()) {
-               realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(newFriend));
-            }
+            DatabaseProvider.facebookFriends.add(
+                  new Friend(id, firstName, lastName, fullName, "", picture, cover, ""));
          }
          catch (JSONException e) {
             e.printStackTrace();
@@ -77,39 +75,8 @@ public class FriendProvider {
       return apiService.getFriends(userId);
    }
 
-   public static Observable<List<Friend>> getSnaptionFriends() {
-      return Observable.defer(() -> {
-         try (Realm realmInstance = Realm.getDefaultInstance()) {
-            RealmResults<Friend> realmResults = realmInstance
-                    .where(Friend.class)
-                    .equalTo("isSnaptionFriend", true)
-                    .findAll();
-            return Observable.just(realmInstance.copyFromRealm(realmResults));
-         }
-      });
-   }
-
-   public static Observable<List<Friend>> getSnaptionFriendsOffline() {
-      return Observable.defer(() -> {
-         try (Realm realmInstance = Realm.getDefaultInstance()) {
-            RealmResults<Friend> realmResults = realmInstance
-                    .where(Friend.class)
-                    .equalTo("isSnaptionFriend", true)
-                    .findAll();
-            return Observable.just(realmInstance.copyFromRealm(realmResults));
-         }
-      });
-   }
-
    public static Observable<List<Friend>> getFacebookFriends() {
-      return Observable.defer(() -> {
-         try (Realm realmInstance = Realm.getDefaultInstance()) {
-            RealmResults<Friend> realmResults = realmInstance
-                  .where(Friend.class).equalTo("isSnaptionFriend", false)
-                  .findAll();
-            return Observable.just(realmInstance.copyFromRealm(realmResults));
-         }
-      });
+      return Observable.just(DatabaseProvider.facebookFriends);
    }
 
    public static Observable<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {

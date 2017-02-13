@@ -2,15 +2,10 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
  * @author Brian Gouldsberry
  */
-
-public class Friend extends RealmObject {
-    @PrimaryKey
+public class Friend {
     public String id;
     public String firstName;
     public String lastName;
@@ -30,8 +25,7 @@ public class Friend extends RealmObject {
     public boolean equals(Object o) {
         if (o instanceof  Friend) {
             Friend other = (Friend) o;
-            return (id.equals(other.id) && firstName.equals(other.fullName) && lastName.equals(other
-                    .lastName) && fullName.equals(other.fullName) && userName.equals(other.userName));
+            return (userName.equals(other.userName));
         }
         return false;
     }
