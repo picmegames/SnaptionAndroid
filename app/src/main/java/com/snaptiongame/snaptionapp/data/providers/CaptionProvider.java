@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.api.ApiProvider;
@@ -31,5 +32,9 @@ public class CaptionProvider {
 
    public static Observable<Caption> addCaption(int gameId, Caption caption) {
       return apiService.addCaption(gameId, caption);
+   }
+
+   public static Observable<List<CaptionSet>> getCaptionSets() {
+      return apiService.getCaptionSets();
    }
 }

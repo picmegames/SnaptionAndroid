@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
  * Created by nickromero on 2/10/17.
  */
@@ -28,8 +29,8 @@ public class FitBCaption {
     public static final String SET_ID = "set_id";
     public static final String USER_ENTRY = "userEntry";
 
-    public FitBCaption(int id, String beforeBlank, String afterBlank, int charLimit,
-                       int setID) {
+    public FitBCaption(int id, int charLimit, String beforeBlank, String afterBlank, int setID) {
+
         this.id = id;
         this.beforeBlank = beforeBlank;
         this.afterBlank = afterBlank;

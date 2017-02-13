@@ -1,29 +1,39 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 /**
  * Created by nickromero on 2/7/17.
  */
 
-public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.View {
+public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.CaptionDialogView,
+        CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
+
+
     enum CaptionDialogToShow {
         SET_CHOOSER, CAPTION_CHOOSER
     }
@@ -59,24 +69,35 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
      */
     private RecyclerView mResults;
 
-    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private LinearLayoutManager mLinearLayoutManager;
     private View mDialogView;
+    private TextInputLayout fitBEditTextLayout;
 
     private FITBCaptionAdapter mFitBAdapter;
     private ArrayList<FitBCaption> mFitBCaptions = new ArrayList<>();
+    private CaptionSetAdapter mCaptionSetAdapter;
+
     private GameContract.Presenter mPresenter;
+    static Activity mGameActivity;
     private int mGameId;
+    private int mSetId;
+
+
+    private AuthenticationManager mAuth;
 
     public CaptionSelectDialogFragment() {
     }
 
-    static CaptionSelectDialogFragment newInstance(CaptionDialogToShow dialogToShow, int gameId) {
+    static CaptionSelectDialogFragment newInstance(CaptionDialogToShow dialogToShow, int gameId, int setId,
+                                                   Activity gameActivity) {
         CaptionSelectDialogFragment newFragment = new CaptionSelectDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable("whichDialog", dialogToShow);
         args.putInt("gameId", gameId);
+        args.putInt("setId", setId);
+
+        mGameActivity = gameActivity;
         newFragment.setArguments(args);
 
         return newFragment;
@@ -85,120 +106,124 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mAuth = AuthenticationManager.getInstance(getApplicationContext());
         sPositiveButtonText = SUMBIT;
         sNegativeButtonText = CANCEL;
         mDialogToShow = (CaptionDialogToShow) getArguments().getSerializable("whichDialog");
         mGameId = getArguments().getInt("gameId");
+        mSetId = getArguments().getInt("setId");
 
         if (mDialogToShow == CaptionDialogToShow.SET_CHOOSER) {
             mDialogTitle = CHOOSE_A_SET;
 
-        }
-        else {
+        } else {
             mDialogTitle = CREATE_A_CAPTION;
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>());
-        mPresenter = new GamePresenter(0, this);
 
-        //mPresenter.loadFitBCaptions();
+        mPresenter = new GamePresenter(mGameId, this);
+
         mDialogBuilder = new AlertDialog.Builder(getActivity());
-        mFitBAdapter = new FITBCaptionAdapter(mFitBCaptions);
+        mFitBAdapter = new FITBCaptionAdapter(mFitBCaptions, this);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         mDialogBuilder.setTitle(mDialogTitle);
 
-        mDialogBuilder.setPositiveButton(sPositiveButtonText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //addCaption("lalala", 1);
-                System.out.println("ASJDASJDHASHDHSA");
-            }
-        });
+        if (mDialogToShow == CaptionDialogToShow.CAPTION_CHOOSER) {
+            mDialogBuilder.setPositiveButton(sPositiveButtonText, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //TODO Backend still needs to do this
+                    addCaption(new Caption(1, "LALALAL", mAuth.getSnaptionUserId()));
+
+                }
+            });
+        }
         mDialogBuilder.setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dismiss();
+                ((GameActivity) mGameActivity).negativeButtonClicked(mDialogToShow);
             }
         });
+
 
         //Build view for set chooser
         if (mDialogToShow == CaptionDialogToShow.SET_CHOOSER) {
             RecyclerView captionSetView = (RecyclerView)
                     inflater.inflate(R.layout.caption_set_holder, null);
 
-            GridLayoutManager g = new GridLayoutManager(getActivity().getApplicationContext(), 3);
-            captionSetView.setAdapter(new CaptionSetAdapter(new ArrayList<>()));
+            mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
+
+            mPresenter.loadCaptionSets();
+            GridLayoutManager g = new GridLayoutManager(getActivity().getApplicationContext(), 2);
+            captionSetView.setAdapter(mCaptionSetAdapter);
+
+
             captionSetView.setLayoutManager(g);
 
             mDialogBuilder.setView(captionSetView);
+
         }
         //Build view for caption chooser
         else {
 
             mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
+            RecyclerView captionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
+            mPresenter.loadFitBCaptions();
 
             mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-            ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder)).setLayoutManager(mLinearLayoutManager);
+            captionView.setLayoutManager(mLinearLayoutManager);
 
-            ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder)).setAdapter(mFitBAdapter);
+            captionView.setAdapter(mFitBAdapter);
+
+            SnapHelper helper = new LinearSnapHelper();
+            helper.attachToRecyclerView(captionView);
+
             mDialogBuilder.setView(mDialogView);
+            fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
         }
 
 
         return mDialogBuilder.create();
     }
 
-/*
-    @Override
-    public void onResume() {
-        super.onPause();
-        mPresenter.subscribe();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.unsubscribe();
-    }
 
     @Override
     public void showFitBCaptions(List<FitBCaption> captions) {
-        mFitBAdapter.clearCaptions();
-
         mFitBAdapter.setCaptions(captions);
     }
 
     @Override
-    public void addCaption(String userEntry, int fitBId) {
-        System.out.println("AddCapttion");
-        mPresenter.addCaption(userEntry, fitBId);
+    public void showCaptionSets(List<CaptionSet> captionSets) {
+        mCaptionSetAdapter.setCaptionSets(captionSets);
     }
 
-    @Override
-    public void setPresenter(FitBCaptionContract.Presenter presenter) {
-        mPresenter = presenter;
-    }
-*/
-
-    @Override
-    public void showCaptions(List<Caption> captions) {
-
-    }
-
+    //TODO This still doesn't work
     @Override
     public void addCaption(Caption caption) {
+        mPresenter.addCaption(caption.caption, 2, 7);
 
     }
 
     @Override
     public void setPresenter(GameContract.Presenter presenter) {
-
+        mPresenter = presenter;
     }
+
+    @Override
+    public void captionSetClicked(View v, int position) {
+        ((GameActivity) mGameActivity).displayCaptionChoosingDialog(position);
+    }
+
+    @Override
+    public void captionClicked(View v, int position) {
+
+        fitBEditTextLayout.setVisibility(View.VISIBLE);
+    }
+
 }

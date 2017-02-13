@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.snaptiongame.snaptionapp.data.converters.AddFriendConverter;
 import com.snaptiongame.snaptionapp.data.converters.CaptionConverter;
+import com.snaptiongame.snaptionapp.data.converters.CaptionSetConverter;
+import com.snaptiongame.snaptionapp.data.converters.FitBCaptionConverter;
 import com.snaptiongame.snaptionapp.data.converters.FriendConverter;
 import com.snaptiongame.snaptionapp.data.converters.LikeConverter;
 import com.snaptiongame.snaptionapp.data.converters.OAuthConverter;
@@ -15,6 +17,8 @@ import com.snaptiongame.snaptionapp.data.converters.SnaptionConverter;
 import com.snaptiongame.snaptionapp.data.converters.UserConverter;
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.CaptionSet;
+import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
@@ -201,6 +205,8 @@ public class SnaptionApplication extends Application {
       builder.registerTypeAdapter(Like.class, new LikeConverter());
       builder.registerTypeAdapter(Friend.class, new FriendConverter());
       builder.registerTypeAdapter(AddFriendRequest.class, new AddFriendConverter());
+      builder.registerTypeAdapter(CaptionSet.class, new CaptionSetConverter());
+      builder.registerTypeAdapter(FitBCaption.class, new FitBCaptionConverter());
       builder.excludeFieldsWithoutExposeAnnotation();
       return builder.create();
    }

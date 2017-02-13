@@ -16,9 +16,11 @@ import java.util.List;
 
 public class FITBCaptionAdapter extends RecyclerView.Adapter {
     private List<FitBCaption> mCaptions;
+    private static CaptionContract.CaptionClickListener mCaptionClickListener;
 
-    public FITBCaptionAdapter(List<FitBCaption> captions) {
+    public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener) {
         mCaptions = captions;
+        mCaptionClickListener = captionClickListener;
     }
 
     @Override
@@ -39,14 +41,19 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         holder.mCurFitB = String.valueOf(position);
         holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
 
+        holder.itemView.findViewById(R.id.fitb_caption_card).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mCaptionClickListener.captionClicked(v, holder.getAdapterPosition());
+                 v.setBackgroundResource(R.drawable.card_border_color);
+
+            }
+        });
+
 
     }
 
-
-    public void addTempCaption(FitBCaption caption) {
-        mCaptions.add(caption);
-        notifyDataSetChanged();
-    }
 
     public void setCaptions(List<FitBCaption> captions) {
         this.mCaptions = captions;

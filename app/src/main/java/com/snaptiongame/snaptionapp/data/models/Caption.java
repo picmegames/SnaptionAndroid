@@ -21,6 +21,8 @@ public class Caption {
    public String caption;
    @SerializedName(PICTURE)
    public String picture;
+   @SerializedName(FITB_ID_SEND)
+   public int fitbIdSend;
 
    public static final String ID = "id";
    public static final String GAME_ID = "game_id";
@@ -36,7 +38,7 @@ public class Caption {
    }
 
    public Caption(int fitBId, String caption, int userId) {
-      this.fitBId = fitBId;
+      this.fitbIdSend = fitBId;
       this.caption = caption;
       this.id = userId;
    }

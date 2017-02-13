@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.data.services;
 
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Like;
@@ -179,6 +180,18 @@ public interface SnaptionApiService {
    @PUT("/UserXCaption/")
    Observable<Like> upvoteCaption(@Body Like request);
 
+   /**
+    * This method sends a request to retrieve all fill in the blank from snaption.
+    * Uses a GET request
+    * @return An observable that emits a list of Fill in the Blank Captions
+     */
    @GET("/FitB/")
    Observable<List<FitBCaption>> getFitBCaptions();
+
+   /**
+    * This method sends a request to retrieve all Caption Sets available to a user
+    * @return An observable that emits a list of Caption Sets
+     */
+   @GET("/FitBSet")
+   Observable<List<CaptionSet>> getCaptionSets();
 }

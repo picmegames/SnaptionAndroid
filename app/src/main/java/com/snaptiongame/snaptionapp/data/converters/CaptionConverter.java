@@ -22,7 +22,7 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
    @Override
    public JsonElement serialize(Caption src, Type typeOfSrc, JsonSerializationContext context) {
       JsonObject json = new JsonObject();
-      json.addProperty(Caption.FITB_ID_SEND, src.fitBId);
+      json.addProperty(Caption.FITB_ID_SEND, 1);
       json.addProperty(Caption.CAPTION, src.caption);
       json.addProperty(Caption.USER_ID, src.creatorId);
       return json;

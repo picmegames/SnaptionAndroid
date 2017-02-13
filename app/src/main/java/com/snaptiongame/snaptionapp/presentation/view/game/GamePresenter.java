@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.CaptionSet;
+import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 
 import java.util.List;
@@ -22,6 +24,9 @@ public class GamePresenter implements GameContract.Presenter {
    private GameContract.View mGameView;
    @NonNull
    private CompositeDisposable mDisposables;
+   @NonNull
+   private GameContract.CaptionDialogView mGameDialogView;
+
    private int mGameId;
    private AuthenticationManager mAuth;
 
@@ -29,9 +34,18 @@ public class GamePresenter implements GameContract.Presenter {
    public GamePresenter(int gameId, @NonNull GameContract.View view) {
       mGameId = gameId;
       mGameView = view;
+
       mDisposables = new CompositeDisposable();
       mGameView.setPresenter(this);
 
+
+   }
+
+   public GamePresenter(int gameId, @NonNull GameContract.CaptionDialogView view) {
+      mGameId = gameId;
+      mDisposables = new CompositeDisposable();
+      mGameDialogView = view;
+      mGameDialogView.setPresenter(this);
    }
 
    @Override
@@ -51,14 +65,36 @@ public class GamePresenter implements GameContract.Presenter {
    }
 
    @Override
-   public void addCaption(String caption, int userId) {
-
-
+   public void addCaption(String caption, int userId, int fitbId) {
 
       CaptionProvider.addCaption(mGameId,
-            new Caption(1, caption, userId))
+            new Caption(fitbId, caption, userId))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(mGameView::addCaption, Timber::e, () -> Timber.i("Added caption"));
+            .subscribe(mGameDialogView::addCaption, Timber::e, () -> Timber.i("Added caption"));
+   }
+
+   @Override
+   public void loadCaptionSets() {
+      mDisposables.clear();
+      Disposable disposable = CaptionProvider.getCaptionSets()
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(
+                      mGameDialogView::showCaptionSets,
+                      Timber::e,
+                      () -> Timber.i("Loading caption sets worked"));
+      mDisposables.add(disposable);
+
+   }
+
+   @Override
+   public void loadFitBCaptions() {
+      mDisposables.clear();
+      Disposable disposable = CaptionProvider.getFitBCaptions()
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(mGameDialogView::showFitBCaptions,
+                      Timber::e,
+                      () -> Timber.i("Successfully got Fitb's!"));
+      mDisposables.add(disposable);
    }
 
    @Override
@@ -70,4 +106,9 @@ public class GamePresenter implements GameContract.Presenter {
    public void unsubscribe() {
       mDisposables.clear();
    }
+
+
+
+
+
 }

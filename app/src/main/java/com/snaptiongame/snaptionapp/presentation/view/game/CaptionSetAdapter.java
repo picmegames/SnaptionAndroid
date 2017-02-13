@@ -6,10 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
+import com.snaptiongame.snaptionapp.presentation.view.game.CaptionContract;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +16,13 @@ import java.util.List;
  */
 
 public class CaptionSetAdapter extends RecyclerView.Adapter{
+    public static final float NON_ACTIVE_SET_FADE = .25f;
     private List<CaptionSet> mSets;
+    private static CaptionContract.CaptionSetClickListener mCaptionSetClickListener;
 
-    public CaptionSetAdapter(List<CaptionSet> sets) {
+    public CaptionSetAdapter(List<CaptionSet> sets, CaptionContract.CaptionSetClickListener captionSetClickListener) {
         mSets = sets;
-        initData();
+        mCaptionSetClickListener = captionSetClickListener;
     }
 
 
@@ -37,11 +38,19 @@ public class CaptionSetAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CaptionSetViewHolder setViewHolder = (CaptionSetViewHolder) holder;
         CaptionSet curSet = mSets.get(position);
-
         setViewHolder.mSetName.setText(curSet.getSetName());
         setViewHolder.mSetImage.setImageResource(R.drawable.snaption_logo);
         setViewHolder.sSetCount.setText(mSets.get(position).getCaptionsUnlocked() + "/" +
                 mSets.get(position).getTotalCaptions());
+        if (!curSet.isCaptionSetActive)
+            holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
+
+        setViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCaptionSetClickListener.captionSetClicked(v, setViewHolder.getAdapterPosition());
+            }
+        });
 
     }
 
@@ -50,31 +59,17 @@ public class CaptionSetAdapter extends RecyclerView.Adapter{
         return 0;
     }
 
+    public void setCaptionSets(List<CaptionSet> captionSets) {
+        mSets.clear();
+        mSets = captionSets;
+        notifyDataSetChanged();
+
+    }
+
     @Override
     public int getItemCount() {
         return mSets.size();
     }
 
-    private void initData() {
-        ArrayList<Caption> newCaptions = new ArrayList<Caption>();
-        newCaptions.add(new Caption(0, "Hello", 1));
-        newCaptions.add(new Caption(1, "HelloHello", 1));
-        newCaptions.add(new Caption(2, "HelloHellllllooo", 1));
 
-        CaptionSet set = new CaptionSet(newCaptions);
-        set.setCaptionsUnlocked(7);
-        set.setSetName("Halloween");
-
-        mSets.add(set);
-        set = new CaptionSet(newCaptions);
-        set.setCaptionsUnlocked(1);
-        set.setSetName("Cal Poly");
-
-        mSets.add(set);
-        set = new CaptionSet(newCaptions);
-        set.setCaptionsUnlocked(5);
-        set.setSetName("2016");
-        mSets.add(set);
-
-    }
 }

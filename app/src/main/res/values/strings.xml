@@ -92,6 +92,7 @@
     <string name="delete_post">as a friend?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="fill_in_the_blank">Fill in the blank!</string>
 
 
 </resources>
