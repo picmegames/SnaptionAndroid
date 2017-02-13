@@ -14,62 +14,48 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class CaptionSet {
-   //private List<Caption> mCaptions;
-  // private Drawable mSetImage;
+    //private List<Caption> mCaptions;
+    // private Drawable mSetImage;
 
-   @SerializedName(ID)
-   @PrimaryKey
-   public int id;
-   @SerializedName(TITLE)
-   public String captionSetTitle;
-   @SerializedName(ACTIVE)
-   public boolean isCaptionSetActive;
+    @SerializedName(ID)
+    @PrimaryKey
+    public int id;
+    @SerializedName(TITLE)
+    public String captionSetTitle;
+    @SerializedName(ACTIVE)
+    public boolean isCaptionSetActive;
 
-   public static final String TITLE = "title";
-   public static final String ID = "id";
-   public static final String ACTIVE = "active";
+    public static final String TITLE = "title";
+    public static final String ID = "id";
+    public static final String ACTIVE = "active";
 
-   private int mTotalCaptions;
-   private int mCaptionsUnlocked;
+    private int mTotalCaptions;
+    private int mCaptionsUnlocked;
 
-   private static final int MAX_CAPTIONS = 10;
-   private static final int MIN_CAPTIONS = 0;
+    private static final int MAX_CAPTIONS = 10;
+    private static final int MIN_CAPTIONS = 0;
 
-   public CaptionSet(List<Caption> captions) {
+    public CaptionSet(List<Caption> captions) {
 
-      mCaptionsUnlocked = MIN_CAPTIONS;
-      mTotalCaptions = MAX_CAPTIONS;
+        mCaptionsUnlocked = MIN_CAPTIONS;
+        mTotalCaptions = MAX_CAPTIONS;
 
-   }
+    }
 
-   public List<Caption> getCaptions() {
-      //return mCaptions;
-      return new ArrayList<>();
-   }
+    public List<Caption> getCaptions() {
 
-   public void setCaptions(List<Caption> captions) {
-      //mCaptions = captions;
-   }
+        return new ArrayList<>();
+    }
 
-   public void setCaptionsUnlocked(int unlocked) {
-      mCaptionsUnlocked = unlocked;
-   }
 
-   public void setSetName(String mSetName) {
-      //this.mSetName = mSetName;
-   }
+    public int getTotalCaptions() {
+        return mTotalCaptions;
+    }
 
-   public int getTotalCaptions() {
-      return mTotalCaptions;
-   }
+    public int getCaptionsUnlocked() {
+        return mCaptionsUnlocked;
+    }
 
-   public int getCaptionsUnlocked() {
-      return mCaptionsUnlocked;
-   }
-
-   public String getSetName() {
-
-      return captionSetTitle;
-   }
+    public String getSetName() { return captionSetTitle; }
 
 }

@@ -6,16 +6,13 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.snaptiongame.snaptionapp.R;
@@ -23,8 +20,6 @@ import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
-import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
-import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +31,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.CaptionDialogView,
-        CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener
-{
+        CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
 
 
     enum CaptionDialogToShow {
@@ -75,7 +69,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
      */
     private RecyclerView mResults;
 
-    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private LinearLayoutManager mLinearLayoutManager;
     private View mDialogView;
     private TextInputLayout fitBEditTextLayout;
@@ -83,7 +76,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private FITBCaptionAdapter mFitBAdapter;
     private ArrayList<FitBCaption> mFitBCaptions = new ArrayList<>();
     private CaptionSetAdapter mCaptionSetAdapter;
-    private List<CaptionSet> mCaptionSets = new ArrayList<>();
 
     private GameContract.Presenter mPresenter;
     static Activity mGameActivity;
@@ -134,7 +126,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
         mPresenter = new GamePresenter(mGameId, this);
 
-        //mPresenter.loadFitBCaptions();
         mDialogBuilder = new AlertDialog.Builder(getActivity());
         mFitBAdapter = new FITBCaptionAdapter(mFitBCaptions, this);
 
@@ -146,7 +137,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             mDialogBuilder.setPositiveButton(sPositiveButtonText, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    //TODO Backend still needs to do this
                     addCaption(new Caption(1, "LALALAL", mAuth.getSnaptionUserId()));
 
                 }
@@ -212,6 +203,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mCaptionSetAdapter.setCaptionSets(captionSets);
     }
 
+    //TODO This still doesn't work
     @Override
     public void addCaption(Caption caption) {
         mPresenter.addCaption(caption.caption, 2, 7);

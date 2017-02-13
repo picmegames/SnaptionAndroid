@@ -16,16 +16,7 @@ import java.lang.reflect.Type;
  * Created by nickromero on 2/12/17.
  */
 
-public class FitBCaptionConverter implements JsonSerializer<FitBCaption>, JsonDeserializer<FitBCaption> {
-
-    @Override
-    public JsonElement serialize(FitBCaption src, Type typeOfSrc, JsonSerializationContext context) {
-        //JsonObject json = new JsonObject();
-        // json.addProperty(CaptionSet.TITLE, src.captionSetTitle);
-        //json.addProperty(CaptionSet.ID, src.id);
-        //json.addProperty(CaptionSet.ACTIVE, src.isCaptionSetActive);
-        return new JsonObject();
-    }
+public class FitBCaptionConverter implements JsonDeserializer<FitBCaption> {
 
     @Override
     public FitBCaption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
