@@ -45,10 +45,10 @@ public class FriendsTouchListener implements RecyclerView.OnItemTouchListener {
 
     private void onItemClick(View view, int position) {
         if (mAdapter.isSelected(position)) {
-            view.setAlpha(1f);
+            view.setAlpha(FriendsAdapter.DIM);
             mAdapter.deselectFriend(position);
         } else {
-            view.setAlpha(.5f);
+            view.setAlpha(FriendsAdapter.BRIGHT);
             mAdapter.selectFriend(position);
         }
     }

@@ -62,6 +62,11 @@ public class FriendsDialogFragment extends DialogFragment {
     private DialogToShow mWhichDialog;
 
     /**
+     * List of the facebook friends that the user has to invite
+     */
+    private List<Friend> mFacebookFriends = new ArrayList<>();
+
+    /**
      * Builder object used to create and show a dialog to a user
      */
     private AlertDialog.Builder mDialogBuilder;
@@ -297,6 +302,24 @@ public class FriendsDialogFragment extends DialogFragment {
                     @Override
                     public void afterTextChanged(Editable editable) {}
                 });
+            } else if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
+                search.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        List<Friend> results = FriendsFragment.filterList(mFacebookFriends,
+                                search.getText().toString());
+                        mAdapter.setFriends(results);
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                    }
+                });
             }
 
 
@@ -341,8 +364,9 @@ public class FriendsDialogFragment extends DialogFragment {
             mAdapter = new FriendsAdapter(friends);
             mResults.setAdapter(mAdapter);
             if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
-                //provide friends
+                mAdapter.setSelectable();
                 mResults.addOnItemTouchListener(new FriendsTouchListener(this.getActivity(), mAdapter));
+                mAdapter.setFriends(mFacebookFriends);
                 loadFacebookFriends();
             }
         }
@@ -463,7 +487,7 @@ public class FriendsDialogFragment extends DialogFragment {
             UserProvider.getUserWithFacebook(friends.get(i).id)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> {  mAdapter.addFriend(new Friend(Integer.toString(result.id), friend
+                    .subscribe(result -> {  mFacebookFriends.add(new Friend(Integer.toString(result.id), friend
                                     .firstName, friend.lastName, friend.fullName, result.username, friend.picture,
                                     friend.cover, friend.email));
                                     mAdapter.notifyDataSetChanged();
@@ -573,6 +597,4 @@ public class FriendsDialogFragment extends DialogFragment {
             return view;
         }
     }
-
-
 }

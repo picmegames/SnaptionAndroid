@@ -23,10 +23,17 @@ import java.util.List;
 public class FriendsAdapter extends RecyclerView.Adapter {
     private List<Friend> mFriends;
     private List<String> mSelected;
+    private boolean mSelectable;
+    public static final float DIM = .6F, BRIGHT = 1F;
 
     public FriendsAdapter(List<Friend> friends) {
         this.mFriends = friends;
         mSelected = new ArrayList<>();
+        mSelectable = false;
+    }
+
+    public void setSelectable() {
+        mSelectable = true;
     }
 
     @Override
@@ -40,6 +47,11 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         FriendViewHolder holder = (FriendViewHolder) viewHolder;
         Friend curFriend = mFriends.get(position);
+        if (mSelected.contains(curFriend.id) || !mSelectable) {
+            holder.itemView.setAlpha(BRIGHT);
+        } else {
+            holder.itemView.setAlpha(DIM);
+        }
 
         holder.mName.setText(curFriend.fullName);
         holder.mUserName.setText(curFriend.userName);
