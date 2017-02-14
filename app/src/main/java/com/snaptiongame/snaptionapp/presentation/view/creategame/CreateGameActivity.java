@@ -3,23 +3,35 @@ package com.snaptiongame.snaptionapp.presentation.view.creategame;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 /**
@@ -37,8 +49,13 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    Spinner mCategorySpinner;
    @BindView(R.id.public_switch)
    Switch mPublicSwitch;
+   @BindView(R.id.add_friends)
+   Button mAddFriendsButton;
 
    private CreateGameContract.Presenter mPresenter;
+
+   private FriendsAdapter mAdapter;
+   private LinearLayoutManager mLayoutManager;
 
    private AuthenticationManager mAuthManager;
    private Uri mUri;
@@ -53,7 +70,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
       assignSpinnerValues();
 
-      mPresenter = new CreateGamePresenter(this);
+      mAdapter = new FriendsAdapter(new ArrayList<>());
+      mLayoutManager = new LinearLayoutManager(this);
+
+      mPresenter = new CreateGamePresenter(mAuthManager.getSnaptionUserId(), this);
    }
 
    @Override
@@ -72,6 +92,35 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    public void createGame() {
       mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(),
             mAuthManager.getSnaptionUserId(), !mPublicSwitch.isChecked());
+   }
+
+   @OnClick(R.id.add_friends)
+   public void addFriends() {
+      new MaterialDialog.Builder(this)
+            .title(R.string.add_friends)
+            .adapter(mAdapter, mLayoutManager)
+            .positiveText(R.string.ok)
+            .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+               Toast.makeText(this, R.string.friends_added, Toast.LENGTH_LONG).show()
+            )
+            .cancelable(true)
+            .show();
+   }
+
+   @OnCheckedChanged(R.id.public_switch)
+   public void switchChanged() {
+      if (mPublicSwitch.isChecked()) {
+         mAddFriendsButton.setVisibility(View.VISIBLE);
+      }
+      else {
+         mAddFriendsButton.setVisibility(View.GONE);
+      }
+   }
+
+   @Override
+   public void setFriends(List<Friend> friends) {
+      mAdapter.setFriends(friends);
+      mAdapter.notifyDataSetChanged();
    }
 
    @Override

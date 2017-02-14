@@ -4,8 +4,11 @@ import android.content.ContentResolver;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
+import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.BasePresenter;
 import com.snaptiongame.snaptionapp.presentation.BaseView;
+
+import java.util.List;
 
 /**
  * @author Tyler Wong
@@ -17,6 +20,7 @@ public class CreateGameContract {
       void onBackPressed();
       void showCreateSuccess();
       void showCreateFailure();
+      void setFriends(List<Friend> friends);
    }
 
    interface Presenter extends BasePresenter {
