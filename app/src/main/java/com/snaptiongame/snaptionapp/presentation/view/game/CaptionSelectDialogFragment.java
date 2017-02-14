@@ -3,6 +3,7 @@ package com.snaptiongame.snaptionapp.presentation.view.game;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -16,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.snaptiongame.snaptionapp.R;
@@ -77,6 +79,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private LinearLayoutManager mLinearLayoutManager;
     private View mDialogView;
     private TextInputLayout fitBEditTextLayout;
+    private TextInputEditText fitBEditText;
 
     private FITBCaptionAdapter mFitBAdapter;
     private ArrayList<FitBCaption> mFitBCaptions = new ArrayList<>();
@@ -88,6 +91,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     private View curSelectedFitBView;
     private int curFitbPos;
+    private TextWatcher captionClickListener;
 
     private AuthenticationManager mAuth;
 
@@ -184,6 +188,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
             mDialogBuilder.setView(mDialogView);
             fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
+            fitBEditText = (TextInputEditText) fitBEditTextLayout.findViewById(R.id.fitbEditText);
+
         }
 
         return mDialogBuilder.create();
@@ -224,22 +230,30 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             afterText = textPieces[1];
 
         String finalAfterText = afterText;
-        ((EditText) (fitBEditTextLayout.findViewById(R.id.fitbEditText))).addTextChangedListener(
-                new TextWatcher() {
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        holder.mCaptionTemplateTextView.setText("");
-                        holder.mCaptionTemplateTextView.setText(beforeText + s + finalAfterText);
-                    }
+        if (captionClickListener != null)
+            fitBEditText.removeTextChangedListener(captionClickListener);
 
-                    @Override
-                    public void afterTextChanged(Editable s) {}
-                }
-        );
+
+        captionClickListener = new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                holder.mCaptionTemplateTextView.setText("");
+                holder.mCaptionTemplateTextView.setText(beforeText + s + finalAfterText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+        fitBEditText.addTextChangedListener(captionClickListener);
+        fitBEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(fitBEditText, InputMethodManager.SHOW_IMPLICIT);
     }
 
 
