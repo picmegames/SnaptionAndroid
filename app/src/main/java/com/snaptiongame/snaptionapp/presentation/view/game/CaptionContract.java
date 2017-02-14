@@ -11,7 +11,7 @@ public class CaptionContract {
         void captionSetClicked(View v, int position);
     }
     public interface CaptionClickListener {
-        void captionClicked(View v, int position);
+        void captionClicked(View v, int position, FITBCaptionCardViewHolder holder);
     };
 
 }

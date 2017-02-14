@@ -20,7 +20,7 @@ public class FitBCaption {
     @SerializedName(SET_ID)
     public int setID;
     @SerializedName(USER_ENTRY)
-    public String userEntry;
+    public String userEntry = "";
 
     public static final String ID = "id";
     public static final String BEFORE = "before";
@@ -28,6 +28,7 @@ public class FitBCaption {
     public static final String CHAR_LIMIT = "charLimit";
     public static final String SET_ID = "set_id";
     public static final String USER_ENTRY = "userEntry";
+    public final String placeholderText = "______";
 
     public FitBCaption(int id, int charLimit, String beforeBlank, String afterBlank, int setID) {
 

@@ -23,6 +23,8 @@ public class Caption {
    public String picture;
    @SerializedName(FITB_ID_SEND)
    public int fitbIdSend;
+   @SerializedName(FITB)
+   public FitBCaption assocFitB;
 
    public static final String ID = "id";
    public static final String GAME_ID = "game_id";
@@ -32,6 +34,7 @@ public class Caption {
    public static final String FITB_ID_SEND = "fitbId";
    public static final String CAPTION = "userEntry";
    public static final String PICTURE = "picUrl";
+   public static final String FITB = "fitB";
 
    public Caption() {
 
@@ -44,7 +47,7 @@ public class Caption {
    }
 
    public Caption(int id, int gameId, int numVotes, int creatorId, int fitBId,
-                  String caption, String picture) {
+                  String caption, String picture, FitBCaption fitb) {
       this.id = id;
       this.gameId = gameId;
       this.numVotes = numVotes;
@@ -52,5 +55,6 @@ public class Caption {
       this.fitBId = fitBId;
       this.caption = caption;
       this.picture = picture;
+      this.assocFitB = fitb;
    }
 }

@@ -67,6 +67,7 @@ public class GamePresenter implements GameContract.Presenter {
    @Override
    public void addCaption(String caption, int userId, int fitbId) {
 
+
       CaptionProvider.addCaption(mGameId,
             new Caption(fitbId, caption, userId))
             .observeOn(AndroidSchedulers.mainThread())
@@ -106,6 +107,8 @@ public class GamePresenter implements GameContract.Presenter {
    public void unsubscribe() {
       mDisposables.clear();
    }
+
+
 
 
 

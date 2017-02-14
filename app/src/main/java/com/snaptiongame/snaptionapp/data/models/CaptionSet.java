@@ -44,7 +44,7 @@ public class CaptionSet {
 
 
     public int getTotalCaptions() {
-        return mTotalCaptions;
+        return MAX_CAPTIONS;
     }
 
     public int getCaptionsUnlocked() {
