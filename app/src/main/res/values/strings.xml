@@ -44,6 +44,9 @@
     <string name="cancel">Cancel</string>
     <string name="create_success">Successfully created game!</string>
     <string name="create_failure">Unable to create game</string>
+    <string name="add_friends">Add Friends</string>
+    <string name="friends_added">Friends Added!</string>
+    <string name="ok">Ok</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

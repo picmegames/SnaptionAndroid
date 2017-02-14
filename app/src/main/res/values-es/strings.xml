@@ -49,4 +49,8 @@
     <string name="delete_post"> como amigo?</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
+    <string name="add_friends">Añade amigos</string>
+    <string name="friends_added">Amigos agregados!</string>
+    <string name="fill_in_the_blank">¡Llena el espacio en blanco!</string>
+    <string name="ok">De acuerdo</string>
 </resources>
