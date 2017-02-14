@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
@@ -25,9 +26,11 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
    @NonNull
    private CompositeDisposable mDisposables;
 
+   private int mUserId;
    private String mEncodedImage;
 
-   public CreateGamePresenter(@NonNull CreateGameContract.View createGameView) {
+   public CreateGamePresenter(int userId, @NonNull CreateGameContract.View createGameView) {
+      mUserId = userId;
       mCreateGameView = createGameView;
       mDisposables = new CompositeDisposable();
       mCreateGameView.setPresenter(this);
@@ -62,9 +65,20 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                   () -> createGame(drawable, resolver.getType(uri), userId, isPublic));
    }
 
+   private void loadFriends() {
+      mDisposables.clear();
+      Disposable disposable = FriendProvider.loadFriends(mUserId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                  mCreateGameView::setFriends,
+                  Timber::e,
+                  () -> Timber.i("Getting friends was successful"));
+      mDisposables.add(disposable);
+   }
+
    @Override
    public void subscribe() {
-
+      loadFriends();
    }
 
    @Override
