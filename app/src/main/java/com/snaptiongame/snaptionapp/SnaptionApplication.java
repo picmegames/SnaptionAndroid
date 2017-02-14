@@ -25,12 +25,14 @@ import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.User;
+import com.snaptiongame.snaptionapp.data.cookies.PersistentCookieStore;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -99,7 +101,9 @@ public class SnaptionApplication extends Application {
     * @return The development or production OkHttpClient
     */
    public static OkHttpClient makeOkHttpClient() {
-      CookieHandler cookieHandler = new CookieManager();
+      PersistentCookieStore persistentCookieStore = new PersistentCookieStore(getContext());
+      CookieHandler cookieHandler = new CookieManager(persistentCookieStore, CookiePolicy.ACCEPT_ALL);
+      CookieHandler.setDefault(cookieHandler);
       JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
 
       try {
