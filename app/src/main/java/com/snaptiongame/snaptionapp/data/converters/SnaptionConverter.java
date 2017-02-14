@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import java.lang.reflect.Type;
@@ -36,7 +37,19 @@ public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserial
       JsonObject content = json.getAsJsonObject();
       Snaption snaption = new Gson().fromJson(json, typeOfT);
       JsonElement topCaption = content.get("topCaption");
-      snaption.topCaption = new Gson().fromJson(topCaption, Caption.class);
+      if (topCaption != null && topCaption.isJsonObject()) {
+         Caption caption = new Caption();
+         caption.assocFitB = new FitBCaption(0, 0,
+               topCaption.getAsJsonObject().get("fitbBefore").getAsString(),
+               topCaption.getAsJsonObject().get("fitbAfter").getAsString(), 0);
+         caption.caption = topCaption.getAsJsonObject().get(Caption.CAPTION).getAsString();
+         JsonElement picture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE);
+         if (!picture.isJsonNull()) {
+            caption.creatorPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE).getAsString();
+         }
+         caption.creatorName = topCaption.getAsJsonObject().get(Caption.USER_NAME).getAsString();
+         snaption.topCaption = caption;
+      }
       return snaption;
    }
 }

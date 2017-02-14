@@ -15,6 +15,7 @@ import java.util.List;
 public class GameContract {
    interface View extends BaseView<Presenter> {
       void showCaptions(List<Caption> captions);
+      void addCaption(Caption caption);
    }
 
    interface Presenter extends BasePresenter {
@@ -27,11 +28,5 @@ public class GameContract {
    interface CaptionDialogView extends BaseView<Presenter> {
       void showFitBCaptions(List<FitBCaption> captions);
       void showCaptionSets(List<CaptionSet> captionSets);
-      void addCaption(Caption caption);
-
    }
-
-
-
-
 }

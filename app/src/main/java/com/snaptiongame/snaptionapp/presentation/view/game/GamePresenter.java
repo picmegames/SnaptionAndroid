@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.CaptionSet;
-import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
 
 import java.util.List;
@@ -34,11 +32,8 @@ public class GamePresenter implements GameContract.Presenter {
    public GamePresenter(int gameId, @NonNull GameContract.View view) {
       mGameId = gameId;
       mGameView = view;
-
       mDisposables = new CompositeDisposable();
       mGameView.setPresenter(this);
-
-
    }
 
    public GamePresenter(int gameId, @NonNull GameContract.CaptionDialogView view) {
@@ -66,12 +61,10 @@ public class GamePresenter implements GameContract.Presenter {
 
    @Override
    public void addCaption(String caption, int userId, int fitbId) {
-
-
       CaptionProvider.addCaption(mGameId,
             new Caption(fitbId, caption, userId))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(mGameDialogView::addCaption, Timber::e, () -> Timber.i("Added caption"));
+            .subscribe(addedCaption -> {}, Timber::e, () -> Timber.i("Added caption"));
    }
 
    @Override

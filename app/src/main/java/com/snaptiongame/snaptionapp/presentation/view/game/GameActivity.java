@@ -2,7 +2,6 @@ package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -10,16 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import java.util.ArrayList;
@@ -99,19 +95,21 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
       mPresenter.unsubscribe();
    }
 
+   @Override
+   public void addCaption(Caption caption) {
+      mAdapter.addCaption(caption);
+   }
+
    @OnClick(R.id.fab)
    public void showAddCaptionDialog() {
       if (!mAuthManager.isLoggedIn()) {
          goToLogin();
       }
       else {
-
          mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
                  CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
                  mGameId, -1);
          mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
-
-
       }
    }
 

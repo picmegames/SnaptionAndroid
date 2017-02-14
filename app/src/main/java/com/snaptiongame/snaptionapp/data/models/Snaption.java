@@ -33,7 +33,7 @@ public class Snaption {
    public static final String ID = "id";
    public static final String USER_ID = "userId";
    public static final String START_DATE = "start_date";
-   public static final String END_DATE = "end_date";
+   public static final String END_DATE = "completedDate";
    public static final String IS_PUBLIC = "isPublic";
    public static final String PICKER_ID = "picker_id";
    public static final String PICKER_NAME = "picker_name";

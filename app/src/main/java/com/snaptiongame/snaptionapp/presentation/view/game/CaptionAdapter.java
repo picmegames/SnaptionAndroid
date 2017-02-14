@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Caption;
@@ -34,19 +36,35 @@ public class CaptionAdapter extends RecyclerView.Adapter {
       CaptionCardViewHolder holder = (CaptionCardViewHolder) viewHolder;
       Caption curCaption = mCaptions.get(position);
 
-      Glide.with(holder.mContext)
-            .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
-            .into(holder.mUserImage);
+      if (curCaption.creatorPicture != null) {
+         Glide.with(holder.mContext)
+               .load(curCaption.creatorPicture)
+               .into(holder.mUserImage);
+      }
+      else {
+         holder.mUserImage.setImageDrawable(TextDrawable.builder()
+               .beginConfig()
+               .width(40)
+               .height(40)
+               .toUpperCase()
+               .endConfig()
+               .buildRound(curCaption.creatorName.substring(0, 1),
+                     ColorGenerator.MATERIAL.getRandomColor()));
+      }
       holder.captionId = curCaption.id;
       holder.mCaption.setText(curCaption.assocFitB.beforeBlank + curCaption.caption + curCaption.assocFitB.afterBlank);
-      //holder.mCaption.setText(curCaption.);
-      holder.mName.setText(curCaption.picture);
+      holder.mName.setText(curCaption.creatorName);
       holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
    }
 
 
    public void setCaptions(List<Caption> captions) {
       this.mCaptions = captions;
+      notifyDataSetChanged();
+   }
+
+   public void addCaption(Caption caption) {
+      this.mCaptions.add(caption);
       notifyDataSetChanged();
    }
 
