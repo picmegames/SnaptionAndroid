@@ -108,7 +108,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
          mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
                  CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
-                 mGameId, -1,  this);
+                 mGameId, -1);
          mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
 
 
@@ -119,7 +119,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
       mCaptionSetDialogFragment.dismiss();
       mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
               CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
-              mGameId, setChosen, this);
+              mGameId, setChosen);
       mCaptionDialogFragment.show(getFragmentManager(), "dialog");
 
    }

@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 
 import java.lang.reflect.Type;
 
@@ -31,6 +32,11 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
    @Override
    public Caption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
          throws JsonParseException {
-      return new Gson().fromJson(json, typeOfT);
+      JsonObject content = json.getAsJsonObject();
+      Caption caption = new Gson().fromJson(json, typeOfT);
+      JsonElement fitBCaption = content.get("fitb");
+      caption.assocFitB = new Gson().fromJson(fitBCaption, FitBCaption.class);
+
+      return caption;
    }
 }

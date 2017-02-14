@@ -2,6 +2,8 @@ package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,4 +84,45 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+
+
+    /*
+     /*
+   String[] textPieces = holder.mCaptionTemplateTextView.getText().toString().split(FITB_PLACEHOLDER);
+
+        final String beforeText = textPieces[0];
+        String afterText = "";
+
+
+        String finalAfterText = afterText;
+        ((EditText) (fitBEditTextLayout.findViewById(R.id.fitbEditText))).addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        holder.mCaptionTemplateTextView.setText("");
+
+
+
+                        holder.mCaptionTemplateTextView.setText(beforeText + s + finalAfterText);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                }
+        );
+    */
+
+
 }

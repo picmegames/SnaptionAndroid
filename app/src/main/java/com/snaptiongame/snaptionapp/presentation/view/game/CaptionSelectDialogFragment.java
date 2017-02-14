@@ -96,8 +96,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     public CaptionSelectDialogFragment() {
     }
 
-    static CaptionSelectDialogFragment newInstance(CaptionDialogToShow dialogToShow, int gameId, int setId,
-                                                   Activity gameActivity) {
+    static CaptionSelectDialogFragment newInstance(CaptionDialogToShow dialogToShow, int gameId, int setId) {
         CaptionSelectDialogFragment newFragment = new CaptionSelectDialogFragment();
 
         Bundle args = new Bundle();
@@ -215,12 +214,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mCaptionSetAdapter.setCaptionSets(captionSets);
     }
 
-    //TODO This still doesn't work
     @Override
-    public void addCaption(Caption caption) {
-        //System.out.println("JHER");
-
-    }
+    public void addCaption(Caption caption) {}
 
     @Override
     public void setPresenter(GameContract.Presenter presenter) {
@@ -238,42 +233,34 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         curFitbPos = position;
         fitBEditTextLayout.setVisibility(View.VISIBLE);
 
-
         String[] textPieces = holder.mCaptionTemplateTextView.getText().toString().split(FITB_PLACEHOLDER);
 
         final String beforeText = textPieces[0];
         String afterText = "";
-
+        if (textPieces.length >= 2)
+            afterText = textPieces[1];
 
         String finalAfterText = afterText;
         ((EditText) (fitBEditTextLayout.findViewById(R.id.fitbEditText))).addTextChangedListener(
                 new TextWatcher() {
 
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-
-
-
-                    }
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         holder.mCaptionTemplateTextView.setText("");
-
-
-
                         holder.mCaptionTemplateTextView.setText(beforeText + s + finalAfterText);
                     }
 
                     @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
+                    public void afterTextChanged(Editable s) {}
                 }
         );
-
     }
+
+
+
 
 
 }
