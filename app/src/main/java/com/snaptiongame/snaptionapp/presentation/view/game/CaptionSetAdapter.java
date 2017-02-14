@@ -18,7 +18,7 @@ import java.util.List;
 public class CaptionSetAdapter extends RecyclerView.Adapter{
     public static final float NON_ACTIVE_SET_FADE = .25f;
     private List<CaptionSet> mSets;
-    private static CaptionContract.CaptionSetClickListener mCaptionSetClickListener;
+    private CaptionContract.CaptionSetClickListener mCaptionSetClickListener;
 
     public CaptionSetAdapter(List<CaptionSet> sets, CaptionContract.CaptionSetClickListener captionSetClickListener) {
         mSets = sets;
