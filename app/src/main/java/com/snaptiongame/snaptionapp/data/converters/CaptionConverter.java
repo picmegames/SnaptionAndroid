@@ -34,9 +34,18 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
          throws JsonParseException {
       JsonObject content = json.getAsJsonObject();
       Caption caption = new Gson().fromJson(json, typeOfT);
+      JsonElement creator = content.get("creator");
+      if (creator.isJsonObject()) {
+         caption.creatorName = creator.getAsJsonObject().get("username").getAsString();
+         JsonElement picture = creator.getAsJsonObject().get("picture");
+         if (!picture.isJsonNull()) {
+            caption.creatorPicture = picture.getAsString();
+         }
+      }
       JsonElement fitBCaption = content.get("fitb");
-      caption.assocFitB = new Gson().fromJson(fitBCaption, FitBCaption.class);
-
+      if (fitBCaption.isJsonObject()) {
+         caption.assocFitB = new Gson().fromJson(fitBCaption, FitBCaption.class);
+      }
       return caption;
    }
 }

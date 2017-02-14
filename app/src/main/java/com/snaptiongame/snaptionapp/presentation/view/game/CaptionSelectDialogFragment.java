@@ -1,6 +1,5 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -21,7 +20,6 @@ import android.widget.EditText;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 
@@ -140,25 +138,15 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mDialogBuilder.setTitle(mDialogTitle);
 
         if (mDialogToShow == CaptionDialogToShow.CAPTION_CHOOSER) {
-            mDialogBuilder.setPositiveButton(sPositiveButtonText, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //TODO Backend still needs to do this
-                    String userText = ((TextInputEditText)
-                            fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
+            mDialogBuilder.setPositiveButton(sPositiveButtonText, (DialogInterface dialog, int which) -> {
+                String userText = ((TextInputEditText)
+                        fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
 
-                    mPresenter.addCaption(userText, mAuth.getSnaptionUserId(), curFitbPos + FITB_OFFSET);
-
-
-
-                }
+                mPresenter.addCaption(userText, mAuth.getSnaptionUserId(), curFitbPos + FITB_OFFSET);
             });
         }
-        mDialogBuilder.setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow);
-            }
+        mDialogBuilder.setNegativeButton(sNegativeButtonText, (DialogInterface dialog, int which) -> {
+            ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow);
         });
 
 
@@ -181,7 +169,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         }
         //Build view for caption chooser
         else {
-
             mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
             RecyclerView captionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
             mPresenter.loadFitBCaptions();
@@ -199,7 +186,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
         }
 
-
         return mDialogBuilder.create();
     }
 
@@ -213,9 +199,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     public void showCaptionSets(List<CaptionSet> captionSets) {
         mCaptionSetAdapter.setCaptionSets(captionSets);
     }
-
-    @Override
-    public void addCaption(Caption caption) {}
 
     @Override
     public void setPresenter(GameContract.Presenter presenter) {

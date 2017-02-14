@@ -50,9 +50,9 @@ public class WallAdapter extends RecyclerView.Adapter {
       }
 
       if (curSnaption.topCaption != null) {
-         if (curSnaption.topCaption.picture != null) {
+         if (curSnaption.topCaption.creatorPicture != null) {
             Glide.with(holder.mContext)
-                  .load("http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
+                  .load(curSnaption.topCaption.creatorPicture)
                   .into(holder.mCaptionerImage);
          }
          else {
@@ -62,10 +62,11 @@ public class WallAdapter extends RecyclerView.Adapter {
                   .height(40)
                   .toUpperCase()
                   .endConfig()
-                  .buildRound(curSnaption.topCaption.caption.substring(0, 1),
+                  .buildRound(curSnaption.topCaption.creatorName.substring(0, 1),
                         ColorGenerator.MATERIAL.getRandomColor()));
          }
-         holder.mTopCaption.setText(curSnaption.topCaption.caption);
+         holder.mTopCaption.setText(curSnaption.topCaption.assocFitB.beforeBlank
+               + curSnaption.topCaption.caption + curSnaption.topCaption.assocFitB.afterBlank);
       }
       else {
          Glide.with(holder.mContext)
@@ -74,7 +75,7 @@ public class WallAdapter extends RecyclerView.Adapter {
          holder.mTopCaption.setText(holder.mContext.getString(R.string.default_caption));
       }
 
-      if (curSnaption.id < 5) {
+      if (curSnaption.endDate != 0) {
          holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
       }
       else {
