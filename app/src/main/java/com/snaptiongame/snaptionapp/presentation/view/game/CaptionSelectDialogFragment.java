@@ -6,14 +6,18 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
@@ -33,6 +37,9 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.CaptionDialogView,
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
 
+
+    private static final int FITB_OFFSET = 1;
+    public static final String FITB_PLACEHOLDER = "______";
 
     enum CaptionDialogToShow {
         SET_CHOOSER, CAPTION_CHOOSER
@@ -78,10 +85,11 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private CaptionSetAdapter mCaptionSetAdapter;
 
     private GameContract.Presenter mPresenter;
-    static Activity mGameActivity;
     private int mGameId;
     private int mSetId;
 
+    private View curSelectedFitBView;
+    private int curFitbPos;
 
     private AuthenticationManager mAuth;
 
@@ -97,7 +105,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         args.putInt("gameId", gameId);
         args.putInt("setId", setId);
 
-        mGameActivity = gameActivity;
         newFragment.setArguments(args);
 
         return newFragment;
@@ -138,7 +145,12 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //TODO Backend still needs to do this
-                    addCaption(new Caption(1, "LALALAL", mAuth.getSnaptionUserId()));
+                    String userText = ((TextInputEditText)
+                            fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
+
+                    mPresenter.addCaption(userText, mAuth.getSnaptionUserId(), curFitbPos + FITB_OFFSET);
+
+
 
                 }
             });
@@ -146,7 +158,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mDialogBuilder.setNegativeButton(sNegativeButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((GameActivity) mGameActivity).negativeButtonClicked(mDialogToShow);
+                ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow);
             }
         });
 
@@ -206,7 +218,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     //TODO This still doesn't work
     @Override
     public void addCaption(Caption caption) {
-        mPresenter.addCaption(caption.caption, 2, 7);
+        //System.out.println("JHER");
 
     }
 
@@ -217,13 +229,51 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     @Override
     public void captionSetClicked(View v, int position) {
-        ((GameActivity) mGameActivity).displayCaptionChoosingDialog(position);
+        ((GameActivity) getActivity()).displayCaptionChoosingDialog(position);
     }
 
     @Override
-    public void captionClicked(View v, int position) {
-
+    public void captionClicked(View v, int position, FITBCaptionCardViewHolder holder) {
+        curSelectedFitBView = v;
+        curFitbPos = position;
         fitBEditTextLayout.setVisibility(View.VISIBLE);
+
+
+        String[] textPieces = holder.mCaptionTemplateTextView.getText().toString().split(FITB_PLACEHOLDER);
+
+        final String beforeText = textPieces[0];
+        String afterText = "";
+
+
+        String finalAfterText = afterText;
+        ((EditText) (fitBEditTextLayout.findViewById(R.id.fitbEditText))).addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        holder.mCaptionTemplateTextView.setText("");
+
+
+
+                        holder.mCaptionTemplateTextView.setText(beforeText + s + finalAfterText);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                }
+        );
+
     }
+
 
 }

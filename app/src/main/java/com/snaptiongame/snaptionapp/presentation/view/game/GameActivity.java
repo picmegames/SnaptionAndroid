@@ -126,10 +126,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
    public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
 
-      if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER)
+      mCaptionDialogFragment.dismiss();
+      if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER) {
          mCaptionSetDialogFragment.dismiss();
+      }
       else {
-         mCaptionDialogFragment.dismiss();
+
          mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
       }
 

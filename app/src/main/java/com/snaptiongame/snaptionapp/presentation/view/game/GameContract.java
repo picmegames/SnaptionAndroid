@@ -28,6 +28,7 @@ public class GameContract {
       void showFitBCaptions(List<FitBCaption> captions);
       void showCaptionSets(List<CaptionSet> captionSets);
       void addCaption(Caption caption);
+
    }
 
 
