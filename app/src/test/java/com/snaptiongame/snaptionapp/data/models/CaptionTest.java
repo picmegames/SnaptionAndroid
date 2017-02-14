@@ -24,7 +24,7 @@ public class CaptionTest {
 
    @Test
    public void testConstructorCaptio() {
-      Caption caption = new Caption(0, 0, 0, 0, 0, "", "");
+      Caption caption = new Caption(0, 0, 0, 0, 0, "", "", new FitBCaption(0, 0, "", "", 0));
       assertTrue(caption.id == 0);
    }
 }
