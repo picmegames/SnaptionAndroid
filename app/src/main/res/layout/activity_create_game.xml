@@ -106,6 +106,7 @@
                 android:padding="10dp"
                 android:text="@string/create_game"
                 android:textColor="@android:color/white"
+                android:enabled="false"
                 style="?android:attr/buttonBarButtonStyle"/>
         </LinearLayout>
     </RelativeLayout>

@@ -25,6 +25,7 @@ import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;
+import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
    private CreateGameContract.Presenter mPresenter;
 
+   private MaterialDialog mAddFriendsDialog;
    private FriendsAdapter mAdapter;
    private LinearLayoutManager mLayoutManager;
 
@@ -71,6 +73,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
       assignSpinnerValues();
 
       mAdapter = new FriendsAdapter(new ArrayList<>());
+      mAdapter.setSelectable();
       mLayoutManager = new LinearLayoutManager(this);
 
       mPresenter = new CreateGamePresenter(mAuthManager.getSnaptionUserId(), this);
@@ -96,15 +99,22 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
    @OnClick(R.id.add_friends)
    public void addFriends() {
-      new MaterialDialog.Builder(this)
-            .title(R.string.add_friends)
-            .adapter(mAdapter, mLayoutManager)
-            .positiveText(R.string.ok)
-            .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-               Toast.makeText(this, R.string.friends_added, Toast.LENGTH_LONG).show()
-            )
-            .cancelable(true)
-            .show();
+      if (mAddFriendsDialog != null) {
+         mAddFriendsDialog.show();
+      }
+      else {
+         mAddFriendsDialog = new MaterialDialog.Builder(this)
+               .title(R.string.add_friends)
+               .adapter(mAdapter, mLayoutManager)
+               .positiveText(R.string.ok)
+               .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                     Toast.makeText(this, R.string.friends_added, Toast.LENGTH_LONG).show()
+               )
+               .cancelable(true)
+               .show();
+      }
+      mAddFriendsDialog.getRecyclerView().addOnItemTouchListener(
+            new FriendsTouchListener(this, mAdapter));
    }
 
    @OnCheckedChanged(R.id.public_switch)
@@ -137,6 +147,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
       if (resultCode == RESULT_OK) {
+         mAddFriendsButton.setEnabled(true);
          mUri = data.getData();
          Glide.with(this)
                .load(mUri)
