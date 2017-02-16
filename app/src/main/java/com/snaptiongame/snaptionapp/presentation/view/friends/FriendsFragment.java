@@ -27,6 +27,7 @@ import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +38,13 @@ import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
+import static com.snaptiongame.snaptionapp.presentation.view.friends.FriendsDialogFragment.DialogToShow.STANDARD_DIALOG;
+
 /**
  * @author Brian Gouldsberry
  */
 
-public class FriendsFragment extends Fragment implements FriendsContract.View {
+public class FriendsFragment extends Fragment implements FriendsContract.View, Serializable {
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.friend_list)
@@ -59,7 +62,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     private List<Friend> friends = new ArrayList<>();
     private String query = null;
 
-    private AuthenticationManager  mAuthManager;
+    private AuthenticationManager mAuthManager;
     private Unbinder mUnbinder;
     private DialogFragment mDialogFragmentDefault;
     private DialogFragment mDialogFragmentFriendSearch;
@@ -122,7 +125,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
                 if (direction == ItemTouchHelper.LEFT) {
                     int index = viewHolder.getAdapterPosition();
                     DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-                        switch (which){
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE: //yes clicked
                                 int id = Integer.parseInt(mAdapter.getFriends().get(index).id);
                                 removeFriend(id);
@@ -190,7 +193,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @OnClick(R.id.fab)
     public void inviteFriends() {
-        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(FriendsDialogFragment.DialogToShow.STANDARD_DIALOG, this);
+        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(STANDARD_DIALOG, this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
     }
 
@@ -201,29 +204,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mAuthManager.disconnectGoogleApi();
     }
 
-    public void updateFriendsDialog(int whichOptionSelected) {
-        FriendsDialogFragment.DialogToShow dialogToShow = null;
+    public void updateFriendsDialog(FriendsDialogFragment.DialogToShow dialogToShow) {
+
         mDialogFragmentDefault.dismiss();
-
-        /**
-         * Depending on which invite option, the user selects, we want to show them the correct
-         * dialog
-         */
-        switch (whichOptionSelected) {
-            case 0:
-                dialogToShow = FriendsDialogFragment.DialogToShow.PHONE_INVITE;
-                break;
-            case 1:
-                dialogToShow = FriendsDialogFragment.DialogToShow.FACEBOOK_INVITE;
-                break;
-            case 2:
-                dialogToShow = FriendsDialogFragment.DialogToShow.EMAIL_INVITE;
-                break;
-        }
-
         mDialogFragmentFriendSearch = new FriendsDialogFragment().newInstance(dialogToShow, this);
-
-
         mDialogFragmentFriendSearch.show(getActivity().getFragmentManager(), "dialog");
     }
 
@@ -231,20 +215,20 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
      * This method determines what should be shown to a user after they click the negative
      * button on a dialog. For a standard dialog we just want to dismiss the dialog,
      * otherwise we return to the previous dialog
+     *
      * @param whichDialog holder for the type of dialog currently being shown
      */
     public void negativeButtonClicked(FriendsDialogFragment.DialogToShow whichDialog) {
 
-        switch (whichDialog) {
-
-            //Default dialog with all options present
-            case STANDARD_DIALOG:
-                mDialogFragmentDefault.dismiss();
-                break;
-            default:
+        if (whichDialog == STANDARD_DIALOG) {
+            mDialogFragmentDefault.dismiss();
+            if (mDialogFragmentFriendSearch != null)
                 mDialogFragmentFriendSearch.dismiss();
-                mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
-                break;
+        }
+        else {
+            mDialogFragmentFriendSearch.dismiss();
+            mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
+
         }
     }
 
