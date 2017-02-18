@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -92,11 +90,6 @@ public class WallFragment extends Fragment implements WallContract.View {
 
       mAdapter = new WallAdapter(new ArrayList<>());
       mWall.setAdapter(mAdapter);
-
-      ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-      if (actionBar != null) {
-         actionBar.setTitle(R.string.wall_label);
-      }
 
       mRefreshLayout.setOnRefreshListener(mPresenter::loadGames);
 

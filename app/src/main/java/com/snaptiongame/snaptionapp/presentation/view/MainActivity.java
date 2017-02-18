@@ -26,7 +26,7 @@ import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.snaptionapp.presentation.view.settings.PreferencesActivity;
-import com.snaptiongame.snaptionapp.presentation.view.wall.WallFragment;
+import com.snaptiongame.snaptionapp.presentation.view.wall.TabbedWallFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          }
       });
 
-      fragTag = WallFragment.class.getSimpleName();
+      fragTag = TabbedWallFragment.class.getSimpleName();
       mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
       if (mCurrentFragment == null) {
-         mCurrentFragment = new WallFragment();
+         mCurrentFragment = new TabbedWallFragment();
       }
 
       getSupportFragmentManager().beginTransaction()
@@ -178,10 +178,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
       switch (item.getItemId()) {
          case R.id.wall:
-            fragTag = WallFragment.class.getSimpleName();
+            fragTag = TabbedWallFragment.class.getSimpleName();
             mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
-               mCurrentFragment = WallFragment.getInstance();
+               mCurrentFragment = TabbedWallFragment.getInstance();
             }
             break;
 

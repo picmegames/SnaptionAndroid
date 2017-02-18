@@ -230,7 +230,7 @@ public final class AuthenticationManager {
 
    private void clearLoginInfo() {
       SharedPreferences.Editor editor = preferences.edit();
-      editor.putString(SNAPTION_USER_ID, "");
+      editor.putInt(SNAPTION_USER_ID, 0);
       editor.putString(SNAPTION_USERNAME, "");
       editor.putString(PROFILE_IMAGE_URL, "");
       editor.putString(FULL_NAME, "");
