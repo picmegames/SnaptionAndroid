@@ -32,6 +32,8 @@ public class TabbedWallFragment extends Fragment {
    private Unbinder mUnbinder;
    private WallPageAdapter mWallPageAdapter;
 
+   public static final String TAG = TabbedWallFragment.class.getSimpleName();
+
    public static TabbedWallFragment getInstance() {
       return new TabbedWallFragment();
    }

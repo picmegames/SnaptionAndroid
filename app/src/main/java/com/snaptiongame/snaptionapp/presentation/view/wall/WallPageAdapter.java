@@ -37,7 +37,7 @@ public class WallPageAdapter extends FragmentPagerAdapter {
    public Fragment getItem(int position) {
       switch (position) {
          case PUBLIC:
-            fragTag = WallFragment.class.getSimpleName();
+            fragTag = WallFragment.TAG;
             mCurrentFragment = mManager.findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
                mCurrentFragment = WallFragment.getInstance();
@@ -45,7 +45,7 @@ public class WallPageAdapter extends FragmentPagerAdapter {
             break;
 
          case PRIVATE:
-            fragTag = WallFragment.class.getSimpleName();
+            fragTag = WallFragment.TAG;
             mCurrentFragment = mManager.findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
                mCurrentFragment = WallFragment.getInstance();
