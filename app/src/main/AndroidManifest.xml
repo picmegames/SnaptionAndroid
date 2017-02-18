@@ -43,7 +43,7 @@
             android:name=".presentation.view.profile.ProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/ProfileTheme"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity

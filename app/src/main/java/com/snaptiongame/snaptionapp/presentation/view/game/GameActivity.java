@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +35,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    Toolbar mToolbar;
    @BindView(R.id.fab)
    FloatingActionButton mFab;
+   @BindView(R.id.refresh_layout)
+   SwipeRefreshLayout mRefreshLayout;
    @BindView(R.id.caption_list)
    RecyclerView mCaptionList;
    @BindView(R.id.game_image)
@@ -76,6 +79,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             .into(mImage);
       mGameId = intent.getIntExtra("gameId", 0);
       mPresenter = new GamePresenter(mGameId, this);
+      mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
    }
 
    @Override
@@ -87,6 +91,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    protected void onResume() {
       super.onResume();
       mPresenter.subscribe();
+      mRefreshLayout.setRefreshing(true);
    }
 
    @Override
@@ -147,6 +152,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    @Override
    public void showCaptions(List<Caption> captions) {
       mAdapter.setCaptions(captions);
+      mRefreshLayout.setRefreshing(false);
    }
 
 

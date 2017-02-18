@@ -79,6 +79,7 @@ public class WallFragment extends Fragment implements WallContract.View {
       View view = inflater.inflate(R.layout.wall_fragment, container, false);
       mUnbinder = ButterKnife.bind(this, view);
       mPresenter = new WallPresenter(this);
+      mAuthManager = AuthenticationManager.getInstance(getContext());
 
       mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
       mWall.addItemDecoration(new SpacesItemDecoration(
@@ -92,27 +93,14 @@ public class WallFragment extends Fragment implements WallContract.View {
       mAdapter = new WallAdapter(new ArrayList<>());
       mWall.setAdapter(mAdapter);
 
-      mRefreshLayout.setOnRefreshListener(mPresenter::loadGames);
-
-      return view;
-   }
-
-   /**
-    * This method is called after the view has been created and handles
-    * any extra setup for the fragment.
-    *
-    * @param view The view that contains the fragment's view
-    * @param savedInstanceState The saved state of the fragment if any
-    */
-   @Override
-   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-      mAuthManager = AuthenticationManager.getInstance(getContext());
-
       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {
          actionBar.setTitle(R.string.wall_label);
       }
+
+      mRefreshLayout.setOnRefreshListener(mPresenter::loadGames);
+
+      return view;
    }
 
    /**
@@ -123,6 +111,7 @@ public class WallFragment extends Fragment implements WallContract.View {
    public void onResume() {
       super.onResume();
       mPresenter.subscribe();
+      mRefreshLayout.setRefreshing(true);
    }
 
    /**
