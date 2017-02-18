@@ -64,7 +64,7 @@ public interface SnaptionApiService {
     * This method sends a request to add a friend
     * with a POST request.
     *
-    * @param userID The id of the user to be added
+    * @param userID        The id of the user to be added
     * @param friendRequest The AddFriendRequest body
     * @return An observable that emits an AddFriendRequest object
     */
@@ -75,7 +75,7 @@ public interface SnaptionApiService {
     * This method sends a request to delete a friend
     * with a custom DELETE request.
     *
-    * @param userID The id of the user to be deleted
+    * @param userID        The id of the user to be deleted
     * @param friendRequest The AddFriendRequest body
     * @return An observable that emits an AddFriendRequest object
     */
@@ -104,7 +104,7 @@ public interface SnaptionApiService {
     * This method sends a request to update a user with a PUT request.
     *
     * @param userId The id of the user to be updated
-    * @param user The new updated information for the user
+    * @param user   The new updated information for the user
     * @return An observable that emits a User object
     */
    @PUT("/Users/{userId}/")
@@ -163,7 +163,7 @@ public interface SnaptionApiService {
     * This method sends a request to add a caption to a game
     * with a POST request.
     *
-    * @param gameId The id of the game we are adding a caption to
+    * @param gameId  The id of the game we are adding a caption to
     * @param caption The caption to be added
     * @return An observable that emits a Caption object
     */
@@ -183,15 +183,26 @@ public interface SnaptionApiService {
    /**
     * This method sends a request to retrieve all fill in the blank from snaption.
     * Uses a GET request
+    *
     * @return An observable that emits a list of Fill in the Blank Captions
-     */
+    */
    @GET("/FitB/")
    Observable<List<FitBCaption>> getFitBCaptions();
 
    /**
     * This method sends a request to retrieve all Caption Sets available to a user
+    *
     * @return An observable that emits a list of Caption Sets
-     */
+    */
    @GET("/FitBSet")
    Observable<List<CaptionSet>> getCaptionSets();
+
+   /**
+    * This method sends a request to retrieve all the user's Facebook friends that
+    * have logged into Snaption
+    *
+    * @return An observable that emits a list of Friends
+    */
+   @GET("/Social/Friends/")
+   Observable<List<Friend>> getFacebookFriends();
 }

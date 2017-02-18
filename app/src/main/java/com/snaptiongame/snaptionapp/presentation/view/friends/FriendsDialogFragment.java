@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
@@ -452,37 +451,29 @@ public class FriendsDialogFragment extends DialogFragment {
     private void addFriend(int userId) {
         FriendProvider.addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(request -> {
-                }, Timber::e, () -> Timber.i("Successfully added friend!"));
+                .subscribe(
+                      request -> {
+                      },
+                      Timber::e,
+                      () -> Timber.i("Successfully added friend!")
+                );
     }
 
     private void loadFacebookFriends() {
         FriendProvider.getFacebookFriends()
-                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                       this::fillFacebookFriends,
                       Timber::e,
-                      () -> {
-                      }
+                      () -> Timber.i("Successfully loaded Facebook friends!")
                 );
     }
 
     //(String id, String first, String last, String fullName, String userName, String picture,
     //String cover, String email)
     private void fillFacebookFriends(List<Friend> friends) {
-        for (int i = 0; i < friends.size(); i++) {
-            final Friend friend = friends.get(i);
-            UserProvider.getUserWithFacebook(friends.get(i).id)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> {  mFacebookFriends.add(new Friend(Integer.toString(result.id), friend
-                                    .firstName, friend.lastName, friend.fullName, result.username, friend.picture,
-                                    friend.cover, friend.email));
-                                    mAdapter.notifyDataSetChanged();
-                                },
-                                Timber::e, () -> {});
-        }
+        mAdapter.setFriends(friends);
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
