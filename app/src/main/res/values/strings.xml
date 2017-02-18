@@ -23,6 +23,7 @@
     <string name="friends_label">Friends</string>
     <string name="profile_label">Profile</string>
     <string name="settings_label">Settings</string>
+    <string name="version_label">Version</string>
     <string name="log_out_label">Log Out</string>
     <string name="share">Share</string>
     <string name="create_game">Create Game</string>

@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
@@ -71,11 +74,29 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
          mActionBar.setTitle(getString(R.string.add_caption));
       }
 
+      supportPostponeEnterTransition();
+
       Intent intent = getIntent();
 
       Glide.with(this)
             .load(intent.getStringExtra("image"))
-            .centerCrop()
+            .fitCenter()
+            .dontAnimate()
+            .listener(new RequestListener<String, GlideDrawable>() {
+               @Override
+               public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+                                          boolean isFirstResource) {
+                  supportStartPostponedEnterTransition();
+                  return false;
+               }
+
+               @Override
+               public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                              boolean isFromMemoryCache, boolean isFirstResource) {
+                  supportStartPostponedEnterTransition();
+                  return false;
+               }
+            })
             .into(mImage);
       mGameId = intent.getIntExtra("gameId", 0);
       mPresenter = new GamePresenter(mGameId, this);

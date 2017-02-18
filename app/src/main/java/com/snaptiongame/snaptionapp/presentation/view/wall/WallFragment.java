@@ -132,7 +132,6 @@ public class WallFragment extends Fragment implements WallContract.View {
     */
    @Override
    public void showGames(List<Snaption> snaptions) {
-      mAdapter.clearSnaptions();
       mAdapter.setSnaptions(snaptions);
       mRefreshLayout.setRefreshing(false);
    }

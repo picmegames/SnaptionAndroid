@@ -49,7 +49,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
                .toUpperCase()
                .endConfig()
                .buildRound(curCaption.creatorName.substring(0, 1),
-                     ColorGenerator.MATERIAL.getRandomColor()));
+                     ColorGenerator.MATERIAL.getColor(curCaption.creatorName)));
       }
       holder.captionId = curCaption.id;
       holder.mCaption.setText(curCaption.assocFitB.beforeBlank + curCaption.caption + curCaption.assocFitB.afterBlank);
@@ -57,14 +57,15 @@ public class CaptionAdapter extends RecyclerView.Adapter {
       holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
    }
 
-
    public void setCaptions(List<Caption> captions) {
-      this.mCaptions = captions;
-      notifyDataSetChanged();
+      if (!mCaptions.equals(captions)) {
+         mCaptions = captions;
+         notifyDataSetChanged();
+      }
    }
 
    public void addCaption(Caption caption) {
-      this.mCaptions.add(caption);
+      mCaptions.add(caption);
       notifyDataSetChanged();
    }
 

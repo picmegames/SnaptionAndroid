@@ -59,4 +59,10 @@ public class Caption {
       this.caption = caption;
       this.assocFitB = fitb;
    }
+
+   @Override
+   public boolean equals(Object obj) {
+      return obj.getClass() == Caption.class
+            && this.id == ((Caption) obj).id;
+   }
 }

@@ -28,6 +28,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.User;
@@ -98,6 +101,8 @@ public class ProfileActivity extends AppCompatActivity
 
       String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);
       String profileUrl = getIntent().getStringExtra(AuthenticationManager.PROFILE_IMAGE_URL);
+
+      supportPostponeEnterTransition();
 
       updateProfilePicture(profileUrl);
 
@@ -192,6 +197,22 @@ public class ProfileActivity extends AppCompatActivity
 
       Glide.with(this)
             .load(profileUrl)
+            .dontAnimate()
+            .listener(new RequestListener<String, GlideDrawable>() {
+               @Override
+               public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+                                          boolean isFirstResource) {
+                  supportStartPostponedEnterTransition();
+                  return false;
+               }
+
+               @Override
+               public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                              boolean isFromMemoryCache, boolean isFirstResource) {
+                  supportStartPostponedEnterTransition();
+                  return false;
+               }
+            })
             .into(mProfileImg);
 
       Glide.with(this)

@@ -6,26 +6,25 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:descendantFocusability="beforeDescendants"
-                android:fitsSystemWindows="true"
                 android:focusableInTouchMode="true">
-
-    <ImageView
-        android:id="@+id/game_image"
-        android:layout_width="match_parent"
-        android:layout_height="275dp"
-        android:contentDescription="@string/app_name"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:transitionName="@string/shared_transition"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@null"
+        android:background="@color/colorPrimary"
         app:layout_collapseMode="pin"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/AppBarTheme"/>
+
+    <ImageView
+        android:id="@+id/game_image"
+        android:layout_width="match_parent"
+        android:layout_height="275dp"
+        android:layout_below="@id/toolbar"
+        android:contentDescription="@string/app_name"
+        android:orientation="vertical"
+        android:transitionName="@string/shared_transition"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"

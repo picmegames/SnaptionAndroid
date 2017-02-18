@@ -66,4 +66,10 @@ public class Snaption {
       this.picture = picture;
       this.type = type;
    }
+
+   @Override
+   public boolean equals(Object obj) {
+      return obj.getClass() == Snaption.class
+            && this.id == ((Snaption) obj).id;
+   }
 }
