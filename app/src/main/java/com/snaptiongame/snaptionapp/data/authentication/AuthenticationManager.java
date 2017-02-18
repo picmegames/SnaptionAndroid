@@ -123,7 +123,6 @@ public final class AuthenticationManager {
                         email = object.getString("email");
 
                         saveLoginInfo(profileImageUrl, name, email);
-                        FriendProvider.loadUserFriends();
                      }
                      catch (JSONException e) {
                         Timber.e(e);
