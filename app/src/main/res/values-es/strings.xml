@@ -56,4 +56,5 @@
     <string name="version_label">Versión</string>
     <string name="tags_label">Etiquetas</string>
     <string name="add_tags_label">Añadir algunas etiquetas!</string>
+    <string name="date_label">Fecha final</string>
 </resources>

@@ -45,7 +45,6 @@ public class WallPresenter implements WallContract.Presenter {
     */
    @Override
    public void loadGames() {
-      mDisposables.clear();
       Disposable disposable = SnaptionProvider.getAllSnaptions()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

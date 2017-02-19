@@ -1,5 +1,6 @@
 package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,17 +9,17 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -27,11 +28,10 @@ import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.Friend;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,6 +61,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    RelativeLayout mFriendsView;
    @BindView(R.id.friends_chip_view)
    NachoTextView mFriendsTextView;
+   @BindView(R.id.set_date_field)
+   TextView mDateLabel;
 
    private ActionBar mActionBar;
 
@@ -68,6 +70,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
    private AuthenticationManager mAuthManager;
    private Uri mUri;
+   private Calendar mCalendar;
+   private int mYear;
+   private int mMonth;
+   private int mDayOfMonth;
+   private String mFormattedDate;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,6 +103,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
       mFriendsTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
       mFriendsTextView.enableEditChipOnTouch(false, true);
 
+      mCalendar = Calendar.getInstance();
+      mCalendar.add(Calendar.DATE, 1);
+      mYear = mCalendar.get(Calendar.YEAR);
+      mMonth = mCalendar.get(Calendar.MONTH);
+      mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
+      mFormattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(mCalendar.getTime());
+      mDateLabel.setText(mFormattedDate);
+
       mPresenter = new CreateGamePresenter(mAuthManager.getSnaptionUserId(), this);
    }
 
@@ -122,6 +137,17 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    public void createGame() {
       mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(),
             mAuthManager.getSnaptionUserId(), !mPrivateSwitch.isChecked());
+   }
+
+   @OnClick(R.id.set_date_field)
+   public void showDatePicker() {
+      DatePickerDialog datePickerDialog = new DatePickerDialog(this, (DatePicker view, int year, int month, int dayOfMonth) -> {
+         mYear = year;
+         mMonth = month;
+         mDayOfMonth = dayOfMonth;
+         mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+      }, mYear, mMonth, mDayOfMonth);
+      datePickerDialog.show();
    }
 
    @OnCheckedChanged(R.id.private_switch)

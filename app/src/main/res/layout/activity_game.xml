@@ -17,11 +17,35 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/AppBarTheme"/>
 
+    <LinearLayout
+        android:id="@+id/picker_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="@null">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/picker_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/picker_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/game_image"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/picker_view"
         android:contentDescription="@string/app_name"
         android:orientation="vertical"
         android:transitionName="@string/shared_transition"/>
@@ -43,10 +67,10 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/game_image"
+        android:layout_alignEnd="@id/game_image"
         android:layout_marginBottom="-28dp"
         android:layout_marginEnd="16dp"
-        android:layout_alignEnd="@id/game_image"
-        android:layout_alignBottom="@id/game_image"
         android:clickable="true"
         android:src="@drawable/ic_add_white_24dp"
         app:backgroundTint="@color/colorAccent"
