@@ -81,6 +81,9 @@ dependencies {
     // Material Dialogs
     compile "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
 
+    // Nachos
+    compile "com.hootsuite.android:nachos:$rootProject.nachosVersion"
+
     // Facebook Login
     compile "com.facebook.android:facebook-android-sdk:$rootProject.facebookSdkVersion"
 

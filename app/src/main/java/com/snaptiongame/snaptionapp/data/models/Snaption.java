@@ -70,6 +70,8 @@ public class Snaption {
    @Override
    public boolean equals(Object obj) {
       return obj.getClass() == Snaption.class
-            && this.id == ((Snaption) obj).id;
+            && this.id == ((Snaption) obj).id
+            && ((this.topCaption == null && ((Snaption) obj).topCaption == null)
+            || (this.topCaption != null && this.topCaption.equals(((Snaption) obj).topCaption)));
    }
 }

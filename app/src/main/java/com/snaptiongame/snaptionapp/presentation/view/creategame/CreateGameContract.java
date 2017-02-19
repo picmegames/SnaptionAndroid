@@ -8,8 +8,6 @@ import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.BasePresenter;
 import com.snaptiongame.snaptionapp.presentation.BaseView;
 
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
@@ -20,11 +18,12 @@ public class CreateGameContract {
       void onBackPressed();
       void showCreateSuccess();
       void showCreateFailure();
-      void setFriends(List<Friend> friends);
+      void setFriendNames(String[] friendNames);
    }
 
    interface Presenter extends BasePresenter {
       void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic);
       void createGame(Drawable drawable, String type, int userId, boolean isPublic);
+      Friend getFriendByName(String name);
    }
 }

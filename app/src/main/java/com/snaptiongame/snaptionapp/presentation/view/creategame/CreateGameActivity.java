@@ -3,29 +3,32 @@ package com.snaptiongame.snaptionapp.presentation.view.creategame;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,24 +45,26 @@ import butterknife.OnClick;
 public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
    @BindView(R.id.layout)
    CoordinatorLayout mLayout;
+   @BindView(R.id.toolbar)
+   Toolbar mToolbar;
    @BindView(R.id.image)
    ImageView mNewGameImage;
    @BindView(R.id.content_spinner)
    Spinner mContentSpinner;
-   @BindView(R.id.category_spinner)
-   Spinner mCategorySpinner;
-   @BindView(R.id.public_switch)
-   Switch mPublicSwitch;
-   @BindView(R.id.add_friends)
-   Button mAddFriendsButton;
+   @BindView(R.id.private_switch)
+   Switch mPrivateSwitch;
    @BindView(R.id.create_game)
    Button mCreateGameButton;
+   @BindView(R.id.tag_chip_view)
+   NachoTextView mTagTextView;
+   @BindView(R.id.add_friends_view)
+   RelativeLayout mFriendsView;
+   @BindView(R.id.friends_chip_view)
+   NachoTextView mFriendsTextView;
+
+   private ActionBar mActionBar;
 
    private CreateGameContract.Presenter mPresenter;
-
-   private MaterialDialog mAddFriendsDialog;
-   private FriendsAdapter mAdapter;
-   private LinearLayoutManager mLayoutManager;
 
    private AuthenticationManager mAuthManager;
    private Uri mUri;
@@ -72,13 +77,33 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
       mAuthManager = AuthenticationManager.getInstance(this);
 
-      assignSpinnerValues();
+      assignValues();
 
-      mAdapter = new FriendsAdapter(new ArrayList<>());
-      mAdapter.setSelectable();
-      mLayoutManager = new LinearLayoutManager(this);
+      setSupportActionBar(mToolbar);
+      mActionBar = getSupportActionBar();
+
+      if (mActionBar != null) {
+         mActionBar.setDisplayHomeAsUpEnabled(true);
+         mActionBar.setTitle(getString(R.string.create_game));
+      }
+
+      mTagTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+      mTagTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+      mTagTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+      mTagTextView.enableEditChipOnTouch(false, true);
+      mFriendsTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+      mFriendsTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+      mFriendsTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+      mFriendsTextView.enableEditChipOnTouch(false, true);
 
       mPresenter = new CreateGamePresenter(mAuthManager.getSnaptionUserId(), this);
+   }
+
+   private void assignValues() {
+      ArrayAdapter contentAdapter = ArrayAdapter.createFromResource(this,
+            R.array.content_ratings_array, android.R.layout.simple_spinner_item);
+      contentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      mContentSpinner.setAdapter(contentAdapter);
    }
 
    @Override
@@ -96,43 +121,24 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    @OnClick(R.id.create_game)
    public void createGame() {
       mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(),
-            mAuthManager.getSnaptionUserId(), !mPublicSwitch.isChecked());
+            mAuthManager.getSnaptionUserId(), !mPrivateSwitch.isChecked());
    }
 
-   @OnClick(R.id.add_friends)
-   public void addFriends() {
-      if (mAddFriendsDialog != null) {
-         mAddFriendsDialog.show();
-      }
-      else {
-         mAddFriendsDialog = new MaterialDialog.Builder(this)
-               .title(R.string.add_friends)
-               .adapter(mAdapter, mLayoutManager)
-               .positiveText(R.string.ok)
-               .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                     Toast.makeText(this, R.string.friends_added, Toast.LENGTH_LONG).show()
-               )
-               .cancelable(true)
-               .show();
-      }
-      mAddFriendsDialog.getRecyclerView().addOnItemTouchListener(
-            new FriendsTouchListener(this, mAdapter));
-   }
-
-   @OnCheckedChanged(R.id.public_switch)
+   @OnCheckedChanged(R.id.private_switch)
    public void switchChanged() {
-      if (mPublicSwitch.isChecked()) {
-         mAddFriendsButton.setVisibility(View.VISIBLE);
+      if (mPrivateSwitch.isChecked()) {
+         mFriendsView.setVisibility(View.VISIBLE);
       }
       else {
-         mAddFriendsButton.setVisibility(View.GONE);
+         mFriendsView.setVisibility(View.GONE);
       }
    }
 
    @Override
-   public void setFriends(List<Friend> friends) {
-      mAdapter.setFriends(friends);
-      mAdapter.notifyDataSetChanged();
+   public void setFriendNames(String[] friends) {
+      ArrayAdapter<String> friendsAdapter = new ArrayAdapter<>(
+            this, android.R.layout.simple_expandable_list_item_1, friends);
+      mFriendsTextView.setAdapter(friendsAdapter);
    }
 
    @Override
@@ -171,21 +177,12 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    }
 
    @Override
-   public void onBackPressed() {
-      super.onBackPressed();
-   }
-
-   private void assignSpinnerValues() {
-      ArrayAdapter contentAdapter = ArrayAdapter.createFromResource(this,
-            R.array.content_ratings_array, android.R.layout.simple_spinner_item);
-
-      ArrayAdapter categoryAdapter = ArrayAdapter.createFromResource(this,
-            R.array.categories_array, android.R.layout.simple_spinner_item);
-
-      contentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-      categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-      mContentSpinner.setAdapter(contentAdapter);
-      mCategorySpinner.setAdapter(categoryAdapter);
+   public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+         case android.R.id.home:
+            onBackPressed();
+            break;
+      }
+      return true;
    }
 }

@@ -176,8 +176,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
       mRefreshLayout.setRefreshing(false);
    }
 
-
-
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {

@@ -46,6 +46,7 @@ ext {
     circleImageViewVersion = '2.1.0'
     textDrawableVersion = '1.0.1'
     materialDialogsVersion = '0.9.2.3'
+    nachosVersion = '1.0.0'
     facebookSdkVersion = '4.19.0'
     butterknifeVersion = '8.5.1'
     glideVersion = '3.7.0'

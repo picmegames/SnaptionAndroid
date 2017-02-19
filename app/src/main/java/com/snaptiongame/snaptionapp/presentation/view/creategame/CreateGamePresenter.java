@@ -5,10 +5,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,6 +29,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
    @NonNull
    private CompositeDisposable mDisposables;
 
+   private List<Friend> mFriends;
    private int mUserId;
    private String mEncodedImage;
 
@@ -65,15 +69,34 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                   () -> createGame(drawable, resolver.getType(uri), userId, isPublic));
    }
 
+   @Override
+   public Friend getFriendByName(String name) {
+      for (Friend friend : mFriends) {
+         if (friend.userName.equals(name)) {
+            return friend;
+         }
+      }
+      return null;
+   }
+
    private void loadFriends() {
       mDisposables.clear();
       Disposable disposable = FriendProvider.loadFriends(mUserId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                  mCreateGameView::setFriends,
+                  this::processFriends,
                   Timber::e,
                   () -> Timber.i("Getting friends was successful"));
       mDisposables.add(disposable);
+   }
+
+   private void processFriends(List<Friend> friends) {
+      mFriends = friends;
+      String[] names = new String[friends.size()];
+      for (int index = 0; index < names.length; index++) {
+         names[index] = friends.get(index).userName;
+      }
+      mCreateGameView.setFriendNames(names);
    }
 
    @Override
