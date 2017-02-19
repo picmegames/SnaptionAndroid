@@ -54,4 +54,6 @@
     <string name="fill_in_the_blank">¡Llena el espacio en blanco!</string>
     <string name="ok">De acuerdo</string>
     <string name="version_label">Versión</string>
+    <string name="tags_label">Etiquetas</string>
+    <string name="add_tags_label">Añadir algunas etiquetas!</string>
 </resources>

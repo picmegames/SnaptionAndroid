@@ -1,113 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  android:id="@+id/layout"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
-                                                 android:background="@color/colorPrimary"
-                                                 android:fitsSystemWindows="true">
+                                                 android:background="@null">
 
-    <RelativeLayout
+    <include
+        layout="@layout/collapsable_toolbar"/>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@null">
+        android:background="@null"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ImageView
-            android:id="@+id/image"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_insert_photo_white_48dp"/>
-
-        <TextView
-            android:id="@+id/content_label"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/image"
-            android:layout_margin="16dp"
-            android:text="@string/content_level_label"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
+            android:background="@null">
 
-        <Spinner
-            android:id="@+id/content_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/image"
-            android:layout_margin="16dp"
-            android:textSize="16sp"/>
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_insert_photo_grey_900_48dp"/>
 
-        <TextView
-            android:id="@+id/category_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/content_label"
-            android:layout_margin="16dp"
-            android:text="@string/category_label"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
-
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/content_spinner"
-            android:layout_margin="16dp"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/privacy_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/category_label"
-            android:layout_margin="16dp"
-            android:text="@string/privacy_label"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
-
-        <Switch
-            android:id="@+id/public_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/privacy_label"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/category_spinner"
-            android:layout_margin="16dp"
-            android:textSize="16sp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/public_switch"
-            style="?android:attr/buttonBarStyle">
-
-            <Button
-                android:id="@+id/add_friends"
+            <TextView
+                android:id="@+id/content_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@null"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/add_friends"
-                android:textColor="@android:color/white"
-                android:visibility="gone"
-                style="?android:attr/buttonBarButtonStyle"/>
+                android:layout_below="@+id/image"
+                android:layout_margin="16dp"
+                android:text="@string/content_level_label"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+            <Spinner
+                android:id="@+id/content_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/image"
+                android:layout_margin="16dp"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tags_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content_label"
+                android:layout_margin="16dp"
+                android:text="@string/tags_label"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/tag_chip_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tags_label"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:hint="@string/add_tags_label"
+                app:chipHeight="30dp"
+                app:chipSpacing="4dp"
+                app:chipTextSize="16dp"
+                app:chipVerticalSpacing="3dp"/>
+
+            <TextView
+                android:id="@+id/private_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tag_chip_view"
+                android:layout_margin="16dp"
+                android:text="@string/privacy_label"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+            <Switch
+                android:id="@+id/private_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/private_label"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/tag_chip_view"
+                android:layout_margin="16dp"
+                android:textSize="16sp"/>
+
+            <RelativeLayout
+                android:id="@+id/add_friends_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/private_label"
+                android:layout_margin="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/add_friends_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/add_friends"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <com.hootsuite.nachos.NachoTextView
+                    android:id="@+id/friends_chip_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/add_friends_label"
+                    android:hint="@string/add_a_friend"
+                    app:chipHeight="30dp"
+                    app:chipSpacing="4dp"
+                    app:chipTextSize="16dp"
+                    app:chipVerticalSpacing="3dp"/>
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/create_game"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@null"
+                android:layout_below="@+id/add_friends_view"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_button"
+                android:enabled="false"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/create_game"
-                android:textColor="@android:color/white"
-                android:enabled="false"
-                style="?android:attr/buttonBarButtonStyle"/>
-        </LinearLayout>
-    </RelativeLayout>
+                android:textColor="@android:color/white"/>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

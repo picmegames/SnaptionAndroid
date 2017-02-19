@@ -63,6 +63,7 @@ public class Caption {
    @Override
    public boolean equals(Object obj) {
       return obj.getClass() == Caption.class
-            && this.id == ((Caption) obj).id;
+            && this.id == ((Caption) obj).id
+            && this.numVotes == ((Caption) obj).numVotes;
    }
 }

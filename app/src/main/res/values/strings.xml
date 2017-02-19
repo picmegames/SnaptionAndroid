@@ -25,6 +25,8 @@
     <string name="settings_label">Settings</string>
     <string name="version_label">Version</string>
     <string name="log_out_label">Log Out</string>
+    <string name="tags_label">Tags</string>
+    <string name="add_tags_label">Add Some Tags!</string>
     <string name="share">Share</string>
     <string name="create_game">Create Game</string>
     <string name="flag">Flag As Inappropriate</string>
@@ -84,7 +86,7 @@
     </string-array>
 
     <!-- Invite Friends Dialog -->
-    <string name="add_a_friend">Add a friend!</string>
+    <string name="add_a_friend">Add a Friend!</string>
     <string name="via_phone">via Phone #</string>
     <string name="via_facebook">via Facebook</string>
     <string name="via_email">via Email</string>
