@@ -53,4 +53,5 @@
     <string name="friends_added">Amigos agregados!</string>
     <string name="fill_in_the_blank">¡Llena el espacio en blanco!</string>
     <string name="ok">De acuerdo</string>
+    <string name="version_label">Versión</string>
 </resources>

@@ -21,7 +21,6 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
-    @NonNull
     private int mSnaptionUserId;
 
     public FriendsPresenter(@NonNull FriendsContract.View friendView, int userId) {

@@ -63,7 +63,7 @@ public class WallAdapter extends RecyclerView.Adapter {
                   .toUpperCase()
                   .endConfig()
                   .buildRound(curSnaption.topCaption.creatorName.substring(0, 1),
-                        ColorGenerator.MATERIAL.getRandomColor()));
+                        ColorGenerator.MATERIAL.getColor(curSnaption.topCaption.creatorName)));
          }
          holder.mTopCaption.setText(curSnaption.topCaption.assocFitB.beforeBlank
                + curSnaption.topCaption.caption + curSnaption.topCaption.assocFitB.afterBlank);
@@ -83,13 +83,11 @@ public class WallAdapter extends RecyclerView.Adapter {
       }
    }
 
-   public void clearSnaptions() {
-      mSnaptions.clear();
-   }
-
    public void setSnaptions(List<Snaption> snaptions) {
-      this.mSnaptions = snaptions;
-      notifyDataSetChanged();
+      if (!mSnaptions.equals(snaptions)) {
+         mSnaptions = snaptions;
+         notifyDataSetChanged();
+      }
    }
 
    @Override

@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -45,8 +43,6 @@ import static com.snaptiongame.snaptionapp.presentation.view.friends.FriendsDial
  */
 
 public class FriendsFragment extends Fragment implements FriendsContract.View, Serializable {
-    @BindView(R.id.fab)
-    FloatingActionButton mFab;
     @BindView(R.id.friend_list)
     RecyclerView mFriends;
     @BindView(R.id.query_field)
@@ -66,6 +62,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     private Unbinder mUnbinder;
     private DialogFragment mDialogFragmentDefault;
     private DialogFragment mDialogFragmentFriendSearch;
+
+    public static final String TAG = FriendsFragment.class.getSimpleName();
 
     public static FriendsFragment getInstance() {
         return new FriendsFragment();
@@ -191,7 +189,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         return friends;
     }
 
-    @OnClick(R.id.fab)
     public void inviteFriends() {
         mDialogFragmentDefault = new FriendsDialogFragment().newInstance(STANDARD_DIALOG, this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");

@@ -52,6 +52,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    Switch mPublicSwitch;
    @BindView(R.id.add_friends)
    Button mAddFriendsButton;
+   @BindView(R.id.create_game)
+   Button mCreateGameButton;
 
    private CreateGameContract.Presenter mPresenter;
 
@@ -147,7 +149,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
       if (resultCode == RESULT_OK) {
-         mAddFriendsButton.setEnabled(true);
+         mCreateGameButton.setEnabled(true);
          mUri = data.getData();
          Glide.with(this)
                .load(mUri)

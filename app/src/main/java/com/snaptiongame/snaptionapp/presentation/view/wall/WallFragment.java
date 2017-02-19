@@ -1,13 +1,9 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -17,15 +13,12 @@ import android.view.ViewGroup;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
-import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -37,8 +30,6 @@ import butterknife.Unbinder;
  * @version 1.0
  */
 public class WallFragment extends Fragment implements WallContract.View {
-   @BindView(R.id.fab)
-   FloatingActionButton mFab;
    @BindView(R.id.wall)
    RecyclerView mWall;
    @BindView(R.id.refresh_layout)
@@ -52,6 +43,7 @@ public class WallFragment extends Fragment implements WallContract.View {
 
    public static final int NUM_COLUMNS = 2;
    public static final int ITEM_VIEW_CACHE_SIZE = 20;
+   public static final String TAG = WallFragment.class.getSimpleName();
 
    /**
     * This method provides a new instance of a Wall Fragment.
@@ -79,6 +71,7 @@ public class WallFragment extends Fragment implements WallContract.View {
       View view = inflater.inflate(R.layout.wall_fragment, container, false);
       mUnbinder = ButterKnife.bind(this, view);
       mPresenter = new WallPresenter(this);
+      mAuthManager = AuthenticationManager.getInstance(getContext());
 
       mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
       mWall.addItemDecoration(new SpacesItemDecoration(
@@ -98,24 +91,6 @@ public class WallFragment extends Fragment implements WallContract.View {
    }
 
    /**
-    * This method is called after the view has been created and handles
-    * any extra setup for the fragment.
-    *
-    * @param view The view that contains the fragment's view
-    * @param savedInstanceState The saved state of the fragment if any
-    */
-   @Override
-   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-      mAuthManager = AuthenticationManager.getInstance(getContext());
-
-      ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-      if (actionBar != null) {
-         actionBar.setTitle(R.string.wall_label);
-      }
-   }
-
-   /**
     * This method is called when the view becomes visible to the user.
     * This will reload the list of games.
     */
@@ -123,6 +98,7 @@ public class WallFragment extends Fragment implements WallContract.View {
    public void onResume() {
       super.onResume();
       mPresenter.subscribe();
+      mRefreshLayout.setRefreshing(true);
    }
 
    /**
@@ -143,7 +119,6 @@ public class WallFragment extends Fragment implements WallContract.View {
     */
    @Override
    public void showGames(List<Snaption> snaptions) {
-      mAdapter.clearSnaptions();
       mAdapter.setSnaptions(snaptions);
       mRefreshLayout.setRefreshing(false);
    }
@@ -156,41 +131,6 @@ public class WallFragment extends Fragment implements WallContract.View {
    @Override
    public void setPresenter(WallContract.Presenter presenter) {
       mPresenter = presenter;
-   }
-
-   /**
-    * This method is called when a user clicks the
-    * floating action button on the wall. If the user is
-    * logged in, they will be directed to the create game
-    * view. If not, they will be directed to the login
-    * view.
-    */
-   @OnClick(R.id.fab)
-   public void createGame() {
-      if (!mAuthManager.isLoggedIn()) {
-         goToLogin();
-      }
-      else {
-         goToCreateGame();
-      }
-   }
-
-   /**
-    * This method creates and fires a new intent to switch to
-    * a CreateGame activity.
-    */
-   private void goToCreateGame() {
-      Intent createGameIntent = new Intent(getContext(), CreateGameActivity.class);
-      startActivity(createGameIntent);
-   }
-
-   /**
-    * This method creates and fires a new intent to switch to
-    * a Login activity.
-    */
-   private void goToLogin() {
-      Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-      startActivity(loginIntent);
    }
 
    /**

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
@@ -34,6 +38,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    Toolbar mToolbar;
    @BindView(R.id.fab)
    FloatingActionButton mFab;
+   @BindView(R.id.refresh_layout)
+   SwipeRefreshLayout mRefreshLayout;
    @BindView(R.id.caption_list)
    RecyclerView mCaptionList;
    @BindView(R.id.game_image)
@@ -68,14 +74,33 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
          mActionBar.setTitle(getString(R.string.add_caption));
       }
 
+      supportPostponeEnterTransition();
+
       Intent intent = getIntent();
 
       Glide.with(this)
             .load(intent.getStringExtra("image"))
-            .centerCrop()
+            .fitCenter()
+            .dontAnimate()
+            .listener(new RequestListener<String, GlideDrawable>() {
+               @Override
+               public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+                                          boolean isFirstResource) {
+                  supportStartPostponedEnterTransition();
+                  return false;
+               }
+
+               @Override
+               public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                              boolean isFromMemoryCache, boolean isFirstResource) {
+                  supportStartPostponedEnterTransition();
+                  return false;
+               }
+            })
             .into(mImage);
       mGameId = intent.getIntExtra("gameId", 0);
       mPresenter = new GamePresenter(mGameId, this);
+      mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
    }
 
    @Override
@@ -87,6 +112,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    protected void onResume() {
       super.onResume();
       mPresenter.subscribe();
+      mRefreshLayout.setRefreshing(true);
    }
 
    @Override
@@ -147,6 +173,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    @Override
    public void showCaptions(List<Caption> captions) {
       mAdapter.setCaptions(captions);
+      mRefreshLayout.setRefreshing(false);
    }
 
 

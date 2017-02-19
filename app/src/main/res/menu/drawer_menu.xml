@@ -23,6 +23,7 @@
         <item
             android:id="@+id/settings"
             android:checked="false"
+            android:checkable="false"
             android:icon="@drawable/ic_settings_grey_900_24dp"
             android:title="@string/settings_label"/>
 

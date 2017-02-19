@@ -1,9 +1,9 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -109,15 +109,10 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          gameIntent.putExtra("gameId", mGameId);
          gameIntent.putExtra("image", mImageUrl);
 
-         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String transitionName = mContext.getString(R.string.shared_transition);
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                  (AppCompatActivity) mContext, mImage, transitionName);
-            cardContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
-         }
-         else {
-            cardContext.startActivity(gameIntent);
-         }
+         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+               .makeSceneTransitionAnimation((AppCompatActivity) mContext,
+                     mImage, mContext.getString(R.string.shared_transition));
+         cardContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
       });
    }
 

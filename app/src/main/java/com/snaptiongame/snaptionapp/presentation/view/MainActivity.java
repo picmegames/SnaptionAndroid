@@ -1,13 +1,13 @@
 package com.snaptiongame.snaptionapp.presentation.view;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,13 +23,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
-import com.snaptiongame.snaptionapp.presentation.view.wall.WallFragment;
+import com.snaptiongame.snaptionapp.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.snaptionapp.presentation.view.wall.TabbedWallFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    DrawerLayout mDrawerLayout;
    @BindView(R.id.navigation_view)
    NavigationView mNavigationView;
+   @BindView(R.id.fab)
+   FloatingActionButton mFab;
 
    ImageView mCoverPhoto;
    CircleImageView mProfilePicture;
@@ -79,25 +84,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             profileIntent.putExtra(AuthenticationManager.PROFILE_IMAGE_URL, mAuthManager.getProfileImageUrl());
             profileIntent.putExtra(AuthenticationManager.FULL_NAME, mAuthManager.getUserFullName());
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-               String transitionName = getString(R.string.shared_transition);
-               ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this,
-                     mProfilePicture, transitionName);
-               startActivity(profileIntent, transitionActivityOptions.toBundle());
-            }
-            else {
-               startActivity(profileIntent);
-            }
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                  .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
+            startActivity(profileIntent, transitionActivityOptions.toBundle());
          }
          else {
             goToLogin();
          }
       });
 
-      fragTag = WallFragment.class.getSimpleName();
+      fragTag = TabbedWallFragment.class.getSimpleName();
       mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
       if (mCurrentFragment == null) {
-         mCurrentFragment = new WallFragment();
+         mCurrentFragment = new TabbedWallFragment();
       }
 
       getSupportFragmentManager().beginTransaction()
@@ -184,19 +183,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
       switch (item.getItemId()) {
          case R.id.wall:
-            fragTag = WallFragment.class.getSimpleName();
+            fragTag = TabbedWallFragment.TAG;
             mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
-               mCurrentFragment = WallFragment.getInstance();
+               mCurrentFragment = TabbedWallFragment.getInstance();
             }
             break;
 
          case R.id.friends:
-            fragTag = FriendsFragment.class.getSimpleName();
+            fragTag = FriendsFragment.TAG;
             mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
             if (mCurrentFragment == null) {
                mCurrentFragment = FriendsFragment.getInstance();
             }
+            break;
+
+         case R.id.settings:
+            startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
             break;
 
          case R.id.log_out:
@@ -219,6 +222,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    @Override
    public void onBackPressed() {
       // Don't allow back button in MainActivity
+   }
+
+   /**
+    * This method is called when a user clicks the
+    * floating action button on the wall. If the user is
+    * logged in, they will be directed to the create game
+    * view. If not, they will be directed to the login
+    * view.
+    */
+   @OnClick(R.id.fab)
+   public void createGame() {
+      if (!mAuthManager.isLoggedIn()) {
+         goToLogin();
+      }
+      else {
+         if (fragTag.equals(TabbedWallFragment.TAG)) {
+            goToCreateGame();
+         }
+         else if (fragTag.equals(FriendsFragment.TAG)) {
+            ((FriendsFragment) mCurrentFragment).inviteFriends();
+         }
+      }
+   }
+
+   /**
+    * This method creates and fires a new intent to switch to
+    * a CreateGame activity.
+    */
+   private void goToCreateGame() {
+      Intent createGameIntent = new Intent(this, CreateGameActivity.class);
+      startActivity(createGameIntent);
    }
 
    private void goToLogin() {
