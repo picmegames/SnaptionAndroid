@@ -16,6 +16,7 @@ public class GameContract {
    interface View extends BaseView<Presenter> {
       void showCaptions(List<Caption> captions);
       void addCaption(Caption caption);
+      void setPickerInfo(String profileUrl, String name);
    }
 
    interface Presenter extends BasePresenter {

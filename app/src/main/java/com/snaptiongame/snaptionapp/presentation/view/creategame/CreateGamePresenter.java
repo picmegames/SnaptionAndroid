@@ -43,30 +43,36 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
    @Override
    public void createGame(Drawable drawable, String type, int userId, boolean isPublic) {
       if (drawable != null) {
-         mDisposables.clear();
          Disposable disposable = SnaptionProvider.addSnaption(
                new Snaption(userId, !isPublic, 1, mEncodedImage, type))
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(snaption -> {
-               }, e -> {
-                  Timber.e(e);
-                  mCreateGameView.showCreateFailure();
-               }, () -> {
-                  mCreateGameView.onBackPressed();
-                  mCreateGameView.showCreateSuccess();
-               });
+               .subscribe(
+                     snaption -> {
+                     },
+                     e -> {
+                        Timber.e(e);
+                        mCreateGameView.showCreateFailure();
+                     },
+                     () -> {
+                        mCreateGameView.onBackPressed();
+                        mCreateGameView.showCreateSuccess();
+                     }
+               );
          mDisposables.add(disposable);
       }
    }
 
    @Override
    public void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
-      ImageConverter.convertImage(resolver, uri)
+      Disposable disposable = ImageConverter.convertImage(resolver, uri)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(s -> mEncodedImage = s,
+            .subscribe(
+                  s -> mEncodedImage = s,
                   Timber::e,
-                  () -> createGame(drawable, resolver.getType(uri), userId, isPublic));
+                  () -> createGame(drawable, resolver.getType(uri), userId, isPublic)
+            );
+      mDisposables.add(disposable);
    }
 
    @Override
@@ -80,13 +86,13 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
    }
 
    private void loadFriends() {
-      mDisposables.clear();
       Disposable disposable = FriendProvider.loadFriends(mUserId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                   this::processFriends,
                   Timber::e,
-                  () -> Timber.i("Getting friends was successful"));
+                  () -> Timber.i("Getting friends was successful")
+            );
       mDisposables.add(disposable);
    }
 

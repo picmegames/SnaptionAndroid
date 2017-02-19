@@ -34,42 +34,44 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
    @Override
    public void updateProfilePicture(int snaptionUserId, User user) {
-      mDisposables.clear();
       Disposable disposable = UserProvider.updateUser(snaptionUserId, user)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(newUser -> mProfileView.saveProfilePicture(newUser.picture),
+            .subscribe(
+                  newUser -> mProfileView.saveProfilePicture(newUser.picture),
                   e -> {
                      Timber.e(e);
                      mProfileView.showProfilePictureFailure();
                   },
-                  () -> mProfileView.showProfilePictureSuccess());
+                  () -> mProfileView.showProfilePictureSuccess()
+            );
       mDisposables.add(disposable);
    }
 
    @Override
    public void updateUsername(int snaptionUserId, String oldUsername, User user) {
-      mDisposables.clear();
       Disposable disposable = UserProvider.updateUser(snaptionUserId, user)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(nextUser -> mProfileView.saveUsername(nextUser.username),
+            .subscribe(
+                  nextUser -> mProfileView.saveUsername(nextUser.username),
                   e -> {
                      Timber.e(e);
                      mProfileView.showUsernameFailure(oldUsername, user);
                   },
-                  () -> mProfileView.showUsernameSuccess(oldUsername, user));
+                  () -> mProfileView.showUsernameSuccess(oldUsername, user)
+            );
       mDisposables.add(disposable);
    }
 
    @Override
    public void convertImage(int snaptionUserId, ContentResolver resolver, Uri uri) {
-      mDisposables.clear();
       Disposable disposable = ImageConverter.convertImage(resolver, uri)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(s -> mEncodedImage = s,
+            .subscribe(
+                  s -> mEncodedImage = s,
                   Timber::e,
-                  () -> updateProfilePicture(snaptionUserId,
-                        new User(mEncodedImage, resolver.getType(uri))));
+                  () -> updateProfilePicture(snaptionUserId, new User(mEncodedImage, resolver.getType(uri)))
+            );
       mDisposables.add(disposable);
    }
 

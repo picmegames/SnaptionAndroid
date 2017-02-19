@@ -12,7 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -44,6 +47,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    RecyclerView mCaptionList;
    @BindView(R.id.game_image)
    ImageView mImage;
+   @BindView(R.id.picker_image)
+   ImageView mPickerImage;
+   @BindView(R.id.picker_name)
+   TextView mPickerName;
 
    private ActionBar mActionBar;
    private CaptionAdapter mAdapter;
@@ -52,6 +59,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
    private CaptionSelectDialogFragment mCaptionDialogFragment;
    private CaptionSelectDialogFragment mCaptionSetDialogFragment;
    private int mGameId;
+   private int mPickerId;
 
    @Override
    protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,8 +107,29 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             })
             .into(mImage);
       mGameId = intent.getIntExtra("gameId", 0);
-      mPresenter = new GamePresenter(mGameId, this);
+      mPickerId = intent.getIntExtra("pickerId", 0);
+      mPresenter = new GamePresenter(mGameId, mPickerId, this);
       mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
+   }
+
+   @Override
+   public void setPickerInfo(String profileUrl, String name) {
+      if (profileUrl != null && !profileUrl.isEmpty()) {
+         Glide.with(this)
+               .load(profileUrl)
+               .into(mPickerImage);
+      }
+      else {
+         mPickerImage.setImageDrawable(TextDrawable.builder()
+               .beginConfig()
+               .width(40)
+               .height(40)
+               .toUpperCase()
+               .endConfig()
+               .buildRound(name.substring(0, 1),
+                     ColorGenerator.MATERIAL.getColor(name)));
+      }
+      mPickerName.setText(name);
    }
 
    @Override

@@ -49,6 +49,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
    public Context mContext;
 
    public int mGameId;
+   public int mPickerId;
    public String mImageUrl;
    public boolean isUpvoted = false;
 
@@ -107,6 +108,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
          Context cardContext = view.getContext();
          Intent gameIntent = new Intent(cardContext, GameActivity.class);
          gameIntent.putExtra("gameId", mGameId);
+         gameIntent.putExtra("pickerId", mPickerId);
          gameIntent.putExtra("image", mImageUrl);
 
          ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat

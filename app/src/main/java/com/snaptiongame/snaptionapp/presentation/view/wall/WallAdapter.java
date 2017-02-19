@@ -37,6 +37,7 @@ public class WallAdapter extends RecyclerView.Adapter {
       Snaption curSnaption = mSnaptions.get(position);
 
       holder.mGameId = curSnaption.id;
+      holder.mPickerId = curSnaption.pickerId;
 
       if (curSnaption.picture != null) {
          holder.mImage.layout(0, 0, 0, 0);

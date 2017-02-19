@@ -2,9 +2,9 @@ package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.support.annotation.NonNull;
 
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
+import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import java.util.List;
 
@@ -26,11 +26,12 @@ public class GamePresenter implements GameContract.Presenter {
    private GameContract.CaptionDialogView mGameDialogView;
 
    private int mGameId;
-   private AuthenticationManager mAuth;
+   private int mPickerId;
 
 
-   public GamePresenter(int gameId, @NonNull GameContract.View view) {
+   public GamePresenter(int gameId, int pickerId, @NonNull GameContract.View view) {
       mGameId = gameId;
+      mPickerId = pickerId;
       mGameView = view;
       mDisposables = new CompositeDisposable();
       mGameView.setPresenter(this);
@@ -45,13 +46,24 @@ public class GamePresenter implements GameContract.Presenter {
 
    @Override
    public void loadCaptions() {
-      mDisposables.clear();
       Disposable disposable = CaptionProvider.getCaptions(mGameId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                   this::processCaptions,
                   Timber::e,
-                  () -> Timber.i("Loading captions completed successfully."));
+                  () -> Timber.i("Loading captions completed successfully.")
+            );
+      mDisposables.add(disposable);
+   }
+
+   private void loadPickerInfo() {
+      Disposable disposable = UserProvider.getUser(mPickerId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                  user -> mGameView.setPickerInfo(user.picture, user.username),
+                  Timber::e,
+                  () -> Timber.i("Loading picker completed successfully.")
+            );
       mDisposables.add(disposable);
    }
 
@@ -61,50 +73,51 @@ public class GamePresenter implements GameContract.Presenter {
 
    @Override
    public void addCaption(String caption, int userId, int fitbId) {
-      CaptionProvider.addCaption(mGameId,
+      Disposable disposable = CaptionProvider.addCaption(mGameId,
             new Caption(fitbId, caption, userId))
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(addedCaption -> {}, Timber::e, () -> Timber.i("Added caption"));
+            .subscribe(
+                  addedCaption -> {
+                  },
+                  Timber::e,
+                  () -> Timber.i("Added caption")
+            );
+      mDisposables.add(disposable);
    }
 
    @Override
    public void loadCaptionSets() {
-      mDisposables.clear();
       Disposable disposable = CaptionProvider.getCaptionSets()
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(
-                      mGameDialogView::showCaptionSets,
-                      Timber::e,
-                      () -> Timber.i("Loading caption sets worked"));
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                  mGameDialogView::showCaptionSets,
+                  Timber::e,
+                  () -> Timber.i("Loading caption sets worked")
+            );
       mDisposables.add(disposable);
 
    }
 
    @Override
    public void loadFitBCaptions() {
-      mDisposables.clear();
       Disposable disposable = CaptionProvider.getFitBCaptions()
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(mGameDialogView::showFitBCaptions,
-                      Timber::e,
-                      () -> Timber.i("Successfully got Fitb's!"));
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                  mGameDialogView::showFitBCaptions,
+                  Timber::e,
+                  () -> Timber.i("Successfully got Fitb's!")
+            );
       mDisposables.add(disposable);
    }
 
    @Override
    public void subscribe() {
       loadCaptions();
+      loadPickerInfo();
    }
 
    @Override
    public void unsubscribe() {
       mDisposables.clear();
    }
-
-
-
-
-
-
-
 }
