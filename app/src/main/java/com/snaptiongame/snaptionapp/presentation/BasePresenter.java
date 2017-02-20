@@ -5,6 +5,7 @@ package com.snaptiongame.snaptionapp.presentation;
  */
 
 public interface BasePresenter {
-   void subscribe();
-   void unsubscribe();
+    void subscribe();
+
+    void unsubscribe();
 }

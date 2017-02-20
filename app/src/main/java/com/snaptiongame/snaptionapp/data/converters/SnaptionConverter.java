@@ -20,36 +20,36 @@ import java.lang.reflect.Type;
 
 public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserializer<Snaption> {
 
-   @Override
-   public JsonElement serialize(Snaption src, Type typeOfSrc, JsonSerializationContext context) {
-      JsonObject json = new JsonObject();
-      json.addProperty(Snaption.USER_ID, src.userId);
-      json.addProperty(Snaption.IS_PUBLIC, src.isPublic);
-      json.addProperty(Snaption.RATING, src.rating);
-      json.addProperty(Snaption.PICTURE, src.picture);
-      json.addProperty(Snaption.IMG_TYPE, src.type);
-      return json;
-   }
+    @Override
+    public JsonElement serialize(Snaption src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject json = new JsonObject();
+        json.addProperty(Snaption.USER_ID, src.userId);
+        json.addProperty(Snaption.IS_PUBLIC, src.isPublic);
+        json.addProperty(Snaption.RATING, src.rating);
+        json.addProperty(Snaption.PICTURE, src.picture);
+        json.addProperty(Snaption.IMG_TYPE, src.type);
+        return json;
+    }
 
-   @Override
-   public Snaption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-         throws JsonParseException {
-      JsonObject content = json.getAsJsonObject();
-      Snaption snaption = new Gson().fromJson(json, typeOfT);
-      JsonElement topCaption = content.get("topCaption");
-      if (topCaption != null && topCaption.isJsonObject()) {
-         Caption caption = new Caption();
-         caption.assocFitB = new FitBCaption(0, 0,
-               topCaption.getAsJsonObject().get("fitbBefore").getAsString(),
-               topCaption.getAsJsonObject().get("fitbAfter").getAsString(), 0);
-         caption.caption = topCaption.getAsJsonObject().get(Caption.CAPTION).getAsString();
-         JsonElement picture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE);
-         if (!picture.isJsonNull()) {
-            caption.creatorPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE).getAsString();
-         }
-         caption.creatorName = topCaption.getAsJsonObject().get(Caption.USER_NAME).getAsString();
-         snaption.topCaption = caption;
-      }
-      return snaption;
-   }
+    @Override
+    public Snaption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        JsonObject content = json.getAsJsonObject();
+        Snaption snaption = new Gson().fromJson(json, typeOfT);
+        JsonElement topCaption = content.get("topCaption");
+        if (topCaption != null && topCaption.isJsonObject()) {
+            Caption caption = new Caption();
+            caption.assocFitB = new FitBCaption(0, 0,
+                    topCaption.getAsJsonObject().get("fitbBefore").getAsString(),
+                    topCaption.getAsJsonObject().get("fitbAfter").getAsString(), 0);
+            caption.caption = topCaption.getAsJsonObject().get(Caption.CAPTION).getAsString();
+            JsonElement picture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE);
+            if (!picture.isJsonNull()) {
+                caption.creatorPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE).getAsString();
+            }
+            caption.creatorName = topCaption.getAsJsonObject().get(Caption.USER_NAME).getAsString();
+            snaption.topCaption = caption;
+        }
+        return snaption;
+    }
 }

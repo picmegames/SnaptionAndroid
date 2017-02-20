@@ -14,21 +14,21 @@ import io.reactivex.Observable;
  */
 
 public class FriendProvider {
-   private static SnaptionApiService apiService = ApiProvider.getApiService();
+    private static SnaptionApiService apiService = ApiProvider.getApiService();
 
-   public static Observable<List<Friend>> loadFriends(int userId) {
-      return apiService.getFriends(userId);
-   }
+    public static Observable<List<Friend>> loadFriends(int userId) {
+        return apiService.getFriends(userId);
+    }
 
-   public static Observable<List<Friend>> getFacebookFriends() {
-      return apiService.getFacebookFriends();
-   }
+    public static Observable<List<Friend>> getFacebookFriends() {
+        return apiService.getFacebookFriends();
+    }
 
-   public static Observable<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {
-      return apiService.addFriend(myId, request);
-   }
+    public static Observable<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {
+        return apiService.addFriend(myId, request);
+    }
 
-   public static Observable<AddFriendRequest> removeFriend(int myId, AddFriendRequest request) {
-      return apiService.deleteFriend(myId, request);
-   }
+    public static Observable<AddFriendRequest> removeFriend(int myId, AddFriendRequest request) {
+        return apiService.deleteFriend(myId, request);
+    }
 }

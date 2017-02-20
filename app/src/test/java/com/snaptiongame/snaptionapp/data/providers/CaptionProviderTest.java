@@ -20,32 +20,32 @@ import static org.mockito.Mockito.when;
  */
 
 public class CaptionProviderTest {
-   private SnaptionApiService service;
-   private List<Caption> captions;
-   private Caption caption;
-   private Like like;
+    private SnaptionApiService service;
+    private List<Caption> captions;
+    private Caption caption;
+    private Like like;
 
-   private static final int TEST_GAME_ID = 1;
+    private static final int TEST_GAME_ID = 1;
 
-   @Before
-   public void setup() {
-      service = mock(SnaptionApiService.class);
-      captions = new ArrayList<>();
-      captions.add(new Caption(0, "test0", 1));
-      captions.add(new Caption(1, "test1", 1));
-      captions.add(new Caption(2, "test2", 1));
-      captions.add(new Caption(3, "test3", 1));
-      captions.add(new Caption(4, "test4", 1));
-      when(service.getCaptions(TEST_GAME_ID)).thenReturn(Observable.just(captions));
-      like = new Like(0, 0, false, false, "");
-      when(service.upvoteCaption(like)).thenReturn(Observable.just(like));
-      caption = new Caption(0, "test0", 1);
-      when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Observable.just(caption));
-   }
+    @Before
+    public void setup() {
+        service = mock(SnaptionApiService.class);
+        captions = new ArrayList<>();
+        captions.add(new Caption(0, "test0", 1));
+        captions.add(new Caption(1, "test1", 1));
+        captions.add(new Caption(2, "test2", 1));
+        captions.add(new Caption(3, "test3", 1));
+        captions.add(new Caption(4, "test4", 1));
+        when(service.getCaptions(TEST_GAME_ID)).thenReturn(Observable.just(captions));
+        like = new Like(0, 0, false, false, "");
+        when(service.upvoteCaption(like)).thenReturn(Observable.just(like));
+        caption = new Caption(0, "test0", 1);
+        when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Observable.just(caption));
+    }
 
-   @Test
-   public void testGetCaptions() {
-      // TODO Fix test
+    @Test
+    public void testGetCaptions() {
+        // TODO Fix test
 //      CaptionProvider.getCaptions(TEST_GAME_ID)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -55,11 +55,11 @@ public class CaptionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testUpvoteCaption() {
-      // TODO Fix test
+    @Test
+    public void testUpvoteCaption() {
+        // TODO Fix test
 //      CaptionProvider.upvoteCaption(like)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -69,11 +69,11 @@ public class CaptionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testAddCaption() {
-      // TODO Fix test
+    @Test
+    public void testAddCaption() {
+        // TODO Fix test
 //      CaptionProvider.addCaption(TEST_GAME_ID, caption)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -83,5 +83,5 @@ public class CaptionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 }

@@ -17,22 +17,22 @@ import static org.mockito.Mockito.when;
  */
 
 public class SessionProviderTest {
-   private SnaptionApiService service;
-   private OAuthRequest request;
-   private Session session;
+    private SnaptionApiService service;
+    private OAuthRequest request;
+    private Session session;
 
-   @Before
-   public void setup() {
-      service = mock(SnaptionApiService.class);
-      request = new OAuthRequest("", "");
-      session = new Session(0);
-      when(service.userOAuthFacebook(request)).thenReturn(Observable.just(session));
-      when(service.userOAuthGoogle(request)).thenReturn(Observable.just(session));
-   }
+    @Before
+    public void setup() {
+        service = mock(SnaptionApiService.class);
+        request = new OAuthRequest("", "");
+        session = new Session(0);
+        when(service.userOAuthFacebook(request)).thenReturn(Observable.just(session));
+        when(service.userOAuthGoogle(request)).thenReturn(Observable.just(session));
+    }
 
-   @Test
-   public void testUserOAuthFacebook() {
-      // TODO Fix test
+    @Test
+    public void testUserOAuthFacebook() {
+        // TODO Fix test
 //      SessionProvider.userOAuthFacebook(request)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -42,11 +42,11 @@ public class SessionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testUserOAuthGoogle() {
-      // TODO Fix test
+    @Test
+    public void testUserOAuthGoogle() {
+        // TODO Fix test
 //      SessionProvider.userOAuthGoogle(request)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -56,5 +56,5 @@ public class SessionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 }

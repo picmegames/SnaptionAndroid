@@ -5,11 +5,11 @@ package com.snaptiongame.snaptionapp.data.models;
  */
 
 public class Session {
-   public int userId;
+    public int userId;
 
-   public static final String USER = "user_id";
+    public static final String USER = "user_id";
 
-   public Session(int userId) {
-      this.userId = userId;
-   }
+    public Session(int userId) {
+        this.userId = userId;
+    }
 }

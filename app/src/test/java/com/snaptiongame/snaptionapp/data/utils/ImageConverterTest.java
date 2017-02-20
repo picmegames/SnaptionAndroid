@@ -9,8 +9,8 @@ import java.io.IOException;
  */
 
 public class ImageConverterTest {
-   @Test(expected=RuntimeException.class)
-   public void testConvertImage() throws IOException {
-      ImageConverter.convertImage(null, null);
-   }
+    @Test(expected = RuntimeException.class)
+    public void testConvertImage() throws IOException {
+        ImageConverter.convertImage(null, null);
+    }
 }

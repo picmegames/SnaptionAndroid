@@ -12,13 +12,13 @@ import io.reactivex.Observable;
  */
 
 public class SessionProvider {
-   private static SnaptionApiService apiService = ApiProvider.getApiService();
+    private static SnaptionApiService apiService = ApiProvider.getApiService();
 
-   public static Observable<Session> userOAuthFacebook(OAuthRequest request) {
-      return apiService.userOAuthFacebook(request);
-   }
+    public static Observable<Session> userOAuthFacebook(OAuthRequest request) {
+        return apiService.userOAuthFacebook(request);
+    }
 
-   public static Observable<Session> userOAuthGoogle(OAuthRequest request) {
-      return apiService.userOAuthGoogle(request);
-   }
+    public static Observable<Session> userOAuthGoogle(OAuthRequest request) {
+        return apiService.userOAuthGoogle(request);
+    }
 }

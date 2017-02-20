@@ -16,22 +16,22 @@ import static org.mockito.Mockito.when;
  */
 
 public class UserProviderTest {
-   private SnaptionApiService service;
-   private User user;
+    private SnaptionApiService service;
+    private User user;
 
-   @Before
-   public void setup() {
-      service = mock(SnaptionApiService.class);
-      user = new User("");
-      when(service.getUser(0)).thenReturn(Observable.just(user));
-      when(service.getUserByEmail("")).thenReturn(Observable.just(user));
-      when(service.getUserByFacebook("")).thenReturn(Observable.just(user));
-      when(service.updateUser(0, user)).thenReturn(Observable.just(user));
-   }
+    @Before
+    public void setup() {
+        service = mock(SnaptionApiService.class);
+        user = new User("");
+        when(service.getUser(0)).thenReturn(Observable.just(user));
+        when(service.getUserByEmail("")).thenReturn(Observable.just(user));
+        when(service.getUserByFacebook("")).thenReturn(Observable.just(user));
+        when(service.updateUser(0, user)).thenReturn(Observable.just(user));
+    }
 
-   @Test
-   public void testGetUser() {
-      // TODO Fix test
+    @Test
+    public void testGetUser() {
+        // TODO Fix test
 //      UserProvider.getUser(0)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -41,11 +41,11 @@ public class UserProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testFindUserEmail() {
-      // TODO Fix test
+    @Test
+    public void testFindUserEmail() {
+        // TODO Fix test
 //      UserProvider.getUserWithEmail("")
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -55,11 +55,11 @@ public class UserProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testFindUserFacebook() {
-      // TODO Fix test
+    @Test
+    public void testFindUserFacebook() {
+        // TODO Fix test
 //      UserProvider.getUserWithFacebook("")
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -69,11 +69,11 @@ public class UserProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testUpdateUser() {
-      // TODO Fix test
+    @Test
+    public void testUpdateUser() {
+        // TODO Fix test
 //      UserProvider.updateUser(0, user)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -83,5 +83,5 @@ public class UserProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 }

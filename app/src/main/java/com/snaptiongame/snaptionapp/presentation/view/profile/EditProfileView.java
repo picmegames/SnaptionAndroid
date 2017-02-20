@@ -24,75 +24,75 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class EditProfileView extends RelativeLayout {
-   @BindView(R.id.profile_image)
-   CircleImageView mProfileImage;
-   @BindView(R.id.full_name)
-   TextView mFullName;
-   @BindView(R.id.email)
-   TextView mEmail;
-   @BindView(R.id.username)
-   TextView mUsername;
-   @BindView(R.id.text_layout)
-   TextInputLayout mInputLayout;
-   @BindView(R.id.name_input)
-   TextInputEditText mEditText;
-   @BindView(R.id.name_count)
-   TextView mNameCount;
+    @BindView(R.id.profile_image)
+    CircleImageView mProfileImage;
+    @BindView(R.id.full_name)
+    TextView mFullName;
+    @BindView(R.id.email)
+    TextView mEmail;
+    @BindView(R.id.username)
+    TextView mUsername;
+    @BindView(R.id.text_layout)
+    TextInputLayout mInputLayout;
+    @BindView(R.id.name_input)
+    TextInputEditText mEditText;
+    @BindView(R.id.name_count)
+    TextView mNameCount;
 
-   private Context mContext;
-   private AuthenticationManager mAuthManager;
+    private Context mContext;
+    private AuthenticationManager mAuthManager;
 
-   public EditProfileView(Context context, AuthenticationManager authenticationManager) {
-      super(context, null);
-      mContext = context;
-      mAuthManager = authenticationManager;
-      init();
-   }
+    public EditProfileView(Context context, AuthenticationManager authenticationManager) {
+        super(context, null);
+        mContext = context;
+        mAuthManager = authenticationManager;
+        init();
+    }
 
-   public EditProfileView(Context context, AttributeSet attrs) {
-      super(context, attrs);
-      mContext = context;
-      init();
-   }
+    public EditProfileView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mContext = context;
+        init();
+    }
 
-   public EditProfileView(Context context, AttributeSet attrs, int defStyle) {
-      super(context, attrs, defStyle);
-      mContext = context;
-      init();
-   }
+    public EditProfileView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        mContext = context;
+        init();
+    }
 
-   private void init() {
-      View view = inflate(mContext, R.layout.edit_profile, this);
-      ButterKnife.bind(this, view);
+    private void init() {
+        View view = inflate(mContext, R.layout.edit_profile, this);
+        ButterKnife.bind(this, view);
 
-      Glide.with(mContext)
-            .load(mAuthManager.getProfileImageUrl())
-            .into(mProfileImage);
+        Glide.with(mContext)
+                .load(mAuthManager.getProfileImageUrl())
+                .into(mProfileImage);
 
-      mFullName.setText(mAuthManager.getUserFullName());
-      mEmail.setText(mAuthManager.getEmail());
-      mUsername.setText(mAuthManager.getSnaptionUsername());
+        mFullName.setText(mAuthManager.getUserFullName());
+        mEmail.setText(mAuthManager.getEmail());
+        mUsername.setText(mAuthManager.getSnaptionUsername());
 
-      mProfileImage.setOnClickListener(imageView -> {
-         Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
-         imagePickerIntent.setType("image/*");
-         ((Activity) mContext).startActivityForResult(imagePickerIntent, 1);
-      });
-   }
+        mProfileImage.setOnClickListener(imageView -> {
+            Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
+            imagePickerIntent.setType("image/*");
+            ((Activity) mContext).startActivityForResult(imagePickerIntent, 1);
+        });
+    }
 
-   public void updateProfilePicture(String profileUrl) {
-      Glide.with(mContext)
-            .load(profileUrl)
-            .into(mProfileImage);
-   }
+    public void updateProfilePicture(String profileUrl) {
+        Glide.with(mContext)
+                .load(profileUrl)
+                .into(mProfileImage);
+    }
 
-   @OnTextChanged(R.id.name_input)
-   public void textChanged(CharSequence sequence) {
-      mNameCount.setText(
-            String.format(mContext.getString(R.string.count_format), sequence.length()));
-   }
+    @OnTextChanged(R.id.name_input)
+    public void textChanged(CharSequence sequence) {
+        mNameCount.setText(
+                String.format(mContext.getString(R.string.count_format), sequence.length()));
+    }
 
-   public String getNewUsername() {
-      return mEditText.getText().toString();
-   }
+    public String getNewUsername() {
+        return mEditText.getText().toString();
+    }
 }

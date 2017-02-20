@@ -42,230 +42,230 @@ import jp.wasabeef.glide.transformations.ColorFilterTransformation;
  */
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-   @BindView(R.id.toolbar)
-   Toolbar mToolbar;
-   @BindView(R.id.drawer)
-   DrawerLayout mDrawerLayout;
-   @BindView(R.id.navigation_view)
-   NavigationView mNavigationView;
-   @BindView(R.id.fab)
-   FloatingActionButton mFab;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.drawer)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.navigation_view)
+    NavigationView mNavigationView;
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
 
-   ImageView mCoverPhoto;
-   CircleImageView mProfilePicture;
-   TextView mNameView;
-   TextView mEmailView;
+    ImageView mCoverPhoto;
+    CircleImageView mProfilePicture;
+    TextView mNameView;
+    TextView mEmailView;
 
-   private AuthenticationManager mAuthManager;
-   private Fragment mCurrentFragment;
-   private String fragTag;
+    private AuthenticationManager mAuthManager;
+    private Fragment mCurrentFragment;
+    private String fragTag;
 
-   private static final int BLUR_RADIUS = 40;
+    private static final int BLUR_RADIUS = 40;
 
-   @Override
-   protected void onCreate(@Nullable Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      mAuthManager = AuthenticationManager.getInstance(this);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAuthManager = AuthenticationManager.getInstance(this);
 
-      setContentView(R.layout.activity_main);
-      ButterKnife.bind(this);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-      setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
 
-      View headerView = mNavigationView.getHeaderView(0);
-      mCoverPhoto = (ImageView) headerView.findViewById(R.id.cover_photo);
-      mProfilePicture = (CircleImageView) headerView.findViewById(R.id.profile_image);
-      mNameView = (TextView) headerView.findViewById(R.id.username);
-      mEmailView = (TextView) headerView.findViewById(R.id.email);
+        View headerView = mNavigationView.getHeaderView(0);
+        mCoverPhoto = (ImageView) headerView.findViewById(R.id.cover_photo);
+        mProfilePicture = (CircleImageView) headerView.findViewById(R.id.profile_image);
+        mNameView = (TextView) headerView.findViewById(R.id.username);
+        mEmailView = (TextView) headerView.findViewById(R.id.email);
 
-      headerView.setOnClickListener(view -> {
-         if (mAuthManager.isLoggedIn()) {
-            Intent profileIntent = new Intent(this, ProfileActivity.class);
-            profileIntent.putExtra(AuthenticationManager.PROFILE_IMAGE_URL, mAuthManager.getProfileImageUrl());
-            profileIntent.putExtra(AuthenticationManager.FULL_NAME, mAuthManager.getUserFullName());
-
-            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                  .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
-            startActivity(profileIntent, transitionActivityOptions.toBundle());
-         }
-         else {
-            goToLogin();
-         }
-      });
-
-      fragTag = TabbedWallFragment.class.getSimpleName();
-      mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-      if (mCurrentFragment == null) {
-         mCurrentFragment = new TabbedWallFragment();
-      }
-
-      getSupportFragmentManager().beginTransaction()
-            .replace(R.id.frame, mCurrentFragment, fragTag).commit();
-      mNavigationView.getMenu().getItem(0).setChecked(true);
-
-      mNavigationView.setNavigationItemSelectedListener(this);
-
-      ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-            this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
-
-         @Override
-         public void onDrawerClosed(View drawerView) {
-            super.onDrawerClosed(drawerView);
-            hideKeyboard();
-         }
-
-         @Override
-         public void onDrawerOpened(View drawerView) {
-            super.onDrawerOpened(drawerView);
-            hideKeyboard();
-         }
-      };
-
-      mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
-      actionBarDrawerToggle.syncState();
-   }
-
-   private void setDefaultHeader() {
-      Glide.with(this)
-            .load(R.mipmap.ic_launcher)
-            .into(mProfilePicture);
-      Glide.clear(mCoverPhoto);
-      mNameView.setText(getString(R.string.welcome_message));
-      mEmailView.setText("");
-   }
-
-   private void setUserHeader() {
-      String profileImageUrl = mAuthManager.getProfileImageUrl();
-      String name = mAuthManager.getUserFullName();
-      String email = mAuthManager.getEmail();
-
-      Glide.with(this)
-            .load(profileImageUrl)
-            .into(mProfilePicture);
-      Glide.with(this)
-            .load(profileImageUrl)
-            .bitmapTransform(
-                  new CenterCrop(this),
-                  new BlurTransformation(this, BLUR_RADIUS),
-                  new ColorFilterTransformation(this, R.color.colorPrimary))
-            .into(mCoverPhoto);
-      mNameView.setText(name);
-      mEmailView.setText(email);
-   }
-
-   @Override
-   protected void onResume() {
-      super.onResume();
-
-      if (mAuthManager.isLoggedIn()) {
-         setUserHeader();
-      }
-      else {
-         setDefaultHeader();
-      }
-   }
-
-   @Override
-   protected void onStart() {
-      super.onStart();
-      mAuthManager.connectGoogleApi();
-   }
-
-   @Override
-   protected void onStop() {
-      super.onStop();
-      mAuthManager.disconnectGoogleApi();
-   }
-
-   @Override
-   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-      mDrawerLayout.closeDrawers();
-
-      switch (item.getItemId()) {
-         case R.id.wall:
-            fragTag = TabbedWallFragment.TAG;
-            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-            if (mCurrentFragment == null) {
-               mCurrentFragment = TabbedWallFragment.getInstance();
-            }
-            break;
-
-         case R.id.friends:
-            fragTag = FriendsFragment.TAG;
-            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-            if (mCurrentFragment == null) {
-               mCurrentFragment = FriendsFragment.getInstance();
-            }
-            break;
-
-         case R.id.settings:
-            startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
-            break;
-
-         case R.id.log_out:
+        headerView.setOnClickListener(view -> {
             if (mAuthManager.isLoggedIn()) {
-               mAuthManager.logout();
-               goToLogin();
+                Intent profileIntent = new Intent(this, ProfileActivity.class);
+                profileIntent.putExtra(AuthenticationManager.PROFILE_IMAGE_URL, mAuthManager.getProfileImageUrl());
+                profileIntent.putExtra(AuthenticationManager.FULL_NAME, mAuthManager.getUserFullName());
+
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
+                startActivity(profileIntent, transitionActivityOptions.toBundle());
             }
-            break;
+            else {
+                goToLogin();
+            }
+        });
 
-         default:
-            break;
-      }
+        fragTag = TabbedWallFragment.class.getSimpleName();
+        mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+        if (mCurrentFragment == null) {
+            mCurrentFragment = new TabbedWallFragment();
+        }
 
-      getSupportFragmentManager().beginTransaction()
-            .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+        mNavigationView.getMenu().getItem(0).setChecked(true);
 
-      return true;
-   }
+        mNavigationView.setNavigationItemSelectedListener(this);
 
-   @Override
-   public void onBackPressed() {
-      // Don't allow back button in MainActivity
-   }
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
 
-   /**
-    * This method is called when a user clicks the
-    * floating action button on the wall. If the user is
-    * logged in, they will be directed to the create game
-    * view. If not, they will be directed to the login
-    * view.
-    */
-   @OnClick(R.id.fab)
-   public void createGame() {
-      if (!mAuthManager.isLoggedIn()) {
-         goToLogin();
-      }
-      else {
-         if (fragTag.equals(TabbedWallFragment.TAG)) {
-            goToCreateGame();
-         }
-         else if (fragTag.equals(FriendsFragment.TAG)) {
-            ((FriendsFragment) mCurrentFragment).inviteFriends();
-         }
-      }
-   }
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                hideKeyboard();
+            }
 
-   /**
-    * This method creates and fires a new intent to switch to
-    * a CreateGame activity.
-    */
-   private void goToCreateGame() {
-      Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-      startActivity(createGameIntent);
-   }
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                hideKeyboard();
+            }
+        };
 
-   private void goToLogin() {
-      Intent loginIntent = new Intent(this, LoginActivity.class);
-      startActivity(loginIntent);
-   }
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+    }
 
-   private void hideKeyboard() {
-      View view = getCurrentFocus();
+    private void setDefaultHeader() {
+        Glide.with(this)
+                .load(R.mipmap.ic_launcher)
+                .into(mProfilePicture);
+        Glide.clear(mCoverPhoto);
+        mNameView.setText(getString(R.string.welcome_message));
+        mEmailView.setText("");
+    }
 
-      if (view != null) {
-         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-      }
-   }
+    private void setUserHeader() {
+        String profileImageUrl = mAuthManager.getProfileImageUrl();
+        String name = mAuthManager.getUserFullName();
+        String email = mAuthManager.getEmail();
+
+        Glide.with(this)
+                .load(profileImageUrl)
+                .into(mProfilePicture);
+        Glide.with(this)
+                .load(profileImageUrl)
+                .bitmapTransform(
+                        new CenterCrop(this),
+                        new BlurTransformation(this, BLUR_RADIUS),
+                        new ColorFilterTransformation(this, R.color.colorPrimary))
+                .into(mCoverPhoto);
+        mNameView.setText(name);
+        mEmailView.setText(email);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mAuthManager.isLoggedIn()) {
+            setUserHeader();
+        }
+        else {
+            setDefaultHeader();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuthManager.connectGoogleApi();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuthManager.disconnectGoogleApi();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mDrawerLayout.closeDrawers();
+
+        switch (item.getItemId()) {
+            case R.id.wall:
+                fragTag = TabbedWallFragment.TAG;
+                mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                if (mCurrentFragment == null) {
+                    mCurrentFragment = TabbedWallFragment.getInstance();
+                }
+                break;
+
+            case R.id.friends:
+                fragTag = FriendsFragment.TAG;
+                mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                if (mCurrentFragment == null) {
+                    mCurrentFragment = FriendsFragment.getInstance();
+                }
+                break;
+
+            case R.id.settings:
+                startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
+                break;
+
+            case R.id.log_out:
+                if (mAuthManager.isLoggedIn()) {
+                    mAuthManager.logout();
+                    goToLogin();
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Don't allow back button in MainActivity
+    }
+
+    /**
+     * This method is called when a user clicks the
+     * floating action button on the wall. If the user is
+     * logged in, they will be directed to the create game
+     * view. If not, they will be directed to the login
+     * view.
+     */
+    @OnClick(R.id.fab)
+    public void createGame() {
+        if (!mAuthManager.isLoggedIn()) {
+            goToLogin();
+        }
+        else {
+            if (fragTag.equals(TabbedWallFragment.TAG)) {
+                goToCreateGame();
+            }
+            else if (fragTag.equals(FriendsFragment.TAG)) {
+                ((FriendsFragment) mCurrentFragment).inviteFriends();
+            }
+        }
+    }
+
+    /**
+     * This method creates and fires a new intent to switch to
+     * a CreateGame activity.
+     */
+    private void goToCreateGame() {
+        Intent createGameIntent = new Intent(this, CreateGameActivity.class);
+        startActivity(createGameIntent);
+    }
+
+    private void goToLogin() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }

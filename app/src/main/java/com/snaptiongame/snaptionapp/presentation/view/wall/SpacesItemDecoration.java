@@ -10,28 +10,28 @@ import android.view.View;
  */
 
 public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
-   private final int mSpace;
+    private final int mSpace;
 
-   private static final int RIGHT = 1;
+    private static final int RIGHT = 1;
 
-   public SpacesItemDecoration(int space) {
-      this.mSpace = space;
-   }
+    public SpacesItemDecoration(int space) {
+        this.mSpace = space;
+    }
 
-   @Override
-   public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-      int spanIndex = ((StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams()).getSpanIndex();
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        int spanIndex = ((StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams()).getSpanIndex();
 
-      if (spanIndex == RIGHT) {
-         outRect.left = mSpace / 2;
-         outRect.right = mSpace;
-      }
-      else {
-         outRect.left = mSpace;
-         outRect.right = mSpace / 2;
-      }
+        if (spanIndex == RIGHT) {
+            outRect.left = mSpace / 2;
+            outRect.right = mSpace;
+        }
+        else {
+            outRect.left = mSpace;
+            outRect.right = mSpace / 2;
+        }
 
-      outRect.bottom = 0;
-      outRect.top = mSpace;
-   }
+        outRect.bottom = 0;
+        outRect.top = mSpace;
+    }
 }

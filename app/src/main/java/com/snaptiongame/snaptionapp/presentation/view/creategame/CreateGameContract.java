@@ -13,17 +13,23 @@ import com.snaptiongame.snaptionapp.presentation.BaseView;
  */
 
 public class CreateGameContract {
-   interface View extends BaseView<Presenter> {
-      void createGame();
-      void onBackPressed();
-      void showCreateSuccess();
-      void showCreateFailure();
-      void setFriendNames(String[] friendNames);
-   }
+    interface View extends BaseView<Presenter> {
+        void createGame();
 
-   interface Presenter extends BasePresenter {
-      void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic);
-      void createGame(Drawable drawable, String type, int userId, boolean isPublic);
-      Friend getFriendByName(String name);
-   }
+        void onBackPressed();
+
+        void showCreateSuccess();
+
+        void showCreateFailure();
+
+        void setFriendNames(String[] friendNames);
+    }
+
+    interface Presenter extends BasePresenter {
+        void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic);
+
+        void createGame(Drawable drawable, String type, int userId, boolean isPublic);
+
+        Friend getFriendByName(String name);
+    }
 }

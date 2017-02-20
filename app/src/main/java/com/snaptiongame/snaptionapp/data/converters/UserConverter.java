@@ -17,21 +17,22 @@ import java.lang.reflect.Type;
 
 public class UserConverter implements JsonSerializer<User>, JsonDeserializer<User> {
 
-   @Override
-   public JsonElement serialize(User src, Type typeOfSrc, JsonSerializationContext context) {
-      return new Gson().toJsonTree(src);
-   }
+    @Override
+    public JsonElement serialize(User src, Type typeOfSrc, JsonSerializationContext context) {
+        return new Gson().toJsonTree(src);
+    }
 
-   @Override
-   public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-      if (json.isJsonArray()) {
-         if (json.getAsJsonArray().size() > 0) {
-            return new Gson().fromJson(json.getAsJsonArray().get(0), typeOfT);
-         } else {
-            return new User();
-         }
+    @Override
+    public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        if (json.isJsonArray()) {
+            if (json.getAsJsonArray().size() > 0) {
+                return new Gson().fromJson(json.getAsJsonArray().get(0), typeOfT);
+            }
+            else {
+                return new User();
+            }
 
-      }
-      return new Gson().fromJson(json, typeOfT);
-   }
+        }
+        return new Gson().fromJson(json, typeOfT);
+    }
 }

@@ -62,156 +62,156 @@ import timber.log.Timber;
  * @version 1.0
  */
 public class SnaptionApplication extends Application {
-   public static Gson gson = setupGson();
-   public static OkHttpClient okHttpClient;
-   private static X509TrustManager trustManager;
-   private static Context context;
+    public static Gson gson = setupGson();
+    public static OkHttpClient okHttpClient;
+    private static X509TrustManager trustManager;
+    private static Context context;
 
-   private static final String CERT_TYPE = "X.509";
-   private static final String CA = "ca";
-   private static final String TLS = "TLS";
+    private static final String CERT_TYPE = "X.509";
+    private static final String CA = "ca";
+    private static final String TLS = "TLS";
 
-   @Override
-   public void onCreate() {
-      super.onCreate();
-      SnaptionApplication.context = getApplicationContext();
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        SnaptionApplication.context = getApplicationContext();
 
-      // INIT Leak Canary (Memory leak checking)
-      if (LeakCanary.isInAnalyzerProcess(this)) {
-         return;
-      }
+        // INIT Leak Canary (Memory leak checking)
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
 
-      LeakCanary.install(this);
+        LeakCanary.install(this);
 
-      if (BuildConfig.DEBUG) {
-         // INIT Timber (Logger for debug builds)
-         Timber.plant(new Timber.DebugTree());
-      }
-   }
+        if (BuildConfig.DEBUG) {
+            // INIT Timber (Logger for debug builds)
+            Timber.plant(new Timber.DebugTree());
+        }
+    }
 
-   public static Context getContext() {
-      return SnaptionApplication.context;
-   }
+    public static Context getContext() {
+        return SnaptionApplication.context;
+    }
 
-   /**
-    * This method provides and handles the creation of an OkHttpClient.
-    * If we are an a debug build, add a logging interceptor,
-    * otherwise provide no logging interceptor.
-    *
-    * @return The development or production OkHttpClient
-    */
-   public static OkHttpClient makeOkHttpClient() {
-      PersistentCookieStore persistentCookieStore = new PersistentCookieStore(getContext());
-      CookieHandler cookieHandler = new CookieManager(persistentCookieStore, CookiePolicy.ACCEPT_ALL);
-      CookieHandler.setDefault(cookieHandler);
-      JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
+    /**
+     * This method provides and handles the creation of an OkHttpClient.
+     * If we are an a debug build, add a logging interceptor,
+     * otherwise provide no logging interceptor.
+     *
+     * @return The development or production OkHttpClient
+     */
+    public static OkHttpClient makeOkHttpClient() {
+        PersistentCookieStore persistentCookieStore = new PersistentCookieStore(getContext());
+        CookieHandler cookieHandler = new CookieManager(persistentCookieStore, CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookieHandler);
+        JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
 
-      try {
-         SSLSocketFactory socketFactory = getSSLConfig(context).getSocketFactory();
+        try {
+            SSLSocketFactory socketFactory = getSSLConfig(context).getSocketFactory();
 
-         if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                okHttpClient = new OkHttpClient.Builder()
+                        .sslSocketFactory(socketFactory, trustManager)
+                        // TODO Make this more secure
+                        .hostnameVerifier((String s, SSLSession sslSession) -> true)
+                        .cookieJar(cookieJar)
+                        .addInterceptor(interceptor)
+                        .build();
+            }
+            else {
+                okHttpClient = new OkHttpClient.Builder()
+                        .sslSocketFactory(socketFactory, trustManager)
+                        // TODO Make this more secure
+                        .hostnameVerifier((String s, SSLSession sslSession) -> true)
+                        .cookieJar(cookieJar)
+                        .build();
+            }
+        }
+        catch (CertificateException | KeyStoreException | NoSuchAlgorithmException |
+                KeyManagementException | IOException e) {
+            Timber.e("Could not initialize OkHttpClient with SSL Certificate", e);
+
             okHttpClient = new OkHttpClient.Builder()
-                  .sslSocketFactory(socketFactory, trustManager)
-                  // TODO Make this more secure
-                  .hostnameVerifier((String s, SSLSession sslSession) -> true)
-                  .cookieJar(cookieJar)
-                  .addInterceptor(interceptor)
-                  .build();
-         }
-         else {
-            okHttpClient = new OkHttpClient.Builder()
-                  .sslSocketFactory(socketFactory, trustManager)
-                  // TODO Make this more secure
-                  .hostnameVerifier((String s, SSLSession sslSession) -> true)
-                  .cookieJar(cookieJar)
-                  .build();
-         }
-      }
-      catch (CertificateException | KeyStoreException | NoSuchAlgorithmException |
-            KeyManagementException | IOException e) {
-         Timber.e("Could not initialize OkHttpClient with SSL Certificate", e);
+                    .hostnameVerifier((String s, SSLSession sslSession) -> true)
+                    .cookieJar(cookieJar)
+                    .build();
+        }
 
-         okHttpClient = new OkHttpClient.Builder()
-               .hostnameVerifier((String s, SSLSession sslSession) -> true)
-               .cookieJar(cookieJar)
-               .build();
-      }
+        return okHttpClient;
+    }
 
-      return okHttpClient;
-   }
+    /**
+     * This method will open the .crt file in the raw resource folder
+     * and create the necessary objects to correctly provide a secure
+     * connection between our application and the server.
+     *
+     * @return A new instance of an SSLContext
+     * @throws CertificateException
+     * @throws KeyStoreException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws IOException
+     */
+    private static SSLContext getSSLConfig(Context context) throws CertificateException,
+            KeyStoreException, NoSuchAlgorithmException, KeyManagementException, IOException {
 
-   /**
-    * This method will open the .crt file in the raw resource folder
-    * and create the necessary objects to correctly provide a secure
-    * connection between our application and the server.
-    *
-    * @return A new instance of an SSLContext
-    * @throws CertificateException
-    * @throws KeyStoreException
-    * @throws NoSuchAlgorithmException
-    * @throws KeyManagementException
-    * @throws IOException
-    */
-   private static SSLContext getSSLConfig(Context context) throws CertificateException,
-         KeyStoreException, NoSuchAlgorithmException, KeyManagementException, IOException {
+        CertificateFactory certificateFactory;
+        certificateFactory = CertificateFactory.getInstance(CERT_TYPE);
 
-      CertificateFactory certificateFactory;
-      certificateFactory = CertificateFactory.getInstance(CERT_TYPE);
+        // Open certificate from raw resource
+        Certificate certificate;
+        try (InputStream cert = context.getResources().openRawResource(R.raw.wwwexamplecom)) {
+            certificate = certificateFactory.generateCertificate(cert);
+        }
 
-      // Open certificate from raw resource
-      Certificate certificate;
-      try (InputStream cert = context.getResources().openRawResource(R.raw.wwwexamplecom)) {
-         certificate = certificateFactory.generateCertificate(cert);
-      }
+        // Creating a KeyStore containing our trusted CAs
+        String keyStoreType = KeyStore.getDefaultType();
+        KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+        keyStore.load(null, null);
+        keyStore.setCertificateEntry(CA, certificate);
 
-      // Creating a KeyStore containing our trusted CAs
-      String keyStoreType = KeyStore.getDefaultType();
-      KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-      keyStore.load(null, null);
-      keyStore.setCertificateEntry(CA, certificate);
+        // Creating a TrustManager that trusts the CAs in our KeyStore.
+        String trustManagerAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(trustManagerAlgorithm);
+        trustManagerFactory.init(keyStore);
 
-      // Creating a TrustManager that trusts the CAs in our KeyStore.
-      String trustManagerAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-      TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(trustManagerAlgorithm);
-      trustManagerFactory.init(keyStore);
+        // Find correct X509TrustManager
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+        for (TrustManager manager : trustManagers) {
+            if (manager != null) {
+                trustManager = (X509TrustManager) manager;
+            }
+        }
 
-      // Find correct X509TrustManager
-      TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-      for (TrustManager manager : trustManagers) {
-         if (manager != null) {
-            trustManager = (X509TrustManager) manager;
-         }
-      }
+        // Creating an SSLSocketFactory that uses our TrustManager
+        SSLContext sslContext = SSLContext.getInstance(TLS);
+        sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
 
-      // Creating an SSLSocketFactory that uses our TrustManager
-      SSLContext sslContext = SSLContext.getInstance(TLS);
-      sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
+        return sslContext;
+    }
 
-      return sslContext;
-   }
-
-   /**
-    * This method provides and handles the creation of a Gson parser.
-    * It will add all of the necessary Type Adapters to serialize and
-    * deserialize objects passed to and from the server.
-    *
-    * @return The Gson parser to be used with a Retrofit instance
-    */
-   public static Gson setupGson() {
-      GsonBuilder builder = new GsonBuilder();
-      builder.registerTypeAdapter(OAuthRequest.class, new OAuthConverter());
-      builder.registerTypeAdapter(Session.class, new SessionConverter());
-      builder.registerTypeAdapter(User.class, new UserConverter());
-      builder.registerTypeAdapter(Snaption.class, new SnaptionConverter());
-      builder.registerTypeAdapter(Caption.class, new CaptionConverter());
-      builder.registerTypeAdapter(Like.class, new LikeConverter());
-      builder.registerTypeAdapter(Friend.class, new FriendConverter());
-      builder.registerTypeAdapter(AddFriendRequest.class, new AddFriendConverter());
-      builder.registerTypeAdapter(CaptionSet.class, new CaptionSetConverter());
-      builder.registerTypeAdapter(FitBCaption.class, new FitBCaptionConverter());
-      builder.excludeFieldsWithoutExposeAnnotation();
-      return builder.create();
-   }
+    /**
+     * This method provides and handles the creation of a Gson parser.
+     * It will add all of the necessary Type Adapters to serialize and
+     * deserialize objects passed to and from the server.
+     *
+     * @return The Gson parser to be used with a Retrofit instance
+     */
+    public static Gson setupGson() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(OAuthRequest.class, new OAuthConverter());
+        builder.registerTypeAdapter(Session.class, new SessionConverter());
+        builder.registerTypeAdapter(User.class, new UserConverter());
+        builder.registerTypeAdapter(Snaption.class, new SnaptionConverter());
+        builder.registerTypeAdapter(Caption.class, new CaptionConverter());
+        builder.registerTypeAdapter(Like.class, new LikeConverter());
+        builder.registerTypeAdapter(Friend.class, new FriendConverter());
+        builder.registerTypeAdapter(AddFriendRequest.class, new AddFriendConverter());
+        builder.registerTypeAdapter(CaptionSet.class, new CaptionSetConverter());
+        builder.registerTypeAdapter(FitBCaption.class, new FitBCaptionConverter());
+        builder.excludeFieldsWithoutExposeAnnotation();
+        return builder.create();
+    }
 }

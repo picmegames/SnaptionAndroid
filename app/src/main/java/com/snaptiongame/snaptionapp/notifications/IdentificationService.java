@@ -8,16 +8,16 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
  */
 
 public class IdentificationService extends FirebaseInstanceIdService {
-   @Override
-   public void onTokenRefresh() {
-      super.onTokenRefresh();
+    @Override
+    public void onTokenRefresh() {
+        super.onTokenRefresh();
 
-      String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
-      sendRegistrationToServer(refreshedToken);
-   }
+        sendRegistrationToServer(refreshedToken);
+    }
 
-   private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer(String token) {
 
-   }
+    }
 }

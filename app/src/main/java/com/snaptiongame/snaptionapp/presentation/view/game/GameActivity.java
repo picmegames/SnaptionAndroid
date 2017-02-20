@@ -37,181 +37,177 @@ import butterknife.OnClick;
  */
 
 public class GameActivity extends AppCompatActivity implements GameContract.View {
-   @BindView(R.id.toolbar)
-   Toolbar mToolbar;
-   @BindView(R.id.fab)
-   FloatingActionButton mFab;
-   @BindView(R.id.refresh_layout)
-   SwipeRefreshLayout mRefreshLayout;
-   @BindView(R.id.caption_list)
-   RecyclerView mCaptionList;
-   @BindView(R.id.game_image)
-   ImageView mImage;
-   @BindView(R.id.picker_image)
-   ImageView mPickerImage;
-   @BindView(R.id.picker_name)
-   TextView mPickerName;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.caption_list)
+    RecyclerView mCaptionList;
+    @BindView(R.id.game_image)
+    ImageView mImage;
+    @BindView(R.id.picker_image)
+    ImageView mPickerImage;
+    @BindView(R.id.picker_name)
+    TextView mPickerName;
 
-   private ActionBar mActionBar;
-   private CaptionAdapter mAdapter;
-   private AuthenticationManager mAuthManager;
-   private GameContract.Presenter mPresenter;
-   private CaptionSelectDialogFragment mCaptionDialogFragment;
-   private CaptionSelectDialogFragment mCaptionSetDialogFragment;
-   private int mGameId;
-   private int mPickerId;
+    private ActionBar mActionBar;
+    private CaptionAdapter mAdapter;
+    private AuthenticationManager mAuthManager;
+    private GameContract.Presenter mPresenter;
+    private CaptionSelectDialogFragment mCaptionDialogFragment;
+    private CaptionSelectDialogFragment mCaptionSetDialogFragment;
+    private int mGameId;
+    private int mPickerId;
 
-   @Override
-   protected void onCreate(@Nullable Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_game);
-      ButterKnife.bind(this);
-      mAuthManager = AuthenticationManager.getInstance(this);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_game);
+        ButterKnife.bind(this);
+        mAuthManager = AuthenticationManager.getInstance(this);
 
-      LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-      layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-      mCaptionList.setLayoutManager(layoutManager);
-      mAdapter = new CaptionAdapter(new ArrayList<>());
-      mCaptionList.setAdapter(mAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mCaptionList.setLayoutManager(layoutManager);
+        mAdapter = new CaptionAdapter(new ArrayList<>());
+        mCaptionList.setAdapter(mAdapter);
 
-      setSupportActionBar(mToolbar);
-      mActionBar = getSupportActionBar();
+        setSupportActionBar(mToolbar);
+        mActionBar = getSupportActionBar();
 
-      if (mActionBar != null) {
-         mActionBar.setDisplayHomeAsUpEnabled(true);
-         mActionBar.setTitle(getString(R.string.add_caption));
-      }
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setTitle(getString(R.string.add_caption));
+        }
 
-      supportPostponeEnterTransition();
+        supportPostponeEnterTransition();
 
-      Intent intent = getIntent();
+        Intent intent = getIntent();
 
-      Glide.with(this)
-            .load(intent.getStringExtra("image"))
-            .fitCenter()
-            .dontAnimate()
-            .listener(new RequestListener<String, GlideDrawable>() {
-               @Override
-               public boolean onException(Exception e, String model, Target<GlideDrawable> target,
-                                          boolean isFirstResource) {
-                  supportStartPostponedEnterTransition();
-                  return false;
-               }
+        Glide.with(this)
+                .load(intent.getStringExtra("image"))
+                .fitCenter()
+                .dontAnimate()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
 
-               @Override
-               public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
-                                              boolean isFromMemoryCache, boolean isFirstResource) {
-                  supportStartPostponedEnterTransition();
-                  return false;
-               }
-            })
-            .into(mImage);
-      mGameId = intent.getIntExtra("gameId", 0);
-      mPickerId = intent.getIntExtra("pickerId", 0);
-      mPresenter = new GamePresenter(mGameId, mPickerId, this);
-      mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
-   }
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache, boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+                })
+                .into(mImage);
+        mGameId = intent.getIntExtra("gameId", 0);
+        mPickerId = intent.getIntExtra("pickerId", 0);
+        mPresenter = new GamePresenter(mGameId, mPickerId, this);
+        mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
 
-   @Override
-   public void setPickerInfo(String profileUrl, String name) {
-      if (profileUrl != null && !profileUrl.isEmpty()) {
-         Glide.with(this)
-               .load(profileUrl)
-               .into(mPickerImage);
-      }
-      else {
-         mPickerImage.setImageDrawable(TextDrawable.builder()
-               .beginConfig()
-               .width(40)
-               .height(40)
-               .toUpperCase()
-               .endConfig()
-               .buildRound(name.substring(0, 1),
-                     ColorGenerator.MATERIAL.getColor(name)));
-      }
-      mPickerName.setText(name);
-   }
+        mPresenter.subscribe();
+        mRefreshLayout.setRefreshing(true);
+    }
 
-   @Override
-   public void setPresenter(GameContract.Presenter presenter) {
-      mPresenter = presenter;
-   }
+    @Override
+    public void setPickerInfo(String profileUrl, String name) {
+        if (profileUrl != null && !profileUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(profileUrl)
+                    .into(mPickerImage);
+        }
+        else {
+            mPickerImage.setImageDrawable(TextDrawable.builder()
+                    .beginConfig()
+                    .width(40)
+                    .height(40)
+                    .toUpperCase()
+                    .endConfig()
+                    .buildRound(name.substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(name)));
+        }
+        mPickerName.setText(name);
+    }
 
-   @Override
-   protected void onResume() {
-      super.onResume();
-      mPresenter.subscribe();
-      mRefreshLayout.setRefreshing(true);
-   }
+    @Override
+    public void setPresenter(GameContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
 
-   @Override
-   protected void onPause() {
-      super.onPause();
-      mPresenter.unsubscribe();
-   }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
+    }
 
-   @Override
-   public void addCaption(Caption caption) {
-      mAdapter.addCaption(caption);
-   }
+    @Override
+    public void addCaption(Caption caption) {
+        mAdapter.addCaption(caption);
+    }
 
-   @OnClick(R.id.fab)
-   public void showAddCaptionDialog() {
-      if (!mAuthManager.isLoggedIn()) {
-         goToLogin();
-      }
-      else {
-         mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
-                 CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
-                 mGameId, -1);
-         mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
-      }
-   }
+    @OnClick(R.id.fab)
+    public void showAddCaptionDialog() {
+        if (!mAuthManager.isLoggedIn()) {
+            goToLogin();
+        }
+        else {
+            mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
+                    CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
+                    mGameId, -1);
+            mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
+        }
+    }
 
-   public void displayCaptionChoosingDialog(int setChosen) {
-      mCaptionSetDialogFragment.dismiss();
-      mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
-              CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
-              mGameId, setChosen);
-      mCaptionDialogFragment.show(getFragmentManager(), "dialog");
+    public void displayCaptionChoosingDialog(int setChosen) {
+        mCaptionSetDialogFragment.dismiss();
+        mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
+                CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
+                mGameId, setChosen);
+        mCaptionDialogFragment.show(getFragmentManager(), "dialog");
 
-   }
+    }
 
-   public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
+    public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
 
-      if (mCaptionDialogFragment != null)
-         mCaptionDialogFragment.dismiss();
+        if (mCaptionDialogFragment != null)
+            mCaptionDialogFragment.dismiss();
 
 
-      if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER) {
-         if (mCaptionSetDialogFragment != null)
-            mCaptionSetDialogFragment.dismiss();
-      }
-      else {
+        if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER) {
+            if (mCaptionSetDialogFragment != null)
+                mCaptionSetDialogFragment.dismiss();
+        }
+        else {
 
-         mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
-      }
+            mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
+        }
 
-   }
+    }
 
-   private void goToLogin() {
-      Intent loginIntent = new Intent(this, LoginActivity.class);
-      startActivity(loginIntent);
-   }
+    private void goToLogin() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+    }
 
-   @Override
-   public void showCaptions(List<Caption> captions) {
-      mAdapter.setCaptions(captions);
-      mRefreshLayout.setRefreshing(false);
-   }
+    @Override
+    public void showCaptions(List<Caption> captions) {
+        mAdapter.setCaptions(captions);
+        mRefreshLayout.setRefreshing(false);
+    }
 
-   @Override
-   public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-         case android.R.id.home:
-            onBackPressed();
-            break;
-      }
-      return true;
-   }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
 }

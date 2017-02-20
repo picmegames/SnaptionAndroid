@@ -11,21 +11,21 @@ import io.reactivex.Observable;
  */
 
 public class UserProvider {
-   private static SnaptionApiService apiService = ApiProvider.getApiService();
+    private static SnaptionApiService apiService = ApiProvider.getApiService();
 
-   public static Observable<User> getUser(int userId) {
-      return apiService.getUser(userId);
-   }
+    public static Observable<User> getUser(int userId) {
+        return apiService.getUser(userId);
+    }
 
-   public static Observable<User> getUserWithEmail(String email) {
-      return apiService.getUserByEmail(email);
-   }
+    public static Observable<User> getUserWithEmail(String email) {
+        return apiService.getUserByEmail(email);
+    }
 
-   public static Observable<User> getUserWithFacebook(String id) {
-      return apiService.getUserByFacebook(id);
-   }
+    public static Observable<User> getUserWithFacebook(String id) {
+        return apiService.getUserByFacebook(id);
+    }
 
-   public static Observable<User> updateUser(int userId, User user) {
-      return apiService.updateUser(userId, user);
-   }
+    public static Observable<User> updateUser(int userId, User user) {
+        return apiService.updateUser(userId, user);
+    }
 }

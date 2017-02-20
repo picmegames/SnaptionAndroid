@@ -18,64 +18,64 @@ import java.util.List;
  */
 
 public class CaptionAdapter extends RecyclerView.Adapter {
-   private List<Caption> mCaptions;
+    private List<Caption> mCaptions;
 
-   public CaptionAdapter(List<Caption> captions) {
-      this.mCaptions = captions;
-   }
+    public CaptionAdapter(List<Caption> captions) {
+        this.mCaptions = captions;
+    }
 
-   @Override
-   public CaptionCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.caption_card, parent, false);
-      return new CaptionCardViewHolder(view);
-   }
+    @Override
+    public CaptionCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.caption_card, parent, false);
+        return new CaptionCardViewHolder(view);
+    }
 
-   @Override
-   public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-      CaptionCardViewHolder holder = (CaptionCardViewHolder) viewHolder;
-      Caption curCaption = mCaptions.get(position);
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        CaptionCardViewHolder holder = (CaptionCardViewHolder) viewHolder;
+        Caption curCaption = mCaptions.get(position);
 
-      if (curCaption.creatorPicture != null) {
-         Glide.with(holder.mContext)
-               .load(curCaption.creatorPicture)
-               .into(holder.mUserImage);
-      }
-      else {
-         holder.mUserImage.setImageDrawable(TextDrawable.builder()
-               .beginConfig()
-               .width(40)
-               .height(40)
-               .toUpperCase()
-               .endConfig()
-               .buildRound(curCaption.creatorName.substring(0, 1),
-                     ColorGenerator.MATERIAL.getColor(curCaption.creatorName)));
-      }
-      holder.captionId = curCaption.id;
-      holder.mCaption.setText(curCaption.assocFitB.beforeBlank + curCaption.caption + curCaption.assocFitB.afterBlank);
-      holder.mName.setText(curCaption.creatorName);
-      holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
-   }
+        if (curCaption.creatorPicture != null) {
+            Glide.with(holder.mContext)
+                    .load(curCaption.creatorPicture)
+                    .into(holder.mUserImage);
+        }
+        else {
+            holder.mUserImage.setImageDrawable(TextDrawable.builder()
+                    .beginConfig()
+                    .width(40)
+                    .height(40)
+                    .toUpperCase()
+                    .endConfig()
+                    .buildRound(curCaption.creatorName.substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(curCaption.creatorName)));
+        }
+        holder.captionId = curCaption.id;
+        holder.mCaption.setText(curCaption.assocFitB.beforeBlank + curCaption.caption + curCaption.assocFitB.afterBlank);
+        holder.mName.setText(curCaption.creatorName);
+        holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
+    }
 
-   public void setCaptions(List<Caption> captions) {
-      if (!mCaptions.equals(captions)) {
-         mCaptions = captions;
-         notifyDataSetChanged();
-      }
-   }
+    public void setCaptions(List<Caption> captions) {
+        if (!mCaptions.equals(captions)) {
+            mCaptions = captions;
+            notifyDataSetChanged();
+        }
+    }
 
-   public void addCaption(Caption caption) {
-      mCaptions.add(caption);
-      notifyDataSetChanged();
-   }
+    public void addCaption(Caption caption) {
+        mCaptions.add(caption);
+        notifyDataSetChanged();
+    }
 
-   @Override
-   public int getItemCount() {
-      return mCaptions.size();
-   }
+    @Override
+    public int getItemCount() {
+        return mCaptions.size();
+    }
 
-   @Override
-   public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-      super.onAttachedToRecyclerView(recyclerView);
-   }
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
 }
