@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     private WallContract.Presenter mPresenter;
 
-    private AuthenticationManager mAuthManager;
     private WallAdapter mAdapter;
     private Unbinder mUnbinder;
 
@@ -71,7 +69,6 @@ public class WallFragment extends Fragment implements WallContract.View {
         View view = inflater.inflate(R.layout.wall_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
         mPresenter = new WallPresenter(this);
-        mAuthManager = AuthenticationManager.getInstance(getContext());
 
         mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
         mWall.addItemDecoration(new SpacesItemDecoration(
@@ -87,18 +84,10 @@ public class WallFragment extends Fragment implements WallContract.View {
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadGames);
 
-        return view;
-    }
-
-    /**
-     * This method is called when the view becomes visible to the user.
-     * This will reload the list of games.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
         mPresenter.subscribe();
         mRefreshLayout.setRefreshing(true);
+
+        return view;
     }
 
     /**

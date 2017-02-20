@@ -110,6 +110,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mPickerId = intent.getIntExtra("pickerId", 0);
         mPresenter = new GamePresenter(mGameId, mPickerId, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
+
+        mPresenter.subscribe();
+        mRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -135,13 +138,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void setPresenter(GameContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPresenter.subscribe();
-        mRefreshLayout.setRefreshing(true);
     }
 
     @Override
