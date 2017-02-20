@@ -59,6 +59,7 @@ dependencies {
     testCompile "junit:junit:$rootProject.junitVersion"
     testCompile "org.assertj:assertj-core:$rootProject.assertjVersion"
     testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
 
     // Android Support Libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
