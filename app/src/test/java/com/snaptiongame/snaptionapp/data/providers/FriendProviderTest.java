@@ -20,26 +20,26 @@ import static org.mockito.Mockito.when;
  */
 
 public class FriendProviderTest {
-   private SnaptionApiService service;
-   private List<Friend> friends;
-   private AddFriendRequest request;
+    private SnaptionApiService service;
+    private List<Friend> friends;
+    private AddFriendRequest request;
 
-   @Before
-   public void setup() {
-      service = mock(SnaptionApiService.class);
-      friends = new ArrayList<>();
-      friends.add(new Friend("", "", "", "", "", "", "", ""));
-      friends.add(new Friend("", "", "", "", "", "", "", ""));
-      friends.add(new Friend("", "", "", "", "", "", "", ""));
-      when(service.getFriends(0)).thenReturn(Observable.just(friends));
-      request = new AddFriendRequest(0);
-      when(service.addFriend(0, request)).thenReturn(Observable.just(request));
-      when(service.deleteFriend(0, request)).thenReturn(Observable.just(request));
-   }
+    @Before
+    public void setup() {
+        service = mock(SnaptionApiService.class);
+        friends = new ArrayList<>();
+        friends.add(new Friend("", "", "", "", "", "", "", ""));
+        friends.add(new Friend("", "", "", "", "", "", "", ""));
+        friends.add(new Friend("", "", "", "", "", "", "", ""));
+        when(service.getFriends(0)).thenReturn(Observable.just(friends));
+        request = new AddFriendRequest(0);
+        when(service.addFriend(0, request)).thenReturn(Observable.just(request));
+        when(service.deleteFriend(0, request)).thenReturn(Observable.just(request));
+    }
 
-   @Test
-   public void testLoadFriends() {
-      // TODO Fix test
+    @Test
+    public void testLoadFriends() {
+        // TODO Fix test
 //      FriendProvider.loadFriends(0)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -49,11 +49,11 @@ public class FriendProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testAddFriend() {
-      // TODO Fix test
+    @Test
+    public void testAddFriend() {
+        // TODO Fix test
 //      FriendProvider.addFriend(0, request)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -63,11 +63,11 @@ public class FriendProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testDeleteFriend() {
-      // TODO Fix test
+    @Test
+    public void testDeleteFriend() {
+        // TODO Fix test
 //      FriendProvider.removeFriend(0, request)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -77,5 +77,5 @@ public class FriendProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 }

@@ -20,29 +20,29 @@ import static org.mockito.Mockito.when;
  */
 
 public class SnaptionProviderTest {
-   private SnaptionApiService service;
-   private List<Snaption> snaptions;
-   private Snaption snaption;
-   private Like like;
+    private SnaptionApiService service;
+    private List<Snaption> snaptions;
+    private Snaption snaption;
+    private Like like;
 
-   @Before
-   public void setup() {
-      service = mock(SnaptionApiService.class);
-      snaptions = new ArrayList<>();
-      snaptions.add(new Snaption(0, false, 0, "picture0", ""));
-      snaptions.add(new Snaption(1, false, 1, "picture1", ""));
-      snaptions.add(new Snaption(2, true, 2, "picture2", ""));
-      snaptions.add(new Snaption(3, false, 3, "picture3", ""));
-      when(service.getSnaptions()).thenReturn(Observable.just(snaptions));
-      like = new Like(0, 0, false, false, "");
-      when(service.upvoteSnaption(like)).thenReturn(Observable.just(like));
-      snaption = new Snaption(0, false, 0, "picture0", "");
-      when(service.addSnaption(snaption)).thenReturn(Observable.just(snaption));
-   }
+    @Before
+    public void setup() {
+        service = mock(SnaptionApiService.class);
+        snaptions = new ArrayList<>();
+        snaptions.add(new Snaption(0, false, 0, "picture0", ""));
+        snaptions.add(new Snaption(1, false, 1, "picture1", ""));
+        snaptions.add(new Snaption(2, true, 2, "picture2", ""));
+        snaptions.add(new Snaption(3, false, 3, "picture3", ""));
+        when(service.getSnaptions()).thenReturn(Observable.just(snaptions));
+        like = new Like(0, 0, false, false, "");
+        when(service.upvoteSnaption(like)).thenReturn(Observable.just(like));
+        snaption = new Snaption(0, false, 0, "picture0", "");
+        when(service.addSnaption(snaption)).thenReturn(Observable.just(snaption));
+    }
 
-   @Test
-   public void testGetAllSnaptions() {
-      // TODO Fix test
+    @Test
+    public void testGetAllSnaptions() {
+        // TODO Fix test
 //      SnaptionProvider.getAllSnaptions()
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -52,11 +52,11 @@ public class SnaptionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testUpvoteSnaption() {
-      // TODO Fix test
+    @Test
+    public void testUpvoteSnaption() {
+        // TODO Fix test
 //      SnaptionProvider.upvoteSnaption(like)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -66,11 +66,11 @@ public class SnaptionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 
-   @Test
-   public void testAddSnaption() {
-      // TODO Fix test
+    @Test
+    public void testAddSnaption() {
+        // TODO Fix test
 //      SnaptionProvider.addSnaption(snaption)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
@@ -80,5 +80,5 @@ public class SnaptionProviderTest {
 //                  () -> {
 //                  }
 //            );
-   }
+    }
 }

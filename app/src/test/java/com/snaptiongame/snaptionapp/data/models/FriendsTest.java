@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by BrianGouldsberry on 1/23/17.
  * friends constructor comes in the form of Friend(String id, String first, String last, String fullName, String userName, String picture,
- String cover, String email)
+ * String cover, String email)
  */
 
 public class FriendsTest {
@@ -22,9 +22,9 @@ public class FriendsTest {
         List<Friend> inst = new ArrayList<>(), check;
         assertEquals(FriendsFragment.filterList(inst, "some filter category"), new
                 ArrayList<Friend>());
-        inst.add(new Friend("1" , "John", "Cena", "John Cena", "jcena1234", "", "", ""));
-        inst.add(new Friend("2" , "Steve", "Buscemi", "Steve Buscemi", "raddude17", "", "", ""));
-        inst.add(new Friend("4" , "Steve", "Cenamopolis", "Steve Cenamopolis", "somefakeperson",
+        inst.add(new Friend("1", "John", "Cena", "John Cena", "jcena1234", "", "", ""));
+        inst.add(new Friend("2", "Steve", "Buscemi", "Steve Buscemi", "raddude17", "", "", ""));
+        inst.add(new Friend("4", "Steve", "Cenamopolis", "Steve Cenamopolis", "somefakeperson",
                 "", "", ""));
 
         check = FriendsFragment.filterList(inst, "Steve");

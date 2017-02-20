@@ -9,9 +9,9 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class SessionTest {
-   @Test
-   public void testConstructorSession() {
-      Session session = new Session(0);
-      assertTrue(session.userId == 0);
-   }
+    @Test
+    public void testConstructorSession() {
+        Session session = new Session(0);
+        assertTrue(session.userId == 0);
+    }
 }

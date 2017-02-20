@@ -13,21 +13,27 @@ import java.util.List;
  */
 
 public class GameContract {
-   interface View extends BaseView<Presenter> {
-      void showCaptions(List<Caption> captions);
-      void addCaption(Caption caption);
-      void setPickerInfo(String profileUrl, String name);
-   }
+    interface View extends BaseView<Presenter> {
+        void showCaptions(List<Caption> captions);
 
-   interface Presenter extends BasePresenter {
-      void loadCaptions();
-      void loadCaptionSets();
-      void loadFitBCaptions();
-      void addCaption(String caption, int userId, int fitBId);
-   }
+        void addCaption(Caption caption);
 
-   interface CaptionDialogView extends BaseView<Presenter> {
-      void showFitBCaptions(List<FitBCaption> captions);
-      void showCaptionSets(List<CaptionSet> captionSets);
-   }
+        void setPickerInfo(String profileUrl, String name);
+    }
+
+    interface Presenter extends BasePresenter {
+        void loadCaptions();
+
+        void loadCaptionSets();
+
+        void loadFitBCaptions();
+
+        void addCaption(String caption, int userId, int fitBId);
+    }
+
+    interface CaptionDialogView extends BaseView<Presenter> {
+        void showFitBCaptions(List<FitBCaption> captions);
+
+        void showCaptionSets(List<CaptionSet> captionSets);
+    }
 }

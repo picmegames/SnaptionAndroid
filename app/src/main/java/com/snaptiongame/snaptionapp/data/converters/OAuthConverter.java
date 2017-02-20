@@ -14,12 +14,12 @@ import java.lang.reflect.Type;
 
 public class OAuthConverter implements JsonSerializer<OAuthRequest> {
 
-   @Override
-   public JsonElement serialize(OAuthRequest src, Type typeOfSrc, JsonSerializationContext context) {
-      JsonObject json = new JsonObject();
-      json.addProperty(OAuthRequest.TOKEN, src.token);
-      json.addProperty(OAuthRequest.DEVICE_TOKEN, src.deviceToken);
-      json.addProperty(OAuthRequest.DEVICE_TYPE, src.deviceType);
-      return json;
-   }
+    @Override
+    public JsonElement serialize(OAuthRequest src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject json = new JsonObject();
+        json.addProperty(OAuthRequest.TOKEN, src.token);
+        json.addProperty(OAuthRequest.DEVICE_TOKEN, src.deviceToken);
+        json.addProperty(OAuthRequest.DEVICE_TYPE, src.deviceType);
+        return json;
+    }
 }

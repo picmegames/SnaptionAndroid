@@ -16,25 +16,25 @@ import io.reactivex.Observable;
  */
 
 public class CaptionProvider {
-   private static SnaptionApiService apiService = ApiProvider.getApiService();
+    private static SnaptionApiService apiService = ApiProvider.getApiService();
 
-   public static Observable<List<Caption>> getCaptions(int gameId) {
-      return apiService.getCaptions(gameId);
-   }
+    public static Observable<List<Caption>> getCaptions(int gameId) {
+        return apiService.getCaptions(gameId);
+    }
 
-   public static Observable<List<FitBCaption>> getFitBCaptions() {
-      return apiService.getFitBCaptions();
-   }
+    public static Observable<List<FitBCaption>> getFitBCaptions() {
+        return apiService.getFitBCaptions();
+    }
 
-   public static Observable<Like> upvoteCaption(Like request) {
-      return apiService.upvoteCaption(request);
-   }
+    public static Observable<Like> upvoteCaption(Like request) {
+        return apiService.upvoteCaption(request);
+    }
 
-   public static Observable<Caption> addCaption(int gameId, Caption caption) {
-      return apiService.addCaption(gameId, caption);
-   }
+    public static Observable<Caption> addCaption(int gameId, Caption caption) {
+        return apiService.addCaption(gameId, caption);
+    }
 
-   public static Observable<List<CaptionSet>> getCaptionSets() {
-      return apiService.getCaptionSets();
-   }
+    public static Observable<List<CaptionSet>> getCaptionSets() {
+        return apiService.getCaptionSets();
+    }
 }

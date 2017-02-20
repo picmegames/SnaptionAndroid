@@ -17,18 +17,18 @@ import timber.log.Timber;
  */
 
 public class ImageConverter {
-   public static Observable<String> convertImage(ContentResolver resolver, Uri uri) {
-      String picture = "";
-      try {
-         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-         MediaStore.Images.Media.getBitmap(resolver, uri).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-         picture = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-         byteArrayOutputStream.close();
-      }
-      catch (IOException e) {
-         Timber.e(e);
-      }
+    public static Observable<String> convertImage(ContentResolver resolver, Uri uri) {
+        String picture = "";
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            MediaStore.Images.Media.getBitmap(resolver, uri).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            picture = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+            byteArrayOutputStream.close();
+        }
+        catch (IOException e) {
+            Timber.e(e);
+        }
 
-      return Observable.just(picture);
-   }
+        return Observable.just(picture);
+    }
 }

@@ -15,17 +15,17 @@ import java.util.List;
  */
 public class WallContract {
 
-   /**
-    * This is a template for a view.
-    */
-   interface View extends BaseView<Presenter> {
-      void showGames(List<Snaption> snaptions);
-   }
+    /**
+     * This is a template for a view.
+     */
+    interface View extends BaseView<Presenter> {
+        void showGames(List<Snaption> snaptions);
+    }
 
-   /**
-    * This is a template for a presenter.
-    */
-   interface Presenter extends BasePresenter {
-      void loadGames();
-   }
+    /**
+     * This is a template for a presenter.
+     */
+    interface Presenter extends BasePresenter {
+        void loadGames();
+    }
 }

@@ -22,64 +22,64 @@ import butterknife.OnClick;
  */
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
-   @BindView(R.id.logo)
-   ImageView mLogo;
-   @BindView(R.id.facebook_login_button)
-   LoginButton mFacebookLoginButton;
-   @BindView(R.id.google_sign_in_button)
-   SignInButton mGoogleSignInButton;
+    @BindView(R.id.logo)
+    ImageView mLogo;
+    @BindView(R.id.facebook_login_button)
+    LoginButton mFacebookLoginButton;
+    @BindView(R.id.google_sign_in_button)
+    SignInButton mGoogleSignInButton;
 
-   private AuthenticationManager mAuthManager;
-   private LoginContract.Presenter mPresenter;
+    private AuthenticationManager mAuthManager;
+    private LoginContract.Presenter mPresenter;
 
-   private static final int RC_SIGN_IN = 2222;
+    private static final int RC_SIGN_IN = 2222;
 
-   @Override
-   protected void onCreate(@Nullable Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-      // Initialize Authentication Manager
-      mAuthManager = AuthenticationManager.getInstance(this);
+        // Initialize Authentication Manager
+        mAuthManager = AuthenticationManager.getInstance(this);
 
-      setContentView(R.layout.activity_login);
-      ButterKnife.bind(this);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
-      int logoHeight = (int) getResources().getDimension(R.dimen.logo_height);
-      int logoWidth = (int) getResources().getDimension(R.dimen.logo_width);
+        int logoHeight = (int) getResources().getDimension(R.dimen.logo_height);
+        int logoWidth = (int) getResources().getDimension(R.dimen.logo_width);
 
-      // Set Logo
-      Glide.with(this)
-            .load(R.mipmap.ic_launcher)
-            .override(logoWidth, logoHeight)
-            .fitCenter()
-            .into(mLogo);
+        // Set Logo
+        Glide.with(this)
+                .load(R.mipmap.ic_launcher)
+                .override(logoWidth, logoHeight)
+                .fitCenter()
+                .into(mLogo);
 
-      mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
+        mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
 
-      mPresenter = new LoginPresenter(this);
-   }
+        mPresenter = new LoginPresenter(this);
+    }
 
-   @Override
-   public void setPresenter(LoginContract.Presenter presenter) {
-      mPresenter = presenter;
-   }
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
 
-   @OnClick(R.id.google_sign_in_button)
-   public void googleLogin(View view) {
-      startActivityForResult(mAuthManager.getGoogleIntent(), RC_SIGN_IN);
-   }
+    @OnClick(R.id.google_sign_in_button)
+    public void googleLogin(View view) {
+        startActivityForResult(mAuthManager.getGoogleIntent(), RC_SIGN_IN);
+    }
 
-   @Override
-   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-      super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-      if (requestCode == RC_SIGN_IN) {
-         mAuthManager.googleActivityResult(data);
-      }
-      else {
-         mAuthManager.facebookActivityResult(requestCode, resultCode, data);
-      }
+        if (requestCode == RC_SIGN_IN) {
+            mAuthManager.googleActivityResult(data);
+        }
+        else {
+            mAuthManager.facebookActivityResult(requestCode, resultCode, data);
+        }
 
-      onBackPressed();
-   }
+        onBackPressed();
+    }
 }

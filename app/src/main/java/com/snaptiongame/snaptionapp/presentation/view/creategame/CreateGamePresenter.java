@@ -24,94 +24,94 @@ import timber.log.Timber;
  */
 
 public class CreateGamePresenter implements CreateGameContract.Presenter {
-   @NonNull
-   private CreateGameContract.View mCreateGameView;
-   @NonNull
-   private CompositeDisposable mDisposables;
+    @NonNull
+    private CreateGameContract.View mCreateGameView;
+    @NonNull
+    private CompositeDisposable mDisposables;
 
-   private List<Friend> mFriends;
-   private int mUserId;
-   private String mEncodedImage;
+    private List<Friend> mFriends;
+    private int mUserId;
+    private String mEncodedImage;
 
-   public CreateGamePresenter(int userId, @NonNull CreateGameContract.View createGameView) {
-      mUserId = userId;
-      mCreateGameView = createGameView;
-      mDisposables = new CompositeDisposable();
-      mCreateGameView.setPresenter(this);
-   }
+    public CreateGamePresenter(int userId, @NonNull CreateGameContract.View createGameView) {
+        mUserId = userId;
+        mCreateGameView = createGameView;
+        mDisposables = new CompositeDisposable();
+        mCreateGameView.setPresenter(this);
+    }
 
-   @Override
-   public void createGame(Drawable drawable, String type, int userId, boolean isPublic) {
-      if (drawable != null) {
-         Disposable disposable = SnaptionProvider.addSnaption(
-               new Snaption(userId, !isPublic, 1, mEncodedImage, type))
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(
-                     snaption -> {
-                     },
-                     e -> {
-                        Timber.e(e);
-                        mCreateGameView.showCreateFailure();
-                     },
-                     () -> {
-                        mCreateGameView.onBackPressed();
-                        mCreateGameView.showCreateSuccess();
-                     }
-               );
-         mDisposables.add(disposable);
-      }
-   }
+    @Override
+    public void createGame(Drawable drawable, String type, int userId, boolean isPublic) {
+        if (drawable != null) {
+            Disposable disposable = SnaptionProvider.addSnaption(
+                    new Snaption(userId, !isPublic, 1, mEncodedImage, type))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            snaption -> {
+                            },
+                            e -> {
+                                Timber.e(e);
+                                mCreateGameView.showCreateFailure();
+                            },
+                            () -> {
+                                mCreateGameView.onBackPressed();
+                                mCreateGameView.showCreateSuccess();
+                            }
+                    );
+            mDisposables.add(disposable);
+        }
+    }
 
-   @Override
-   public void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
-      Disposable disposable = ImageConverter.convertImage(resolver, uri)
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                  s -> mEncodedImage = s,
-                  Timber::e,
-                  () -> createGame(drawable, resolver.getType(uri), userId, isPublic)
-            );
-      mDisposables.add(disposable);
-   }
+    @Override
+    public void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
+        Disposable disposable = ImageConverter.convertImage(resolver, uri)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        s -> mEncodedImage = s,
+                        Timber::e,
+                        () -> createGame(drawable, resolver.getType(uri), userId, isPublic)
+                );
+        mDisposables.add(disposable);
+    }
 
-   @Override
-   public Friend getFriendByName(String name) {
-      for (Friend friend : mFriends) {
-         if (friend.userName.equals(name)) {
-            return friend;
-         }
-      }
-      return null;
-   }
+    @Override
+    public Friend getFriendByName(String name) {
+        for (Friend friend : mFriends) {
+            if (friend.userName.equals(name)) {
+                return friend;
+            }
+        }
+        return null;
+    }
 
-   private void loadFriends() {
-      Disposable disposable = FriendProvider.loadFriends(mUserId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                  this::processFriends,
-                  Timber::e,
-                  () -> Timber.i("Getting friends was successful")
-            );
-      mDisposables.add(disposable);
-   }
+    private void loadFriends() {
+        Disposable disposable = FriendProvider.loadFriends(mUserId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::processFriends,
+                        Timber::e,
+                        () -> Timber.i("Getting friends was successful")
+                );
+        mDisposables.add(disposable);
+    }
 
-   private void processFriends(List<Friend> friends) {
-      mFriends = friends;
-      String[] names = new String[friends.size()];
-      for (int index = 0; index < names.length; index++) {
-         names[index] = friends.get(index).userName;
-      }
-      mCreateGameView.setFriendNames(names);
-   }
+    private void processFriends(List<Friend> friends) {
+        mFriends = friends;
+        String[] names = new String[friends.size()];
+        for (int index = 0; index < names.length; index++) {
+            names[index] = friends.get(index).userName;
+        }
+        mCreateGameView.setFriendNames(names);
+    }
 
-   @Override
-   public void subscribe() {
-      loadFriends();
-   }
+    @Override
+    public void subscribe() {
+        loadFriends();
+    }
 
-   @Override
-   public void unsubscribe() {
-      mDisposables.clear();
-   }
+    @Override
+    public void unsubscribe() {
+        mDisposables.clear();
+    }
 }
