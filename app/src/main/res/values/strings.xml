@@ -93,6 +93,7 @@
     <string name="via_email">via Email</string>
     <string name="friendDialogTitle">Add a Friend!</string>
     <string name="update_failure">Duplicate username</string>
+    <string name="no_friends">No friends could be found</string>
 
     <!-- Delete Friend Dialog -->
     <string name="delete_pre">Are you sure you want to remove</string>

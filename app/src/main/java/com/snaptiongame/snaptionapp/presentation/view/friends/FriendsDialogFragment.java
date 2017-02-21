@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.content.DialogInterface;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
@@ -80,6 +81,11 @@ public class FriendsDialogFragment extends DialogFragment {
      * List of the facebook friends that the user has to invite
      */
     private List<Friend> mFacebookFriends = new ArrayList<>();
+
+    /**
+     * List of snaption friends
+     */
+    private List<Friend> mSnaptionFriends;
 
     /**
      * Builder object used to create and show a dialog to a user
@@ -150,6 +156,8 @@ public class FriendsDialogFragment extends DialogFragment {
     private AuthenticationManager mAuthManager;
 
     private FriendsFragment mFriendsFragment;
+
+    private TextView mEmpty;
 
     /**
      * Empty constructor for the dialog. Expected from a DialogFragment
@@ -275,6 +283,7 @@ public class FriendsDialogFragment extends DialogFragment {
             View view = inflater.inflate(R.layout.find_friend_layout, null);
             mDialogBuilder.setView(view);
             search = (EditText) view.findViewById(R.id.friendSearchView);
+            mEmpty = (TextView) view.findViewById(R.id.empty_view);
 
             /**
              * Determine what dialog is being shown.
@@ -432,17 +441,28 @@ public class FriendsDialogFragment extends DialogFragment {
      * @param user User returned from the database
      */
     private void showFriend(User user) {
-        Friend tmpFriend = new Friend();
-        List<Friend> friendList = new ArrayList<Friend>();
-        tmpFriend.userName = user.username;
-        tmpFriend.picture = user.picture;
-        tmpFriend.email = search.getText().toString();
+        //If the user exists then adapt them into a friend and dislpay them
+        if (user.username != null) {
+            Friend tmpFriend = new Friend();
+            List<Friend> friendList = new ArrayList<>();
+            tmpFriend.userName = user.username;
+            tmpFriend.picture = user.picture;
+            tmpFriend.email = search.getText().toString();
 
-        sUserID = user.id;
+            sUserID = user.id;
 
-        friendList.add(tmpFriend);
-        mAdapter.setFriends(friendList);
-        mAdapter.notifyDataSetChanged();
+            friendList.add(tmpFriend);
+            mAdapter.setFriends(friendList);
+            mAdapter.notifyDataSetChanged();
+            mEmpty.setVisibility(View.GONE);
+        }
+        //Display the no friends found dialog if not
+        else {
+            mAdapter.setFriends(new ArrayList<>());
+            mAdapter.notifyDataSetChanged();
+            mEmpty.setVisibility(View.VISIBLE);
+        }
+
     }
 
     /**
@@ -459,21 +479,27 @@ public class FriendsDialogFragment extends DialogFragment {
                 );
     }
 
+    /**
+     * Gets the users list of facebook friends from the friend provider and then removes any that
+     * overlap with existing snaption friends. The filtered list is then displayed in the view
+     */
     private void loadFacebookFriends() {
         FriendProvider.getFacebookFriends()
+                .filter(friends -> { friends.removeAll(mFriendsFragment.getFriends());
+                                     return true; })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                      this::fillFacebookFriends,
+                      friends -> {  mAdapter.setFriends(friends);
+                                    mAdapter.notifyDataSetChanged();
+                                    if (friends.size() > 0) {
+                                        mEmpty.setVisibility(View.GONE);
+                                    } else {
+                                        mEmpty.setVisibility(View.VISIBLE);
+                                    }
+                      },
                       Timber::e,
                       () -> Timber.i("Successfully loaded Facebook friends!")
                 );
-    }
-
-    //(String id, String first, String last, String fullName, String userName, String picture,
-    //String cover, String email)
-    private void fillFacebookFriends(List<Friend> friends) {
-        mAdapter.setFriends(friends);
-        mAdapter.notifyDataSetChanged();
     }
 
     /**
