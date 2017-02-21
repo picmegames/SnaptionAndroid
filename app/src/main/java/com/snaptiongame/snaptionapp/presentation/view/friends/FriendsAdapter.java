@@ -66,7 +66,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     .toUpperCase()
                     .endConfig()
                     .buildRound(curFriend.userName.substring(0, 1),
-                            ColorGenerator.MATERIAL.getRandomColor()));
+                            ColorGenerator.MATERIAL.getColor(curFriend.userName)));
         }
     }
 

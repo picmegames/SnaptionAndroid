@@ -190,7 +190,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     }
 
     public void inviteFriends() {
-        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(STANDARD_DIALOG, this);
+        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(STANDARD_DIALOG,
+                this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
     }
 
@@ -204,7 +205,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     public void updateFriendsDialog(FriendsDialogFragment.DialogToShow dialogToShow) {
 
         mDialogFragmentDefault.dismiss();
-        mDialogFragmentFriendSearch = new FriendsDialogFragment().newInstance(dialogToShow, this);
+        mDialogFragmentFriendSearch = new FriendsDialogFragment().newInstance(dialogToShow,
+                this);
         mDialogFragmentFriendSearch.show(getActivity().getFragmentManager(), "dialog");
     }
 
@@ -234,6 +236,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(request -> {
                 }, Timber::e, () -> Timber.i("Successfully removed friend!"));
+    }
+
+    public List<Friend> getFriends() {
+        return friends;
     }
 
     @Override
