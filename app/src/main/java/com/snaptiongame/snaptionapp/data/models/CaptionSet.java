@@ -30,16 +30,11 @@ public class CaptionSet {
     private static final int MAX_CAPTIONS = 10;
     private static final int MIN_CAPTIONS = 0;
 
-    public CaptionSet(List<Caption> captions) {
+    public CaptionSet() {
 
         mCaptionsUnlocked = MIN_CAPTIONS;
         mTotalCaptions = MAX_CAPTIONS;
 
-    }
-
-    public List<Caption> getCaptions() {
-
-        return new ArrayList<>();
     }
 
 

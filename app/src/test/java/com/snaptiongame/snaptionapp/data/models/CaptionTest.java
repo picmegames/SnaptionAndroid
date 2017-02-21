@@ -2,6 +2,7 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -26,5 +27,25 @@ public class CaptionTest {
     public void testConstructorCaption() {
         Caption caption = new Caption(0, 0, 0, 0, 0, "", new FitBCaption(0, 0, "", "", 0));
         assertTrue(caption.id == 0);
+    }
+
+    @Test
+    public void testEqualsCaptionTrue() {
+        Caption caption1 = new Caption(32, "I'm a caption", 0);
+        caption1.numVotes = 200;
+        Caption caption2 = new Caption(32, "I'm a caption", 0);
+        caption2.numVotes = 200;
+        assertTrue(caption1.equals(caption2));
+
+    }
+
+    @Test
+    public void testEqualsCaptionFalse() {
+        Caption caption1 = new Caption(32, "I'm a caption", 0);
+        caption1.numVotes = 200;
+        Caption caption2 = new Caption(32, "I'm a caption", 0);
+        caption1.numVotes = 1234567;
+        assertFalse(caption1.equals(caption2));
+
     }
 }
