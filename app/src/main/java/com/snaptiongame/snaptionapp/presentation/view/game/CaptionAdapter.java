@@ -69,6 +69,10 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public List<Caption> getCaptions() {
+        return mCaptions;
+    }
+
     @Override
     public int getItemCount() {
         return mCaptions.size();
