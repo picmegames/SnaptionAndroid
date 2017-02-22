@@ -15,6 +15,7 @@ import com.snaptiongame.snaptionapp.data.converters.OAuthConverter;
 import com.snaptiongame.snaptionapp.data.converters.SessionConverter;
 import com.snaptiongame.snaptionapp.data.converters.SnaptionConverter;
 import com.snaptiongame.snaptionapp.data.converters.UserConverter;
+import com.snaptiongame.snaptionapp.data.cookies.PersistentCookieStore;
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
@@ -25,7 +26,6 @@ import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.User;
-import com.snaptiongame.snaptionapp.data.cookies.PersistentCookieStore;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.io.IOException;
@@ -162,7 +162,7 @@ public class SnaptionApplication extends Application {
 
         // Open certificate from raw resource
         Certificate certificate;
-        try (InputStream cert = context.getResources().openRawResource(R.raw.wwwexamplecom)) {
+        try (InputStream cert = context.getResources().openRawResource(R.raw.letsencryptauthorityx3)) {
             certificate = certificateFactory.generateCertificate(cert);
         }
 
@@ -180,7 +180,7 @@ public class SnaptionApplication extends Application {
         // Find correct X509TrustManager
         TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
         for (TrustManager manager : trustManagers) {
-            if (manager != null) {
+            if (manager instanceof X509TrustManager) {
                 trustManager = (X509TrustManager) manager;
             }
         }
