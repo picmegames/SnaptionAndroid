@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthManager = AuthenticationManager.getInstance(this);
+        mAuthManager = AuthenticationManager.getInstance();
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -73,17 +73,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
 
         View headerView = mNavigationView.getHeaderView(0);
-        mCoverPhoto = (ImageView) headerView.findViewById(R.id.cover_photo);
-        mProfilePicture = (CircleImageView) headerView.findViewById(R.id.profile_image);
-        mNameView = (TextView) headerView.findViewById(R.id.username);
-        mEmailView = (TextView) headerView.findViewById(R.id.email);
+        mCoverPhoto = ButterKnife.findById(headerView, R.id.cover_photo);
+        mProfilePicture = ButterKnife.findById(headerView, R.id.profile_image);
+        mNameView = ButterKnife.findById(headerView, R.id.username);
+        mEmailView = ButterKnife.findById(headerView, R.id.email);
 
         headerView.setOnClickListener(view -> {
             if (mAuthManager.isLoggedIn()) {
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
-                profileIntent.putExtra(AuthenticationManager.PROFILE_IMAGE_URL, mAuthManager.getProfileImageUrl());
-                profileIntent.putExtra(AuthenticationManager.FULL_NAME, mAuthManager.getUserFullName());
-
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
                 startActivity(profileIntent, transitionActivityOptions.toBundle());
@@ -93,14 +90,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        fragTag = TabbedWallFragment.class.getSimpleName();
-        mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-        if (mCurrentFragment == null) {
-            mCurrentFragment = new TabbedWallFragment();
-        }
+        mCurrentFragment = new TabbedWallFragment();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+                .replace(R.id.frame, mCurrentFragment).commit();
         mNavigationView.getMenu().getItem(0).setChecked(true);
 
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -183,19 +176,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.wall:
+                mCurrentFragment = TabbedWallFragment.getInstance();
                 fragTag = TabbedWallFragment.TAG;
-                mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-                if (mCurrentFragment == null) {
-                    mCurrentFragment = TabbedWallFragment.getInstance();
-                }
                 break;
 
             case R.id.friends:
+                mCurrentFragment = FriendsFragment.getInstance();
                 fragTag = FriendsFragment.TAG;
-                mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-                if (mCurrentFragment == null) {
-                    mCurrentFragment = FriendsFragment.getInstance();
-                }
                 break;
 
             case R.id.settings:
@@ -214,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+                .replace(R.id.frame, mCurrentFragment).commit();
 
         return true;
     }

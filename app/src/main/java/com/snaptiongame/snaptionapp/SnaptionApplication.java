@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.converters.AddFriendConverter;
 import com.snaptiongame.snaptionapp.data.converters.CaptionConverter;
 import com.snaptiongame.snaptionapp.data.converters.CaptionSetConverter;
@@ -75,6 +76,9 @@ public class SnaptionApplication extends Application {
     public void onCreate() {
         super.onCreate();
         SnaptionApplication.context = getApplicationContext();
+
+        // INIT Authentication Manager
+        AuthenticationManager.init(context);
 
         // INIT Leak Canary (Memory leak checking)
         if (LeakCanary.isInAnalyzerProcess(this)) {

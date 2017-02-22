@@ -188,7 +188,7 @@ public class FriendsDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAuthManager = AuthenticationManager.getInstance(getActivity());
+        mAuthManager = AuthenticationManager.getInstance();
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
         mFriendsFragment = (FriendsFragment) getArguments().getSerializable("fragment");
 

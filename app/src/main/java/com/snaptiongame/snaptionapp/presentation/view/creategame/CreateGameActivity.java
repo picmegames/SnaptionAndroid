@@ -77,7 +77,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         setContentView(R.layout.activity_create_game);
         ButterKnife.bind(this);
 
-        mAuthManager = AuthenticationManager.getInstance(this);
+        mAuthManager = AuthenticationManager.getInstance();
 
         assignValues();
 

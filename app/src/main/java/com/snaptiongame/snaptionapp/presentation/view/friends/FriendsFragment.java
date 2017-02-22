@@ -78,7 +78,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
 
         mUnbinder = ButterKnife.bind(this, view);
 
-        mAuthManager = AuthenticationManager.getInstance(getContext());
+        mAuthManager = AuthenticationManager.getInstance();
         mPresenter = new FriendsPresenter(this, mAuthManager.getSnaptionUserId());
 
         mFriends.setHasFixedSize(true);
