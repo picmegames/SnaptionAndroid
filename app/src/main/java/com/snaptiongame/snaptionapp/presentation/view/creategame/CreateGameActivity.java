@@ -11,12 +11,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,7 +33,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 /**
@@ -57,8 +54,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     Button mCreateGameButton;
     @BindView(R.id.tag_chip_view)
     NachoTextView mTagTextView;
-    @BindView(R.id.add_friends_view)
-    RelativeLayout mFriendsView;
     @BindView(R.id.friends_chip_view)
     NachoTextView mFriendsTextView;
     @BindView(R.id.set_date_field)
@@ -148,16 +143,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
         }, mYear, mMonth, mDayOfMonth);
         datePickerDialog.show();
-    }
-
-    @OnCheckedChanged(R.id.private_switch)
-    public void switchChanged() {
-        if (mPrivateSwitch.isChecked()) {
-            mFriendsView.setVisibility(View.VISIBLE);
-        }
-        else {
-            mFriendsView.setVisibility(View.GONE);
-        }
     }
 
     @Override
