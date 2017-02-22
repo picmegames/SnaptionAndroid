@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.SnaptionApplication;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.providers.SessionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
@@ -93,7 +94,8 @@ public final class AuthenticationManager {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void setFacebookCallback(Context context, LoginButton facebookButton) {
+    public void setFacebookCallback(LoginButton facebookButton) {
+        Context context = SnaptionApplication.getContext();
         // Set Facebook Login Permissions
         facebookButton.setReadPermissions(
                 context.getString(R.string.fb_permission_profile),

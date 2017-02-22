@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 .fitCenter()
                 .into(mLogo);
 
-        mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
+        mAuthManager.setFacebookCallback(mFacebookLoginButton);
 
         mPresenter = new LoginPresenter(this);
     }
