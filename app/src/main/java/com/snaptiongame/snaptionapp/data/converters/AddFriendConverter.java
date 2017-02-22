@@ -32,7 +32,6 @@ public class AddFriendConverter implements JsonSerializer<AddFriendRequest>,
         if (json.isJsonArray()) {
             return new Gson().fromJson(json.getAsJsonArray().get(0), typeOfT);
         }
-        System.out.println(json.toString());
 
         return new Gson().fromJson(json, typeOfT);
     }
