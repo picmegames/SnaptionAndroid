@@ -28,7 +28,7 @@ import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.User;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,7 +68,7 @@ import static com.snaptiongame.snaptionapp.SnaptionApplication.getContext;
  * @version 1.0
  */
 public class ApiProvider {
-    private static SnaptionApiService apiService;
+    private static SnaptionApi apiService;
     private static X509TrustManager trustManager;
 
     private static final String SNAPTION_SERVER_URL = "https://api.snaptiongame.com";
@@ -82,7 +82,7 @@ public class ApiProvider {
      *
      * @return An instance of a Snaption API service
      */
-    public static SnaptionApiService getApiService() {
+    public static SnaptionApi getApiService() {
         if (apiService == null) {
             apiService = new Retrofit.Builder()
                     .baseUrl(SNAPTION_SERVER_URL)
@@ -90,7 +90,7 @@ public class ApiProvider {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .addConverterFactory(GsonConverterFactory.create(setupGson()))
                     .build()
-                    .create(SnaptionApiService.class);
+                    .create(SnaptionApi.class);
         }
 
         return apiService;

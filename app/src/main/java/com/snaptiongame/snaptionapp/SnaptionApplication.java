@@ -9,9 +9,8 @@ import com.squareup.leakcanary.LeakCanary;
 import timber.log.Timber;
 
 /**
- * This is the entry point for the application.
- * When the application is started up, LeakCanary, Realm, Gson,
- * and Timber are initialized.
+ * This is the entry point for the application. When the application is started up, the
+ * AuthenticationManager, LeakCanary, and Timber are initialized.
  *
  * @author Tyler Wong
  * @version 1.0

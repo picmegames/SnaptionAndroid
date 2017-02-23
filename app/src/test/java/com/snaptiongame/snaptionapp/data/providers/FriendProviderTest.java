@@ -2,7 +2,7 @@ package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Friend;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +20,13 @@ import static org.mockito.Mockito.when;
  */
 
 public class FriendProviderTest {
-    private SnaptionApiService service;
+    private SnaptionApi service;
     private List<Friend> friends;
     private AddFriendRequest request;
 
     @Before
     public void setup() {
-        service = mock(SnaptionApiService.class);
+        service = mock(SnaptionApi.class);
         friends = new ArrayList<>();
         friends.add(new Friend("", "", "", "", "", "", "", ""));
         friends.add(new Friend("", "", "", "", "", "", "", ""));

@@ -3,7 +3,7 @@ package com.snaptiongame.snaptionapp.data.providers;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.api.ApiProvider;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +15,7 @@ import io.reactivex.Observable;
  */
 
 public class SnaptionProvider {
-    private static SnaptionApiService apiService = ApiProvider.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Observable<List<Snaption>> getAllSnaptions() {
         return apiService.getSnaptions()

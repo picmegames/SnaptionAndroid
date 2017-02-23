@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         mCurrentFragment = new TabbedWallFragment();
+        fragTag = TabbedWallFragment.TAG;
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, mCurrentFragment).commit();

@@ -2,7 +2,7 @@ package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
 import com.snaptiongame.snaptionapp.data.models.Session;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,13 +17,13 @@ import static org.mockito.Mockito.when;
  */
 
 public class SessionProviderTest {
-    private SnaptionApiService service;
+    private SnaptionApi service;
     private OAuthRequest request;
     private Session session;
 
     @Before
     public void setup() {
-        service = mock(SnaptionApiService.class);
+        service = mock(SnaptionApi.class);
         request = new OAuthRequest("", "");
         session = new Session(0);
         when(service.userOAuthFacebook(request)).thenReturn(Observable.just(session));

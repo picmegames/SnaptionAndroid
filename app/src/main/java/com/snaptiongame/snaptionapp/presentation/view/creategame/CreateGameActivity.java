@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
@@ -130,8 +128,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(),
+        mPresenter.createGame(getContentResolver(), mUri, mNewGameImage.getDrawable(),
                 mAuthManager.getSnaptionUserId(), !mPrivateSwitch.isChecked());
+        onBackPressed();
     }
 
     @OnClick(R.id.set_date_field)
@@ -150,16 +149,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         ArrayAdapter<String> friendsAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_expandable_list_item_1, friends);
         mFriendsTextView.setAdapter(friendsAdapter);
-    }
-
-    @Override
-    public void showCreateFailure() {
-        Snackbar.make(mLayout, getString(R.string.create_failure), Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void showCreateSuccess() {
-        Toast.makeText(this, getString(R.string.create_success), Toast.LENGTH_LONG).show();
     }
 
     @Override
