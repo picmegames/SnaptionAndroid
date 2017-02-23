@@ -16,10 +16,11 @@
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null">
+            android:background="@null"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/image"
@@ -28,74 +29,91 @@
                 android:scaleType="center"
                 android:src="@drawable/ic_insert_photo_grey_900_48dp"/>
 
-            <TextView
-                android:id="@+id/content_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image"
-                android:layout_margin="16dp"
-                android:text="@string/content_level_label"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
-
-            <Spinner
-                android:id="@+id/content_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/image"
-                android:layout_margin="16dp"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tags_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/content_label"
-                android:layout_margin="16dp"
-                android:text="@string/tags_label"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
-
-            <com.hootsuite.nachos.NachoTextView
-                android:id="@+id/tag_chip_view"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tags_label"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:hint="@string/add_tags_label"
-                app:chipHeight="32dp"
-                app:chipSpacing="4dp"
-                app:chipTextSize="13sp"
-                app:chipVerticalSpacing="3dp"/>
+                android:background="@null"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/private_label"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/content_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:text="@string/content_level_label"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <Spinner
+                    android:id="@+id/content_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tag_chip_view"
+                android:background="@null"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tags_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/tags_label"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <com.hootsuite.nachos.NachoTextView
+                    android:id="@+id/tag_chip_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:hint="@string/add_tags_label"
+                    app:chipHeight="32dp"
+                    app:chipSpacing="4dp"
+                    app:chipTextSize="13sp"
+                    app:chipVerticalSpacing="3dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/private_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:text="@string/privacy_label"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <Switch
+                    android:id="@+id/private_switch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="@string/privacy_label"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
-
-            <Switch
-                android:id="@+id/private_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/private_label"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/tag_chip_view"
-                android:layout_margin="16dp"/>
-
-            <RelativeLayout
-                android:id="@+id/add_friends_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/private_label"
-                android:layout_margin="16dp"
-                android:visibility="gone">
+                android:background="@null"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/add_friends_label"
@@ -110,41 +128,45 @@
                     android:id="@+id/friends_chip_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/add_friends_label"
                     android:hint="@string/add_a_friend"
                     app:chipHeight="32dp"
                     app:chipSpacing="4dp"
                     app:chipTextSize="13sp"
                     app:chipVerticalSpacing="3dp"/>
-            </RelativeLayout>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/date_label"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/add_friends_view"
-                android:layout_margin="16dp"
-                android:text="@string/date_label"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
+                android:background="@null"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/set_date_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/add_friends_view"
-                android:layout_alignBaseline="@+id/date_label"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="16dp"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/date_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:text="@string/date_label"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/set_date_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/create_game"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/date_label"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_button"
                 android:enabled="false"
@@ -152,6 +174,6 @@
                 android:padding="10dp"
                 android:text="@string/create_game"
                 android:textColor="@android:color/white"/>
-        </RelativeLayout>
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

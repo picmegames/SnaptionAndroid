@@ -45,7 +45,7 @@ public class TabbedWallFragment extends Fragment {
         View view = inflater.inflate(R.layout.tabbed_wall_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mWallPageAdapter = new WallPageAdapter(getChildFragmentManager(), getContext());
+        mWallPageAdapter = new WallPageAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mWallPageAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);

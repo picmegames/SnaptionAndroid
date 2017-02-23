@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         super.onCreate(savedInstanceState);
 
         // Initialize Authentication Manager
-        mAuthManager = AuthenticationManager.getInstance(this);
+        mAuthManager = AuthenticationManager.getInstance();
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 .fitCenter()
                 .into(mLogo);
 
-        mAuthManager.setFacebookCallback(this, mFacebookLoginButton);
+        mAuthManager.setFacebookCallback(mFacebookLoginButton);
 
         mPresenter = new LoginPresenter(this);
     }

@@ -5,7 +5,7 @@ import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.api.ApiProvider;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import io.reactivex.Observable;
  */
 
 public class CaptionProvider {
-    private static SnaptionApiService apiService = ApiProvider.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Observable<List<Caption>> getCaptions(int gameId) {
         return apiService.getCaptions(gameId);

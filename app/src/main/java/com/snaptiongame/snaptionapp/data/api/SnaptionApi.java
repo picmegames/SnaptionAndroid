@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.services;
+package com.snaptiongame.snaptionapp.data.api;
 
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Caption;
@@ -29,7 +29,7 @@ import retrofit2.http.Query;
  * @author Tyler Wong
  * @version 1.0
  */
-public interface SnaptionApiService {
+public interface SnaptionApi {
 
     /**
      * This method authenticates a user with Facebook with

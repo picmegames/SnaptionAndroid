@@ -1,7 +1,7 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.User;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,12 +16,12 @@ import static org.mockito.Mockito.when;
  */
 
 public class UserProviderTest {
-    private SnaptionApiService service;
+    private SnaptionApi service;
     private User user;
 
     @Before
     public void setup() {
-        service = mock(SnaptionApiService.class);
+        service = mock(SnaptionApi.class);
         user = new User("");
         when(service.getUser(0)).thenReturn(Observable.just(user));
         when(service.getUserByEmail("")).thenReturn(Observable.just(user));

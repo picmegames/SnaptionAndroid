@@ -18,7 +18,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
@@ -27,8 +26,6 @@ import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by nickromero on 2/7/17.
@@ -114,7 +111,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = AuthenticationManager.getInstance(getApplicationContext());
+        mAuth = AuthenticationManager.getInstance();
         sPositiveButtonText = SUMBIT;
         sNegativeButtonText = CANCEL;
         mDialogToShow = (CaptionDialogToShow) getArguments().getSerializable("whichDialog");

@@ -66,7 +66,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ButterKnife.bind(this);
-        mAuthManager = AuthenticationManager.getInstance(this);
+        mAuthManager = AuthenticationManager.getInstance();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

@@ -58,7 +58,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
         mContext = itemView.getContext();
         ButterKnife.bind(this, itemView);
 
-        mAuthManager = AuthenticationManager.getInstance(mContext);
+        mAuthManager = AuthenticationManager.getInstance();
 
         if (Build.VERSION.SDK_INT >= 21) {
             mImage.setClipToOutline(true);
