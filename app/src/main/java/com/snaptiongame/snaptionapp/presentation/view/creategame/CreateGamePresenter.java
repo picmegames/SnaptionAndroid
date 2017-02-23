@@ -1,15 +1,24 @@
 package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.NotificationCompat;
 
+import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.SnaptionApplication;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
+import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 
 import java.util.List;
 
@@ -29,9 +38,15 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
+    private NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
     private List<Friend> mFriends;
     private int mUserId;
     private String mEncodedImage;
+
+    private static final int MAX_PROGRESS = 0;
+    private static final int CURRENT_PROGRESS = 0;
+    private static final int ID = 100;
 
     public CreateGamePresenter(int userId, @NonNull CreateGameContract.View createGameView) {
         mUserId = userId;
@@ -41,38 +56,55 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     @Override
-    public void createGame(Drawable drawable, String type, int userId, boolean isPublic) {
-        if (drawable != null) {
-            Disposable disposable = SnaptionProvider.addSnaption(
-                    new Snaption(userId, !isPublic, 1, mEncodedImage, type))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            snaption -> {
-                            },
-                            e -> {
-                                Timber.e(e);
-                                mCreateGameView.showCreateFailure();
-                            },
-                            () -> {
-                                mCreateGameView.onBackPressed();
-                                mCreateGameView.showCreateSuccess();
-                            }
-                    );
-            mDisposables.add(disposable);
-        }
-    }
-
-    @Override
-    public void convertImage(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
-        Disposable disposable = ImageConverter.convertImage(resolver, uri)
+    public void createGame(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
+        ImageConverter.convertImage(resolver, uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         s -> mEncodedImage = s,
                         Timber::e,
-                        () -> createGame(drawable, resolver.getType(uri), userId, isPublic)
+                        () -> {
+                            addSnaption(resolver.getType(uri), userId, isPublic);
+                            showUploadProgressNotification();
+                        }
                 );
-        mDisposables.add(disposable);
+    }
+
+    private void addSnaption(String type, int userId, boolean isPublic) {
+        SnaptionProvider.addSnaption(new Snaption(userId, !isPublic, 1, mEncodedImage, type))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        snaption -> {
+                        },
+                        Timber::e,
+                        this::showUploadCompleteNotification
+                );
+    }
+
+    private void showUploadProgressNotification() {
+        Context context = SnaptionApplication.getContext();
+        mNotifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(SnaptionApplication.getContext());
+        mBuilder.setContentTitle(context.getString(R.string.upload_title))
+                .setContentText(context.getString(R.string.upload_message))
+                .setSmallIcon(R.drawable.ic_notification);
+        mBuilder.setProgress(MAX_PROGRESS, CURRENT_PROGRESS, true);
+        mNotifyManager.notify(ID, mBuilder.build());
+    }
+
+    private void showUploadCompleteNotification() {
+        Context context = SnaptionApplication.getContext();
+        mBuilder = new NotificationCompat.Builder(SnaptionApplication.getContext());
+        mBuilder.setContentTitle(context.getString(R.string.upload_complete_title))
+                .setContentText(context.getString(R.string.upload_complete_message))
+                .setSmallIcon(R.drawable.ic_notification);
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        mNotifyManager.notify(ID, mBuilder.build());
     }
 
     @Override

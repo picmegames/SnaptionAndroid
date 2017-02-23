@@ -46,7 +46,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         this.mContext = itemView.getContext();
         ButterKnife.bind(this, itemView);
 
-        mAuthManager = AuthenticationManager.getInstance(mContext);
+        mAuthManager = AuthenticationManager.getInstance();
 
         mLike.setOnClickListener(view -> {
             if (isLiked) {

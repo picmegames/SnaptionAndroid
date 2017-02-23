@@ -2,7 +2,7 @@ package com.snaptiongame.snaptionapp.data.providers;
 
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.services.SnaptionApiService;
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +20,14 @@ import static org.mockito.Mockito.when;
  */
 
 public class SnaptionProviderTest {
-    private SnaptionApiService service;
+    private SnaptionApi service;
     private List<Snaption> snaptions;
     private Snaption snaption;
     private Like like;
 
     @Before
     public void setup() {
-        service = mock(SnaptionApiService.class);
+        service = mock(SnaptionApi.class);
         snaptions = new ArrayList<>();
         snaptions.add(new Snaption(0, false, 0, "picture0", ""));
         snaptions.add(new Snaption(1, false, 1, "picture1", ""));

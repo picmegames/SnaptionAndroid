@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.notifications;
+package com.snaptiongame.snaptionapp.data.services.notifications;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

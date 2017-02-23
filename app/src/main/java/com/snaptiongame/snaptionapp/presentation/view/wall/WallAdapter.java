@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.presentation.view.wall;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.utils.TextStyleUtils;
 
 import java.util.List;
 
@@ -66,8 +68,10 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .buildRound(curSnaption.topCaption.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curSnaption.topCaption.creatorName)));
             }
-            holder.mTopCaption.setText(curSnaption.topCaption.assocFitB.beforeBlank
-                    + curSnaption.topCaption.caption + curSnaption.topCaption.assocFitB.afterBlank);
+
+            holder.mTopCaption.setText(TextUtils.concat(curSnaption.topCaption.assocFitB.beforeBlank,
+                    TextStyleUtils.getTextUnderlined(curSnaption.topCaption.caption),
+                    curSnaption.topCaption.assocFitB.afterBlank));
         }
         else {
             Glide.with(holder.mContext)

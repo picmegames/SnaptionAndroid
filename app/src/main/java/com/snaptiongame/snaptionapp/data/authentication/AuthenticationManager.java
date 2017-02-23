@@ -20,9 +20,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.SnaptionApplication;
 import com.snaptiongame.snaptionapp.data.models.OAuthRequest;
-import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.providers.SessionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
@@ -37,7 +36,7 @@ import timber.log.Timber;
  */
 
 public final class AuthenticationManager {
-    private static AuthenticationManager authManager;
+    private static AuthenticationManager authenticationManager;
     private CallbackManager callbackManager;
     private GoogleApiClient googleApiClient;
     private SharedPreferences preferences;
@@ -47,19 +46,17 @@ public final class AuthenticationManager {
     private static final String FB_FIELDS = "fields";
     private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large)";
 
-    public static final String SNAPTION_USER_ID = "snaption_user_id";
-    public static final String SNAPTION_USERNAME = "snaption_username";
-    public static final String PROFILE_IMAGE_URL = "image_url";
-    public static final String FULL_NAME = "full_name";
-    public static final String EMAIL = "email";
-
-    public static final String FACEBOOK_LOGIN = "facebook";
-    public static final String GOOGLE_SIGN_IN = "google";
+    private static final String SNAPTION_USER_ID = "snaption_user_id";
+    private static final String SNAPTION_USERNAME = "snaption_username";
+    private static final String PROFILE_IMAGE_URL = "image_url";
+    private static final String FULL_NAME = "full_name";
+    private static final String EMAIL = "email";
+    private static final String FACEBOOK_LOGIN = "facebook";
+    private static final String GOOGLE_SIGN_IN = "google";
 
     private AuthenticationManager(Context context) {
         // INIT Shared Preferences Editor
-        preferences = context.getSharedPreferences(context.getPackageName(),
-                Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
 
         // INIT Facebook Login Callbacks
         callbackManager = CallbackManager.Factory.create();
@@ -77,14 +74,14 @@ public final class AuthenticationManager {
                 .build();
     }
 
-    public static AuthenticationManager getInstance(Context context) {
-        // IF we haven't initialized an instance of Authentication Manager
-        if (authManager == null) {
-            // INIT instance of Authentication Manager
-            authManager = new AuthenticationManager(context);
-        }
+    public static void init(Context context) {
+        // INIT an instance of an Authentication Manager
+        authenticationManager = new AuthenticationManager(context);
+    }
+
+    public static AuthenticationManager getInstance() {
         // RETURN an instance of Authentication Manager
-        return authManager;
+        return authenticationManager;
     }
 
     public void googleActivityResult(Intent data) {
@@ -96,7 +93,8 @@ public final class AuthenticationManager {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void setFacebookCallback(Context context, LoginButton facebookButton) {
+    public void setFacebookCallback(LoginButton facebookButton) {
+        Context context = SnaptionApplication.getContext();
         // Set Facebook Login Permissions
         facebookButton.setReadPermissions(
                 context.getString(R.string.fb_permission_profile),
@@ -279,16 +277,6 @@ public final class AuthenticationManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
                             saveSnaptionUsername(user.username);
-                            FriendProvider.loadFriends(snaptionUserId)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(friends -> {
-                                                for (Friend friend : friends) {
-                                                    friend.isSnaptionFriend = true;
-                                                    Timber.i(friend.toString());
-                                                }
-                                            },
-                                            e -> Timber.e(e, "Getting Snaption Friends errored."),
-                                            () -> Timber.i("Getting Snaption Friends completed successfully"));
 
                             if (user.picture != null) {
                                 saveSnaptionProfileImage(user.picture);
@@ -296,7 +284,8 @@ public final class AuthenticationManager {
                         },
                         Timber::e,
                         () -> {
-                        });
+                        }
+                );
     }
 
     private void handleOAuthGoogle(String token, String deviceToken) {

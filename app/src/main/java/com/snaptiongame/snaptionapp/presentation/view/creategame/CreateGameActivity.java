@@ -6,21 +6,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
@@ -35,7 +31,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 /**
@@ -57,8 +52,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     Button mCreateGameButton;
     @BindView(R.id.tag_chip_view)
     NachoTextView mTagTextView;
-    @BindView(R.id.add_friends_view)
-    RelativeLayout mFriendsView;
     @BindView(R.id.friends_chip_view)
     NachoTextView mFriendsTextView;
     @BindView(R.id.set_date_field)
@@ -82,7 +75,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         setContentView(R.layout.activity_create_game);
         ButterKnife.bind(this);
 
-        mAuthManager = AuthenticationManager.getInstance(this);
+        mAuthManager = AuthenticationManager.getInstance();
 
         assignValues();
 
@@ -135,8 +128,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        mPresenter.convertImage(getContentResolver(), mUri, mNewGameImage.getDrawable(),
+        mPresenter.createGame(getContentResolver(), mUri, mNewGameImage.getDrawable(),
                 mAuthManager.getSnaptionUserId(), !mPrivateSwitch.isChecked());
+        onBackPressed();
     }
 
     @OnClick(R.id.set_date_field)
@@ -150,31 +144,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         datePickerDialog.show();
     }
 
-    @OnCheckedChanged(R.id.private_switch)
-    public void switchChanged() {
-        if (mPrivateSwitch.isChecked()) {
-            mFriendsView.setVisibility(View.VISIBLE);
-        }
-        else {
-            mFriendsView.setVisibility(View.GONE);
-        }
-    }
-
     @Override
     public void setFriendNames(String[] friends) {
         ArrayAdapter<String> friendsAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_expandable_list_item_1, friends);
         mFriendsTextView.setAdapter(friendsAdapter);
-    }
-
-    @Override
-    public void showCreateFailure() {
-        Snackbar.make(mLayout, getString(R.string.create_failure), Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void showCreateSuccess() {
-        Toast.makeText(this, getString(R.string.create_success), Toast.LENGTH_LONG).show();
     }
 
     @Override

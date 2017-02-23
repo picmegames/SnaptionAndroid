@@ -96,11 +96,11 @@ public class ProfileActivity extends AppCompatActivity
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
 
-        mAuthManager = AuthenticationManager.getInstance(this);
+        mAuthManager = AuthenticationManager.getInstance();
         mPresenter = new ProfilePresenter(this);
 
-        String name = getIntent().getStringExtra(AuthenticationManager.FULL_NAME);
-        String profileUrl = getIntent().getStringExtra(AuthenticationManager.PROFILE_IMAGE_URL);
+        String name = mAuthManager.getUserFullName();
+        String profileUrl = mAuthManager.getProfileImageUrl();
 
         supportPostponeEnterTransition();
 

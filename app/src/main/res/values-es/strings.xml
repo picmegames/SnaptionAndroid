@@ -57,4 +57,8 @@
     <string name="tags_label">Etiquetas</string>
     <string name="add_tags_label">Añadir algunas etiquetas!</string>
     <string name="date_label">Fecha final</string>
+    <string name="upload_complete_message">Juego creado correctamente</string>
+    <string name="upload_complete_title">Carga completa</string>
+    <string name="upload_message">Carga en progreso&#8230;</string>
+    <string name="upload_title">Subir nuevo juego</string>
 </resources>

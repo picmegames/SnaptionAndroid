@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.utils.TextStyleUtils;
 
 import java.util.List;
 
@@ -52,7 +54,9 @@ public class CaptionAdapter extends RecyclerView.Adapter {
                             ColorGenerator.MATERIAL.getColor(curCaption.creatorName)));
         }
         holder.captionId = curCaption.id;
-        holder.mCaption.setText(curCaption.assocFitB.beforeBlank + curCaption.caption + curCaption.assocFitB.afterBlank);
+        holder.mCaption.setText(TextUtils.concat(curCaption.assocFitB.beforeBlank,
+                TextStyleUtils.getTextUnderlined(curCaption.caption),
+                curCaption.assocFitB.afterBlank));
         holder.mName.setText(curCaption.creatorName);
         holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
     }
