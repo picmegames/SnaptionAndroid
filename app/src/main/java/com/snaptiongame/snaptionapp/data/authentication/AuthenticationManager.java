@@ -56,8 +56,7 @@ public final class AuthenticationManager {
 
     private AuthenticationManager(Context context) {
         // INIT Shared Preferences Editor
-        preferences = context.getSharedPreferences(context.getPackageName(),
-                Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
 
         // INIT Facebook Login Callbacks
         callbackManager = CallbackManager.Factory.create();
