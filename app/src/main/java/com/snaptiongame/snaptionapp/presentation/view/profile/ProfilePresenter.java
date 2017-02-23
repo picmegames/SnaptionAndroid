@@ -64,7 +64,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void convertImage(int snaptionUserId, ContentResolver resolver, Uri uri) {
-        Disposable disposable = ImageConverter.convertImage(resolver, uri)
+        Disposable disposable = ImageConverter.convertImageBase64(resolver, uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

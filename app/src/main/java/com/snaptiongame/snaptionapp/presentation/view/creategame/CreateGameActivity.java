@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,6 +70,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private int mDayOfMonth;
     private String mFormattedDate;
 
+    private static final String INTENT_TYPE = "image/*";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,10 +122,15 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mPresenter = presenter;
     }
 
+    @Override
+    public Context getContext() {
+        return CreateGameActivity.this;
+    }
+
     @OnClick(R.id.image)
     public void getImage() {
         Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
-        imagePickerIntent.setType("image/*");
+        imagePickerIntent.setType(INTENT_TYPE);
         startActivityForResult(imagePickerIntent, 1);
     }
 
@@ -130,7 +138,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void createGame() {
         mPresenter.createGame(getContentResolver(), mUri, mNewGameImage.getDrawable(),
                 mAuthManager.getSnaptionUserId(), !mPrivateSwitch.isChecked());
-        onBackPressed();
     }
 
     @OnClick(R.id.set_date_field)

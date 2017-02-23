@@ -17,7 +17,7 @@ import timber.log.Timber;
  */
 
 public class ImageConverter {
-    public static Observable<String> convertImage(ContentResolver resolver, Uri uri) {
+    public static Observable<String> convertImageBase64(ContentResolver resolver, Uri uri) {
         String picture = "";
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -30,5 +30,20 @@ public class ImageConverter {
         }
 
         return Observable.just(picture);
+    }
+
+    public static Observable<byte[]> convertImageByteArray(ContentResolver resolver, Uri uri) {
+        byte[] byteArray = new byte[1];
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            MediaStore.Images.Media.getBitmap(resolver, uri).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byteArray = byteArrayOutputStream.toByteArray();
+            byteArrayOutputStream.close();
+        }
+        catch (IOException e) {
+            Timber.e(e);
+        }
+
+        return Observable.just(byteArray);
     }
 }
