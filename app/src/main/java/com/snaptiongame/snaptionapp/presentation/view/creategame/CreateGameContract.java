@@ -1,6 +1,7 @@
 package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
@@ -17,6 +18,10 @@ public class CreateGameContract {
         void createGame();
 
         void setFriendNames(String[] friendNames);
+
+        void onBackPressed();
+
+        Context getContext();
     }
 
     interface Presenter extends BasePresenter {
