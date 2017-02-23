@@ -88,6 +88,10 @@
             android:exported="true"/>
 
         <service
+            android:name="com.snaptiongame.snaptionapp.data.services.SnaptionUploadService"
+            android:exported="false"/>
+
+        <service
             android:name=".data.services.notifications.NotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
