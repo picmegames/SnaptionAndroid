@@ -57,7 +57,7 @@ public interface SnaptionApi {
      * @param userId The id of the desired user.
      * @return An observable that emits a User object
      */
-    @GET("Users/{userId}/")
+    @GET("/Users/{userId}/")
     Observable<User> getUser(@Path("userId") int userId);
 
     /**
@@ -88,7 +88,7 @@ public interface SnaptionApi {
      * @param userEmail The desired user's E-mail address
      * @return An observable that emits a User object
      */
-    @GET("Users?email=")
+    @GET("/Users?email=")
     Observable<User> getUserByEmail(@Query("email") String userEmail);
 
     /**
@@ -97,18 +97,17 @@ public interface SnaptionApi {
      * @param facebookID The desired user's facebookID
      * @return An observable that emits a User object
      */
-    @GET("Users?facebookID=")
+    @GET("/Users?facebookID=")
     Observable<User> getUserByFacebook(@Query("facebookID") String facebookID);
 
     /**
      * This method sends a request to update a user with a PUT request.
      *
-     * @param userId The id of the user to be updated
      * @param user   The new updated information for the user
      * @return An observable that emits a User object
      */
-    @PUT("/Users/{userId}/")
-    Observable<User> updateUser(@Path("userId") int userId, @Body User user);
+    @PUT("/Users/")
+    Observable<User> updateUser(@Body User user);
 
     /**
      * This method sends a request to get a list of games
@@ -116,8 +115,8 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Snaption objects.
      */
-    @GET("/Games/")
-    Observable<List<Snaption>> getSnaptions();
+    @GET("/Games")
+    Observable<List<Snaption>> getSnaptions(@Query("public") boolean isPublic);
 
     /**
      * This method sends a request to upvote a game with
@@ -186,15 +185,15 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Fill in the Blank Captions
      */
-    @GET("/FitB/")
-    Observable<List<FitBCaption>> getFitBCaptions();
+    @GET("/FitBSet/{set_id}/")
+    Observable<List<FitBCaption>> getFitBCaptions(@Path("set_id") int setId);
 
     /**
      * This method sends a request to retrieve all Caption Sets available to a user
      *
      * @return An observable that emits a list of Caption Sets
      */
-    @GET("/FitBSet")
+    @GET("/FitBSet/")
     Observable<List<CaptionSet>> getCaptionSets();
 
     /**

@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.content.DialogInterface;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
@@ -384,9 +383,9 @@ public class FriendsDialogFragment extends DialogFragment {
 
             //add all selected friends if in the facebook dialog
             if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE)) {
-                List<String> friends = mAdapter.getSelectedFriends();
-                for (String id : friends) {
-                    addFriend(Integer.parseInt(id));
+                List<Integer> friends = mAdapter.getSelectedFriends();
+                for (Integer id : friends) {
+                    addFriend(id);
                 }
             }
             //Only send an outer app if we are still on the first dialog screen. Otherwise

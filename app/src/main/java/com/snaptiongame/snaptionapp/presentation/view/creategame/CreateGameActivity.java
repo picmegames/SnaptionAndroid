@@ -28,6 +28,7 @@ import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -120,6 +121,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void setPresenter(CreateGameContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public List<String> getAddedFriends() {
+        return mFriendsTextView.getChipValues();
     }
 
     @Override

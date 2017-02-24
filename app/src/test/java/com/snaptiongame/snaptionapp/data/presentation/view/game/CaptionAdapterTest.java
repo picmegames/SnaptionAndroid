@@ -1,37 +1,31 @@
 package com.snaptiongame.snaptionapp.data.presentation.view.game;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.text.Layout;
-import android.view.LayoutInflater;
+import android.os.Build;
 import android.view.View;
 
-import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.BuildConfig;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.presentation.view.game.CaptionAdapter;
 import com.snaptiongame.snaptionapp.presentation.view.game.CaptionCardViewHolder;
-import com.snaptiongame.snaptionapp.presentation.view.game.CaptionSelectDialogFragment;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by nickromero on 2/20/17.
  */
 
 @RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 public class CaptionAdapterTest {
 
     private CaptionAdapter captionAdapter;
@@ -46,14 +40,14 @@ public class CaptionAdapterTest {
         //        .create().resume().get();
 
         captions = new ArrayList<>();
-        captions.add(new Caption(0, "First caption", 123));
-        captions.add(new Caption(0, "Second caption", 234));
-        captions.add(new Caption(0, "Third caption", 345));
+        captions.add(new Caption(0, "First caption"));
+        captions.add(new Caption(0, "Second caption"));
+        captions.add(new Caption(0, "Third caption"));
 
         captions2 = new ArrayList<>();
-        captions2.add(new Caption(123, "First caption", 12));
-        captions2.add(new Caption(234, "Second caption", 4));
-        captions2.add(new Caption(345, "Third caption", 35));
+        captions2.add(new Caption(123, "First caption"));
+        captions2.add(new Caption(234, "Second caption"));
+        captions2.add(new Caption(345, "Third caption"));
 
         captionAdapter = new CaptionAdapter(captions);
 

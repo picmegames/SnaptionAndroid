@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager.registerCallback(this::setUserHeader);
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -169,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
         mAuthManager.disconnectGoogleApi();
+        mAuthManager.unregisterCallback();
     }
 
     @Override

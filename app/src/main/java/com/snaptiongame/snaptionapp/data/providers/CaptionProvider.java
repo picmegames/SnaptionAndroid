@@ -22,8 +22,8 @@ public class CaptionProvider {
         return apiService.getCaptions(gameId);
     }
 
-    public static Observable<List<FitBCaption>> getFitBCaptions() {
-        return apiService.getFitBCaptions();
+    public static Observable<List<FitBCaption>> getFitBCaptions(int setId) {
+        return apiService.getFitBCaptions(setId);
     }
 
     public static Observable<Like> upvoteCaption(Like request) {

@@ -26,9 +26,9 @@ public class GameContract {
 
         void loadCaptionSets();
 
-        void loadFitBCaptions();
+        void loadFitBCaptions(int setId);
 
-        void addCaption(String caption, int userId, int fitBId);
+        void addCaption(int fitBId, String caption);
     }
 
     interface CaptionDialogView extends BaseView<Presenter> {

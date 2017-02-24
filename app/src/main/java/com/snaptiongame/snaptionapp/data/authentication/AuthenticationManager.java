@@ -40,6 +40,7 @@ public final class AuthenticationManager {
     private CallbackManager callbackManager;
     private GoogleApiClient googleApiClient;
     private SharedPreferences preferences;
+    private AuthenticationCallback callback;
 
     private static final String LOGGED_IN = "logged in";
 
@@ -200,6 +201,14 @@ public final class AuthenticationManager {
         clearLoginInfo();
     }
 
+    public void registerCallback(AuthenticationCallback callback) {
+        this.callback = callback;
+    }
+
+    public void unregisterCallback() {
+        this.callback = null;
+    }
+
     private void saveSnaptionUserId(int snaptionUserId) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(SNAPTION_USER_ID, snaptionUserId);
@@ -284,6 +293,9 @@ public final class AuthenticationManager {
                         },
                         Timber::e,
                         () -> {
+                            if (callback != null) {
+                                callback.updateView();
+                            }
                         }
                 );
     }

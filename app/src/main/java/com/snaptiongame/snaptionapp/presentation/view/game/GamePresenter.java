@@ -72,9 +72,8 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
-    public void addCaption(String caption, int userId, int fitbId) {
-        Disposable disposable = CaptionProvider.addCaption(mGameId,
-                new Caption(fitbId, caption, userId))
+    public void addCaption(int fitbId, String caption) {
+        Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         addedCaption -> {
@@ -99,8 +98,8 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
-    public void loadFitBCaptions() {
-        Disposable disposable = CaptionProvider.getFitBCaptions()
+    public void loadFitBCaptions(int setId) {
+        Disposable disposable = CaptionProvider.getFitBCaptions(setId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mGameDialogView::showFitBCaptions,

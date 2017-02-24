@@ -21,7 +21,7 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.image)
     CircleImageView mImage;
     @BindView(R.id.secondary_text)
-    TextView mUserName;
+    TextView mUsernameField;
 
     public Context mContext;
 

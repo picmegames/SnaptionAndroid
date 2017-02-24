@@ -2,6 +2,8 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -17,12 +19,13 @@ public class SnaptionTest {
 
     @Test
     public void testConstructorSendSnaption() {
-        Snaption testSnaption = new Snaption(0, false, 0, "", "");
+        Snaption testSnaption = new Snaption(0, false, 0, "", "", new ArrayList<>());
         assertTrue(testSnaption.userId == 0);
         assertTrue(!testSnaption.isPublic);
         assertTrue(testSnaption.rating == 0);
         assertTrue(testSnaption.picture.isEmpty());
         assertTrue(testSnaption.type.isEmpty());
+        assertTrue(testSnaption.friendIds.isEmpty());
     }
 
     @Test

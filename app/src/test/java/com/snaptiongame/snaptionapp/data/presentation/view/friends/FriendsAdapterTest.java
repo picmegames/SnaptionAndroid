@@ -25,9 +25,9 @@ public class FriendsAdapterTest {
         inst.clearFriends();
         assertEquals(inst.getItemCount(), 0);
 
-        friends.add(new Friend("1", "John", "Cena", "John Cena", "jcena1234", "", "", ""));
-        friends.add(new Friend("2", "Steve", "Buscemi", "Steve Buscemi", "raddude17", "", "", ""));
-        friends.add(new Friend("4", "Steve", "Cenamopolis", "Steve Cenamopolis", "somefakeperson",
+        friends.add(new Friend(1, "John", "Cena", "John Cena", "jcena1234", "", "", ""));
+        friends.add(new Friend(2, "Steve", "Buscemi", "Steve Buscemi", "raddude17", "", "", ""));
+        friends.add(new Friend(4, "Steve", "Cenamopolis", "Steve Cenamopolis", "somefakeperson",
                 "", "", ""));
         inst.setFriends(friends);
 

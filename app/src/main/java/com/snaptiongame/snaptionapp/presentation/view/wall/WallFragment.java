@@ -41,15 +41,19 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     public static final int NUM_COLUMNS = 2;
     public static final int ITEM_VIEW_CACHE_SIZE = 20;
-    public static final String TAG = WallFragment.class.getSimpleName();
+    public static final String IS_PUBLIC = "is_public";
 
     /**
      * This method provides a new instance of a Wall Fragment.
      *
      * @return An instance of a Wall Fragment
      */
-    public static WallFragment getInstance() {
-        return new WallFragment();
+    public static WallFragment getInstance(boolean isPublic) {
+        Bundle args = new Bundle();
+        args.putBoolean(IS_PUBLIC, isPublic);
+        WallFragment wallFragment = new WallFragment();
+        wallFragment.setArguments(args);
+        return wallFragment;
     }
 
     /**
@@ -68,7 +72,7 @@ public class WallFragment extends Fragment implements WallContract.View {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.wall_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
-        mPresenter = new WallPresenter(this);
+        mPresenter = new WallPresenter(this, getArguments().getBoolean(IS_PUBLIC));
 
         mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
         mWall.addItemDecoration(new SpacesItemDecoration(
@@ -77,7 +81,7 @@ public class WallFragment extends Fragment implements WallContract.View {
         mWall.setHasFixedSize(true);
         mWall.setItemViewCacheSize(ITEM_VIEW_CACHE_SIZE);
         mWall.setDrawingCacheEnabled(true);
-        mWall.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        mWall.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
 
         mAdapter = new WallAdapter(new ArrayList<>());
         mWall.setAdapter(mAdapter);
