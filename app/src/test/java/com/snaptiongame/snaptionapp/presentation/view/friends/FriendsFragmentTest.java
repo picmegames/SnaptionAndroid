@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.presentation.view.friends;
+package com.snaptiongame.snaptionapp.presentation.view.friends;
 
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +11,6 @@ import com.snaptiongame.snaptionapp.BuildConfig;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 
 import org.junit.After;
 import org.junit.Before;

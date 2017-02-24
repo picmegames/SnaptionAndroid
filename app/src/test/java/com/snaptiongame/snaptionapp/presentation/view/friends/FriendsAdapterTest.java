@@ -1,7 +1,6 @@
-package com.snaptiongame.snaptionapp.data.presentation.view.friends;
+package com.snaptiongame.snaptionapp.presentation.view.friends;
 
 import com.snaptiongame.snaptionapp.data.models.Friend;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;
 
 import org.junit.Test;
 

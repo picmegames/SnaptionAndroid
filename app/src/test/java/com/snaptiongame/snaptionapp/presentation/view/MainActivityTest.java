@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.presentation.view;
+package com.snaptiongame.snaptionapp.presentation.view;
 
 import android.content.Intent;
 import android.os.Build;
@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.snaptiongame.snaptionapp.BuildConfig;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import org.junit.After;

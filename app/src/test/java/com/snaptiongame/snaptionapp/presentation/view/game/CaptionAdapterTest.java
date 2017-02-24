@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.presentation.view.game;
+package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.app.Fragment;
 import android.os.Build;
@@ -6,8 +6,6 @@ import android.view.View;
 
 import com.snaptiongame.snaptionapp.BuildConfig;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.presentation.view.game.CaptionAdapter;
-import com.snaptiongame.snaptionapp.presentation.view.game.CaptionCardViewHolder;
 
 import org.junit.Before;
 import org.junit.Test;
