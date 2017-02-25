@@ -158,6 +158,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setHeader();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         mAuthManager.connectGoogleApi();
