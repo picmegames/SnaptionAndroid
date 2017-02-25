@@ -17,7 +17,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/AppBarTheme"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/picker_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,9 +37,19 @@
             android:id="@+id/picker_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/picker_image"
             android:textSize="16sp"/>
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_favorite_border_grey_400_24dp"/>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/game_image"

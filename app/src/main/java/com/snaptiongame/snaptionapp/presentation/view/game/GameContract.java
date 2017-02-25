@@ -1,8 +1,12 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
+
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.presentation.BasePresenter;
 import com.snaptiongame.snaptionapp.presentation.BaseView;
 
@@ -29,6 +33,10 @@ public class GameContract {
         void loadFitBCaptions(int setId);
 
         void addCaption(int fitBId, String caption);
+
+        void upvoteOrFlagGame(Like request);
+
+        void shareToFacebook(AppCompatActivity activity, ImageView image);
     }
 
     interface CaptionDialogView extends BaseView<Presenter> {

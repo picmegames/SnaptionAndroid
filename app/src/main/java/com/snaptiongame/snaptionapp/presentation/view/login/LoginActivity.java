@@ -84,6 +84,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         goToMain();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        goToMain();
+    }
+
     private void goToMain() {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);

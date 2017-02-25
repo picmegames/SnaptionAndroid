@@ -64,12 +64,19 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 context.startActivity(profileIntent, transitionActivityOptions.toBundle());
             });
         }
-
-        if (mSelected.contains(curFriend.id) || !mSelectable) {
-            holder.itemView.setAlpha(BRIGHT);
-        }
         else {
             holder.itemView.setAlpha(DIM);
+
+            holder.itemView.setOnClickListener(view -> {
+                if (!mSelected.contains(curFriend.id)) {
+                    view.setAlpha(BRIGHT);
+                    mSelected.add(curFriend.id);
+                }
+                else {
+                    view.setAlpha(DIM);
+                    mSelected.remove(Integer.valueOf(curFriend.id));
+                }
+            });
         }
 
         holder.mName.setText(curFriend.fullName);
@@ -104,7 +111,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void deselectFriend(int position) {
-        this.mSelected.remove(mFriends.get(position).id);
+        this.mSelected.remove(position);
     }
 
     public boolean isSelected(int position) {

@@ -33,6 +33,7 @@
     <string name="share">Share</string>
     <string name="create_game">Create Game</string>
     <string name="flag">Flag As Inappropriate</string>
+    <string name="unflag">Undo Flag</string>
     <string name="default_caption">Be the first to caption this image!</string>
     <string name="game_open">Open!</string>
     <string name="game_closed">Closed</string>
@@ -57,6 +58,7 @@
     <string name="upload_message">Uploading in progress&#8230;</string>
     <string name="upload_complete_title">Upload Complete</string>
     <string name="upload_complete_message">Game created successfully</string>
+    <string name="login_failure">Failed to log in</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

@@ -119,14 +119,14 @@ public interface SnaptionApi {
     Observable<List<Snaption>> getSnaptions(@Query("public") boolean isPublic);
 
     /**
-     * This method sends a request to upvote a game with
+     * This method sends a request to upvote or flag a game with
      * a PUT request.
      *
      * @param request The Like body
      * @return An observable that emits a Like object
      */
     @PUT("/UserXGame/")
-    Observable<Like> upvoteSnaption(@Body Like request);
+    Observable<Like> upvoteOrFlagSnaption(@Body Like request);
 
     /**
      * This method sends a request to add a game with
@@ -170,14 +170,14 @@ public interface SnaptionApi {
     Observable<Caption> addCaption(@Path("game_id") int gameId, @Body Caption caption);
 
     /**
-     * This method sends a request to upvote a caption
+     * This method sends a request to upvote or flag a caption
      * with a PUT request.
      *
      * @param request The Like body
      * @return An observable that emits a Like object
      */
     @PUT("/UserXCaption/")
-    Observable<Like> upvoteCaption(@Body Like request);
+    Observable<Like> upvoteOrFlagCaption(@Body Like request);
 
     /**
      * This method sends a request to retrieve all fill in the blank from snaption.

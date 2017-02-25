@@ -13,13 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Like;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.providers.FacebookShareProvider;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
+import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 
 import butterknife.BindView;
@@ -41,24 +40,24 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
     CircleImageView mCaptionerImage;
     @BindView(R.id.upvote)
     ImageView mUpvoteButton;
+    @BindView(R.id.flag)
+    ImageView mFlagButton;
     @BindView(R.id.game_status)
     TextView mGameStatus;
-
-    private AuthenticationManager mAuthManager;
 
     public Context mContext;
 
     public int mGameId;
     public int mPickerId;
     public String mImageUrl;
+
     public boolean isUpvoted = false;
+    public boolean isFlagged = false;
 
     public SnaptionCardViewHolder(View itemView) {
         super(itemView);
         mContext = itemView.getContext();
         ButterKnife.bind(this, itemView);
-
-        mAuthManager = AuthenticationManager.getInstance();
 
         if (Build.VERSION.SDK_INT >= 21) {
             mImage.setClipToOutline(true);
@@ -74,24 +73,35 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
                 isUpvoted = true;
                 Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
             }
-            upvoteSnaption(mAuthManager.getSnaptionUserId(), mGameId, isUpvoted);
+            upvoteSnaption(mGameId, isUpvoted);
+        });
+
+        mFlagButton.setOnClickListener(view -> {
+            if (isFlagged) {
+                mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+                isFlagged = false;
+            }
+            else {
+                mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+                isFlagged = true;
+                Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+            }
+            flagSnaption(mGameId, isFlagged);
         });
 
         itemView.setOnLongClickListener(view -> {
             PopupMenu menu = new PopupMenu(mContext, itemView);
-            menu.getMenuInflater().inflate(R.menu.snaption_card_menu, menu.getMenu());
+            menu.getMenuInflater().inflate(R.menu.game_menu, menu.getMenu());
+            menu.getMenu().findItem(R.id.flag).setVisible(false);
+            menu.getMenu().findItem(R.id.unflag).setVisible(false);
 
             menu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
-                    case R.id.flag:
-                        Toast.makeText(mContext, "This will flag a photo as inappropriate!",
-                                Toast.LENGTH_LONG).show();
                     case R.id.create_game:
-                        Toast.makeText(mContext, "This will make a game with the picture.",
-                                Toast.LENGTH_LONG).show();
+                        startCreateGame();
                         break;
                     case R.id.share:
-                        shareToFacebook();
+                        FacebookShareProvider.shareToFacebook((AppCompatActivity) mContext, mImage);
                         break;
                     default:
                         break;
@@ -104,38 +114,47 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
         });
 
         itemView.setOnClickListener(view -> {
-            mImage.buildDrawingCache();
-            Context cardContext = view.getContext();
-            Intent gameIntent = new Intent(cardContext, GameActivity.class);
-            gameIntent.putExtra("gameId", mGameId);
-            gameIntent.putExtra("pickerId", mPickerId);
-            gameIntent.putExtra("image", mImageUrl);
+            Intent gameIntent = new Intent(mContext, GameActivity.class);
+            gameIntent.putExtra(Snaption.ID, mGameId);
+            gameIntent.putExtra(Snaption.PICKER_ID, mPickerId);
+            gameIntent.putExtra(Snaption.PICTURE, mImageUrl);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,
                             mImage, mContext.getString(R.string.shared_transition));
-            cardContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
+            mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
         });
     }
 
-    private void upvoteSnaption(int userId, int gameId, boolean isUpvoted) {
-        SnaptionProvider.upvoteSnaption(new Like(userId, gameId, isUpvoted, false, Like.GAME_ID))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(like -> {
-                }, Timber::e, () -> Timber.i("Successfully liked snaption!"));
+    private void startCreateGame() {
+        Intent createGameIntent = new Intent(mContext, CreateGameActivity.class);
+        createGameIntent.putExtra(Snaption.PICTURE, mImageUrl);
+
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation((AppCompatActivity) mContext,
+                        mImage, mContext.getString(R.string.shared_transition));
+        mContext.startActivity(createGameIntent, transitionActivityOptions.toBundle());
     }
 
-    private void shareToFacebook() {
-        mImage.setDrawingCacheEnabled(true);
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(mImage.getDrawingCache())
-                .build();
+    private void upvoteSnaption(int gameId, boolean isUpvoted) {
+        SnaptionProvider.upvoteOrFlagSnaption(new Like(gameId, isUpvoted, Like.UPVOTE, Like.GAME_ID))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        like -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully liked snaption!")
+                );
+    }
 
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .addPhoto(photo)
-                .build();
-
-        ShareDialog shareDialog = new ShareDialog((AppCompatActivity) mContext);
-        shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+    private void flagSnaption(int gameId, boolean isFlagged) {
+        SnaptionProvider.upvoteOrFlagSnaption(new Like(gameId, isFlagged, Like.FLAGGED, Like.GAME_ID))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        like -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully flagged snaption")
+                );
     }
 }

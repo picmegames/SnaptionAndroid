@@ -69,4 +69,6 @@
     </string-array>
     <string name="log_in_label">Iniciar sesión</string>
     <string name="current_login">Conectado como: %1$s</string>
+    <string name="unflag">Deshacer la bandera</string>
+    <string name="login_failure">Error al iniciar sesión</string>
 </resources>

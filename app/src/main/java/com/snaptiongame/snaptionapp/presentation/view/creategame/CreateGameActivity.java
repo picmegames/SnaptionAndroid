@@ -25,6 +25,7 @@ import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,7 +39,6 @@ import butterknife.OnClick;
 /**
  * @author Nick Romero
  */
-
 public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
     @BindView(R.id.layout)
     CoordinatorLayout mLayout;
@@ -80,6 +80,15 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         ButterKnife.bind(this);
 
         mAuthManager = AuthenticationManager.getInstance();
+
+        Intent intent = getIntent();
+        if (intent.hasExtra(Snaption.PICTURE)) {
+            Glide.with(this)
+                    .load(intent.getStringExtra(Snaption.PICTURE))
+                    .fitCenter()
+                    .dontAnimate()
+                    .into(mNewGameImage);
+        }
 
         assignValues();
 

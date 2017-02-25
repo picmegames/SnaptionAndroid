@@ -26,8 +26,8 @@ public class CaptionProvider {
         return apiService.getFitBCaptions(setId);
     }
 
-    public static Observable<Like> upvoteCaption(Like request) {
-        return apiService.upvoteCaption(request);
+    public static Observable<Like> upvoteOrFlagCaption(Like request) {
+        return apiService.upvoteOrFlagCaption(request);
     }
 
     public static Observable<Caption> addCaption(int gameId, Caption caption) {

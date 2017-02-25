@@ -37,8 +37,8 @@ public class CaptionProviderTest {
         captions.add(new Caption(3, "test3"));
         captions.add(new Caption(4, "test4"));
         when(service.getCaptions(TEST_GAME_ID)).thenReturn(Observable.just(captions));
-        like = new Like(0, 0, false, false, "");
-        when(service.upvoteCaption(like)).thenReturn(Observable.just(like));
+        like = new Like(0, false, Like.UPVOTE, Like.CAPTION_ID);
+        when(service.upvoteOrFlagCaption(like)).thenReturn(Observable.just(like));
         caption = new Caption(0, "test0");
         when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Observable.just(caption));
     }
@@ -60,7 +60,7 @@ public class CaptionProviderTest {
     @Test
     public void testUpvoteCaption() {
         // TODO Fix test
-//      CaptionProvider.upvoteCaption(like)
+//      CaptionProvider.upvoteOrFlagCaption(like)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
 //                  returnedLike -> assertTrue(returnedLike.equals(like)),

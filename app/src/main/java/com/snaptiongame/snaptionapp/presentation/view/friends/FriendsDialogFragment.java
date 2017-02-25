@@ -57,7 +57,9 @@ public class FriendsDialogFragment extends DialogFragment {
 
         private final int position;
 
-        DialogToShow(int position) {this.position = position;}
+        DialogToShow(int position) {
+            this.position = position;
+        }
 
         public int getPosition() {
             return position;
@@ -68,8 +70,8 @@ public class FriendsDialogFragment extends DialogFragment {
      * Collection of Dialog Enums used for mapping a user's click
      */
     private DialogToShow[] mDialogOptions = {DialogToShow.PHONE_INVITE,
-                                             DialogToShow.FACEBOOK_INVITE,
-                                             DialogToShow.EMAIL_INVITE};
+            DialogToShow.FACEBOOK_INVITE,
+            DialogToShow.EMAIL_INVITE};
 
     /**
      * Holder for the type of dialog to show a user
@@ -101,7 +103,6 @@ public class FriendsDialogFragment extends DialogFragment {
      * Header icon associated with a dialog title. Changes depending on which dialog is shown
      */
     private int mHeaderIcon;
-
 
 
     /**
@@ -180,7 +181,6 @@ public class FriendsDialogFragment extends DialogFragment {
         args.putSerializable("whichDialog", whichDialogToShow);
         args.putSerializable("fragment", fragmentActivity);
         newFragment.setArguments(args);
-
 
 
         return newFragment;
@@ -303,7 +303,8 @@ public class FriendsDialogFragment extends DialogFragment {
                 });
 
 
-            } else if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
+            }
+            else if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
                 search.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -366,7 +367,6 @@ public class FriendsDialogFragment extends DialogFragment {
             mResults.setAdapter(mAdapter);
             if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
                 mAdapter.setSelectable();
-                mResults.addOnItemTouchListener(new FriendsTouchListener(this.getActivity(), mAdapter));
                 mAdapter.setFriends(mFacebookFriends);
                 loadFacebookFriends();
             }
@@ -427,8 +427,8 @@ public class FriendsDialogFragment extends DialogFragment {
             UserProvider.getUserWithEmail(search.getText().toString())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::showFriend,
-                          Timber::e,
-                          () -> Timber.i("Found user successfully"));
+                            Timber::e,
+                            () -> Timber.i("Found user successfully"));
         }
 
     }
@@ -471,10 +471,10 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                      request -> {
-                      },
-                      Timber::e,
-                      () -> Timber.i("Successfully added friend!")
+                        request -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully added friend!")
                 );
     }
 
@@ -484,20 +484,24 @@ public class FriendsDialogFragment extends DialogFragment {
      */
     private void loadFacebookFriends() {
         FriendProvider.getFacebookFriends()
-                .filter(friends -> { friends.removeAll(mFriendsFragment.getFriends());
-                                     return true; })
+                .filter(friends -> {
+                    friends.removeAll(mFriendsFragment.getFriends());
+                    return true;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                      friends -> {  mAdapter.setFriends(friends);
-                                    mAdapter.notifyDataSetChanged();
-                                    if (friends.size() > 0) {
-                                        mEmpty.setVisibility(View.GONE);
-                                    } else {
-                                        mEmpty.setVisibility(View.VISIBLE);
-                                    }
-                      },
-                      Timber::e,
-                      () -> Timber.i("Successfully loaded Facebook friends!")
+                        friends -> {
+                            mAdapter.setFriends(friends);
+                            mAdapter.notifyDataSetChanged();
+                            if (friends.size() > 0) {
+                                mEmpty.setVisibility(View.GONE);
+                            }
+                            else {
+                                mEmpty.setVisibility(View.VISIBLE);
+                            }
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully loaded Facebook friends!")
                 );
     }
 

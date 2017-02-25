@@ -25,8 +25,8 @@ public class SnaptionProvider {
                 });
     }
 
-    public static Observable<Like> upvoteSnaption(Like request) {
-        return apiService.upvoteSnaption(request);
+    public static Observable<Like> upvoteOrFlagSnaption(Like request) {
+        return apiService.upvoteOrFlagSnaption(request);
     }
 
     public static Observable<Snaption> addSnaption(Snaption snaption) {

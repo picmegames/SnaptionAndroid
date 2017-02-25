@@ -1,9 +1,14 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
+import com.snaptiongame.snaptionapp.data.providers.FacebookShareProvider;
+import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import java.util.List;
@@ -65,6 +70,24 @@ public class GamePresenter implements GameContract.Presenter {
                         () -> Timber.i("Loading picker completed successfully.")
                 );
         mDisposables.add(disposable);
+    }
+
+    @Override
+    public void upvoteOrFlagGame(Like request) {
+        Disposable disposable = SnaptionProvider.upvoteOrFlagSnaption(request)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        like -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully flagged snaption")
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void shareToFacebook(AppCompatActivity activity, ImageView image) {
+        FacebookShareProvider.shareToFacebook(activity, image);
     }
 
     private void processCaptions(List<Caption> captions) {

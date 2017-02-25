@@ -190,16 +190,6 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (!mIsUserProfile) {
-            MenuItem logoutItem = menu.findItem(R.id.log_out);
-            logoutItem.setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         mPresenter.subscribe();
@@ -318,6 +308,15 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (!mIsUserProfile) {
+            menu.findItem(R.id.log_out).setVisible(false);
+        }
         return true;
     }
 

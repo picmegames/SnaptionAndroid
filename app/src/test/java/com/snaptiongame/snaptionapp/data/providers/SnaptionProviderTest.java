@@ -33,8 +33,8 @@ public class SnaptionProviderTest {
         snaptions.add(new Snaption(2, true, 2, "picture2", "", new ArrayList<>()));
         snaptions.add(new Snaption(3, false, 3, "picture3", "", new ArrayList<>()));
         when(service.getSnaptions(true)).thenReturn(Observable.just(snaptions));
-        like = new Like(0, 0, false, false, "");
-        when(service.upvoteSnaption(like)).thenReturn(Observable.just(like));
+        like = new Like(0, false, Like.UPVOTE, Like.GAME_ID);
+        when(service.upvoteOrFlagSnaption(like)).thenReturn(Observable.just(like));
         snaption = new Snaption(0, false, 0, "picture0", "", new ArrayList<>());
         when(service.addSnaption(snaption)).thenReturn(Observable.just(snaption));
     }
@@ -56,7 +56,7 @@ public class SnaptionProviderTest {
     @Test
     public void testUpvoteSnaption() {
         // TODO Fix test
-//      SnaptionProvider.upvoteSnaption(like)
+//      SnaptionProvider.upvoteOrFlagSnaption(like)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
 //                  returnedLike -> assertTrue(returnedLike.equals(like)),

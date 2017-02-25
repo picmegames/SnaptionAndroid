@@ -35,6 +35,16 @@
         android:textSize="14sp"/>
 
     <ImageView
+        android:id="@+id/flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/top_caption"
+        android:layout_toStartOf="@+id/upvote"
+        android:layout_margin="2dp"
+        android:src="@drawable/ic_flag_grey_400_24dp"/>
+
+    <ImageView
         android:id="@+id/upvote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
