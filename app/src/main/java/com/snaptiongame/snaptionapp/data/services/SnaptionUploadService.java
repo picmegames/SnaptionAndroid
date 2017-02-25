@@ -18,6 +18,8 @@ import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 
+import java.util.ArrayList;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -58,11 +60,12 @@ public class SnaptionUploadService extends Service {
             int userId = uploadBundle.getInt(Snaption.ID);
             boolean isPublic = uploadBundle.getBoolean(Snaption.IS_PUBLIC);
             byte[] encodedBytes = uploadBundle.getByteArray(Snaption.PICTURE);
+            ArrayList<Integer> friendIds = uploadBundle.getIntegerArrayList(Snaption.FRIENDS);
             String type = uploadBundle.getString(Snaption.IMG_TYPE);
 
             showUploadProgressNotification();
             Disposable disposable = SnaptionProvider.addSnaption(new Snaption(userId, !isPublic, 1,
-                    Base64.encodeToString(encodedBytes, Base64.DEFAULT), type))
+                    Base64.encodeToString(encodedBytes, Base64.DEFAULT), type, friendIds))
                     .subscribe(
                             snaption -> {
                             },

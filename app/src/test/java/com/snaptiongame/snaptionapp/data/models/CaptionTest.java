@@ -18,7 +18,7 @@ public class CaptionTest {
 
     @Test
     public void testConstructorSendCaption() {
-        Caption caption = new Caption(0, "", 1);
+        Caption caption = new Caption(0, "");
         assertTrue(caption.fitBId == 0);
         assertTrue(caption.caption.isEmpty());
     }
@@ -31,9 +31,9 @@ public class CaptionTest {
 
     @Test
     public void testEqualsCaptionTrue() {
-        Caption caption1 = new Caption(32, "I'm a caption", 0);
+        Caption caption1 = new Caption(32, "I'm a caption");
         caption1.numVotes = 200;
-        Caption caption2 = new Caption(32, "I'm a caption", 0);
+        Caption caption2 = new Caption(32, "I'm a caption");
         caption2.numVotes = 200;
         assertTrue(caption1.equals(caption2));
 
@@ -41,9 +41,9 @@ public class CaptionTest {
 
     @Test
     public void testEqualsCaptionFalse() {
-        Caption caption1 = new Caption(32, "I'm a caption", 0);
+        Caption caption1 = new Caption(32, "I'm a caption");
         caption1.numVotes = 200;
-        Caption caption2 = new Caption(32, "I'm a caption", 0);
+        Caption caption2 = new Caption(32, "I'm a caption");
         caption1.numVotes = 1234567;
         assertFalse(caption1.equals(caption2));
 

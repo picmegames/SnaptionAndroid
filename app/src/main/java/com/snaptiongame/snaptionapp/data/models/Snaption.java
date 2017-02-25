@@ -2,6 +2,8 @@ package com.snaptiongame.snaptionapp.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * @author Tyler Wong
  */
@@ -29,6 +31,8 @@ public class Snaption {
     public String picture;
     @SerializedName(TOP_CAPTION)
     public Caption topCaption;
+    @SerializedName(FRIENDS)
+    public List<Integer> friendIds;
 
     public static final String ID = "id";
     public static final String USER_ID = "userId";
@@ -41,17 +45,19 @@ public class Snaption {
     public static final String IMG_TYPE = "imgType";
     public static final String PICTURE = "picture";
     public static final String TOP_CAPTION = "topCaption";
+    public static final String FRIENDS = "friends";
 
     public Snaption() {
 
     }
 
-    public Snaption(int userId, boolean isPublic, int rating, String picture, String type) {
+    public Snaption(int userId, boolean isPublic, int rating, String picture, String type, List<Integer> friendIds) {
         this.userId = userId;
         this.isPublic = isPublic;
         this.rating = rating;
         this.picture = picture;
         this.type = type;
+        this.friendIds = friendIds;
     }
 
     public Snaption(int id, long startDate, long endDate, boolean isPublic, int rating,

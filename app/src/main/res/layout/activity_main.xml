@@ -31,9 +31,9 @@
             android:src="@drawable/ic_add_white_24dp"
             app:backgroundTint="@color/colorAccent"
             app:fabSize="normal"
-            app:rippleColor="@color/colorAccent"
             app:layout_anchor="@id/frame"
-            app:layout_anchorGravity="bottom|end"/>
+            app:layout_anchorGravity="bottom|end"
+            app:rippleColor="@color/colorAccent"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
@@ -24,17 +25,20 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
+    private AuthenticationManager mAuthManager;
+
     private String mEncodedImage;
 
     public ProfilePresenter(@NonNull ProfileContract.View profileView) {
         mProfileView = profileView;
         mDisposables = new CompositeDisposable();
         mProfileView.setPresenter(this);
+        mAuthManager = AuthenticationManager.getInstance();
     }
 
     @Override
-    public void updateProfilePicture(int snaptionUserId, User user) {
-        Disposable disposable = UserProvider.updateUser(snaptionUserId, user)
+    public void updateProfilePicture(User user) {
+        Disposable disposable = UserProvider.updateUser(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         newUser -> mProfileView.saveProfilePicture(newUser.picture),
@@ -48,8 +52,8 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
-    public void updateUsername(int snaptionUserId, String oldUsername, User user) {
-        Disposable disposable = UserProvider.updateUser(snaptionUserId, user)
+    public void updateUsername(String oldUsername, User user) {
+        Disposable disposable = UserProvider.updateUser(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         nextUser -> mProfileView.saveUsername(nextUser.username),
@@ -63,16 +67,24 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
-    public void convertImage(int snaptionUserId, ContentResolver resolver, Uri uri) {
+    public void convertImage(ContentResolver resolver, Uri uri) {
         Disposable disposable = ImageConverter.convertImageBase64(resolver, uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         s -> mEncodedImage = s,
                         Timber::e,
-                        () -> updateProfilePicture(snaptionUserId, new User(mEncodedImage, resolver.getType(uri)))
+                        () -> updateProfilePicture(new User(mEncodedImage, resolver.getType(uri)))
                 );
         mDisposables.add(disposable);
+    }
+
+    @Override
+    public void logout() {
+        if (mAuthManager.isLoggedIn()) {
+            mAuthManager.logout();
+            mProfileView.goToLogin();
+        }
     }
 
     @Override

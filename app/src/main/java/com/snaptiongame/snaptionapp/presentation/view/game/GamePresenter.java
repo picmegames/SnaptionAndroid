@@ -1,9 +1,14 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
+import com.snaptiongame.snaptionapp.data.providers.FacebookShareProvider;
+import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import java.util.List;
@@ -67,14 +72,31 @@ public class GamePresenter implements GameContract.Presenter {
         mDisposables.add(disposable);
     }
 
+    @Override
+    public void upvoteOrFlagGame(Like request) {
+        Disposable disposable = SnaptionProvider.upvoteOrFlagSnaption(request)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        like -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully flagged snaption")
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void shareToFacebook(AppCompatActivity activity, ImageView image) {
+        FacebookShareProvider.shareToFacebook(activity, image);
+    }
+
     private void processCaptions(List<Caption> captions) {
         mGameView.showCaptions(captions);
     }
 
     @Override
-    public void addCaption(String caption, int userId, int fitbId) {
-        Disposable disposable = CaptionProvider.addCaption(mGameId,
-                new Caption(fitbId, caption, userId))
+    public void addCaption(int fitbId, String caption) {
+        Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         addedCaption -> {
@@ -99,8 +121,8 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
-    public void loadFitBCaptions() {
-        Disposable disposable = CaptionProvider.getFitBCaptions()
+    public void loadFitBCaptions(int setId) {
+        Disposable disposable = CaptionProvider.getFitBCaptions(setId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mGameDialogView::showFitBCaptions,

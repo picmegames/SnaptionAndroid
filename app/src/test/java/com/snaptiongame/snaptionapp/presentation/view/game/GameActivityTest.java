@@ -1,9 +1,8 @@
-package com.snaptiongame.snaptionapp.data.presentation.view.game;
+package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.os.Build;
 
 import com.snaptiongame.snaptionapp.BuildConfig;
-import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,5 +1,9 @@
 package com.snaptiongame.snaptionapp.presentation.view.friends;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +14,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +25,7 @@ import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter {
     private List<Friend> mFriends;
-    private List<String> mSelected;
+    private List<Integer> mSelected;
     private boolean mSelectable;
     public static final float DIM = .6F, BRIGHT = 1F;
 
@@ -45,14 +50,37 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         FriendViewHolder holder = (FriendViewHolder) viewHolder;
         Friend curFriend = mFriends.get(position);
-        if (mSelected.contains(curFriend.id) || !mSelectable) {
-            holder.itemView.setAlpha(BRIGHT);
-        } else {
+
+        if (!mSelectable) {
+            Context context = holder.itemView.getContext();
+            holder.itemView.setOnClickListener(view -> {
+                Intent profileIntent = new Intent(context, ProfileActivity.class);
+                profileIntent.putExtra(ProfileActivity.IS_USER, false);
+                profileIntent.putExtra(Friend.USERNAME, curFriend.userName);
+                profileIntent.putExtra(Friend.PICTURE, curFriend.picture);
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation((AppCompatActivity) context, holder.mImage,
+                                context.getString(R.string.shared_transition));
+                context.startActivity(profileIntent, transitionActivityOptions.toBundle());
+            });
+        }
+        else {
             holder.itemView.setAlpha(DIM);
+
+            holder.itemView.setOnClickListener(view -> {
+                if (!mSelected.contains(curFriend.id)) {
+                    view.setAlpha(BRIGHT);
+                    mSelected.add(curFriend.id);
+                }
+                else {
+                    view.setAlpha(DIM);
+                    mSelected.remove(Integer.valueOf(curFriend.id));
+                }
+            });
         }
 
         holder.mName.setText(curFriend.fullName);
-        holder.mUserName.setText(curFriend.userName);
+        holder.mUsernameField.setText(curFriend.userName);
         if (curFriend.picture != null && !curFriend.picture.isEmpty()) {
             Glide.with(holder.mContext)
                     .load(curFriend.picture)
@@ -74,22 +102,33 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         this.mFriends = friends;
     }
 
-    public void addFriend(Friend friend) { this.mFriends.add(friend); }
+    public void addFriend(Friend friend) {
+        this.mFriends.add(friend);
+    }
 
-    public void selectFriend(int position) { this.mSelected.add(mFriends.get(position).id); }
+    public void selectFriend(int position) {
+        this.mSelected.add(mFriends.get(position).id);
+    }
 
-    public void deselectFriend(int position) { this.mSelected.remove(mFriends.get(position).id); }
+    public void deselectFriend(int position) {
+        this.mSelected.remove(position);
+    }
 
-    public boolean isSelected(int position) { return mSelected.contains(mFriends.get(position).id); }
+    public boolean isSelected(int position) {
+        return mSelected.contains(mFriends.get(position).id);
+    }
 
-    public List<String> getSelectedFriends() { return mSelected; }
+    public List<Integer> getSelectedFriends() {
+        return mSelected;
+    }
 
     public List<Friend> getFriends() {
         return mFriends;
     }
 
-    public void clearFriends() {mFriends.clear();}
-
+    public void clearFriends() {
+        mFriends.clear();
+    }
 
     @Override
     public int getItemCount() {
