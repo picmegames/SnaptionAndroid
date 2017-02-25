@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -19,7 +20,15 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
     @Override
     public JsonElement serialize(User src, Type typeOfSrc, JsonSerializationContext context) {
-        return new Gson().toJsonTree(src);
+        JsonObject json = new JsonObject();
+        if (src.username == null) {
+            json.addProperty(User.PICTURE, src.picture);
+            json.addProperty(User.TYPE, src.type);
+        }
+        else {
+            json.addProperty(User.USERNAME, src.username);
+        }
+        return json;
     }
 
     @Override
@@ -31,7 +40,6 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
             else {
                 return new User();
             }
-
         }
         return new Gson().fromJson(json, typeOfT);
     }

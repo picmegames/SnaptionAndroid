@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,12 +17,10 @@ import java.util.List;
 public class FITBCaptionAdapter extends RecyclerView.Adapter {
     private List<FitBCaption> mCaptions;
     private CaptionContract.CaptionClickListener mCaptionClickListener;
-    private List<View> fitbViews;
 
     public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener) {
         mCaptions = captions;
         mCaptionClickListener = captionClickListener;
-        fitbViews = new ArrayList<>();
     }
 
     @Override
@@ -55,13 +52,13 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public FitBCaption getCaption(int index) {
+        return mCaptions.get(index);
+    }
+
     @Override
     public int getItemCount() {
         return mCaptions.size();
-    }
-
-    public void clearCaptions() {
-        mCaptions.clear();
     }
 
     @Override

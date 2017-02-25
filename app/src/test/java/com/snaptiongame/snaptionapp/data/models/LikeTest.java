@@ -11,11 +11,10 @@ import static org.junit.Assert.assertTrue;
 public class LikeTest {
     @Test
     public void testConstructorLike() {
-        Like like = new Like(0, 0, false, false, "");
-        assertTrue(like.userId == 0);
+        Like like = new Like(0, false, Like.FLAGGED, Like.GAME_ID);
         assertTrue(like.targetId == 0);
-        assertTrue(!like.upvote);
-        assertTrue(!like.flagged);
-        assertTrue(like.type.isEmpty());
+        assertTrue(!like.choice);
+        assertTrue(!like.choiceType.isEmpty());
+        assertTrue(!like.type.isEmpty());
     }
 }

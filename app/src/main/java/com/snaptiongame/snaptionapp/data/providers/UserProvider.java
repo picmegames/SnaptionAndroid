@@ -25,7 +25,7 @@ public class UserProvider {
         return apiService.getUserByFacebook(id);
     }
 
-    public static Observable<User> updateUser(int userId, User user) {
-        return apiService.updateUser(userId, user);
+    public static Observable<User> updateUser(User user) {
+        return apiService.updateUser(user);
     }
 }

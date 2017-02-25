@@ -26,7 +26,7 @@ public class UserProviderTest {
         when(service.getUser(0)).thenReturn(Observable.just(user));
         when(service.getUserByEmail("")).thenReturn(Observable.just(user));
         when(service.getUserByFacebook("")).thenReturn(Observable.just(user));
-        when(service.updateUser(0, user)).thenReturn(Observable.just(user));
+        when(service.updateUser(user)).thenReturn(Observable.just(user));
     }
 
     @Test

@@ -125,7 +125,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
                     DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE: //yes clicked
-                                int id = Integer.parseInt(mAdapter.getFriends().get(index).id);
+                                int id = mAdapter.getFriends().get(index).id;
                                 removeFriend(id);
                                 mAdapter.getFriends().remove(index);
                                 mAdapter.notifyItemRemoved(index);
@@ -148,6 +148,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         };
 
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(mFriends);
+        mPresenter.subscribe();
 
         return view;
     }
@@ -160,12 +161,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         if (actionBar != null) {
             actionBar.setTitle(R.string.friends_label);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.subscribe();
     }
 
     @Override
@@ -190,8 +185,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     }
 
     public void inviteFriends() {
-        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(STANDARD_DIALOG,
-                this);
+        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(STANDARD_DIALOG, this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
     }
 

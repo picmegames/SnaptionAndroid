@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by nickromero on 2/21/17.
@@ -21,18 +20,14 @@ public class LikeConverterTest {
 
     @Before
     public void setup() {
-        like = new Like(123, 124, false, true, "What");
+        like = new Like(123, false, Like.UPVOTE, Like.GAME_ID);
 
         jsonObject = new JsonObject();
 
-        jsonObject.addProperty(Like.USER_ID, like.userId);
-        jsonObject.addProperty(Like.UPVOTE, like.upvote);
-        jsonObject.addProperty(Like.FLAGGED, like.flagged);
-        jsonObject.addProperty(like.type, like.targetId);
+        jsonObject.addProperty(Like.GAME_ID, like.targetId);
+        jsonObject.addProperty(Like.UPVOTE, like.choice);
 
         converter = new LikeConverter();
-
-
     }
 
     @Test

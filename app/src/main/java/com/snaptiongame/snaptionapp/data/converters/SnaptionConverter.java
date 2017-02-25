@@ -28,6 +28,7 @@ public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserial
         json.addProperty(Snaption.RATING, src.rating);
         json.addProperty(Snaption.PICTURE, src.picture);
         json.addProperty(Snaption.IMG_TYPE, src.type);
+        json.add(Snaption.FRIENDS, new Gson().toJsonTree(src.friendIds));
         return json;
     }
 

@@ -1,5 +1,6 @@
 package com.snaptiongame.snaptionapp.presentation.view.settings;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.snaptiongame.snaptionapp.R;
+import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import timber.log.Timber;
 
@@ -19,13 +22,16 @@ import timber.log.Timber;
 public class PreferencesFragment extends PreferenceFragment implements
         Preference.OnPreferenceClickListener {
     private Preference mVersionPreference;
+    private Preference mLogoutPreference;
 
+    private AuthenticationManager mAuthManager;
     private SharedPreferences mPref;
     private boolean mListStyled = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuthManager = AuthenticationManager.getInstance();
         View rootView = getView();
         ListView list = null;
         if (rootView != null) {
@@ -48,6 +54,16 @@ public class PreferencesFragment extends PreferenceFragment implements
         addPreferencesFromResource(R.xml.preferences);
 
         mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_label));
+        mLogoutPreference = getPreferenceScreen().findPreference(getString(R.string.log_out_label));
+        mLogoutPreference.setOnPreferenceClickListener(this);
+
+        if (mAuthManager.isLoggedIn()) {
+            mLogoutPreference.setTitle(R.string.log_out_label);
+            mLogoutPreference.setSummary(String.format(getString(R.string.current_login), mAuthManager.getSnaptionUsername()));
+        }
+        else {
+            mLogoutPreference.setTitle(R.string.log_in_label);
+        }
 
         if (packageInfo != null) {
             mVersionPreference.setSummary(packageInfo.versionName);
@@ -68,8 +84,22 @@ public class PreferencesFragment extends PreferenceFragment implements
         }
     }
 
+    private void goToLogin() {
+        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(loginIntent);
+    }
+
     @Override
     public boolean onPreferenceClick(Preference preference) {
+        if (preference.getKey().equals(getString(R.string.log_out_label))) {
+            if (mAuthManager.isLoggedIn()) {
+                mAuthManager.logout();
+                goToLogin();
+            }
+            else {
+                goToLogin();
+            }
+        }
         return true;
     }
 }

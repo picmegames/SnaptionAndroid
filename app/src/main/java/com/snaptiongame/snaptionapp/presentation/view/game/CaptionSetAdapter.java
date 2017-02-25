@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
-import com.snaptiongame.snaptionapp.presentation.view.game.CaptionContract;
 
 import java.util.List;
 
@@ -45,13 +44,8 @@ public class CaptionSetAdapter extends RecyclerView.Adapter{
         if (!curSet.isCaptionSetActive)
             holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
 
-        setViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCaptionSetClickListener.captionSetClicked(v, setViewHolder.getAdapterPosition());
-            }
-        });
-
+        setViewHolder.itemView.setOnClickListener(v ->
+                mCaptionSetClickListener.captionSetClicked(v, setViewHolder.getAdapterPosition()));
     }
 
     @Override

@@ -32,8 +32,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider
-                .loadFriends(mSnaptionUserId)
+        Disposable disposable = FriendProvider.loadFriends(mSnaptionUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                       mFriendView::processFriends,

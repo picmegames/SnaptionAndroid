@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 
@@ -63,34 +62,28 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private String sPositiveButtonText;
 
     // TODO Make these string resource files
-    private String SUMBIT = "Submit!";
-    private String CANCEL = "Cancel";
-    private String CREATE_A_CAPTION = "Create a Caption!";
-    private String CHOOSE_A_SET = "Choose one of your Caption Sets!";
+    private static final String SUBMIT = "Submit!";
+    private static final String CANCEL = "Cancel";
+    private static final String CREATE_A_CAPTION = "Create a Caption!";
+    private static final String CHOOSE_A_SET = "Choose one of your Caption Sets!";
 
     /**
      * Recycler view used to hold the results of a search query run by the user
      */
-    private RecyclerView mResults;
-
     private LinearLayoutManager mLinearLayoutManager;
     private View mDialogView;
     private TextInputLayout fitBEditTextLayout;
     private TextInputEditText fitBEditText;
 
     private FITBCaptionAdapter mFitBAdapter;
-    private ArrayList<FitBCaption> mFitBCaptions = new ArrayList<>();
     private CaptionSetAdapter mCaptionSetAdapter;
 
     private GameContract.Presenter mPresenter;
     private int mGameId;
     private int mSetId;
 
-    private View curSelectedFitBView;
     private int curFitbPos;
     private TextWatcher captionClickListener;
-
-    private AuthenticationManager mAuth;
 
     public CaptionSelectDialogFragment() {
     }
@@ -111,8 +104,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = AuthenticationManager.getInstance();
-        sPositiveButtonText = SUMBIT;
+        sPositiveButtonText = SUBMIT;
         sNegativeButtonText = CANCEL;
         mDialogToShow = (CaptionDialogToShow) getArguments().getSerializable("whichDialog");
         mGameId = getArguments().getInt("gameId");
@@ -132,7 +124,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mPresenter = new GamePresenter(mGameId, this);
 
         mDialogBuilder = new AlertDialog.Builder(getActivity());
-        mFitBAdapter = new FITBCaptionAdapter(mFitBCaptions, this);
+        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -143,7 +135,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
                 String userText = ((TextInputEditText)
                         fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
 
-                mPresenter.addCaption(userText, mAuth.getSnaptionUserId(), curFitbPos + FITB_OFFSET);
+                mPresenter.addCaption(mFitBAdapter.getCaption(curFitbPos).id, userText);
             });
         }
         mDialogBuilder.setNegativeButton(sNegativeButtonText, (DialogInterface dialog, int which) -> {
@@ -172,7 +164,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         else {
             mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
             RecyclerView captionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
-            mPresenter.loadFitBCaptions();
+            mPresenter.loadFitBCaptions(mSetId);
 
             mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
@@ -215,7 +207,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     @Override
     public void captionClicked(View v, int position, FITBCaptionCardViewHolder holder) {
-        curSelectedFitBView = v;
         curFitbPos = position;
         fitBEditTextLayout.setVisibility(View.VISIBLE);
 

@@ -14,6 +14,7 @@ import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
 import com.snaptiongame.snaptionapp.data.services.SnaptionUploadService;
 import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,20 +64,29 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         uploadBundle.putBoolean(Snaption.IS_PUBLIC, isPublic);
         uploadBundle.putByteArray(Snaption.PICTURE, mEncodedImage);
         uploadBundle.putString(Snaption.IMG_TYPE, type);
+        uploadBundle.putIntegerArrayList(Snaption.FRIENDS, getFriendIds(mCreateGameView.getAddedFriends()));
         Intent uploadIntent = new Intent(context, SnaptionUploadService.class);
         uploadIntent.putExtras(uploadBundle);
         context.startService(uploadIntent);
         mCreateGameView.onBackPressed();
     }
 
+    private ArrayList<Integer> getFriendIds(List<String> friendNames) {
+        ArrayList<Integer> friendIds = new ArrayList<>();
+        for (String friendName : friendNames) {
+            friendIds.add(getFriendIdByName(friendName));
+        }
+        return friendIds;
+    }
+
     @Override
-    public Friend getFriendByName(String name) {
+    public int getFriendIdByName(String name) {
         for (Friend friend : mFriends) {
             if (friend.userName.equals(name)) {
-                return friend;
+                return friend.id;
             }
         }
-        return null;
+        return 0;
     }
 
     private void loadFriends() {

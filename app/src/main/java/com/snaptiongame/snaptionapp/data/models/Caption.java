@@ -43,10 +43,9 @@ public class Caption {
 
     }
 
-    public Caption(int fitBId, String caption, int userId) {
+    public Caption(int fitBId, String caption) {
         this.fitbIdSend = fitBId;
         this.caption = caption;
-        this.id = userId;
     }
 
     public Caption(int id, int gameId, int numVotes, int creatorId, int fitBId,

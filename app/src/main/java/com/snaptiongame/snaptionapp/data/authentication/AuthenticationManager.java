@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -40,6 +41,7 @@ public final class AuthenticationManager {
     private CallbackManager callbackManager;
     private GoogleApiClient googleApiClient;
     private SharedPreferences preferences;
+    private AuthenticationCallback callback;
 
     private static final String LOGGED_IN = "logged in";
 
@@ -148,12 +150,63 @@ public final class AuthenticationManager {
         });
     }
 
+    private void handleGoogleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            GoogleSignInAccount profileResult = result.getSignInAccount();
+            String profileImageUrl = "";
+            String username = "";
+            String email = "";
+
+            if (profileResult != null) {
+                if (profileResult.getPhotoUrl() != null) {
+                    profileImageUrl = profileResult.getPhotoUrl().toString();
+                }
+
+                username = profileResult.getDisplayName();
+                email = profileResult.getEmail();
+
+                handleOAuthGoogle(profileResult.getIdToken(),
+                        FirebaseInstanceId.getInstance().getToken());
+            }
+
+            saveLoginInfo(profileImageUrl, username, email);
+            setGoogleLoginState();
+        }
+        else {
+            Timber.e("Google login failed :(");
+        }
+    }
+
     private void handleOAuthFacebook(String accessToken, String deviceToken) {
         SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(session -> saveSnaptionUserId(session.userId),
-                        Timber::e,
-                        () -> handleSnaptionLogIn(getSnaptionUserId()));
+                .subscribe(
+                        session -> saveSnaptionUserId(session.userId),
+                        e -> {
+                            Timber.e(e);
+                            logout();
+                            Toast.makeText(SnaptionApplication.getContext(),
+                                    R.string.login_failure, Toast.LENGTH_LONG).show();
+                            fireCallback();
+                        },
+                        () -> getUserInfo(getSnaptionUserId())
+                );
+    }
+
+    private void handleOAuthGoogle(String token, String deviceToken) {
+        SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        session -> saveSnaptionUserId(session.userId),
+                        e -> {
+                            Timber.e(e);
+                            Toast.makeText(SnaptionApplication.getContext(),
+                                    R.string.login_failure, Toast.LENGTH_LONG).show();
+                            logout();
+                            fireCallback();
+                        },
+                        () -> getUserInfo(getSnaptionUserId())
+                );
     }
 
     public Intent getGoogleIntent() {
@@ -166,6 +219,12 @@ public final class AuthenticationManager {
 
     public void disconnectGoogleApi() {
         googleApiClient.disconnect();
+    }
+
+    private void fireCallback() {
+        if (callback != null) {
+            callback.updateView();
+        }
     }
 
     public boolean isLoggedIn() {
@@ -198,6 +257,14 @@ public final class AuthenticationManager {
         editor.apply();
 
         clearLoginInfo();
+    }
+
+    public void registerCallback(AuthenticationCallback callback) {
+        this.callback = callback;
+    }
+
+    public void unregisterCallback() {
+        this.callback = null;
     }
 
     private void saveSnaptionUserId(int snaptionUserId) {
@@ -272,7 +339,7 @@ public final class AuthenticationManager {
         editor.apply();
     }
 
-    private void handleSnaptionLogIn(int snaptionUserId) {
+    private void getUserInfo(int snaptionUserId) {
         UserProvider.getUser(snaptionUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
@@ -284,42 +351,10 @@ public final class AuthenticationManager {
                         },
                         Timber::e,
                         () -> {
+                            if (callback != null) {
+                                callback.updateView();
+                            }
                         }
                 );
-    }
-
-    private void handleOAuthGoogle(String token, String deviceToken) {
-        SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(session -> saveSnaptionUserId(session.userId),
-                        Timber::e,
-                        () -> handleSnaptionLogIn(getSnaptionUserId()));
-    }
-
-    private void handleGoogleSignInResult(GoogleSignInResult result) {
-        if (result.isSuccess()) {
-            GoogleSignInAccount profileResult = result.getSignInAccount();
-            String profileImageUrl = "";
-            String username = "";
-            String email = "";
-
-            if (profileResult != null) {
-                if (profileResult.getPhotoUrl() != null) {
-                    profileImageUrl = profileResult.getPhotoUrl().toString();
-                }
-
-                username = profileResult.getDisplayName();
-                email = profileResult.getEmail();
-
-                handleOAuthGoogle(profileResult.getIdToken(),
-                        FirebaseInstanceId.getInstance().getToken());
-            }
-
-            saveLoginInfo(profileImageUrl, username, email);
-            setGoogleLoginState();
-        }
-        else {
-            Timber.e("Google login failed :(");
-        }
     }
 }

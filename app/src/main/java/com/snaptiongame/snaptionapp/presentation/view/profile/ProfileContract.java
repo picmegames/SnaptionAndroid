@@ -24,13 +24,17 @@ public class ProfileContract {
         void showUsernameFailure(String oldeUsername, User user);
 
         void saveUsername(String username);
+
+        void goToLogin();
     }
 
     interface Presenter extends BasePresenter {
-        void updateProfilePicture(int snaptionUserId, User user);
+        void updateProfilePicture(User user);
 
-        void updateUsername(int snaptionUserId, String oldUsername, User user);
+        void updateUsername(String oldUsername, User user);
 
-        void convertImage(int snaptionUserId, ContentResolver resolver, Uri uri);
+        void convertImage(ContentResolver resolver, Uri uri);
+
+        void logout();
     }
 }
