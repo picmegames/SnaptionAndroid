@@ -28,7 +28,7 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
         else {
             json.addProperty(User.USERNAME, src.username);
         }
-        return new Gson().toJsonTree(src);
+        return json;
     }
 
     @Override
