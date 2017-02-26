@@ -62,5 +62,5 @@
         android:gravity="center_horizontal"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/like"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="32dp"/>
 </RelativeLayout>

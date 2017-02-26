@@ -14,6 +14,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Friend;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
@@ -55,9 +56,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             Context context = holder.itemView.getContext();
             holder.itemView.setOnClickListener(view -> {
                 Intent profileIntent = new Intent(context, ProfileActivity.class);
-                profileIntent.putExtra(ProfileActivity.IS_USER, false);
-                profileIntent.putExtra(Friend.USERNAME, curFriend.userName);
-                profileIntent.putExtra(Friend.PICTURE, curFriend.picture);
+                profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
+                profileIntent.putExtra(User.USERNAME, curFriend.userName);
+                profileIntent.putExtra(User.PICTURE, curFriend.picture);
+                profileIntent.putExtra(User.ID, curFriend.id);
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation((AppCompatActivity) context, holder.mImage,
                                 context.getString(R.string.shared_transition));

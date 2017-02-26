@@ -22,6 +22,8 @@ import java.util.List;
 public class WallAdapter extends RecyclerView.Adapter {
     private List<Snaption> mSnaptions;
 
+    private static final int AVATAR_SIZE = 30;
+
     public WallAdapter(List<Snaption> snaptions) {
         this.mSnaptions = snaptions;
     }
@@ -61,14 +63,14 @@ public class WallAdapter extends RecyclerView.Adapter {
             else {
                 holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
                         .beginConfig()
-                        .width(40)
-                        .height(40)
+                        .width(AVATAR_SIZE)
+                        .height(AVATAR_SIZE)
                         .toUpperCase()
                         .endConfig()
                         .buildRound(curSnaption.topCaption.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curSnaption.topCaption.creatorName)));
             }
-
+            holder.mPickerName.setText(curSnaption.topCaption.creatorName);
             holder.mTopCaption.setText(TextUtils.concat(curSnaption.topCaption.assocFitB.beforeBlank,
                     TextStyleUtils.getTextUnderlined(curSnaption.topCaption.caption),
                     curSnaption.topCaption.assocFitB.afterBlank));
@@ -77,6 +79,7 @@ public class WallAdapter extends RecyclerView.Adapter {
             Glide.with(holder.mContext)
                     .load(R.mipmap.ic_launcher)
                     .into(holder.mCaptionerImage);
+            holder.mPickerName.setText("");
             holder.mTopCaption.setText(holder.mContext.getString(R.string.default_caption));
         }
 

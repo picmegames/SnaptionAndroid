@@ -35,8 +35,8 @@
     <string name="flag">Flag As Inappropriate</string>
     <string name="unflag">Undo Flag</string>
     <string name="default_caption">Be the first to caption this image!</string>
-    <string name="game_open">Open!</string>
-    <string name="game_closed">Closed</string>
+    <string name="game_open">OPEN</string>
+    <string name="game_closed">CLOSED</string>
     <string name="edit">Edit</string>
     <string name="email" translatable="false">E-mail</string>
     <string name="username">Username</string>
