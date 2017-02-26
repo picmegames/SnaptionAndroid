@@ -42,6 +42,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
             Glide.with(holder.mContext)
                     .load(curCaption.creatorPicture)
                     .into(holder.mUserImage);
+            holder.imageUrl = curCaption.creatorPicture;
         }
         else {
             holder.mUserImage.setImageDrawable(TextDrawable.builder()
@@ -53,11 +54,13 @@ public class CaptionAdapter extends RecyclerView.Adapter {
                     .buildRound(curCaption.creatorName.substring(0, 1),
                             ColorGenerator.MATERIAL.getColor(curCaption.creatorName)));
         }
+        holder.userId = curCaption.creatorId;
         holder.captionId = curCaption.id;
         holder.mCaption.setText(TextUtils.concat(curCaption.assocFitB.beforeBlank,
                 TextStyleUtils.getTextUnderlined(curCaption.caption),
                 curCaption.assocFitB.afterBlank));
         holder.mName.setText(curCaption.creatorName);
+        holder.username = curCaption.creatorName;
         holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
     }
 

@@ -28,7 +28,7 @@ public class ImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
     private float mChangeBehaviorPoint;
 
     private static final int CUSTOM_Y_OFFSET = 8;
-    private static final int CUSTOM_X_OFFSET = 4;
+    private static final int CUSTOM_X_OFFSET = 6;
 
     private static final String STATUS_BAR_HEIGHT = "status_bar_height";
     private static final String DIMEN = "dimen";

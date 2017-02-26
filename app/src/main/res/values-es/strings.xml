@@ -21,8 +21,7 @@
     <string name="timer_label">Minutero</string>
     <string name="welcome_message">¡Bienvenido a Snaption!</string>
     <string name="add_caption">¡Agrega un subtítulo!</string>
-    <string name="game_open">¡Abierto!</string>
-    <string name="game_closed">Cerrado</string>
+    <string name="game_closed">CERRADO</string>
     <string name="edit">Editar</string>
     <string name="default_caption">¡Sea el primero en subtítulos esta imagen!</string>
     <string name="username">Nombre de usuario</string>
@@ -71,4 +70,5 @@
     <string name="current_login">Conectado como: %1$s</string>
     <string name="unflag">Deshacer la bandera</string>
     <string name="login_failure">Error al iniciar sesión</string>
+    <string name="game_open">ABIERTO</string>
 </resources>

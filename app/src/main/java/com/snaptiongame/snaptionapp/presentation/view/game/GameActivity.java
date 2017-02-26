@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +33,10 @@ import com.snaptiongame.snaptionapp.data.models.GameInvite;
 
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
+import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +76,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private GameContract.Presenter mPresenter;
     private CaptionSelectDialogFragment mCaptionDialogFragment;
     private CaptionSelectDialogFragment mCaptionSetDialogFragment;
+    private String mPickerImageUrl;
+    private String mPicker;
     private int mGameId;
     private int mPickerId;
     private GameInvite mInvite;
@@ -157,6 +162,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     }
                 })
                 .into(mImage);
+
+        mPickerImage.setOnClickListener(this::goToPickerProfile);
+
         mGameId = intent.getIntExtra(Snaption.ID, 0);
         mPickerId = intent.getIntExtra(Snaption.PICKER_ID, 0);
         mPresenter = new GamePresenter(mGameId, mPickerId, this);
@@ -222,8 +230,22 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         startActivity(createGameIntent, transitionActivityOptions.toBundle());
     }
 
+    private void goToPickerProfile(View view) {
+        Intent profileIntent = new Intent(this, ProfileActivity.class);
+        profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
+        profileIntent.putExtra(User.USERNAME, mPicker);
+        profileIntent.putExtra(User.PICTURE, mPickerImageUrl);
+        profileIntent.putExtra(User.ID, mPickerId);
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(this, view, getString(R.string.shared_transition));
+        startActivity(profileIntent, transitionActivityOptions.toBundle());
+    }
+
     @Override
     public void setPickerInfo(String profileUrl, String name) {
+        mPickerImageUrl = profileUrl;
+        mPicker = name;
+
         if (profileUrl != null && !profileUrl.isEmpty()) {
             Glide.with(this)
                     .load(profileUrl)
