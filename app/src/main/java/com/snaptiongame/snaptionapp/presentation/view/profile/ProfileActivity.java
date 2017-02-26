@@ -36,7 +36,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
-import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
@@ -89,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity
 
     private String mName;
     private String mPicture;
+    private int mUserId;
 
     private int mColorPrimary;
     private int mTransparent;
@@ -96,6 +96,7 @@ public class ProfileActivity extends AppCompatActivity
     private AuthenticationManager mAuthManager;
     private ProfileContract.Presenter mPresenter;
     private boolean mIsUserProfile;
+    private boolean mHasSameUserId;
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
@@ -106,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
     private static final int BLUR_RADIUS = 40;
 
-    public static final String IS_USER = "is_user";
+    public static final String IS_CURRENT_USER = "is_current_user";
 
     /**
      * This method creates and initializes the view for the Profile Activity.
@@ -123,16 +124,18 @@ public class ProfileActivity extends AppCompatActivity
 
         // GET previous intent
         Intent profileIntent = getIntent();
-        mIsUserProfile = profileIntent.getBooleanExtra(IS_USER, true);
+        mUserId = profileIntent.getIntExtra(User.ID, 0);
+        mIsUserProfile = profileIntent.getBooleanExtra(IS_CURRENT_USER, true);
+        mHasSameUserId = (mUserId == mAuthManager.getSnaptionUserId());
 
         // IF we are viewing the logged-in user's profile
-        if (mIsUserProfile) {
-            mName = mAuthManager.getUserFullName();
+        if (mIsUserProfile || mHasSameUserId) {
+            mName = mAuthManager.getSnaptionUsername();
             mPicture = mAuthManager.getProfileImageUrl();
         }
         else {
-            mName = profileIntent.getStringExtra(Friend.USERNAME);
-            mPicture = profileIntent.getStringExtra(Friend.PICTURE);
+            mName = profileIntent.getStringExtra(User.USERNAME);
+            mPicture = profileIntent.getStringExtra(User.PICTURE);
             mFab.setVisibility(View.GONE);
         }
 
@@ -314,7 +317,7 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (!mIsUserProfile) {
+        if (!mIsUserProfile && !mHasSameUserId) {
             menu.findItem(R.id.log_out).setVisible(false);
         }
         return true;
@@ -369,7 +372,6 @@ public class ProfileActivity extends AppCompatActivity
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
-
         }
         else {
             if (mIsTheTitleVisible) {
