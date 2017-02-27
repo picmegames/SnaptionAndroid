@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/tylerbwong/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=develop)](https://travis-ci.com/tylerbwong/SnaptionAndroid) [![codecov](https://codecov.io/gh/tylerbwong/SnaptionAndroid/branch/develop/graph/badge.svg?token=zeey0ytfqu)](https://codecov.io/gh/tylerbwong/SnaptionAndroid)
 
+![Snaption](/art/banner.png)
 
 This is repository for the Snaption Android Application developed by Team Fightin' Puffins for CPE 402, 405, and 406 at Cal Poly San Luis Obispo.
 

@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "346066457840-c5uoik87im20npsc1v1o8pc2bfm5r0n4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.snaptiongame.snaptionapp",
+            "certificate_hash": "46e9ecaf06157a17fd2e4b442cb91171b8ddab3e"
+          }
+        },
+        {
           "client_id": "346066457840-2kb7gucs2uktlk2nd3d19qivi5ini68p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.snaptiongame.snaptionapp",
-            "certificate_hash": "DB2EC1DDBE231DB3BE0E7A6350339214E709AAFD"
+            "certificate_hash": "db2ec1ddbe231db3be0e7a6350339214e709aafd"
           }
         },
         {
