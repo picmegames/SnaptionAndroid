@@ -22,7 +22,9 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.converters.BranchConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.GameInvite;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.referral.Branch;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -60,6 +64,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private CaptionSelectDialogFragment mCaptionSetDialogFragment;
     private int mGameId;
     private int mPickerId;
+    private GameInvite mInvite;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +72,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         setContentView(R.layout.activity_game);
         ButterKnife.bind(this);
         mAuthManager = AuthenticationManager.getInstance();
+
+        Branch branch = Branch.getInstance(getApplicationContext());
+        branch.initSession((referringParams, error) -> {
+            if (error == null) {
+                mInvite = BranchConverter.deserializeGameInvite(referringParams);
+                Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
+            } else {
+                Timber.e("Branch errored with " + error.getMessage());
+            }
+        }, this.getIntent().getData(), this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -84,30 +99,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         supportPostponeEnterTransition();
 
-        Intent intent = getIntent();
+        if (mInvite == null) {
+            loadRegularGame();
+        } else {
+            loadInvitedGame();
+        }
 
-        Glide.with(this)
-                .load(intent.getStringExtra("image"))
-                .fitCenter()
-                .dontAnimate()
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache, boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-                })
-                .into(mImage);
-        mGameId = intent.getIntExtra("gameId", 0);
-        mPickerId = intent.getIntExtra("pickerId", 0);
         mPresenter = new GamePresenter(mGameId, mPickerId, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
 
@@ -162,6 +159,37 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     mGameId, -1);
             mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
         }
+    }
+
+    public void loadRegularGame() {
+        Intent intent = getIntent();
+
+        Glide.with(this)
+                .load(intent.getStringExtra("image"))
+                .fitCenter()
+                .dontAnimate()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache, boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+                })
+                .into(mImage);
+        mGameId = intent.getIntExtra("gameId", 0);
+        mPickerId = intent.getIntExtra("pickerId", 0);
+    }
+
+    public void loadInvitedGame() {
+        mGameId = mInvite.gameId;
     }
 
     public void displayCaptionChoosingDialog(int setChosen) {

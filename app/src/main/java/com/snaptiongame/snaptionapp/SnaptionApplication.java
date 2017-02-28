@@ -6,6 +6,7 @@ import android.content.Context;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.squareup.leakcanary.LeakCanary;
 
+import io.branch.referral.Branch;
 import timber.log.Timber;
 
 /**
@@ -21,6 +22,9 @@ public class SnaptionApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Branch.getAutoInstance(this);
+
         SnaptionApplication.context = getApplicationContext();
 
         // INIT Authentication Manager

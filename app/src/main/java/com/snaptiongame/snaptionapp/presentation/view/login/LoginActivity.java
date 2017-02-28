@@ -13,9 +13,14 @@ import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -81,5 +86,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         }
 
         onBackPressed();
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        this.setIntent(intent);
     }
 }

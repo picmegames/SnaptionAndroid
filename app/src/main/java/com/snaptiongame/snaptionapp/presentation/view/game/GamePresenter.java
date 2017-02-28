@@ -44,6 +44,9 @@ public class GamePresenter implements GameContract.Presenter {
         mGameDialogView.setPresenter(this);
     }
 
+    public void loadGame(int gameId) {
+    }
+
     @Override
     public void loadCaptions() {
         Disposable disposable = CaptionProvider.getCaptions(mGameId)
