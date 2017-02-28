@@ -104,7 +104,7 @@ public interface SnaptionApi {
     /**
      * This method sends a request to update a user with a PUT request.
      *
-     * @param user   The new updated information for the user
+     * @param user The new updated information for the user
      * @return An observable that emits a User object
      */
     @PUT("/Users/")
@@ -216,6 +216,12 @@ public interface SnaptionApi {
     @GET("/Social/Friends/")
     Observable<List<Friend>> getFacebookFriends();
 
+    /**
+     * This method sends a request for a deep link token that will be used to
+     * generate a branch.io link
+     *
+     * @return An observable that emits a deep link token
+     */
     @POST("/DeepLink/")
     Observable<String> getToken(@Body DeepLinkRequest deepLinkRequest);
 }

@@ -23,9 +23,10 @@ public class SnaptionApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Branch.getAutoInstance(this);
-
         SnaptionApplication.context = getApplicationContext();
+
+        // INIT Branch
+        Branch.getAutoInstance(this);
 
         // INIT Authentication Manager
         AuthenticationManager.init(context);

@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
  */
 
 public class BranchConverter implements JsonSerializer<DeepLinkRequest> {
+
     public static GameInvite deserializeGameInvite(JSONObject json) {
         Gson gson = new GsonBuilder().create();
         return gson.fromJson(String.valueOf(json), GameInvite.class);

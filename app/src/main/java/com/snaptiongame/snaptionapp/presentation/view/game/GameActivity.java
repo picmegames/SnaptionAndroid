@@ -88,6 +88,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private boolean isUpvoted = false;
     private boolean isFlagged = false;
     private String mImageUrl;
+
+    private static final int AVATAR_SIZE = 40;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,13 +107,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 if (mInvite == null || mInvite.gameId == 0) {
                     showGame(intent.getStringExtra(Snaption.PICTURE), intent.getIntExtra(Snaption.ID, 0),
                             intent.getIntExtra(Snaption.PICKER_ID, 0));
-                } else {
+                }
+                else {
                     Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
                     AuthenticationManager.getInstance().saveToken(mInvite.inviteToken);
                     loadInvitedGame();
                 }
                 Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
-            } else {
+            }
+            else {
                 Timber.e("Branch errored with " + error.getMessage());
             }
         }, this.getIntent().getData(), this);
@@ -187,8 +192,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         Intent inviteIntent = new Intent();
         inviteIntent.setAction(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, url);
-
-
         inviteIntent.setType("text/plain");
 
         Intent chooser = Intent.createChooser(inviteIntent, title);
@@ -239,8 +242,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         else {
             mPickerImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
-                    .width(40)
-                    .height(40)
+                    .width(AVATAR_SIZE)
+                    .height(AVATAR_SIZE)
                     .toUpperCase()
                     .endConfig()
                     .buildRound(name.substring(0, 1),
@@ -279,7 +282,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void showGame(String image, int id, int pickerId) {
-
         Glide.with(this)
                 .load(image)
                 .fitCenter()
@@ -317,10 +319,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
-
         if (mCaptionDialogFragment != null)
             mCaptionDialogFragment.dismiss();
-
 
         if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER) {
             if (mCaptionSetDialogFragment != null)
@@ -346,8 +346,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void onBackPressed() {
-        Intent setIntent = new Intent(this, MainActivity.class);
-        startActivity(setIntent);
+        super.onBackPressed();
+        goToMain();
+    }
+
+    private void goToMain() {
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        startActivity(mainIntent);
     }
 
     @Override
@@ -372,7 +377,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             if (error == null) {
                 Timber.i("got my Branch link to share: " + url);
                 inviteFriendIntent(url);
-            } else {
+            }
+            else {
                 Timber.e("Branch " + error);
             }
         });
