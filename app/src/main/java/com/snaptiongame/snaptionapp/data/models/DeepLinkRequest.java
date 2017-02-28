@@ -1,14 +1,21 @@
 package com.snaptiongame.snaptionapp.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by BrianGouldsberry on 2/27/17.
  */
 
 public class DeepLinkRequest {
+    @SerializedName(GAMEID)
     public int gameId;
+    @SerializedName(EMAIL)
     public String email;
+    @SerializedName(PHONE)
     public String phone;
+    @SerializedName(FACEBOOKID)
     public String facebookID;
+    @SerializedName(GOOGLEID)
     public String googleID;
 
     public static final String GAMEID = "gameId";

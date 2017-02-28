@@ -23,6 +23,8 @@ public class GameContract {
         void addCaption(Caption caption);
 
         void setPickerInfo(String profileUrl, String name);
+
+        void generateInviteUrl(String inviteToken);
     }
 
     interface Presenter extends BasePresenter {
@@ -37,6 +39,8 @@ public class GameContract {
         void upvoteOrFlagGame(Like request);
 
         void shareToFacebook(AppCompatActivity activity, ImageView image);
+
+        void getBranchToken(int gameId);
     }
 
     interface CaptionDialogView extends BaseView<Presenter> {

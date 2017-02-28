@@ -216,6 +216,6 @@ public interface SnaptionApi {
     @GET("/Social/Friends/")
     Observable<List<Friend>> getFacebookFriends();
 
-    @GET("/DeepLink/")
+    @POST("/DeepLink/")
     Observable<String> getToken(@Body DeepLinkRequest deepLinkRequest);
 }

@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
+import com.snaptiongame.snaptionapp.data.models.DeepLinkRequest;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
+import com.snaptiongame.snaptionapp.data.providers.DeepLinkProvider;
 import com.snaptiongame.snaptionapp.data.providers.FacebookShareProvider;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
@@ -133,6 +135,18 @@ public class GamePresenter implements GameContract.Presenter {
                         () -> Timber.i("Successfully got Fitb's!")
                 );
         mDisposables.add(disposable);
+    }
+
+    @Override
+    public void getBranchToken(int gameId) {
+        DeepLinkRequest linkRequest = new DeepLinkRequest(gameId, "", "", "", "");
+        DeepLinkProvider.getToken(linkRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        token -> mGameView.generateInviteUrl(token),
+                        Timber::e,
+                        () -> Timber.i("Getting Snaptions completed successfully")
+                );
     }
 
     @Override

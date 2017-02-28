@@ -22,21 +22,16 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.converters.BranchConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.GameInvite;
-
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
-import com.snaptiongame.snaptionapp.data.models.Like;
-import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
 import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
@@ -179,7 +174,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mPresenter.shareToFacebook(this, mImage);
                 break;
             case R.id.invite_friend_to_game:
-                generateInviteUrl("banana", mGameId);
+                mPresenter.getBranchToken(mGameId);
                 break;
             default:
                 break;
@@ -355,8 +350,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         startActivity(setIntent);
     }
 
-  
-    public void generateInviteUrl(String inviteToken, int gameId) {
+    @Override
+    public void generateInviteUrl(String inviteToken) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
@@ -368,7 +363,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
                 // Here is where you can add custom keys/values to the deep link data
                 .addContentMetadata("inviteToken", inviteToken)
-                .addContentMetadata("gameId", Integer.toString(gameId));
+                .addContentMetadata("gameId", Integer.toString(mGameId));
         LinkProperties linkProperties = new LinkProperties()
                 .setChannel("facebook")
                 .setFeature("invite")
