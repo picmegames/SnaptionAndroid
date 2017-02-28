@@ -31,12 +31,17 @@ public class Snaption {
     public String picture;
     @SerializedName(TOP_CAPTION)
     public Caption topCaption;
+    @SerializedName(USERS)
+    public List<User> users;
+    @SerializedName(TAGS)
+    public List<Tag> tags;
+    public List<String> sendTags;
     @SerializedName(FRIENDS)
     public List<Integer> friendIds;
 
     public static final String ID = "id";
     public static final String USER_ID = "userId";
-    public static final String START_DATE = "start_date";
+    public static final String START_DATE = "creationDate";
     public static final String END_DATE = "completedDate";
     public static final String IS_PUBLIC = "isPublic";
     public static final String PICKER_ID = "picker_id";
@@ -45,29 +50,31 @@ public class Snaption {
     public static final String IMG_TYPE = "imgType";
     public static final String PICTURE = "picture";
     public static final String TOP_CAPTION = "topCaption";
-    public static final String FRIENDS = "friends";
+    public static final String TAGS = "tags";
+    public static final String FRIENDS = "invitedUsers";
+    public static final String USERS = "users";
 
     public Snaption() {
 
     }
 
-    public Snaption(int userId, boolean isPublic, int rating, String picture, String type, List<Integer> friendIds) {
+    public Snaption(int userId, boolean isPublic, int rating, String picture, String type,
+                    List<String> tags, List<Integer> friendIds) {
         this.userId = userId;
         this.isPublic = isPublic;
         this.rating = rating;
         this.picture = picture;
         this.type = type;
+        this.sendTags = tags;
         this.friendIds = friendIds;
     }
 
-    public Snaption(int id, long startDate, long endDate, boolean isPublic, int rating,
-                    String pickerName, int pickerId, String picture, String type) {
+    public Snaption(int id, long startDate, boolean isPublic, int rating,
+                    int pickerId, String picture, String type) {
         this.id = id;
         this.startDate = startDate;
-        this.endDate = endDate;
         this.isPublic = isPublic;
         this.rating = rating;
-        this.pickerName = pickerName;
         this.pickerId = pickerId;
         this.picture = picture;
         this.type = type;

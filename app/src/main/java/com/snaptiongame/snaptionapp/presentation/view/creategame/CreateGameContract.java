@@ -22,6 +22,10 @@ public class CreateGameContract {
 
         void onBackPressed();
 
+        void showUploadComplete();
+
+        List<String> getTags();
+
         List<String> getAddedFriends();
 
         Context getContext();

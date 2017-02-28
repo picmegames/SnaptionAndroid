@@ -10,19 +10,15 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
-import android.util.Base64;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.SnaptionApplication;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 
 import java.util.ArrayList;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -64,15 +60,15 @@ public class SnaptionUploadService extends Service {
             String type = uploadBundle.getString(Snaption.IMG_TYPE);
 
             showUploadProgressNotification();
-            Disposable disposable = SnaptionProvider.addSnaption(new Snaption(userId, !isPublic, 1,
-                    Base64.encodeToString(encodedBytes, Base64.DEFAULT), type, friendIds))
-                    .subscribe(
-                            snaption -> {
-                            },
-                            Timber::e,
-                            this::uploadComplete
-                    );
-            disposables.add(disposable);
+//            Disposable disposable = SnaptionProvider.addSnaption(new Snaption(userId, !isPublic, 1,
+//                    Base64.encodeToString(encodedBytes, Base64.DEFAULT), type, friendIds))
+//                    .subscribe(
+//                            snaption -> {
+//                            },
+//                            Timber::e,
+//                            this::uploadComplete
+//                    );
+//            disposables.add(disposable);
         }
 
         return START_REDELIVER_INTENT;

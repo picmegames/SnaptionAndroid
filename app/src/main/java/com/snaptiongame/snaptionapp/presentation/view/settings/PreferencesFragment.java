@@ -7,11 +7,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import com.google.android.gms.auth.api.Auth;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
@@ -36,6 +34,7 @@ public class PreferencesFragment extends PreferenceFragment implements
         super.onCreate(savedInstanceState);
         mAuthManager = AuthenticationManager.getInstance();
         mAuthManager.registerCallback(this::updateLoginField);
+
         View rootView = getView();
         ListView list = null;
         if (rootView != null) {
@@ -61,21 +60,14 @@ public class PreferencesFragment extends PreferenceFragment implements
         mLogoutPreference = getPreferenceScreen().findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
 
-        if (mAuthManager.isLoggedIn()) {
-            mLogoutPreference.setTitle(R.string.log_out_label);
-            mLogoutPreference.setSummary(String.format(getString(R.string.current_login), mAuthManager.getSnaptionUsername()));
-        }
-        else {
-            mLogoutPreference.setTitle(R.string.log_in_label);
-        }
+        updateLoginField();
 
         if (packageInfo != null) {
             mVersionPreference.setSummary(packageInfo.versionName);
         }
     }
 
-    private void updateLoginField() {
-
+    protected void updateLoginField() {
         if (mAuthManager.isLoggedIn()) {
             mLogoutPreference.setTitle(R.string.log_out_label);
             mLogoutPreference.setSummary(String.format(getString(R.string.current_login), mAuthManager.getSnaptionUsername()));
@@ -84,8 +76,6 @@ public class PreferencesFragment extends PreferenceFragment implements
             mLogoutPreference.setTitle(R.string.log_in_label);
         }
     }
-
-
 
     @Override
     public void onResume() {
@@ -103,7 +93,7 @@ public class PreferencesFragment extends PreferenceFragment implements
 
     private void goToLogin() {
         Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-        startActivityForResult(loginIntent, LOGIN_REQUEST_CODE);
+        startActivity(loginIntent);
     }
 
     @Override
@@ -111,18 +101,9 @@ public class PreferencesFragment extends PreferenceFragment implements
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
             if (mAuthManager.isLoggedIn()) {
                 mAuthManager.logout();
-                goToLogin();
             }
-            else {
-                goToLogin();
-            }
+            goToLogin();
         }
         return true;
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mAuthManager.registerCallback(this::updateLoginField);
-    }
-
 }
