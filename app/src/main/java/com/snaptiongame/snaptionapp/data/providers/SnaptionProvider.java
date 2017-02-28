@@ -25,6 +25,10 @@ public class SnaptionProvider {
                 });
     }
 
+    public static Observable<Snaption> getSnaption(int gameId) {
+        return apiService.getSnaption(gameId);
+    }
+
     public static Observable<Like> upvoteSnaption(Like request) {
         return apiService.upvoteSnaption(request);
     }

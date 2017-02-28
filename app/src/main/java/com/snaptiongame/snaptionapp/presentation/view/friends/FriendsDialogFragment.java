@@ -202,7 +202,7 @@ public class FriendsDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         mAuthManager = AuthenticationManager.getInstance();
-        generateInviteUrl("banana", 2);
+        generateInviteUrl("banana", 1);
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
         mFriendsFragment = (FriendsFragment) getArguments().getSerializable("fragment");
 

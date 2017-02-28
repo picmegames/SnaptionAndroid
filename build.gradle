@@ -55,5 +55,5 @@ ext {
     retrofitVersion = '2.2.0'
     rxAndroidVersion = '2.0.1'
     rxJavaVersion = '2.0.6'
-    branchioVersion = '2.+'
+    branchioVersion = '2.5.8'
 }

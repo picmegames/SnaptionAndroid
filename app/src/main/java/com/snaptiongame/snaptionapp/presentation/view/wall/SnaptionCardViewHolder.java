@@ -19,6 +19,7 @@ import com.facebook.share.widget.ShareDialog;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Like;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.game.GameActivity;
 
@@ -107,9 +108,9 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
             mImage.buildDrawingCache();
             Context cardContext = view.getContext();
             Intent gameIntent = new Intent(cardContext, GameActivity.class);
-            gameIntent.putExtra("gameId", mGameId);
-            gameIntent.putExtra("pickerId", mPickerId);
-            gameIntent.putExtra("image", mImageUrl);
+            gameIntent.putExtra(Snaption.ID, mGameId);
+            gameIntent.putExtra(Snaption.PICKER_ID, mPickerId);
+            gameIntent.putExtra(Snaption.PICTURE, mImageUrl);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,

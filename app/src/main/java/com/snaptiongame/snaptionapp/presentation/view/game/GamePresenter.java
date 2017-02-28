@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
+import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import java.util.List;
@@ -42,9 +43,6 @@ public class GamePresenter implements GameContract.Presenter {
         mDisposables = new CompositeDisposable();
         mGameDialogView = view;
         mGameDialogView.setPresenter(this);
-    }
-
-    public void loadGame(int gameId) {
     }
 
     @Override
@@ -122,5 +120,9 @@ public class GamePresenter implements GameContract.Presenter {
     @Override
     public void unsubscribe() {
         mDisposables.clear();
+    }
+
+    public void loadGame() {
+
     }
 }

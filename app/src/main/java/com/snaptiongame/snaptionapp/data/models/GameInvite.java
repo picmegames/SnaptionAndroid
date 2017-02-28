@@ -8,6 +8,8 @@ public class GameInvite {
     public String inviteToken;
     public int gameId;
 
+    public static final String TOKEN = "token";
+
     public GameInvite(String token, int gameId) {
         this.inviteToken = token;
         this.gameId = gameId;
