@@ -117,7 +117,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Snaption objects.
      */
     @GET("/Games")
-    Observable<List<Snaption>> getSnaptions(@Query("public") boolean isPublic);
+    Observable<List<Snaption>> getSnaptions(@Query("private") boolean isPrivate);
 
     /**
      * This method sends a request to get a single game

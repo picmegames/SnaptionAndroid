@@ -21,6 +21,7 @@ import timber.log.Timber;
  */
 public class PreferencesFragment extends PreferenceFragment implements
         Preference.OnPreferenceClickListener {
+    public static final int LOGIN_REQUEST_CODE = 30;
     private Preference mVersionPreference;
     private Preference mLogoutPreference;
 
@@ -32,6 +33,8 @@ public class PreferencesFragment extends PreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager.registerCallback(this::updateLoginField);
+
         View rootView = getView();
         ListView list = null;
         if (rootView != null) {
@@ -57,16 +60,20 @@ public class PreferencesFragment extends PreferenceFragment implements
         mLogoutPreference = getPreferenceScreen().findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
 
+        updateLoginField();
+
+        if (packageInfo != null) {
+            mVersionPreference.setSummary(packageInfo.versionName);
+        }
+    }
+
+    protected void updateLoginField() {
         if (mAuthManager.isLoggedIn()) {
             mLogoutPreference.setTitle(R.string.log_out_label);
             mLogoutPreference.setSummary(String.format(getString(R.string.current_login), mAuthManager.getSnaptionUsername()));
         }
         else {
             mLogoutPreference.setTitle(R.string.log_in_label);
-        }
-
-        if (packageInfo != null) {
-            mVersionPreference.setSummary(packageInfo.versionName);
         }
     }
 
@@ -94,11 +101,8 @@ public class PreferencesFragment extends PreferenceFragment implements
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
             if (mAuthManager.isLoggedIn()) {
                 mAuthManager.logout();
-                goToLogin();
             }
-            else {
-                goToLogin();
-            }
+            goToLogin();
         }
         return true;
     }

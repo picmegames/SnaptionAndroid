@@ -30,6 +30,8 @@ import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.converters.BranchConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.GameInvite;
+
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
@@ -87,10 +89,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private int mGameId;
     private int mPickerId;
     private GameInvite mInvite;
+
     private boolean isUpvoted = false;
     private boolean isFlagged = false;
     private String mImageUrl;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +114,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     AuthenticationManager.getInstance().saveToken(mInvite.inviteToken);
                     loadInvitedGame();
                 }
+                Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
             } else {
                 Timber.e("Branch errored with " + error.getMessage());
             }
@@ -352,6 +355,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         startActivity(setIntent);
     }
 
+  
     public void generateInviteUrl(String inviteToken, int gameId) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 // The identifier is what Branch will use to de-dupe the content across many different Universal Objects

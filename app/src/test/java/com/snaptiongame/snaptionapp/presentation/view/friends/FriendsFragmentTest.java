@@ -84,7 +84,6 @@ public class FriendsFragmentTest {
         assertEquals(a.getItemCount(), inst.size());
     }
 
-
     @After
     public void tearDown() {
         fragmentTransaction.remove(friendsFragment);

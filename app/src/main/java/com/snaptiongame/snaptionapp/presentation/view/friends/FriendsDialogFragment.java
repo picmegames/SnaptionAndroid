@@ -202,6 +202,7 @@ public class FriendsDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         mAuthManager = AuthenticationManager.getInstance();
+
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
         mFriendsFragment = (FriendsFragment) getArguments().getSerializable("fragment");
 
@@ -612,4 +613,6 @@ public class FriendsDialogFragment extends DialogFragment {
             return view;
         }
     }
+
+
 }

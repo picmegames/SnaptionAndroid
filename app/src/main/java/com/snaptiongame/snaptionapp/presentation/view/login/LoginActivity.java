@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         else {
             mAuthManager.facebookActivityResult(requestCode, resultCode, data);
         }
-
+        // finish();
         goToMain();
     }
 
@@ -98,10 +98,5 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private void goToMain() {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
-    }
-
-    @Override
-    public void onNewIntent(Intent intent) {
-        this.setIntent(intent);
     }
 }
