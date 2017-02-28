@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @OnClick(R.id.google_sign_in_button)
     public void googleLogin(View view) {
         startActivityForResult(mAuthManager.getGoogleIntent(), RC_SIGN_IN);
+
     }
 
     @Override
@@ -80,8 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         else {
             mAuthManager.facebookActivityResult(requestCode, resultCode, data);
         }
-
-        goToMain();
+        finish();
     }
 
     @Override

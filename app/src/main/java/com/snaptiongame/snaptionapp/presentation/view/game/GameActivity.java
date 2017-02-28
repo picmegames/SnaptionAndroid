@@ -159,10 +159,27 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             case R.id.share:
                 mPresenter.shareToFacebook(this, mImage);
                 break;
+            case R.id.invite_friend_to_game:
+                inviteFriendBranchIntent();
+                break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void inviteFriendBranchIntent() {
+        String title = "Invite friend via";
+
+
+        Intent inviteIntent = new Intent();
+        inviteIntent.setAction(Intent.ACTION_SEND);
+
+        inviteIntent.setType("text/plain");
+
+        Intent chooser = Intent.createChooser(inviteIntent, title);
+        startActivity(chooser);
+
     }
 
     private void flagGame() {
