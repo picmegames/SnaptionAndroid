@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
         mAuthManager.disconnectGoogleApi();
-        mAuthManager.unregisterCallback();
     }
 
     @Override
