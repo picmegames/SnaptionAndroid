@@ -217,13 +217,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         return true;
     }
 
-    private void inviteFriendBranchIntent() {
-
-
-
-
-
-    }
 
     private void inviteFriendIntent(String url) {
         String title = "Invite friend via";
@@ -389,7 +382,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void generateInviteUrl(String inviteToken, int gameId) {
-        final String[] myUrl = new String[1];
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
@@ -410,8 +402,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             if (error == null) {
                 Timber.i("got my Branch link to share: " + url);
                 inviteFriendIntent(url);
-
-
             } else {
                 Timber.e("Branch " + error);
             }
