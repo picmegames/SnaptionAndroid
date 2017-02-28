@@ -23,12 +23,6 @@
             android:name="io.branch.sdk.BranchKey"
             android:value="key_live_hbAxkg6Ohydx4Y7nRYeFTadmAuosDU68" />
 
-        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".presentation.view.MainActivity"
             android:configChanges="orientation"
@@ -77,13 +71,6 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
 
-            <intent-filter>
-                <data android:scheme="snaption://" android:host="open" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -112,9 +99,9 @@
             android:authorities="com.facebook.app.FacebookContentProvider359612531056210"
             android:exported="true"/>
 
-        <service
-            android:name="com.snaptiongame.snaptionapp.data.services.SnaptionUploadService"
-            android:exported="false"/>
+        <!--<service-->
+            <!--android:name="com.snaptiongame.snaptionapp.data.services.SnaptionUploadService"-->
+            <!--android:exported="false"/>-->
 
         <service
             android:name=".data.services.notifications.NotificationService">
