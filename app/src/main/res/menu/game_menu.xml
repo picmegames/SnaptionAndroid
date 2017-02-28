@@ -21,4 +21,9 @@
         android:checked="false"
         android:title="@string/share"/>
 
+    <item
+        android:id="@+id/invite_friend_to_game"
+        android:checked="false"
+        android:title="@string/invite_friend"/>
+
 </menu>
