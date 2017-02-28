@@ -77,13 +77,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         if (requestCode == RC_SIGN_IN) {
             mAuthManager.googleActivityResult(data);
-
         }
         else {
             mAuthManager.facebookActivityResult(requestCode, resultCode, data);
-
         }
-
         finish();
     }
 

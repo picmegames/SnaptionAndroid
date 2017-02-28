@@ -76,9 +76,7 @@ public class PreferencesFragment extends PreferenceFragment implements
 
     private void updateLoginField() {
 
-        Log.i("her", "her");
         if (mAuthManager.isLoggedIn()) {
-            Log.i("Mehtod", "IF");
             mLogoutPreference.setTitle(R.string.log_out_label);
             mLogoutPreference.setSummary(String.format(getString(R.string.current_login), mAuthManager.getSnaptionUsername()));
         }
