@@ -279,6 +279,8 @@ public class ProfileActivity extends AppCompatActivity
                 .setAction(getString(R.string.undo), view ->
                         mPresenter.updateUsername(user.username, new User(oldUsername)))
                 .show();
+        mTitle.setText(user.username);
+        mMainTitle.setText(user.username);
     }
 
     @Override
