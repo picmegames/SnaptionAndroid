@@ -22,15 +22,12 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.converters.BranchConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-import com.snaptiongame.snaptionapp.data.models.GameInvite;
 
+import com.snaptiongame.snaptionapp.data.models.GameInvite;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.User;
@@ -84,7 +81,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private String mPicker;
     private int mGameId;
     private int mPickerId;
+
     private GameInvite mInvite;
+
 
     private boolean isUpvoted = false;
     private boolean isFlagged = false;
@@ -133,6 +132,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mPresenter.upvoteOrFlagGame(new Like(mGameId, isUpvoted, Like.UPVOTE, Like.GAME_ID));
         });
 
+
         supportPostponeEnterTransition();
 
 
@@ -149,22 +149,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         Glide.with(this)
                 .load(mImageUrl)
                 .fitCenter()
-                .dontAnimate()
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache, boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-                })
                 .into(mImage);
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
@@ -218,11 +202,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
 
+
     private void inviteFriendIntent(String url) {
         String title = "Invite friend via";
         Intent inviteIntent = new Intent();
         inviteIntent.setAction(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, url);
+
 
         inviteIntent.setType("text/plain");
 
@@ -380,7 +366,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mAdapter.setCaptions(captions);
         mRefreshLayout.setRefreshing(false);
     }
-
+  
     public void generateInviteUrl(String inviteToken, int gameId) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
@@ -406,6 +392,5 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 Timber.e("Branch " + error);
             }
         });
-
     }
 }

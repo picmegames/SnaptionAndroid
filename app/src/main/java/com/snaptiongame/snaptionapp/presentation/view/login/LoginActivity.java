@@ -16,6 +16,7 @@ import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 
 import org.json.JSONObject;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -103,5 +104,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void onNewIntent(Intent intent) {
         this.setIntent(intent);
+
     }
 }

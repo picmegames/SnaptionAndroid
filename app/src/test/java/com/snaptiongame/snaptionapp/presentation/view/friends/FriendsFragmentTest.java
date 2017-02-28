@@ -85,6 +85,7 @@ public class FriendsFragmentTest {
     }
 
 
+
     @After
     public void tearDown() {
         fragmentTransaction.remove(friendsFragment);
