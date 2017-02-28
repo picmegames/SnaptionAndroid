@@ -1,16 +1,21 @@
 package com.snaptiongame.snaptionapp.presentation.view.game;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.models.Like;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.data.providers.CaptionProvider;
+import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,22 +36,24 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     TextView mCaption;
     @BindView(R.id.like)
     ImageView mLike;
+    @BindView(R.id.flag)
+    ImageView mFlag;
     @BindView(R.id.number_of_likes)
     TextView mNumberOfLikes;
 
-    private AuthenticationManager mAuthManager;
-
     public Context mContext;
 
+    public String imageUrl;
+    public String username;
+    public int userId;
     public boolean isLiked = false;
+    public boolean isFlagged = false;
     public int captionId;
 
     public CaptionCardViewHolder(View itemView) {
         super(itemView);
         this.mContext = itemView.getContext();
         ButterKnife.bind(this, itemView);
-
-        mAuthManager = AuthenticationManager.getInstance();
 
         mLike.setOnClickListener(view -> {
             if (isLiked) {
@@ -59,14 +66,54 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                 isLiked = true;
                 mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
             }
-            upvoteCaption(mAuthManager.getSnaptionUserId(), captionId, isLiked);
+            upvoteCaption(captionId, isLiked);
+        });
+
+        mFlag.setOnClickListener(view -> {
+            if (isFlagged) {
+                mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+                isFlagged = false;
+            }
+            else {
+                mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+                isFlagged = true;
+                Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+            }
+            flagCaption(captionId, isFlagged);
+        });
+
+        mUserImage.setOnClickListener(view -> {
+            Intent profileIntent = new Intent(mContext, ProfileActivity.class);
+            profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
+            profileIntent.putExtra(User.USERNAME, username);
+            profileIntent.putExtra(User.PICTURE, imageUrl);
+            profileIntent.putExtra(User.ID, userId);
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation((AppCompatActivity) mContext, mUserImage,
+                            mContext.getString(R.string.shared_transition));
+            mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
         });
     }
 
-    private void upvoteCaption(int userId, int captionId, boolean isLiked) {
-        CaptionProvider.upvoteCaption(new Like(userId, captionId, isLiked, false, Like.CAPTION_ID))
+    private void upvoteCaption(int captionId, boolean isLiked) {
+        CaptionProvider.upvoteOrFlagCaption(new Like(captionId, isLiked, Like.UPVOTE, Like.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(like -> {
-                }, Timber::e, () -> Timber.i("Successfully liked caption!"));
+                .subscribe(
+                        like -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully liked caption!")
+                );
+    }
+
+    private void flagCaption(int captionId, boolean isFlagged) {
+        CaptionProvider.upvoteOrFlagCaption(new Like(captionId, isFlagged, Like.FLAGGED, Like.CAPTION_ID))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        like -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully flagged caption")
+                );
     }
 }

@@ -26,16 +26,19 @@ public class WallPresenter implements WallContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
+    private boolean mIsPublic;
+
     /**
      * This constructor creates a new instance of a Wall Presenter
      * and initializes a Composite Disposable.
      *
      * @param wallView The view that it will present to
      */
-    public WallPresenter(@NonNull WallContract.View wallView) {
+    public WallPresenter(@NonNull WallContract.View wallView, boolean isPublic) {
         mWallView = wallView;
         mDisposables = new CompositeDisposable();
         mWallView.setPresenter(this);
+        mIsPublic = isPublic;
     }
 
     /**
@@ -45,7 +48,7 @@ public class WallPresenter implements WallContract.Presenter {
      */
     @Override
     public void loadGames() {
-        Disposable disposable = SnaptionProvider.getAllSnaptions()
+        Disposable disposable = SnaptionProvider.getSnaptions(mIsPublic)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processSnaptions,

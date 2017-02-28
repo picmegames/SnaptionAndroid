@@ -7,6 +7,11 @@
         android:title="@string/flag"/>
 
     <item
+        android:id="@+id/unflag"
+        android:checked="false"
+        android:title="@string/unflag"/>
+
+    <item
         android:id="@+id/create_game"
         android:checked="false"
         android:title="@string/create_game"/>
@@ -15,5 +20,10 @@
         android:id="@+id/share"
         android:checked="false"
         android:title="@string/share"/>
+
+    <item
+        android:id="@+id/invite_friend_to_game"
+        android:checked="false"
+        android:title="@string/invite_friend"/>
 
 </menu>

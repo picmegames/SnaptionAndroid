@@ -22,9 +22,9 @@ public class CaptionSetTest {
     @Before
     public void setup() {
         captions = new ArrayList<>();
-        captions.add(new Caption(0, "First caption", 123));
-        captions.add(new Caption(1, "Second caption", 234));
-        captions.add(new Caption(2, "Third caption", 345));
+        captions.add(new Caption(0, "First caption"));
+        captions.add(new Caption(1, "Second caption"));
+        captions.add(new Caption(2, "Third caption"));
 
         testSet = new CaptionSet();
         testSet.captionSetTitle = "Welcome to the thunderdome.";

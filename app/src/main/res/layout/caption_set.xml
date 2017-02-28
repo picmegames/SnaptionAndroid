@@ -4,50 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
+    android:layout_margin="4dp"
     android:paddingBottom="4dp"
-    android:paddingTop="4dp"
-    android:layout_margin="4dp">
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        card_view:cardElevation="2dp"
-        card_view:cardCornerRadius="5dp"
-        android:id="@+id/caption_set"
+    android:paddingTop="4dp">
+    
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        >
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/set_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_gravity="center"/>
 
-            >
-            <TextView
-                android:id="@+id/set_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
+        <ImageView
+            android:id="@+id/set_image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/snaption_icon"/>
 
-            <ImageView
-                android:id="@+id/set_image"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_gravity="center"
-                android:src="@drawable/snaption_icon"
-
-                />
-            <TextView
-                android:id="@+id/set_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="0/10"/>
-
-        </LinearLayout>
-
-
-    </android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/set_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="0/10"/>
+    </LinearLayout>
 </RelativeLayout>

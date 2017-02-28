@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager.registerCallback(this::setHeader);
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerView.setOnClickListener(view -> {
             if (mAuthManager.isLoggedIn()) {
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
+                profileIntent.putExtra(User.ID, mAuthManager.getSnaptionUserId());
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
                 startActivity(profileIntent, transitionActivityOptions.toBundle());
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setUserHeader() {
         String profileImageUrl = mAuthManager.getProfileImageUrl();
-        String name = mAuthManager.getUserFullName();
+        String name = mAuthManager.getSnaptionUsername();
         String email = mAuthManager.getEmail();
 
         Glide.with(this)
@@ -147,16 +150,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mEmailView.setText(email);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
+    private void setHeader() {
         if (mAuthManager.isLoggedIn()) {
             setUserHeader();
         }
         else {
             setDefaultHeader();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setHeader();
     }
 
     @Override
@@ -169,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
         mAuthManager.disconnectGoogleApi();
+        mAuthManager.unregisterCallback();
     }
 
     @Override

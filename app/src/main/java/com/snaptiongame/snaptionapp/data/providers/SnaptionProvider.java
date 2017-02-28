@@ -17,8 +17,8 @@ import io.reactivex.Observable;
 public class SnaptionProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
-    public static Observable<List<Snaption>> getAllSnaptions() {
-        return apiService.getSnaptions()
+    public static Observable<List<Snaption>> getSnaptions(boolean isPublic) {
+        return apiService.getSnaptions(isPublic)
                 .filter(snaptions -> {
                     Collections.reverse(snaptions);
                     return true;
@@ -29,8 +29,8 @@ public class SnaptionProvider {
         return apiService.getSnaption(gameId);
     }
 
-    public static Observable<Like> upvoteSnaption(Like request) {
-        return apiService.upvoteSnaption(request);
+    public static Observable<Like> upvoteOrFlagSnaption(Like request) {
+        return apiService.upvoteOrFlagSnaption(request);
     }
 
     public static Observable<Snaption> addSnaption(Snaption snaption) {

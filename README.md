@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/tylerbwong/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=develop)](https://travis-ci.com/tylerbwong/SnaptionAndroid) [![codecov](https://codecov.io/gh/tylerbwong/SnaptionAndroid/branch/develop/graph/badge.svg?token=zeey0ytfqu)](https://codecov.io/gh/tylerbwong/SnaptionAndroid)
 
+![Snaption](/art/banner.png)
 
 This is repository for the Snaption Android Application developed by Team Fightin' Puffins for CPE 402, 405, and 406 at Cal Poly San Luis Obispo.
 
@@ -112,7 +113,12 @@ gotten the project to build successfully!
 ### Developer Dependencies
 * [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 * [square/leakcanary](https://github.com/square/leakcanary)
+* [orfjackal/retrolambda](https://github.com/orfjackal/retrolambda)
 * [JakeWharton/timber](https://github.com/JakeWharton/timber)
+
+### Testing Dependencies
+* [mockito/mockito](https://github.com/mockito/mockito)
+* [robolectric/robolectric](https://github.com/robolectric/robolectric)
 
 ### Application Dependencies
 * [hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
@@ -120,6 +126,7 @@ gotten the project to build successfully!
 * [bumptech/glide](https://github.com/bumptech/glide)
 * [wasabeef/glide-transformations](https://github.com/wasabeef/glide-transformations)
 * [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs)
+* [hootsuite/nachos](https://github.com/hootsuite/nachos)
 * [square/okhttp](https://github.com/square/okhttp)
 * [square/retrofit](https://github.com/square/retrofit)
 * [ReactiveX/RxAndroid](https://github.com/ReactiveX/RxAndroid)

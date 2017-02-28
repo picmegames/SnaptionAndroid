@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.presentation.view.friends;
+package com.snaptiongame.snaptionapp.presentation.view.friends;
 
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +11,6 @@ import com.snaptiongame.snaptionapp.BuildConfig;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsAdapter;
-import com.snaptiongame.snaptionapp.presentation.view.friends.FriendsFragment;
 
 import org.junit.After;
 import org.junit.Before;
@@ -77,9 +75,9 @@ public class FriendsFragmentTest {
         RecyclerView friends = (RecyclerView) friendsFragment.getView().findViewById(R.id.friend_list);
         assertNotNull(friends);
         List<Friend> inst = new ArrayList<>();
-        inst.add(new Friend("1", "John", "Cena", "John Cena", "jcena1234", "", "", ""));
-        inst.add(new Friend("2", "Steve", "Buscemi", "Steve Buscemi", "raddude17", "", "", ""));
-        inst.add(new Friend("4", "Steve", "Cenamopolis", "Steve Cenamopolis", "somefakeperson",
+        inst.add(new Friend(1, "John", "Cena", "John Cena", "jcena1234", "", "", ""));
+        inst.add(new Friend(2, "Steve", "Buscemi", "Steve Buscemi", "raddude17", "", "", ""));
+        inst.add(new Friend(4, "Steve", "Cenamopolis", "Steve Cenamopolis", "somefakeperson",
                 "", "", ""));
         friendsFragment.processFriends(inst);
         FriendsAdapter a  = (FriendsAdapter) friends.getAdapter();

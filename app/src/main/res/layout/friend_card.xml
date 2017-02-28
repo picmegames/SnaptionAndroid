@@ -10,7 +10,8 @@
         android:id="@+id/image"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp"
+        android:transitionName="@string/shared_transition"/>
 
     <TextView
         android:id="@+id/primary_text"

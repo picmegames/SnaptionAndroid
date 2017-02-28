@@ -32,11 +32,11 @@ public class WallPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case PUBLIC:
-                mCurrentFragment = WallFragment.getInstance();
+                mCurrentFragment = WallFragment.getInstance(true);
                 break;
 
             case PRIVATE:
-                mCurrentFragment = WallFragment.getInstance();
+                mCurrentFragment = WallFragment.getInstance(false);
                 break;
         }
         return mCurrentFragment;

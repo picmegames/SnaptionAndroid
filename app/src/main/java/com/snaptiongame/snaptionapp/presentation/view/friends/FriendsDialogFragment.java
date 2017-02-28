@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.content.DialogInterface;
 
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
@@ -65,7 +64,9 @@ public class FriendsDialogFragment extends DialogFragment {
 
         private final int position;
 
-        DialogToShow(int position) {this.position = position;}
+        DialogToShow(int position) {
+            this.position = position;
+        }
 
         public int getPosition() {
             return position;
@@ -76,8 +77,8 @@ public class FriendsDialogFragment extends DialogFragment {
      * Collection of Dialog Enums used for mapping a user's click
      */
     private DialogToShow[] mDialogOptions = {DialogToShow.PHONE_INVITE,
-                                             DialogToShow.FACEBOOK_INVITE,
-                                             DialogToShow.EMAIL_INVITE};
+            DialogToShow.FACEBOOK_INVITE,
+            DialogToShow.EMAIL_INVITE};
 
     /**
      * Holder for the type of dialog to show a user
@@ -109,7 +110,6 @@ public class FriendsDialogFragment extends DialogFragment {
      * Header icon associated with a dialog title. Changes depending on which dialog is shown
      */
     private int mHeaderIcon;
-
 
 
     /**
@@ -202,7 +202,6 @@ public class FriendsDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         mAuthManager = AuthenticationManager.getInstance();
-        generateInviteUrl("banana", 1);
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
         mFriendsFragment = (FriendsFragment) getArguments().getSerializable("fragment");
 
@@ -310,7 +309,8 @@ public class FriendsDialogFragment extends DialogFragment {
                 });
 
 
-            } else if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
+            }
+            else if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
                 search.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -373,7 +373,6 @@ public class FriendsDialogFragment extends DialogFragment {
             mResults.setAdapter(mAdapter);
             if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
                 mAdapter.setSelectable();
-                mResults.addOnItemTouchListener(new FriendsTouchListener(this.getActivity(), mAdapter));
                 mAdapter.setFriends(mFacebookFriends);
                 loadFacebookFriends();
             }
@@ -390,9 +389,9 @@ public class FriendsDialogFragment extends DialogFragment {
 
             //add all selected friends if in the facebook dialog
             if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE)) {
-                List<String> friends = mAdapter.getSelectedFriends();
-                for (String id : friends) {
-                    addFriend(Integer.parseInt(id));
+                List<Integer> friends = mAdapter.getSelectedFriends();
+                for (Integer id : friends) {
+                    addFriend(id);
                 }
             }
             //Only send an outer app if we are still on the first dialog screen. Otherwise
@@ -434,8 +433,8 @@ public class FriendsDialogFragment extends DialogFragment {
             UserProvider.getUserWithEmail(search.getText().toString())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::showFriend,
-                          Timber::e,
-                          () -> Timber.i("Found user successfully"));
+                            Timber::e,
+                            () -> Timber.i("Found user successfully"));
         }
 
     }
@@ -478,10 +477,10 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                      request -> {
-                      },
-                      Timber::e,
-                      () -> Timber.i("Successfully added friend!")
+                        request -> {
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully added friend!")
                 );
     }
 
@@ -491,20 +490,24 @@ public class FriendsDialogFragment extends DialogFragment {
      */
     private void loadFacebookFriends() {
         FriendProvider.getFacebookFriends()
-                .filter(friends -> { friends.removeAll(mFriendsFragment.getFriends());
-                                     return true; })
+                .filter(friends -> {
+                    friends.removeAll(mFriendsFragment.getFriends());
+                    return true;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                      friends -> {  mAdapter.setFriends(friends);
-                                    mAdapter.notifyDataSetChanged();
-                                    if (friends.size() > 0) {
-                                        mEmpty.setVisibility(View.GONE);
-                                    } else {
-                                        mEmpty.setVisibility(View.VISIBLE);
-                                    }
-                      },
-                      Timber::e,
-                      () -> Timber.i("Successfully loaded Facebook friends!")
+                        friends -> {
+                            mAdapter.setFriends(friends);
+                            mAdapter.notifyDataSetChanged();
+                            if (friends.size() > 0) {
+                                mEmpty.setVisibility(View.GONE);
+                            }
+                            else {
+                                mEmpty.setVisibility(View.VISIBLE);
+                            }
+                        },
+                        Timber::e,
+                        () -> Timber.i("Successfully loaded Facebook friends!")
                 );
     }
 
@@ -608,31 +611,5 @@ public class FriendsDialogFragment extends DialogFragment {
 
             return view;
         }
-    }
-
-    public void generateInviteUrl(String inviteToken, int gameId) {
-        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
-                // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
-                .setCanonicalIdentifier(UUID.randomUUID().toString())
-                // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
-                .setTitle("Join Snaption")
-                .setContentDescription("Some description")
-                .setContentImageUrl("http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/")
-                // You use this to specify whether this content can be discovered publicly - default is public
-                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
-                // Here is where you can add custom keys/values to the deep link data
-                .addContentMetadata("inviteToken", inviteToken)
-                .addContentMetadata("gameId", Integer.toString(gameId));
-        LinkProperties linkProperties = new LinkProperties()
-                .setChannel("facebook")
-                .setFeature("invite")
-                .addControlParameter("$android_url", "https://play.google.com/apps/testing/com.snaptiongame.snaptionapp");
-        branchUniversalObject.generateShortUrl(getActivity(), linkProperties, (url, error) -> {
-            if (error == null) {
-                Timber.i("got my Branch link to share: " + url);
-            } else {
-                Timber.e("Branch " + error);
-            }
-        });
     }
 }

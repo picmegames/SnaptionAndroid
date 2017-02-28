@@ -25,9 +25,11 @@ import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.models.Snaption;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -37,7 +39,6 @@ import butterknife.OnClick;
 /**
  * @author Nick Romero
  */
-
 public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
     @BindView(R.id.layout)
     CoordinatorLayout mLayout;
@@ -80,6 +81,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
         mAuthManager = AuthenticationManager.getInstance();
 
+        Intent intent = getIntent();
+        if (intent.hasExtra(Snaption.PICTURE)) {
+            Glide.with(this)
+                    .load(intent.getStringExtra(Snaption.PICTURE))
+                    .fitCenter()
+                    .into(mNewGameImage);
+        }
+
         assignValues();
 
         setSupportActionBar(mToolbar);
@@ -120,6 +129,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void setPresenter(CreateGameContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public List<String> getAddedFriends() {
+        return mFriendsTextView.getChipValues();
     }
 
     @Override

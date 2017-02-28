@@ -31,12 +31,21 @@
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:layout_toEndOf="@+id/user_image"
-        android:layout_toStartOf="@+id/like"
+        android:layout_toStartOf="@+id/flag"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:lines="3"
         android:textAlignment="gravity"
         android:textSize="14sp"/>
+
+    <ImageView
+        android:id="@+id/flag"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/like"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_flag_grey_400_24dp"/>
 
     <ImageView
         android:id="@+id/like"
@@ -53,5 +62,5 @@
         android:gravity="center_horizontal"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/like"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="32dp"/>
 </RelativeLayout>

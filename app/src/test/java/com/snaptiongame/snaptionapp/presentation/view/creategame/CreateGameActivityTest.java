@@ -1,4 +1,4 @@
-package com.snaptiongame.snaptionapp.data.presentation.view.creategame;
+package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
 import android.content.Intent;
 import android.os.Build;
@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.snaptiongame.snaptionapp.BuildConfig;
 import com.snaptiongame.snaptionapp.R;
-import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
 
 import org.junit.After;
 import org.junit.Before;

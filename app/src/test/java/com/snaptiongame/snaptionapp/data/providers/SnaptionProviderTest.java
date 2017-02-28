@@ -1,8 +1,8 @@
 package com.snaptiongame.snaptionapp.data.providers;
 
+import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
-import com.snaptiongame.snaptionapp.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,6 @@ import static org.mockito.Mockito.when;
 /**
  * @author Tyler Wong
  */
-
 public class SnaptionProviderTest {
     private SnaptionApi service;
     private List<Snaption> snaptions;
@@ -29,21 +28,21 @@ public class SnaptionProviderTest {
     public void setup() {
         service = mock(SnaptionApi.class);
         snaptions = new ArrayList<>();
-        snaptions.add(new Snaption(0, false, 0, "picture0", ""));
-        snaptions.add(new Snaption(1, false, 1, "picture1", ""));
-        snaptions.add(new Snaption(2, true, 2, "picture2", ""));
-        snaptions.add(new Snaption(3, false, 3, "picture3", ""));
-        when(service.getSnaptions()).thenReturn(Observable.just(snaptions));
-        like = new Like(0, 0, false, false, "");
-        when(service.upvoteSnaption(like)).thenReturn(Observable.just(like));
-        snaption = new Snaption(0, false, 0, "picture0", "");
+        snaptions.add(new Snaption(0, false, 0, "picture0", "", new ArrayList<>()));
+        snaptions.add(new Snaption(1, false, 1, "picture1", "", new ArrayList<>()));
+        snaptions.add(new Snaption(2, true, 2, "picture2", "", new ArrayList<>()));
+        snaptions.add(new Snaption(3, false, 3, "picture3", "", new ArrayList<>()));
+        when(service.getSnaptions(true)).thenReturn(Observable.just(snaptions));
+        like = new Like(0, false, Like.UPVOTE, Like.GAME_ID);
+        when(service.upvoteOrFlagSnaption(like)).thenReturn(Observable.just(like));
+        snaption = new Snaption(0, false, 0, "picture0", "", new ArrayList<>());
         when(service.addSnaption(snaption)).thenReturn(Observable.just(snaption));
     }
 
     @Test
     public void testGetAllSnaptions() {
         // TODO Fix test
-//      SnaptionProvider.getAllSnaptions()
+//      SnaptionProvider.getSnaptions(true)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
 //                  returnedSnaptions -> assertTrue(returnedSnaptions.containsAll(snaptions)),
@@ -57,7 +56,7 @@ public class SnaptionProviderTest {
     @Test
     public void testUpvoteSnaption() {
         // TODO Fix test
-//      SnaptionProvider.upvoteSnaption(like)
+//      SnaptionProvider.upvoteOrFlagSnaption(like)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
 //                  returnedLike -> assertTrue(returnedLike.equals(like)),
