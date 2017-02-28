@@ -1,17 +1,14 @@
 package com.snaptiongame.snaptionapp.presentation.view.creategame;
 
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.providers.FriendProvider;
-import com.snaptiongame.snaptionapp.data.services.SnaptionUploadService;
+import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
 import com.snaptiongame.snaptionapp.data.utils.ImageConverter;
 
 import java.util.ArrayList;
@@ -35,7 +32,8 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     private List<Friend> mFriends;
     private int mUserId;
-    private byte[] mEncodedImage;
+    // private byte[] mEncodedImage;
+    private String mEncodedImage;
 
     public CreateGamePresenter(int userId, @NonNull CreateGameContract.View createGameView) {
         mUserId = userId;
@@ -46,33 +44,47 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void createGame(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
-        Disposable disposable = ImageConverter.convertImageByteArray(resolver, uri)
+        Disposable disposable = ImageConverter.convertImageBase64(resolver, uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         s -> mEncodedImage = s,
                         Timber::e,
-                        () -> startUploadService(userId, isPublic, resolver.getType(uri))
+                        () -> uploadGame(userId, isPublic, resolver.getType(uri))
                 );
         mDisposables.add(disposable);
     }
 
-    private void startUploadService(int userId, boolean isPublic, String type) {
-        Context context = mCreateGameView.getContext();
-        Bundle uploadBundle = new Bundle();
-        uploadBundle.putInt(Snaption.ID, userId);
-        uploadBundle.putBoolean(Snaption.IS_PUBLIC, isPublic);
-        uploadBundle.putByteArray(Snaption.PICTURE, mEncodedImage);
-        uploadBundle.putString(Snaption.IMG_TYPE, type);
-        uploadBundle.putIntegerArrayList(Snaption.FRIENDS, getFriendIds(mCreateGameView.getAddedFriends()));
-        Intent uploadIntent = new Intent(context, SnaptionUploadService.class);
-        uploadIntent.putExtras(uploadBundle);
-        context.startService(uploadIntent);
-        mCreateGameView.onBackPressed();
+    private void uploadGame(int userId, boolean isPublic, String type) {
+        Disposable disposable = SnaptionProvider.addSnaption(
+                new Snaption(userId, isPublic, 1, mEncodedImage, type, mCreateGameView.getTags(),
+                        getFriendIds(mCreateGameView.getAddedFriends())))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        snaption -> {
+                        },
+                        Timber::e,
+                        mCreateGameView::showUploadComplete
+                );
+        mDisposables.add(disposable);
     }
 
-    private ArrayList<Integer> getFriendIds(List<String> friendNames) {
-        ArrayList<Integer> friendIds = new ArrayList<>();
+//    private void startUploadService(int userId, boolean isPublic, String type) {
+//        Context context = mCreateGameView.getContext();
+//        Bundle uploadBundle = new Bundle();
+//        uploadBundle.putInt(Snaption.ID, userId);
+//        uploadBundle.putBoolean(Snaption.IS_PUBLIC, isPublic);
+//        uploadBundle.putByteArray(Snaption.PICTURE, mEncodedImage);
+//        uploadBundle.putString(Snaption.IMG_TYPE, type);
+//        uploadBundle.putIntegerArrayList(Snaption.FRIENDS, getFriendIds(mCreateGameView.getAddedFriends()));
+//        Intent uploadIntent = new Intent(context, SnaptionUploadService.class);
+//        uploadIntent.putExtras(uploadBundle);
+//        context.startService(uploadIntent);
+//        mCreateGameView.onBackPressed();
+//    }
+
+    private List<Integer> getFriendIds(List<String> friendNames) {
+        List<Integer> friendIds = new ArrayList<>();
         for (String friendName : friendNames) {
             friendIds.add(getFriendIdByName(friendName));
         }

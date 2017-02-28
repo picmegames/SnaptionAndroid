@@ -19,7 +19,7 @@ public class SnaptionTest {
 
     @Test
     public void testConstructorSendSnaption() {
-        Snaption testSnaption = new Snaption(0, false, 0, "", "", new ArrayList<>());
+        Snaption testSnaption = new Snaption(0, false, 0, "", "", new ArrayList<>(), new ArrayList<>());
         assertTrue(testSnaption.userId == 0);
         assertTrue(!testSnaption.isPublic);
         assertTrue(testSnaption.rating == 0);
@@ -30,7 +30,7 @@ public class SnaptionTest {
 
     @Test
     public void testConstructorSnaption() {
-        Snaption testSnaption = new Snaption(0, 0, 0, false, 0, "", 0, "", "");
+        Snaption testSnaption = new Snaption(0, 0, false, 0, 0, "", "");
         assertTrue(testSnaption.id == 0);
     }
 }

@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.hootsuite.nachos.NachoTextView;
@@ -60,6 +61,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     TextView mDateLabel;
 
     private ActionBar mActionBar;
+    private MaterialDialog mProgressDialog;
 
     private CreateGameContract.Presenter mPresenter;
 
@@ -127,6 +129,17 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     }
 
     @Override
+    public void showUploadComplete() {
+        mProgressDialog.dismiss();
+        onBackPressed();
+    }
+
+    @Override
+    public List<String> getTags() {
+        return mTagTextView.getChipValues();
+    }
+
+    @Override
     public void setPresenter(CreateGameContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -152,6 +165,12 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void createGame() {
         mPresenter.createGame(getContentResolver(), mUri, mNewGameImage.getDrawable(),
                 mAuthManager.getSnaptionUserId(), !mPrivateSwitch.isChecked());
+        mProgressDialog = new MaterialDialog.Builder(this)
+                .title(R.string.upload_title)
+                .content(R.string.upload_message)
+                .progress(true, 0)
+                .cancelable(false)
+                .show();
     }
 
     @OnClick(R.id.set_date_field)
