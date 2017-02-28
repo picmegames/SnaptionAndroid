@@ -40,11 +40,15 @@ import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 import timber.log.Timber;
 
 /**
@@ -205,7 +209,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mPresenter.shareToFacebook(this, mImage);
                 break;
             case R.id.invite_friend_to_game:
-                inviteFriendBranchIntent();
+                generateInviteUrl("banana", mGameId);
                 break;
             default:
                 break;
@@ -214,17 +218,23 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     private void inviteFriendBranchIntent() {
+
+
+
+
+
+    }
+
+    private void inviteFriendIntent(String url) {
         String title = "Invite friend via";
-
-
         Intent inviteIntent = new Intent();
         inviteIntent.setAction(Intent.ACTION_SEND);
+        inviteIntent.putExtra(Intent.EXTRA_TEXT, url);
 
         inviteIntent.setType("text/plain");
 
         Intent chooser = Intent.createChooser(inviteIntent, title);
         startActivity(chooser);
-
     }
 
     private void flagGame() {
@@ -376,5 +386,36 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void showCaptions(List<Caption> captions) {
         mAdapter.setCaptions(captions);
         mRefreshLayout.setRefreshing(false);
+    }
+
+    public void generateInviteUrl(String inviteToken, int gameId) {
+        final String[] myUrl = new String[1];
+        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
+                // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
+                .setCanonicalIdentifier(UUID.randomUUID().toString())
+                // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
+                .setTitle("Join Snaption")
+                .setContentDescription("Some description")
+                .setContentImageUrl("http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/")
+                // You use this to specify whether this content can be discovered publicly - default is public
+                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
+                // Here is where you can add custom keys/values to the deep link data
+                .addContentMetadata("inviteToken", inviteToken)
+                .addContentMetadata("gameId", Integer.toString(gameId));
+        LinkProperties linkProperties = new LinkProperties()
+                .setChannel("facebook")
+                .setFeature("invite")
+                .addControlParameter("$android_url", "https://play.google.com/apps/testing/com.snaptiongame.snaptionapp");
+        branchUniversalObject.generateShortUrl(this, linkProperties, (String url, BranchError error) -> {
+            if (error == null) {
+                Timber.i("got my Branch link to share: " + url);
+                inviteFriendIntent(url);
+
+
+            } else {
+                Timber.e("Branch " + error);
+            }
+        });
+
     }
 }
