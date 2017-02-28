@@ -169,8 +169,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     private void inviteFriendBranchIntent() {
-        Intent branchFriendIntent = new Intent();
-        startActivity(branchFriendIntent);
+        String title = "Invite friend via";
+
+
+        Intent inviteIntent = new Intent();
+        inviteIntent.setAction(Intent.ACTION_SEND);
+
+        inviteIntent.setType("text/plain");
+
+        Intent chooser = Intent.createChooser(inviteIntent, title);
+        startActivity(chooser);
+
     }
 
     private void flagGame() {
