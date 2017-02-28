@@ -226,6 +226,7 @@ public final class AuthenticationManager {
     private void fireCallback() {
         if (callback != null) {
             callback.updateView();
+            callback = null;
         }
     }
 

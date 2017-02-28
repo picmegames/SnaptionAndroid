@@ -1,7 +1,6 @@
 package com.snaptiongame.snaptionapp.presentation.view.settings;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -21,12 +20,10 @@ import timber.log.Timber;
  */
 public class PreferencesFragment extends PreferenceFragment implements
         Preference.OnPreferenceClickListener {
-    public static final int LOGIN_REQUEST_CODE = 30;
     private Preference mVersionPreference;
     private Preference mLogoutPreference;
 
     private AuthenticationManager mAuthManager;
-    private SharedPreferences mPref;
     private boolean mListStyled = false;
 
     @Override
@@ -94,6 +91,12 @@ public class PreferencesFragment extends PreferenceFragment implements
     private void goToLogin() {
         Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
         startActivity(loginIntent);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mAuthManager.unregisterCallback();
     }
 
     @Override

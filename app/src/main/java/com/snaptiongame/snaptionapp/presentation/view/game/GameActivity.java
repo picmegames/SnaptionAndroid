@@ -282,6 +282,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void showGame(String image, int id, int pickerId) {
+        mImageUrl = image;
+
         Glide.with(this)
                 .load(image)
                 .fitCenter()

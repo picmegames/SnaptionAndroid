@@ -14,14 +14,9 @@ import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
 
-import org.json.JSONObject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.branch.referral.Branch;
-import io.branch.referral.BranchError;
-import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -50,13 +45,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        int logoHeight = (int) getResources().getDimension(R.dimen.logo_height);
-        int logoWidth = (int) getResources().getDimension(R.dimen.logo_width);
-
         // Set Logo
         Glide.with(this)
                 .load(R.mipmap.ic_launcher)
-                .override(logoWidth, logoHeight)
                 .fitCenter()
                 .into(mLogo);
 
