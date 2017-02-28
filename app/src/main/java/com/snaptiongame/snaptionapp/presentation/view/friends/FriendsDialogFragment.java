@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -29,7 +31,12 @@ import com.snaptiongame.snaptionapp.data.providers.UserProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -196,6 +203,7 @@ public class FriendsDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         mAuthManager = AuthenticationManager.getInstance();
+
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
         mFriendsFragment = (FriendsFragment) getArguments().getSerializable("fragment");
 
@@ -606,4 +614,6 @@ public class FriendsDialogFragment extends DialogFragment {
             return view;
         }
     }
+
+
 }

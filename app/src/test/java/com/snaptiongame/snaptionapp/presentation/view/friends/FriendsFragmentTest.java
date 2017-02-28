@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFragment;
 
 /**
- * @author Tyler Wong
+ * @author Brian Gouldsberry
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
@@ -84,9 +84,6 @@ public class FriendsFragmentTest {
         assertEquals(a.getItemCount(), inst.size());
     }
 
-    public void filterList_isCorrect() {
-
-    }
 
 
     @After

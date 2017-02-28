@@ -24,7 +24,10 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
+import com.snaptiongame.snaptionapp.data.converters.BranchConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
+
+import com.snaptiongame.snaptionapp.data.models.GameInvite;
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
 import com.snaptiongame.snaptionapp.data.models.User;
@@ -34,10 +37,16 @@ import com.snaptiongame.snaptionapp.presentation.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
+import timber.log.Timber;
 
 /**
  * @author Tyler Wong
@@ -72,16 +81,29 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private String mPicker;
     private int mGameId;
     private int mPickerId;
+
+    private GameInvite mInvite;
+
+
     private boolean isUpvoted = false;
     private boolean isFlagged = false;
     private String mImageUrl;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ButterKnife.bind(this);
         mAuthManager = AuthenticationManager.getInstance();
+
+        Branch branch = Branch.getInstance(getApplicationContext());
+        branch.initSession((referringParams, error) -> {
+            if (error == null) {
+                mInvite = BranchConverter.deserializeGameInvite(referringParams);
+                Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
+            } else {
+                Timber.e("Branch errored with " + error.getMessage());
+            }
+        }, this.getIntent().getData(), this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -109,6 +131,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             }
             mPresenter.upvoteOrFlagGame(new Like(mGameId, isUpvoted, Like.UPVOTE, Like.GAME_ID));
         });
+
+
+        supportPostponeEnterTransition();
+
+
+        if (mInvite == null) {
+            loadRegularGame();
+        } else {
+            loadInvitedGame();
+        }
+
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(Snaption.PICTURE);
@@ -160,7 +193,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mPresenter.shareToFacebook(this, mImage);
                 break;
             case R.id.invite_friend_to_game:
-                inviteFriendBranchIntent();
+                generateInviteUrl("banana", mGameId);
                 break;
             default:
                 break;
@@ -168,18 +201,19 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         return true;
     }
 
-    private void inviteFriendBranchIntent() {
+
+
+    private void inviteFriendIntent(String url) {
         String title = "Invite friend via";
-
-
         Intent inviteIntent = new Intent();
         inviteIntent.setAction(Intent.ACTION_SEND);
+        inviteIntent.putExtra(Intent.EXTRA_TEXT, url);
+
 
         inviteIntent.setType("text/plain");
 
         Intent chooser = Intent.createChooser(inviteIntent, title);
         startActivity(chooser);
-
     }
 
     private void flagGame() {
@@ -265,6 +299,37 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
     }
 
+    public void loadRegularGame() {
+        Intent intent = getIntent();
+
+        Glide.with(this)
+                .load(intent.getStringExtra("image"))
+                .fitCenter()
+                .dontAnimate()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache, boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+                })
+                .into(mImage);
+        mGameId = intent.getIntExtra("gameId", 0);
+        mPickerId = intent.getIntExtra("pickerId", 0);
+    }
+
+    public void loadInvitedGame() {
+        mGameId = mInvite.gameId;
+    }
+
     public void displayCaptionChoosingDialog(int setChosen) {
         mCaptionSetDialogFragment.dismiss();
         mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
@@ -300,5 +365,32 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void showCaptions(List<Caption> captions) {
         mAdapter.setCaptions(captions);
         mRefreshLayout.setRefreshing(false);
+    }
+  
+    public void generateInviteUrl(String inviteToken, int gameId) {
+        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
+                // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
+                .setCanonicalIdentifier(UUID.randomUUID().toString())
+                // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
+                .setTitle("Join Snaption")
+                .setContentDescription("Some description")
+                .setContentImageUrl("http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/")
+                // You use this to specify whether this content can be discovered publicly - default is public
+                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
+                // Here is where you can add custom keys/values to the deep link data
+                .addContentMetadata("inviteToken", inviteToken)
+                .addContentMetadata("gameId", Integer.toString(gameId));
+        LinkProperties linkProperties = new LinkProperties()
+                .setChannel("facebook")
+                .setFeature("invite")
+                .addControlParameter("$android_url", "https://play.google.com/apps/testing/com.snaptiongame.snaptionapp");
+        branchUniversalObject.generateShortUrl(this, linkProperties, (String url, BranchError error) -> {
+            if (error == null) {
+                Timber.i("got my Branch link to share: " + url);
+                inviteFriendIntent(url);
+            } else {
+                Timber.e("Branch " + error);
+            }
+        });
     }
 }

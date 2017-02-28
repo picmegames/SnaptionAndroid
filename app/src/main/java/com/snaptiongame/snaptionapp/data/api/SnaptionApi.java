@@ -3,6 +3,7 @@ package com.snaptiongame.snaptionapp.data.api;
 import com.snaptiongame.snaptionapp.data.models.AddFriendRequest;
 import com.snaptiongame.snaptionapp.data.models.Caption;
 import com.snaptiongame.snaptionapp.data.models.CaptionSet;
+import com.snaptiongame.snaptionapp.data.models.DeepLinkRequest;
 import com.snaptiongame.snaptionapp.data.models.FitBCaption;
 import com.snaptiongame.snaptionapp.data.models.Friend;
 import com.snaptiongame.snaptionapp.data.models.Like;
@@ -204,4 +205,7 @@ public interface SnaptionApi {
      */
     @GET("/Social/Friends/")
     Observable<List<Friend>> getFacebookFriends();
+
+    @GET("/DeepLink/")
+    Observable<String> getToken(@Body DeepLinkRequest deepLinkRequest);
 }
