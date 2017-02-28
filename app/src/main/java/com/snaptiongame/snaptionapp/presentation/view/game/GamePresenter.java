@@ -145,4 +145,8 @@ public class GamePresenter implements GameContract.Presenter {
     public void unsubscribe() {
         mDisposables.clear();
     }
+
+    public void loadGame() {
+
+    }
 }

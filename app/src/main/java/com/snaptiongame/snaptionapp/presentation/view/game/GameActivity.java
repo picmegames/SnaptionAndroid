@@ -22,14 +22,20 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.snaptionapp.R;
 import com.snaptiongame.snaptionapp.data.authentication.AuthenticationManager;
 import com.snaptiongame.snaptionapp.data.converters.BranchConverter;
 import com.snaptiongame.snaptionapp.data.models.Caption;
-
 import com.snaptiongame.snaptionapp.data.models.GameInvite;
+
 import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.Snaption;
+import com.snaptiongame.snaptionapp.data.providers.SnaptionProvider;
+import com.snaptiongame.snaptionapp.presentation.view.MainActivity;
+import com.snaptiongame.snaptionapp.data.models.Like;
 import com.snaptiongame.snaptionapp.data.models.User;
 import com.snaptiongame.snaptionapp.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.snaptionapp.presentation.view.login.LoginActivity;
@@ -46,6 +52,7 @@ import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -81,9 +88,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private String mPicker;
     private int mGameId;
     private int mPickerId;
-
     private GameInvite mInvite;
-
 
     private boolean isUpvoted = false;
     private boolean isFlagged = false;
@@ -95,10 +100,20 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         ButterKnife.bind(this);
         mAuthManager = AuthenticationManager.getInstance();
 
+        Intent intent = getIntent();
+
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
             if (error == null) {
                 mInvite = BranchConverter.deserializeGameInvite(referringParams);
+                if (mInvite == null || mInvite.gameId == 0) {
+                    showGame(intent.getStringExtra(Snaption.PICTURE), intent.getIntExtra(Snaption.ID, 0),
+                            intent.getIntExtra(Snaption.PICKER_ID, 0));
+                } else {
+                    Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
+                    AuthenticationManager.getInstance().saveToken(mInvite.inviteToken);
+                    loadInvitedGame();
+                }
                 Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
             } else {
                 Timber.e("Branch errored with " + error.getMessage());
@@ -131,35 +146,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             }
             mPresenter.upvoteOrFlagGame(new Like(mGameId, isUpvoted, Like.UPVOTE, Like.GAME_ID));
         });
-
-
-        supportPostponeEnterTransition();
-
-
-        if (mInvite == null) {
-            loadRegularGame();
-        } else {
-            loadInvitedGame();
-        }
-
-
-        Intent intent = getIntent();
-        mImageUrl = intent.getStringExtra(Snaption.PICTURE);
-
-        Glide.with(this)
-                .load(mImageUrl)
-                .fitCenter()
-                .into(mImage);
-
-        mPickerImage.setOnClickListener(this::goToPickerProfile);
-
-        mGameId = intent.getIntExtra(Snaption.ID, 0);
-        mPickerId = intent.getIntExtra(Snaption.PICKER_ID, 0);
-        mPresenter = new GamePresenter(mGameId, mPickerId, this);
-        mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
-
-        mPresenter.subscribe();
-        mRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -200,8 +186,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
         return true;
     }
-
-
 
     private void inviteFriendIntent(String url) {
         String title = "Invite friend via";
@@ -299,35 +283,33 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
     }
 
-    public void loadRegularGame() {
-        Intent intent = getIntent();
+    public void showGame(String image, int id, int pickerId) {
 
         Glide.with(this)
-                .load(intent.getStringExtra("image"))
+                .load(image)
                 .fitCenter()
-                .dontAnimate()
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache, boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-                })
                 .into(mImage);
-        mGameId = intent.getIntExtra("gameId", 0);
-        mPickerId = intent.getIntExtra("pickerId", 0);
+        mGameId = id;
+        mPickerId = pickerId;
+
+        mPresenter = new GamePresenter(id, pickerId, this);
+        mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
+
+        mPickerImage.setOnClickListener(this::goToPickerProfile);
+
+        mPresenter.subscribe();
+        mRefreshLayout.setRefreshing(true);
     }
 
     public void loadInvitedGame() {
-        mGameId = mInvite.gameId;
+        SnaptionProvider.getSnaption(mInvite.gameId).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        snaption -> {
+                            showGame(snaption.picture, snaption.id, snaption.pickerId);
+                        },
+                        Timber::e,
+                        () -> Timber.i("Loading caption completed successfully.")
+                );
     }
 
     public void displayCaptionChoosingDialog(int setChosen) {
@@ -366,6 +348,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mAdapter.setCaptions(captions);
         mRefreshLayout.setRefreshing(false);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent setIntent = new Intent(this, MainActivity.class);
+        startActivity(setIntent);
+    }
+
   
     public void generateInviteUrl(String inviteToken, int gameId) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()

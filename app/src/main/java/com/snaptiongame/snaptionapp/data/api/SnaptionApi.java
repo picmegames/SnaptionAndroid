@@ -120,6 +120,16 @@ public interface SnaptionApi {
     Observable<List<Snaption>> getSnaptions(@Query("private") boolean isPrivate);
 
     /**
+     * This method sends a request to get a single game
+     * with a GET request.
+     *
+     * @param gameId the id of the game
+     * @return An observable that emits a list of Snaption objects.
+     */
+    @GET("/Games/{gameId}/")
+    Observable<Snaption> getSnaption(@Path("gameId") int gameId);
+
+    /**
      * This method sends a request to upvote or flag a game with
      * a PUT request.
      *

@@ -189,7 +189,6 @@ public class FriendsDialogFragment extends DialogFragment {
         args.putSerializable("fragment", fragmentActivity);
         newFragment.setArguments(args);
 
-
         return newFragment;
     }
 

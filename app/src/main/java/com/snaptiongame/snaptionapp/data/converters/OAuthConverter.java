@@ -20,6 +20,7 @@ public class OAuthConverter implements JsonSerializer<OAuthRequest> {
         json.addProperty(OAuthRequest.TOKEN, src.token);
         json.addProperty(OAuthRequest.DEVICE_TOKEN, src.deviceToken);
         json.addProperty(OAuthRequest.DEVICE_TYPE, src.deviceType);
+        json.addProperty(OAuthRequest.LINK_TOKEN, src.linkToken);
         return json;
     }
 }

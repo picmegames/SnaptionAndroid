@@ -56,6 +56,8 @@ public final class AuthenticationManager {
     private static final String FACEBOOK_LOGIN = "facebook";
     private static final String GOOGLE_SIGN_IN = "google";
 
+    private static final String INVITE_TOKEN = "token";
+
     private AuthenticationManager(Context context) {
         // INIT Shared Preferences Editor
         preferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -178,7 +180,7 @@ public final class AuthenticationManager {
     }
 
     private void handleOAuthFacebook(String accessToken, String deviceToken) {
-        SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken))
+        SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, getToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> saveSnaptionUserId(session.userId),
@@ -194,7 +196,7 @@ public final class AuthenticationManager {
     }
 
     private void handleOAuthGoogle(String token, String deviceToken) {
-        SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken))
+        SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, getToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> saveSnaptionUserId(session.userId),
@@ -283,6 +285,16 @@ public final class AuthenticationManager {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PROFILE_IMAGE_URL, profileImage);
         editor.apply();
+    }
+
+    public void saveToken(String token) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(INVITE_TOKEN, token);
+        editor.apply();
+    }
+
+    public String getToken() {
+        return preferences.getString(INVITE_TOKEN, "");
     }
 
     private void saveLoginInfo(String imageUrl, String name, String email) {

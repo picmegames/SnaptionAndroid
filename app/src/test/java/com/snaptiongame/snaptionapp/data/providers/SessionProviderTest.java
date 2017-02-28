@@ -24,7 +24,7 @@ public class SessionProviderTest {
     @Before
     public void setup() {
         service = mock(SnaptionApi.class);
-        request = new OAuthRequest("", "");
+        request = new OAuthRequest("", "", "");
         session = new Session(0);
         when(service.userOAuthFacebook(request)).thenReturn(Observable.just(session));
         when(service.userOAuthGoogle(request)).thenReturn(Observable.just(session));
