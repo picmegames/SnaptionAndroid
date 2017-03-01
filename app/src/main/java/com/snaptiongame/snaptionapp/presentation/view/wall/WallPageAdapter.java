@@ -10,17 +10,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class WallPageAdapter extends FragmentPagerAdapter {
 
-    private FragmentManager mManager;
     private Fragment mCurrentFragment;
 
-    private static final int PAGE_COUNT = 2;
-    private static final int PUBLIC = 0;
-    private static final int PRIVATE = 1;
-    private static final String tabTitles[] = new String[]{"Public", "Private"};
+    private static final int PAGE_COUNT = 3;
+    private static final int MY_WALL = 0;
+    private static final int DISCOVER = 1;
+    private static final int POPULAR = 2;
 
     public WallPageAdapter(FragmentManager manager) {
         super(manager);
-        mManager = manager;
     }
 
     @Override
@@ -31,19 +29,17 @@ public class WallPageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case PUBLIC:
+            case MY_WALL:
                 mCurrentFragment = WallFragment.getInstance(false);
                 break;
 
-            case PRIVATE:
+            case DISCOVER:
                 mCurrentFragment = WallFragment.getInstance(true);
                 break;
+
+            case POPULAR:
+                mCurrentFragment = WallFragment.getInstance(false);
         }
         return mCurrentFragment;
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return tabTitles[position];
     }
 }

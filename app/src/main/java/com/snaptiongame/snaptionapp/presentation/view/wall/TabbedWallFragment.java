@@ -32,6 +32,9 @@ public class TabbedWallFragment extends Fragment {
     private Unbinder mUnbinder;
     private WallPageAdapter mWallPageAdapter;
 
+    private static final int TAB_ICONS[] = new int[] {
+            R.drawable.ic_face_white_24dp, R.drawable.ic_explore_white_24dp, R.drawable.ic_whatshot_white_24dp};
+
     public static final String TAG = TabbedWallFragment.class.getSimpleName();
 
     public static TabbedWallFragment getInstance() {
@@ -49,6 +52,11 @@ public class TabbedWallFragment extends Fragment {
         mViewPager.setAdapter(mWallPageAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
+
+        for (int index = 0; index < mTabLayout.getTabCount(); index++) {
+            mTabLayout.getTabAt(index).setIcon(TAB_ICONS[index]);
+        }
+
         int white = ContextCompat.getColor(getContext(), android.R.color.white);
         mTabLayout.setTabTextColors(white, white);
 
