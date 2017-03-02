@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.snaptiongame.snaptionapp"
+          package="com.snaptiongame.app"
           android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -77,6 +77,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="snaption.app.link" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.snaptiongame.app.presentation.view.MainActivity"/>
         </activity>
 
         <activity
@@ -100,7 +104,7 @@
             android:exported="true"/>
 
         <!--<service-->
-            <!--android:name="com.snaptiongame.snaptionapp.data.services.SnaptionUploadService"-->
+            <!--android:name=".data.services.SnaptionUploadService"-->
             <!--android:exported="false"/>-->
 
         <service
