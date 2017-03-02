@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/my_wall"
+        android:enabled="true"
+        android:title="@string/my_wall"
+        android:icon="@drawable/ic_face_white_24dp"/>
+
+    <item
+        android:id="@+id/discover"
+        android:enabled="true"
+        android:title="@string/discover"
+        android:icon="@drawable/ic_explore_white_24dp"/>
+
+    <item
+        android:id="@+id/popular"
+        android:enabled="true"
+        android:title="@string/popular"
+        android:icon="@drawable/ic_whatshot_white_24dp"/>
+
+</menu>

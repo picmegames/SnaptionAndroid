@@ -72,4 +72,7 @@
     <string name="login_failure">Error al iniciar sesión</string>
     <string name="game_open">ABIERTO</string>
     <string name="invite_friend">¡Invitar a un amigo!</string>
+    <string name="discover">Descubrir</string>
+    <string name="popular">Popular</string>
+    <string name="my_wall">Mi pared</string>
 </resources>
