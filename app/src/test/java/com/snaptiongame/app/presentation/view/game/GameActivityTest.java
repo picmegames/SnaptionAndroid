@@ -1,10 +1,8 @@
 package com.snaptiongame.app.presentation.view.game;
 
-import android.content.Intent;
 import android.os.Build;
 
 import com.snaptiongame.app.BuildConfig;
-import com.snaptiongame.app.presentation.view.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,9 +37,7 @@ public class GameActivityTest {
     public void clickingBack_shouldCloseActivity() {
         ShadowActivity shadowActivity = shadowOf(gameActivity);
         gameActivity.onBackPressed();
-        Intent expectedIntent = new Intent(gameActivity, MainActivity.class);
-        Intent actualIntent = shadowActivity.getNextStartedActivity();
-        assertTrue(actualIntent.filterEquals(expectedIntent));
+        assertTrue(shadowActivity.isFinishing());
     }
 
     @After
