@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.snaptiongame.app.data.models.Caption;
+import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
+import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
@@ -13,7 +15,9 @@ import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.SnaptionProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -135,6 +139,50 @@ public class GamePresenter implements GameContract.Presenter {
                         () -> Timber.i("Successfully got Fitb's!")
                 );
         mDisposables.add(disposable);
+    }
+
+    @Override
+    public void loadRandomFITBCaptions() {
+        Disposable disposable = CaptionProvider.getCaptionSets()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::countSets,
+                        Timber::e,
+                        () -> Timber.i("Loading caption sets worked")
+                );
+        mDisposables.add(disposable);
+    }
+
+    private void countSets(List<CaptionSet> sets) {
+        int numSets = sets.size();
+        List<FitBCaption> captions = new ArrayList<>();
+        buildRandomCaptions(numSets, captions, 0);
+
+    }
+
+    private void buildRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
+        if (start == numSets) {
+            Random random = new Random();
+            List<FitBCaption> randomCaptions = new ArrayList<>();
+            for (int i = 0; i < 6; i++) {
+                int nextCaption = random.nextInt(captions.size());
+
+                randomCaptions.add(captions.get(nextCaption));
+                captions.remove(nextCaption);
+            }
+            mGameDialogView.showRandomCaptions(randomCaptions);
+        }
+        else {
+            final int nextStart = ++start;
+            Disposable disposable = CaptionProvider.getFitBCaptions(start)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            fitbs -> buildRandomCaptions(numSets, fitbs, nextStart),
+                            Timber::e,
+                            () -> Timber.i("Successfully got Fitb's!")
+                    );
+            mDisposables.add(disposable);
+        }
     }
 
     @Override

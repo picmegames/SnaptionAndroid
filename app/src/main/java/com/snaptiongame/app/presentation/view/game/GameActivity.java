@@ -274,7 +274,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
         else {
             mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
-                    CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
+                    CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
                     mGameId, -1);
             mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
         }
@@ -328,8 +328,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mCaptionSetDialogFragment.dismiss();
         }
         else {
-
-            mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
+            if (mCaptionDialogFragment != null)
+                mCaptionDialogFragment.dismiss();
+            //mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
         }
 
     }

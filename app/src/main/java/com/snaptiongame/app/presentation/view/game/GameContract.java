@@ -34,6 +34,8 @@ public class GameContract {
 
         void loadFitBCaptions(int setId);
 
+        void loadRandomFITBCaptions();
+
         void addCaption(int fitBId, String caption);
 
         void upvoteOrFlagGame(Like request);
@@ -47,5 +49,7 @@ public class GameContract {
         void showFitBCaptions(List<FitBCaption> captions);
 
         void showCaptionSets(List<CaptionSet> captionSets);
+
+        void showRandomCaptions(List<FitBCaption> captions);
     }
 }

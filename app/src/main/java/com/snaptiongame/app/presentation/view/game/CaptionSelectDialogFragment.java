@@ -18,6 +18,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.CaptionSet;
@@ -124,7 +126,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mPresenter = new GamePresenter(mGameId, this);
 
         mDialogBuilder = new AlertDialog.Builder(getActivity());
-        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
+        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this,
+                getActivity().getLayoutInflater());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -163,17 +166,18 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         //Build view for caption chooser
         else {
             mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
-            RecyclerView captionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
-            mPresenter.loadFitBCaptions(mSetId);
+            GridView captionView = ((GridView) mDialogView.findViewById(R.id.caption_card_holder));
+            mPresenter.loadRandomFITBCaptions();
 
             mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-            captionView.setLayoutManager(mLinearLayoutManager);
+
+
 
             captionView.setAdapter(mFitBAdapter);
 
             SnapHelper helper = new LinearSnapHelper();
-            helper.attachToRecyclerView(captionView);
+
 
             mDialogBuilder.setView(mDialogView);
             fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
@@ -191,6 +195,12 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     }
 
     @Override
+    public void showRandomCaptions(List<FitBCaption> captions) {
+        mFitBAdapter.setCaptions(captions);
+    }
+
+
+    @Override
     public void showCaptionSets(List<CaptionSet> captionSets) {
         mCaptionSetAdapter.setCaptionSets(captionSets);
     }
@@ -206,11 +216,12 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     }
 
     @Override
-    public void captionClicked(View v, int position, FITBCaptionCardViewHolder holder) {
+    public void captionClicked(View v, int position) {
         curFitbPos = position;
         fitBEditTextLayout.setVisibility(View.VISIBLE);
 
-        String[] textPieces = holder.mCaptionTemplateTextView.getText().toString().split(FITB_PLACEHOLDER);
+        String[] textPieces = ((TextView)
+                v.findViewById(R.id.fitb_caption_card_text)).getText().toString().split(FITB_PLACEHOLDER);
 
         final String beforeText = textPieces[0];
         String afterText = "";
@@ -231,8 +242,10 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                holder.mCaptionTemplateTextView.setText("");
-                holder.mCaptionTemplateTextView.setText(beforeText + s + finalAfterText);
+                ((TextView)
+                        v.findViewById(R.id.fitb_caption_card_text)).setText("");
+                ((TextView)
+                        v.findViewById(R.id.fitb_caption_card_text)).setText(beforeText + s + finalAfterText);
             }
 
             @Override
