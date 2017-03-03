@@ -6,22 +6,18 @@
     <string name="open_drawer" translatable="false">Navigation View Open</string>
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
     <string name="shared_transition" translatable="false">snaption_transition</string>
-    <string name="image_behavior" translatable="false">com.snaptiongame.snaptionapp.presentation.view.profile.ImageBehavior</string>
+    <string name="image_behavior" translatable="false">com.snaptiongame.app.presentation.view.profile.ImageBehavior</string>
 
     <!-- Urls -->
-    <string name="snaption_url" translatable="false">http://www.snaptiongame.com/</string>
 
     <!-- Titles -->
-    <string name="top_caption">Top Caption</string>
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="add_caption">Add a Caption!</string>
-    <string name="edit_username">Enter a New Username</string>
     <string name="update_info">Update Information</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
     <string name="friends_label">Friends</string>
-    <string name="profile_label">Profile</string>
     <string name="settings_label">Settings</string>
     <string name="version_label">Version</string>
     <string name="log_out_label">Log Out</string>
@@ -37,23 +33,16 @@
     <string name="default_caption">Be the first to caption this image!</string>
     <string name="game_open">OPEN</string>
     <string name="game_closed">CLOSED</string>
-    <string name="edit">Edit</string>
-    <string name="email" translatable="false">E-mail</string>
     <string name="username">Username</string>
     <string name="undo">Undo</string>
     <string name="update_success">Username updated successfully</string>
     <string name="update_profile_picture_success">Profile picture updated successfully</string>
-    <string name="update_profile_picture_failure">Unable to update profile picture</string>
     <string name="try_again">Try Again</string>
     <string name="count" translatable="false">0/15</string>
     <string name="count_format" translatable="false">%1$d/15</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="create_success">Successfully created game!</string>
-    <string name="create_failure">Unable to create game</string>
     <string name="add_friends">Add Friends</string>
-    <string name="friends_added">Friends Added!</string>
-    <string name="ok">Ok</string>
     <string name="upload_title">Upload New Game</string>
     <string name="upload_message">Uploading in progress&#8230;</string>
     <string name="upload_complete_title">Upload Complete</string>
@@ -62,6 +51,7 @@
     <string name="my_wall">My Wall</string>
     <string name="discover">Discover</string>
     <string name="popular">Popular</string>
+    <string name="filter">Filter</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -69,20 +59,15 @@
     <string name="fb_permission_profile" translatable="false">public_profile</string>
     <string name="fb_permission_friends" translatable="false">user_friends</string>
     <string name="fb_permission_email" translatable="false">email</string>
-    <string name="fb_permission_publish" translatable="false">publish_actions</string>
 
     <!-- Google Login -->
     <string name="google_client_id" translatable="false">346066457840-g7fg2s2283kb7le97fga5pd0sb4hv86d.apps.googleusercontent.com</string>
 
     <!-- Create New Game Labels -->
     <string name="content_level_label">Content Level</string>
-    <string name="category_label">Category</string>
     <string name="privacy_label">Private Game</string>
-    <string name="timer_label">Timer</string>
 
     <!-- Content Rating Labels-->
-    <string name="family_label">Family</string>
-    <string name="mature_label">Mature</string>
 
     <string-array name="content_ratings_array">
         <item>Family</item>
@@ -91,10 +76,6 @@
 
     <!-- Invite Friends Dialog -->
     <string name="add_a_friend">Add a Friend!</string>
-    <string name="via_phone">via Phone #</string>
-    <string name="via_facebook">via Facebook</string>
-    <string name="via_email">via Email</string>
-    <string name="friendDialogTitle">Add a Friend!</string>
     <string name="update_failure">Duplicate username</string>
     <string name="no_friends">No friends could be found</string>
 
