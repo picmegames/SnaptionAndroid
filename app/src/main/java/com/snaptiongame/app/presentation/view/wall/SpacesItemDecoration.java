@@ -31,7 +31,7 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
             outRect.right = mSpace / 2;
         }
 
-        outRect.bottom = mSpace * 2;
+        outRect.bottom = mSpace * 4;
         outRect.top = mSpace;
     }
 }

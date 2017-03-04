@@ -6,42 +6,27 @@
     <!-- Labels -->
     <string name="wall_label">Pared</string>
     <string name="friends_label">Amigos</string>
-    <string name="profile_label">Perfil</string>
     <string name="settings_label">Ajustes</string>
     <string name="log_out_label">Cerrar sesión</string>
     <string name="share">Compartir</string>
     <string name="create_game">Crear juego</string>
-    <string name="top_caption">Subtítulo superior</string>
     <string name="flag">Marcar como inapropiado</string>
-    <string name="category_label">Categoría</string>
     <string name="content_level_label">Nivel de contenido</string>
-    <string name="family_label">Familia</string>
-    <string name="mature_label">Maduro</string>
     <string name="privacy_label">Juego privado</string>
-    <string name="timer_label">Minutero</string>
     <string name="welcome_message">¡Bienvenido a Snaption!</string>
     <string name="add_caption">¡Agrega un subtítulo!</string>
     <string name="game_closed">CERRADO</string>
-    <string name="edit">Editar</string>
     <string name="default_caption">¡Sea el primero en subtítulos esta imagen!</string>
     <string name="username">Nombre de usuario</string>
-    <string name="edit_username">Introduzca un nuevo nombre de usuario</string>
-    <string name="friendDialogTitle">¡Añade un amigo!</string>
     <string name="add_a_friend">¡Añade un amigo!</string>
     <string name="undo">Deshacer</string>
     <string name="update_success">Nombre de usuario actualizado con éxito</string>
-    <string name="via_email">vía correo electrónico</string>
-    <string name="via_facebook">vía Facebook</string>
-    <string name="via_phone">vía número de teléfono</string>
     <string name="update_failure">Nombre de usuario duplicado</string>
     <string name="update_profile_picture_success">Imagen de perfil actualizada con éxito</string>
-    <string name="update_profile_picture_failure">No se puede actualizar la imagen de perfil</string>
     <string name="try_again">Inténtalo de nuevo</string>
     <string name="update_info">Actualizar información</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
-    <string name="create_success">Juego creado con éxito!</string>
-    <string name="create_failure">No se puede crear juego</string>
 
     <!-- Delete Friend Dialog -->
     <string name="delete_pre">¿Estás seguro de que desea eliminar </string>
@@ -49,9 +34,7 @@
     <string name="yes">Sí</string>
     <string name="no">No</string>
     <string name="add_friends">Añade amigos</string>
-    <string name="friends_added">Amigos agregados!</string>
     <string name="fill_in_the_blank">¡Llena el espacio en blanco!</string>
-    <string name="ok">De acuerdo</string>
     <string name="version_label">Versión</string>
     <string name="tags_label">Etiquetas</string>
     <string name="add_tags_label">Añadir algunas etiquetas!</string>
@@ -75,4 +58,5 @@
     <string name="discover">Descubrir</string>
     <string name="popular">Popular</string>
     <string name="my_wall">Mi pared</string>
+    <string name="filter">Filtrar</string>
 </resources>
