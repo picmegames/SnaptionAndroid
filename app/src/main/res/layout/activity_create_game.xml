@@ -130,6 +130,16 @@
                     app:chipSpacing="4dp"
                     app:chipTextSize="13sp"
                     app:chipVerticalSpacing="3dp"/>
+
+                <Button
+                    android:id="@+id/add_friends_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:background="@drawable/rounded_button"
+                    android:text="@string/add_friends"
+                    android:textColor="@android:color/white"/>
             </LinearLayout>
 
             <LinearLayout

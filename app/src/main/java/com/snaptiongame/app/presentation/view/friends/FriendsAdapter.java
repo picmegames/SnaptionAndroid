@@ -26,13 +26,15 @@ import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter {
     private List<Friend> mFriends;
-    private List<Integer> mSelected;
+    private List<Integer> mSelectedIds;
+    private List<String> mSelectedNames;
     private boolean mSelectable;
     public static final float DIM = .6F, BRIGHT = 1F;
 
     public FriendsAdapter(List<Friend> friends) {
         this.mFriends = friends;
-        mSelected = new ArrayList<>();
+        mSelectedIds = new ArrayList<>();
+        mSelectedNames = new ArrayList<>();
         mSelectable = false;
     }
 
@@ -70,13 +72,15 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             holder.itemView.setAlpha(DIM);
 
             holder.itemView.setOnClickListener(view -> {
-                if (!mSelected.contains(curFriend.id)) {
+                if (!mSelectedIds.contains(curFriend.id)) {
                     view.setAlpha(BRIGHT);
-                    mSelected.add(curFriend.id);
+                    mSelectedIds.add(curFriend.id);
+                    mSelectedNames.add(curFriend.userName);
                 }
                 else {
                     view.setAlpha(DIM);
-                    mSelected.remove(Integer.valueOf(curFriend.id));
+                    mSelectedIds.remove(Integer.valueOf(curFriend.id));
+                    mSelectedNames.remove(curFriend.userName);
                 }
             });
         }
@@ -109,19 +113,23 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void selectFriend(int position) {
-        this.mSelected.add(mFriends.get(position).id);
+        this.mSelectedIds.add(mFriends.get(position).id);
     }
 
     public void deselectFriend(int position) {
-        this.mSelected.remove(position);
+        this.mSelectedIds.remove(position);
     }
 
     public boolean isSelected(int position) {
-        return mSelected.contains(mFriends.get(position).id);
+        return mSelectedIds.contains(mFriends.get(position).id);
     }
 
-    public List<Integer> getSelectedFriends() {
-        return mSelected;
+    public List<Integer> getSelectedFriendIds() {
+        return mSelectedIds;
+    }
+
+    public List<String> getSelectedFriendNames() {
+        return mSelectedNames;
     }
 
     public List<Friend> getFriends() {
