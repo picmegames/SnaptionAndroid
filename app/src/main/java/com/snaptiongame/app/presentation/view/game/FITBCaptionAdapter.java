@@ -2,16 +2,20 @@ package com.snaptiongame.app.presentation.view.game;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.FitBCaption;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,16 +26,26 @@ public class FITBCaptionAdapter extends BaseAdapter {
     private List<FitBCaption> mCaptions;
     private CaptionContract.CaptionClickListener mCaptionClickListener;
     private LayoutInflater mInflater;
+    private Drawable mOriginalBackground;
+    private List<Boolean> areCardsChecked;
 
     public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener,
                               LayoutInflater inflater) {
         mCaptions = captions;
+        areCardsChecked = new ArrayList<>();
+
+        for (int i = 0; i < captions.size(); i++)
+            areCardsChecked.add(false);
+
         mCaptionClickListener = captionClickListener;
         mInflater = inflater;
     }
 
     public void setCaptions(List<FitBCaption> captions) {
         this.mCaptions = captions;
+        areCardsChecked = new ArrayList<>();
+        for (int i = 0; i < captions.size(); i++)
+            areCardsChecked.add(false);
         notifyDataSetChanged();
     }
 
@@ -61,7 +75,10 @@ public class FITBCaptionAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null)
             view = mInflater.inflate(R.layout.fitb_caption_card, parent, false);
+
+        view.setSelected(true);
         FitBCaption curCaption = mCaptions.get(position);
+
 
         TextView fitbText = (TextView) view.findViewById(R.id.fitb_caption_card_text);
         fitbText.setText(curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank);
@@ -70,13 +87,19 @@ public class FITBCaptionAdapter extends BaseAdapter {
 
         view.setTag(position);
 
-
         view.findViewById(R.id.fitb_caption_card).setOnClickListener(v -> {
             mCaptionClickListener.captionClicked(v, position);
-            v.setBackgroundResource(R.drawable.card_border_color_pink);
+
+            if (!areCardsChecked.get(position)) {
+                mOriginalBackground = v.getBackground();
+                v.setBackgroundResource(R.drawable.card_border_color_pink);
+                areCardsChecked.set(position, true);
+            }
+            else {
+                v.setBackground(mOriginalBackground);
+                areCardsChecked.set(position, false);
+            }
         });
         return view;
     }
-
-
 }
