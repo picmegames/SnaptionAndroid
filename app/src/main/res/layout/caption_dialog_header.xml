@@ -17,7 +17,7 @@
             android:clickable="true"
             android:scaleX=".75"
             android:scaleY=".75"
-            android:src="@drawable/ic_refresh_blue_grey_600_48dp" />
+            android:src="@drawable/ic_refresh_pink_48dp" />
     </RelativeLayout>
 
     <TextView
