@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -17,6 +18,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -41,6 +43,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     public static final int RANDOM_SET_VALUE = -1;
     private static final String BACK = "Back";
     private static final String RANDOM_CAPTIONS = "Random";
+    private GridView mCaptionView;
+    private Drawable mOriginalCardViewBackground;
 
     enum CaptionDialogToShow {
         SET_CHOOSER, CAPTION_CHOOSER
@@ -198,7 +202,10 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
 
             mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
-            GridView captionView = ((GridView) mDialogView.findViewById(R.id.caption_card_holder));
+
+            mCaptionView = ((GridView) mDialogView.findViewById(R.id.caption_card_holder));
+
+
 
             if (mSetId == RANDOM_SET_VALUE)
                 mPresenter.loadRandomFITBCaptions();
@@ -218,8 +225,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
                 }
             });
 
+            mCaptionView.setAdapter(mFitBAdapter);
 
-            captionView.setAdapter(mFitBAdapter);
             mDialogBuilder.setView(mDialogView);
             fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
             fitBEditText = (TextInputEditText) fitBEditTextLayout.findViewById(R.id.fitbEditText);
@@ -268,6 +275,19 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     @Override
     public void captionClicked(View v, int position) {
+
+        if (mOriginalCardViewBackground == null)
+            mOriginalCardViewBackground = v.getBackground();
+
+        int childCount = mCaptionView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View layout = mCaptionView.getChildAt(i);
+            if (i == position)
+                layout.findViewById(R.id.fitb_caption_card).setBackgroundResource(R.drawable.card_border_color_pink);
+            else
+                layout.findViewById(R.id.fitb_caption_card).setBackground(mOriginalCardViewBackground);
+        }
+
         curFitbPos = position;
         fitBEditTextLayout.setVisibility(View.VISIBLE);
 

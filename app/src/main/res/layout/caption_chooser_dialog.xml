@@ -11,8 +11,10 @@
         android:layout_height="wrap_content"
         android:stretchMode="columnWidth"
         android:gravity="center"
+        android:choiceMode="singleChoice"
         android:numColumns="2"
         android:verticalSpacing="6dp"
+        android:descendantFocusability="blocksDescendants"
         android:horizontalSpacing="6dp"/>
 
 
