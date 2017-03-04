@@ -11,9 +11,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -31,16 +29,12 @@ import com.snaptiongame.app.data.models.FitBCaption;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by nickromero on 2/7/17.
  */
 
 public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.CaptionDialogView,
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
-
 
     private static final int FITB_OFFSET = 1;
     public static final String FITB_PLACEHOLDER = "______";
@@ -236,10 +230,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             mDialogBuilder.setView(mDialogView);
             fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
             fitBEditText = (TextInputEditText) fitBEditTextLayout.findViewById(R.id.fitbEditText);
-
-
         }
-
 
         mSetIcon = (ImageView) customTitle.findViewById(R.id.caption_sets);
         mSetIcon.setOnClickListener(new View.OnClickListener() {

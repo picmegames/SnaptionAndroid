@@ -159,7 +159,6 @@ public class GamePresenter implements GameContract.Presenter {
         int numSets = sets.size();
         List<FitBCaption> captions = new ArrayList<>();
         getRandomCaptions(numSets, captions, 0);
-
     }
 
     private void buildRandomCaptions(List<FitBCaption> captions) {
@@ -210,8 +209,6 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void refreshCaptions() {
-
-
         buildRandomCaptions(new ArrayList<>(mCaptions));
     }
 
