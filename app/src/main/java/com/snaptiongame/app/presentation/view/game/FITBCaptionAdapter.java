@@ -86,7 +86,7 @@ public class FITBCaptionAdapter extends BaseAdapter {
         curFITB.setText((position + 1) + "/" + mCaptions.size());
 
         view.setTag(position);
-        
+
         view.findViewById(R.id.fitb_caption_card).setOnClickListener(v -> {
             mCaptionClickListener.captionClicked(v, position);
 
