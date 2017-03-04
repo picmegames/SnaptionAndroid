@@ -383,7 +383,7 @@ public class FriendsDialogFragment extends DialogFragment {
 
             //add all selected friends if in the facebook dialog
             if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE)) {
-                List<Integer> friends = mAdapter.getSelectedFriends();
+                List<Integer> friends = mAdapter.getSelectedFriendIds();
                 for (Integer id : friends) {
                     addFriend(id);
                 }

@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -19,14 +22,20 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.chip.ChipSpan;
+import com.hootsuite.nachos.chip.ChipSpanChipCreator;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
+import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -62,6 +71,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     private ActionBar mActionBar;
     private MaterialDialog mProgressDialog;
+    private MaterialDialog mFriendsDialog;
+    private FriendsAdapter mFriendsAdapter;
 
     private CreateGameContract.Presenter mPresenter;
 
@@ -82,6 +93,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         ButterKnife.bind(this);
 
         mAuthManager = AuthenticationManager.getInstance();
+        mPresenter = new CreateGamePresenter(mAuthManager.getSnaptionUserId(), this);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Snaption.PICTURE)) {
@@ -109,6 +121,29 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mFriendsTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mFriendsTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mFriendsTextView.enableEditChipOnTouch(false, true);
+        mFriendsTextView.setChipTokenizer(new SpanChipTokenizer<>(this, new ChipSpanChipCreator() {
+            @Override
+            public ChipSpan createChip(@NonNull Context context, @NonNull CharSequence text, Object data) {
+                ChipSpan newChip;
+
+                if (mPresenter.getFriendIdByName(text.toString()) < 0) {
+                    newChip = new ChipSpan(context, text,
+                            ContextCompat.getDrawable(CreateGameActivity.this, R.drawable.ic_cancel_red_400_24dp), data);
+                }
+                else {
+                    newChip = new ChipSpan(context, text,
+                            ContextCompat.getDrawable(CreateGameActivity.this, R.drawable.ic_check_circle_green_400_24dp), data);
+                }
+
+                return newChip;
+            }
+
+            @Override
+            public void configureChip(@NonNull ChipSpan chip, @NonNull ChipConfiguration chipConfiguration) {
+                super.configureChip(chip, chipConfiguration);
+                chip.setShowIconOnLeft(true);
+            }
+        }, ChipSpan.class));
 
         mCalendar = Calendar.getInstance();
         mCalendar.add(Calendar.DATE, 1);
@@ -117,8 +152,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         mFormattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
-
-        mPresenter = new CreateGamePresenter(mAuthManager.getSnaptionUserId(), this);
     }
 
     private void assignValues() {
@@ -159,6 +192,36 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
         imagePickerIntent.setType(INTENT_TYPE);
         startActivityForResult(imagePickerIntent, 1);
+    }
+
+    @OnClick(R.id.add_friends_button)
+    public void prepareFriendsDialog() {
+        if (mFriendsDialog == null) {
+            mPresenter.loadFriends();
+        }
+        else {
+            mFriendsDialog.show();
+        }
+    }
+
+    @Override
+    public void showFriendsDialog() {
+        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
+        mFriendsAdapter.setSelectable();
+
+        mFriendsDialog = new MaterialDialog.Builder(this)
+                .title(R.string.add_friends)
+                .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                    addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
+                )
+                .positiveText(R.string.update)
+                .cancelable(false)
+                .show();
+    }
+
+    private void addFriendsToTextView(List<String> selectedFriendNames) {
+        mFriendsTextView.setText(selectedFriendNames);
     }
 
     @OnClick(R.id.create_game)

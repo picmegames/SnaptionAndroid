@@ -98,16 +98,22 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                 return friend.id;
             }
         }
-        return 0;
+        return -1;
     }
 
-    private void loadFriends() {
+    @Override
+    public List<Friend> getFriends() {
+        return mFriends;
+    }
+
+    @Override
+    public void loadFriends() {
         Disposable disposable = FriendProvider.loadFriends(mUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processFriends,
                         Timber::e,
-                        () -> Timber.i("Getting friends was successful")
+                        mCreateGameView::showFriendsDialog
                 );
         mDisposables.add(disposable);
     }
@@ -123,7 +129,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadFriends();
+
     }
 
     @Override
