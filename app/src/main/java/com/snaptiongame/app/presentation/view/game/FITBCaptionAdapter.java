@@ -1,9 +1,13 @@
 package com.snaptiongame.app.presentation.view.game;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.FitBCaption;
@@ -14,37 +18,16 @@ import java.util.List;
  * Created by nickromero on 2/7/17.
  */
 
-public class FITBCaptionAdapter extends RecyclerView.Adapter {
+public class FITBCaptionAdapter extends BaseAdapter {
     private List<FitBCaption> mCaptions;
     private CaptionContract.CaptionClickListener mCaptionClickListener;
+    private LayoutInflater mInflater;
 
-    public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener) {
+    public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener,
+                              LayoutInflater inflater) {
         mCaptions = captions;
         mCaptionClickListener = captionClickListener;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fitb_caption_card, parent, false);
-        return new FITBCaptionCardViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        FITBCaptionCardViewHolder holder = (FITBCaptionCardViewHolder) viewHolder;
-        FitBCaption curCaption = mCaptions.get(position);
-
-        holder.mCaptionTemplate = curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank;
-        holder.mCaptionTemplateTextView.setText(holder.mCaptionTemplate);
-        holder.mCurFitB = String.valueOf(position);
-        holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
-        holder.itemView.setTag(position);
-
-        holder.itemView.findViewById(R.id.fitb_caption_card).setOnClickListener(v -> {
-            mCaptionClickListener.captionClicked(v, position, holder);
-            v.setBackgroundResource(R.drawable.card_border_color_pink);
-        });
+        mInflater = inflater;
     }
 
     public void setCaptions(List<FitBCaption> captions) {
@@ -56,50 +39,44 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         return mCaptions.get(index);
     }
 
+
+
     @Override
-    public int getItemCount() {
+    public int getCount() {
         return mCaptions.size();
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
+    public Object getItem(int position) {
+        return mCaptions.get(position);
     }
 
-    /*
-     /*
-   String[] textPieces = holder.mCaptionTemplateTextView.getText().toString().split(FITB_PLACEHOLDER);
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-        final String beforeText = textPieces[0];
-        String afterText = "";
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        if (view == null)
+            view = mInflater.inflate(R.layout.fitb_caption_card, parent, false);
+        FitBCaption curCaption = mCaptions.get(position);
 
+        TextView fitbText = (TextView) view.findViewById(R.id.fitb_caption_card_text);
+        fitbText.setText(curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank);
+        TextView curFITB = (TextView) view.findViewById(R.id.cur_fitb);
+        curFITB.setText((position + 1) + "/" + mCaptions.size());
 
-        String finalAfterText = afterText;
-        ((EditText) (fitBEditTextLayout.findViewById(R.id.fitbEditText))).addTextChangedListener(
-                new TextWatcher() {
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-
-
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        holder.mCaptionTemplateTextView.setText("");
+        view.setTag(position);
 
 
+        view.findViewById(R.id.fitb_caption_card).setOnClickListener(v -> {
+            mCaptionClickListener.captionClicked(v, position);
+            v.setBackgroundResource(R.drawable.card_border_color_pink);
+        });
+        return view;
+    }
 
-                        holder.mCaptionTemplateTextView.setText(beforeText + s + finalAfterText);
-                    }
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                }
-        );
-    */
 }

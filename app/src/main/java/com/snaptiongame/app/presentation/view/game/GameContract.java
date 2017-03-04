@@ -34,6 +34,8 @@ public class GameContract {
 
         void loadFitBCaptions(int setId);
 
+        void loadRandomFITBCaptions();
+
         void addCaption(int fitBId, String caption);
 
         void upvoteOrFlagGame(Like request);
@@ -41,11 +43,15 @@ public class GameContract {
         void shareToFacebook(AppCompatActivity activity, ImageView image);
 
         void getBranchToken(int gameId);
+
+        void refreshCaptions();
     }
 
     interface CaptionDialogView extends BaseView<Presenter> {
         void showFitBCaptions(List<FitBCaption> captions);
 
         void showCaptionSets(List<CaptionSet> captionSets);
+
+        void showRandomCaptions(List<FitBCaption> captions);
     }
 }

@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.snaptiongame.app.data.models.Caption;
+import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
+import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
@@ -13,7 +15,10 @@ import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.SnaptionProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -34,6 +39,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     private int mGameId;
     private int mPickerId;
+    private List<FitBCaption> mCaptions;
 
 
     public GamePresenter(int gameId, int pickerId, @NonNull GameContract.View view) {
@@ -138,6 +144,58 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
+    public void loadRandomFITBCaptions() {
+        Disposable disposable = CaptionProvider.getCaptionSets()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::countSets,
+                        Timber::e,
+                        () -> Timber.i("Loading caption sets worked")
+                );
+        mDisposables.add(disposable);
+    }
+
+    private void countSets(List<CaptionSet> sets) {
+        int numSets = sets.size();
+        List<FitBCaption> captions = new ArrayList<>();
+        getRandomCaptions(numSets, captions, 0);
+    }
+
+    private void buildRandomCaptions(List<FitBCaption> captions) {
+
+        Random random = new Random();
+        List<FitBCaption> randomCaptions = new ArrayList<>();
+
+        for (int i = 0; i < 6; i++) {
+            int nextCaption = random.nextInt(captions.size());
+
+            randomCaptions.add(captions.get(nextCaption));
+            captions.remove(nextCaption);
+        }
+        mGameDialogView.showRandomCaptions(randomCaptions);
+    }
+
+    private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
+        if (start == numSets) {
+            mCaptions = captions;
+            List<FitBCaption> tempList = new ArrayList<>(captions);
+
+            buildRandomCaptions(tempList);
+        }
+        else {
+            final int nextStart = ++start;
+            Disposable disposable = CaptionProvider.getFitBCaptions(start)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            fitbs -> getRandomCaptions(numSets, fitbs, nextStart),
+                            Timber::e,
+                            () -> Timber.i("Successfully got Fitb's!")
+                    );
+            mDisposables.add(disposable);
+        }
+    }
+
+    @Override
     public void getBranchToken(int gameId) {
         DeepLinkRequest linkRequest = new DeepLinkRequest(gameId, "", "", "", "");
         DeepLinkProvider.getToken(linkRequest)
@@ -147,6 +205,11 @@ public class GamePresenter implements GameContract.Presenter {
                         Timber::e,
                         () -> Timber.i("Getting Snaptions completed successfully")
                 );
+    }
+
+    @Override
+    public void refreshCaptions() {
+        buildRandomCaptions(new ArrayList<>(mCaptions));
     }
 
     @Override
