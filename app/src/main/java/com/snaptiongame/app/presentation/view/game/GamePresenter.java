@@ -16,6 +16,7 @@ import com.snaptiongame.app.data.providers.SnaptionProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -38,6 +39,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     private int mGameId;
     private int mPickerId;
+    private List<FitBCaption> mCaptions;
 
 
     public GamePresenter(int gameId, int pickerId, @NonNull GameContract.View view) {
@@ -156,28 +158,37 @@ public class GamePresenter implements GameContract.Presenter {
     private void countSets(List<CaptionSet> sets) {
         int numSets = sets.size();
         List<FitBCaption> captions = new ArrayList<>();
-        buildRandomCaptions(numSets, captions, 0);
+        getRandomCaptions(numSets, captions, 0);
 
     }
 
-    private void buildRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
-        if (start == numSets) {
-            Random random = new Random();
-            List<FitBCaption> randomCaptions = new ArrayList<>();
-            for (int i = 0; i < 6; i++) {
-                int nextCaption = random.nextInt(captions.size());
+    private void buildRandomCaptions(List<FitBCaption> captions) {
 
-                randomCaptions.add(captions.get(nextCaption));
-                captions.remove(nextCaption);
-            }
-            mGameDialogView.showRandomCaptions(randomCaptions);
+        Random random = new Random();
+        List<FitBCaption> randomCaptions = new ArrayList<>();
+
+        for (int i = 0; i < 6; i++) {
+            int nextCaption = random.nextInt(captions.size());
+
+            randomCaptions.add(captions.get(nextCaption));
+            captions.remove(nextCaption);
+        }
+        mGameDialogView.showRandomCaptions(randomCaptions);
+    }
+
+    private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
+        if (start == numSets) {
+            mCaptions = captions;
+            List<FitBCaption> tempList = new ArrayList<>(captions);
+
+            buildRandomCaptions(tempList);
         }
         else {
             final int nextStart = ++start;
             Disposable disposable = CaptionProvider.getFitBCaptions(start)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            fitbs -> buildRandomCaptions(numSets, fitbs, nextStart),
+                            fitbs -> getRandomCaptions(numSets, fitbs, nextStart),
                             Timber::e,
                             () -> Timber.i("Successfully got Fitb's!")
                     );
@@ -195,6 +206,13 @@ public class GamePresenter implements GameContract.Presenter {
                         Timber::e,
                         () -> Timber.i("Getting Snaptions completed successfully")
                 );
+    }
+
+    @Override
+    public void refreshCaptions() {
+
+
+        buildRandomCaptions(new ArrayList<>(mCaptions));
     }
 
     @Override

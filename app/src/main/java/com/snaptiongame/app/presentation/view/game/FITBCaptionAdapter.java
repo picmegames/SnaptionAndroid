@@ -60,7 +60,7 @@ public class FITBCaptionAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null)
-            view = mInflater.inflate(R.layout.fitb_caption_card, null);
+            view = mInflater.inflate(R.layout.fitb_caption_card, parent, false);
         FitBCaption curCaption = mCaptions.get(position);
 
         TextView fitbText = (TextView) view.findViewById(R.id.fitb_caption_card_text);
@@ -69,6 +69,7 @@ public class FITBCaptionAdapter extends BaseAdapter {
         curFITB.setText((position + 1) + "/" + mCaptions.size());
 
         view.setTag(position);
+
 
         view.findViewById(R.id.fitb_caption_card).setOnClickListener(v -> {
             mCaptionClickListener.captionClicked(v, position);

@@ -9,8 +9,11 @@
         android:id="@+id/caption_card_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:numColumns="2"/>
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:numColumns="2"
+        android:verticalSpacing="6dp"
+        android:horizontalSpacing="6dp"/>
 
 
     <android.support.design.widget.TextInputLayout

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -19,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.snaptiongame.app.R;
@@ -27,6 +30,9 @@ import com.snaptiongame.app.data.models.FitBCaption;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by nickromero on 2/7/17.
@@ -38,6 +44,9 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     private static final int FITB_OFFSET = 1;
     public static final String FITB_PLACEHOLDER = "______";
+    public static final int RANDOM_SET_VALUE = -1;
+    private static final String BACK = "Back";
+    private static final String RANDOM_CAPTIONS = "Random";
 
     enum CaptionDialogToShow {
         SET_CHOOSER, CAPTION_CHOOSER
@@ -87,6 +96,9 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private int curFitbPos;
     private TextWatcher captionClickListener;
 
+    ImageView mSetIcon;
+    ImageView mRefreshIcon;
+
     public CaptionSelectDialogFragment() {
     }
 
@@ -131,7 +143,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        mDialogBuilder.setTitle(mDialogTitle);
 
         if (mDialogToShow == CaptionDialogToShow.CAPTION_CHOOSER) {
             mDialogBuilder.setPositiveButton(sPositiveButtonText, (DialogInterface dialog, int which) -> {
@@ -146,10 +157,19 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         });
 
 
+        //Build the custom title for the dialog
+        RelativeLayout customTitle = (RelativeLayout) inflater.inflate(R.layout.caption_dialog_header, null);
+        ((TextView) customTitle.findViewById(R.id.caption_chooser_title)).setText(mDialogTitle);
+        mDialogBuilder.setCustomTitle(customTitle);
+
+        //Create the refresh icon. Will be removed if choosing a set
+        mRefreshIcon = (ImageView) customTitle.findViewById(R.id.refresh_icon);
+
         //Build view for set chooser
         if (mDialogToShow == CaptionDialogToShow.SET_CHOOSER) {
             RecyclerView captionSetView = (RecyclerView)
                     inflater.inflate(R.layout.caption_set_holder, null);
+
 
             mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
 
@@ -160,30 +180,76 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
             captionSetView.setLayoutManager(g);
 
+            mDialogBuilder
+                    .setPositiveButton(RANDOM_CAPTIONS, (DialogInterface dialog, int which) -> {
+                        ((GameActivity) getActivity()).displayCaptionChoosingDialog(RANDOM_SET_VALUE);
+                    })
+                    .setNegativeButton(CANCEL, (DialogInterface dialog, int which) -> {
+                                ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow);
+                            }
+                    );
+
+
+            mRefreshIcon.setVisibility(View.GONE);
             mDialogBuilder.setView(captionSetView);
 
         }
         //Build view for caption chooser
         else {
+
+            mDialogBuilder
+                    .setPositiveButton(sPositiveButtonText, (DialogInterface dialog, int which) -> {
+                        String userText = ((TextInputEditText)
+                                fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
+
+                        mPresenter.addCaption(mFitBAdapter.getCaption(curFitbPos).id, userText);
+                    })
+                    .setNegativeButton(CANCEL, (DialogInterface dialog, int which) -> {
+                                ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow);
+                            }
+                    );
+
+
             mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
             GridView captionView = ((GridView) mDialogView.findViewById(R.id.caption_card_holder));
-            mPresenter.loadRandomFITBCaptions();
+
+            if (mSetId == RANDOM_SET_VALUE)
+                mPresenter.loadRandomFITBCaptions();
+            else {
+                mPresenter.loadFitBCaptions(mSetId);
+                mDialogBuilder.setNegativeButton(BACK, (DialogInterface dialog, int which) -> {
+                    ((GameActivity) getActivity()).displaySetChoosingDialog();
+                });
+            }
 
             mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-
+            mRefreshIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.refreshCaptions();
+                }
+            });
 
 
             captionView.setAdapter(mFitBAdapter);
-
-            SnapHelper helper = new LinearSnapHelper();
-
-
             mDialogBuilder.setView(mDialogView);
             fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
             fitBEditText = (TextInputEditText) fitBEditTextLayout.findViewById(R.id.fitbEditText);
 
+
         }
+
+
+        mSetIcon = (ImageView) customTitle.findViewById(R.id.caption_sets);
+        mSetIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((GameActivity) getActivity()).displaySetChoosingDialog();
+                dismiss();
+            }
+        });
 
         return mDialogBuilder.create();
     }
@@ -213,6 +279,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     @Override
     public void captionSetClicked(View v, int position) {
         ((GameActivity) getActivity()).displayCaptionChoosingDialog(position);
+        dismiss();
     }
 
     @Override
@@ -238,7 +305,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         captionClickListener = new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -249,16 +317,14 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         };
         fitBEditText.addTextChangedListener(captionClickListener);
         fitBEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(fitBEditText, InputMethodManager.SHOW_IMPLICIT);
     }
-
-
-
 
 
 }

@@ -319,6 +319,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     }
 
+    public void displaySetChoosingDialog() {
+        mCaptionSetDialogFragment.dismiss();
+        mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
+                CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
+                mGameId, -1);
+        mCaptionDialogFragment.show(getFragmentManager(), "dialog");
+    }
+
     public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
         if (mCaptionDialogFragment != null)
             mCaptionDialogFragment.dismiss();

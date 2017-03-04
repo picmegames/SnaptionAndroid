@@ -43,6 +43,8 @@ public class GameContract {
         void shareToFacebook(AppCompatActivity activity, ImageView image);
 
         void getBranchToken(int gameId);
+
+        void refreshCaptions();
     }
 
     interface CaptionDialogView extends BaseView<Presenter> {
