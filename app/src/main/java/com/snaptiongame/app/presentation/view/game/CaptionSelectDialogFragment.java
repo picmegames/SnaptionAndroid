@@ -203,8 +203,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
             mCaptionView = ((GridView) mDialogView.findViewById(R.id.caption_card_holder));
 
-
-
             if (mSetId == RANDOM_SET_VALUE)
                 mPresenter.loadRandomFITBCaptions();
             else {
@@ -234,7 +232,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         mSetIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ((GameActivity) getActivity()).displaySetChoosingDialog();
                 dismiss();
             }
@@ -242,7 +239,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
         return mDialogBuilder.create();
     }
-
 
     @Override
     public void showFitBCaptions(List<FitBCaption> captions) {
@@ -253,8 +249,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     public void showRandomCaptions(List<FitBCaption> captions) {
         mFitBAdapter.setCaptions(captions);
     }
-
-
+    
     @Override
     public void showCaptionSets(List<CaptionSet> captionSets) {
         mCaptionSetAdapter.setCaptionSets(captionSets);
