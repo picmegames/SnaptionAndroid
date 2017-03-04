@@ -93,8 +93,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     ImageView mSetIcon;
     ImageView mRefreshIcon;
 
-    public CaptionSelectDialogFragment() {
-    }
+    public CaptionSelectDialogFragment() {}
 
     static CaptionSelectDialogFragment newInstance(CaptionDialogToShow dialogToShow, int gameId, int setId) {
         CaptionSelectDialogFragment newFragment = new CaptionSelectDialogFragment();
@@ -103,7 +102,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         args.putSerializable("whichDialog", dialogToShow);
         args.putInt("gameId", gameId);
         args.putInt("setId", setId);
-
         newFragment.setArguments(args);
 
         return newFragment;
@@ -150,7 +148,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow);
         });
 
-
         //Build the custom title for the dialog
         RelativeLayout customTitle = (RelativeLayout) inflater.inflate(R.layout.caption_dialog_header, null);
         ((TextView) customTitle.findViewById(R.id.caption_chooser_title)).setText(mDialogTitle);
@@ -164,13 +161,11 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             RecyclerView captionSetView = (RecyclerView)
                     inflater.inflate(R.layout.caption_set_holder, null);
 
-
             mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
 
             mPresenter.loadCaptionSets();
             GridLayoutManager g = new GridLayoutManager(getActivity().getApplicationContext(), 2);
             captionSetView.setAdapter(mCaptionSetAdapter);
-
 
             captionSetView.setLayoutManager(g);
 
@@ -183,10 +178,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
                             }
                     );
 
-
             mRefreshIcon.setVisibility(View.GONE);
             mDialogBuilder.setView(captionSetView);
-
         }
         //Build view for caption chooser
         else {
