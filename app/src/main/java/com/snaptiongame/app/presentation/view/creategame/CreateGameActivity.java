@@ -213,7 +213,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 .title(R.string.add_friends)
                 .adapter(mFriendsAdapter, new LinearLayoutManager(this))
                 .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                    addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
+                        addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
                 )
                 .positiveText(R.string.update)
                 .cancelable(false)
