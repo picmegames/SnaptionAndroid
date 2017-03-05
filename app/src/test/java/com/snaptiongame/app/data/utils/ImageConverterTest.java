@@ -11,6 +11,6 @@ import java.io.IOException;
 public class ImageConverterTest {
     @Test(expected = RuntimeException.class)
     public void testConvertImage() throws IOException {
-        ImageConverter.convertImageBase64(null, null);
+        ImageConverter.convertImageBase64(null);
     }
 }
