@@ -2,7 +2,6 @@ package com.snaptiongame.app.presentation.view.wall;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +20,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.snaptiongame.app.R.id.fab;
-
 /**
  * The Wall Fragment is a fragment that shows the wall to the user.
  * When the wall is first shown it will load in a list of games
@@ -37,12 +34,12 @@ public class WallFragment extends Fragment implements WallContract.View {
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
 
-    FloatingActionButton mFab;
-
     private WallContract.Presenter mPresenter;
 
     private WallAdapter mAdapter;
     private Unbinder mUnbinder;
+
+    public static final String TAG = WallFragment.class.getSimpleName();
 
     public static final int NUM_COLUMNS = 2;
     public static final int ITEM_VIEW_CACHE_SIZE = 20;
@@ -79,8 +76,6 @@ public class WallFragment extends Fragment implements WallContract.View {
         mUnbinder = ButterKnife.bind(this, view);
         mPresenter = new WallPresenter(this, getArguments().getBoolean(IS_PUBLIC));
 
-        mFab = ButterKnife.findById(getActivity(), fab);
-
         mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
         mWall.addItemDecoration(new SpacesItemDecoration(
                 getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
@@ -89,19 +84,6 @@ public class WallFragment extends Fragment implements WallContract.View {
         mWall.setItemViewCacheSize(ITEM_VIEW_CACHE_SIZE);
         mWall.setDrawingCacheEnabled(true);
         mWall.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
-
-        mWall.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    mFab.hide();
-                }
-                else if (dy < 0) {
-                    mFab.show();
-                }
-            }
-        });
 
         mAdapter = new WallAdapter(new ArrayList<>());
         mWall.setAdapter(mAdapter);

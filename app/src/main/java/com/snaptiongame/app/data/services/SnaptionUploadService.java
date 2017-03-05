@@ -14,7 +14,7 @@ import android.support.v7.app.NotificationCompat;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.Snaption;
-import com.snaptiongame.app.presentation.view.MainActivity;
+import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import java.util.ArrayList;
 

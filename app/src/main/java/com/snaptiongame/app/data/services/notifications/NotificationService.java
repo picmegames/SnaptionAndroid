@@ -11,7 +11,7 @@ import android.support.v4.app.TaskStackBuilder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.presentation.view.MainActivity;
+import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 /**
  * @author Tyler Wong

@@ -1,21 +1,26 @@
-package com.snaptiongame.app.presentation.view;
+package com.snaptiongame.app.presentation.view.main;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +35,7 @@ import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
-import com.snaptiongame.app.presentation.view.wall.TabbedWallFragment;
+import com.snaptiongame.app.presentation.view.wall.WallFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,13 +48,16 @@ import jp.wasabeef.glide.transformations.ColorFilterTransformation;
  * @author Tyler Wong
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        BottomNavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.navigation_view)
     NavigationView mNavigationView;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView mBottomNavigationView;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
 
@@ -57,12 +65,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CircleImageView mProfilePicture;
     TextView mNameView;
     TextView mEmailView;
+    ActionBar mActionBar;
 
     private AuthenticationManager mAuthManager;
     private Fragment mCurrentFragment;
     private String fragTag;
+    private int rightMargin;
+    private int bottomMargin;
 
     private static final int BLUR_RADIUS = 40;
+    private static final int DEFAULT_MARGIN = 16;
+    private static final int BOTTOM_MARGIN = 70;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
+        mActionBar = getSupportActionBar();
 
         View headerView = mNavigationView.getHeaderView(0);
         mCoverPhoto = ButterKnife.findById(headerView, R.id.cover_photo);
@@ -94,14 +108,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        mCurrentFragment = new TabbedWallFragment();
-        fragTag = TabbedWallFragment.TAG;
-
+        mCurrentFragment = WallFragment.getInstance(true);
+        fragTag = WallFragment.TAG;
+        mActionBar.setTitle(R.string.my_wall);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, mCurrentFragment).commit();
         mNavigationView.getMenu().getItem(0).setChecked(true);
 
         mNavigationView.setNavigationItemSelectedListener(this);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
@@ -121,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
+        rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_MARGIN,
+                getResources().getDisplayMetrics());
     }
 
     private void setDefaultHeader() {
@@ -197,15 +215,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawerLayout.closeDrawers();
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
         switch (item.getItemId()) {
             case R.id.wall:
-                mCurrentFragment = TabbedWallFragment.getInstance();
-                fragTag = TabbedWallFragment.TAG;
+                mBottomNavigationView.setVisibility(View.VISIBLE);
+                resetFabPosition(true);
+            case R.id.my_wall:
+                mCurrentFragment = WallFragment.getInstance(true);
+                fragTag = WallFragment.TAG;
+                mActionBar.setTitle(R.string.my_wall);
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+
+            case R.id.discover:
+                mCurrentFragment = WallFragment.getInstance(false);
+                fragTag = WallFragment.TAG;
+                mActionBar.setTitle(R.string.discover);
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+
+            case R.id.popular:
+                mCurrentFragment = WallFragment.getInstance(false);
+                fragTag = WallFragment.TAG;
+                mActionBar.setTitle(R.string.popular);
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
 
             case R.id.friends:
                 mCurrentFragment = FriendsFragment.getInstance();
                 fragTag = FriendsFragment.TAG;
+                mBottomNavigationView.setVisibility(View.GONE);
+                resetFabPosition(false);
                 break;
 
             case R.id.settings:
@@ -223,10 +264,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, mCurrentFragment).commit();
+        transaction.replace(R.id.frame, mCurrentFragment).commit();
 
         return true;
+    }
+
+    private void resetFabPosition(boolean isWall) {
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFab.getLayoutParams();
+
+        if (isWall) {
+            bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
+                    getResources().getDisplayMetrics());
+            layoutParams.setMargins(0, 0, rightMargin, bottomMargin);
+        }
+        else {
+            bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_MARGIN,
+                    getResources().getDisplayMetrics());
+            layoutParams.setMargins(0, 0, rightMargin, bottomMargin);
+        }
     }
 
     @Override
@@ -247,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToLogin();
         }
         else {
-            if (fragTag.equals(TabbedWallFragment.TAG)) {
+            if (fragTag.equals(WallFragment.TAG)) {
                 goToCreateGame();
             }
             else if (fragTag.equals(FriendsFragment.TAG)) {

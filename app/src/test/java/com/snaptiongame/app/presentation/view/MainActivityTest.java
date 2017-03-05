@@ -9,6 +9,7 @@ import android.view.View;
 import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;

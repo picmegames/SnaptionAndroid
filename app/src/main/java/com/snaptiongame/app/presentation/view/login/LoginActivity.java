@@ -12,7 +12,7 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
-import com.snaptiongame.app.presentation.view.MainActivity;
+import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
