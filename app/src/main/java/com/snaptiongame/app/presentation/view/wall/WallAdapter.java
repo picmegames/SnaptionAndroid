@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -21,6 +23,8 @@ import java.util.List;
 
 public class WallAdapter extends RecyclerView.Adapter {
     private List<Snaption> mSnaptions;
+
+    private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 30;
 
@@ -89,6 +93,7 @@ public class WallAdapter extends RecyclerView.Adapter {
         else {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_open));
         }
+        setAnimation(holder.itemView, position);
     }
 
     public void setSnaptions(List<Snaption> snaptions) {
@@ -96,6 +101,21 @@ public class WallAdapter extends RecyclerView.Adapter {
             mSnaptions = snaptions;
             notifyDataSetChanged();
         }
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(
+                    viewToAnimate.getContext(), (position > lastPosition) ?
+                            R.anim.up_from_bottom : R.anim.down_from_top);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
+        ((SnaptionCardViewHolder) holder).itemView.clearAnimation();
     }
 
     @Override

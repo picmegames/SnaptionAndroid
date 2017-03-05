@@ -2,6 +2,8 @@ package com.snaptiongame.app.presentation.view.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +13,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
-    private static final int BOTTOM_MARGIN = 70;
+    private static final int BOTTOM_MARGIN = 72;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mActionBar.setTitle(R.string.my_wall);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, mCurrentFragment).commit();
+        setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
         mNavigationView.getMenu().getItem(0).setChecked(true);
 
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -225,7 +229,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mCurrentFragment = WallFragment.getInstance(true);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.my_wall);
+                mBottomNavigationView.getMenu().getItem(0).setChecked(true);
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 break;
 
             case R.id.discover:
@@ -233,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.discover);
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
                 break;
 
             case R.id.popular:
@@ -240,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.popular);
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                setAppStatusBarColors(R.color.colorPopular, R.color.colorPopularDark);
                 break;
 
             case R.id.friends:
@@ -247,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragTag = FriendsFragment.TAG;
                 mBottomNavigationView.setVisibility(View.GONE);
                 resetFabPosition(false);
+                setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 break;
 
             case R.id.settings:
@@ -267,6 +276,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.replace(R.id.frame, mCurrentFragment).commit();
 
         return true;
+    }
+
+    private void setAppStatusBarColors(int colorResource, int colorResourceDark) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int color = ContextCompat.getColor(this, colorResource);
+            int colorDark = ContextCompat.getColor(this, colorResourceDark);
+            getWindow().setStatusBarColor(colorDark);
+            mActionBar.setBackgroundDrawable(new ColorDrawable(color));
+        }
     }
 
     private void resetFabPosition(boolean isWall) {

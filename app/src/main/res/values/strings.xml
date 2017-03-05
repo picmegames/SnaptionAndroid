@@ -7,6 +7,7 @@
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
     <string name="shared_transition" translatable="false">snaption_transition</string>
     <string name="image_behavior" translatable="false">com.snaptiongame.app.presentation.view.profile.ImageBehavior</string>
+    <string name="toolbar_behavior" translatable="false">com.snaptiongame.app.presentation.view.main.ToolbarScrollBehavior</string>
     <string name="fab_behavior" translatable="false">com.snaptiongame.app.presentation.view.main.FABScrollBehavior</string>
     <string name="bottom_nav_behavior" translatable="false">com.snaptiongame.app.presentation.view.main.BottomNavigationScrollBehavior</string>
 

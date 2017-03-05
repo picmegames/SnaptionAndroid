@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
+import timber.log.Timber;
+
 /**
  * @author Tyler Wong
  */
@@ -31,7 +33,10 @@ public final class BottomNavigationScrollBehavior<V extends View> extends Vertic
     private int mSnackbarHeight = -1;
     private boolean scrollingEnabled = true;
     private boolean hideAlongSnackbar = false;
+
     int[] attrsArray = new int[]{android.R.attr.id};
+
+    private static final int BOTTOM_NAV_SPEED = 500;
 
     public BottomNavigationScrollBehavior() {
         super();
@@ -47,11 +52,11 @@ public final class BottomNavigationScrollBehavior<V extends View> extends Vertic
     public static <V extends View> BottomNavigationScrollBehavior<V> from(@NonNull V view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (!(params instanceof CoordinatorLayout.LayoutParams)) {
-            throw new IllegalArgumentException("The view is not a child of CoordinatorLayout");
+            Timber.e("The view is not a child of CoordinatorLayout");
         }
         CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) params).getBehavior();
         if (!(behavior instanceof BottomNavigationScrollBehavior)) {
-            throw new IllegalArgumentException("The view is not associated with BottomNavigationBehavior");
+            Timber.e("The view is not associated with BottomNavigationScrollBehavior");
         }
         return (BottomNavigationScrollBehavior<V>) behavior;
     }
@@ -150,14 +155,14 @@ public final class BottomNavigationScrollBehavior<V extends View> extends Vertic
 
     private void animateTabsHolder(int offset) {
         if (mTabsHolder != null) {
-            ViewCompat.animate(mTabsHolder).setDuration(300).start();
+            ViewCompat.animate(mTabsHolder).setDuration(BOTTOM_NAV_SPEED).start();
         }
     }
 
     private void ensureOrCancelAnimator(V child) {
         if (mOffsetValueAnimator == null) {
             mOffsetValueAnimator = ViewCompat.animate(child);
-            mOffsetValueAnimator.setDuration(300);
+            mOffsetValueAnimator.setDuration(BOTTOM_NAV_SPEED);
             mOffsetValueAnimator.setInterpolator(INTERPOLATOR);
         }
         else {
