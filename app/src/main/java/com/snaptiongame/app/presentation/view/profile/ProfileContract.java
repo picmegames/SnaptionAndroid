@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.profile;
 
-import android.content.ContentResolver;
 import android.net.Uri;
 
 import com.snaptiongame.app.data.models.User;
@@ -21,7 +20,7 @@ public class ProfileContract {
 
         void showUsernameSuccess(String oldUsername, User user);
 
-        void showUsernameFailure(String oldeUsername, User user);
+        void showUsernameFailure(String oldUsername, User user);
 
         void saveUsername(String username);
 
@@ -33,7 +32,7 @@ public class ProfileContract {
 
         void updateUsername(String oldUsername, User user);
 
-        void convertImage(ContentResolver resolver, Uri uri);
+        void convertImage(String type, Uri uri);
 
         void logout();
     }

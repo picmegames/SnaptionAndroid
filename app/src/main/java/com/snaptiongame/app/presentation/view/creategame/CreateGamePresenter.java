@@ -1,7 +1,5 @@
 package com.snaptiongame.app.presentation.view.creategame;
 
-import android.content.ContentResolver;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -43,14 +41,14 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     @Override
-    public void createGame(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic) {
-        Disposable disposable = ImageConverter.convertImageBase64(resolver, uri)
+    public void createGame(String type, Uri uri, int userId, boolean isPublic) {
+        Disposable disposable = ImageConverter.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         s -> mEncodedImage = s,
                         Timber::e,
-                        () -> uploadGame(userId, isPublic, resolver.getType(uri))
+                        () -> uploadGame(userId, isPublic, type)
                 );
         mDisposables.add(disposable);
     }

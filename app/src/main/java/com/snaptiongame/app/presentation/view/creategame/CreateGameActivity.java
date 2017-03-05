@@ -1,13 +1,17 @@
 package com.snaptiongame.app.presentation.view.creategame;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -189,9 +193,39 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.image)
     public void getImage() {
+        if (isStoragePermissionGranted()) {
+            pickImage();
+        }
+    }
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            }
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    private void pickImage() {
         Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
         imagePickerIntent.setType(INTENT_TYPE);
         startActivityForResult(imagePickerIntent, 1);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            pickImage();
+        }
     }
 
     @OnClick(R.id.add_friends_button)
@@ -226,8 +260,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        mPresenter.createGame(getContentResolver(), mUri, mNewGameImage.getDrawable(),
-                mAuthManager.getSnaptionUserId(), !mPrivateSwitch.isChecked());
+        mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getSnaptionUserId(),
+                !mPrivateSwitch.isChecked());
         mProgressDialog = new MaterialDialog.Builder(this)
                 .title(R.string.upload_title)
                 .content(R.string.upload_message)
