@@ -35,6 +35,12 @@ public class ImageConverter {
     private static final int NUM_MB = 16;
     private static final int NUM_BYTES = 1024;
     private static final float MIDDLE_FACTOR = 2.0f;
+    private static final int NINETY_DEGREES = 90;
+    private static final int ONE_EIGHTY_DEGREES = 180;
+    private static final int TWO_SEVENTY_DEGREES = 270;
+    private static final int QUALITY = 75;
+    private static final String FOLDER = "MyFolder/Images";
+    private static final String JPEG = ".jpg";
 
     public static Observable<String> convertImageBase64(Uri uri) {
         String picture = "";
@@ -107,7 +113,6 @@ public class ImageConverter {
         }
         catch (OutOfMemoryError exception) {
             exception.printStackTrace();
-
         }
 
         try {
@@ -132,18 +137,19 @@ public class ImageConverter {
         ExifInterface exif;
         try {
             exif = new ExifInterface(filePath);
-
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
             Matrix matrix = new Matrix();
+
             if (orientation == 6) {
-                matrix.postRotate(90);
+                matrix.postRotate(NINETY_DEGREES);
             }
             else if (orientation == 3) {
-                matrix.postRotate(180);
+                matrix.postRotate(ONE_EIGHTY_DEGREES);
             }
             else if (orientation == 8) {
-                matrix.postRotate(270);
+                matrix.postRotate(TWO_SEVENTY_DEGREES);
             }
+
             scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(),
                     scaledBitmap.getHeight(), matrix, true);
         }
@@ -155,7 +161,7 @@ public class ImageConverter {
         String filename = getFilename();
         try {
             out = new FileOutputStream(filename);
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, out);
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, out);
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -165,13 +171,13 @@ public class ImageConverter {
     }
 
     private static String getFilename() {
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), "MyFolder/Images");
+        File file = new File(Environment.getExternalStorageDirectory().getPath(), FOLDER);
         if (!file.exists()) {
             file.mkdirs();
         }
-        String uriSting = (file.getAbsolutePath() + "/" + System.currentTimeMillis() + ".jpg");
-        return uriSting;
 
+        String uriSting = (file.getAbsolutePath() + "/" + System.currentTimeMillis() + JPEG);
+        return uriSting;
     }
 
     private static String getRealPathFromURI(Uri contentUri) {
@@ -196,6 +202,7 @@ public class ImageConverter {
             final int widthRatio = Math.round((float) width / (float) reqWidth);
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
+
         final float totalPixels = width * height;
         final float totalReqPixelsCap = reqWidth * reqHeight * 2;
         while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
