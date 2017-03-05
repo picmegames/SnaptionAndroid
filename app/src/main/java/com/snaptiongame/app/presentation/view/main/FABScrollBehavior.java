@@ -22,7 +22,7 @@ import android.view.animation.Interpolator;
 public final class FABScrollBehavior<V extends View> extends VerticalScrollingBehavior<V> {
     private static final Interpolator INTERPOLATOR = new LinearOutSlowInInterpolator();
     private final ViewWithSnackbar mWithSnackBarImpl = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-            new LollipopBottomNavWithSnackBarImpl() : new PreLollipopBottomNavWithSnackBarImpl();
+            new LollipopFABWithSnackBarImpl() : new PreLollipopFABWithSnackBarImpl();
     private int mTabLayoutId;
     private boolean hidden = false;
     private ViewPropertyAnimatorCompat mOffsetValueAnimator;
@@ -194,7 +194,7 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
         void updateSnackbar(CoordinatorLayout parent, View dependency, View child);
     }
 
-    private class PreLollipopBottomNavWithSnackBarImpl implements ViewWithSnackbar {
+    private class PreLollipopFABWithSnackBarImpl implements ViewWithSnackbar {
         @Override
         public void updateSnackbar(CoordinatorLayout parent, View dependency, View child) {
             if (dependency instanceof Snackbar.SnackbarLayout) {
@@ -212,7 +212,7 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
         }
     }
 
-    private class LollipopBottomNavWithSnackBarImpl implements ViewWithSnackbar {
+    private class LollipopFABWithSnackBarImpl implements ViewWithSnackbar {
         @Override
         public void updateSnackbar(CoordinatorLayout parent, View dependency, View child) {
             if (dependency instanceof Snackbar.SnackbarLayout) {
