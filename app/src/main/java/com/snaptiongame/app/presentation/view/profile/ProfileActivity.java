@@ -222,7 +222,7 @@ public class ProfileActivity extends AppCompatActivity
 
         if (resultCode == RESULT_OK) {
             mUri = data.getData();
-            mPresenter.convertImage(getContentResolver(), mUri);
+            mPresenter.convertImage(getContentResolver().getType(mUri), mUri);
         }
     }
 

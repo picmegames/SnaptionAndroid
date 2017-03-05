@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.profile;
 
-import android.content.ContentResolver;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -67,14 +66,14 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
-    public void convertImage(ContentResolver resolver, Uri uri) {
-        Disposable disposable = ImageConverter.convertImageBase64(resolver, uri)
+    public void convertImage(String type, Uri uri) {
+        Disposable disposable = ImageConverter.convertImageBase64(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         s -> mEncodedImage = s,
                         Timber::e,
-                        () -> updateProfilePicture(new User(mEncodedImage, resolver.getType(uri)))
+                        () -> updateProfilePicture(new User(mEncodedImage, type))
                 );
         mDisposables.add(disposable);
     }

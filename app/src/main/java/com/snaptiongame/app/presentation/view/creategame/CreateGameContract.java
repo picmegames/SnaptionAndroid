@@ -1,8 +1,6 @@
 package com.snaptiongame.app.presentation.view.creategame;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import com.snaptiongame.app.data.models.Friend;
@@ -35,7 +33,7 @@ public class CreateGameContract {
     }
 
     interface Presenter extends BasePresenter {
-        void createGame(ContentResolver resolver, Uri uri, Drawable drawable, int userId, boolean isPublic);
+        void createGame(String type, Uri uri, int userId, boolean isPublic);
 
         int getFriendIdByName(String name);
 
