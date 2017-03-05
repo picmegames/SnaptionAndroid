@@ -42,7 +42,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void createGame(String type, Uri uri, int userId, boolean isPublic) {
-        Disposable disposable = ImageConverter.convertImageBase64(uri)
+        Disposable disposable = ImageConverter.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

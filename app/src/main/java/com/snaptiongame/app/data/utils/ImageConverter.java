@@ -42,7 +42,11 @@ public class ImageConverter {
     private static final String FOLDER = "MyFolder/Images";
     private static final String JPEG = ".jpg";
 
-    public static Observable<String> convertImageBase64(Uri uri) {
+    public static Observable<String> getCompressedImage(Uri uri) {
+        return Observable.defer(() ->  Observable.just(convertImageBase64(uri)));
+    }
+
+    private static String convertImageBase64(Uri uri) {
         String picture = "";
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -54,7 +58,7 @@ public class ImageConverter {
             Timber.e(e);
         }
 
-        return Observable.just(picture);
+        return picture;
     }
 
     public static Observable<byte[]> convertImageByteArray(ContentResolver resolver, Uri uri) {

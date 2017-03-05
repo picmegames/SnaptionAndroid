@@ -67,7 +67,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void convertImage(String type, Uri uri) {
-        Disposable disposable = ImageConverter.convertImageBase64(uri)
+        Disposable disposable = ImageConverter.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
