@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.wall:
                 mBottomNavigationView.setVisibility(View.VISIBLE);
                 resetFabPosition(true);
+
             case R.id.my_wall:
                 mCurrentFragment = WallFragment.getInstance(true);
                 fragTag = WallFragment.TAG;
