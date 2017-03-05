@@ -37,7 +37,7 @@
             app:layout_anchor="@id/frame"
             app:layout_anchorGravity="bottom|end"
             app:rippleColor="@color/colorAccent"
-            app:layout_behavior="com.snaptiongame.app.presentation.view.main.FABScrollBehavior"/>
+            app:layout_behavior="@string/fab_behavior"/>
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"
@@ -49,7 +49,7 @@
             app:itemBackground="@color/grey_900"
             app:itemIconTint="@android:color/white"
             app:itemTextColor="@android:color/white"
-            app:layout_behavior="com.snaptiongame.app.presentation.view.main.BottomNavigationScrollBehavior"
+            app:layout_behavior="@string/bottom_nav_behavior"
             app:menu="@menu/bottom_navigation_menu"/>
 
     </android.support.design.widget.CoordinatorLayout>
