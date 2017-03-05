@@ -8,8 +8,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="CreateGameTheme" parent="AppTheme"/>
+
     <style name="StatusBarTheme" parent="AppTheme"/>
+
     <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

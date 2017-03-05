@@ -43,5 +43,6 @@
     </style>
 
     <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <style name="ToolBarTheme" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>
