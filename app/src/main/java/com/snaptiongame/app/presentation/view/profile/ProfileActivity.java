@@ -245,13 +245,17 @@ public class ProfileActivity extends AppCompatActivity
                     .into(mCoverPhoto);
         }
         else {
+            String initials = "";
+            if (!mName.isEmpty()) {
+                initials = mName.substring(0, 1);
+            }
             mProfileImg.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(DEFAULT_IMG_SIZE)
                     .height(DEFAULT_IMG_SIZE)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(mName.substring(0, 1),
+                    .buildRound(initials,
                             ColorGenerator.MATERIAL.getColor(mName)));
 
             mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));

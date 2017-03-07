@@ -127,7 +127,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/{gameId}/")
-    Observable<Game> getGame(@Path("gameId") int gameId);
+    Observable<Game> getGame(@Path("gameId") int gameId, @Query("linkToken") String token);
 
     /**
      * This method sends a request to upvote or flag a game with

@@ -19,8 +19,12 @@ public class Friend {
 
     public static final String ID = "id";
     public static final String USERNAME = "username";
-    public static final String FULL_NAME = "full_name";
+    public static final String FULL_NAME = "fullName";
     public static final String PICTURE = "picture";
+    public static final String FIRST = "firstName";
+    public static final String LAST = "lastName";
+    public static final String COVER = "cover";
+    public static final String EMAIL = "email";
 
     public Friend() {
 

@@ -93,6 +93,7 @@ dependencies {
     // Robolectric
     testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
     testCompile "org.robolectric:shadows-support-v4:$rootProject.robolectricVersion"
+    testCompile "org.json:json:$rootProject.jsonVersion"
 
     // Android Support Libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
