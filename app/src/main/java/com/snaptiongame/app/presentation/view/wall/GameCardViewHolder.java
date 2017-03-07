@@ -14,10 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.Like;
-import com.snaptiongame.app.data.models.Snaption;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
-import com.snaptiongame.app.data.providers.SnaptionProvider;
+import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
 
@@ -31,7 +31,7 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 
-public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
+public class GameCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.image)
     ImageView mImage;
     @BindView(R.id.top_caption)
@@ -56,7 +56,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
     public boolean isUpvoted = false;
     public boolean isFlagged = false;
 
-    public SnaptionCardViewHolder(View itemView) {
+    public GameCardViewHolder(View itemView) {
         super(itemView);
         mContext = itemView.getContext();
         ButterKnife.bind(this, itemView);
@@ -75,7 +75,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
                 isUpvoted = true;
                 Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
             }
-            upvoteSnaption(mGameId, isUpvoted);
+            upvoteGame(mGameId, isUpvoted);
         });
 
         mFlagButton.setOnClickListener(view -> {
@@ -88,7 +88,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
                 isFlagged = true;
                 Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
             }
-            flagSnaption(mGameId, isFlagged);
+            flagGame(mGameId, isFlagged);
         });
 
         itemView.setOnLongClickListener(view -> {
@@ -117,9 +117,9 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setOnClickListener(view -> {
             Intent gameIntent = new Intent(mContext, GameActivity.class);
-            gameIntent.putExtra(Snaption.ID, mGameId);
-            gameIntent.putExtra(Snaption.PICKER_ID, mPickerId);
-            gameIntent.putExtra(Snaption.PICTURE, mImageUrl);
+            gameIntent.putExtra(Game.ID, mGameId);
+            gameIntent.putExtra(Game.PICKER_ID, mPickerId);
+            gameIntent.putExtra(Game.PICTURE, mImageUrl);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,
@@ -130,7 +130,7 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void startCreateGame() {
         Intent createGameIntent = new Intent(mContext, CreateGameActivity.class);
-        createGameIntent.putExtra(Snaption.PICTURE, mImageUrl);
+        createGameIntent.putExtra(Game.PICTURE, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation((AppCompatActivity) mContext,
@@ -138,25 +138,25 @@ public class SnaptionCardViewHolder extends RecyclerView.ViewHolder {
         mContext.startActivity(createGameIntent, transitionActivityOptions.toBundle());
     }
 
-    private void upvoteSnaption(int gameId, boolean isUpvoted) {
-        SnaptionProvider.upvoteOrFlagSnaption(new Like(gameId, isUpvoted, Like.UPVOTE, Like.GAME_ID))
+    private void upvoteGame(int gameId, boolean isUpvoted) {
+        GameProvider.upvoteOrFlagGame(new Like(gameId, isUpvoted, Like.UPVOTE, Like.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         like -> {
                         },
                         Timber::e,
-                        () -> Timber.i("Successfully liked snaption!")
+                        () -> Timber.i("Successfully liked game!")
                 );
     }
 
-    private void flagSnaption(int gameId, boolean isFlagged) {
-        SnaptionProvider.upvoteOrFlagSnaption(new Like(gameId, isFlagged, Like.FLAGGED, Like.GAME_ID))
+    private void flagGame(int gameId, boolean isFlagged) {
+        GameProvider.upvoteOrFlagGame(new Like(gameId, isFlagged, Like.FLAGGED, Like.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         like -> {
                         },
                         Timber::e,
-                        () -> Timber.i("Successfully flagged snaption")
+                        () -> Timber.i("Successfully flagged game")
                 );
     }
 }

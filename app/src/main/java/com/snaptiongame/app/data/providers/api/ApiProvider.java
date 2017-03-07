@@ -16,7 +16,7 @@ import com.snaptiongame.app.data.converters.FriendConverter;
 import com.snaptiongame.app.data.converters.LikeConverter;
 import com.snaptiongame.app.data.converters.OAuthConverter;
 import com.snaptiongame.app.data.converters.SessionConverter;
-import com.snaptiongame.app.data.converters.SnaptionConverter;
+import com.snaptiongame.app.data.converters.GameConverter;
 import com.snaptiongame.app.data.converters.UserConverter;
 import com.snaptiongame.app.data.cookies.PersistentCookieStore;
 import com.snaptiongame.app.data.models.AddFriendRequest;
@@ -25,10 +25,10 @@ import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Friend;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Session;
-import com.snaptiongame.app.data.models.Snaption;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.api.SnaptionApi;
 
@@ -63,7 +63,7 @@ import timber.log.Timber;
 import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 /**
- * The Snaption API Provider provides an instance of
+ * The Game API Provider provides an instance of
  * the API service built by Retrofit.
  *
  * @author Tyler Wong
@@ -80,9 +80,9 @@ public class ApiProvider {
 
     /**
      * This method provides and handles the creation of
-     * the Snaption API service.
+     * the Game API service.
      *
-     * @return An instance of a Snaption API service
+     * @return An instance of a Game API service
      */
     public static SnaptionApi getApiService() {
         if (apiService == null) {
@@ -196,7 +196,7 @@ public class ApiProvider {
         builder.registerTypeAdapter(OAuthRequest.class, new OAuthConverter());
         builder.registerTypeAdapter(Session.class, new SessionConverter());
         builder.registerTypeAdapter(User.class, new UserConverter());
-        builder.registerTypeAdapter(Snaption.class, new SnaptionConverter());
+        builder.registerTypeAdapter(Game.class, new GameConverter());
         builder.registerTypeAdapter(Caption.class, new CaptionConverter());
         builder.registerTypeAdapter(Like.class, new LikeConverter());
         builder.registerTypeAdapter(Friend.class, new FriendConverter());

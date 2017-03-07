@@ -45,7 +45,7 @@ import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 import static android.R.color.transparent;
 
 /**
- * The Profile Activity is an activity that displays a Snaption user's information. It can be used
+ * The Profile Activity is an activity that displays a Game user's information. It can be used
  * to display either the current logged in user, or the user's friend. From here, a user will be
  * able to change their username or profile picture, log out, view their past games, or view more
  * info about themselves.
@@ -123,11 +123,11 @@ public class ProfileActivity extends AppCompatActivity
         Intent profileIntent = getIntent();
         mUserId = profileIntent.getIntExtra(User.ID, 0);
         mIsUserProfile = profileIntent.getBooleanExtra(IS_CURRENT_USER, true);
-        mHasSameUserId = (mUserId == mAuthManager.getSnaptionUserId());
+        mHasSameUserId = (mUserId == mAuthManager.getUserId());
 
         // IF we are viewing the logged-in user's profile
         if (mIsUserProfile || mHasSameUserId) {
-            mName = mAuthManager.getSnaptionUsername();
+            mName = mAuthManager.getUsername();
             mPicture = mAuthManager.getProfileImageUrl();
         }
         else {
@@ -180,7 +180,7 @@ public class ProfileActivity extends AppCompatActivity
                 .positiveText(getString(R.string.confirm))
                 .negativeText(R.string.cancel)
                 .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
-                    mPresenter.updateUsername(mAuthManager.getSnaptionUsername(),
+                    mPresenter.updateUsername(mAuthManager.getUsername(),
                             new User(mEditView.getNewUsername()));
                 })
                 .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
@@ -208,12 +208,12 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void saveProfilePicture(String picture) {
-        mAuthManager.saveSnaptionProfileImage(picture);
+        mAuthManager.saveProfileImage(picture);
     }
 
     @Override
     public void saveUsername(String username) {
-        mAuthManager.saveSnaptionUsername(username);
+        mAuthManager.saveUsername(username);
     }
 
     @Override

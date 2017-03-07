@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerView.setOnClickListener(view -> {
             if (mAuthManager.isLoggedIn()) {
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
-                profileIntent.putExtra(User.ID, mAuthManager.getSnaptionUserId());
+                profileIntent.putExtra(User.ID, mAuthManager.getUserId());
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
                 startActivity(profileIntent, transitionActivityOptions.toBundle());
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setUserHeader() {
         String profileImageUrl = mAuthManager.getProfileImageUrl();
-        String name = mAuthManager.getSnaptionUsername();
+        String name = mAuthManager.getUsername();
         String email = mAuthManager.getEmail();
 
         Glide.with(this)

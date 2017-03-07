@@ -12,7 +12,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
 
 import java.util.List;
@@ -22,46 +22,46 @@ import java.util.List;
  */
 
 public class WallAdapter extends RecyclerView.Adapter {
-    private List<Snaption> mSnaptions;
+    private List<Game> mGames;
 
     private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 30;
 
-    public WallAdapter(List<Snaption> snaptions) {
-        this.mSnaptions = snaptions;
+    public WallAdapter(List<Game> snaptions) {
+        this.mGames = snaptions;
     }
 
     @Override
-    public SnaptionCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GameCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.snaption_card, parent, false);
-        return new SnaptionCardViewHolder(view);
+                .inflate(R.layout.game_card, parent, false);
+        return new GameCardViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        SnaptionCardViewHolder holder = (SnaptionCardViewHolder) viewHolder;
-        Snaption curSnaption = mSnaptions.get(position);
+        GameCardViewHolder holder = (GameCardViewHolder) viewHolder;
+        Game curGame = mGames.get(position);
 
-        holder.mGameId = curSnaption.id;
-        holder.mPickerId = curSnaption.pickerId;
+        holder.mGameId = curGame.id;
+        holder.mPickerId = curGame.pickerId;
 
-        if (curSnaption.picture != null) {
+        if (curGame.picture != null) {
             holder.mImage.layout(0, 0, 0, 0);
             Glide.with(holder.mContext)
-                    .load(curSnaption.picture)
+                    .load(curGame.picture)
                     .into(holder.mImage);
-            holder.mImageUrl = curSnaption.picture;
+            holder.mImageUrl = curGame.picture;
         }
         else {
             Glide.clear(holder.mImage);
         }
 
-        if (curSnaption.topCaption != null) {
-            if (curSnaption.topCaption.creatorPicture != null) {
+        if (curGame.topCaption != null) {
+            if (curGame.topCaption.creatorPicture != null) {
                 Glide.with(holder.mContext)
-                        .load(curSnaption.topCaption.creatorPicture)
+                        .load(curGame.topCaption.creatorPicture)
                         .into(holder.mCaptionerImage);
             }
             else {
@@ -71,13 +71,13 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .height(AVATAR_SIZE)
                         .toUpperCase()
                         .endConfig()
-                        .buildRound(curSnaption.topCaption.creatorName.substring(0, 1),
-                                ColorGenerator.MATERIAL.getColor(curSnaption.topCaption.creatorName)));
+                        .buildRound(curGame.topCaption.creatorName.substring(0, 1),
+                                ColorGenerator.MATERIAL.getColor(curGame.topCaption.creatorName)));
             }
-            holder.mPickerName.setText(curSnaption.topCaption.creatorName);
-            holder.mTopCaption.setText(TextUtils.concat(curSnaption.topCaption.assocFitB.beforeBlank,
-                    TextStyleUtils.getTextUnderlined(curSnaption.topCaption.caption),
-                    curSnaption.topCaption.assocFitB.afterBlank));
+            holder.mPickerName.setText(curGame.topCaption.creatorName);
+            holder.mTopCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
+                    TextStyleUtils.getTextUnderlined(curGame.topCaption.caption),
+                    curGame.topCaption.assocFitB.afterBlank));
         }
         else {
             Glide.with(holder.mContext)
@@ -87,7 +87,7 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mTopCaption.setText(holder.mContext.getString(R.string.default_caption));
         }
 
-        if (curSnaption.endDate != 0) {
+        if (curGame.endDate != 0) {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
         }
         else {
@@ -96,9 +96,9 @@ public class WallAdapter extends RecyclerView.Adapter {
         setAnimation(holder.itemView, position);
     }
 
-    public void setSnaptions(List<Snaption> snaptions) {
-        if (!mSnaptions.equals(snaptions)) {
-            mSnaptions = snaptions;
+    public void setGames(List<Game> games) {
+        if (!mGames.equals(games)) {
+            mGames = games;
             notifyDataSetChanged();
         }
     }
@@ -115,12 +115,12 @@ public class WallAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
-        ((SnaptionCardViewHolder) holder).itemView.clearAnimation();
+        ((GameCardViewHolder) holder).itemView.clearAnimation();
     }
 
     @Override
     public int getItemCount() {
-        return mSnaptions.size();
+        return mGames.size();
     }
 
     @Override

@@ -21,18 +21,18 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
-    private int mSnaptionUserId;
+    private int mUserId;
 
     public FriendsPresenter(@NonNull FriendsContract.View friendView, int userId) {
         mFriendView = friendView;
         mDisposables = new CompositeDisposable();
-        mSnaptionUserId = userId;
+        mUserId = userId;
         mFriendView.setPresenter(this);
     }
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider.loadFriends(mSnaptionUserId)
+        Disposable disposable = FriendProvider.loadFriends(mUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                       mFriendView::processFriends,

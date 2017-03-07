@@ -13,7 +13,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
-import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import io.reactivex.disposables.CompositeDisposable;
 /**
  * @author Tyler Wong
  */
-public class SnaptionUploadService extends Service {
+public class GameUploadService extends Service {
 
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
@@ -53,14 +53,14 @@ public class SnaptionUploadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             Bundle uploadBundle = intent.getExtras();
-            int userId = uploadBundle.getInt(Snaption.ID);
-            boolean isPublic = uploadBundle.getBoolean(Snaption.IS_PUBLIC);
-            byte[] encodedBytes = uploadBundle.getByteArray(Snaption.PICTURE);
-            ArrayList<Integer> friendIds = uploadBundle.getIntegerArrayList(Snaption.FRIENDS);
-            String type = uploadBundle.getString(Snaption.IMG_TYPE);
+            int userId = uploadBundle.getInt(Game.ID);
+            boolean isPublic = uploadBundle.getBoolean(Game.IS_PUBLIC);
+            byte[] encodedBytes = uploadBundle.getByteArray(Game.PICTURE);
+            ArrayList<Integer> friendIds = uploadBundle.getIntegerArrayList(Game.FRIENDS);
+            String type = uploadBundle.getString(Game.IMG_TYPE);
 
             showUploadProgressNotification();
-//            Disposable disposable = SnaptionProvider.addSnaption(new Snaption(userId, !isPublic, 1,
+//            Disposable disposable = GameProvider.addGame(new Game(userId, !isPublic, 1,
 //                    Base64.encodeToString(encodedBytes, Base64.DEFAULT), type, friendIds))
 //                    .subscribe(
 //                            snaption -> {

@@ -122,7 +122,7 @@ public class FriendsDialogFragment extends DialogFragment {
     private final String BACK = "Back";
     private final String ADD_FRIEND_TITLE = "Add A Friend!";
     private final String FIND_FRIEND = "Find your friends!";
-    private final String INVITE_FRIEND_LONG = "Invite a friend to Snaption!";
+    private final String INVITE_FRIEND_LONG = "Invite a friend to Game!";
     private final String INVITE_FRIEND_SHORT = "Invite Friend";
     private final String[] mHints = {"Ex: (555)-444-3333", "Ex: Bill Johnson", "Ex: sk8rdude@aol.com"};
 
@@ -151,7 +151,7 @@ public class FriendsDialogFragment extends DialogFragment {
     private int sUserID;
 
     /**
-     * Authentication manager used to grab a user's Snaption ID
+     * Authentication manager used to grab a user's Game ID
      */
     private AuthenticationManager mAuthManager;
 
@@ -402,7 +402,7 @@ public class FriendsDialogFragment extends DialogFragment {
 
     private void sendInviteIntent() {
         String title = "Invite friend via";
-        String smsBody = "Hey there download this nifty app called Snaption :^) \n" +
+        String smsBody = "Hey there download this nifty app called Game :^) \n" +
                 "https://goo.gl/FWrtSX";
 
         Intent inviteIntent = new Intent();
@@ -468,7 +468,7 @@ public class FriendsDialogFragment extends DialogFragment {
      * Add a friendId to our list of users
      */
     private void addFriend(int userId) {
-        FriendProvider.addFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(userId))
+        FriendProvider.addFriend(mAuthManager.getUserId(), new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         request -> {
@@ -514,7 +514,7 @@ public class FriendsDialogFragment extends DialogFragment {
          * Container for the various options to invite a friend to snaption
          */
         private final String[] mInviteOptions = {"Add via Phone #",
-                "Add via Facebook", "Add via Email", "Invite to Snaption!"};
+                "Add via Facebook", "Add via Email", "Invite to Game!"};
 
 
         /**

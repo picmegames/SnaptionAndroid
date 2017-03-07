@@ -2,8 +2,8 @@ package com.snaptiongame.app.presentation.view.wall;
 
 import android.support.annotation.NonNull;
 
-import com.snaptiongame.app.data.models.Snaption;
-import com.snaptiongame.app.data.providers.SnaptionProvider;
+import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.data.providers.GameProvider;
 
 import java.util.List;
 
@@ -48,10 +48,10 @@ public class WallPresenter implements WallContract.Presenter {
      */
     @Override
     public void loadGames() {
-        Disposable disposable = SnaptionProvider.getSnaptions(mIsPublic)
+        Disposable disposable = GameProvider.getGames(mIsPublic)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::processSnaptions,
+                        this::processGames,
                         Timber::e,
                         () -> Timber.i("Getting Snaptions completed successfully")
                 );
@@ -61,10 +61,10 @@ public class WallPresenter implements WallContract.Presenter {
     /**
      * This method hands off the list to the view to be shown.
      *
-     * @param snaptions The list of games from the server
+     * @param games The list of games from the server
      */
-    private void processSnaptions(List<Snaption> snaptions) {
-        mWallView.showGames(snaptions);
+    private void processGames(List<Game> games) {
+        mWallView.showGames(games);
     }
 
     /**

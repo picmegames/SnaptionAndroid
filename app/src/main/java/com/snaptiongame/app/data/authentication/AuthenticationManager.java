@@ -48,8 +48,8 @@ public final class AuthenticationManager {
     private static final String FB_FIELDS = "fields";
     private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large)";
 
-    private static final String SNAPTION_USER_ID = "snaption_user_id";
-    private static final String SNAPTION_USERNAME = "snaption_username";
+    private static final String USER_ID = "user_id";
+    private static final String USERNAME = "username";
     private static final String PROFILE_IMAGE_URL = "image_url";
     private static final String FULL_NAME = "full_name";
     private static final String EMAIL = "email";
@@ -183,7 +183,7 @@ public final class AuthenticationManager {
         SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, getToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        session -> saveSnaptionUserId(session.userId),
+                        session -> saveUserId(session.userId),
                         e -> {
                             Timber.e(e);
                             logout();
@@ -191,7 +191,7 @@ public final class AuthenticationManager {
                                     R.string.login_failure, Toast.LENGTH_LONG).show();
                             fireCallback();
                         },
-                        () -> getUserInfo(getSnaptionUserId())
+                        () -> getUserInfo(getUserId())
                 );
     }
 
@@ -199,7 +199,7 @@ public final class AuthenticationManager {
         SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, getToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        session -> saveSnaptionUserId(session.userId),
+                        session -> saveUserId(session.userId),
                         e -> {
                             Timber.e(e);
                             Toast.makeText(SnaptionApplication.getContext(),
@@ -207,7 +207,7 @@ public final class AuthenticationManager {
                             logout();
                             fireCallback();
                         },
-                        () -> getUserInfo(getSnaptionUserId())
+                        () -> getUserInfo(getUserId())
                 );
     }
 
@@ -270,19 +270,19 @@ public final class AuthenticationManager {
         this.callback = null;
     }
 
-    private void saveSnaptionUserId(int snaptionUserId) {
+    private void saveUserId(int snaptionUserId) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(SNAPTION_USER_ID, snaptionUserId);
+        editor.putInt(USER_ID, snaptionUserId);
         editor.apply();
     }
 
-    public void saveSnaptionUsername(String username) {
+    public void saveUsername(String username) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(SNAPTION_USERNAME, username);
+        editor.putString(USERNAME, username);
         editor.apply();
     }
 
-    public void saveSnaptionProfileImage(String profileImage) {
+    public void saveProfileImage(String profileImage) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PROFILE_IMAGE_URL, profileImage);
         editor.apply();
@@ -308,20 +308,20 @@ public final class AuthenticationManager {
 
     private void clearLoginInfo() {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(SNAPTION_USER_ID, 0);
-        editor.putString(SNAPTION_USERNAME, "");
+        editor.putInt(USER_ID, 0);
+        editor.putString(USERNAME, "");
         editor.putString(PROFILE_IMAGE_URL, "");
         editor.putString(FULL_NAME, "");
         editor.putString(EMAIL, "");
         editor.apply();
     }
 
-    public int getSnaptionUserId() {
-        return preferences.getInt(SNAPTION_USER_ID, 0);
+    public int getUserId() {
+        return preferences.getInt(USER_ID, 0);
     }
 
-    public String getSnaptionUsername() {
-        return preferences.getString(SNAPTION_USERNAME, "");
+    public String getUsername() {
+        return preferences.getString(USERNAME, "");
     }
 
     public String getProfileImageUrl() {
@@ -356,10 +356,10 @@ public final class AuthenticationManager {
         UserProvider.getUser(snaptionUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
-                            saveSnaptionUsername(user.username);
+                            saveUsername(user.username);
 
                             if (user.picture != null) {
-                                saveSnaptionProfileImage(user.picture);
+                                saveProfileImage(user.picture);
                             }
                         },
                         Timber::e,
