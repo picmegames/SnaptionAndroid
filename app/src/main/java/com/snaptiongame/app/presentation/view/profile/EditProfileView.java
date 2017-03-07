@@ -71,7 +71,7 @@ public class EditProfileView extends RelativeLayout {
 
         mFullName.setText(mAuthManager.getUserFullName());
         mEmail.setText(mAuthManager.getEmail());
-        mUsername.setText(mAuthManager.getSnaptionUsername());
+        mUsername.setText(mAuthManager.getUsername());
 
         mProfileImage.setOnClickListener(imageView -> {
             Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);

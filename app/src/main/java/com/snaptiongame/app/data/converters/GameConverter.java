@@ -11,7 +11,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.FitBCaption;
-import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.Tag;
 import com.snaptiongame.app.data.models.User;
 
@@ -23,16 +23,16 @@ import java.util.List;
  * @author Tyler Wong
  */
 
-public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserializer<Snaption> {
+public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Game> {
 
     @Override
-    public JsonElement serialize(Snaption src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(Game src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(Snaption.USER_ID, src.userId);
-        json.addProperty(Snaption.IS_PUBLIC, src.isPublic);
-        json.addProperty(Snaption.RATING, src.rating);
-        json.addProperty(Snaption.PICTURE, src.picture);
-        json.addProperty(Snaption.IMG_TYPE, src.type);
+        json.addProperty(Game.USER_ID, src.userId);
+        json.addProperty(Game.IS_PUBLIC, src.isPublic);
+        json.addProperty(Game.RATING, src.rating);
+        json.addProperty(Game.PICTURE, src.picture);
+        json.addProperty(Game.IMG_TYPE, src.type);
 
         JsonArray tags = new JsonArray();
         if (src.tags != null && !src.tags.isEmpty()) {
@@ -40,7 +40,7 @@ public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserial
                 tags.add(tag.name);
             }
         }
-        json.add(Snaption.TAGS, tags);
+        json.add(Game.TAGS, tags);
 
         JsonArray friends = new JsonArray();
         if (src.friendIds != null && !src.friendIds.isEmpty()) {
@@ -48,49 +48,49 @@ public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserial
                 friends.add(id);
             }
         }
-        json.add(Snaption.FRIENDS, friends);
+        json.add(Game.FRIENDS, friends);
 
-        json.add(Snaption.FRIENDS, new Gson().toJsonTree(src.friendIds));
+        json.add(Game.FRIENDS, new Gson().toJsonTree(src.friendIds));
         return json;
     }
 
     @Override
-    public Snaption deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public Game deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject content = json.getAsJsonObject();
-        Snaption snaption = new Snaption(
-                content.get(Snaption.ID).getAsInt(),
-                content.get(Snaption.START_DATE).getAsLong(),
-                content.get(Snaption.IS_PUBLIC).getAsBoolean(),
-                content.get(Snaption.RATING).getAsInt(),
-                content.get(Snaption.PICKER_ID).getAsInt(),
-                content.get(Snaption.PICTURE).getAsString(), "");
+        Game game = new Game(
+                content.get(Game.ID).getAsInt(),
+                content.get(Game.START_DATE).getAsLong(),
+                content.get(Game.IS_PUBLIC).getAsBoolean(),
+                content.get(Game.RATING).getAsInt(),
+                content.get(Game.PICKER_ID).getAsInt(),
+                content.get(Game.PICTURE).getAsString(), "");
 
-        JsonElement endDate = content.get(Snaption.END_DATE);
+        JsonElement endDate = content.get(Game.END_DATE);
         if (endDate.isJsonNull()) {
-            snaption.endDate = 0;
+            game.endDate = 0;
         }
         else {
-            snaption.endDate = endDate.getAsLong();
+            game.endDate = endDate.getAsLong();
         }
 
-        JsonArray tags = content.getAsJsonArray(Snaption.TAGS);
+        JsonArray tags = content.getAsJsonArray(Game.TAGS);
         List<Tag> gameTags = new ArrayList<>();
         if (tags.size() > 0) {
             for (JsonElement tag : tags) {
                 gameTags.add(new Gson().fromJson(tag, Tag.class));
             }
         }
-        snaption.tags = gameTags;
+        game.tags = gameTags;
 
-        JsonArray users = content.getAsJsonArray(Snaption.USERS);
+        JsonArray users = content.getAsJsonArray(Game.USERS);
         List<User> gameUsers = new ArrayList<>();
         if (users.size() > 0) {
             for (JsonElement user : users) {
                 gameUsers.add(new Gson().fromJson(user, User.class));
             }
         }
-        snaption.users = gameUsers;
+        game.users = gameUsers;
 
         JsonElement topCaption = content.get("topCaption");
         if (topCaption != null && topCaption.isJsonObject()) {
@@ -104,8 +104,8 @@ public class SnaptionConverter implements JsonSerializer<Snaption>, JsonDeserial
                 caption.creatorPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE).getAsString();
             }
             caption.creatorName = topCaption.getAsJsonObject().get(Caption.USER_NAME).getAsString();
-            snaption.topCaption = caption;
+            game.topCaption = caption;
         }
-        return snaption;
+        return game;
     }
 }

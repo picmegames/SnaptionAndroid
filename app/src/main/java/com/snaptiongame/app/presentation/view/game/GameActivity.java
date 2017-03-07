@@ -26,11 +26,11 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.models.Caption;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameInvite;
 import com.snaptiongame.app.data.models.Like;
-import com.snaptiongame.app.data.models.Snaption;
 import com.snaptiongame.app.data.models.User;
-import com.snaptiongame.app.data.providers.SnaptionProvider;
+import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -104,8 +104,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             if (error == null) {
                 mInvite = BranchConverter.deserializeGameInvite(referringParams);
                 if (mInvite == null || mInvite.gameId == 0) {
-                    showGame(intent.getStringExtra(Snaption.PICTURE), intent.getIntExtra(Snaption.ID, 0),
-                            intent.getIntExtra(Snaption.PICKER_ID, 0));
+                    showGame(intent.getStringExtra(Game.PICTURE), intent.getIntExtra(Game.ID, 0),
+                            intent.getIntExtra(Game.PICKER_ID, 0));
                 }
                 else {
                     Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
@@ -210,7 +210,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private void startCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-        createGameIntent.putExtra(Snaption.PICTURE, mImageUrl);
+        createGameIntent.putExtra(Game.PICTURE, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(this, mImage, getString(R.string.shared_transition));
@@ -300,7 +300,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void loadInvitedGame() {
-        SnaptionProvider.getSnaption(mInvite.gameId).observeOn(AndroidSchedulers.mainThread())
+        GameProvider.getGame(mInvite.gameId).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         snaption -> {
                             showGame(snaption.picture, snaption.id, snaption.pickerId);
@@ -360,7 +360,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
                 // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
-                .setTitle("Join Snaption")
+                .setTitle("Join Game")
                 .setContentDescription("Some description")
                 .setContentImageUrl("http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/")
                 // You use this to specify whether this content can be discovered publicly - default is public

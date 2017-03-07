@@ -80,9 +80,17 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test:runner:$rootProject.androidTestVersion"
     androidTestCompile "com.android.support.test:rules:$rootProject.androidTestVersion"
+
+    // JUnit
     testCompile "junit:junit:$rootProject.junitVersion"
+
+    // AssertJ
     testCompile "org.assertj:assertj-core:$rootProject.assertjVersion"
+
+    // Mockito
     testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
+
+    // Robolectric
     testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
     testCompile "org.robolectric:shadows-support-v4:$rootProject.robolectricVersion"
 

@@ -12,11 +12,10 @@ import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
-import com.snaptiongame.app.data.providers.SnaptionProvider;
+import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -85,7 +84,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void upvoteOrFlagGame(Like request) {
-        Disposable disposable = SnaptionProvider.upvoteOrFlagSnaption(request)
+        Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         like -> {

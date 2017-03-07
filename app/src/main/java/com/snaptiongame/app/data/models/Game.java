@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Tyler Wong
  */
-public class Snaption {
+public class Game {
 
     @SerializedName(ID)
     public int id;
@@ -54,12 +54,12 @@ public class Snaption {
     public static final String FRIENDS = "invitedUsers";
     public static final String USERS = "users";
 
-    public Snaption() {
+    public Game() {
 
     }
 
-    public Snaption(int userId, boolean isPublic, int rating, String picture, String type,
-                    List<String> tags, List<Integer> friendIds) {
+    public Game(int userId, boolean isPublic, int rating, String picture, String type,
+                List<String> tags, List<Integer> friendIds) {
         this.userId = userId;
         this.isPublic = isPublic;
         this.rating = rating;
@@ -69,8 +69,8 @@ public class Snaption {
         this.friendIds = friendIds;
     }
 
-    public Snaption(int id, long startDate, boolean isPublic, int rating,
-                    int pickerId, String picture, String type) {
+    public Game(int id, long startDate, boolean isPublic, int rating,
+                int pickerId, String picture, String type) {
         this.id = id;
         this.startDate = startDate;
         this.isPublic = isPublic;
@@ -82,9 +82,9 @@ public class Snaption {
 
     @Override
     public boolean equals(Object obj) {
-        return obj.getClass() == Snaption.class
-                && this.id == ((Snaption) obj).id
-                && ((this.topCaption == null && ((Snaption) obj).topCaption == null)
-                || (this.topCaption != null && this.topCaption.equals(((Snaption) obj).topCaption)));
+        return obj.getClass() == Game.class
+                && this.id == ((Game) obj).id
+                && ((this.topCaption == null && ((Game) obj).topCaption == null)
+                || (this.topCaption != null && this.topCaption.equals(((Game) obj).topCaption)));
     }
 }

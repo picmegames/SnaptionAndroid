@@ -1,6 +1,6 @@
 package com.snaptiongame.app.presentation.view.wall;
 
-import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.presentation.BasePresenter;
 import com.snaptiongame.app.presentation.BaseView;
 
@@ -19,7 +19,7 @@ public class WallContract {
      * This is a template for a view.
      */
     interface View extends BaseView<Presenter> {
-        void showGames(List<Snaption> snaptions);
+        void showGames(List<Game> games);
     }
 
     /**

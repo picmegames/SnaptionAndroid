@@ -38,7 +38,7 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
-import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
@@ -97,12 +97,12 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         ButterKnife.bind(this);
 
         mAuthManager = AuthenticationManager.getInstance();
-        mPresenter = new CreateGamePresenter(mAuthManager.getSnaptionUserId(), this);
+        mPresenter = new CreateGamePresenter(mAuthManager.getUserId(), this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra(Snaption.PICTURE)) {
+        if (intent.hasExtra(Game.PICTURE)) {
             Glide.with(this)
-                    .load(intent.getStringExtra(Snaption.PICTURE))
+                    .load(intent.getStringExtra(Game.PICTURE))
                     .fitCenter()
                     .into(mNewGameImage);
         }
@@ -260,7 +260,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getSnaptionUserId(),
+        mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getUserId(),
                 !mPrivateSwitch.isChecked());
         mProgressDialog = new MaterialDialog.Builder(this)
                 .title(R.string.upload_title)

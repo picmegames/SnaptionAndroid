@@ -38,8 +38,8 @@ public class ImageConverter {
     private static final int NINETY_DEGREES = 90;
     private static final int ONE_EIGHTY_DEGREES = 180;
     private static final int TWO_SEVENTY_DEGREES = 270;
-    private static final int QUALITY = 75;
-    private static final String FOLDER = "MyFolder/Images";
+    private static final int QUALITY = 100;
+    private static final String FOLDER = "snaption/images";
     private static final String JPEG = ".jpg";
 
     public static Observable<String> getCompressedImage(Uri uri) {

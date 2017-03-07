@@ -80,7 +80,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         mUnbinder = ButterKnife.bind(this, view);
 
         mAuthManager = AuthenticationManager.getInstance();
-        mPresenter = new FriendsPresenter(this, mAuthManager.getSnaptionUserId());
+        mPresenter = new FriendsPresenter(this, mAuthManager.getUserId());
 
         mFab = ButterKnife.findById(getActivity(), R.id.fab);
 
@@ -242,7 +242,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     }
 
     private void removeFriend(int id) {
-        FriendProvider.removeFriend(mAuthManager.getSnaptionUserId(), new AddFriendRequest(id))
+        FriendProvider.removeFriend(mAuthManager.getUserId(), new AddFriendRequest(id))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(request -> {
                 }, Timber::e, () -> Timber.i("Successfully removed friend!"));

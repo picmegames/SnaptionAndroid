@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.data.models.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,11 +110,11 @@ public class WallFragment extends Fragment implements WallContract.View {
      * This method is called after the network call to get new
      * games is complete and successful.
      *
-     * @param snaptions A list of new games from the server
+     * @param games A list of new games from the server
      */
     @Override
-    public void showGames(List<Snaption> snaptions) {
-        mAdapter.setSnaptions(snaptions);
+    public void showGames(List<Game> games) {
+        mAdapter.setGames(games);
         mRefreshLayout.setRefreshing(false);
     }
 

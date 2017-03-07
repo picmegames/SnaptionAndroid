@@ -4,9 +4,9 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.data.models.Snaption;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.providers.FriendProvider;
-import com.snaptiongame.app.data.providers.SnaptionProvider;
+import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.data.utils.ImageConverter;
 
 import java.util.ArrayList;
@@ -54,8 +54,8 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     private void uploadGame(int userId, boolean isPublic, String type) {
-        Disposable disposable = SnaptionProvider.addSnaption(
-                new Snaption(userId, isPublic, 1, mEncodedImage, type, mCreateGameView.getTags(),
+        Disposable disposable = GameProvider.addGame(
+                new Game(userId, isPublic, 1, mEncodedImage, type, mCreateGameView.getTags(),
                         getFriendIds(mCreateGameView.getAddedFriends())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -70,12 +70,12 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 //    private void startUploadService(int userId, boolean isPublic, String type) {
 //        Context context = mCreateGameView.getContext();
 //        Bundle uploadBundle = new Bundle();
-//        uploadBundle.putInt(Snaption.ID, userId);
-//        uploadBundle.putBoolean(Snaption.IS_PUBLIC, isPublic);
-//        uploadBundle.putByteArray(Snaption.PICTURE, mEncodedImage);
-//        uploadBundle.putString(Snaption.IMG_TYPE, type);
-//        uploadBundle.putIntegerArrayList(Snaption.FRIENDS, getFriendIds(mCreateGameView.getAddedFriends()));
-//        Intent uploadIntent = new Intent(context, SnaptionUploadService.class);
+//        uploadBundle.putInt(Game.ID, userId);
+//        uploadBundle.putBoolean(Game.IS_PUBLIC, isPublic);
+//        uploadBundle.putByteArray(Game.PICTURE, mEncodedImage);
+//        uploadBundle.putString(Game.IMG_TYPE, type);
+//        uploadBundle.putIntegerArrayList(Game.FRIENDS, getFriendIds(mCreateGameView.getAddedFriends()));
+//        Intent uploadIntent = new Intent(context, GameUploadService.class);
 //        uploadIntent.putExtras(uploadBundle);
 //        context.startService(uploadIntent);
 //        mCreateGameView.onBackPressed();

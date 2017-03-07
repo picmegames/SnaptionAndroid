@@ -6,10 +6,10 @@ import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Friend;
+import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Session;
-import com.snaptiongame.app.data.models.Snaption;
 import com.snaptiongame.app.data.models.User;
 
 import java.util.List;
@@ -114,20 +114,20 @@ public interface SnaptionApi {
      * This method sends a request to get a list of games
      * with a GET request.
      *
-     * @return An observable that emits a list of Snaption objects.
+     * @return An observable that emits a list of Game objects.
      */
     @GET("/Games")
-    Observable<List<Snaption>> getSnaptions(@Query("private") boolean isPrivate);
+    Observable<List<Game>> getGames(@Query("private") boolean isPrivate);
 
     /**
      * This method sends a request to get a single game
      * with a GET request.
      *
      * @param gameId the id of the game
-     * @return An observable that emits a list of Snaption objects.
+     * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/{gameId}/")
-    Observable<Snaption> getSnaption(@Path("gameId") int gameId);
+    Observable<Game> getGame(@Path("gameId") int gameId);
 
     /**
      * This method sends a request to upvote or flag a game with
@@ -137,17 +137,17 @@ public interface SnaptionApi {
      * @return An observable that emits a Like object
      */
     @PUT("/UserXGame/")
-    Observable<Like> upvoteOrFlagSnaption(@Body Like request);
+    Observable<Like> upvoteOrFlagGame(@Body Like request);
 
     /**
      * This method sends a request to add a game with
      * a POST request.
      *
      * @param snaption The game to be added
-     * @return An observable that emits a Snaption object
+     * @return An observable that emits a Game object
      */
     @POST("/Games/")
-    Observable<Snaption> addSnaption(@Body Snaption snaption);
+    Observable<Game> addGame(@Body Game snaption);
 
     /**
      * This method sends a request to get a user's friends
@@ -209,7 +209,7 @@ public interface SnaptionApi {
 
     /**
      * This method sends a request to retrieve all the user's Facebook friends that
-     * have logged into Snaption
+     * have logged into Game
      *
      * @return An observable that emits a list of Friends
      */
