@@ -196,7 +196,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void getBranchToken(int gameId) {
-        DeepLinkRequest linkRequest = new DeepLinkRequest(gameId, "", "", "", "");
+        DeepLinkRequest linkRequest = new DeepLinkRequest(gameId);
         DeepLinkProvider.getToken(linkRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
