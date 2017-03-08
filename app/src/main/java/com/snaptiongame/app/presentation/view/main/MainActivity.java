@@ -38,6 +38,7 @@ import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
 
 import butterknife.BindView;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AuthenticationManager mAuthManager;
     private Fragment mCurrentFragment;
     private String fragTag;
+    private int mUserId;
     private int rightMargin;
     private int bottomMargin;
 
@@ -85,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         mAuthManager = AuthenticationManager.getInstance();
         mAuthManager.registerCallback(this::setHeader);
+
+        mUserId = mAuthManager.getUserId();
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        mCurrentFragment = WallFragment.getInstance(true);
+        mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
         fragTag = WallFragment.TAG;
         mActionBar.setTitle(R.string.my_wall);
         getSupportFragmentManager().beginTransaction()
@@ -227,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 resetFabPosition(true);
 
             case R.id.my_wall:
-                mCurrentFragment = WallFragment.getInstance(true);
+                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.my_wall);
                 mBottomNavigationView.getMenu().getItem(0).setChecked(true);
@@ -236,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.discover:
-                mCurrentFragment = WallFragment.getInstance(false);
+                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.discover);
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.popular:
-                mCurrentFragment = WallFragment.getInstance(false);
+                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.POPULAR);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.popular);
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);

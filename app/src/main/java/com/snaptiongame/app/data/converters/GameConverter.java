@@ -36,17 +36,13 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
 
         JsonArray tags = new JsonArray();
         if (src.tags != null && !src.tags.isEmpty()) {
-            for (Tag tag : src.tags) {
-                tags.add(tag.name);
-            }
+            src.tags.forEach(tag -> tags.add(tag.name));
         }
         json.add(Game.TAGS, tags);
 
         JsonArray friends = new JsonArray();
         if (src.friendIds != null && !src.friendIds.isEmpty()) {
-            for (Integer id : src.friendIds) {
-                friends.add(id);
-            }
+            src.friendIds.forEach(friends::add);
         }
         json.add(Game.FRIENDS, friends);
 
@@ -63,8 +59,12 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 content.get(Game.START_DATE).getAsLong(),
                 content.get(Game.IS_PUBLIC).getAsBoolean(),
                 content.get(Game.RATING).getAsInt(),
-                content.get(Game.PICKER_ID).getAsInt(),
-                content.get(Game.PICTURE).getAsString(), "");
+                content.get(Game.PICKER_ID).getAsInt(), "", "");
+
+        JsonObject picture = content.getAsJsonObject(Game.PICTURE);
+        game.imageUrl = picture.get(Game.IMAGE_URL).getAsString();
+        game.imageWidth = picture.get(Game.IMAGE_WIDTH).getAsInt();
+        game.imageHeight = picture.get(Game.IMAGE_HEIGHT).getAsInt();
 
         JsonElement endDate = content.get(Game.END_DATE);
         if (endDate.isJsonNull()) {
@@ -84,10 +84,23 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
         game.tags = gameTags;
 
         JsonArray users = content.getAsJsonArray(Game.USERS);
+        JsonObject userObject;
+        JsonObject pictureObject;
         List<User> gameUsers = new ArrayList<>();
+        User newUser;
         if (users.size() > 0) {
             for (JsonElement user : users) {
-                gameUsers.add(new Gson().fromJson(user, User.class));
+                newUser = new User();
+                userObject = user.getAsJsonObject();
+                newUser.id = userObject.get(User.ID).getAsInt();
+                newUser.username = userObject.get(User.USERNAME).getAsString();
+                newUser.exp = userObject.get(User.EXP).getAsInt();
+                pictureObject = userObject.getAsJsonObject("picture");
+                newUser.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
+                newUser.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
+                newUser.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
+                newUser.rankId = userObject.get(User.RANK_ID).getAsInt();
+                gameUsers.add(newUser);
             }
         }
         game.users = gameUsers;
@@ -99,8 +112,8 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                     topCaption.getAsJsonObject().get("fitbBefore").getAsString(),
                     topCaption.getAsJsonObject().get("fitbAfter").getAsString(), 0);
             caption.caption = topCaption.getAsJsonObject().get(Caption.CAPTION).getAsString();
-            JsonElement picture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE);
-            if (!picture.isJsonNull()) {
+            JsonElement topCaptionerPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE);
+            if (!topCaptionerPicture.isJsonNull()) {
                 caption.creatorPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE).getAsString();
             }
             caption.creatorName = topCaption.getAsJsonObject().get(Caption.USER_NAME).getAsString();

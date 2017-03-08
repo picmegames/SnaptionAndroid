@@ -358,8 +358,8 @@ public final class AuthenticationManager {
                 .subscribe(user -> {
                             saveUsername(user.username);
 
-                            if (user.picture != null) {
-                                saveProfileImage(user.picture);
+                            if (user.imageUrl != null) {
+                                saveProfileImage(user.imageUrl);
                             }
                         },
                         Timber::e,

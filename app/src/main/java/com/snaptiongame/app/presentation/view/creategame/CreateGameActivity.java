@@ -105,6 +105,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .load(intent.getStringExtra(Game.PICTURE))
                     .fitCenter()
                     .into(mNewGameImage);
+            mCreateGameButton.setEnabled(true);
         }
 
         assignValues();

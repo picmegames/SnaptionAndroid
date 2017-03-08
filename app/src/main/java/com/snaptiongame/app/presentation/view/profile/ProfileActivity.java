@@ -157,7 +157,7 @@ public class ProfileActivity extends AppCompatActivity
         mAppBar.addOnOffsetChangedListener(this);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
-        mViewPager.setAdapter(new ProfileInfoPageAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new ProfileInfoPageAdapter(getSupportFragmentManager(), mUserId));
 
         mTabLayout.setupWithViewPager(mViewPager);
         int white = ContextCompat.getColor(this, android.R.color.white);
@@ -179,10 +179,10 @@ public class ProfileActivity extends AppCompatActivity
                 .customView(mEditView, false)
                 .positiveText(getString(R.string.confirm))
                 .negativeText(R.string.cancel)
-                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
+                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
                     mPresenter.updateUsername(mAuthManager.getUsername(),
-                            new User(mEditView.getNewUsername()));
-                })
+                            new User(mEditView.getNewUsername()))
+                )
                 .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
 
                 })

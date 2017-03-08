@@ -38,21 +38,24 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     private WallAdapter mAdapter;
     private Unbinder mUnbinder;
+    private int mUserId;
+    private int mType;
 
     public static final String TAG = WallFragment.class.getSimpleName();
 
     public static final int NUM_COLUMNS = 2;
-    public static final int ITEM_VIEW_CACHE_SIZE = 20;
-    public static final String IS_PUBLIC = "is_public";
+    public static final String USER_ID = "userId";
+    public static final String TYPE = "type";
 
     /**
      * This method provides a new instance of a Wall Fragment.
      *
      * @return An instance of a Wall Fragment
      */
-    public static WallFragment getInstance(boolean isPublic) {
+    public static WallFragment getInstance(int userId, int type) {
         Bundle args = new Bundle();
-        args.putBoolean(IS_PUBLIC, isPublic);
+        args.putInt(USER_ID, userId);
+        args.putInt(TYPE, type);
         WallFragment wallFragment = new WallFragment();
         wallFragment.setArguments(args);
         return wallFragment;
@@ -74,36 +77,24 @@ public class WallFragment extends Fragment implements WallContract.View {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.wall_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
-        mPresenter = new WallPresenter(this, getArguments().getBoolean(IS_PUBLIC));
+        mUserId = getArguments().getInt(USER_ID);
+        mType = getArguments().getInt(TYPE);
+        mPresenter = new WallPresenter(this, mUserId, mType);
 
         mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
         mWall.addItemDecoration(new SpacesItemDecoration(
                 getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
-
         mWall.setHasFixedSize(true);
-        mWall.setItemViewCacheSize(ITEM_VIEW_CACHE_SIZE);
-        mWall.setDrawingCacheEnabled(true);
-        mWall.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
 
         mAdapter = new WallAdapter(new ArrayList<>());
         mWall.setAdapter(mAdapter);
 
-        mRefreshLayout.setOnRefreshListener(mPresenter::loadGames);
+        mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType));
 
         mPresenter.subscribe();
         mRefreshLayout.setRefreshing(true);
 
         return view;
-    }
-
-    /**
-     * This method is called when the view goes into the background.
-     * This will clear any disposable network calls.
-     */
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.unsubscribe();
     }
 
     /**
@@ -136,5 +127,6 @@ public class WallFragment extends Fragment implements WallContract.View {
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+        mPresenter.unsubscribe();
     }
 }

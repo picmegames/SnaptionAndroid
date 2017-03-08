@@ -83,16 +83,14 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     private List<Integer> getFriendIds(List<String> friendNames) {
         List<Integer> friendIds = new ArrayList<>();
-        for (String friendName : friendNames) {
-            friendIds.add(getFriendIdByName(friendName));
-        }
+        friendNames.forEach(friendName -> friendIds.add(getFriendIdByName(friendName)));
         return friendIds;
     }
 
     @Override
     public int getFriendIdByName(String name) {
         for (Friend friend : mFriends) {
-            if (friend.userName.equals(name)) {
+            if (friend.username.equals(name)) {
                 return friend.id;
             }
         }
@@ -120,7 +118,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         mFriends = friends;
         String[] names = new String[friends.size()];
         for (int index = 0; index < names.length; index++) {
-            names[index] = friends.get(index).userName;
+            names[index] = friends.get(index).username;
         }
         mCreateGameView.setFriendNames(names);
     }

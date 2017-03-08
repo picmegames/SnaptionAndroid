@@ -25,6 +25,22 @@ public class GameProvider {
                 });
     }
 
+    public static Observable<List<Game>> getUserGames() {
+        return apiService.getUserGames();
+    }
+
+    public static Observable<List<Game>> getDiscoverGames() {
+        return apiService.getDiscoverGames();
+    }
+
+    public static Observable<List<Game>> getPopularGames() {
+        return apiService.getPopularGames();
+    }
+
+    public static Observable<List<Game>> getUserGameHistory(int userId) {
+        return apiService.getUserGameHistory(userId);
+    }
+
     public static Observable<Game> getGame(int gameId, String token) {
         return apiService.getGame(gameId, token);
     }

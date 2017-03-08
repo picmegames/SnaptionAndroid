@@ -75,7 +75,7 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = UserProvider.getUser(mPickerId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        user -> mGameView.setPickerInfo(user.picture, user.username),
+                        user -> mGameView.setPickerInfo(user.imageUrl, user.username),
                         Timber::e,
                         () -> Timber.i("Loading picker completed successfully.")
                 );
@@ -109,8 +109,7 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        addedCaption -> {
-                        },
+                        addedCaption -> {},
                         Timber::e,
                         () -> Timber.i("Added caption")
                 );

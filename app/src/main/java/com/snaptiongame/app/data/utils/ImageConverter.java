@@ -192,7 +192,9 @@ public class ImageConverter {
         else {
             cursor.moveToFirst();
             int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            return cursor.getString(index);
+            String path = cursor.getString(index);
+            cursor.close();
+            return path;
         }
     }
 

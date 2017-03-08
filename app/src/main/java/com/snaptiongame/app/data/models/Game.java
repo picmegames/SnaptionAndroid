@@ -29,6 +29,12 @@ public class Game {
     public int pickerId;
     @SerializedName(PICTURE)
     public String picture;
+    @SerializedName(IMAGE_URL)
+    public String imageUrl;
+    @SerializedName(IMAGE_WIDTH)
+    public int imageWidth;
+    @SerializedName(IMAGE_HEIGHT)
+    public int imageHeight;
     @SerializedName(TOP_CAPTION)
     public Caption topCaption;
     @SerializedName(USERS)
@@ -49,6 +55,9 @@ public class Game {
     public static final String RATING = "rating";
     public static final String IMG_TYPE = "imgType";
     public static final String PICTURE = "picture";
+    public static final String IMAGE_URL = "url";
+    public static final String IMAGE_WIDTH = "width";
+    public static final String IMAGE_HEIGHT = "height";
     public static final String TOP_CAPTION = "topCaption";
     public static final String TAGS = "tags";
     public static final String FRIENDS = "invitedUsers";

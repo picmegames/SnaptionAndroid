@@ -40,7 +40,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         Disposable disposable = UserProvider.updateUser(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        newUser -> mProfileView.saveProfilePicture(newUser.picture),
+                        newUser -> mProfileView.saveProfilePicture(newUser.imageUrl),
                         e -> {
                             Timber.e(e);
                             mProfileView.showProfilePictureFailure();

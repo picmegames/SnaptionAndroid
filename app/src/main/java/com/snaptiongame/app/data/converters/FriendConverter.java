@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.snaptiongame.app.data.models.Friend;
+import com.snaptiongame.app.data.models.User;
 
 import java.lang.reflect.Type;
 
@@ -25,9 +27,14 @@ public class FriendConverter implements JsonSerializer<Friend>, JsonDeserializer
     @Override
     public Friend deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        if (json.isJsonArray()) {
-            return new Gson().fromJson(json.getAsJsonArray().get(0), typeOfT);
-        }
-        return new Gson().fromJson(json, typeOfT);
+        JsonObject object = json.getAsJsonObject();
+        Friend newFriend = new Friend();
+        newFriend.id = object.get(User.ID).getAsInt();
+        newFriend.username = object.get(User.USERNAME).getAsString();
+        JsonObject pictureObject = object.getAsJsonObject(User.PICTURE);
+        newFriend.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
+        newFriend.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
+        newFriend.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
+        return newFriend;
     }
 }
