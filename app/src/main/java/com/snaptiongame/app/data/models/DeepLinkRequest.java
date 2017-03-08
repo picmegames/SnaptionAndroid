@@ -24,6 +24,14 @@ public class DeepLinkRequest {
     public static final String FACEBOOKID = "facebookID";
     public static final String GOOGLEID = "googleID";
 
+    public DeepLinkRequest(int gameId) {
+        this.gameId = gameId;
+        this.email = null;
+        this.phone = null;
+        this.facebookID = null;
+        this.googleID = null;
+    }
+
     public DeepLinkRequest(int gameId, String email, String phone, String facebookID, String
             googleID) {
         this.gameId = gameId;

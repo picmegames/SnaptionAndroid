@@ -25,8 +25,8 @@ public class GameProvider {
                 });
     }
 
-    public static Observable<Game> getGame(int gameId) {
-        return apiService.getGame(gameId);
+    public static Observable<Game> getGame(int gameId, String token) {
+        return apiService.getGame(gameId, token);
     }
 
     public static Observable<Like> upvoteOrFlagGame(Like request) {

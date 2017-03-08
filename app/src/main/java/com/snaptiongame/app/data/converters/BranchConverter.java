@@ -28,6 +28,10 @@ public class BranchConverter implements JsonSerializer<DeepLinkRequest> {
     public JsonElement serialize(DeepLinkRequest src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
         json.addProperty(DeepLinkRequest.GAMEID, src.gameId);
+        json.addProperty(DeepLinkRequest.PHONE, src.phone);
+        json.addProperty(DeepLinkRequest.GOOGLEID, src.googleID);
+        json.addProperty(DeepLinkRequest.FACEBOOKID, src.facebookID);
+        json.addProperty(DeepLinkRequest.EMAIL, src.email);
         return json;
     }
 }

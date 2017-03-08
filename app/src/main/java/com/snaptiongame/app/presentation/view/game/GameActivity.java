@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -54,6 +55,11 @@ import timber.log.Timber;
  */
 
 public class GameActivity extends AppCompatActivity implements GameContract.View {
+    public static final String JOIN_SNAPTION = "Join Snaption!";
+    public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
+    public static final String SNAPTION_IMAGE = "http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/";
+    public static final String INVITE_CHANNEL = "GameInvite";
+    public static final String INVITE = "invite";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.fab)
@@ -101,15 +107,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
+            //CALLED when the async initSession returns, won't error if no branch data is founds
             if (error == null) {
                 mInvite = BranchConverter.deserializeGameInvite(referringParams);
+                //IF branch returns a null or invalid invite then display the intent information
                 if (mInvite == null || mInvite.gameId == 0) {
                     showGame(intent.getStringExtra(Game.PICTURE), intent.getIntExtra(Game.ID, 0),
                             intent.getIntExtra(Game.PICKER_ID, 0));
                 }
+                //ELSE display information from the game invite
                 else {
-                    Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
-                    AuthenticationManager.getInstance().saveToken(mInvite.inviteToken);
+                    mAuthManager.saveToken(mInvite.inviteToken);
                     loadInvitedGame();
                 }
                 Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
@@ -117,7 +125,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             else {
                 Timber.e("Branch errored with " + error.getMessage());
             }
-        }, this.getIntent().getData(), this);
+        }, intent.getData(), this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -300,7 +308,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void loadInvitedGame() {
-        GameProvider.getGame(mInvite.gameId).observeOn(AndroidSchedulers.mainThread())
+        GameProvider.getGame(mInvite.gameId, mAuthManager.getToken()).observeOn
+                (AndroidSchedulers
+                .mainThread())
                 .subscribe(
                         snaption -> {
                             showGame(snaption.picture, snaption.id, snaption.pickerId);
@@ -357,21 +367,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void generateInviteUrl(String inviteToken) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
-                // The identifier is what Branch will use to de-dupe the content across many different Universal Objects
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
-                // This is where you define the open graph structure and how the object will appear on Facebook or in a deepview
-                .setTitle("Join Game")
-                .setContentDescription("Some description")
-                .setContentImageUrl("http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/")
-                // You use this to specify whether this content can be discovered publicly - default is public
+                .setTitle(JOIN_SNAPTION)
+                .setContentDescription(SNAPTION_DESCRIPTION)
+                .setContentImageUrl(SNAPTION_IMAGE)
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
-                // Here is where you can add custom keys/values to the deep link data
-                .addContentMetadata("inviteToken", inviteToken)
-                .addContentMetadata("gameId", Integer.toString(mGameId));
+                .addContentMetadata(GameInvite.INVITE_TOKEN, inviteToken)
+                .addContentMetadata(GameInvite.GAME_ID, Integer.toString(mGameId));
         LinkProperties linkProperties = new LinkProperties()
-                .setChannel("facebook")
-                .setFeature("invite")
-                .addControlParameter("$android_url", "https://play.google.com/apps/testing/com.snaptiongame.app");
+                .setChannel(INVITE_CHANNEL)
+                .setFeature(INVITE);
         branchUniversalObject.generateShortUrl(this, linkProperties, (String url, BranchError error) -> {
             if (error == null) {
                 Timber.i("got my Branch link to share: " + url);
