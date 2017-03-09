@@ -38,7 +38,11 @@ public class GameProvider {
     }
 
     public static Observable<List<Game>> getUserGameHistory(int userId) {
-        return apiService.getUserGameHistory(userId);
+        return apiService.getUserGameHistory(userId)
+                .filter(games -> {
+                    Collections.reverse(games);
+                    return true;
+                });
     }
 
     public static Observable<Game> getGame(int gameId, String token) {

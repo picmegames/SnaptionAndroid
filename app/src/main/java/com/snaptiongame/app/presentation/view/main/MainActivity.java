@@ -85,13 +85,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         mAuthManager = AuthenticationManager.getInstance();
         mAuthManager.registerCallback(this::setHeader);
 
         mUserId = mAuthManager.getUserId();
-
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -115,12 +115,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
-        fragTag = WallFragment.TAG;
-        mActionBar.setTitle(R.string.my_wall);
+        if (!mAuthManager.isLoggedIn()) {
+            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
+            mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
+            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
+            fragTag = WallFragment.TAG;
+            mActionBar.setTitle(R.string.discover);
+            setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
+        }
+        else {
+            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
+            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
+            fragTag = WallFragment.TAG;
+            mActionBar.setTitle(R.string.my_wall);
+            setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+        }
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, mCurrentFragment).commit();
-        setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
         mNavigationView.getMenu().getItem(0).setChecked(true);
 
         mNavigationView.setNavigationItemSelectedListener(this);

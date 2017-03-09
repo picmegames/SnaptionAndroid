@@ -11,6 +11,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.FitBCaption;
+import com.snaptiongame.app.data.models.User;
 
 import java.lang.reflect.Type;
 
@@ -33,15 +34,16 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
             throws JsonParseException {
         JsonObject content = json.getAsJsonObject();
         Caption caption = new Gson().fromJson(json, typeOfT);
-        JsonObject creator = content.getAsJsonObject("creator");
+        JsonObject creator = content.getAsJsonObject(Caption.CREATOR);
         if (creator.isJsonObject()) {
-            caption.creatorName = creator.getAsJsonObject().get("username").getAsString();
-            JsonObject picture = creator.get("picture").getAsJsonObject();
+            caption.creatorName = creator.get(Caption.USERNAME).getAsString();
+            JsonObject picture = creator.get(User.PICTURE).getAsJsonObject();
             if (!picture.isJsonNull()) {
-                caption.creatorPicture = picture.get("url").getAsString();
+                caption.creatorPicture = picture.get(User.IMAGE_URL).getAsString();
             }
         }
-        JsonElement fitBCaption = content.get("fitb");
+        caption.creatorId = creator.get(User.ID).getAsInt();
+        JsonElement fitBCaption = content.get(Caption.FITB_OTHER);
         if (fitBCaption.isJsonObject()) {
             caption.assocFitB = new Gson().fromJson(fitBCaption, FitBCaption.class);
         }

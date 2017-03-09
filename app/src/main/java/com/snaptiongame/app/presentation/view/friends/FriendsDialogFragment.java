@@ -30,6 +30,7 @@ import com.snaptiongame.app.data.providers.UserProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -360,10 +361,11 @@ public class FriendsDialogFragment extends DialogFragment {
             //hint is assigned above when the dialog to display is chosen
             search.setHint(sHint); //Sets the hint based off of which method
             // the user is adding a friend
-            mResults = (RecyclerView) view.findViewById(R.id.search_results);
+            mResults = ButterKnife.findById(view, R.id.search_results);
             mResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
             ArrayList<Friend> friends = new ArrayList<>();
             mAdapter = new FriendsAdapter(friends);
+            mAdapter.setSelectable();
             mResults.setAdapter(mAdapter);
             if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
                 mAdapter.setSelectable();

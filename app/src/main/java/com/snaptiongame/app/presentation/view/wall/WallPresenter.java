@@ -53,37 +53,36 @@ public class WallPresenter implements WallContract.Presenter {
     public void loadGames(int type) {
         Observable<List<Game>> gameRequest;
         switch (type) {
-//            case WallContract.DISCOVER:
-//                gameRequest = GameProvider.getDiscoverGames();
-//                break;
-//            case WallContract.POPULAR:
-//                gameRequest = GameProvider.getPopularGames();
-//                break;
+            case WallContract.DISCOVER:
+                //gameRequest = GameProvider.getDiscoverGames();
+                gameRequest = GameProvider.getGames(false);
+                break;
+            case WallContract.POPULAR:
+                //gameRequest = GameProvider.getPopularGames();
+                gameRequest = GameProvider.getGames(false);
+                break;
             case WallContract.HISTORY:
                 gameRequest = GameProvider.getUserGameHistory(mUserId);
                 break;
             default:
-                gameRequest = GameProvider.getGames(false);
+                gameRequest = GameProvider.getGames(true);
                 break;
         }
 
         Disposable disposable = gameRequest
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::processGames,
-                        Timber::e,
-                        () -> Timber.i("Getting Snaptions completed successfully")
+                        mWallView::showGames,
+                        e -> {
+                            Timber.e(e);
+                            mWallView.setRefreshing(false);
+                        },
+                        () -> {
+                            Timber.i("Getting Snaptions completed successfully");
+                            mWallView.setRefreshing(false);
+                        }
                 );
         mDisposables.add(disposable);
-    }
-
-    /**
-     * This method hands off the list to the view to be shown.
-     *
-     * @param games The list of games from the server
-     */
-    private void processGames(List<Game> games) {
-        mWallView.showGames(games);
     }
 
     /**

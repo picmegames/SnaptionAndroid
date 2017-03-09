@@ -3,6 +3,7 @@ package com.snaptiongame.app.presentation.view.wall;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -90,6 +91,12 @@ public class WallFragment extends Fragment implements WallContract.View {
         mWall.setAdapter(mAdapter);
 
         mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType));
+        mRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getContext(), R.color.colorAccent),
+                ContextCompat.getColor(getContext(), R.color.colorPrimary),
+                ContextCompat.getColor(getContext(), R.color.colorDiscover),
+                ContextCompat.getColor(getContext(), R.color.colorPopular)
+        );
 
         mPresenter.subscribe();
         mRefreshLayout.setRefreshing(true);
@@ -106,7 +113,6 @@ public class WallFragment extends Fragment implements WallContract.View {
     @Override
     public void showGames(List<Game> games) {
         mAdapter.setGames(games);
-        mRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -117,6 +123,17 @@ public class WallFragment extends Fragment implements WallContract.View {
     @Override
     public void setPresenter(WallContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    /**
+     * This method sets the layout to a refreshing
+     * state.
+     *
+     * @param isRefreshing Whether or not the layout is refreshing
+     */
+    @Override
+    public void setRefreshing(boolean isRefreshing) {
+        mRefreshLayout.setRefreshing(isRefreshing);
     }
 
     /**

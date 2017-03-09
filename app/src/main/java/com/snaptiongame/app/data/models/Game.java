@@ -59,6 +59,8 @@ public class Game {
     public static final String IMAGE_WIDTH = "width";
     public static final String IMAGE_HEIGHT = "height";
     public static final String TOP_CAPTION = "topCaption";
+    public static final String FITB_BEFORE = "fitbBefore";
+    public static final String FITB_AFTER = "fitbAfter";
     public static final String TAGS = "tags";
     public static final String FRIENDS = "invitedUsers";
     public static final String USERS = "users";

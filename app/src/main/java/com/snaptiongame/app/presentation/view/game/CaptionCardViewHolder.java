@@ -56,29 +56,12 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
 
         mLike.setOnClickListener(view -> {
-            if (isLiked) {
-                mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
-                isLiked = false;
-                mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) - 1));
-            }
-            else {
-                mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
-                isLiked = true;
-                mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
-            }
+            setBeenUpvoted();
             upvoteCaption(captionId, isLiked);
         });
 
         mFlag.setOnClickListener(view -> {
-            if (isFlagged) {
-                mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
-                isFlagged = false;
-            }
-            else {
-                mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
-                isFlagged = true;
-                Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
-            }
+            setBeenFlagged();
             flagCaption(captionId, isFlagged);
         });
 
@@ -93,6 +76,43 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                             mContext.getString(R.string.shared_transition));
             mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
         });
+    }
+
+    public void setHasBeenUpvotedOrFlagged(boolean beenUpvoted, boolean beenFlagged) {
+        isLiked = beenUpvoted;
+        isFlagged = beenFlagged;
+
+        if (isLiked) {
+            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+        }
+        if (isFlagged) {
+            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+        }
+    }
+
+    private void setBeenUpvoted() {
+        if (isLiked) {
+            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            isLiked = false;
+            mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) - 1));
+        }
+        else {
+            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            isLiked = true;
+            mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
+        }
+    }
+
+    private void setBeenFlagged() {
+        if (isFlagged) {
+            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            isFlagged = false;
+        }
+        else {
+            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+            isFlagged = true;
+            Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void upvoteCaption(int captionId, boolean isLiked) {

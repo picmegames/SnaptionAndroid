@@ -17,7 +17,7 @@ public class Caption {
     public int creatorId;
     @SerializedName(USER_PICTURE)
     public String creatorPicture;
-    @SerializedName(USER_NAME)
+    @SerializedName(USERNAME)
     public String creatorName;
     @SerializedName(FITB_ID_RECEIVE)
     public int fitBId;
@@ -27,17 +27,26 @@ public class Caption {
     public int fitbIdSend;
     @SerializedName(FITB)
     public FitBCaption assocFitB;
+    @SerializedName(BEEN_UPVOTED)
+    public boolean beenUpvoted;
+    @SerializedName(BEEN_FLAGGED)
+    public boolean beenFlagged;
 
     public static final String ID = "id";
     public static final String GAME_ID = "game_id";
     public static final String NUM_VOTES = "numVotes";
     public static final String USER_ID = "userId";
     public static final String USER_PICTURE = "userPic";
-    public static final String USER_NAME = "username";
+    public static final String PICTURE = "picture";
+    public static final String USERNAME = "username";
+    public static final String CREATOR = "creator";
     public static final String FITB_ID_RECEIVE = "fitb_id";
     public static final String FITB_ID_SEND = "fitbId";
     public static final String CAPTION = "userEntry";
     public static final String FITB = "fitB";
+    public static final String FITB_OTHER = "fitb";
+    public static final String BEEN_UPVOTED = "beenUpvoted";
+    public static final String BEEN_FLAGGED = "beenFlagged";
 
     public Caption() {
 
