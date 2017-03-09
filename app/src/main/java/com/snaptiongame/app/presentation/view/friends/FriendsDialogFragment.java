@@ -385,8 +385,9 @@ public class FriendsDialogFragment extends DialogFragment {
 
             //add all selected friends if in the facebook dialog
             if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE)) {
-                List<Integer> friends = mAdapter.getSelectedFriendIds();
-                friends.forEach(this::addFriend);
+                for (Integer friendId : mAdapter.getSelectedFriendIds()) {
+                    addFriend(friendId);
+                }
             }
             //Only send an outer app if we are still on the first dialog screen. Otherwise
             //we handle the friend invite in app

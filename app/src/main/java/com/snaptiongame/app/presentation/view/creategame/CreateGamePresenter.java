@@ -83,7 +83,9 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     private List<Integer> getFriendIds(List<String> friendNames) {
         List<Integer> friendIds = new ArrayList<>();
-        friendNames.forEach(friendName -> friendIds.add(getFriendIdByName(friendName)));
+        for (String name : friendNames) {
+            friendIds.add(getFriendIdByName(name));
+        }
         return friendIds;
     }
 

@@ -22,7 +22,7 @@
 
         <meta-data
             android:name="io.branch.sdk.BranchKey"
-            android:value="key_live_hbAxkg6Ohydx4Y7nRYeFTadmAuosDU68"/>
+            android:value="key_live_haBBfa2QhslFWX9oNYgBTicfvrlEuS32"/>
 
         <activity
             android:name=".presentation.view.main.MainActivity"
