@@ -49,7 +49,6 @@ public class FITBCaptionAdapter extends BaseAdapter {
     }
 
 
-
     @Override
     public int getCount() {
         return mCaptions.size();

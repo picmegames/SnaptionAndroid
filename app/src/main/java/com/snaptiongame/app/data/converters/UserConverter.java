@@ -36,19 +36,23 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
         if (json.isJsonArray()) {
             object = json.getAsJsonArray().get(0).getAsJsonObject();
         }
-        else{
+        else {
             object = json.getAsJsonObject();
         }
+
         User newUser = new User();
+
         newUser.id = object.get(User.ID).getAsInt();
         newUser.username = object.get(User.USERNAME).getAsString();
         newUser.exp = object.get(User.EXP).getAsInt();
+
         if (!object.get(User.PICTURE).isJsonNull()) {
             JsonObject pictureObject = object.getAsJsonObject(User.PICTURE);
             newUser.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
             newUser.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
             newUser.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
         }
+
         newUser.rankId = object.get(User.RANK_ID).getAsInt();
         return newUser;
     }

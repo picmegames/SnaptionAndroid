@@ -180,8 +180,8 @@ public class ProfileActivity extends AppCompatActivity
                 .positiveText(getString(R.string.confirm))
                 .negativeText(R.string.cancel)
                 .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                    mPresenter.updateUsername(mAuthManager.getUsername(),
-                            new User(mEditView.getNewUsername()))
+                        mPresenter.updateUsername(mAuthManager.getUsername(),
+                                new User(mEditView.getNewUsername()))
                 )
                 .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
 

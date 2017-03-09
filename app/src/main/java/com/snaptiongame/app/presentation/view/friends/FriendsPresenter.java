@@ -35,15 +35,19 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Disposable disposable = FriendProvider.loadFriends(mUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                      mFriendView::processFriends,
-                      Timber::e,
-                      () -> Timber.i("Getting friends was successful"));
+                        mFriendView::processFriends,
+                        Timber::e,
+                        () -> Timber.i("Getting friends was successful"));
         mDisposables.add(disposable);
     }
 
     @Override
-    public void subscribe() { loadFriends();}
+    public void subscribe() {
+        loadFriends();
+    }
 
     @Override
-    public void unsubscribe() { mDisposables.clear();}
+    public void unsubscribe() {
+        mDisposables.clear();
+    }
 }

@@ -35,6 +35,7 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
         JsonObject content = json.getAsJsonObject();
         Caption caption = new Gson().fromJson(json, typeOfT);
         JsonObject creator = content.getAsJsonObject(Caption.CREATOR);
+
         if (creator.isJsonObject()) {
             caption.creatorName = creator.get(Caption.USERNAME).getAsString();
             JsonObject picture = creator.get(User.PICTURE).getAsJsonObject();
@@ -42,8 +43,10 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
                 caption.creatorPicture = picture.get(User.IMAGE_URL).getAsString();
             }
         }
+
         caption.creatorId = creator.get(User.ID).getAsInt();
         JsonElement fitBCaption = content.get(Caption.FITB_OTHER);
+
         if (fitBCaption.isJsonObject()) {
             caption.assocFitB = new Gson().fromJson(fitBCaption, FitBCaption.class);
         }

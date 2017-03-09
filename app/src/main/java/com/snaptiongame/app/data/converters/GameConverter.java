@@ -88,6 +88,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
         JsonObject pictureObject;
         List<User> gameUsers = new ArrayList<>();
         User newUser;
+
         if (users.size() > 0) {
             for (JsonElement user : users) {
                 newUser = new User();
@@ -106,6 +107,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
         game.users = gameUsers;
 
         JsonElement topCaption = content.get(Game.TOP_CAPTION);
+
         if (topCaption != null && topCaption.isJsonObject()) {
             Caption caption = new Caption();
             caption.assocFitB = new FitBCaption(0, 0,
@@ -113,9 +115,11 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                     topCaption.getAsJsonObject().get(Game.FITB_AFTER).getAsString(), 0);
             caption.caption = topCaption.getAsJsonObject().get(Caption.CAPTION).getAsString();
             JsonElement topCaptionerPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE);
+
             if (!topCaptionerPicture.isJsonNull()) {
                 caption.creatorPicture = topCaptionerPicture.getAsJsonObject().get(User.IMAGE_URL).getAsString();
             }
+
             caption.creatorName = topCaption.getAsJsonObject().get(Caption.USERNAME).getAsString();
             game.topCaption = caption;
         }

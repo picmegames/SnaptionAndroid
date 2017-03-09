@@ -95,7 +95,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     ImageView mSetIcon;
     ImageView mRefreshIcon;
 
-    public CaptionSelectDialogFragment() {}
+    public CaptionSelectDialogFragment() {
+    }
 
     static CaptionSelectDialogFragment newInstance(CaptionDialogToShow dialogToShow, int gameId, int setId) {
         CaptionSelectDialogFragment newFragment = new CaptionSelectDialogFragment();
@@ -121,7 +122,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         if (mDialogToShow == CaptionDialogToShow.SET_CHOOSER) {
             mDialogTitle = CHOOSE_A_SET;
 
-        } else {
+        }
+        else {
             mDialogTitle = CREATE_A_CAPTION;
         }
     }
@@ -147,7 +149,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             });
         }
         mDialogBuilder.setNegativeButton(sNegativeButtonText, (DialogInterface dialog, int which) ->
-            ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow)
+                ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow)
         );
 
         //Build the custom title for the dialog
@@ -239,7 +241,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     public void showRandomCaptions(List<FitBCaption> captions) {
         mFitBAdapter.setCaptions(captions);
     }
-    
+
     @Override
     public void showCaptionSets(List<CaptionSet> captionSets) {
         mCaptionSetAdapter.setCaptionSets(captionSets);

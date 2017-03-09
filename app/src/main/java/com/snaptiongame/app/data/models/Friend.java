@@ -41,7 +41,7 @@ public class Friend {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof  Friend) {
+        if (o instanceof Friend) {
             Friend other = (Friend) o;
             return (username.equals(other.username));
         }

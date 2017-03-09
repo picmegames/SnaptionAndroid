@@ -29,8 +29,10 @@ public class FriendConverter implements JsonSerializer<Friend>, JsonDeserializer
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
         Friend newFriend = new Friend();
+
         newFriend.id = object.get(User.ID).getAsInt();
         newFriend.username = object.get(User.USERNAME).getAsString();
+
         JsonObject pictureObject = object.getAsJsonObject(User.PICTURE);
         newFriend.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
         newFriend.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();

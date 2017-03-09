@@ -109,7 +109,8 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        addedCaption -> {},
+                        addedCaption -> {
+                        },
                         Timber::e,
                         () -> Timber.i("Added caption")
                 );

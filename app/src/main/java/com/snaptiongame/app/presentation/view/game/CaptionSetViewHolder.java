@@ -25,8 +25,6 @@ public class CaptionSetViewHolder extends RecyclerView.ViewHolder {
 
     public Context mContext;
 
-
-
     public CaptionSetViewHolder(View itemView) {
         super(itemView);
         mContext = itemView.getContext();
