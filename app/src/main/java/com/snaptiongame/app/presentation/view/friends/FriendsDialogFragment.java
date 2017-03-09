@@ -175,7 +175,7 @@ public class FriendsDialogFragment extends DialogFragment {
      * @param fragmentActivity  reference to calling(underlying activity)
      * @return new instance of this class
      */
-    public FriendsDialogFragment newInstance(DialogToShow whichDialogToShow, FriendsFragment fragmentActivity) {
+    public static FriendsDialogFragment newInstance(DialogToShow whichDialogToShow, FriendsFragment fragmentActivity) {
         FriendsDialogFragment newFragment = new FriendsDialogFragment();
 
         Bundle args = new Bundle();
@@ -406,8 +406,7 @@ public class FriendsDialogFragment extends DialogFragment {
         String smsBody = "Hey there download this nifty app called Game :^) \n" +
                 "https://goo.gl/FWrtSX";
 
-        Intent inviteIntent = new Intent();
-        inviteIntent.setAction(Intent.ACTION_SEND);
+        Intent inviteIntent = new Intent(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
         inviteIntent.setType("text/plain");
 
@@ -526,13 +525,13 @@ public class FriendsDialogFragment extends DialogFragment {
                 R.drawable.ic_email,
                 R.drawable.snaption_icon};
 
-        private final FriendsFragment mAFriendsFragment;
+        private final FriendsFragment mFriendsFragment;
 
         /**
          * Empty constructor.
          */
         private AddFriendsAdapter(FriendsFragment fragment) {
-            mAFriendsFragment = fragment;
+            mFriendsFragment = fragment;
         }
 
         /**
@@ -600,7 +599,7 @@ public class FriendsDialogFragment extends DialogFragment {
                 if (position == INVITE_TO_SNAPTION_POSITION)
                     sendInviteIntent();
                 else
-                    mAFriendsFragment.updateFriendsDialog(mDialogOptions[position]);
+                    mFriendsFragment.updateFriendsDialog(mDialogOptions[position]);
             });
 
 

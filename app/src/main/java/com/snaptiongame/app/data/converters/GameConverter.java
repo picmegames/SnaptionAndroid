@@ -89,7 +89,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
 
         JsonArray users = content.getAsJsonArray(Game.USERS);
         JsonObject userObject;
-        JsonObject pictureObject;
+        JsonElement pictureObject;
         List<User> gameUsers = new ArrayList<>();
         User newUser;
 
@@ -100,10 +100,12 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 newUser.id = userObject.get(User.ID).getAsInt();
                 newUser.username = userObject.get(User.USERNAME).getAsString();
                 newUser.exp = userObject.get(User.EXP).getAsInt();
-                pictureObject = userObject.getAsJsonObject(User.PICTURE);
-                newUser.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
-                newUser.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
-                newUser.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
+                pictureObject = userObject.get(User.PICTURE);
+                if (!pictureObject.isJsonNull()) {
+                    newUser.imageUrl = pictureObject.getAsJsonObject().get(User.IMAGE_URL).getAsString();
+                    newUser.imageWidth = pictureObject.getAsJsonObject().get(User.IMAGE_WIDTH).getAsInt();
+                    newUser.imageHeight = pictureObject.getAsJsonObject().get(User.IMAGE_HEIGHT).getAsInt();
+                }
                 newUser.rankId = userObject.get(User.RANK_ID).getAsInt();
                 gameUsers.add(newUser);
             }

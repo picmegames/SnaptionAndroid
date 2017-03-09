@@ -203,7 +203,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     }
 
     public void inviteFriends() {
-        mDialogFragmentDefault = new FriendsDialogFragment().newInstance(STANDARD_DIALOG, this);
+        mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG, this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
     }
 
@@ -215,10 +215,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     }
 
     public void updateFriendsDialog(FriendsDialogFragment.DialogToShow dialogToShow) {
-
         mDialogFragmentDefault.dismiss();
-        mDialogFragmentFriendSearch = new FriendsDialogFragment().newInstance(dialogToShow,
-                this);
+        mDialogFragmentFriendSearch = FriendsDialogFragment.newInstance(dialogToShow, this);
         mDialogFragmentFriendSearch.show(getActivity().getFragmentManager(), "dialog");
     }
 
