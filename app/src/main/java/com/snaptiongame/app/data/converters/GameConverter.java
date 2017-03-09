@@ -35,14 +35,18 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
         json.addProperty(Game.IMG_TYPE, src.type);
 
         JsonArray tags = new JsonArray();
-        if (src.tags != null && !src.tags.isEmpty()) {
-            src.tags.forEach(tag -> tags.add(tag.name));
+        if (src.sendTags != null && !src.sendTags.isEmpty()) {
+            for (String sendTag : src.sendTags) {
+                tags.add(sendTag);
+            }
         }
         json.add(Game.TAGS, tags);
 
         JsonArray friends = new JsonArray();
         if (src.friendIds != null && !src.friendIds.isEmpty()) {
-            src.friendIds.forEach(friends::add);
+            for (Integer friendId : src.friendIds) {
+                friends.add(friendId);
+            }
         }
         json.add(Game.FRIENDS, friends);
 

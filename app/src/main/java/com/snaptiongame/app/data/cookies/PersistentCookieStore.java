@@ -37,7 +37,7 @@ public class PersistentCookieStore implements CookieStore {
 
         // Load any previously stored cookies into the store
         Map<String, ?> prefsMap = cookiePrefs.getAll();
-        prefsMap.entrySet().forEach(entry -> {
+        for (Map.Entry<String, ?> entry : prefsMap.entrySet()) {
             if ((entry.getValue()) != null && !((String) entry.getValue()).startsWith(COOKIE_NAME_PREFIX)) {
                 String[] cookieNames = TextUtils.split((String) entry.getValue(), ",");
                 for (String name : cookieNames) {
@@ -53,7 +53,7 @@ public class PersistentCookieStore implements CookieStore {
                     }
                 }
             }
-        });
+        }
     }
 
     @Override
