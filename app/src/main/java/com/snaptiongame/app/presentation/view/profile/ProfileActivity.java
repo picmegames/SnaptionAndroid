@@ -1,6 +1,8 @@
 package com.snaptiongame.app.presentation.view.profile;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -157,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity
         mAppBar.addOnOffsetChangedListener(this);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
-        mViewPager.setAdapter(new ProfileInfoPageAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new ProfileInfoPageAdapter(getSupportFragmentManager(), mUserId));
 
         mTabLayout.setupWithViewPager(mViewPager);
         int white = ContextCompat.getColor(this, android.R.color.white);
@@ -172,21 +175,28 @@ public class ProfileActivity extends AppCompatActivity
      */
     @OnClick(R.id.fab)
     public void showEditDialog() {
-        mEditView = new EditProfileView(this, mAuthManager);
+        if (isStoragePermissionGranted()) {
+            if (mEditDialog == null) {
+                mEditView = new EditProfileView(this, mAuthManager);
 
-        mEditDialog = new MaterialDialog.Builder(this)
-                .title(getString(R.string.update_info))
-                .customView(mEditView, false)
-                .positiveText(getString(R.string.confirm))
-                .negativeText(R.string.cancel)
-                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
-                    mPresenter.updateUsername(mAuthManager.getUsername(),
-                            new User(mEditView.getNewUsername()));
-                })
-                .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
+                mEditDialog = new MaterialDialog.Builder(this)
+                        .title(getString(R.string.update_info))
+                        .customView(mEditView, false)
+                        .positiveText(getString(R.string.confirm))
+                        .negativeText(R.string.cancel)
+                        .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                                mPresenter.updateUsername(mAuthManager.getUsername(),
+                                        new User(mEditView.getNewUsername()))
+                        )
+                        .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
 
-                })
-                .show();
+                        })
+                        .show();
+            }
+            else {
+                mEditDialog.show();
+            }
+        }
     }
 
     @Override
@@ -199,6 +209,30 @@ public class ProfileActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         mPresenter.unsubscribe();
+    }
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            }
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            showEditDialog();
+        }
     }
 
     @Override

@@ -11,8 +11,14 @@ public class Friend {
     public String lastName;
     public String fullName;
     @SerializedName(USERNAME)
-    public String userName;
+    public String username;
     public String picture;
+    @SerializedName(IMAGE_URL)
+    public String imageUrl;
+    @SerializedName(IMAGE_WIDTH)
+    public int imageWidth;
+    @SerializedName(IMAGE_HEIGHT)
+    public int imageHeight;
     public String cover;
     public String email;
     public boolean isSnaptionFriend;
@@ -21,6 +27,9 @@ public class Friend {
     public static final String USERNAME = "username";
     public static final String FULL_NAME = "fullName";
     public static final String PICTURE = "picture";
+    public static final String IMAGE_URL = "url";
+    public static final String IMAGE_WIDTH = "width";
+    public static final String IMAGE_HEIGHT = "height";
     public static final String FIRST = "firstName";
     public static final String LAST = "lastName";
     public static final String COVER = "cover";
@@ -32,20 +41,20 @@ public class Friend {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof  Friend) {
+        if (o instanceof Friend) {
             Friend other = (Friend) o;
-            return (userName.equals(other.userName));
+            return (username.equals(other.username));
         }
         return false;
     }
 
-    public Friend(int id, String first, String last, String fullName, String userName, String picture,
+    public Friend(int id, String first, String last, String fullName, String username, String picture,
                   String cover, String email) {
         this.id = id;
         this.firstName = first;
         this.lastName = last;
         this.fullName = fullName;
-        this.userName = userName;
+        this.username = username;
         this.picture = picture;
         this.cover = cover;
         this.email = email;

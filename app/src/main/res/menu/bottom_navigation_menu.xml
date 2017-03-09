@@ -3,18 +3,15 @@
     <item
         android:id="@+id/my_wall"
         android:icon="@drawable/ic_face_white_24dp"
-        android:title="@string/my_wall"
-        android:visible="true"/>
+        android:title="@string/my_wall"/>
 
     <item
         android:id="@+id/discover"
         android:icon="@drawable/ic_explore_white_24dp"
-        android:title="@string/discover"
-        android:visible="true"/>
+        android:title="@string/discover"/>
 
     <item
         android:id="@+id/popular"
         android:icon="@drawable/ic_whatshot_white_24dp"
-        android:title="@string/popular"
-        android:visible="true"/>
+        android:title="@string/popular"/>
 </menu>

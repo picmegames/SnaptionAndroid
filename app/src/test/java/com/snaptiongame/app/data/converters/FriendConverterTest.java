@@ -17,7 +17,8 @@ import static junit.framework.Assert.assertEquals;
 
 public class FriendConverterTest {
     private Friend pal;
-    private JsonObject jsonObject;
+    private JsonObject jsonObjectSerialize;
+    private JsonObject jsonObjectDeserialize;
     private JSONObject inviteObject;
     FriendConverter converter;
 
@@ -26,24 +27,41 @@ public class FriendConverterTest {
         pal = new Friend(1, "Bill", "Nye", "Bill Nye", "sciencedude12", "fakeurl.com",
                 "anotherone.com", "j@j.com");
 
-        jsonObject = new JsonObject();
+        jsonObjectSerialize = new JsonObject();
+        jsonObjectDeserialize = new JsonObject();
 
-        jsonObject.addProperty(Friend.ID, pal.id);
-        jsonObject.addProperty(Friend.FIRST, pal.firstName);
-        jsonObject.addProperty(Friend.LAST, pal.lastName);
-        jsonObject.addProperty(Friend.FULL_NAME, pal.fullName);
-        jsonObject.addProperty(Friend.USERNAME, pal.userName);
-        jsonObject.addProperty(Friend.PICTURE, pal.picture);
-        jsonObject.addProperty(Friend.COVER, pal.cover);
-        jsonObject.addProperty(Friend.EMAIL, pal.email);
-        jsonObject.addProperty("isSnaptionFriend", false);
+        jsonObjectSerialize.addProperty(Friend.ID, pal.id);
+        jsonObjectSerialize.addProperty(Friend.FIRST, pal.firstName);
+        jsonObjectSerialize.addProperty(Friend.LAST, pal.lastName);
+        jsonObjectSerialize.addProperty(Friend.FULL_NAME, pal.fullName);
+        jsonObjectSerialize.addProperty(Friend.USERNAME, pal.username);
+        jsonObjectSerialize.addProperty(Friend.PICTURE, pal.picture);
+        jsonObjectSerialize.addProperty(Friend.IMAGE_WIDTH, pal.imageWidth);
+        jsonObjectSerialize.addProperty(Friend.IMAGE_HEIGHT, pal.imageHeight);
+        jsonObjectSerialize.addProperty(Friend.COVER, pal.cover);
+        jsonObjectSerialize.addProperty(Friend.EMAIL, pal.email);
+        jsonObjectSerialize.addProperty("isSnaptionFriend", false);
+
+        jsonObjectDeserialize.addProperty(Friend.ID, pal.id);
+        jsonObjectDeserialize.addProperty(Friend.FIRST, pal.firstName);
+        jsonObjectDeserialize.addProperty(Friend.LAST, pal.lastName);
+        jsonObjectDeserialize.addProperty(Friend.FULL_NAME, pal.fullName);
+        jsonObjectDeserialize.addProperty(Friend.USERNAME, pal.username);
+        JsonObject picture = new JsonObject();
+        picture.addProperty(Friend.IMAGE_URL, pal.picture);
+        picture.addProperty(Friend.IMAGE_WIDTH, pal.imageWidth);
+        picture.addProperty(Friend.IMAGE_HEIGHT, pal.imageHeight);
+        jsonObjectDeserialize.add(Friend.PICTURE, picture);
+        jsonObjectDeserialize.addProperty(Friend.COVER, pal.cover);
+        jsonObjectDeserialize.addProperty(Friend.EMAIL, pal.email);
+        jsonObjectDeserialize.addProperty("isSnaptionFriend", false);
 
         converter = new FriendConverter();
     }
 
     @Test
     public void testSerialize() {
-        assertEquals(converter.serialize(pal, Friend.class, null), jsonObject);
-        assertEquals(converter.deserialize(jsonObject, Friend.class, null), pal);
+        assertEquals(converter.serialize(pal, Friend.class, null), jsonObjectSerialize);
+        assertEquals(converter.deserialize(jsonObjectDeserialize, Friend.class, null), pal);
     }
 }

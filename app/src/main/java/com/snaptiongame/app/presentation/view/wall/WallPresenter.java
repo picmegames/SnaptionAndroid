@@ -7,6 +7,7 @@ import com.snaptiongame.app.data.providers.GameProvider;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -26,7 +27,8 @@ public class WallPresenter implements WallContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
-    private boolean mIsPublic;
+    private int mUserId;
+    private int mType;
 
     /**
      * This constructor creates a new instance of a Wall Presenter
@@ -34,11 +36,12 @@ public class WallPresenter implements WallContract.Presenter {
      *
      * @param wallView The view that it will present to
      */
-    public WallPresenter(@NonNull WallContract.View wallView, boolean isPublic) {
+    public WallPresenter(@NonNull WallContract.View wallView, int userId, int type) {
         mWallView = wallView;
         mDisposables = new CompositeDisposable();
         mWallView.setPresenter(this);
-        mIsPublic = isPublic;
+        mUserId = userId;
+        mType = type;
     }
 
     /**
@@ -47,24 +50,41 @@ public class WallPresenter implements WallContract.Presenter {
      * an IO thread and handle the result on the UI thread.
      */
     @Override
-    public void loadGames() {
-        Disposable disposable = GameProvider.getGames(mIsPublic)
+    public void loadGames(int type) {
+        mWallView.setRefreshing(true);
+
+        Observable<List<Game>> gameRequest;
+        switch (type) {
+            case WallContract.DISCOVER:
+                //gameRequest = GameProvider.getDiscoverGames();
+                gameRequest = GameProvider.getGames(false);
+                break;
+            case WallContract.POPULAR:
+                //gameRequest = GameProvider.getPopularGames();
+                gameRequest = GameProvider.getGames(false);
+                break;
+            case WallContract.HISTORY:
+                gameRequest = GameProvider.getUserGameHistory(mUserId);
+                break;
+            default:
+                gameRequest = GameProvider.getGames(true);
+                break;
+        }
+
+        Disposable disposable = gameRequest
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::processGames,
-                        Timber::e,
-                        () -> Timber.i("Getting Snaptions completed successfully")
+                        mWallView::showGames,
+                        e -> {
+                            Timber.e(e);
+                            mWallView.setRefreshing(false);
+                        },
+                        () -> {
+                            Timber.i("Getting Snaptions completed successfully");
+                            mWallView.setRefreshing(false);
+                        }
                 );
         mDisposables.add(disposable);
-    }
-
-    /**
-     * This method hands off the list to the view to be shown.
-     *
-     * @param games The list of games from the server
-     */
-    private void processGames(List<Game> games) {
-        mWallView.showGames(games);
     }
 
     /**
@@ -73,7 +93,7 @@ public class WallPresenter implements WallContract.Presenter {
      */
     @Override
     public void subscribe() {
-        loadGames();
+        loadGames(mType);
     }
 
     /**

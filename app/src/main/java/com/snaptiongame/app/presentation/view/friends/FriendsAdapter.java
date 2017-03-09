@@ -59,7 +59,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             holder.itemView.setOnClickListener(view -> {
                 Intent profileIntent = new Intent(context, ProfileActivity.class);
                 profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
-                profileIntent.putExtra(User.USERNAME, curFriend.userName);
+                profileIntent.putExtra(User.USERNAME, curFriend.username);
                 profileIntent.putExtra(User.PICTURE, curFriend.picture);
                 profileIntent.putExtra(User.ID, curFriend.id);
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
@@ -75,32 +75,32 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 if (!mSelectedIds.contains(curFriend.id)) {
                     view.setAlpha(BRIGHT);
                     mSelectedIds.add(curFriend.id);
-                    mSelectedNames.add(curFriend.userName);
+                    mSelectedNames.add(curFriend.username);
                 }
                 else {
                     view.setAlpha(DIM);
                     mSelectedIds.remove(Integer.valueOf(curFriend.id));
-                    mSelectedNames.remove(curFriend.userName);
+                    mSelectedNames.remove(curFriend.username);
                 }
             });
         }
 
         holder.mName.setText(curFriend.fullName);
-        holder.mUsernameField.setText(curFriend.userName);
-        if (curFriend.picture != null && !curFriend.picture.isEmpty()) {
+        holder.mUsernameField.setText(curFriend.username);
+        if (curFriend.imageUrl != null && !curFriend.imageUrl.isEmpty()) {
             Glide.with(holder.mContext)
-                    .load(curFriend.picture)
+                    .load(curFriend.imageUrl)
                     .into(holder.mImage);
         }
-        else if (curFriend.picture == null) {
+        else if (curFriend.imageUrl == null) {
             holder.mImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(40)
                     .height(40)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(curFriend.userName.substring(0, 1),
-                            ColorGenerator.MATERIAL.getColor(curFriend.userName)));
+                    .buildRound(curFriend.username.substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
     }
 

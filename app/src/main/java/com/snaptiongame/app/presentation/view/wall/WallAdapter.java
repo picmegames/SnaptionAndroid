@@ -1,5 +1,6 @@
 package com.snaptiongame.app.presentation.view.wall;
 
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -44,15 +45,17 @@ public class WallAdapter extends RecyclerView.Adapter {
         GameCardViewHolder holder = (GameCardViewHolder) viewHolder;
         Game curGame = mGames.get(position);
 
+        holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
+
         holder.mGameId = curGame.id;
         holder.mPickerId = curGame.pickerId;
 
-        if (curGame.picture != null) {
-            holder.mImage.layout(0, 0, 0, 0);
+        if (curGame.imageUrl != null) {
             Glide.with(holder.mContext)
-                    .load(curGame.picture)
+                    .load(curGame.imageUrl)
+                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.imageUrl)))
                     .into(holder.mImage);
-            holder.mImageUrl = curGame.picture;
+            holder.mImageUrl = curGame.imageUrl;
         }
         else {
             Glide.clear(holder.mImage);

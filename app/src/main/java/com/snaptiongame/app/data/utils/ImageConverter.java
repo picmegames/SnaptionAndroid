@@ -43,7 +43,7 @@ public class ImageConverter {
     private static final String JPEG = ".jpg";
 
     public static Observable<String> getCompressedImage(Uri uri) {
-        return Observable.defer(() ->  Observable.just(convertImageBase64(uri)));
+        return Observable.defer(() -> Observable.just(convertImageBase64(uri)));
     }
 
     private static String convertImageBase64(Uri uri) {
@@ -192,7 +192,9 @@ public class ImageConverter {
         else {
             cursor.moveToFirst();
             int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            return cursor.getString(index);
+            String path = cursor.getString(index);
+            cursor.close();
+            return path;
         }
     }
 

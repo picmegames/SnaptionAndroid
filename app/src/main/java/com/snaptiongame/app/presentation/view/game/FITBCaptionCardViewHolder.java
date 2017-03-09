@@ -22,7 +22,6 @@ public class FITBCaptionCardViewHolder extends RecyclerView.ViewHolder {
     public String mCaptionTemplate;
     public String mCurFitB;
 
-
     public FITBCaptionCardViewHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);

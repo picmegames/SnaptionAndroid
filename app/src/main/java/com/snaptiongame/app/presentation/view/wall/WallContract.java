@@ -15,17 +15,24 @@ import java.util.List;
  */
 public class WallContract {
 
+    public static final int MY_WALL = 0;
+    public static final int DISCOVER = 1;
+    public static final int POPULAR = 2;
+    public static final int HISTORY = 3;
+
     /**
      * This is a template for a view.
      */
     interface View extends BaseView<Presenter> {
         void showGames(List<Game> games);
+
+        void setRefreshing(boolean isRefreshing);
     }
 
     /**
      * This is a template for a presenter.
      */
     interface Presenter extends BasePresenter {
-        void loadGames();
+        void loadGames(int type);
     }
 }

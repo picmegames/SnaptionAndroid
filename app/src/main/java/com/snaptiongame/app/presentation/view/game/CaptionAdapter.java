@@ -20,7 +20,10 @@ import java.util.List;
  */
 
 public class CaptionAdapter extends RecyclerView.Adapter {
+
     private List<Caption> mCaptions;
+
+    private static final int AVATAR_SIZE = 40;
 
     public CaptionAdapter(List<Caption> captions) {
         this.mCaptions = captions;
@@ -47,8 +50,8 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         else {
             holder.mUserImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
-                    .width(40)
-                    .height(40)
+                    .width(AVATAR_SIZE)
+                    .height(AVATAR_SIZE)
                     .toUpperCase()
                     .endConfig()
                     .buildRound(curCaption.creatorName.substring(0, 1),
@@ -62,6 +65,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         holder.mName.setText(curCaption.creatorName);
         holder.username = curCaption.creatorName;
         holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
+        holder.setHasBeenUpvotedOrFlagged(curCaption.beenUpvoted, curCaption.beenFlagged);
     }
 
     public void setCaptions(List<Caption> captions) {

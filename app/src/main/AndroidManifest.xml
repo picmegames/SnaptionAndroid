@@ -108,6 +108,12 @@
             android:authorities="com.facebook.app.FacebookContentProvider359612531056210"
             android:exported="true"/>
 
+        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <!--<service-->
         <!--android:name=".data.services.GameUploadService"-->
         <!--android:exported="false"/>-->

@@ -7,16 +7,17 @@ import com.google.gson.GsonBuilder;
 import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
+import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.converters.AddFriendConverter;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.converters.CaptionConverter;
 import com.snaptiongame.app.data.converters.CaptionSetConverter;
 import com.snaptiongame.app.data.converters.FitBCaptionConverter;
 import com.snaptiongame.app.data.converters.FriendConverter;
+import com.snaptiongame.app.data.converters.GameConverter;
 import com.snaptiongame.app.data.converters.LikeConverter;
 import com.snaptiongame.app.data.converters.OAuthConverter;
 import com.snaptiongame.app.data.converters.SessionConverter;
-import com.snaptiongame.app.data.converters.GameConverter;
 import com.snaptiongame.app.data.converters.UserConverter;
 import com.snaptiongame.app.data.cookies.PersistentCookieStore;
 import com.snaptiongame.app.data.models.AddFriendRequest;
@@ -30,7 +31,6 @@ import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.models.User;
-import com.snaptiongame.app.data.api.SnaptionApi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +44,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -77,6 +78,7 @@ public class ApiProvider {
     private static final String CERT_TYPE = "X.509";
     private static final String CA = "ca";
     private static final String TLS = "TLS";
+    private static final long CONNECTION_TIMEOUT = 10;
 
     /**
      * This method provides and handles the creation of
@@ -110,7 +112,9 @@ public class ApiProvider {
         CookieHandler cookieHandler = new CookieManager(persistentCookieStore, CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieHandler);
         JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
-        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
+                .readTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+                .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
         try {
             SSLSocketFactory socketFactory = getSSLConfig(SnaptionApplication.getContext()).getSocketFactory();

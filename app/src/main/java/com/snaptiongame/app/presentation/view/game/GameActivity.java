@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -55,11 +54,6 @@ import timber.log.Timber;
  */
 
 public class GameActivity extends AppCompatActivity implements GameContract.View {
-    public static final String JOIN_SNAPTION = "Join Snaption!";
-    public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
-    public static final String SNAPTION_IMAGE = "http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/";
-    public static final String INVITE_CHANNEL = "GameInvite";
-    public static final String INVITE = "invite";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.fab)
@@ -94,6 +88,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private boolean isFlagged = false;
     private String mImageUrl;
 
+    public static final String JOIN_SNAPTION = "Join Snaption!";
+    public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
+    public static final String SNAPTION_IMAGE = "http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/";
+    public static final String INVITE_CHANNEL = "GameInvite";
+    public static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
 
     @Override
@@ -265,8 +264,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         mPresenter.unsubscribe();
     }
 
@@ -300,6 +299,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mPresenter = new GamePresenter(id, pickerId, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
+        mRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, R.color.colorPrimary),
+                ContextCompat.getColor(this, R.color.colorDiscover),
+                ContextCompat.getColor(this, R.color.colorPopular)
+        );
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
 
@@ -308,13 +313,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void loadInvitedGame() {
-        GameProvider.getGame(mInvite.gameId, mAuthManager.getToken()).observeOn
-                (AndroidSchedulers
-                .mainThread())
+        GameProvider.getGame(mInvite.gameId, mAuthManager.getToken())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        snaption -> {
-                            showGame(snaption.picture, snaption.id, snaption.pickerId);
-                        },
+                        snaption -> showGame(snaption.picture, snaption.id, snaption.pickerId),
                         Timber::e,
                         () -> Timber.i("Loading caption completed successfully.")
                 );

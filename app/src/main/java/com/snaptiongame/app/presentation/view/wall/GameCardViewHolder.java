@@ -19,6 +19,7 @@ import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
+import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
 
 import butterknife.BindView;
@@ -33,7 +34,7 @@ import timber.log.Timber;
 
 public class GameCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.image)
-    ImageView mImage;
+    DynamicImageView mImage;
     @BindView(R.id.top_caption)
     TextView mTopCaption;
     @BindView(R.id.picker_image)

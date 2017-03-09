@@ -42,7 +42,7 @@
     <string name="upload_complete_message">Juego creado correctamente</string>
     <string name="upload_complete_title">Carga completa</string>
     <string name="upload_message">Carga en progreso&#8230;</string>
-    <string name="upload_title">Subir nuevo juego</string>
+    <string name="upload_title">Subiendo Nuevo Juego</string>
     <string name="no_friends">No se pudo encontrar amigos</string>
 
     <string-array name="content_ratings_array">
@@ -60,4 +60,5 @@
     <string name="my_wall">Mi pared</string>
     <string name="filter">Filtrar</string>
     <string name="update">Actualizar</string>
+    <string name="nothing_here">¡Nada aquí todavía!</string>
 </resources>

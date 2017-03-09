@@ -14,7 +14,7 @@ import java.util.List;
  * Created by nickromero on 2/8/17.
  */
 
-public class CaptionSetAdapter extends RecyclerView.Adapter{
+public class CaptionSetAdapter extends RecyclerView.Adapter {
     public static final float NON_ACTIVE_SET_FADE = .25f;
     private List<CaptionSet> mSets;
     private CaptionContract.CaptionSetClickListener mCaptionSetClickListener;

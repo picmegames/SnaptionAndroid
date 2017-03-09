@@ -43,6 +43,8 @@ public class CaptionSet {
         return mCaptionsUnlocked;
     }
 
-    public String getSetName() { return captionSetTitle; }
+    public String getSetName() {
+        return captionSetTitle;
+    }
 
 }

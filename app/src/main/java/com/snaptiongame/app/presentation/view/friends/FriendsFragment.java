@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -127,6 +128,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         });
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
+        mRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getContext(), R.color.colorAccent),
+                ContextCompat.getColor(getContext(), R.color.colorPrimary),
+                ContextCompat.getColor(getContext(), R.color.colorDiscover),
+                ContextCompat.getColor(getContext(), R.color.colorPopular)
+        );
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -156,7 +163,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setMessage(getString(R.string.delete_pre) + " " + mAdapter.getFriends()
-                            .get(index).userName + " " + getString(R.string.delete_post))
+                            .get(index).username + " " + getString(R.string.delete_post))
+                            .setCancelable(false)
                             .setPositiveButton(getString(R.string.yes), dialogClickListener)
                             .setNegativeButton(getString(R.string.no), dialogClickListener).show();
                 }
@@ -179,18 +187,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.unsubscribe();
-    }
-
     //Returns a subset of friends where each friend has the query in either their name or username
     public static List<Friend> filterList(List<Friend> friends, String query) {
         if (query != null && query.length() > 0) {
             ArrayList<Friend> filtered = new ArrayList<>();
             for (Friend pal : friends) {
-                String mashedNames = pal.fullName + " " + pal.userName;
+                String mashedNames = pal.fullName + " " + pal.username;
                 if (mashedNames.toLowerCase().contains(query.toLowerCase())) {
                     filtered.add(pal);
                 }
@@ -209,7 +211,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
-        mAuthManager.disconnectGoogleApi();
+        mPresenter.unsubscribe();
     }
 
     public void updateFriendsDialog(FriendsDialogFragment.DialogToShow dialogToShow) {

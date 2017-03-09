@@ -120,6 +120,42 @@ public interface SnaptionApi {
     Observable<List<Game>> getGames(@Query("private") boolean isPrivate);
 
     /**
+     * This method sends a request to get a list of the current
+     * user's games with a GET request.
+     *
+     * @return An observable that emits a list of Game objects.
+     */
+    @GET("/Games/mine/")
+    Observable<List<Game>> getUserGames();
+
+    /**
+     * This method sends a request to get a list of the current
+     * discover games with a GET request.
+     *
+     * @return An observable that emits a list of Game objects.
+     */
+    @GET("/Games/discover/")
+    Observable<List<Game>> getDiscoverGames();
+
+    /**
+     * This method sends a request to get a list of the current
+     * popular games with a GET request.
+     *
+     * @return An observable that emits a list of Game objects.
+     */
+    @GET("/Games/popular")
+    Observable<List<Game>> getPopularGames();
+
+    /**
+     * This method sends a request to get a list of the games
+     * a user has been involved in with a GET request.
+     *
+     * @return An observable that emits a list of Game objects.
+     */
+    @GET("/UserGame/History")
+    Observable<List<Game>> getUserGameHistory(@Query("creator") int userId);
+
+    /**
      * This method sends a request to get a single game
      * with a GET request.
      *

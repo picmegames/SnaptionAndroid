@@ -1,6 +1,5 @@
 package com.snaptiongame.app.data.converters;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -33,14 +32,28 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
     @Override
     public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        JsonObject object;
         if (json.isJsonArray()) {
-            if (json.getAsJsonArray().size() > 0) {
-                return new Gson().fromJson(json.getAsJsonArray().get(0), typeOfT);
-            }
-            else {
-                return new User();
-            }
+            object = json.getAsJsonArray().get(0).getAsJsonObject();
         }
-        return new Gson().fromJson(json, typeOfT);
+        else {
+            object = json.getAsJsonObject();
+        }
+
+        User newUser = new User();
+
+        newUser.id = object.get(User.ID).getAsInt();
+        newUser.username = object.get(User.USERNAME).getAsString();
+        newUser.exp = object.get(User.EXP).getAsInt();
+
+        if (!object.get(User.PICTURE).isJsonNull()) {
+            JsonObject pictureObject = object.getAsJsonObject(User.PICTURE);
+            newUser.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
+            newUser.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
+            newUser.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
+        }
+
+        newUser.rankId = object.get(User.RANK_ID).getAsInt();
+        return newUser;
     }
 }
