@@ -1,10 +1,10 @@
 package com.snaptiongame.app.presentation.view.profile;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -76,7 +76,7 @@ public class EditProfileView extends RelativeLayout {
         mProfileImage.setOnClickListener(imageView -> {
             Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
             imagePickerIntent.setType("image/*");
-            ((Activity) mContext).startActivityForResult(imagePickerIntent, 1);
+            ((AppCompatActivity) mContext).startActivityForResult(imagePickerIntent, 1);
         });
     }
 

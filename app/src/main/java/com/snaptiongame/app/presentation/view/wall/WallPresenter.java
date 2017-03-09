@@ -51,6 +51,8 @@ public class WallPresenter implements WallContract.Presenter {
      */
     @Override
     public void loadGames(int type) {
+        mWallView.setRefreshing(true);
+
         Observable<List<Game>> gameRequest;
         switch (type) {
             case WallContract.DISCOVER:

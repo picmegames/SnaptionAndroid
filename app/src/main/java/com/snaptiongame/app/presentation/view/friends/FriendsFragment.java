@@ -164,6 +164,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setMessage(getString(R.string.delete_pre) + " " + mAdapter.getFriends()
                             .get(index).username + " " + getString(R.string.delete_post))
+                            .setCancelable(false)
                             .setPositiveButton(getString(R.string.yes), dialogClickListener)
                             .setNegativeButton(getString(R.string.no), dialogClickListener).show();
                 }

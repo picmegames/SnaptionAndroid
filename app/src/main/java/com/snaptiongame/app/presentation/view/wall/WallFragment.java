@@ -98,10 +98,16 @@ public class WallFragment extends Fragment implements WallContract.View {
                 ContextCompat.getColor(getContext(), R.color.colorPopular)
         );
 
-        mPresenter.subscribe();
-        mRefreshLayout.setRefreshing(true);
-
         return view;
+    }
+
+    /**
+     * This method is called when the fragment comes into view.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
     }
 
     /**

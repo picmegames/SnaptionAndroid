@@ -261,8 +261,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getUserId(),
-                !mPrivateSwitch.isChecked());
+        if (mUri != null) {
+            mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getUserId(),
+                    !mPrivateSwitch.isChecked());
+        }
         mProgressDialog = new MaterialDialog.Builder(this)
                 .title(R.string.upload_title)
                 .content(R.string.upload_message)
