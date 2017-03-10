@@ -16,6 +16,8 @@ script:
     ./gradlew build jacocoTestReport assembleAndroidTest --stacktrace
 notifications:
     slack:
+        rooms:
+            - capstone-snaption:uLoSExpS3w6h7MWDHQfExWth#android-build
         template:
             - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository}@%{branch} by %{author} %{result} in %{duration}"
             - ":push_parrot: :push_parrot: :push_parrot:"
