@@ -16,7 +16,6 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +28,7 @@ public class WallAdapter extends RecyclerView.Adapter {
     private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 30;
+    private static final int MILLIS = 1000;
 
     public WallAdapter(List<Game> snaptions) {
         this.mGames = snaptions;
@@ -93,7 +93,8 @@ public class WallAdapter extends RecyclerView.Adapter {
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);
 
-        if ((curGame.endDate - new Date().getTime()) <= 0) {
+        long currentTime = System.currentTimeMillis() / MILLIS;
+        if (curGame.endDate - currentTime <= 0) {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
         }
         else {
