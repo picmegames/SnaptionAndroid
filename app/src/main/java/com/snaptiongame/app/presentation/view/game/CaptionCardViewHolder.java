@@ -85,8 +85,14 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         if (isLiked) {
             mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
         }
+        else {
+            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+        }
         if (isFlagged) {
             mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+        }
+        else {
+            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
         }
     }
 

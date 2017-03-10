@@ -16,6 +16,7 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,7 +91,9 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mTopCaption.setText(holder.mContext.getString(R.string.default_caption));
         }
 
-        if (curGame.endDate != 0) {
+        holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);
+
+        if ((curGame.endDate - new Date().getTime()) <= 0) {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
         }
         else {

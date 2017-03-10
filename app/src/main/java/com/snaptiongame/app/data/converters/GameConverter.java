@@ -112,6 +112,11 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
         }
         game.users = gameUsers;
 
+        if (content.get(Game.BEEN_UPVOTED) != null && content.get(Game.BEEN_FLAGGED) != null) {
+            game.beenUpvoted = content.get(Game.BEEN_UPVOTED).getAsBoolean();
+            game.beenFlagged = content.get(Game.BEEN_FLAGGED).getAsBoolean();
+        }
+
         JsonElement topCaption = content.get(Game.TOP_CAPTION);
 
         if (topCaption != null && topCaption.isJsonObject()) {

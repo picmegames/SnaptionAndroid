@@ -44,6 +44,10 @@ public class Game {
     public List<String> sendTags;
     @SerializedName(FRIENDS)
     public List<Integer> friendIds;
+    @SerializedName(BEEN_UPVOTED)
+    public boolean beenUpvoted;
+    @SerializedName(BEEN_FLAGGED)
+    public boolean beenFlagged;
 
     public static final String ID = "id";
     public static final String USER_ID = "userId";
@@ -64,6 +68,8 @@ public class Game {
     public static final String TAGS = "tags";
     public static final String FRIENDS = "invitedUsers";
     public static final String USERS = "users";
+    public static final String BEEN_UPVOTED = "beenUpvoted";
+    public static final String BEEN_FLAGGED = "beenFlagged";
 
     public Game() {
 

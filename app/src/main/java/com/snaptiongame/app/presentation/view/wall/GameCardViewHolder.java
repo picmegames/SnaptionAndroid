@@ -67,28 +67,12 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         }
 
         mUpvoteButton.setOnClickListener(view -> {
-            if (isUpvoted) {
-                mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
-                isUpvoted = false;
-            }
-            else {
-                mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
-                isUpvoted = true;
-                Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
-            }
+            setBeenUpvoted();
             upvoteGame(mGameId, isUpvoted);
         });
 
         mFlagButton.setOnClickListener(view -> {
-            if (isFlagged) {
-                mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
-                isFlagged = false;
-            }
-            else {
-                mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
-                isFlagged = true;
-                Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
-            }
+            setBeenFlagged();
             flagGame(mGameId, isFlagged);
         });
 
@@ -127,6 +111,48 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                             mImage, mContext.getString(R.string.shared_transition));
             mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
         });
+    }
+
+    public void hasBeenUpvotedOrFlagged(boolean beenUpvoted, boolean beenFlagged) {
+        isUpvoted = beenUpvoted;
+        isFlagged = beenFlagged;
+
+        if (isUpvoted) {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+        }
+        else {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+        }
+        if (isFlagged) {
+            mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+        }
+        else {
+            mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+        }
+    }
+
+    private void setBeenUpvoted() {
+        if (isUpvoted) {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            isUpvoted = false;
+        }
+        else {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            isUpvoted = true;
+            Toast.makeText(mContext, "Upvoted!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setBeenFlagged() {
+        if (isFlagged) {
+            mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            isFlagged = false;
+        }
+        else {
+            mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+            isFlagged = true;
+            Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startCreateGame() {
