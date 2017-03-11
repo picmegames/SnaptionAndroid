@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -53,8 +52,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     Button clear;
     @BindView(R.id.refresh_layout_friends)
     SwipeRefreshLayout mRefreshLayout;
-
-    private FloatingActionButton mFab;
 
     private FriendsContract.Presenter mPresenter;
 
