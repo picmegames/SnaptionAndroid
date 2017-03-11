@@ -44,7 +44,7 @@ import static com.snaptiongame.app.presentation.view.friends.FriendsDialogFragme
  * @author Brian Gouldsberry
  */
 
-public class FriendsFragment extends Fragment implements FriendsContract.View, Serializable {
+public class FriendsFragment extends Fragment implements FriendsContract.View, Serializable, FriendsDialogInterface {
     @BindView(R.id.friend_list)
     RecyclerView mFriends;
     @BindView(R.id.query_field)
@@ -203,6 +203,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     }
 
     public void inviteFriends() {
+
         mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG, this);
         mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
     }

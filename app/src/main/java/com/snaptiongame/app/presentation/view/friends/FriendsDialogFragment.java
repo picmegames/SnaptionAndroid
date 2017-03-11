@@ -48,6 +48,9 @@ public class FriendsDialogFragment extends DialogFragment {
 
 
     private static final int INVITE_TO_SNAPTION_POSITION = 3;
+    public static final String INVITE_FRIEND_VIA = "Invite friend via";
+    public static final String INVITE_MESSAGE = "Hey there download this nifty app called Snaption :^) \n";
+    public static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.snaptiongame.app&hl=en";
 
     /**
      * A representation of what dialog to show. Enum is used for readability.
@@ -105,6 +108,8 @@ public class FriendsDialogFragment extends DialogFragment {
      */
     private int mHeaderIcon;
 
+    private FriendsDialogInterface friendsDialogInterface;
+
 
     /**
      * Reference to the search view that is shown on the second dialog. Pulled out of local scope
@@ -156,7 +161,7 @@ public class FriendsDialogFragment extends DialogFragment {
      */
     private AuthenticationManager mAuthManager;
 
-    private FriendsFragment mFriendsFragment;
+    private static FriendsDialogInterface mFriendsDialogInterface;
 
     private TextView mEmpty;
 
@@ -175,12 +180,14 @@ public class FriendsDialogFragment extends DialogFragment {
      * @param fragmentActivity  reference to calling(underlying activity)
      * @return new instance of this class
      */
-    public static FriendsDialogFragment newInstance(DialogToShow whichDialogToShow, FriendsFragment fragmentActivity) {
+    public static FriendsDialogFragment newInstance(DialogToShow whichDialogToShow, FriendsDialogInterface fragmentActivity) {
         FriendsDialogFragment newFragment = new FriendsDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable("whichDialog", whichDialogToShow);
-        args.putSerializable("fragment", fragmentActivity);
+        //args.putSerializable("fragment", fragmentActivity);
+        mFriendsDialogInterface = fragmentActivity;
+
         newFragment.setArguments(args);
 
         return newFragment;
@@ -198,7 +205,7 @@ public class FriendsDialogFragment extends DialogFragment {
         mAuthManager = AuthenticationManager.getInstance();
 
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
-        mFriendsFragment = (FriendsFragment) getArguments().getSerializable("fragment");
+        mFriendsDialogInterface = (FriendsFragment) getArguments().getSerializable("fragment");
 
         sNegativeButtonText = BACK;
         sPositiveButtonText = INVITE_FRIEND_SHORT;
@@ -274,7 +281,7 @@ public class FriendsDialogFragment extends DialogFragment {
         if (mWhichDialog == DialogToShow.STANDARD_DIALOG) {
             ListView friendList = (ListView) inflater.inflate(R.layout.custom_friend_dialog, null);
             mDialogBuilder.setView(friendList);
-            friendList.setAdapter(new AddFriendsAdapter(mFriendsFragment));
+            friendList.setAdapter(new AddFriendsAdapter(mFriendsDialogInterface));
         }
         /**
          * Change the following for your own screen on the invite dialog
@@ -394,7 +401,7 @@ public class FriendsDialogFragment extends DialogFragment {
             else if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
                 addFriend(sUserID);
         }).setNegativeButton(sNegativeButtonText, (dialogInterface, i)
-                -> mFriendsFragment.negativeButtonClicked(mWhichDialog));
+                -> mFriendsDialogInterface.negativeButtonClicked(mWhichDialog));
 
 
         return mDialogBuilder.create();
@@ -402,15 +409,15 @@ public class FriendsDialogFragment extends DialogFragment {
     }
 
     private void sendInviteIntent() {
-        String title = "Invite friend via";
-        String smsBody = "Hey there download this nifty app called Game :^) \n" +
-                "https://goo.gl/FWrtSX";
+        String title = INVITE_FRIEND_VIA;
+        String smsBody = INVITE_MESSAGE +
+                PLAY_STORE_LINK;
 
         Intent inviteIntent = new Intent(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
         inviteIntent.setType("text/plain");
 
-        Intent chooser = Intent.createChooser(inviteIntent, title);
+        Intent chooser = Intent.createChooser(inviteIntent, INVITE_FRIEND_VIA);
         startActivity(chooser);
     }
 
@@ -485,7 +492,7 @@ public class FriendsDialogFragment extends DialogFragment {
     private void loadFacebookFriends() {
         FriendProvider.getFacebookFriends()
                 .filter(friends -> {
-                    friends.removeAll(mFriendsFragment.getFriends());
+                    friends.removeAll(mFriendsDialogInterface.getFriends());
                     return true;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -525,13 +532,13 @@ public class FriendsDialogFragment extends DialogFragment {
                 R.drawable.ic_email,
                 R.drawable.snaption_icon};
 
-        private final FriendsFragment mFriendsFragment;
-
+       private FriendsDialogInterface mFriendsDialogInterface;
         /**
          * Empty constructor.
          */
-        private AddFriendsAdapter(FriendsFragment fragment) {
-            mFriendsFragment = fragment;
+        private AddFriendsAdapter(FriendsDialogInterface friendsDialogInterface) {
+            mFriendsDialogInterface = friendsDialogInterface;
+
         }
 
         /**
@@ -599,7 +606,7 @@ public class FriendsDialogFragment extends DialogFragment {
                 if (position == INVITE_TO_SNAPTION_POSITION)
                     sendInviteIntent();
                 else
-                    mFriendsFragment.updateFriendsDialog(mDialogOptions[position]);
+                    mFriendsDialogInterface.updateFriendsDialog(mDialogOptions[position]);
             });
 
 
