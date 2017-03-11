@@ -83,25 +83,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         mAuthManager = AuthenticationManager.getInstance();
         mPresenter = new FriendsPresenter(this, mAuthManager.getUserId());
 
-        mFab = ButterKnife.findById(getActivity(), R.id.fab);
-
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(friends);
         mFriends.setAdapter(mAdapter);
-
-        mFriends.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    mFab.hide();
-                }
-                else if (dy < 0) {
-                    mFab.show();
-                }
-            }
-        });
 
         mQuery.addTextChangedListener(new TextWatcher() {
             @Override
