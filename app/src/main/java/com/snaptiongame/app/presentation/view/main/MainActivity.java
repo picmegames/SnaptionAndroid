@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -119,18 +120,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
             mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
-            fragTag = WallFragment.TAG;
             mActionBar.setTitle(R.string.discover);
             setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
         }
         else {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
-            fragTag = WallFragment.TAG;
             mActionBar.setTitle(R.string.my_wall);
             setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
         }
 
+        resetFabPosition(true);
+        fragTag = WallFragment.TAG;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, mCurrentFragment).commit();
         mNavigationView.getMenu().getItem(0).setChecked(true);
@@ -236,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.closeDrawers();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
         switch (item.getItemId()) {
             case R.id.wall:
@@ -243,19 +245,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 resetFabPosition(true);
 
             case R.id.my_wall:
-                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
-                fragTag = WallFragment.TAG;
-                mActionBar.setTitle(R.string.my_wall);
-                mBottomNavigationView.getMenu().getItem(0).setChecked(true);
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
-                break;
+                if (mAuthManager.isLoggedIn()) {
+                    mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
+                    fragTag = WallFragment.TAG;
+                    mActionBar.setTitle(R.string.my_wall);
+                    mBottomNavigationView.getMenu().getItem(0).setChecked(true);
+                    setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+                    break;
+                }
 
             case R.id.discover:
                 mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.discover);
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
                 break;
 
@@ -263,7 +265,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.POPULAR);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.popular);
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 setAppStatusBarColors(R.color.colorPopular, R.color.colorPopularDark);
                 break;
 
@@ -306,15 +307,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void resetFabPosition(boolean isWall) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFab.getLayoutParams();
+        CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+        FABScrollBehavior fabScrollBehavior = new FABScrollBehavior(this, null, isWall);
+        mFab.show();
 
         if (isWall) {
             bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
                     getResources().getDisplayMetrics());
+            coordinatorParams.setBehavior(fabScrollBehavior);
             layoutParams.setMargins(0, 0, rightMargin, bottomMargin);
         }
         else {
             bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_MARGIN,
                     getResources().getDisplayMetrics());
+            coordinatorParams.setBehavior(fabScrollBehavior);
             layoutParams.setMargins(0, 0, rightMargin, bottomMargin);
         }
     }

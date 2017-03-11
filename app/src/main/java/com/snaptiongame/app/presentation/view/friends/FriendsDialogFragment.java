@@ -437,7 +437,7 @@ public class FriendsDialogFragment extends DialogFragment {
             Friend tmpFriend = new Friend();
             List<Friend> friendList = new ArrayList<>();
             tmpFriend.username = user.username;
-            tmpFriend.picture = user.imageUrl;
+            tmpFriend.imageUrl = user.imageUrl;
             tmpFriend.email = search.getText().toString();
 
             sUserID = user.id;

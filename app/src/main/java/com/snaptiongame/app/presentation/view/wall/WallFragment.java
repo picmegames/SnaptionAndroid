@@ -98,6 +98,12 @@ public class WallFragment extends Fragment implements WallContract.View {
                 ContextCompat.getColor(getContext(), R.color.colorPopular)
         );
 
+        // Need to subscribe if on Discover tab because onResume will
+        // not subscribe if we are on Discover tab
+        if (mType == WallContract.DISCOVER) {
+            mPresenter.subscribe();
+        }
+
         return view;
     }
 
@@ -107,7 +113,11 @@ public class WallFragment extends Fragment implements WallContract.View {
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.subscribe();
+
+        // Do not refresh wall in onResume if on Discover tab
+        if (mType != WallContract.DISCOVER) {
+            mPresenter.subscribe();
+        }
     }
 
     /**

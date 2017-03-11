@@ -36,7 +36,6 @@
             app:fabSize="normal"
             app:layout_anchor="@id/frame"
             app:layout_anchorGravity="bottom|end"
-            app:layout_behavior="@string/fab_behavior"
             app:rippleColor="@color/colorAccent"/>
 
         <android.support.design.widget.BottomNavigationView

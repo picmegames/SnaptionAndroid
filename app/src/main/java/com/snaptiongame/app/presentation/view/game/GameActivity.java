@@ -111,7 +111,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mInvite = BranchConverter.deserializeGameInvite(referringParams);
                 //IF branch returns a null or invalid invite then display the intent information
                 if (mInvite == null || mInvite.gameId == 0) {
-                    showGame(intent.getStringExtra(Game.PICTURE), intent.getIntExtra(Game.ID, 0),
+                    showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
                             intent.getIntExtra(Game.PICKER_ID, 0));
                 }
                 //ELSE display information from the game invite
@@ -316,7 +316,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         GameProvider.getGame(mInvite.gameId, mAuthManager.getToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        snaption -> showGame(snaption.picture, snaption.id, snaption.pickerId),
+                        snaption -> showGame(snaption.imageUrl, snaption.id, snaption.pickerId),
                         Timber::e,
                         () -> Timber.i("Loading caption completed successfully.")
                 );

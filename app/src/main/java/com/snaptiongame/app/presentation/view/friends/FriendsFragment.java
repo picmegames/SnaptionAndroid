@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -55,8 +54,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     @BindView(R.id.refresh_layout_friends)
     SwipeRefreshLayout mRefreshLayout;
 
-    private FloatingActionButton mFab;
-
     private FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
@@ -84,25 +81,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         mAuthManager = AuthenticationManager.getInstance();
         mPresenter = new FriendsPresenter(this, mAuthManager.getUserId());
 
-        mFab = ButterKnife.findById(getActivity(), R.id.fab);
-
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(friends);
         mFriends.setAdapter(mAdapter);
-
-        mFriends.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    mFab.hide();
-                }
-                else if (dy < 0) {
-                    mFab.show();
-                }
-            }
-        });
 
         mQuery.addTextChangedListener(new TextWatcher() {
             @Override
