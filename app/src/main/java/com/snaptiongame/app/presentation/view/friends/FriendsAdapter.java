@@ -60,7 +60,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 Intent profileIntent = new Intent(context, ProfileActivity.class);
                 profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
                 profileIntent.putExtra(User.USERNAME, curFriend.username);
-                profileIntent.putExtra(User.PICTURE, curFriend.picture);
+                profileIntent.putExtra(User.PICTURE, curFriend.imageUrl);
                 profileIntent.putExtra(User.ID, curFriend.id);
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation((AppCompatActivity) context, holder.mImage,

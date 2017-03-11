@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.closeDrawers();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
         switch (item.getItemId()) {
             case R.id.wall:
@@ -247,7 +248,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.my_wall);
                 mBottomNavigationView.getMenu().getItem(0).setChecked(true);
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 break;
 
@@ -255,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.discover);
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
                 break;
 
@@ -263,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.POPULAR);
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.popular);
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 setAppStatusBarColors(R.color.colorPopular, R.color.colorPopularDark);
                 break;
 
