@@ -149,4 +149,6 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+
 }

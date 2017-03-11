@@ -1,7 +1,8 @@
 package com.snaptiongame.app.presentation.view.friends;
 
-import android.app.DialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -44,7 +45,7 @@ import static com.snaptiongame.app.presentation.view.friends.FriendsDialogFragme
  * @author Brian Gouldsberry
  */
 
-public class FriendsFragment extends Fragment implements FriendsContract.View, Serializable, FriendsDialogInterface {
+public class FriendsFragment extends Fragment implements FriendsContract.View, FriendsDialogInterface {
     @BindView(R.id.friend_list)
     RecyclerView mFriends;
     @BindView(R.id.query_field)
@@ -205,7 +206,9 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     public void inviteFriends() {
 
         mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG, this);
-        mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
+        mDialogFragmentDefault.setTargetFragment(this, 1);
+        mDialogFragmentDefault.show(getFragmentManager(), "dialog");
+        ((FriendsDialogFragment) mDialogFragmentDefault).setDialogInterface(this, STANDARD_DIALOG);
     }
 
     @Override
@@ -218,7 +221,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
     public void updateFriendsDialog(FriendsDialogFragment.DialogToShow dialogToShow) {
         mDialogFragmentDefault.dismiss();
         mDialogFragmentFriendSearch = FriendsDialogFragment.newInstance(dialogToShow, this);
-        mDialogFragmentFriendSearch.show(getActivity().getFragmentManager(), "dialog");
+        mDialogFragmentFriendSearch.setTargetFragment(this, 1);
+        ((FriendsDialogFragment) mDialogFragmentDefault).setDialogInterface(this, dialogToShow);
+        mDialogFragmentFriendSearch.show(getFragmentManager().beginTransaction(), "dialog");
+
+
+
     }
 
     /**
@@ -237,7 +245,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         }
         else {
             mDialogFragmentFriendSearch.dismiss();
-            mDialogFragmentDefault.show(getActivity().getFragmentManager(), "dialog");
+            mDialogFragmentDefault.setTargetFragment(this, 1);
+            mDialogFragmentDefault.show(getFragmentManager().beginTransaction(), "dialog");
 
         }
     }
@@ -267,5 +276,13 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, S
         mPresenter = presenter;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case 1:
+                negativeButtonClicked((FriendsDialogFragment.DialogToShow) data.getSerializableExtra("which"));
+                break;
+        }
+    }
 
 }

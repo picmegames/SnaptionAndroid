@@ -2,13 +2,14 @@ package com.snaptiongame.app.presentation.view.friends;
 
 import com.snaptiongame.app.data.models.Friend;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by nickromero on 3/10/17.
  */
 
-public interface FriendsDialogInterface {
+public interface FriendsDialogInterface extends Serializable {
 
      void negativeButtonClicked(FriendsDialogFragment.DialogToShow whichDialog);
 
