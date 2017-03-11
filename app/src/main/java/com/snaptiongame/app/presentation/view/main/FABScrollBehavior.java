@@ -46,13 +46,20 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
         super();
     }
 
-    public FABScrollBehavior(Context context, AttributeSet attrs) {
+    public FABScrollBehavior(Context context, AttributeSet attrs, boolean isWall) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, attrsArray);
         mTabLayoutId = a.getResourceId(0, View.NO_ID);
         a.recycle();
-        bottomBarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN + BOTTOM_BAR_HEIGHT,
-                context.getResources().getDisplayMetrics());
+
+        if (isWall) {
+            bottomBarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN + BOTTOM_BAR_HEIGHT,
+                    context.getResources().getDisplayMetrics());
+        }
+        else {
+            bottomBarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
+                    context.getResources().getDisplayMetrics());
+        }
     }
 
     public static <V extends View> FABScrollBehavior<V> from(@NonNull V view) {

@@ -56,18 +56,16 @@ public class WallPresenter implements WallContract.Presenter {
         Observable<List<Game>> gameRequest;
         switch (type) {
             case WallContract.DISCOVER:
-                //gameRequest = GameProvider.getDiscoverGames();
-                gameRequest = GameProvider.getGames(false);
+                gameRequest = GameProvider.getDiscoverGames();
                 break;
             case WallContract.POPULAR:
-                //gameRequest = GameProvider.getPopularGames();
-                gameRequest = GameProvider.getGames(false);
+                gameRequest = GameProvider.getPopularGames();
                 break;
             case WallContract.HISTORY:
                 gameRequest = GameProvider.getUserGameHistory(mUserId);
                 break;
             default:
-                gameRequest = GameProvider.getGames(true);
+                gameRequest = GameProvider.getUserGames();
                 break;
         }
 
