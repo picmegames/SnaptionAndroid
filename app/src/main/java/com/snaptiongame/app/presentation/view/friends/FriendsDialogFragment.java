@@ -51,9 +51,10 @@ public class FriendsDialogFragment extends DialogFragment {
 
     private static final int INVITE_TO_SNAPTION_POSITION = 3;
     public static final String INVITE_FRIEND_VIA = "Invite friend via";
-    public static final String INVITE_MESSAGE = "Hey there download this nifty app called Snaption :^) \n";
+    public static final String INVITE_MESSAGE = "Hey there download this nifty app called Snaption!\n";
     public static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.snaptiongame.app&hl=en";
     private AddFriendsAdapter mAddFriendsAdapter;
+
 
     /**
      * A representation of what dialog to show. Enum is used for readability.
@@ -91,11 +92,6 @@ public class FriendsDialogFragment extends DialogFragment {
     private List<Friend> mFacebookFriends = new ArrayList<>();
 
     /**
-     * List of snaption friends
-     */
-    private List<Friend> mSnaptionFriends;
-
-    /**
      * Builder object used to create and show a dialog to a user
      */
     private AlertDialog.Builder mDialogBuilder;
@@ -124,7 +120,9 @@ public class FriendsDialogFragment extends DialogFragment {
     private String sNegativeButtonText;
     private String sPositiveButtonText;
 
-    private final int NEGATIVE_BUTTON_RESULT_CODE = -1;
+    private final int NEGATIVE_BUTTON_RESULT_CODE = 1;
+    private int INVITE_OPTION_SELECT_CODE = 2;
+
     private final String CANCEL = "Cancel";
     private final String BACK = "Back";
     private final String ADD_FRIEND_TITLE = "Add A Friend!";
@@ -171,14 +169,15 @@ public class FriendsDialogFragment extends DialogFragment {
     /**
      * Empty constructor for the dialog. Expected from a DialogFragment
      */
-    public FriendsDialogFragment() {}
+    public FriendsDialogFragment() {
+    }
 
 
     /**
      * User to instantiate a new instance of the FriendsDialogFragment class
      *
      * @param whichDialogToShow the type of dialog to display to the user
-     * @param friendsFragment  reference to calling(underlying activity)
+     * @param friendsFragment   reference to calling(underlying activity)
      * @return new instance of this class
      */
     public static FriendsDialogFragment newInstance(DialogToShow whichDialogToShow, FriendsDialogInterface friendsFragment) {
@@ -186,8 +185,6 @@ public class FriendsDialogFragment extends DialogFragment {
 
         Bundle args = new Bundle();
         args.putSerializable("whichDialog", whichDialogToShow);
-        ///args.putSerializable("fragment", fragmentActivity);
-        //mFriendsDialogInterface = friendsFragment;
 
         newFragment.setArguments(args);
 
@@ -317,8 +314,7 @@ public class FriendsDialogFragment extends DialogFragment {
                 });
 
 
-            }
-            else if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
+            } else if (mWhichDialog == DialogToShow.FACEBOOK_INVITE) {
 
                 search.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -379,6 +375,7 @@ public class FriendsDialogFragment extends DialogFragment {
 
             Intent data = new Intent();
             data.putExtra("which", mWhichDialog);
+
             getTargetFragment().onActivityResult(0, NEGATIVE_BUTTON_RESULT_CODE, data);
 
         });
@@ -389,9 +386,10 @@ public class FriendsDialogFragment extends DialogFragment {
 
     public void setDialogInterface(FriendsDialogInterface friendsDialogInterface, DialogToShow whichDialog) {
         mFriendsDialogInterface = friendsDialogInterface;
-        mAddFriendsAdapter = new AddFriendsAdapter(mFriendsDialogInterface);
+        mAddFriendsAdapter = new AddFriendsAdapter();
+        if (whichDialog == DialogToShow.FACEBOOK_INVITE)
+            loadFacebookFriends();
     }
-
 
 
     private void sendInviteIntent() {
@@ -455,7 +453,6 @@ public class FriendsDialogFragment extends DialogFragment {
             mAdapter.notifyDataSetChanged();
             mEmpty.setVisibility(View.VISIBLE);
         }
-
     }
 
     /**
@@ -479,7 +476,7 @@ public class FriendsDialogFragment extends DialogFragment {
     private void loadFacebookFriends() {
         FriendProvider.getFacebookFriends()
                 .filter(friends -> {
-                    //This will break
+                    //This will break NOT ANYMORE
                     friends.removeAll(mFriendsDialogInterface.getFriends());
                     return true;
                 })
@@ -491,8 +488,7 @@ public class FriendsDialogFragment extends DialogFragment {
                             mAdapter.notifyDataSetChanged();
                             if (friends.size() > 0) {
                                 mEmpty.setVisibility(View.GONE);
-                            }
-                            else {
+                            } else {
                                 mEmpty.setVisibility(View.VISIBLE);
                             }
                         },
@@ -521,18 +517,11 @@ public class FriendsDialogFragment extends DialogFragment {
                 R.drawable.ic_email,
                 R.drawable.snaption_icon};
 
-       private FriendsDialogInterface mAdapterFriendsDialogInterface;
+
         /**
          * Empty constructor.
          */
-        private AddFriendsAdapter(FriendsDialogInterface friendsDialogInterface) {
-            mAdapterFriendsDialogInterface = friendsDialogInterface;
-
-        }
-
-        AddFriendsAdapter() {
-
-        }
+        private AddFriendsAdapter(){};
 
 
         /**
@@ -599,8 +588,11 @@ public class FriendsDialogFragment extends DialogFragment {
             view.setOnClickListener(view1 -> {
                 if (position == INVITE_TO_SNAPTION_POSITION)
                     sendInviteIntent();
-                else
-                    mFriendsDialogInterface.updateFriendsDialog(mDialogOptions[position]);
+                else {
+                    Intent data = new Intent();
+                    data.putExtra("which", mDialogOptions[position]);
+                    getTargetFragment().onActivityResult(0, INVITE_OPTION_SELECT_CODE, data);
+                }
             });
 
             return view;

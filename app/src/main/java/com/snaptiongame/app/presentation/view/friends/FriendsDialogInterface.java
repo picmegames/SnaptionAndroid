@@ -9,7 +9,7 @@ import java.util.List;
  * Created by nickromero on 3/10/17.
  */
 
-public interface FriendsDialogInterface extends Serializable {
+public interface FriendsDialogInterface {
 
      void negativeButtonClicked(FriendsDialogFragment.DialogToShow whichDialog);
 

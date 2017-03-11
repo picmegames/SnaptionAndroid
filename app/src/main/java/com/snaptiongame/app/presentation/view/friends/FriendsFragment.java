@@ -204,7 +204,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     }
 
     public void inviteFriends() {
-
         mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG, this);
         mDialogFragmentDefault.setTargetFragment(this, 1);
         mDialogFragmentDefault.show(getFragmentManager(), "dialog");
@@ -222,11 +221,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         mDialogFragmentDefault.dismiss();
         mDialogFragmentFriendSearch = FriendsDialogFragment.newInstance(dialogToShow, this);
         mDialogFragmentFriendSearch.setTargetFragment(this, 1);
-        ((FriendsDialogFragment) mDialogFragmentDefault).setDialogInterface(this, dialogToShow);
         mDialogFragmentFriendSearch.show(getFragmentManager().beginTransaction(), "dialog");
-
-
-
+        ((FriendsDialogFragment) mDialogFragmentFriendSearch).setDialogInterface(this, dialogToShow);
     }
 
     /**
@@ -245,9 +241,9 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         }
         else {
             mDialogFragmentFriendSearch.dismiss();
+            mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG, this);
             mDialogFragmentDefault.setTargetFragment(this, 1);
             mDialogFragmentDefault.show(getFragmentManager().beginTransaction(), "dialog");
-
         }
     }
 
@@ -278,11 +274,15 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        FriendsDialogFragment.DialogToShow toShow = (FriendsDialogFragment.DialogToShow) data.getSerializableExtra("which");
         switch (resultCode) {
             case 1:
-                negativeButtonClicked((FriendsDialogFragment.DialogToShow) data.getSerializableExtra("which"));
+                negativeButtonClicked(toShow);
+                break;
+            case 2:
+                updateFriendsDialog(toShow);
                 break;
         }
     }
-
 }
