@@ -100,9 +100,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mPresenter = new CreateGamePresenter(mAuthManager.getUserId(), this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra(Game.PICTURE)) {
+        if (intent.hasExtra(Game.IMAGE_URL)) {
             Glide.with(this)
-                    .load(intent.getStringExtra(Game.PICTURE))
+                    .load(intent.getStringExtra(Game.IMAGE_URL))
                     .fitCenter()
                     .into(mNewGameImage);
             mCreateGameButton.setEnabled(true);
