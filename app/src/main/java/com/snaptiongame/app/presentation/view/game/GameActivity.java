@@ -328,7 +328,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         Glide.with(this)
                 .load(image)
-                .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(image)))
                 .fitCenter()
                 .into(mImage);
         mGameId = id;
