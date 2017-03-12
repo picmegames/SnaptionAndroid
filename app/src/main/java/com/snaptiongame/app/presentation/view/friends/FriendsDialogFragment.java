@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +34,6 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
-import static android.R.attr.data;
 import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
 
 /**
@@ -177,10 +175,9 @@ public class FriendsDialogFragment extends DialogFragment {
      * User to instantiate a new instance of the FriendsDialogFragment class
      *
      * @param whichDialogToShow the type of dialog to display to the user
-     * @param friendsFragment   reference to calling(underlying activity)
      * @return new instance of this class
      */
-    public static FriendsDialogFragment newInstance(DialogToShow whichDialogToShow, FriendsDialogInterface friendsFragment) {
+    public static FriendsDialogFragment newInstance(DialogToShow whichDialogToShow) {
         FriendsDialogFragment newFragment = new FriendsDialogFragment();
 
         Bundle args = new Bundle();
@@ -203,7 +200,6 @@ public class FriendsDialogFragment extends DialogFragment {
         mAuthManager = AuthenticationManager.getInstance();
 
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
-        //mFriendsDialogInterface = ((FriendsDialogInterface) getParentFragment());
 
         sNegativeButtonText = BACK;
         sPositiveButtonText = INVITE_FRIEND_SHORT;
@@ -282,7 +278,6 @@ public class FriendsDialogFragment extends DialogFragment {
             mDialogBuilder.setView(mFriendList);
             mAddFriendsAdapter = new AddFriendsAdapter();
             mFriendList.setAdapter(mAddFriendsAdapter);
-            //friendList.setAdapter(new AddFriendsAdapter(mFriendsDialogInterface));
         }
         /**
          * Change the following for your own screen on the invite dialog

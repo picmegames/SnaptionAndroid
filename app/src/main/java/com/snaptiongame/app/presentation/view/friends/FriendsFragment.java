@@ -65,8 +65,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
     private AuthenticationManager mAuthManager;
     private Unbinder mUnbinder;
-    private DialogFragment mDialogFragmentDefault;
-    private DialogFragment mDialogFragmentFriendSearch;
+    private FriendsDialogFragment mDialogFragmentDefault;
+    private FriendsDialogFragment mDialogFragmentFriendSearch;
 
     public static final String TAG = FriendsFragment.class.getSimpleName();
 
@@ -204,10 +204,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     }
 
     public void inviteFriends() {
-        mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG, this);
+        mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG);
         mDialogFragmentDefault.setTargetFragment(this, 1);
         mDialogFragmentDefault.show(getFragmentManager(), "dialog");
-        ((FriendsDialogFragment) mDialogFragmentDefault).setDialogInterface(this, STANDARD_DIALOG);
+        mDialogFragmentDefault.setDialogInterface(this, STANDARD_DIALOG);
     }
 
     @Override
@@ -219,10 +219,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
     public void updateFriendsDialog(FriendsDialogFragment.DialogToShow dialogToShow) {
         mDialogFragmentDefault.dismiss();
-        mDialogFragmentFriendSearch = FriendsDialogFragment.newInstance(dialogToShow, this);
+        mDialogFragmentFriendSearch = FriendsDialogFragment.newInstance(dialogToShow);
         mDialogFragmentFriendSearch.setTargetFragment(this, 1);
         mDialogFragmentFriendSearch.show(getFragmentManager().beginTransaction(), "dialog");
-        ((FriendsDialogFragment) mDialogFragmentFriendSearch).setDialogInterface(this, dialogToShow);
+        mDialogFragmentFriendSearch.setDialogInterface(this, dialogToShow);
     }
 
     /**
@@ -241,7 +241,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         }
         else {
             mDialogFragmentFriendSearch.dismiss();
-            mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG, this);
+            mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG);
             mDialogFragmentDefault.setTargetFragment(this, 1);
             mDialogFragmentDefault.show(getFragmentManager().beginTransaction(), "dialog");
         }
