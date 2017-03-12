@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -78,14 +79,49 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private GameContract.Presenter mPresenter;
     private CaptionSelectDialogFragment mCaptionDialogFragment;
     private CaptionSelectDialogFragment mCaptionSetDialogFragment;
+
+    /**
+     * Member variable to reference the game owner's image
+     */
     private String mPickerImageUrl;
+
+    /**
+     * Member variable to reference the game owner's name
+     */
     private String mPicker;
+
+    /**
+     * Member variable to reference the game's id so that additional game information like
+     * comments can be accessed
+     */
     private int mGameId;
+
+    /**
+     * Member variable to reference the game owner's id so that additional user information can
+     * be accessed
+     */
     private int mPickerId;
+
+    /**
+     * Member variable to represent an invite to a game. If the user came from a branch link then
+     * the invite will contain a valid gameId and token to access the game. If not then it will
+     * be invalid data and use data from the intent to show the game
+     */
     private GameInvite mInvite;
 
+    /**
+     * Reference to whether the game has been upvoted or not, false by default
+     */
     private boolean isUpvoted = false;
+
+    /**
+     * Reference to whether the game has been flagged or not, false by default
+     */
     private boolean isFlagged = false;
+
+    /**
+     * Member variable that contains the image's url to be loaded by glide
+     */
     private String mImageUrl;
 
     public static final String JOIN_SNAPTION = "Join Snaption!";
@@ -106,7 +142,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
-            //CALLED when the async initSession returns, won't error if no branch data is founds
+            //CALLED when the async initSession returns, won't error if no branch data is found
             if (error == null) {
                 mInvite = BranchConverter.deserializeGameInvite(referringParams);
                 //IF branch returns a null or invalid invite then display the intent information
@@ -292,6 +328,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         Glide.with(this)
                 .load(image)
+                .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(image)))
                 .fitCenter()
                 .into(mImage);
         mGameId = id;
@@ -372,13 +409,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
                 .setTitle(JOIN_SNAPTION)
                 .setContentDescription(SNAPTION_DESCRIPTION)
-                .setContentImageUrl(SNAPTION_IMAGE)
+                .setContentImageUrl(mImageUrl)
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
                 .addContentMetadata(GameInvite.INVITE_TOKEN, inviteToken)
                 .addContentMetadata(GameInvite.GAME_ID, Integer.toString(mGameId));
+
         LinkProperties linkProperties = new LinkProperties()
                 .setChannel(INVITE_CHANNEL)
                 .setFeature(INVITE);
+
         branchUniversalObject.generateShortUrl(this, linkProperties, (String url, BranchError error) -> {
             if (error == null) {
                 Timber.i("got my Branch link to share: " + url);
