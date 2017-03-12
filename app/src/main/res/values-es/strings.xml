@@ -61,4 +61,6 @@
     <string name="filter">Filtrar</string>
     <string name="update">Actualizar</string>
     <string name="nothing_here">¡Nada aquí todavía!</string>
+    <string name="experience">Experiencia:</string>
+    <string name="rank">Rango:</string>
 </resources>
