@@ -3,6 +3,7 @@ package com.snaptiongame.app.presentation.view.profile;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -272,6 +273,7 @@ public class ProfileActivity extends AppCompatActivity
 
             Glide.with(this)
                     .load(mPicture)
+                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(mPicture)))
                     .bitmapTransform(
                             new CenterCrop(this),
                             new BlurTransformation(this, BLUR_RADIUS),
