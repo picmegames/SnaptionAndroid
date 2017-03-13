@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.friends:
                 mCurrentFragment = FriendsFragment.getInstance();
                 fragTag = FriendsFragment.TAG;
+                mActionBar.setTitle(R.string.friends_label);
                 mBottomNavigationView.setVisibility(View.GONE);
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);

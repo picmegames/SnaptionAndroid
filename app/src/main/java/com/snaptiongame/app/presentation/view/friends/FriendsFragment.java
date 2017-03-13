@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.friends;
 
-import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -28,7 +25,6 @@ import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.FriendProvider;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,16 +156,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.friends_label);
-        }
-    }
-
     //Returns a subset of friends where each friend has the query in either their name or username
     public static List<Friend> filterList(List<Friend> friends, String query) {
         if (query != null && query.length() > 0) {
@@ -203,7 +189,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         mDialogFragmentDefault.dismiss();
         mDialogFragmentFriendSearch = FriendsDialogFragment.newInstance(dialogToShow);
         mDialogFragmentFriendSearch.setTargetFragment(this, 1);
-        mDialogFragmentFriendSearch.show(getFragmentManager().beginTransaction(), "dialog");
+        mDialogFragmentFriendSearch.show(getFragmentManager(), "dialog");
         mDialogFragmentFriendSearch.setDialogInterface(this, dialogToShow);
     }
 
@@ -215,7 +201,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
      * @param whichDialog holder for the type of dialog currently being shown
      */
     public void negativeButtonClicked(FriendsDialogFragment.DialogToShow whichDialog) {
-
         if (whichDialog == STANDARD_DIALOG) {
             mDialogFragmentDefault.dismiss();
             if (mDialogFragmentFriendSearch != null)
@@ -225,7 +210,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
             mDialogFragmentFriendSearch.dismiss();
             mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG);
             mDialogFragmentDefault.setTargetFragment(this, 1);
-            mDialogFragmentDefault.show(getFragmentManager().beginTransaction(), "dialog");
+            mDialogFragmentDefault.show(getFragmentManager(), "dialog");
         }
     }
 
@@ -256,7 +241,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         FriendsDialogFragment.DialogToShow toShow = (FriendsDialogFragment.DialogToShow) data.getSerializableExtra("which");
         switch (resultCode) {
             case 1:
