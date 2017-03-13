@@ -35,7 +35,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.caption)
     TextView mCaption;
     @BindView(R.id.like)
-    ImageView mLike;
+    ImageView mUpvote;
     @BindView(R.id.flag)
     ImageView mFlag;
     @BindView(R.id.number_of_likes)
@@ -55,7 +55,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         this.mContext = itemView.getContext();
         ButterKnife.bind(this, itemView);
 
-        mLike.setOnClickListener(view -> {
+        mUpvote.setOnClickListener(view -> {
             setBeenUpvoted();
             upvoteCaption(captionId, isLiked);
         });
@@ -83,11 +83,12 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         isFlagged = beenFlagged;
 
         if (isLiked) {
-            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
         }
         else {
-            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
         }
+
         if (isFlagged) {
             mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
         }
@@ -98,12 +99,12 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setBeenUpvoted() {
         if (isLiked) {
-            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
             isLiked = false;
             mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) - 1));
         }
         else {
-            mLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
             isLiked = true;
             mNumberOfLikes.setText(String.valueOf(Integer.parseInt(mNumberOfLikes.getText().toString()) + 1));
         }

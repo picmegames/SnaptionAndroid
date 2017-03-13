@@ -26,6 +26,7 @@ public class WallAdapter extends RecyclerView.Adapter {
     private List<Game> mGames;
 
     private int lastPosition = -1;
+    private long currentTime;
 
     private static final int AVATAR_SIZE = 30;
     private static final int MILLIS = 1000;
@@ -46,12 +47,11 @@ public class WallAdapter extends RecyclerView.Adapter {
         GameCardViewHolder holder = (GameCardViewHolder) viewHolder;
         Game curGame = mGames.get(position);
 
-        holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
-
         holder.mGameId = curGame.id;
         holder.mPickerId = curGame.pickerId;
 
         if (curGame.imageUrl != null) {
+            holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
             Glide.with(holder.mContext)
                     .load(curGame.imageUrl)
                     .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.imageUrl)))
@@ -63,6 +63,9 @@ public class WallAdapter extends RecyclerView.Adapter {
         }
 
         if (curGame.topCaption != null) {
+            holder.mCaptionerImage.setVisibility(View.VISIBLE);
+            holder.mCaptionerName.setVisibility(View.VISIBLE);
+
             if (curGame.topCaption.creatorPicture != null) {
                 Glide.with(holder.mContext)
                         .load(curGame.topCaption.creatorPicture)
@@ -78,34 +81,33 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .buildRound(curGame.topCaption.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curGame.topCaption.creatorName)));
             }
-            holder.mPickerName.setText(curGame.topCaption.creatorName);
+            holder.mCaptionerName.setText(curGame.topCaption.creatorName);
             holder.mTopCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
                     TextStyleUtils.getTextUnderlined(curGame.topCaption.caption),
                     curGame.topCaption.assocFitB.afterBlank));
         }
         else {
-            Glide.with(holder.mContext)
-                    .load(R.mipmap.ic_launcher)
-                    .into(holder.mCaptionerImage);
-            holder.mPickerName.setText("");
+            holder.mCaptionerImage.setVisibility(View.GONE);
+            holder.mCaptionerName.setVisibility(View.GONE);
             holder.mTopCaption.setText(holder.mContext.getString(R.string.default_caption));
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);
 
-        long currentTime = System.currentTimeMillis() / MILLIS;
         if (curGame.endDate - currentTime <= 0) {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
         }
         else {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_open));
         }
+
         setAnimation(holder.itemView, position);
     }
 
     public void setGames(List<Game> games) {
         if (!mGames.equals(games)) {
             mGames = games;
+            currentTime = System.currentTimeMillis() / MILLIS;
             notifyDataSetChanged();
         }
     }

@@ -37,10 +37,10 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     DynamicImageView mImage;
     @BindView(R.id.top_caption)
     TextView mTopCaption;
-    @BindView(R.id.picker_image)
+    @BindView(R.id.captioner_image)
     CircleImageView mCaptionerImage;
-    @BindView(R.id.picker_name)
-    TextView mPickerName;
+    @BindView(R.id.captioner_name)
+    TextView mCaptionerName;
     @BindView(R.id.upvote)
     ImageView mUpvoteButton;
     @BindView(R.id.flag)
@@ -123,6 +123,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         else {
             mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
         }
+
         if (isFlagged) {
             mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
         }
