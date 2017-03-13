@@ -1,7 +1,6 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -253,7 +252,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private void startCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-        createGameIntent.putExtra(Game.PICTURE, mImageUrl);
+        createGameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(this, mImage, getString(R.string.shared_transition));
@@ -264,7 +263,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         Intent profileIntent = new Intent(this, ProfileActivity.class);
         profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
         profileIntent.putExtra(User.USERNAME, mPicker);
-        profileIntent.putExtra(User.PICTURE, mPickerImageUrl);
+        profileIntent.putExtra(User.IMAGE_URL, mPickerImageUrl);
         profileIntent.putExtra(User.ID, mPickerId);
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(this, view, getString(R.string.shared_transition));

@@ -135,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity
         }
         else {
             mName = profileIntent.getStringExtra(User.USERNAME);
-            mPicture = profileIntent.getStringExtra(User.PICTURE);
+            mPicture = profileIntent.getStringExtra(User.IMAGE_URL);
             mFab.setVisibility(View.GONE);
         }
 

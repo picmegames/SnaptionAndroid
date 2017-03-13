@@ -69,7 +69,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             Intent profileIntent = new Intent(mContext, ProfileActivity.class);
             profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
             profileIntent.putExtra(User.USERNAME, username);
-            profileIntent.putExtra(User.PICTURE, imageUrl);
+            profileIntent.putExtra(User.IMAGE_URL, imageUrl);
             profileIntent.putExtra(User.ID, userId);
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext, mUserImage,
