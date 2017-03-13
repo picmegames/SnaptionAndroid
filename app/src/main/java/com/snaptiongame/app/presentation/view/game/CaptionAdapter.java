@@ -64,7 +64,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
                 curCaption.assocFitB.afterBlank));
         holder.mName.setText(curCaption.creatorName);
         holder.username = curCaption.creatorName;
-        holder.mNumberOfLikes.setText(String.valueOf(curCaption.numVotes));
+        holder.mNumberOfUpvotes.setText(String.valueOf(curCaption.numVotes));
         holder.setHasBeenUpvotedOrFlagged(curCaption.beenUpvoted, curCaption.beenFlagged);
     }
 

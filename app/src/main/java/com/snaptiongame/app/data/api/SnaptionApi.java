@@ -7,7 +7,7 @@ import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.data.models.Like;
+import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.models.User;
@@ -169,11 +169,11 @@ public interface SnaptionApi {
      * This method sends a request to upvote or flag a game with
      * a PUT request.
      *
-     * @param request The Like body
-     * @return An observable that emits a Like object
+     * @param request The GameAction body
+     * @return An observable that emits a GameAction object
      */
     @PUT("/UserXGame/")
-    Observable<Like> upvoteOrFlagGame(@Body Like request);
+    Observable<GameAction> upvoteOrFlagGame(@Body GameAction request);
 
     /**
      * This method sends a request to add a game with
@@ -220,11 +220,11 @@ public interface SnaptionApi {
      * This method sends a request to upvote or flag a caption
      * with a PUT request.
      *
-     * @param request The Like body
-     * @return An observable that emits a Like object
+     * @param request The GameAction body
+     * @return An observable that emits a GameAction object
      */
     @PUT("/UserXCaption/")
-    Observable<Like> upvoteOrFlagCaption(@Body Like request);
+    Observable<GameAction> upvoteOrFlagCaption(@Body GameAction request);
 
     /**
      * This method sends a request to retrieve all fill in the blank from snaption.

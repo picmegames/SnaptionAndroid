@@ -2,6 +2,7 @@ package com.snaptiongame.app.presentation.view.game;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
@@ -27,8 +30,8 @@ import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.GameInvite;
-import com.snaptiongame.app.data.models.Like;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
@@ -68,7 +71,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ImageView mPickerImage;
     @BindView(R.id.picker_name)
     TextView mPickerName;
-    @BindView(R.id.like)
+    @BindView(R.id.upvote)
     ImageView mUpvoteButton;
 
     private ActionBar mActionBar;
@@ -125,7 +128,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     public static final String JOIN_SNAPTION = "Join Snaption!";
     public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
-    public static final String SNAPTION_IMAGE = "http://static1.squarespace.com/static/55a5836fe4b0b0843a0e2862/t/571fefa0f8baf30a23c535dd/1473092005381/";
     public static final String INVITE_CHANNEL = "GameInvite";
     public static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
@@ -147,7 +149,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 //IF branch returns a null or invalid invite then display the intent information
                 if (mInvite == null || mInvite.gameId == 0) {
                     showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
-                            intent.getIntExtra(Game.PICKER_ID, 0));
+                            intent.getIntExtra(Game.PICKER_ID, 0), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
+                            intent.getBooleanExtra(Game.BEEN_FLAGGED, false));
                 }
                 //ELSE display information from the game invite
                 else {
@@ -175,25 +178,34 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mActionBar.setTitle(getString(R.string.add_caption));
         }
 
-        mUpvoteButton.setOnClickListener(view -> {
-            if (isUpvoted) {
-                mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
-                isUpvoted = false;
-            }
-            else {
-                mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_400_24dp));
-                isUpvoted = true;
-                Toast.makeText(this, "Upvoted!", Toast.LENGTH_SHORT).show();
-            }
-            mPresenter.upvoteOrFlagGame(new Like(mGameId, isUpvoted, Like.UPVOTE, Like.GAME_ID));
-        });
+        mUpvoteButton.setOnClickListener(view -> upvoteGame());
+    }
+
+    private void upvoteGame() {
+        if (isUpvoted) {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
+            isUpvoted = false;
+        }
+        else {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_400_24dp));
+            isUpvoted = true;
+        }
+        mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.game_menu, menu);
-        menu.findItem(R.id.unflag).setVisible(false);
         mMenu = menu;
+
+        if (isFlagged) {
+            mMenu.findItem(R.id.unflag).setVisible(true);
+            mMenu.findItem(R.id.flag).setVisible(false);
+        }
+        else {
+            mMenu.findItem(R.id.unflag).setVisible(false);
+            mMenu.findItem(R.id.flag).setVisible(true);
+        }
         return true;
     }
 
@@ -204,13 +216,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 onBackPressed();
                 break;
             case R.id.flag:
-                mMenu.findItem(R.id.unflag).setVisible(true);
-                item.setVisible(false);
                 flagGame();
                 break;
             case R.id.unflag:
-                mMenu.findItem(R.id.flag).setVisible(true);
-                item.setVisible(false);
                 flagGame();
                 break;
             case R.id.create_game:
@@ -242,12 +250,26 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private void flagGame() {
         if (isFlagged) {
             isFlagged = false;
+            mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID));
+            mMenu.findItem(R.id.unflag).setVisible(false);
+            mMenu.findItem(R.id.flag).setVisible(true);
         }
         else {
-            isFlagged = true;
-            Toast.makeText(this, "Flagged", Toast.LENGTH_SHORT).show();
+            new MaterialDialog.Builder(this)
+                    .title(R.string.flag_alert_game)
+                    .content(R.string.ask_flag_game)
+                    .positiveText(R.string.confirm)
+                    .negativeText(R.string.cancel)
+                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                        isFlagged = true;
+                        mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID));
+                        mMenu.findItem(R.id.unflag).setVisible(true);
+                        mMenu.findItem(R.id.flag).setVisible(false);
+                        Toast.makeText(this, "Flagged", Toast.LENGTH_SHORT).show();
+                    })
+                    .cancelable(true)
+                    .show();
         }
-        mPresenter.upvoteOrFlagGame(new Like(mGameId, isFlagged, Like.FLAGGED, Like.GAME_ID));
     }
 
     private void startCreateGame() {
@@ -322,8 +344,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
     }
 
-    public void showGame(String image, int id, int pickerId) {
+    public void showGame(String image, int id, int pickerId, boolean beenUpvoted, boolean beenFlagged) {
         mImageUrl = image;
+        isUpvoted = beenUpvoted;
+        isFlagged = beenFlagged;
+
+        if (isUpvoted) {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_400_24dp));
+        }
+        else {
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
+        }
 
         Glide.with(this)
                 .load(image)
@@ -348,12 +379,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     public void loadInvitedGame() {
-        GameProvider.getGame(mInvite.gameId, mAuthManager.getToken())
+        GameProvider.getGame(mInvite.gameId, mAuthManager.getInviteToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        snaption -> showGame(snaption.imageUrl, snaption.id, snaption.pickerId),
+                        game -> showGame(game.imageUrl, game.id, game.pickerId, game.beenUpvoted, game.beenFlagged),
                         Timber::e,
-                        () -> Timber.i("Loading caption completed successfully.")
+                        () -> Timber.i("Loading game completed successfully.")
                 );
     }
 

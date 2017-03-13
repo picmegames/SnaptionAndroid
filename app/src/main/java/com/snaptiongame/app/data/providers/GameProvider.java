@@ -1,9 +1,9 @@
 package com.snaptiongame.app.data.providers;
 
-import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.data.models.Like;
-import com.snaptiongame.app.data.providers.api.ApiProvider;
 import com.snaptiongame.app.data.api.SnaptionApi;
+import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.data.models.GameAction;
+import com.snaptiongame.app.data.providers.api.ApiProvider;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,20 +17,19 @@ import io.reactivex.Observable;
 public class GameProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
+    private static List<Game> reverseGames(List<Game> games) {
+        Collections.reverse(games);
+        return games;
+    }
+
     public static Observable<List<Game>> getGames(boolean isPublic) {
         return apiService.getGames(isPublic)
-                .filter(games -> {
-                    Collections.reverse(games);
-                    return true;
-                });
+                .map(GameProvider::reverseGames);
     }
 
     public static Observable<List<Game>> getUserGames() {
         return apiService.getUserGames()
-                .filter(games -> {
-                    Collections.reverse(games);
-                    return true;
-                });
+                .map(GameProvider::reverseGames);
     }
 
     public static Observable<List<Game>> getDiscoverGames() {
@@ -49,7 +48,7 @@ public class GameProvider {
         return apiService.getGame(gameId, token);
     }
 
-    public static Observable<Like> upvoteOrFlagGame(Like request) {
+    public static Observable<GameAction> upvoteOrFlagGame(GameAction request) {
         return apiService.upvoteOrFlagGame(request);
     }
 

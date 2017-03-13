@@ -8,7 +8,7 @@ import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.FitBCaption;
-import com.snaptiongame.app.data.models.Like;
+import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
@@ -83,7 +83,7 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
-    public void upvoteOrFlagGame(Like request) {
+    public void upvoteOrFlagGame(GameAction request) {
         Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

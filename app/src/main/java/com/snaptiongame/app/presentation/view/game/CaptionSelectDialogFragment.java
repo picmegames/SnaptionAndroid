@@ -72,7 +72,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     private static final String SUBMIT = "Submit!";
     private static final String CANCEL = "Cancel";
     private static final String CREATE_A_CAPTION = "Create a Caption!";
-    private static final String CHOOSE_A_SET = "Choose one of your Caption Sets!";
+    private static final String CHOOSE_A_SET = "Choose a Caption Set!";
 
     /**
      * Recycler view used to hold the results of a search query run by the user

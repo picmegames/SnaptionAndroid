@@ -57,6 +57,10 @@
     <string name="filter">Filter</string>
     <string name="update">Update</string>
     <string name="nothing_here">Nothing here yet!</string>
+    <string name="flag_alert_game">Flag Game</string>
+    <string name="ask_flag_game">Are you sure you want to flag this game?</string>
+    <string name="flag_alert_caption">Flag Caption</string>
+    <string name="ask_flag_caption">Are you sure you want to flag this caption?</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

@@ -1,7 +1,7 @@
 package com.snaptiongame.app.data.providers;
 
 import com.snaptiongame.app.data.models.Caption;
-import com.snaptiongame.app.data.models.Like;
+import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.api.SnaptionApi;
 
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class CaptionProviderTest {
     private SnaptionApi service;
     private List<Caption> captions;
     private Caption caption;
-    private Like like;
+    private GameAction gameAction;
 
     private static final int TEST_GAME_ID = 1;
 
@@ -37,8 +37,8 @@ public class CaptionProviderTest {
         captions.add(new Caption(3, "test3"));
         captions.add(new Caption(4, "test4"));
         when(service.getCaptions(TEST_GAME_ID)).thenReturn(Observable.just(captions));
-        like = new Like(0, false, Like.UPVOTE, Like.CAPTION_ID);
-        when(service.upvoteOrFlagCaption(like)).thenReturn(Observable.just(like));
+        gameAction = new GameAction(0, false, GameAction.UPVOTE, GameAction.CAPTION_ID);
+        when(service.upvoteOrFlagCaption(gameAction)).thenReturn(Observable.just(gameAction));
         caption = new Caption(0, "test0");
         when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Observable.just(caption));
     }
@@ -60,10 +60,10 @@ public class CaptionProviderTest {
     @Test
     public void testUpvoteCaption() {
         // TODO Fix test
-//      CaptionProvider.upvoteOrFlagCaption(like)
+//      CaptionProvider.upvoteOrFlagCaption(gameAction)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
-//                  returnedLike -> assertTrue(returnedLike.equals(like)),
+//                  returnedLike -> assertTrue(returnedLike.equals(gameAction)),
 //                  e -> {
 //                  },
 //                  () -> {

@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.snaptiongame.app.data.models.Like;
+import com.snaptiongame.app.data.models.GameAction;
 
 import java.lang.reflect.Type;
 
@@ -12,10 +12,10 @@ import java.lang.reflect.Type;
  * @author Tyler Wong
  */
 
-public class LikeConverter implements JsonSerializer<Like> {
+public class GameActionConverter implements JsonSerializer<GameAction> {
 
     @Override
-    public JsonElement serialize(Like src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(GameAction src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
         json.addProperty(src.type, src.targetId);
         json.addProperty(src.choiceType, src.choice);

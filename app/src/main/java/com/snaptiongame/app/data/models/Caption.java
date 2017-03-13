@@ -72,6 +72,8 @@ public class Caption {
     public boolean equals(Object obj) {
         return obj.getClass() == Caption.class
                 && this.id == ((Caption) obj).id
+                && this.beenUpvoted == ((Caption) obj).beenUpvoted
+                && this.beenFlagged == ((Caption) obj).beenFlagged
                 && this.numVotes == ((Caption) obj).numVotes;
     }
 }

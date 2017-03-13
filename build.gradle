@@ -46,7 +46,7 @@ ext {
     playServicesVersion = '10.2.0'
     circleImageViewVersion = '2.1.0'
     textDrawableVersion = '1.0.1'
-    materialDialogsVersion = '0.9.3.0'
+    materialDialogsVersion = '0.9.4.1'
     nachosVersion = '1.0.0'
     facebookSdkVersion = '4.19.0'
     butterknifeVersion = '8.5.1'

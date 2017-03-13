@@ -1,6 +1,5 @@
 package com.snaptiongame.app.data.utils;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,21 +54,6 @@ public class ImageConverter {
         }
 
         return picture;
-    }
-
-    public static Observable<byte[]> convertImageByteArray(ContentResolver resolver, Uri uri) {
-        byte[] byteArray = new byte[1];
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            MediaStore.Images.Media.getBitmap(resolver, uri).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            byteArray = byteArrayOutputStream.toByteArray();
-            byteArrayOutputStream.close();
-        }
-        catch (IOException e) {
-            Timber.e(e);
-        }
-
-        return Observable.just(byteArray);
     }
 
     private static String compressImage(Uri imageUri) {
@@ -141,7 +125,7 @@ public class ImageConverter {
             scaledBitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, out);
         }
         catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Timber.e("Could not find file");
         }
 
         return filename;

@@ -4,7 +4,7 @@ package com.snaptiongame.app.data.models;
  * @author Tyler Wong
  */
 
-public class Like {
+public class GameAction {
     public int targetId;
     public boolean choice;
     public String choiceType;
@@ -15,7 +15,7 @@ public class Like {
     public static final String UPVOTE = "upvote";
     public static final String FLAGGED = "flagged";
 
-    public Like(int targetId, boolean choice, String choiceType, String type) {
+    public GameAction(int targetId, boolean choice, String choiceType, String type) {
         this.targetId = targetId;
         this.choice = choice;
         this.choiceType = choiceType;

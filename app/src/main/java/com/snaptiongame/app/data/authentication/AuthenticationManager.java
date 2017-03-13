@@ -180,7 +180,7 @@ public final class AuthenticationManager {
     }
 
     private void handleOAuthFacebook(String accessToken, String deviceToken) {
-        SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, getToken()))
+        SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, getInviteToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> saveUserId(session.userId),
@@ -196,7 +196,7 @@ public final class AuthenticationManager {
     }
 
     private void handleOAuthGoogle(String token, String deviceToken) {
-        SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, getToken()))
+        SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, getInviteToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> saveUserId(session.userId),
@@ -294,7 +294,7 @@ public final class AuthenticationManager {
         editor.apply();
     }
 
-    public String getToken() {
+    public String getInviteToken() {
         return preferences.getString(INVITE_TOKEN, "");
     }
 

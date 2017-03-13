@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.FitBCaption;
-import com.snaptiongame.app.data.models.Like;
+import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.presentation.BasePresenter;
 import com.snaptiongame.app.presentation.BaseView;
 
@@ -38,7 +38,7 @@ public class GameContract {
 
         void addCaption(int fitBId, String caption);
 
-        void upvoteOrFlagGame(Like request);
+        void upvoteOrFlagGame(GameAction request);
 
         void shareToFacebook(AppCompatActivity activity, ImageView image);
 

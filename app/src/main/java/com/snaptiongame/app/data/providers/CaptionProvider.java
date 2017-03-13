@@ -3,7 +3,7 @@ package com.snaptiongame.app.data.providers;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.FitBCaption;
-import com.snaptiongame.app.data.models.Like;
+import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
 import com.snaptiongame.app.data.api.SnaptionApi;
 
@@ -26,7 +26,7 @@ public class CaptionProvider {
         return apiService.getFitBCaptions(setId);
     }
 
-    public static Observable<Like> upvoteOrFlagCaption(Like request) {
+    public static Observable<GameAction> upvoteOrFlagCaption(GameAction request) {
         return apiService.upvoteOrFlagCaption(request);
     }
 

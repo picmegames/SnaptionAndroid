@@ -2,7 +2,7 @@ package com.snaptiongame.app.data.providers;
 
 import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.data.models.Like;
+import com.snaptiongame.app.data.models.GameAction;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class GameProviderTest {
     private SnaptionApi service;
     private List<Game> games;
     private Game game;
-    private Like like;
+    private GameAction gameAction;
 
     @Before
     public void setup() {
@@ -33,8 +33,8 @@ public class GameProviderTest {
         games.add(new Game(2, true, 2, "picture2", "", new ArrayList<>(), new ArrayList<>()));
         games.add(new Game(3, false, 3, "picture3", "", new ArrayList<>(), new ArrayList<>()));
         when(service.getGames(true)).thenReturn(Observable.just(games));
-        like = new Like(0, false, Like.UPVOTE, Like.GAME_ID);
-        when(service.upvoteOrFlagGame(like)).thenReturn(Observable.just(like));
+        gameAction = new GameAction(0, false, GameAction.UPVOTE, GameAction.GAME_ID);
+        when(service.upvoteOrFlagGame(gameAction)).thenReturn(Observable.just(gameAction));
         game = new Game(0, false, 0, "picture0", "", new ArrayList<>(), new ArrayList<>());
         when(service.addGame(game)).thenReturn(Observable.just(game));
     }
@@ -56,10 +56,10 @@ public class GameProviderTest {
     @Test
     public void testUpvoteGame() {
         // TODO Fix test
-//      GameProvider.upvoteOrFlagGame(like)
+//      GameProvider.upvoteOrFlagGame(gameAction)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
-//                  returnedLike -> assertTrue(returnedLike.equals(like)),
+//                  returnedLike -> assertTrue(returnedLike.equals(gameAction)),
 //                  e -> {
 //                  },
 //                  () -> {

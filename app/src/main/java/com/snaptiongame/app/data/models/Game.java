@@ -101,6 +101,8 @@ public class Game {
     public boolean equals(Object obj) {
         return obj.getClass() == Game.class
                 && this.id == ((Game) obj).id
+                && this.beenUpvoted == ((Game) obj).beenUpvoted
+                && this.beenFlagged == ((Game) obj).beenFlagged
                 && ((this.topCaption == null && ((Game) obj).topCaption == null)
                 || (this.topCaption != null && this.topCaption.equals(((Game) obj).topCaption)));
     }
