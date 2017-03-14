@@ -23,6 +23,10 @@ public class CreateGameContract {
 
         void showUploadComplete();
 
+        void showUploadFailure();
+
+        void showImageCompressionFailure();
+
         List<String> getTags();
 
         List<String> getAddedFriends();

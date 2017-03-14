@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -45,6 +46,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,6 +92,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private String mFormattedDate;
 
     private static final String INTENT_TYPE = "image/*";
+    private static final String DATE_FORMAT = "MM/dd/yyyy";
+    private static final String EMOJI_REGEX = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])";
+    private static final String EMOJI_ERROR = "Tags cannot contain emojis";
+    private static final String COMPRESSION_ERROR = "Could not compress image";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,7 +162,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mYear = mCalendar.get(Calendar.YEAR);
         mMonth = mCalendar.get(Calendar.MONTH);
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
-        mFormattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(mCalendar.getTime());
+        mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
     }
 
@@ -164,6 +171,31 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 R.array.content_ratings_array, android.R.layout.simple_spinner_item);
         contentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mContentSpinner.setAdapter(contentAdapter);
+    }
+
+    private boolean containsEmoji(List<String> tags) {
+        Matcher matcher;
+        Pattern emojiPattern = Pattern.compile(EMOJI_REGEX);
+
+        for (String tag : tags) {
+            matcher = emojiPattern.matcher(tag);
+            if (matcher.find()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void showImageCompressionFailure() {
+        mProgressDialog.dismiss();
+        Toast.makeText(this, COMPRESSION_ERROR, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showUploadFailure() {
+        mProgressDialog.dismiss();
+        Toast.makeText(this, EMOJI_ERROR, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -261,16 +293,21 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        if (mUri != null) {
-            mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getUserId(),
-                    !mPrivateSwitch.isChecked());
+        if (!containsEmoji(mTagTextView.getChipValues())) {
+            if (mUri != null) {
+                mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getUserId(),
+                        !mPrivateSwitch.isChecked());
+            }
+            mProgressDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.upload_title)
+                    .content(R.string.upload_message)
+                    .progress(true, 0)
+                    .cancelable(false)
+                    .show();
         }
-        mProgressDialog = new MaterialDialog.Builder(this)
-                .title(R.string.upload_title)
-                .content(R.string.upload_message)
-                .progress(true, 0)
-                .cancelable(false)
-                .show();
+        else {
+            Toast.makeText(this, EMOJI_ERROR, Toast.LENGTH_LONG).show();
+        }
     }
 
     @OnClick(R.id.set_date_field)

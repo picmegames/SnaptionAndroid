@@ -260,13 +260,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .negativeText(R.string.clear)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         if (fragTag.equals(WallFragment.TAG)) {
-                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipAndTokenValues());
+                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
                     .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         clearFilterView();
                         if (fragTag.equals(WallFragment.TAG)) {
-                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipAndTokenValues());
+                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
                     .cancelable(true)

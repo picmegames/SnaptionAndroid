@@ -46,8 +46,11 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        s -> mEncodedImage = s,
-                        Timber::e,
+                        image -> mEncodedImage = image,
+                        e -> {
+                            Timber.e(e);
+                            mCreateGameView.showImageCompressionFailure();
+                        },
                         () -> uploadGame(userId, isPublic, type)
                 );
         mDisposables.add(disposable);
@@ -61,7 +64,10 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                 .subscribe(
                         snaption -> {
                         },
-                        Timber::e,
+                        e -> {
+                            Timber.e(e);
+                            mCreateGameView.showUploadFailure();
+                        },
                         mCreateGameView::showUploadComplete
                 );
         mDisposables.add(disposable);
