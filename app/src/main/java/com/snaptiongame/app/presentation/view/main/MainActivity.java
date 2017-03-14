@@ -29,8 +29,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
@@ -71,9 +75,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView mNameView;
     TextView mEmailView;
     ActionBar mActionBar;
+    NachoTextView mFilterTextView;
 
     private AuthenticationManager mAuthManager;
     private Fragment mCurrentFragment;
+    private MaterialDialog mFilterDialog;
+    private Menu mMenu;
     private String fragTag;
     private int mUserId;
     private int rightMargin;
@@ -220,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.filter_menu, menu);
+        mMenu = menu;
         return true;
     }
 
@@ -227,9 +235,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.filter:
+                showFilterDialog();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showFilterDialog() {
+        if (mFilterDialog == null) {
+            mFilterTextView = new NachoTextView(this);
+            mFilterTextView.setChipHeight(R.dimen.chip_height);
+            mFilterTextView.setChipSpacing(R.dimen.chip_spacing);
+            mFilterTextView.setChipTextSize(R.dimen.chip_text_size);
+            mFilterTextView.setChipVerticalSpacing(R.dimen.chip_vertical_spacing);
+            mFilterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+            mFilterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+            mFilterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+            mFilterTextView.enableEditChipOnTouch(false, true);
+
+            mFilterDialog = new MaterialDialog.Builder(this)
+                    .customView(mFilterTextView, false)
+                    .title(R.string.filter_games_title)
+                    .positiveText(R.string.filter)
+                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                        if (fragTag.equals(WallFragment.TAG)) {
+                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipAndTokenValues());
+                        }
+                    })
+                    .cancelable(true)
+                    .show();
+
+            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFilterTextView.getLayoutParams();
+            layoutParams.setMargins(rightMargin, rightMargin, rightMargin, rightMargin);
+        }
+        else {
+            mFilterDialog.show();
+        }
+    }
+
+    private void clearFilterView() {
+        if (mFilterTextView != null) {
+            mFilterTextView.setText("");
+        }
     }
 
     @Override
@@ -243,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.wall:
                 mBottomNavigationView.setVisibility(View.VISIBLE);
                 resetFabPosition(true);
+                mMenu.findItem(R.id.filter).setVisible(true);
 
             case R.id.my_wall:
                 if (mAuthManager.isLoggedIn()) {
@@ -251,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mActionBar.setTitle(R.string.my_wall);
                     mBottomNavigationView.getMenu().getItem(0).setChecked(true);
                     setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+                    clearFilterView();
                     break;
                 }
 
@@ -259,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.discover);
                 setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
+                clearFilterView();
                 break;
 
             case R.id.popular:
@@ -266,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragTag = WallFragment.TAG;
                 mActionBar.setTitle(R.string.popular);
                 setAppStatusBarColors(R.color.colorPopular, R.color.colorPopularDark);
+                clearFilterView();
                 break;
 
             case R.id.friends:
@@ -275,6 +326,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mBottomNavigationView.setVisibility(View.GONE);
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+                mMenu.findItem(R.id.filter).setVisible(false);
                 break;
 
             case R.id.settings:

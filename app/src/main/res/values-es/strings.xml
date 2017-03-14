@@ -67,4 +67,5 @@
     <string name="flag_alert_game">Juego de Bandera</string>
     <string name="flag_alert_caption">Leyenda de la bandera</string>
     <string name="ask_flag_caption">¿Estás seguro de que quieres marcar este título?</string>
+    <string name="filter_games_title">Filtrar por Etiquetas</string>
 </resources>

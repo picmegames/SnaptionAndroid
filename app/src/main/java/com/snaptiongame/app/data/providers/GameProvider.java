@@ -27,17 +27,17 @@ public class GameProvider {
                 .map(GameProvider::reverseGames);
     }
 
-    public static Observable<List<Game>> getUserGames() {
-        return apiService.getUserGames()
+    public static Observable<List<Game>> getUserGames(List<String> tags) {
+        return apiService.getUserGames(tags)
                 .map(GameProvider::reverseGames);
     }
 
-    public static Observable<List<Game>> getDiscoverGames() {
-        return apiService.getDiscoverGames();
+    public static Observable<List<Game>> getDiscoverGames(List<String> tags) {
+        return apiService.getDiscoverGames(tags);
     }
 
-    public static Observable<List<Game>> getPopularGames() {
-        return apiService.getPopularGames();
+    public static Observable<List<Game>> getPopularGames(List<String> tags) {
+        return apiService.getPopularGames(tags);
     }
 
     public static Observable<List<Game>> getUserGameHistory(int userId) {

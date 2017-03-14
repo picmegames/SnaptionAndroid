@@ -33,6 +33,6 @@ public class WallContract {
      * This is a template for a presenter.
      */
     interface Presenter extends BasePresenter {
-        void loadGames(int type);
+        void loadGames(int type, List<String> tags);
     }
 }

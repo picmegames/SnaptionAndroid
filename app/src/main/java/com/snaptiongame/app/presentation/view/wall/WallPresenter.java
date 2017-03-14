@@ -27,6 +27,7 @@ public class WallPresenter implements WallContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
+    private List<String> mTags;
     private int mUserId;
     private int mType;
 
@@ -50,22 +51,26 @@ public class WallPresenter implements WallContract.Presenter {
      * an IO thread and handle the result on the UI thread.
      */
     @Override
-    public void loadGames(int type) {
+    public void loadGames(int type, List<String> tags) {
         mWallView.setRefreshing(true);
+
+        if (tags != null) {
+            mTags = tags;
+        }
 
         Observable<List<Game>> gameRequest;
         switch (type) {
             case WallContract.DISCOVER:
-                gameRequest = GameProvider.getDiscoverGames();
+                gameRequest = GameProvider.getDiscoverGames(mTags);
                 break;
             case WallContract.POPULAR:
-                gameRequest = GameProvider.getPopularGames();
+                gameRequest = GameProvider.getPopularGames(mTags);
                 break;
             case WallContract.HISTORY:
                 gameRequest = GameProvider.getUserGameHistory(mUserId);
                 break;
             default:
-                gameRequest = GameProvider.getUserGames();
+                gameRequest = GameProvider.getUserGames(mTags);
                 break;
         }
 
@@ -91,7 +96,7 @@ public class WallPresenter implements WallContract.Presenter {
      */
     @Override
     public void subscribe() {
-        loadGames(mType);
+        loadGames(mType, null);
     }
 
     /**

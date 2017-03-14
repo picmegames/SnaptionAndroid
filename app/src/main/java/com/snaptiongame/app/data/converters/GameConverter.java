@@ -49,8 +49,6 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
             }
         }
         json.add(Game.FRIENDS, friends);
-
-        json.add(Game.FRIENDS, new Gson().toJsonTree(src.friendIds));
         return json;
     }
 

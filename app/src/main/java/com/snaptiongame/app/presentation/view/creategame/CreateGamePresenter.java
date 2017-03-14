@@ -91,9 +91,11 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public int getFriendIdByName(String name) {
-        for (Friend friend : mFriends) {
-            if (friend.username.equals(name)) {
-                return friend.id;
+        if (mFriends != null) {
+            for (Friend friend : mFriends) {
+                if (friend.username.equals(name)) {
+                    return friend.id;
+                }
             }
         }
         return -1;
@@ -111,7 +113,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                 .subscribe(
                         this::processFriends,
                         Timber::e,
-                        mCreateGameView::showFriendsDialog
+                        () -> Timber.i("Friends loaded successfully!")
                 );
         mDisposables.add(disposable);
     }
@@ -127,7 +129,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void subscribe() {
-
+        loadFriends();
     }
 
     @Override

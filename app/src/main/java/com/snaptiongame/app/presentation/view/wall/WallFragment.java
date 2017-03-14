@@ -90,7 +90,7 @@ public class WallFragment extends Fragment implements WallContract.View {
         mAdapter = new WallAdapter(new ArrayList<>());
         mWall.setAdapter(mAdapter);
 
-        mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType));
+        mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType, null));
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent),
                 ContextCompat.getColor(getContext(), R.color.colorPrimary),
@@ -118,6 +118,15 @@ public class WallFragment extends Fragment implements WallContract.View {
         if (mType != WallContract.DISCOVER) {
             mPresenter.subscribe();
         }
+    }
+
+    /**
+     * This method will filter the wall by tag
+     *
+     * @param tags a list of user defined tags to filter by
+     */
+    public void filterGames(List<String> tags) {
+        mPresenter.loadGames(mType, tags);
     }
 
     /**

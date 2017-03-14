@@ -232,7 +232,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.add_friends_button)
     public void prepareFriendsDialog() {
         if (mFriendsDialog == null) {
-            mPresenter.loadFriends();
+            showFriendsDialog();
         }
         else {
             mFriendsDialog.show();

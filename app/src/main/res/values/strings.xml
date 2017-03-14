@@ -17,6 +17,7 @@
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="add_caption">Add a Caption!</string>
     <string name="update_info">Update Information</string>
+    <string name="filter_games_title">Filter By Tags</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
