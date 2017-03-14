@@ -257,7 +257,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .customView(mFilterTextView, false)
                     .title(R.string.filter_games_title)
                     .positiveText(R.string.filter)
+                    .negativeText(R.string.clear)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                        if (fragTag.equals(WallFragment.TAG)) {
+                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipAndTokenValues());
+                        }
+                    })
+                    .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                        clearFilterView();
                         if (fragTag.equals(WallFragment.TAG)) {
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipAndTokenValues());
                         }
