@@ -41,7 +41,8 @@ public class GameProvider {
     }
 
     public static Observable<List<Game>> getUserGameHistory(int userId) {
-        return apiService.getUserGameHistory(userId);
+        return apiService.getUserGameHistory(userId)
+                .map(GameProvider::reverseGames);
     }
 
     public static Observable<Game> getGame(int gameId, String token) {
