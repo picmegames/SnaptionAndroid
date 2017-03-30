@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -59,8 +58,6 @@ import timber.log.Timber;
 public class GameActivity extends AppCompatActivity implements GameContract.View {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.fab)
-    FloatingActionButton mFab;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.caption_list)
@@ -143,16 +140,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
-            //CALLED when the async initSession returns, won't error if no branch data is found
+            // CALLED when the async initSession returns, won't error if no branch data is found
             if (error == null) {
                 mInvite = BranchConverter.deserializeGameInvite(referringParams);
-                //IF branch returns a null or invalid invite then display the intent information
+                // IF branch returns a null or invalid invite then display the intent information
                 if (mInvite == null || mInvite.gameId == 0) {
                     showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
                             intent.getIntExtra(Game.PICKER_ID, 0), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
                             intent.getBooleanExtra(Game.BEEN_FLAGGED, false));
                 }
-                //ELSE display information from the game invite
+                // ELSE display information from the game invite
                 else {
                     mAuthManager.saveToken(mInvite.inviteToken);
                     loadInvitedGame();
