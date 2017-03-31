@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -70,9 +71,10 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             profileIntent.putExtra(User.USERNAME, username);
             profileIntent.putExtra(User.IMAGE_URL, imageUrl);
             profileIntent.putExtra(User.ID, userId);
+
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext, mUserImage,
-                            mContext.getString(R.string.shared_transition));
+                            ViewCompat.getTransitionName(mUserImage));
             mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
         });
     }

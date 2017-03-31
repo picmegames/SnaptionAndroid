@@ -69,6 +69,7 @@ public class WallAdapter extends RecyclerView.Adapter {
             if (curGame.topCaption.creatorPicture != null) {
                 Glide.with(holder.mContext)
                         .load(curGame.topCaption.creatorPicture)
+                        .dontAnimate()
                         .into(holder.mCaptionerImage);
             }
             else {

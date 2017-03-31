@@ -44,6 +44,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         if (curCaption.creatorPicture != null) {
             Glide.with(holder.mContext)
                     .load(curCaption.creatorPicture)
+                    .dontAnimate()
                     .into(holder.mUserImage);
             holder.imageUrl = curCaption.creatorPicture;
         }

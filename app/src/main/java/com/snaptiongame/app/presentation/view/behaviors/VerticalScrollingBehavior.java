@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.main;
+package com.snaptiongame.app.presentation.view.behaviors;
 
 import android.content.Context;
 import android.os.Parcelable;

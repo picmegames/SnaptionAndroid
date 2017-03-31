@@ -45,8 +45,8 @@
             android:id="@+id/captioner_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 
     <TextView
@@ -68,7 +68,8 @@
         android:layout_margin="2dp"
         android:layout_toStartOf="@+id/upvote"
         android:contentDescription="@string/flag"
-        android:src="@drawable/ic_flag_grey_400_24dp"/>
+        android:src="@drawable/ic_flag_grey_900_24dp"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/upvote"
@@ -77,10 +78,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/captioner_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="2dp"
         android:layout_marginBottom="2dp"
         android:layout_marginEnd="4dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
         android:src="@drawable/ic_favorite_border_grey_400_24dp"/>
 
 </RelativeLayout>

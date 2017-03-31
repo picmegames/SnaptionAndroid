@@ -86,6 +86,11 @@ public class EditProfileView extends RelativeLayout {
                 .into(mProfileImage);
     }
 
+    public void updateUsername(String username) {
+        mUsername.setText(username);
+        mEditText.setText("");
+    }
+
     @OnTextChanged(R.id.name_input)
     public void textChanged(CharSequence sequence) {
         mNameCount.setText(

@@ -3,6 +3,7 @@ package com.snaptiongame.app.presentation.view.friends;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -64,7 +65,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 profileIntent.putExtra(User.ID, curFriend.id);
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation((AppCompatActivity) context, holder.mImage,
-                                context.getString(R.string.shared_transition));
+                                ViewCompat.getTransitionName(holder.mImage));
                 context.startActivity(profileIntent, transitionActivityOptions.toBundle());
             });
         }

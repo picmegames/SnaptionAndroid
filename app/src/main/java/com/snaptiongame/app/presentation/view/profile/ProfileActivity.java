@@ -38,6 +38,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 
 import butterknife.BindView;
@@ -266,9 +267,22 @@ public class ProfileActivity extends AppCompatActivity
             mEditView.updateProfilePicture(mPicture);
         }
 
+        String initials = "";
+        if (!mName.isEmpty()) {
+            initials = mName.substring(0, 1);
+        }
+
         if (mPicture != null && !mPicture.isEmpty()) {
             Glide.with(this)
                     .load(mPicture)
+                    .placeholder(TextDrawable.builder()
+                            .beginConfig()
+                            .width(DEFAULT_IMG_SIZE)
+                            .height(DEFAULT_IMG_SIZE)
+                            .toUpperCase()
+                            .endConfig()
+                            .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)))
+                    .dontAnimate()
                     .into(mProfileImg);
 
             Glide.with(this)
@@ -281,18 +295,13 @@ public class ProfileActivity extends AppCompatActivity
                     .into(mCoverPhoto);
         }
         else {
-            String initials = "";
-            if (!mName.isEmpty()) {
-                initials = mName.substring(0, 1);
-            }
             mProfileImg.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(DEFAULT_IMG_SIZE)
                     .height(DEFAULT_IMG_SIZE)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(initials,
-                            ColorGenerator.MATERIAL.getColor(mName)));
+                    .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)));
 
             mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
@@ -300,33 +309,30 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void showProfilePictureSuccess() {
-        Snackbar.make(
-                mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
         mPicture = mAuthManager.getProfileImageUrl();
         updateProfilePicture();
     }
 
     @Override
     public void showProfilePictureFailure() {
-        Snackbar.make(
-                mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showUsernameSuccess(String oldUsername, User user) {
-        Snackbar
-                .make(mLayout, getString(R.string.update_success), Snackbar.LENGTH_LONG)
+        Snackbar.make(mLayout, getString(R.string.update_success), Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.undo), view ->
                         mPresenter.updateUsername(user.username, new User(oldUsername)))
                 .show();
         mTitle.setText(user.username);
         mMainTitle.setText(user.username);
+        mEditView.updateUsername(user.username);
     }
 
     @Override
     public void showUsernameFailure(String oldUsername, User user) {
-        Snackbar
-                .make(mLayout, getString(R.string.update_failure), Snackbar.LENGTH_LONG)
+        Snackbar.make(mLayout, getString(R.string.update_failure), Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.try_again), view -> mEditDialog.show())
                 .show();
     }
@@ -386,7 +392,7 @@ public class ProfileActivity extends AppCompatActivity
             mToolbar.setBackgroundColor(mTransparent);
         }
 
-        mLayout.setPadding(0, (int) Math.floor(ImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);
+        mLayout.setPadding(0, (int) Math.floor(ProfileImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);
     }
 
     private void handleToolbarTitleVisibility(float percentage) {

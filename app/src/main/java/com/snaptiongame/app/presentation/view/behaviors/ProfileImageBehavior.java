@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.profile;
+package com.snaptiongame.app.presentation.view.behaviors;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,7 +14,7 @@ import com.snaptiongame.app.R;
  * @author Tyler Wong
  */
 
-public class ImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
+public class ProfileImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
 
     private Context mContext;
 
@@ -34,7 +34,7 @@ public class ImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
     private static final String DIMEN = "dimen";
     private static final String ANDROID = "android";
 
-    public ImageBehavior(Context context, AttributeSet attrs) {
+    public ProfileImageBehavior(Context context, AttributeSet attrs) {
         mContext = context;
     }
 

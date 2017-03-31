@@ -1,17 +1,20 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +27,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -35,6 +41,7 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 
 import java.util.ArrayList;
@@ -175,6 +182,20 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mActionBar.setTitle(getString(R.string.add_caption));
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(null);
+            getWindow().setReturnTransition(new Fade());
+        }
+
+        mImage.setOnClickListener(view -> {
+            Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
+            immersiveIntent.putExtra(Game.IMAGE_URL, mImageUrl);
+
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, mImage, ViewCompat.getTransitionName(mImage));
+            startActivity(immersiveIntent, transitionActivityOptions.toBundle());
+        });
+
         mUpvoteButton.setOnClickListener(view -> upvoteGame());
     }
 
@@ -274,7 +295,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         createGameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, mImage, getString(R.string.shared_transition));
+                .makeSceneTransitionAnimation(this, mImage, ViewCompat.getTransitionName(mImage));
         startActivity(createGameIntent, transitionActivityOptions.toBundle());
     }
 
@@ -284,8 +305,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         profileIntent.putExtra(User.USERNAME, mPicker);
         profileIntent.putExtra(User.IMAGE_URL, mPickerImageUrl);
         profileIntent.putExtra(User.ID, mPickerId);
+
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, view, getString(R.string.shared_transition));
+                .makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(mPickerImage));
         startActivity(profileIntent, transitionActivityOptions.toBundle());
     }
 
@@ -297,6 +319,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (profileUrl != null && !profileUrl.isEmpty()) {
             Glide.with(this)
                     .load(profileUrl)
+                    .dontAnimate()
                     .into(mPickerImage);
         }
         else {
@@ -352,10 +375,24 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         else {
             mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
         }
-
+        supportPostponeEnterTransition();
         Glide.with(this)
                 .load(image)
                 .fitCenter()
+                .dontAnimate()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+                })
                 .into(mImage);
         mGameId = id;
         mPickerId = pickerId;

@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,6 +39,7 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
@@ -52,8 +54,6 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
-
-import static android.R.id.toggle;
 
 /**
  * @author Tyler Wong
@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(null);
+        }
+
         View headerView = mNavigationView.getHeaderView(0);
         mCoverPhoto = ButterKnife.findById(headerView, R.id.cover_photo);
         mProfilePicture = ButterKnife.findById(headerView, R.id.profile_image);
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
                 profileIntent.putExtra(User.ID, mAuthManager.getUserId());
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
+                        .makeSceneTransitionAnimation(this, mProfilePicture, ViewCompat.getTransitionName(mProfilePicture));
                 startActivity(profileIntent, transitionActivityOptions.toBundle());
             }
             else {
@@ -175,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setDefaultHeader() {
         Glide.with(this)
                 .load(R.mipmap.ic_launcher)
+                .dontAnimate()
                 .into(mProfilePicture);
         Glide.clear(mCoverPhoto);
         mNameView.setText(getString(R.string.welcome_message));
@@ -188,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Glide.with(this)
                 .load(profileImageUrl)
+                .dontAnimate()
                 .into(mProfilePicture);
         Glide.with(this)
                 .load(profileImageUrl)

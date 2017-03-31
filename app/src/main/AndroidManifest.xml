@@ -99,6 +99,10 @@
                 android:value="com.snaptiongame.app.presentation.view.main.MainActivity"/>
         </activity>
 
+        <activity android:name=".presentation.view.photo.ImmersiveActivity"
+                  android:configChanges="orientation"
+                  android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

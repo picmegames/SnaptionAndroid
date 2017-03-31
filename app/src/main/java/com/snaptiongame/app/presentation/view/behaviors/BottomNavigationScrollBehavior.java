@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.main;
+package com.snaptiongame.app.presentation.view.behaviors;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,7 +11,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -22,10 +21,10 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 @SuppressWarnings("unused")
-public final class FABScrollBehavior<V extends View> extends VerticalScrollingBehavior<V> {
+public final class BottomNavigationScrollBehavior<V extends View> extends VerticalScrollingBehavior<V> {
     private static final Interpolator INTERPOLATOR = new LinearOutSlowInInterpolator();
     private final ViewWithSnackbar mWithSnackBarImpl = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-            new LollipopFABWithSnackBarImpl() : new PreLollipopFABWithSnackBarImpl();
+            new LollipopBottomNavWithSnackBarImpl() : new PreLollipopBottomNavWithSnackBarImpl();
     private int mTabLayoutId;
     private boolean hidden = false;
     private ViewPropertyAnimatorCompat mOffsetValueAnimator;
@@ -34,44 +33,32 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
     private int mSnackbarHeight = -1;
     private boolean scrollingEnabled = true;
     private boolean hideAlongSnackbar = false;
-    private int bottomBarHeight;
 
     int[] attrsArray = new int[]{android.R.attr.id};
 
-    private static final int FAB_SPEED = 200;
-    private static final int BOTTOM_MARGIN = 16;
-    private static final int BOTTOM_BAR_HEIGHT = 56;
+    private static final int BOTTOM_NAV_SPEED = 500;
 
-    public FABScrollBehavior() {
+    public BottomNavigationScrollBehavior() {
         super();
     }
 
-    public FABScrollBehavior(Context context, AttributeSet attrs, boolean isWall) {
+    public BottomNavigationScrollBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, attrsArray);
         mTabLayoutId = a.getResourceId(0, View.NO_ID);
         a.recycle();
-
-        if (isWall) {
-            bottomBarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN + BOTTOM_BAR_HEIGHT,
-                    context.getResources().getDisplayMetrics());
-        }
-        else {
-            bottomBarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
-                    context.getResources().getDisplayMetrics());
-        }
     }
 
-    public static <V extends View> FABScrollBehavior<V> from(@NonNull V view) {
+    public static <V extends View> BottomNavigationScrollBehavior<V> from(@NonNull V view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (!(params instanceof CoordinatorLayout.LayoutParams)) {
             Timber.e("The view is not a child of CoordinatorLayout");
         }
         CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) params).getBehavior();
-        if (!(behavior instanceof FABScrollBehavior)) {
-            Timber.e("The view is not associated with FABScrollBehavior");
+        if (!(behavior instanceof BottomNavigationScrollBehavior)) {
+            Timber.e("The view is not associated with BottomNavigationScrollBehavior");
         }
-        return (FABScrollBehavior<V>) behavior;
+        return (BottomNavigationScrollBehavior<V>) behavior;
     }
 
     @Override
@@ -149,7 +136,7 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
         }
         else if (scrollDirection == ScrollDirection.SCROLL_DIRECTION_UP && !hidden) {
             hidden = true;
-            animateOffset(child, child.getHeight() + bottomBarHeight);
+            animateOffset(child, child.getHeight());
         }
     }
 
@@ -168,14 +155,14 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
 
     private void animateTabsHolder(int offset) {
         if (mTabsHolder != null) {
-            ViewCompat.animate(mTabsHolder).setDuration(FAB_SPEED).start();
+            ViewCompat.animate(mTabsHolder).setDuration(BOTTOM_NAV_SPEED).start();
         }
     }
 
     private void ensureOrCancelAnimator(V child) {
         if (mOffsetValueAnimator == null) {
             mOffsetValueAnimator = ViewCompat.animate(child);
-            mOffsetValueAnimator.setDuration(FAB_SPEED);
+            mOffsetValueAnimator.setDuration(BOTTOM_NAV_SPEED);
             mOffsetValueAnimator.setInterpolator(INTERPOLATOR);
         }
         else {
@@ -211,7 +198,7 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
         void updateSnackbar(CoordinatorLayout parent, View dependency, View child);
     }
 
-    private class PreLollipopFABWithSnackBarImpl implements ViewWithSnackbar {
+    private class PreLollipopBottomNavWithSnackBarImpl implements ViewWithSnackbar {
         @Override
         public void updateSnackbar(CoordinatorLayout parent, View dependency, View child) {
             if (dependency instanceof Snackbar.SnackbarLayout) {
@@ -229,7 +216,7 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
         }
     }
 
-    private class LollipopFABWithSnackBarImpl implements ViewWithSnackbar {
+    private class LollipopBottomNavWithSnackBarImpl implements ViewWithSnackbar {
         @Override
         public void updateSnackbar(CoordinatorLayout parent, View dependency, View child) {
             if (dependency instanceof Snackbar.SnackbarLayout) {

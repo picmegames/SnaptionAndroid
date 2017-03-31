@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.main;
+package com.snaptiongame.app.presentation.view.behaviors;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,7 +21,7 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 @SuppressWarnings("unused")
-public final class BottomNavigationScrollBehavior<V extends View> extends VerticalScrollingBehavior<V> {
+public final class ToolbarScrollBehavior<V extends View> extends VerticalScrollingBehavior<V> {
     private static final Interpolator INTERPOLATOR = new LinearOutSlowInInterpolator();
     private final ViewWithSnackbar mWithSnackBarImpl = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
             new LollipopBottomNavWithSnackBarImpl() : new PreLollipopBottomNavWithSnackBarImpl();
@@ -36,29 +36,29 @@ public final class BottomNavigationScrollBehavior<V extends View> extends Vertic
 
     int[] attrsArray = new int[]{android.R.attr.id};
 
-    private static final int BOTTOM_NAV_SPEED = 500;
+    private static final int TOOLBAR_SPEED = 400;
 
-    public BottomNavigationScrollBehavior() {
+    public ToolbarScrollBehavior() {
         super();
     }
 
-    public BottomNavigationScrollBehavior(Context context, AttributeSet attrs) {
+    public ToolbarScrollBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, attrsArray);
         mTabLayoutId = a.getResourceId(0, View.NO_ID);
         a.recycle();
     }
 
-    public static <V extends View> BottomNavigationScrollBehavior<V> from(@NonNull V view) {
+    public static <V extends View> ToolbarScrollBehavior<V> from(@NonNull V view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (!(params instanceof CoordinatorLayout.LayoutParams)) {
             Timber.e("The view is not a child of CoordinatorLayout");
         }
         CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) params).getBehavior();
-        if (!(behavior instanceof BottomNavigationScrollBehavior)) {
-            Timber.e("The view is not associated with BottomNavigationScrollBehavior");
+        if (!(behavior instanceof ToolbarScrollBehavior)) {
+            Timber.e("The view is not associated with ToolbarScrollBehavior");
         }
-        return (BottomNavigationScrollBehavior<V>) behavior;
+        return (ToolbarScrollBehavior<V>) behavior;
     }
 
     @Override
@@ -136,7 +136,7 @@ public final class BottomNavigationScrollBehavior<V extends View> extends Vertic
         }
         else if (scrollDirection == ScrollDirection.SCROLL_DIRECTION_UP && !hidden) {
             hidden = true;
-            animateOffset(child, child.getHeight());
+            animateOffset(child, -child.getHeight());
         }
     }
 
@@ -155,14 +155,14 @@ public final class BottomNavigationScrollBehavior<V extends View> extends Vertic
 
     private void animateTabsHolder(int offset) {
         if (mTabsHolder != null) {
-            ViewCompat.animate(mTabsHolder).setDuration(BOTTOM_NAV_SPEED).start();
+            ViewCompat.animate(mTabsHolder).setDuration(TOOLBAR_SPEED).start();
         }
     }
 
     private void ensureOrCancelAnimator(V child) {
         if (mOffsetValueAnimator == null) {
             mOffsetValueAnimator = ViewCompat.animate(child);
-            mOffsetValueAnimator.setDuration(BOTTOM_NAV_SPEED);
+            mOffsetValueAnimator.setDuration(TOOLBAR_SPEED);
             mOffsetValueAnimator.setInterpolator(INTERPOLATOR);
         }
         else {
@@ -231,3 +231,4 @@ public final class BottomNavigationScrollBehavior<V extends View> extends Vertic
         }
     }
 }
+

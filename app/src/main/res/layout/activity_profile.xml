@@ -104,10 +104,10 @@
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:layout_gravity="center_horizontal"
-        android:transitionName="@string/shared_transition"
+        android:transitionName="@string/profile_transition"
         app:finalHeight="@dimen/image_final_width"
         app:finalYPosition="2dp"
-        app:layout_behavior="@string/image_behavior"
+        app:layout_behavior="@string/profile_image_behavior"
         app:startHeight="2dp"
         app:startToolbarPosition="2dp"
         app:startXPosition="2dp"/>
