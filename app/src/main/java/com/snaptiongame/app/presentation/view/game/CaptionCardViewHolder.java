@@ -39,12 +39,11 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     TextView mCaption;
     @BindView(R.id.upvote)
     ImageView mUpvote;
-    @BindView(R.id.flag)
-    ImageView mFlag;
     @BindView(R.id.number_of_upvotes)
     TextView mNumberOfUpvotes;
 
     public Context mContext;
+    public View mView;
 
     public String imageUrl;
     public String username;
@@ -55,11 +54,15 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     public CaptionCardViewHolder(View itemView) {
         super(itemView);
-        this.mContext = itemView.getContext();
+        mContext = itemView.getContext();
+        mView = itemView;
         ButterKnife.bind(this, itemView);
 
         mUpvote.setOnClickListener(view -> setBeenUpvoted());
-        mFlag.setOnClickListener(view -> setBeenFlagged());
+        itemView.setOnLongClickListener(view -> {
+            setBeenFlagged();
+            return true;
+        });
 
         mUserImage.setOnClickListener(view -> {
             Intent profileIntent = new Intent(mContext, ProfileActivity.class);
@@ -84,12 +87,11 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         else {
             mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
         }
-
         if (isFlagged) {
-            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+            mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorFlagged));
         }
         else {
-            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDefault));
         }
     }
 
@@ -109,9 +111,10 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setBeenFlagged() {
         if (isFlagged) {
-            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDefault));
             isFlagged = false;
             flagCaption(captionId, isFlagged);
+            Toast.makeText(mContext, "Unflagged", Toast.LENGTH_SHORT).show();
         }
         else {
             new MaterialDialog.Builder(mContext)
@@ -120,7 +123,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+                        mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorFlagged));
                         isFlagged = true;
                         flagCaption(captionId, isFlagged);
                         Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
@@ -130,11 +133,11 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void upvoteCaption(int captionId, boolean isLiked) {
-        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isLiked, GameAction.UPVOTE, GameAction.CAPTION_ID))
+    private void upvoteCaption(int captionId, boolean isUpvoted) {
+        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isUpvoted, GameAction.UPVOTE, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        like -> {
+                        upvote -> {
                         },
                         Timber::e,
                         () -> Timber.i("Successfully liked caption!")
@@ -145,7 +148,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isFlagged, GameAction.FLAGGED, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        like -> {
+                        flag -> {
                         },
                         Timber::e,
                         () -> Timber.i("Successfully flagged caption")

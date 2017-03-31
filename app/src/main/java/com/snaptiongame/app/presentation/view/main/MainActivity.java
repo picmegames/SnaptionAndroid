@@ -53,6 +53,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 
+import static android.R.id.toggle;
+
 /**
  * @author Tyler Wong
  */
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
 
         mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.setDrawerSlideAnimationEnabled(false);
         actionBarDrawerToggle.syncState();
 
         rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_MARGIN,
