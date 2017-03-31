@@ -5,7 +5,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'me.tatarka:gradle-retrolambda:3.5.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.6.0'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
@@ -31,6 +31,7 @@ ext {
     buildToolsVersion = '25.0.2'
 
     // Developer dependencies
+    butterknifeVersion = '8.5.1'
     androidTestVersion = '0.5'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'
@@ -42,19 +43,18 @@ ext {
     jsonVersion = '20160810'
 
     // Application dependencies
-    supportLibVersion = '25.2.0'
-    playServicesVersion = '10.2.0'
+    supportLibVersion = '25.3.0'
+    playServicesVersion = '10.2.1'
     circleImageViewVersion = '2.1.0'
     textDrawableVersion = '1.0.1'
-    materialDialogsVersion = '0.9.4.1'
-    nachosVersion = '1.0.0'
+    materialDialogsVersion = '0.9.4.2'
+    nachosVersion = '1.1.0'
     facebookSdkVersion = '4.20.0'
-    butterknifeVersion = '8.5.1'
     glideVersion = '3.7.0'
-    glideTransformationsVersion = '2.0.1'
+    glideTransformationsVersion = '2.0.2'
     okHttpVersion = '3.6.0'
     retrofitVersion = '2.2.0'
     rxAndroidVersion = '2.0.1'
     rxJavaVersion = '2.0.7'
-    branchioVersion = '2.5.9'
+    branchioVersion = '2.6.0'
 }

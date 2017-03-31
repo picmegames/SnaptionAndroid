@@ -163,7 +163,8 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     /**
      * This method is called when the view is destroyed.
-     * It will unbind and dispose of the Butterknife bindings.
+     * It will unbind and dispose of the Butterknife bindings
+     * and network calls.
      */
     @Override
     public void onDestroyView() {
