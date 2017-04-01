@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppBarTheme">
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -23,7 +22,6 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
@@ -79,23 +77,23 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@null"
+        android:theme="@style/AppBarTheme"
         app:layout_anchor="@id/frame_layout"
-        app:layout_collapseMode="pin"
-        app:popupTheme="@style/ToolBarTheme"
-        app:title="">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <Space
             android:layout_width="@dimen/image_final_width"
             android:layout_height="@dimen/image_final_width"
+            android:layout_marginEnd="16dp"
             android:background="@null"/>
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"/>
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
 
     </android.support.v7.widget.Toolbar>
 

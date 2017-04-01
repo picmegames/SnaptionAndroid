@@ -73,8 +73,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ImageView mPickerImage;
     @BindView(R.id.picker_name)
     TextView mPickerName;
-    @BindView(R.id.upvote)
-    ImageView mUpvoteButton;
 
     private ActionBar mActionBar;
     private Menu mMenu;
@@ -174,7 +172,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
-
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
             mActionBar.setTitle("");
@@ -188,17 +185,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     this, mImage, ViewCompat.getTransitionName(mImage));
             startActivity(immersiveIntent, transitionActivityOptions.toBundle());
         });
-
-        mUpvoteButton.setOnClickListener(view -> upvoteGame());
     }
 
     private void upvoteGame() {
         if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
             isUpvoted = false;
         }
         else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_400_24dp));
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
             isUpvoted = true;
         }
         mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID));
@@ -217,6 +212,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mMenu.findItem(R.id.unflag).setVisible(false);
             mMenu.findItem(R.id.flag).setVisible(true);
         }
+        if (isUpvoted) {
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
+        }
+        else {
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
+        }
+
         return true;
     }
 
@@ -240,6 +242,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 break;
             case R.id.invite_friend_to_game:
                 mPresenter.getBranchToken(mGameId);
+                break;
+            case R.id.upvote:
+                upvoteGame();
                 break;
             default:
                 break;
@@ -325,7 +330,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     .buildRound(name.substring(0, 1),
                             ColorGenerator.MATERIAL.getColor(name)));
         }
-        mPickerName.setText(name);
+        mPickerName.setText(mPicker);
     }
 
     @Override
@@ -361,13 +366,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mImageUrl = image;
         isUpvoted = beenUpvoted;
         isFlagged = beenFlagged;
-
-        if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_400_24dp));
-        }
-        else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
-        }
 
         supportPostponeEnterTransition();
         Glide.with(this)

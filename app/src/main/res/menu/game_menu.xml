@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/flag"
@@ -25,5 +26,12 @@
         android:id="@+id/invite_friend_to_game"
         android:checked="false"
         android:title="@string/invite_friend"/>
+
+    <item
+        android:id="@+id/upvote"
+        android:checked="false"
+        android:icon="@drawable/ic_favorite_border_white_24dp"
+        android:title="@string/upvote"
+        app:showAsAction="ifRoom"/>
 
 </menu>
