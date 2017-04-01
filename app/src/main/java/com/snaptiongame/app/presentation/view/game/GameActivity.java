@@ -1,7 +1,6 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -179,20 +177,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setTitle(getString(R.string.add_caption));
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setEnterTransition(null);
-            getWindow().setReturnTransition(new Fade());
+            mActionBar.setTitle("");
         }
 
         mImage.setOnClickListener(view -> {
             Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
             immersiveIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
-            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(this, mImage, ViewCompat.getTransitionName(mImage));
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this, mImage, ViewCompat.getTransitionName(mImage));
             startActivity(immersiveIntent, transitionActivityOptions.toBundle());
         });
 
@@ -375,10 +368,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         else {
             mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
         }
+
         supportPostponeEnterTransition();
         Glide.with(this)
                 .load(image)
-                .fitCenter()
                 .dontAnimate()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override

@@ -58,7 +58,6 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/app_name"
             android:maxHeight="280dp"
-            android:orientation="vertical"
             android:transitionName="@string/shared_transition"/>
 
         <android.support.v4.widget.SwipeRefreshLayout

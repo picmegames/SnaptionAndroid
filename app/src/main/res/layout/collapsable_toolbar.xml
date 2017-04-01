@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
+        android:theme="@style/AppBarTheme"
         app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/AppBarTheme"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 </android.support.design.widget.AppBarLayout>

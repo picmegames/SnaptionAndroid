@@ -1,9 +1,9 @@
 package com.snaptiongame.app.presentation.view.photo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -30,33 +30,28 @@ public class ImmersiveActivity extends AppCompatActivity {
         setContentView(R.layout.activity_immersive);
         ButterKnife.bind(this);
 
-        supportPostponeEnterTransition();
-        Glide.with(this)
-                .load(getIntent().getStringExtra(Game.IMAGE_URL))
-                .fitCenter()
-                .dontAnimate()
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
+        Intent intent = getIntent();
+        String imageUrl = intent.getStringExtra(Game.IMAGE_URL);
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-                })
-                .into(mPhotoView);
-        fullScreen();
-    }
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            supportPostponeEnterTransition();
+            Glide.with(this)
+                    .load(imageUrl)
+                    .dontAnimate()
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            supportStartPostponedEnterTransition();
+                            return false;
+                        }
 
-    public void fullScreen() {
-        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-        uiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        uiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        uiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        getWindow().getDecorView().setSystemUiVisibility(uiOptions);
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            supportStartPostponedEnterTransition();
+                            return false;
+                        }
+                    })
+                    .into(mPhotoView);
+        }
     }
 }
