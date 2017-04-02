@@ -65,7 +65,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             return true;
         });
 
-        mUserImage.setOnClickListener(view -> {
+        itemView.setOnClickListener(view -> {
             Intent profileIntent = new Intent(mContext, ProfileActivity.class);
             profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
             profileIntent.putExtra(User.USERNAME, username);
