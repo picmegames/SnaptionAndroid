@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -25,6 +26,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -73,6 +76,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ImageView mPickerImage;
     @BindView(R.id.picker_name)
     TextView mPickerName;
+    @BindView(R.id.layout)
+    CoordinatorLayout mLayout;
 
     private ActionBar mActionBar;
     private Menu mMenu;
@@ -140,6 +145,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mAuthManager = AuthenticationManager.getInstance();
 
         Intent intent = getIntent();
+        ViewCompat.setTransitionName(mImage, intent.getStringExtra(Game.IMAGE_URL));
 
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
@@ -371,6 +377,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         Glide.with(this)
                 .load(image)
                 .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {

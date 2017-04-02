@@ -93,7 +93,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorFlagged));
         }
         else {
-            mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDefault));
+            mView.setBackgroundColor(0);
         }
     }
 
@@ -113,7 +113,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setBeenFlagged() {
         if (isFlagged) {
-            mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorDefault));
+            mView.setBackgroundColor(0);
             isFlagged = false;
             flagCaption(captionId, isFlagged);
             Toast.makeText(mContext, "Unflagged", Toast.LENGTH_SHORT).show();

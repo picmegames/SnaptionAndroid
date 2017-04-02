@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corners"
-        android:contentDescription="@string/app_name"
-        android:transitionName="@string/shared_transition"/>
+        android:contentDescription="@string/app_name"/>
 
     <TextView
         android:id="@+id/top_caption"
