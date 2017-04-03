@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -323,6 +324,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (profileUrl != null && !profileUrl.isEmpty()) {
             Glide.with(this)
                     .load(profileUrl)
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)))
                     .dontAnimate()
                     .into(mPickerImage);
         }

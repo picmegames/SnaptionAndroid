@@ -30,6 +30,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -114,6 +116,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             supportPostponeEnterTransition();
             Glide.with(this)
                     .load(intent.getStringExtra(Game.IMAGE_URL))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .priority(Priority.IMMEDIATE)
                     .fitCenter()
                     .dontAnimate()
                     .listener(new RequestListener<String, GlideDrawable>() {

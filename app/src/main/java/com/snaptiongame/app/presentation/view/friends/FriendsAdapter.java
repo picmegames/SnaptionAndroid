@@ -2,7 +2,9 @@ package com.snaptiongame.app.presentation.view.friends;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -91,6 +93,8 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         if (curFriend.imageUrl != null && !curFriend.imageUrl.isEmpty()) {
             Glide.with(holder.mContext)
                     .load(curFriend.imageUrl)
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                    .dontAnimate()
                     .into(holder.mImage);
         }
         else if (curFriend.imageUrl == null) {

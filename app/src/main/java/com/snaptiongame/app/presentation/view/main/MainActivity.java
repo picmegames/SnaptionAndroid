@@ -33,6 +33,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
@@ -179,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setDefaultHeader() {
         Glide.with(this)
                 .load(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
                 .dontAnimate()
                 .into(mProfilePicture);
         Glide.clear(mCoverPhoto);
@@ -193,10 +197,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Glide.with(this)
                 .load(profileImageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
                 .dontAnimate()
                 .into(mProfilePicture);
         Glide.with(this)
                 .load(profileImageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
                 .bitmapTransform(
                         new CenterCrop(this),
                         new BlurTransformation(this, BLUR_RADIUS),

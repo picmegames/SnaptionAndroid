@@ -34,6 +34,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
@@ -275,6 +277,8 @@ public class ProfileActivity extends AppCompatActivity
         if (mPicture != null && !mPicture.isEmpty()) {
             Glide.with(this)
                     .load(mPicture)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .priority(Priority.IMMEDIATE)
                     .placeholder(TextDrawable.builder()
                             .beginConfig()
                             .width(DEFAULT_IMG_SIZE)
@@ -287,6 +291,8 @@ public class ProfileActivity extends AppCompatActivity
 
             Glide.with(this)
                     .load(mPicture)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .priority(Priority.IMMEDIATE)
                     .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(mPicture)))
                     .bitmapTransform(
                             new CenterCrop(this),

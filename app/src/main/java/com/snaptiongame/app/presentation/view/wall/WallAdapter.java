@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.wall;
 
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -75,6 +76,8 @@ public class WallAdapter extends RecyclerView.Adapter {
             if (curGame.topCaption.creatorPicture != null) {
                 Glide.with(holder.mContext)
                         .load(curGame.topCaption.creatorPicture)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
                         .dontAnimate()
                         .into(holder.mCaptionerImage);
             }

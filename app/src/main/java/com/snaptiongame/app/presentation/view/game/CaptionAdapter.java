@@ -1,5 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -44,6 +46,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         if (curCaption.creatorPicture != null) {
             Glide.with(holder.mContext)
                     .load(curCaption.creatorPicture)
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
                     .dontAnimate()
                     .into(holder.mUserImage);
             holder.imageUrl = curCaption.creatorPicture;
