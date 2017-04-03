@@ -40,6 +40,8 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     TextView mCaption;
     @BindView(R.id.upvote)
     ImageView mUpvote;
+    @BindView(R.id.flag)
+    ImageView mFlag;
     @BindView(R.id.number_of_upvotes)
     TextView mNumberOfUpvotes;
 
@@ -90,10 +92,10 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
         }
         if (isFlagged) {
-            mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorFlagged));
+            mFlag.setVisibility(View.VISIBLE);
         }
         else {
-            mView.setBackgroundColor(0);
+            mFlag.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -113,7 +115,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setBeenFlagged() {
         if (isFlagged) {
-            mView.setBackgroundColor(0);
+            mFlag.setVisibility(View.INVISIBLE);
             isFlagged = false;
             flagCaption(captionId, isFlagged);
             Toast.makeText(mContext, "Unflagged", Toast.LENGTH_SHORT).show();
@@ -125,7 +127,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorFlagged));
+                        mFlag.setVisibility(View.VISIBLE);
                         isFlagged = true;
                         flagCaption(captionId, isFlagged);
                         Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();

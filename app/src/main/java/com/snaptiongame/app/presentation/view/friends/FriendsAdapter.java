@@ -32,7 +32,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private List<Integer> mSelectedIds;
     private List<String> mSelectedNames;
     private boolean mSelectable;
-    public static final float DIM = .6F, BRIGHT = 1F;
+
+    private static final int AVATAR_SIZE = 40;
+    private static final float DIM = .6F;
+    private static final float BRIGHT = 1F;
 
     public FriendsAdapter(List<Friend> friends) {
         this.mFriends = friends;
@@ -100,8 +103,8 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         else if (curFriend.imageUrl == null) {
             holder.mImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
-                    .width(40)
-                    .height(40)
+                    .width(AVATAR_SIZE)
+                    .height(AVATAR_SIZE)
                     .toUpperCase()
                     .endConfig()
                     .buildRound(curFriend.username.substring(0, 1),

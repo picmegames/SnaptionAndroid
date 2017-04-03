@@ -70,7 +70,7 @@
         android:layout_toStartOf="@+id/upvote"
         android:contentDescription="@string/flag"
         android:src="@drawable/ic_flag_grey_900_24dp"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/upvote"

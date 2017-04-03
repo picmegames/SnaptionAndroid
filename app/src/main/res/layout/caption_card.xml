@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_toEndOf="@+id/user_image"
-        android:layout_toStartOf="@+id/upvote_view"
+        android:layout_toStartOf="@+id/flag"
         android:textColor="@android:color/black"
         android:textSize="16sp"/>
 
@@ -32,9 +32,19 @@
         android:layout_below="@+id/name"
         android:layout_marginEnd="16dp"
         android:layout_toEndOf="@+id/user_image"
-        android:layout_toStartOf="@+id/upvote_view"
+        android:layout_toStartOf="@+id/flag"
         android:textAlignment="gravity"
         android:textSize="14sp"/>
+
+    <ImageView
+        android:id="@+id/flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_toStartOf="@+id/upvote_view"
+        android:contentDescription="@string/flag"
+        android:src="@drawable/ic_flag_grey_900_24dp"
+        android:visibility="invisible"/>
 
     <LinearLayout
         android:id="@+id/upvote_view"

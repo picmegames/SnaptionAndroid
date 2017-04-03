@@ -401,10 +401,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mPresenter = new GamePresenter(id, pickerId, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
         mRefreshLayout.setColorSchemeColors(
-                ContextCompat.getColor(this, R.color.colorAccent),
-                ContextCompat.getColor(this, R.color.colorPrimary),
-                ContextCompat.getColor(this, R.color.colorDiscover),
-                ContextCompat.getColor(this, R.color.colorPopular)
+                ContextCompat.getColor(this, R.color.colorAccent)
         );
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
