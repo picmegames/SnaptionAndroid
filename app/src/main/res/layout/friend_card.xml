@@ -4,7 +4,8 @@
                 android:layout_height="80dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:foreground="?android:selectableItemBackground">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image"

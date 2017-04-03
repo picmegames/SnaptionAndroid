@@ -3,8 +3,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:paddingTop="24dp"
-                android:paddingBottom="24dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:foreground="?android:selectableItemBackground">
 
     <de.hdodenhof.circleimageview.CircleImageView

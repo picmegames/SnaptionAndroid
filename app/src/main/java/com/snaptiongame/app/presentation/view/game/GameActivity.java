@@ -42,6 +42,7 @@ import com.snaptiongame.app.data.models.GameInvite;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
+import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -83,6 +84,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private ActionBar mActionBar;
     private Menu mMenu;
     private CaptionAdapter mAdapter;
+    private InsetDividerDecoration mDecoration;
     private AuthenticationManager mAuthManager;
     private GameContract.Presenter mPresenter;
     private CaptionSelectDialogFragment mCaptionDialogFragment;
@@ -176,6 +178,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCaptionList.setLayoutManager(layoutManager);
         mAdapter = new CaptionAdapter(new ArrayList<>());
         mCaptionList.setAdapter(mAdapter);
+        mDecoration = new InsetDividerDecoration(
+                CaptionCardViewHolder.class,
+                getResources().getDimensionPixelSize(R.dimen.divider_height),
+                getResources().getDimensionPixelSize(R.dimen.keyline_1),
+                ContextCompat.getColor(this, R.color.divider));
+        mCaptionList.addItemDecoration(mDecoration);
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -257,6 +265,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mCaptionList.removeItemDecoration(mDecoration);
     }
 
     private void inviteFriendIntent(String url) {

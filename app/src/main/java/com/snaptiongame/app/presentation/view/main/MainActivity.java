@@ -108,10 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setExitTransition(null);
-        }
-
         View headerView = mNavigationView.getHeaderView(0);
         mCoverPhoto = ButterKnife.findById(headerView, R.id.cover_photo);
         mProfilePicture = ButterKnife.findById(headerView, R.id.profile_image);

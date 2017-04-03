@@ -42,6 +42,7 @@ import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -172,6 +173,8 @@ public class ProfileActivity extends AppCompatActivity
 
         mColorPrimary = ContextCompat.getColor(this, R.color.colorPrimary);
         mTransparent = ContextCompat.getColor(this, transparent);
+
+        TransitionUtils.setupArcTransition(this, getWindow());
     }
 
     /**

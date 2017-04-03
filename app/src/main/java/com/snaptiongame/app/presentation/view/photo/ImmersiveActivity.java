@@ -15,6 +15,7 @@ import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,5 +60,7 @@ public class ImmersiveActivity extends AppCompatActivity {
                     })
                     .into(mPhotoView);
         }
+
+        TransitionUtils.setupArcTransition(this, getWindow());
     }
 }

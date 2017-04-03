@@ -6,4 +6,6 @@
     <dimen name="chip_spacing">4dp</dimen>
     <dimen name="chip_text_size">13sp</dimen>
     <dimen name="chip_vertical_spacing">3dp</dimen>
+    <dimen name="divider_height">1px</dimen>
+    <dimen name="keyline_1">72dp</dimen>
 </resources>
