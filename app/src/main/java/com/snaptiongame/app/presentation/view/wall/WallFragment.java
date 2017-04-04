@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.presentation.view.customviews.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -100,6 +100,7 @@ dependencies {
     // Android Support Libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
     compile "com.android.support:design:$rootProject.supportLibVersion"
+    compile "com.android.support:palette-v7:${supportLibVersion}"
 
     // Leak Canary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"

@@ -65,6 +65,7 @@
     <string name="ask_flag_caption">Are you sure you want to flag this caption?</string>
     <string name="clear">Clear</string>
     <string name="upvote">Upvote</string>
+    <string name="upvoted">Upvoted!</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

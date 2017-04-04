@@ -70,4 +70,5 @@
     <string name="filter_games_title">Filtrar por Etiquetas</string>
     <string name="clear">Claro</string>
     <string name="upvote">Votar</string>
+    <string name="upvoted">¡Votado!</string>
 </resources>
