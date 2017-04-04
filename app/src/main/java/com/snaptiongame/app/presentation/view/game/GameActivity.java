@@ -449,10 +449,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     24, getResources().getDisplayMetrics());
             Palette.from(bitmap)
                     .maximumColorCount(3)
-                    .clearFilters() /* by default palette ignore certain hues
-                        (e.g. pure black/white) but we don't want this. */
-                    .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip) /* - 1 to work around
-                        https://code.google.com/p/android/issues/detail?id=191013 */
+                    .clearFilters()
+                    .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
                     .generate(palette -> {
                         @ColorUtils.Lightness int lightness = ColorUtils.isDark(palette);
                         if (lightness == ColorUtils.LIGHTNESS_UNKNOWN) {

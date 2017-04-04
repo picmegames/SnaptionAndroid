@@ -16,12 +16,8 @@ package com.snaptiongame.app.presentation.view.utils;
  * limitations under the License.
  */
 
-import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
@@ -29,9 +25,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
-import android.text.TextPaint;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 
 /**
@@ -83,14 +76,6 @@ public class ViewUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int flags = view.getSystemUiVisibility();
             flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            view.setSystemUiVisibility(flags);
-        }
-    }
-
-    public static void clearLightStatusBar(@NonNull View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int flags = view.getSystemUiVisibility();
-            flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             view.setSystemUiVisibility(flags);
         }
     }
