@@ -1,6 +1,8 @@
 package com.snaptiongame.app.presentation.view.wall;
 
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.view.animation.AnimationUtils;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
@@ -54,9 +58,12 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
             Glide.with(holder.mContext)
                     .load(curGame.imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .priority(Priority.IMMEDIATE)
                     .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.imageUrl)))
                     .into(holder.mImage);
             holder.mImageUrl = curGame.imageUrl;
+            ViewCompat.setTransitionName(holder.mImage, curGame.imageUrl);
         }
         else {
             Glide.clear(holder.mImage);
@@ -69,6 +76,9 @@ public class WallAdapter extends RecyclerView.Adapter {
             if (curGame.topCaption.creatorPicture != null) {
                 Glide.with(holder.mContext)
                         .load(curGame.topCaption.creatorPicture)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                        .dontAnimate()
                         .into(holder.mCaptionerImage);
             }
             else {

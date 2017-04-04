@@ -1,17 +1,28 @@
 package com.snaptiongame.app.presentation.view.game;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +35,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -34,8 +50,14 @@ import com.snaptiongame.app.data.models.GameInvite;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
+import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
+import com.snaptiongame.app.presentation.view.utils.AnimUtils;
+import com.snaptiongame.app.presentation.view.utils.ColorUtils;
+import com.snaptiongame.app.presentation.view.utils.GlideUtils;
+import com.snaptiongame.app.presentation.view.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,12 +90,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ImageView mPickerImage;
     @BindView(R.id.picker_name)
     TextView mPickerName;
-    @BindView(R.id.upvote)
-    ImageView mUpvoteButton;
+    @BindView(R.id.layout)
+    CoordinatorLayout mLayout;
 
     private ActionBar mActionBar;
     private Menu mMenu;
     private CaptionAdapter mAdapter;
+    private InsetDividerDecoration mDecoration;
     private AuthenticationManager mAuthManager;
     private GameContract.Presenter mPresenter;
     private CaptionSelectDialogFragment mCaptionDialogFragment;
@@ -123,11 +146,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
      */
     private String mImageUrl;
 
+    private boolean isDark = false;
+
     public static final String JOIN_SNAPTION = "Join Snaption!";
     public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
     public static final String INVITE_CHANNEL = "GameInvite";
     public static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
+    private static final float SCRIM_ADJUSTMENT = 0.075f;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -137,6 +163,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mAuthManager = AuthenticationManager.getInstance();
 
         Intent intent = getIntent();
+        ViewCompat.setTransitionName(mImage, intent.getStringExtra(Game.IMAGE_URL));
 
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
@@ -166,26 +193,49 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCaptionList.setLayoutManager(layoutManager);
         mAdapter = new CaptionAdapter(new ArrayList<>());
         mCaptionList.setAdapter(mAdapter);
+        mDecoration = new InsetDividerDecoration(
+                CaptionCardViewHolder.class,
+                getResources().getDimensionPixelSize(R.dimen.divider_height),
+                getResources().getDimensionPixelSize(R.dimen.keyline_1),
+                ContextCompat.getColor(this, R.color.divider));
+        mCaptionList.addItemDecoration(mDecoration);
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
-
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setTitle(getString(R.string.add_caption));
+            mActionBar.setTitle("");
         }
 
-        mUpvoteButton.setOnClickListener(view -> upvoteGame());
+        mImage.setOnClickListener(view -> {
+            Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
+            immersiveIntent.putExtra(Game.IMAGE_URL, mImageUrl);
+
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this, mImage, ViewCompat.getTransitionName(mImage));
+            startActivity(immersiveIntent, transitionActivityOptions.toBundle());
+        });
     }
 
     private void upvoteGame() {
         if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
+            if (!isDark) {
+                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
+            }
+            else {
+                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
+            }
             isUpvoted = false;
         }
         else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_400_24dp));
+            if (!isDark) {
+                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
+            }
+            else {
+                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
+            }
             isUpvoted = true;
+            Toast.makeText(this, getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
         mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID));
     }
@@ -203,6 +253,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mMenu.findItem(R.id.unflag).setVisible(false);
             mMenu.findItem(R.id.flag).setVisible(true);
         }
+        if (isUpvoted) {
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
+        }
+        else {
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
+        }
+
         return true;
     }
 
@@ -227,10 +284,19 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             case R.id.invite_friend_to_game:
                 mPresenter.getBranchToken(mGameId);
                 break;
+            case R.id.upvote:
+                upvoteGame();
+                break;
             default:
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mCaptionList.removeItemDecoration(mDecoration);
     }
 
     private void inviteFriendIntent(String url) {
@@ -274,7 +340,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         createGameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, mImage, getString(R.string.shared_transition));
+                .makeSceneTransitionAnimation(this, mImage, ViewCompat.getTransitionName(mImage));
         startActivity(createGameIntent, transitionActivityOptions.toBundle());
     }
 
@@ -284,8 +350,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         profileIntent.putExtra(User.USERNAME, mPicker);
         profileIntent.putExtra(User.IMAGE_URL, mPickerImageUrl);
         profileIntent.putExtra(User.ID, mPickerId);
+
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, view, getString(R.string.shared_transition));
+                .makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(mPickerImage));
         startActivity(profileIntent, transitionActivityOptions.toBundle());
     }
 
@@ -297,6 +364,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (profileUrl != null && !profileUrl.isEmpty()) {
             Glide.with(this)
                     .load(profileUrl)
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)))
+                    .dontAnimate()
                     .into(mPickerImage);
         }
         else {
@@ -309,7 +378,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     .buildRound(name.substring(0, 1),
                             ColorGenerator.MATERIAL.getColor(name)));
         }
-        mPickerName.setText(name);
+        mPickerName.setText(mPicker);
     }
 
     @Override
@@ -346,16 +415,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         isUpvoted = beenUpvoted;
         isFlagged = beenFlagged;
 
-        if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_400_24dp));
-        }
-        else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_grey_400_24dp));
-        }
-
+        supportPostponeEnterTransition();
         Glide.with(this)
                 .load(image)
-                .fitCenter()
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
+                .listener(imageLoadListener)
                 .into(mImage);
         mGameId = id;
         mPickerId = pickerId;
@@ -363,10 +429,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mPresenter = new GamePresenter(id, pickerId, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
         mRefreshLayout.setColorSchemeColors(
-                ContextCompat.getColor(this, R.color.colorAccent),
-                ContextCompat.getColor(this, R.color.colorPrimary),
-                ContextCompat.getColor(this, R.color.colorDiscover),
-                ContextCompat.getColor(this, R.color.colorPopular)
+                ContextCompat.getColor(this, R.color.colorAccent)
         );
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
@@ -374,6 +437,110 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mPresenter.subscribe();
         mRefreshLayout.setRefreshing(true);
     }
+
+    private RequestListener imageLoadListener = new RequestListener<String, GlideDrawable>() {
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model,
+                                       Target<GlideDrawable> target, boolean isFromMemoryCache,
+                                       boolean isFirstResource) {
+            supportStartPostponedEnterTransition();
+            final Bitmap bitmap = GlideUtils.getBitmap(resource);
+            final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    24, getResources().getDisplayMetrics());
+            Palette.from(bitmap)
+                    .maximumColorCount(3)
+                    .clearFilters()
+                    .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
+                    .generate(palette -> {
+                        @ColorUtils.Lightness int lightness = ColorUtils.isDark(palette);
+                        if (lightness == ColorUtils.LIGHTNESS_UNKNOWN) {
+                            isDark = ColorUtils.isDark(bitmap, bitmap.getWidth() / 2, 0);
+                        }
+                        else {
+                            isDark = lightness == ColorUtils.IS_DARK;
+                        }
+
+                        if (!isDark) {
+                            ActionBar actionBar = getSupportActionBar();
+
+                            if (actionBar != null) {
+                                final Drawable upArrow = ContextCompat.getDrawable(
+                                        GameActivity.this, R.drawable.abc_ic_ab_back_material);
+                                upArrow.setColorFilter(ContextCompat.getColor(GameActivity.this, R.color.grey_800), PorterDuff.Mode.SRC_ATOP);
+                                actionBar.setHomeAsUpIndicator(upArrow);
+
+                                final Drawable more = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_more_vert_grey_800_24dp, null);
+                                mToolbar.setOverflowIcon(more);
+
+                                if (isUpvoted) {
+                                    mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
+                                }
+                                else {
+                                    mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
+                                }
+                            }
+                        }
+
+                        // color the status bar. Set a complementary dark color on L,
+                        // light or dark color on M (with matching status bar icons)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            int statusBarColor = getWindow().getStatusBarColor();
+                            final Palette.Swatch topColor = ColorUtils.getMostPopulousSwatch(palette);
+                            if (topColor != null &&
+                                    (isDark || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
+                                statusBarColor = ColorUtils.scrimify(topColor.getRgb(),
+                                        isDark, SCRIM_ADJUSTMENT);
+                                mImage.setBackgroundColor(statusBarColor);
+                                // set a light status bar on M+
+                                if (!isDark && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    ViewUtils.setLightStatusBar(mLayout);
+                                }
+                            }
+
+                            if (statusBarColor != getWindow().getStatusBarColor()) {
+                                ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
+                                        getWindow().getStatusBarColor(), statusBarColor);
+                                statusBarColorAnim.addUpdateListener(animation ->
+                                        getWindow().setStatusBarColor(
+                                                (int) animation.getAnimatedValue())
+                                );
+                                statusBarColorAnim.setDuration(1000L);
+                                statusBarColorAnim.setInterpolator(AnimUtils.getFastOutSlowInInterpolator(GameActivity.this));
+                                statusBarColorAnim.start();
+                            }
+                        }
+                    });
+
+            Palette.from(bitmap)
+                    .clearFilters()
+                    .generate(palette -> {
+//                            // color the ripple on the image spacer (default is grey)
+//                            shotSpacer.setBackground(
+//                                    ViewUtils.createRipple(palette, 0.25f, 0.5f,
+//                                            ContextCompat.getColor(DribbbleShot.this, R.color.mid_grey),
+//                                            true));
+                        // slightly more opaque ripple on the pinned image to compensate
+                        // for the scrim
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            mImage.setForeground(ViewUtils.createRipple(palette, 0.3f, 0.6f,
+                                    ContextCompat.getColor(GameActivity.this, R.color.grey_500),
+                                    true));
+                        }
+                    });
+
+            // TODO should keep the background if the image contains transparency?!
+            mImage.setBackground(null);
+            return false;
+        }
+
+        @Override
+        public boolean onException(Exception e, String model, Target<GlideDrawable> target,
+                                   boolean isFirstResource) {
+            supportStartPostponedEnterTransition();
+            return false;
+        }
+    };
 
     public void loadInvitedGame() {
         GameProvider.getGame(mInvite.gameId, mAuthManager.getInviteToken())

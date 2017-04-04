@@ -7,24 +7,24 @@
     <string name="wall_label">Pared</string>
     <string name="friends_label">Amigos</string>
     <string name="settings_label">Ajustes</string>
-    <string name="log_out_label">Cerrar sesión</string>
+    <string name="log_out_label">Cerrar Sesión</string>
     <string name="share">Compartir</string>
-    <string name="create_game">Crear juego</string>
-    <string name="flag">Marcar como inapropiado</string>
-    <string name="content_level_label">Nivel de contenido</string>
-    <string name="privacy_label">Juego privado</string>
+    <string name="create_game">Crear Juego</string>
+    <string name="flag">Marcar como Inapropiado</string>
+    <string name="content_level_label">Nivel de Contenido</string>
+    <string name="privacy_label">Juego Privado</string>
     <string name="welcome_message">¡Bienvenido a Snaption!</string>
-    <string name="add_caption">¡Agrega un subtítulo!</string>
+    <string name="add_caption">Agrega un Subtítulo</string>
     <string name="game_closed">CERRADO</string>
     <string name="default_caption">¡Sea el primero en subtítulos esta imagen!</string>
-    <string name="username">Nombre de usuario</string>
-    <string name="add_a_friend">¡Añade un amigo!</string>
+    <string name="username">Nombre de Usuario</string>
+    <string name="add_a_friend">¡Añade un Amigo!</string>
     <string name="undo">Deshacer</string>
     <string name="update_success">Nombre de usuario actualizado con éxito</string>
     <string name="update_failure">Nombre de usuario duplicado</string>
     <string name="update_profile_picture_success">Imagen de perfil actualizada con éxito</string>
-    <string name="try_again">Inténtalo de nuevo</string>
-    <string name="update_info">Actualizar información</string>
+    <string name="try_again">Inténtalo de Nuevo</string>
+    <string name="update_info">Actualizar Información</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
 
@@ -33,14 +33,14 @@
     <string name="delete_post"> como amigo?</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
-    <string name="add_friends">Añade amigos</string>
+    <string name="add_friends">Añade Amigos</string>
     <string name="fill_in_the_blank">¡Llena el espacio en blanco!</string>
     <string name="version_label">Versión</string>
     <string name="tags_label">Etiquetas</string>
-    <string name="add_tags_label">Añadir algunas etiquetas!</string>
-    <string name="date_label">Fecha final</string>
+    <string name="add_tags_label">Añadir Algunas Etiquetas!</string>
+    <string name="date_label">Fecha Final</string>
     <string name="upload_complete_message">Juego creado correctamente</string>
-    <string name="upload_complete_title">Carga completa</string>
+    <string name="upload_complete_title">Carga Completa</string>
     <string name="upload_message">Carga en progreso&#8230;</string>
     <string name="upload_title">Subiendo Nuevo Juego</string>
     <string name="no_friends">No se pudo encontrar amigos</string>
@@ -49,15 +49,15 @@
         <item>Familia</item>
         <item>Maduro</item>
     </string-array>
-    <string name="log_in_label">Iniciar sesión</string>
+    <string name="log_in_label">Iniciar Sesión</string>
     <string name="current_login">Conectado como: %1$s</string>
-    <string name="unflag">Deshacer la bandera</string>
+    <string name="unflag">Deshacer la Bandera</string>
     <string name="login_failure">Error al iniciar sesión</string>
     <string name="game_open">ABIERTO</string>
-    <string name="invite_friend">¡Invitar a un amigo!</string>
+    <string name="invite_friend">¡Invitar a un Amigo!</string>
     <string name="discover">Descubrir</string>
     <string name="popular">Popular</string>
-    <string name="my_wall">Mi pared</string>
+    <string name="my_wall">Mi Pared</string>
     <string name="filter">Filtrar</string>
     <string name="update">Actualizar</string>
     <string name="nothing_here">¡Nada aquí todavía!</string>
@@ -65,8 +65,10 @@
     <string name="rank">Rango:</string>
     <string name="ask_flag_game">¿Estás seguro de que quieres marcar este juego?</string>
     <string name="flag_alert_game">Juego de Bandera</string>
-    <string name="flag_alert_caption">Leyenda de la bandera</string>
+    <string name="flag_alert_caption">Leyenda de la Bandera</string>
     <string name="ask_flag_caption">¿Estás seguro de que quieres marcar este título?</string>
     <string name="filter_games_title">Filtrar por Etiquetas</string>
     <string name="clear">Claro</string>
+    <string name="upvote">Votar</string>
+    <string name="upvoted">¡Votado!</string>
 </resources>

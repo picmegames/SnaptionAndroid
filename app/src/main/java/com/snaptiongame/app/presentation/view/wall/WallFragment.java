@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.presentation.view.customviews.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,10 +93,7 @@ public class WallFragment extends Fragment implements WallContract.View {
 
         mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType, null));
         mRefreshLayout.setColorSchemeColors(
-                ContextCompat.getColor(getContext(), R.color.colorAccent),
-                ContextCompat.getColor(getContext(), R.color.colorPrimary),
-                ContextCompat.getColor(getContext(), R.color.colorDiscover),
-                ContextCompat.getColor(getContext(), R.color.colorPopular)
+                ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
         // Need to subscribe if on Discover tab because onResume will

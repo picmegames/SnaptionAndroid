@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,12 +33,15 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
                 profileIntent.putExtra(User.ID, mAuthManager.getUserId());
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(this, mProfilePicture, getString(R.string.shared_transition));
+                        .makeSceneTransitionAnimation(this, mProfilePicture, ViewCompat.getTransitionName(mProfilePicture));
                 startActivity(profileIntent, transitionActivityOptions.toBundle());
             }
             else {
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
 
         mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.setDrawerSlideAnimationEnabled(false);
         actionBarDrawerToggle.syncState();
 
         rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_MARGIN,
@@ -172,6 +177,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setDefaultHeader() {
         Glide.with(this)
                 .load(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
+                .dontAnimate()
                 .into(mProfilePicture);
         Glide.clear(mCoverPhoto);
         mNameView.setText(getString(R.string.welcome_message));
@@ -185,9 +193,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Glide.with(this)
                 .load(profileImageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
+                .dontAnimate()
                 .into(mProfilePicture);
         Glide.with(this)
                 .load(profileImageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
                 .bitmapTransform(
                         new CenterCrop(this),
                         new BlurTransformation(this, BLUR_RADIUS),

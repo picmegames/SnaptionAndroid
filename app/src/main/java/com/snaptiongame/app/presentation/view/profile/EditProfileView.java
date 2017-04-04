@@ -2,8 +2,10 @@ package com.snaptiongame.app.presentation.view.profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 
@@ -67,6 +71,8 @@ public class EditProfileView extends RelativeLayout {
 
         Glide.with(mContext)
                 .load(mAuthManager.getProfileImageUrl())
+                .placeholder(new ColorDrawable(ContextCompat.getColor(mContext, R.color.grey_300)))
+                .dontAnimate()
                 .into(mProfileImage);
 
         mFullName.setText(mAuthManager.getUserFullName());
@@ -83,7 +89,14 @@ public class EditProfileView extends RelativeLayout {
     public void updateProfilePicture(String profileUrl) {
         Glide.with(mContext)
                 .load(profileUrl)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .priority(Priority.IMMEDIATE)
                 .into(mProfileImage);
+    }
+
+    public void updateUsername(String username) {
+        mUsername.setText(username);
+        mEditText.setText("");
     }
 
     @OnTextChanged(R.id.name_input)

@@ -108,10 +108,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
         mRefreshLayout.setColorSchemeColors(
-                ContextCompat.getColor(getContext(), R.color.colorAccent),
-                ContextCompat.getColor(getContext(), R.color.colorPrimary),
-                ContextCompat.getColor(getContext(), R.color.colorDiscover),
-                ContextCompat.getColor(getContext(), R.color.colorPopular)
+                ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

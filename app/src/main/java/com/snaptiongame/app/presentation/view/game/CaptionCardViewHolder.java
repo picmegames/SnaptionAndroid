@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -45,6 +46,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     TextView mNumberOfUpvotes;
 
     public Context mContext;
+    public View mView;
 
     public String imageUrl;
     public String username;
@@ -55,21 +57,26 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     public CaptionCardViewHolder(View itemView) {
         super(itemView);
-        this.mContext = itemView.getContext();
+        mContext = itemView.getContext();
+        mView = itemView;
         ButterKnife.bind(this, itemView);
 
         mUpvote.setOnClickListener(view -> setBeenUpvoted());
-        mFlag.setOnClickListener(view -> setBeenFlagged());
+        itemView.setOnLongClickListener(view -> {
+            setBeenFlagged();
+            return true;
+        });
 
-        mUserImage.setOnClickListener(view -> {
+        itemView.setOnClickListener(view -> {
             Intent profileIntent = new Intent(mContext, ProfileActivity.class);
             profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
             profileIntent.putExtra(User.USERNAME, username);
             profileIntent.putExtra(User.IMAGE_URL, imageUrl);
             profileIntent.putExtra(User.ID, userId);
+
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext, mUserImage,
-                            mContext.getString(R.string.shared_transition));
+                            ViewCompat.getTransitionName(mUserImage));
             mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
         });
     }
@@ -79,39 +86,40 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         isFlagged = beenFlagged;
 
         if (isUpvoted) {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
         }
         else {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
         }
-
         if (isFlagged) {
-            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+            mFlag.setVisibility(View.VISIBLE);
         }
         else {
-            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            mFlag.setVisibility(View.INVISIBLE);
         }
     }
 
     private void setBeenUpvoted() {
         if (isUpvoted) {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
             isUpvoted = false;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) - 1));
         }
         else {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
             isUpvoted = true;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) + 1));
+            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
         upvoteCaption(captionId, isUpvoted);
     }
 
     private void setBeenFlagged() {
         if (isFlagged) {
-            mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            mFlag.setVisibility(View.INVISIBLE);
             isFlagged = false;
             flagCaption(captionId, isFlagged);
+            Toast.makeText(mContext, "Unflagged", Toast.LENGTH_SHORT).show();
         }
         else {
             new MaterialDialog.Builder(mContext)
@@ -120,7 +128,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mFlag.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+                        mFlag.setVisibility(View.VISIBLE);
                         isFlagged = true;
                         flagCaption(captionId, isFlagged);
                         Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
@@ -130,11 +138,11 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void upvoteCaption(int captionId, boolean isLiked) {
-        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isLiked, GameAction.UPVOTE, GameAction.CAPTION_ID))
+    private void upvoteCaption(int captionId, boolean isUpvoted) {
+        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isUpvoted, GameAction.UPVOTE, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        like -> {
+                        upvote -> {
                         },
                         Timber::e,
                         () -> Timber.i("Successfully liked caption!")
@@ -145,7 +153,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isFlagged, GameAction.FLAGGED, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        like -> {
+                        flag -> {
                         },
                         Timber::e,
                         () -> Timber.i("Successfully flagged caption")

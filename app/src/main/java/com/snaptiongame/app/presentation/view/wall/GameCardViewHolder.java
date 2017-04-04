@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -47,11 +48,13 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.upvote)
     ImageView mUpvoteButton;
     @BindView(R.id.flag)
-    ImageView mFlagButton;
+    ImageView mFlagIcon;
     @BindView(R.id.game_status)
     TextView mGameStatus;
 
     public Context mContext;
+    public PopupMenu mMenu;
+    public View mView;
 
     public int mGameId;
     public int mPickerId;
@@ -63,23 +66,21 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public GameCardViewHolder(View itemView) {
         super(itemView);
         mContext = itemView.getContext();
+        mView = itemView;
         ButterKnife.bind(this, itemView);
 
-        if (Build.VERSION.SDK_INT >= 21) {
+        mMenu = new PopupMenu(mContext, itemView);
+        mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
+        mMenu.getMenu().findItem(R.id.invite_friend_to_game).setVisible(false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mImage.setClipToOutline(true);
         }
 
         mUpvoteButton.setOnClickListener(view -> setBeenUpvoted());
-        mFlagButton.setOnClickListener(view -> setBeenFlagged());
 
         itemView.setOnLongClickListener(view -> {
-            PopupMenu menu = new PopupMenu(mContext, itemView);
-            menu.getMenuInflater().inflate(R.menu.game_menu, menu.getMenu());
-            menu.getMenu().findItem(R.id.invite_friend_to_game).setVisible(false);
-            menu.getMenu().findItem(R.id.flag).setVisible(false);
-            menu.getMenu().findItem(R.id.unflag).setVisible(false);
-
-            menu.setOnMenuItemClickListener(item -> {
+            mMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.create_game:
                         startCreateGame();
@@ -87,13 +88,19 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                     case R.id.share:
                         FacebookShareProvider.shareToFacebook((AppCompatActivity) mContext, mImage);
                         break;
+                    case R.id.flag:
+                        setBeenFlagged();
+                        break;
+                    case R.id.unflag:
+                        setBeenFlagged();
+                        break;
                     default:
                         break;
                 }
                 return true;
             });
 
-            menu.show();
+            mMenu.show();
             return true;
         });
 
@@ -107,7 +114,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,
-                            mImage, mContext.getString(R.string.shared_transition));
+                            mImage, ViewCompat.getTransitionName(mImage));
             mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
         });
     }
@@ -117,35 +124,42 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         isFlagged = beenFlagged;
 
         if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
         }
         else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
         }
 
         if (isFlagged) {
-            mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+            mMenu.getMenu().findItem(R.id.flag).setVisible(false);
+            mMenu.getMenu().findItem(R.id.unflag).setVisible(true);
+            mFlagIcon.setVisibility(View.VISIBLE);
         }
         else {
-            mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            mMenu.getMenu().findItem(R.id.flag).setVisible(true);
+            mMenu.getMenu().findItem(R.id.unflag).setVisible(false);
+            mFlagIcon.setVisibility(View.INVISIBLE);
         }
     }
 
     private void setBeenUpvoted() {
         if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_400_24dp));
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
             isUpvoted = false;
         }
         else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red_400_24dp));
+            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
             isUpvoted = true;
+            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
         upvoteGame(mGameId, isUpvoted);
     }
 
     private void setBeenFlagged() {
         if (isFlagged) {
-            mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_grey_400_24dp));
+            mFlagIcon.setVisibility(View.INVISIBLE);
+            mMenu.getMenu().findItem(R.id.flag).setVisible(true);
+            mMenu.getMenu().findItem(R.id.unflag).setVisible(false);
             isFlagged = false;
             flagGame(mGameId, isFlagged);
         }
@@ -156,7 +170,9 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mFlagButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_flag_black_24dp));
+                        mFlagIcon.setVisibility(View.VISIBLE);
+                        mMenu.getMenu().findItem(R.id.flag).setVisible(false);
+                        mMenu.getMenu().findItem(R.id.unflag).setVisible(true);
                         isFlagged = true;
                         flagGame(mGameId, isFlagged);
                         Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
@@ -172,7 +188,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation((AppCompatActivity) mContext,
-                        mImage, mContext.getString(R.string.shared_transition));
+                        mImage, ViewCompat.getTransitionName(mImage));
         mContext.startActivity(createGameIntent, transitionActivityOptions.toBundle());
     }
 
@@ -180,7 +196,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         GameProvider.upvoteOrFlagGame(new GameAction(gameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        like -> {
+                        upvote -> {
                         },
                         Timber::e,
                         () -> Timber.i("Successfully upvoted game!")
@@ -191,7 +207,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         GameProvider.upvoteOrFlagGame(new GameAction(gameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        like -> {
+                        flag -> {
                         },
                         Timber::e,
                         () -> {
