@@ -50,7 +50,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     @BindView(R.id.refresh_layout_friends)
     SwipeRefreshLayout mRefreshLayout;
 
-    private FriendsContract.Presenter mPresenter;
+    protected FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
     private List<Friend> friends = new ArrayList<>();

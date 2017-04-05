@@ -49,6 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
+import retrofit2.HttpException;
 
 import static android.R.color.transparent;
 
@@ -340,8 +341,14 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
-    public void showUsernameFailure(String oldUsername, User user) {
-        Snackbar.make(mLayout, getString(R.string.update_failure), Snackbar.LENGTH_LONG)
+    public void showUsernameFailure(Throwable e) {
+        String msg = getString(R.string.update_failure);
+        if (e instanceof HttpException) {
+            if (((HttpException) e).code() == 500) {
+                msg = getString(R.string.invalid_char);
+            }
+        }
+        Snackbar.make(mLayout, msg, Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.try_again), view -> mEditDialog.show())
                 .show();
     }
