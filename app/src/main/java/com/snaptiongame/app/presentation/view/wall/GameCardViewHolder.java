@@ -72,6 +72,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         mMenu = new PopupMenu(mContext, itemView);
         mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
         mMenu.getMenu().findItem(R.id.invite_friend_to_game).setVisible(false);
+        mMenu.getMenu().findItem(R.id.upvote).setVisible(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mImage.setClipToOutline(true);

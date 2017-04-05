@@ -514,14 +514,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             Palette.from(bitmap)
                     .clearFilters()
                     .generate(palette -> {
-//                            // color the ripple on the image spacer (default is grey)
-//                            shotSpacer.setBackground(
-//                                    ViewUtils.createRipple(palette, 0.25f, 0.5f,
-//                                            ContextCompat.getColor(DribbbleShot.this, R.color.mid_grey),
-//                                            true));
-                        // slightly more opaque ripple on the pinned image to compensate
-                        // for the scrim
-
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             mImage.setForeground(ViewUtils.createRipple(palette, 0.3f, 0.6f,
                                     ContextCompat.getColor(GameActivity.this, R.color.grey_500),
@@ -529,7 +521,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         }
                     });
 
-            // TODO should keep the background if the image contains transparency?!
             mImage.setBackground(null);
             return false;
         }
