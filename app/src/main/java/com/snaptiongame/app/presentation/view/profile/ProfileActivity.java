@@ -49,7 +49,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
-import retrofit2.HttpException;
 
 import static android.R.color.transparent;
 

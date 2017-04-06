@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.profile;
 
-import android.content.res.Resources;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
