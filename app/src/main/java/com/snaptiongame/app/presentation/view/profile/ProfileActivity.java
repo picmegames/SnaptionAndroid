@@ -340,8 +340,8 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
-    public void showUsernameFailure(String oldUsername, User user) {
-        Snackbar.make(mLayout, getString(R.string.update_failure), Snackbar.LENGTH_LONG)
+    public void showUsernameFailure(String message) {
+        Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.try_again), view -> mEditDialog.show())
                 .show();
     }

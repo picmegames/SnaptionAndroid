@@ -91,6 +91,7 @@
     <!-- Invite Friends Dialog -->
     <string name="add_a_friend">Add a Friend!</string>
     <string name="update_failure">Duplicate username</string>
+    <string name="invalid_char">Invalid symbol in username</string>
     <string name="no_friends">No friends could be found</string>
 
     <!-- Delete Friend Dialog -->

@@ -2,6 +2,7 @@ package com.snaptiongame.app.presentation.view.friends;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -355,17 +356,18 @@ public class FriendsDialogFragment extends DialogFragment {
          * previous dialog.
          */
         mDialogBuilder.setPositiveButton(sPositiveButtonText, (dialogInterface, i) -> {
-
             //add all selected friends if in the facebook dialog
             if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE)) {
                 for (Integer friendId : mAdapter.getSelectedFriendIds()) {
                     addFriend(friendId);
                 }
             }
+
             //Only send an outer app if we are still on the first dialog screen. Otherwise
             //we handle the friend invite in app
-            else if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
+            else if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG)) {
                 addFriend(sUserID);
+            }
         }).setNegativeButton(sNegativeButtonText, (dialogInterface, i) -> {
 
             Intent data = new Intent();
@@ -458,6 +460,8 @@ public class FriendsDialogFragment extends DialogFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         request -> {
+                            //Update the background fragment with the new friend(s)
+                            updateFriendFragment();
                         },
                         Timber::e,
                         () -> Timber.i("Successfully added friend!")
@@ -594,5 +598,9 @@ public class FriendsDialogFragment extends DialogFragment {
         }
     }
 
+    public void updateFriendFragment() {
+        FriendsFragment frag = (FriendsFragment) this.getTargetFragment();
+        frag.mPresenter.loadFriends();
+    }
 
 }

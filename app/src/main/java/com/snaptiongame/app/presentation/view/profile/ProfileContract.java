@@ -20,7 +20,7 @@ public class ProfileContract {
 
         void showUsernameSuccess(String oldUsername, User user);
 
-        void showUsernameFailure(String oldUsername, User user);
+        void showUsernameFailure(String message);
 
         void saveUsername(String username);
 

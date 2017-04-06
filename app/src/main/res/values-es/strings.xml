@@ -22,6 +22,7 @@
     <string name="undo">Deshacer</string>
     <string name="update_success">Nombre de usuario actualizado con éxito</string>
     <string name="update_failure">Nombre de usuario duplicado</string>
+    <string name="invalid_char">Símbolo no válido en el nombre de usuario</string>
     <string name="update_profile_picture_success">Imagen de perfil actualizada con éxito</string>
     <string name="try_again">Inténtalo de Nuevo</string>
     <string name="update_info">Actualizar Información</string>
