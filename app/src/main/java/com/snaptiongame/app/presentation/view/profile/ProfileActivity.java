@@ -341,14 +341,8 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
-    public void showUsernameFailure(Throwable e) {
-        String msg = getString(R.string.update_failure);
-        if (e instanceof HttpException) {
-            if (((HttpException) e).code() == 500) {
-                msg = getString(R.string.invalid_char);
-            }
-        }
-        Snackbar.make(mLayout, msg, Snackbar.LENGTH_LONG)
+    public void showUsernameFailure(String message) {
+        Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.try_again), view -> mEditDialog.show())
                 .show();
     }

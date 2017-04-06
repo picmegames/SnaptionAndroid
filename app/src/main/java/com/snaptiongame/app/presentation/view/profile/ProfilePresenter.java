@@ -1,8 +1,11 @@
 package com.snaptiongame.app.presentation.view.profile;
 
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.snaptiongame.app.R;
+import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.UserProvider;
@@ -59,7 +62,14 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                         nextUser -> mProfileView.saveUsername(nextUser.username),
                         e -> {
                             Timber.e(e);
-                            mProfileView.showUsernameFailure(e);
+                            String msg = SnaptionApplication.getContext().getString(R.string.update_failure);
+                            if (e instanceof HttpException) {
+                                //Show the invalid character message if the error code is 500
+                                if (((HttpException) e).code() == 500) {
+                                    msg = SnaptionApplication.getContext().getString(R.string.invalid_char);
+                                }
+                            }
+                            mProfileView.showUsernameFailure(msg);
                         },
                         () -> mProfileView.showUsernameSuccess(oldUsername, user)
                 );
