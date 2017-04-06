@@ -1,13 +1,15 @@
 package com.snaptiongame.app.data.providers;
 
+import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
-import com.snaptiongame.app.data.api.SnaptionApi;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * @author Tyler Wong
@@ -24,11 +26,11 @@ public class FriendProvider {
         return apiService.getFacebookFriends();
     }
 
-    public static Observable<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {
+    public static Single<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {
         return apiService.addFriend(myId, request);
     }
 
-    public static Observable<AddFriendRequest> removeFriend(int myId, AddFriendRequest request) {
+    public static Completable removeFriend(int myId, AddFriendRequest request) {
         return apiService.deleteFriend(myId, request);
     }
 }

@@ -1,13 +1,13 @@
 package com.snaptiongame.app.data.providers;
 
+import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Session;
-import com.snaptiongame.app.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,8 +26,8 @@ public class SessionProviderTest {
         service = mock(SnaptionApi.class);
         request = new OAuthRequest("", "", "");
         session = new Session(0);
-        when(service.userOAuthFacebook(request)).thenReturn(Observable.just(session));
-        when(service.userOAuthGoogle(request)).thenReturn(Observable.just(session));
+        when(service.userOAuthFacebook(request)).thenReturn(Single.just(session));
+        when(service.userOAuthGoogle(request)).thenReturn(Single.just(session));
     }
 
     @Test

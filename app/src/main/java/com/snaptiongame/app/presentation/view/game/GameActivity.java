@@ -538,8 +538,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         game -> showGame(game.imageUrl, game.id, game.pickerId, game.beenUpvoted, game.beenFlagged),
-                        Timber::e,
-                        () -> Timber.i("Loading game completed successfully.")
+                        Timber::e
                 );
     }
 

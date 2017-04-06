@@ -62,13 +62,11 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                         getFriendIds(mCreateGameView.getAddedFriends())))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        snaption -> {
-                        },
+                        mCreateGameView::showUploadComplete,
                         e -> {
                             Timber.e(e);
                             mCreateGameView.showUploadFailure();
-                        },
-                        mCreateGameView::showUploadComplete
+                        }
                 );
         mDisposables.add(disposable);
     }

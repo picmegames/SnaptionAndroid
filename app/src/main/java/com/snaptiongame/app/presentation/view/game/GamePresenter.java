@@ -76,8 +76,7 @@ public class GamePresenter implements GameContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         user -> mGameView.setPickerInfo(user.imageUrl, user.username),
-                        Timber::e,
-                        () -> Timber.i("Loading picker completed successfully.")
+                        Timber::e
                 );
         mDisposables.add(disposable);
     }
@@ -87,10 +86,8 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        like -> {
-                        },
-                        Timber::e,
-                        () -> Timber.i("Successfully flagged snaption")
+                        () -> Timber.i("Successfully flagged snaption"),
+                        Timber::e
                 );
         mDisposables.add(disposable);
     }
@@ -109,10 +106,8 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        addedCaption -> {
-                        },
-                        Timber::e,
-                        () -> Timber.i("Added caption")
+                        () -> Timber.i("Added caption"),
+                        Timber::e
                 );
         mDisposables.add(disposable);
     }
@@ -201,8 +196,7 @@ public class GamePresenter implements GameContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         token -> mGameView.generateInviteUrl(token),
-                        Timber::e,
-                        () -> Timber.i("Getting Snaptions completed successfully")
+                        Timber::e
                 );
     }
 

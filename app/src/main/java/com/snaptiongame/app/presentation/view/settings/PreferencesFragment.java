@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.authentication.AuthenticationCallback;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import timber.log.Timber;
 
@@ -19,7 +21,7 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 public class PreferencesFragment extends PreferenceFragment implements
-        Preference.OnPreferenceClickListener {
+        Preference.OnPreferenceClickListener, AuthenticationCallback {
     private Preference mVersionPreference;
     private Preference mLogoutPreference;
 
@@ -30,7 +32,7 @@ public class PreferencesFragment extends PreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthManager = AuthenticationManager.getInstance();
-        mAuthManager.registerCallback(this::updateLoginField);
+        mAuthManager.registerCallback(this);
 
         View rootView = getView();
         ListView list = null;
@@ -71,7 +73,18 @@ public class PreferencesFragment extends PreferenceFragment implements
         }
         else {
             mLogoutPreference.setTitle(R.string.log_in_label);
+            mLogoutPreference.setSummary("");
         }
+    }
+
+    @Override
+    public void onAuthenticationSuccess() {
+        goToMain();
+    }
+
+    @Override
+    public void onAuthenticationFailure() {
+
     }
 
     @Override
@@ -93,10 +106,9 @@ public class PreferencesFragment extends PreferenceFragment implements
         startActivity(loginIntent);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mAuthManager.unregisterCallback();
+    private void goToMain() {
+        Intent mainIntent = new Intent(getActivity(), MainActivity.class);
+        startActivity(mainIntent);
     }
 
     @Override
@@ -104,8 +116,10 @@ public class PreferencesFragment extends PreferenceFragment implements
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
             if (mAuthManager.isLoggedIn()) {
                 mAuthManager.logout();
+                updateLoginField();
             }
             goToLogin();
+            getActivity().finish();
         }
         return true;
     }

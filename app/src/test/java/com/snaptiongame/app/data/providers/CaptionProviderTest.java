@@ -1,8 +1,8 @@
 package com.snaptiongame.app.data.providers;
 
+import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.GameAction;
-import com.snaptiongame.app.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 import static org.mockito.Mockito.mock;
@@ -38,9 +39,9 @@ public class CaptionProviderTest {
         captions.add(new Caption(4, "test4"));
         when(service.getCaptions(TEST_GAME_ID)).thenReturn(Observable.just(captions));
         gameAction = new GameAction(0, false, GameAction.UPVOTE, GameAction.CAPTION_ID);
-        when(service.upvoteOrFlagCaption(gameAction)).thenReturn(Observable.just(gameAction));
+        when(service.upvoteOrFlagCaption(gameAction)).thenReturn(Completable.complete());
         caption = new Caption(0, "test0");
-        when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Observable.just(caption));
+        when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Completable.complete());
     }
 
     @Test

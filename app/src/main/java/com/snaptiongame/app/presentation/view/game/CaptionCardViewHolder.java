@@ -142,10 +142,8 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isUpvoted, GameAction.UPVOTE, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        upvote -> {
-                        },
-                        Timber::e,
-                        () -> Timber.i("Successfully liked caption!")
+                        () -> Timber.i("Successfully liked caption!"),
+                        Timber::e
                 );
     }
 
@@ -153,10 +151,8 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isFlagged, GameAction.FLAGGED, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        flag -> {
-                        },
-                        Timber::e,
-                        () -> Timber.i("Successfully flagged caption")
+                        () -> Timber.i("Successfully flagged caption"),
+                        Timber::e
                 );
     }
 }

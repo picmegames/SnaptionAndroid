@@ -197,10 +197,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         GameProvider.upvoteOrFlagGame(new GameAction(gameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        upvote -> {
-                        },
-                        Timber::e,
-                        () -> Timber.i("Successfully upvoted game!")
+                        () -> Timber.i("Successfully upvoted game!"),
+                        Timber::e
                 );
     }
 
@@ -208,12 +206,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         GameProvider.upvoteOrFlagGame(new GameAction(gameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        flag -> {
-                        },
-                        Timber::e,
-                        () -> {
-                            Timber.i("Successfully flagged game");
-                        }
+                        () -> Timber.i("Successfully flagged game"),
+                        Timber::e
                 );
     }
 }

@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 import static org.mockito.Mockito.mock;
@@ -34,9 +35,9 @@ public class GameProviderTest {
         games.add(new Game(3, false, 3, "picture3", "", new ArrayList<>(), new ArrayList<>()));
         when(service.getGames(true)).thenReturn(Observable.just(games));
         gameAction = new GameAction(0, false, GameAction.UPVOTE, GameAction.GAME_ID);
-        when(service.upvoteOrFlagGame(gameAction)).thenReturn(Observable.just(gameAction));
+        when(service.upvoteOrFlagGame(gameAction)).thenReturn(Completable.complete());
         game = new Game(0, false, 0, "picture0", "", new ArrayList<>(), new ArrayList<>());
-        when(service.addGame(game)).thenReturn(Observable.just(game));
+        when(service.addGame(game)).thenReturn(Completable.complete());
     }
 
     @Test

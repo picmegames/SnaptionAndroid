@@ -1,14 +1,15 @@
 package com.snaptiongame.app.data.providers;
 
+import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
-import com.snaptiongame.app.data.api.SnaptionApi;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -26,11 +27,11 @@ public class CaptionProvider {
         return apiService.getFitBCaptions(setId);
     }
 
-    public static Observable<GameAction> upvoteOrFlagCaption(GameAction request) {
+    public static Completable upvoteOrFlagCaption(GameAction request) {
         return apiService.upvoteOrFlagCaption(request);
     }
 
-    public static Observable<Caption> addCaption(int gameId, Caption caption) {
+    public static Completable addCaption(int gameId, Caption caption) {
         return apiService.addCaption(gameId, caption);
     }
 
