@@ -39,7 +39,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationCallback;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
@@ -63,7 +62,7 @@ import jp.wasabeef.glide.transformations.ColorFilterTransformation;
  */
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        BottomNavigationView.OnNavigationItemSelectedListener, AuthenticationCallback {
+        BottomNavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.drawer)
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
 
         mAuthManager = AuthenticationManager.getInstance();
-        mAuthManager.registerCallback(this);
 
         mUserId = mAuthManager.getUserId();
 
@@ -224,17 +222,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else {
             setDefaultHeader();
         }
-    }
-
-    @Override
-    public void onAuthenticationSuccess() {
-        setHeader();
-        setupWallBottomNavigation();
-    }
-
-    @Override
-    public void onAuthenticationFailure() {
-
     }
 
     @Override
