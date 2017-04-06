@@ -1,6 +1,8 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +19,16 @@ import java.util.List;
  * Created by nickromero on 2/7/17.
  */
 
-public class FITBCaptionAdapter extends BaseAdapter {
+/**
+ * A FITBCaptionAdapter is used by the the FITB Dialog View to display sets of empty captions.
+ */
+public class FITBCaptionAdapter extends RecyclerView.Adapter {
     private List<FitBCaption> mCaptions;
     private CaptionContract.CaptionClickListener mCaptionClickListener;
     private LayoutInflater mInflater;
     private Drawable mOriginalBackground;
     private List<Boolean> areCardsChecked;
+
 
     public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener,
                               LayoutInflater inflater) {
@@ -48,42 +54,28 @@ public class FITBCaptionAdapter extends BaseAdapter {
         return mCaptions.get(index);
     }
 
-
     @Override
-    public int getCount() {
-        return mCaptions.size();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fitb_caption_card, parent, false);
+
+        return new FITBCaptionCardViewHolder(view);
     }
 
     @Override
-    public Object getItem(int position) {
-        return mCaptions.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null)
-            view = mInflater.inflate(R.layout.fitb_caption_card, parent, false);
-
-        view.setSelected(true);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        FITBCaptionCardViewHolder holder = (FITBCaptionCardViewHolder) viewHolder;
         FitBCaption curCaption = mCaptions.get(position);
 
+        holder.mCaptionTemplateTextView.setText(curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank);
 
-        TextView fitbText = (TextView) view.findViewById(R.id.fitb_caption_card_text);
-        fitbText.setText(curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank);
-        TextView curFITB = (TextView) view.findViewById(R.id.cur_fitb);
-        curFITB.setText((position + 1) + "/" + mCaptions.size());
+        holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
 
-        view.setTag(position);
-
-        view.findViewById(R.id.fitb_caption_card).setOnClickListener(v -> {
+        /**
+        holder.mFitBCaptionCard.setOnClickListener(v -> {
             mCaptionClickListener.captionClicked(v, position);
 
+            //Determine which cards are checked and should be highlighted
             if (!areCardsChecked.get(position)) {
                 mOriginalBackground = v.getBackground();
                 v.setBackgroundResource(R.drawable.card_border_color_pink);
@@ -93,7 +85,22 @@ public class FITBCaptionAdapter extends BaseAdapter {
                 v.setBackground(mOriginalBackground);
                 areCardsChecked.set(position, false);
             }
-        });
-        return view;
+        });*/
+    }
+
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mCaptions.size();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
     }
 }

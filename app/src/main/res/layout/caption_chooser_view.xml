@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <!--RelativeLayout
         android:id="@+id/caption_view_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,10 +47,10 @@
             android:scaleY=".75"
             android:src="@drawable/snaption_icon" />
 
-    </RelativeLayout>
+    </RelativeLayout-->
 
 
-    <GridView
+    <!--GridView
         android:id="@+id/caption_card_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,6 +77,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/fill_in_the_blank" />
 
-    </android.support.design.widget.TextInputLayout>
+    </android.support.design.widget.TextInputLayout-->
 
 </RelativeLayout>

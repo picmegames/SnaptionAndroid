@@ -72,7 +72,7 @@ public class CaptionAdapterTest {
         LayoutInflater inflater =
                 (LayoutInflater) RuntimeEnvironment.application.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View listitemview = inflater.inflate(R.layout.caption_chooser_dialog, null, false);
+        View listitemview = inflater.inflate(R.layout.caption_chooser_view, null, false);
         holder = new CaptionCardViewHolder(listitemview);
         captionAdapter.onBindViewHolder(holder, 0);
         assertEquals(holder.captionId, 0);

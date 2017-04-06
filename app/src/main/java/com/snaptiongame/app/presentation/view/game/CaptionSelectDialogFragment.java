@@ -153,7 +153,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         );
 
         //Build the custom title for the dialog
-        RelativeLayout customTitle = (RelativeLayout) inflater.inflate(R.layout.caption_dialog_header, null);
+        RelativeLayout customTitle = null;//(RelativeLayout) inflater.inflate(R.layout.caption_dialog_header, null);
         ((TextView) customTitle.findViewById(R.id.caption_chooser_title)).setText(mDialogTitle);
         mDialogBuilder.setCustomTitle(customTitle);
 
@@ -199,7 +199,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
                     );
 
 
-            mDialogView = inflater.inflate(R.layout.caption_chooser_dialog, null);
+            mDialogView = inflater.inflate(R.layout.caption_chooser_view, null);
 
             mCaptionView = ((GridView) mDialogView.findViewById(R.id.caption_card_holder));
 
@@ -216,7 +216,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
             mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
 
-            mCaptionView.setAdapter(mFitBAdapter);
+            //mCaptionView.setAdapter(mFitBAdapter);
 
             mDialogBuilder.setView(mDialogView);
             fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);

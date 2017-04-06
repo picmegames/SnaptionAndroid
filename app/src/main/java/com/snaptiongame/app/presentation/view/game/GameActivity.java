@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -11,14 +12,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,9 +34,13 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -44,6 +56,8 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.models.Caption;
+import com.snaptiongame.app.data.models.CaptionSet;
+import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.GameInvite;
@@ -77,7 +91,8 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 
-public class GameActivity extends AppCompatActivity implements GameContract.View {
+public class GameActivity extends AppCompatActivity implements GameContract.View, GameContract.CaptionDialogView,
+        CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -92,6 +107,24 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     TextView mPickerName;
     @BindView(R.id.layout)
     CoordinatorLayout mLayout;
+    @BindView(R.id.caption_view_switcher)
+    ViewSwitcher mCaptionViewSwitcher;
+    @BindView(R.id.switch_title_picker)
+    ViewSwitcher mHeaderViewSwitcher;
+    @BindView(R.id.switch_caption_list)
+    LinearLayout mSwitchCaptionListView;
+    @BindView(R.id.switch_create_caption)
+    LinearLayout mSwitchCreateCaptionView;
+    @BindView(R.id.switch_caption_titles)
+    ViewSwitcher mCaptionTitles;
+    @BindView(R.id.fitbEditText)
+    TextInputEditText mFitBEditText;
+    @BindView(R.id.refresh_icon)
+    ImageView mRefreshIcon;
+
+
+    //@BindView(R.id.caption_pager)
+    //private PagerAdapter mPagerAdapter;
 
     private ActionBar mActionBar;
     private Menu mMenu;
@@ -101,6 +134,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private GameContract.Presenter mPresenter;
     private CaptionSelectDialogFragment mCaptionDialogFragment;
     private CaptionSelectDialogFragment mCaptionSetDialogFragment;
+    private CaptionSetAdapter mCaptionSetAdapter;
+    private View mDialogView;
+
+    private static final int NUM_CAPTION_PAGES = 2;
+
 
     /**
      * Member variable to reference the game owner's image
@@ -154,6 +192,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
+    private FITBCaptionAdapter mFitBAdapter;
+    private RecyclerView mCaptionView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -182,8 +222,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     loadInvitedGame();
                 }
                 Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
-            }
-            else {
+            } else {
                 Timber.e("Branch errored with " + error.getMessage());
             }
         }, intent.getData(), this);
@@ -215,23 +254,23 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     this, mImage, ViewCompat.getTransitionName(mImage));
             startActivity(immersiveIntent, transitionActivityOptions.toBundle());
         });
+
+        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this,
+                this.getLayoutInflater());
     }
 
     private void upvoteGame() {
         if (isUpvoted) {
             if (!isDark) {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
-            }
-            else {
+            } else {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
             }
             isUpvoted = false;
-        }
-        else {
+        } else {
             if (!isDark) {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
-            }
-            else {
+            } else {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
             }
             isUpvoted = true;
@@ -248,15 +287,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (isFlagged) {
             mMenu.findItem(R.id.unflag).setVisible(true);
             mMenu.findItem(R.id.flag).setVisible(false);
-        }
-        else {
+        } else {
             mMenu.findItem(R.id.unflag).setVisible(false);
             mMenu.findItem(R.id.flag).setVisible(true);
         }
         if (isUpvoted) {
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
-        }
-        else {
+        } else {
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
         }
 
@@ -316,8 +353,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID));
             mMenu.findItem(R.id.unflag).setVisible(false);
             mMenu.findItem(R.id.flag).setVisible(true);
-        }
-        else {
+        } else {
             new MaterialDialog.Builder(this)
                     .title(R.string.flag_alert_game)
                     .content(R.string.ask_flag_game)
@@ -367,8 +403,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)))
                     .dontAnimate()
                     .into(mPickerImage);
-        }
-        else {
+        } else {
             mPickerImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(AVATAR_SIZE)
@@ -401,13 +436,57 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void showAddCaptionDialog() {
         if (!mAuthManager.isLoggedIn()) {
             goToLogin();
-        }
-        else {
+        } else {
+            if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView) {
+                mCaptionViewSwitcher.showPrevious();
+                mHeaderViewSwitcher.showPrevious();
+            } else {
+                mPresenter = new GamePresenter(mGameId, this);
+
+                mCaptionViewSwitcher.showNext();
+                mHeaderViewSwitcher.showNext();
+                initializeCaptionView();
+            }
+            /*
             mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
                     CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
                     mGameId, -1);
             mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
+            */
         }
+    }
+
+    private void initializeCaptionView() {
+        mDialogView = mSwitchCreateCaptionView;
+
+        mCaptionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
+
+        //if (mSetId == -1
+        mPresenter.loadRandomFITBCaptions();
+        /*
+        else {
+            mPresenter.loadFitBCaptions(mSetId);
+            mDialogBuilder.setNegativeButton(BACK, (DialogInterface dialog, int which) ->
+                    ((GameActivity) getActivity()).displaySetChoosingDialog()
+            );
+        }*/
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        mCaptionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
+        mCaptionView.setLayoutManager(layoutManager);
+
+        LinearLayoutManager mLinearLayoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
+
+        mCaptionView.setAdapter(mFitBAdapter);
+
+
+        //fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
+        //fitBEditText = (TextInputEditText) fitBEditTextLayout.findViewById(R.id.fitbEditText);
     }
 
     public void showGame(String image, int id, int pickerId, boolean beenUpvoted, boolean beenFlagged) {
@@ -455,8 +534,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         @ColorUtils.Lightness int lightness = ColorUtils.isDark(palette);
                         if (lightness == ColorUtils.LIGHTNESS_UNKNOWN) {
                             isDark = ColorUtils.isDark(bitmap, bitmap.getWidth() / 2, 0);
-                        }
-                        else {
+                        } else {
                             isDark = lightness == ColorUtils.IS_DARK;
                         }
 
@@ -474,8 +552,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
                                 if (isUpvoted) {
                                     mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
-                                }
-                                else {
+                                } else {
                                     mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
                                 }
                             }
@@ -567,8 +644,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER) {
             if (mCaptionSetDialogFragment != null)
                 mCaptionSetDialogFragment.dismiss();
-        }
-        else {
+        } else {
             if (mCaptionDialogFragment != null)
                 mCaptionDialogFragment.dismiss();
             //mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
@@ -606,10 +682,58 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             if (error == null) {
                 Timber.i("got my Branch link to share: " + url);
                 inviteFriendIntent(url);
-            }
-            else {
+            } else {
                 Timber.e("Branch " + error);
             }
         });
     }
+
+
+    @Override
+    public void captionClicked(View v, int position) {
+
+    }
+
+    @Override
+    public void showFitBCaptions(List<FitBCaption> captions) {
+        mFitBAdapter.setCaptions(captions);
+    }
+
+    @Override
+    public void showRandomCaptions(List<FitBCaption> captions) {
+        System.out.println(captions.size());
+        mFitBAdapter.setCaptions(captions);
+        mFitBAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showCaptionSets(List<CaptionSet> captionSets) {
+        mCaptionSetAdapter.setCaptionSets(captionSets);
+    }
+
+
+    @Override
+    public void captionSetClicked(View v, int position) {
+        displayCaptionChoosingDialog(position);
+
+    }
+
+    /**private class CaptionSlidePagerAdapter extends FragmentStatePagerAdapter {
+
+     public CaptionSlidePagerAdapter(FragmentManager fm) {
+     super(fm);
+     }
+
+     @Override public Fragment getItem(int position) {
+     if (position == 0)
+     return new CaptionFragment();
+     else
+     return new CaptionListFragment();
+     }
+
+     @Override public int getCount() {
+     return NUM_CAPTION_PAGES;
+     }
+     }**/
 }
+

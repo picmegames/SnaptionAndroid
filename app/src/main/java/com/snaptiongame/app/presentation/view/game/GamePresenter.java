@@ -47,6 +47,7 @@ public class GamePresenter implements GameContract.Presenter {
         mGameView = view;
         mDisposables = new CompositeDisposable();
         mGameView.setPresenter(this);
+        mCaptions = new ArrayList<>();
     }
 
     public GamePresenter(int gameId, @NonNull GameContract.CaptionDialogView view) {
@@ -54,6 +55,8 @@ public class GamePresenter implements GameContract.Presenter {
         mDisposables = new CompositeDisposable();
         mGameDialogView = view;
         mGameDialogView.setPresenter(this);
+        mCaptions = new ArrayList<>();
+
     }
 
     public void loadGame(int gameId) {
@@ -157,7 +160,9 @@ public class GamePresenter implements GameContract.Presenter {
     private void countSets(List<CaptionSet> sets) {
         int numSets = sets.size();
         List<FitBCaption> captions = new ArrayList<>();
+
         getRandomCaptions(numSets, captions, 0);
+
     }
 
     private void buildRandomCaptions(List<FitBCaption> captions) {
@@ -165,7 +170,7 @@ public class GamePresenter implements GameContract.Presenter {
         Random random = new Random();
         List<FitBCaption> randomCaptions = new ArrayList<>();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < captions.size(); i++) {
             int nextCaption = random.nextInt(captions.size());
 
             randomCaptions.add(captions.get(nextCaption));
@@ -176,12 +181,14 @@ public class GamePresenter implements GameContract.Presenter {
 
     private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
         if (start == numSets) {
-            mCaptions = captions;
+            //mCaptions = captions;
             List<FitBCaption> tempList = new ArrayList<>(captions);
 
-            buildRandomCaptions(tempList);
+            buildRandomCaptions(mCaptions);
         }
         else {
+            for (FitBCaption c : captions)
+                mCaptions.add(c);
             final int nextStart = ++start;
             Disposable disposable = CaptionProvider.getFitBCaptions(start)
                     .observeOn(AndroidSchedulers.mainThread())

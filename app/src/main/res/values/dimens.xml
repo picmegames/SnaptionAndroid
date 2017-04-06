@@ -8,4 +8,5 @@
     <dimen name="chip_vertical_spacing">3dp</dimen>
     <dimen name="divider_height">1px</dimen>
     <dimen name="keyline_1">72dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
