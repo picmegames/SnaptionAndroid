@@ -13,6 +13,7 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.FitBCaption;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
     private Drawable mOriginalBackground;
     private List<Boolean> areCardsChecked;
 
+    private int mItemSelected = -1;
 
     public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener,
                               LayoutInflater inflater) {
@@ -58,33 +60,55 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fitb_caption_card, parent, false);
-
+        //mOriginalBackground = view.getBackground();
         return new FITBCaptionCardViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         FITBCaptionCardViewHolder holder = (FITBCaptionCardViewHolder) viewHolder;
-        FitBCaption curCaption = mCaptions.get(position);
+        if (mItemSelected == -1)
+            mOriginalBackground = holder.mFitBCaptionCard.getBackground();
 
-        holder.mCaptionTemplateTextView.setText(curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank);
+        FitBCaption curCaption = mCaptions.get(position);
+        String fitbText = curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank;
+        ArrayList<String> fitbs = new ArrayList<String>(
+                Arrays.asList(curCaption.beforeBlank,
+                curCaption.placeholderText,
+                curCaption.afterBlank));
+
+        holder.mCaptionTemplateTextView.setText(fitbText);
 
         holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
+        
+
+
 
         holder.mFitBCaptionCard.setOnClickListener(v -> {
-            mCaptionClickListener.captionClicked(v, position);
+            mCaptionClickListener.captionClicked(v, position, fitbs);
+            int previousSelection = mItemSelected;
+
+            mItemSelected = holder.getAdapterPosition();
+            notifyItemChanged(previousSelection);
+            notifyItemChanged(mItemSelected);
+
 
             //Determine which cards are checked and should be highlighted
-            if (!areCardsChecked.get(position)) {
+            /*if (!areCardsChecked.get(position)) {
                 mOriginalBackground = v.getBackground();
                 v.setBackgroundResource(R.drawable.card_border_color_pink);
                 areCardsChecked.set(position, true);
             }
             else {
-                v.setBackground(mOriginalBackground);
+                //v.setBackground(mOriginalBackground);
+
                 areCardsChecked.set(position, false);
-            }
+            }*/
         });
+        if(position == mItemSelected)
+            holder.mFitBCaptionCard.setBackgroundResource(R.drawable.card_border_color_pink);
+        else
+            holder.mFitBCaptionCard.setBackground(mOriginalBackground);
     }
 
 

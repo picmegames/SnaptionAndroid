@@ -15,18 +15,13 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -34,10 +29,9 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -73,6 +67,8 @@ import com.snaptiongame.app.presentation.view.utils.ColorUtils;
 import com.snaptiongame.app.presentation.view.utils.GlideUtils;
 import com.snaptiongame.app.presentation.view.utils.ViewUtils;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -80,6 +76,7 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
@@ -117,18 +114,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     LinearLayout mSwitchCreateCaptionView;
     @BindView(R.id.switch_caption_titles)
     ViewSwitcher mSwitchCaptionTitles;
-    @BindView(R.id.fitbEditTextLayout)
-    TextInputLayout mFitBEditTextLayout;
-    @BindView(R.id.fitbEditText)
-    TextInputEditText mFitBEditText;
+    @BindView(R.id.fitb_entry)
+    EditText mFitBEditTextField;
+
+
     @BindView(R.id.refresh_icon)
     ImageView mRefreshIcon;
     @BindView(R.id.switch_fitb_entry)
     LinearLayout mSwitchFitBEntry;
 
 
-    //@BindView(R.id.caption_pager)
-    //private PagerAdapter mPagerAdapter;
+
 
     private ActionBar mActionBar;
     private Menu mMenu;
@@ -140,6 +136,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private CaptionSelectDialogFragment mCaptionSetDialogFragment;
     private CaptionSetAdapter mCaptionSetAdapter;
     private View mDialogView;
+    private Drawable mOriginalCardViewBackground;
 
     private static final int NUM_CAPTION_PAGES = 2;
 
@@ -261,6 +258,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this,
                 this.getLayoutInflater());
+
+
     }
 
     private void upvoteGame() {
@@ -451,12 +450,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mHeaderViewSwitcher.showNext();
                 initializeCaptionView();
             }
-            /*
-            mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
-                    CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
-                    mGameId, -1);
-            mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
-            */
+
         }
     }
 
@@ -495,6 +489,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void refreshCaptions() {
         mPresenter.loadRandomFITBCaptions();
     }
+
+    @OnFocusChange(R.id.fitb_entry)
+    public void removeFITBUnderScores() {
+        String curText = mFitBEditTextField.getText().toString();
+        System.out.println(curText);
+        if (curText.matches("/[_]/"))
+            mFitBEditTextField.setText("");
+
+    }
+
+
 
     @OnClick(R.id.caption_sets)
     public void loadCaptionSets() {
@@ -649,6 +654,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     }
 
+
+
     public void displaySetChoosingDialog() {
         mCaptionSetDialogFragment.dismiss();
         mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
@@ -710,9 +717,28 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
 
     @Override
-    public void captionClicked(View v, int position) {
-        mFitBEditTextLayout.setVisibility(View.VISIBLE);
-        mSwitchCaptionTitles.showNext();
+    public void captionClicked(View v, int position, List<String> fitbs) {
+        int start = fitbs.get(0).length();
+
+        mFitBEditTextField.setVisibility(View.VISIBLE);
+        mFitBEditTextField.setText(fitbs.get(0) + "" + fitbs.get(2));
+        mFitBEditTextField.setSelection(start);
+
+        mFitBEditTextField.requestFocus();
+        if (mSwitchCaptionTitles.getCurrentView() != mSwitchFitBEntry)
+            mSwitchCaptionTitles.showNext();
+
+        if (mOriginalCardViewBackground == null)
+            mOriginalCardViewBackground = v.getBackground();
+
+        int childCount = mCaptionView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View layout = mCaptionView.getChildAt(i);
+            if (i == position)
+                layout.findViewById(R.id.fitb_caption_card).setBackgroundResource(R.drawable.card_border_color_pink);
+            else
+                layout.findViewById(R.id.fitb_caption_card).setBackground(mOriginalCardViewBackground);
+        }
     }
 
     @Override
@@ -735,7 +761,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void captionSetClicked(View v, int position) {
-        //displayCaptionChoosingDialog(position);
+
         mPresenter.loadFitBCaptions(position);
 
     }

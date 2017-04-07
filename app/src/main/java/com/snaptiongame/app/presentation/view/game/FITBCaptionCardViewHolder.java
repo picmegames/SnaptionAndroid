@@ -3,6 +3,7 @@ package com.snaptiongame.app.presentation.view.game;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.snaptiongame.app.R;
@@ -17,9 +18,11 @@ public class FITBCaptionCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.fitb_caption_card)
     CardView mFitBCaptionCard;
     @BindView(R.id.fitb_caption_card_text)
-    public TextView mCaptionTemplateTextView;
+    TextView mCaptionTemplateTextView;
     @BindView(R.id.cur_fitb)
-    public TextView mCurrentFitB;
+    TextView mCurrentFitB;
+    @BindView(R.id.relative_layout_fitb)
+    RelativeLayout relativeLayout;
 
     public String mCaptionTemplate;
     public String mCurFitB;

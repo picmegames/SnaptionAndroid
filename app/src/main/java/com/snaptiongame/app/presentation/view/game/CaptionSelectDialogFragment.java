@@ -142,10 +142,10 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
         if (mDialogToShow == CaptionDialogToShow.CAPTION_CHOOSER) {
             mDialogBuilder.setPositiveButton(sPositiveButtonText, (DialogInterface dialog, int which) -> {
-                String userText = ((TextInputEditText)
-                        fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
+            //    String userText = ((TextInputEditText)
+              //          fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
 
-                mPresenter.addCaption(mFitBAdapter.getCaption(curFitbPos).id, userText);
+                //mPresenter.addCaption(mFitBAdapter.getCaption(curFitbPos).id, userText);
             });
         }
         mDialogBuilder.setNegativeButton(sNegativeButtonText, (DialogInterface dialog, int which) ->
@@ -189,10 +189,10 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
             mDialogBuilder
                     .setPositiveButton(sPositiveButtonText, (DialogInterface dialog, int which) -> {
-                        String userText = ((TextInputEditText)
-                                fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
+                       // String userText = ((TextInputEditText)
+                         //       fitBEditTextLayout.findViewById(R.id.fitbEditText)).getText().toString();
 
-                        mPresenter.addCaption(mFitBAdapter.getCaption(curFitbPos).id, userText);
+                       // mPresenter.addCaption(mFitBAdapter.getCaption(curFitbPos).id, userText);
                     })
                     .setNegativeButton(CANCEL, (DialogInterface dialog, int which) ->
                             ((GameActivity) getActivity()).negativeButtonClicked(mDialogToShow)
@@ -219,8 +219,8 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
             //mCaptionView.setAdapter(mFitBAdapter);
 
             mDialogBuilder.setView(mDialogView);
-            fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
-            fitBEditText = (TextInputEditText) fitBEditTextLayout.findViewById(R.id.fitbEditText);
+          //  fitBEditTextLayout = (TextInputLayout) mDialogView.findViewById(R.id.fitbEditTextLayout);
+           // fitBEditText = (TextInputEditText) fitBEditTextLayout.findViewById(R.id.fitbEditText);
         }
 
         mSetIcon = (ImageView) customTitle.findViewById(R.id.caption_sets);
@@ -259,7 +259,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
     }
 
     @Override
-    public void captionClicked(View v, int position) {
+    public void captionClicked(View v, int position, List<String> fitbs) {
 
         if (mOriginalCardViewBackground == null)
             mOriginalCardViewBackground = v.getBackground();

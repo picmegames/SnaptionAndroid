@@ -39,8 +39,7 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
         CaptionSet curSet = mSets.get(position);
         setViewHolder.mSetName.setText(curSet.getSetName());
         setViewHolder.mSetImage.setImageResource(R.drawable.snaption_logo);
-        //setViewHolder.sSetCount.setText(mSets.get(position).getCaptionsUnlocked() + "/" +
-          ///      mSets.get(position).getTotalCaptions());
+
         if (!curSet.isCaptionSetActive)
             holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
 
