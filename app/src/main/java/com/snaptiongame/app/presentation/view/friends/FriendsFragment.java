@@ -214,8 +214,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     private void removeFriend(int id) {
         FriendProvider.removeFriend(mAuthManager.getUserId(), new AddFriendRequest(id))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(request -> {
-                }, Timber::e, () -> Timber.i("Successfully removed friend!"));
+                .subscribe(
+                        () -> Timber.i("Successfully removed friend!"),
+                        Timber::e
+                );
     }
 
     public List<Friend> getFriends() {

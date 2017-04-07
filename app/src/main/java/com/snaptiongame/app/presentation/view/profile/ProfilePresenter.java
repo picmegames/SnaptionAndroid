@@ -43,12 +43,14 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         Disposable disposable = UserProvider.updateUser(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        newUser -> mProfileView.saveProfilePicture(newUser.imageUrl),
+                        newUser -> {
+                            mProfileView.saveProfilePicture(newUser.imageUrl);
+                            mProfileView.showProfilePictureSuccess();
+                        },
                         e -> {
                             Timber.e(e);
                             mProfileView.showProfilePictureFailure();
-                        },
-                        () -> mProfileView.showProfilePictureSuccess()
+                        }
                 );
         mDisposables.add(disposable);
     }
@@ -58,7 +60,10 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         Disposable disposable = UserProvider.updateUser(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        nextUser -> mProfileView.saveUsername(nextUser.username),
+                        nextUser -> {
+                            mProfileView.saveUsername(nextUser.username);
+                            mProfileView.showUsernameSuccess(oldUsername, user);
+                        },
                         e -> {
                             Timber.e(e);
                             String msg = SnaptionApplication.getContext().getString(R.string.update_failure);
@@ -69,8 +74,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                                 }
                             }
                             mProfileView.showUsernameFailure(msg);
-                        },
-                        () -> mProfileView.showUsernameSuccess(oldUsername, user)
+                        }
                 );
         mDisposables.add(disposable);
     }

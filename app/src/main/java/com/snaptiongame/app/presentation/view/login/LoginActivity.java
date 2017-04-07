@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.authentication.AuthenticationCallback;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 
@@ -22,7 +23,7 @@ import butterknife.OnClick;
  * @author Tyler Wong
  */
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View {
+public class LoginActivity extends AppCompatActivity implements LoginContract.View, AuthenticationCallback {
     @BindView(R.id.logo)
     ImageView mLogo;
     @BindView(R.id.facebook_login_button)
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         // Initialize Authentication Manager
         mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager.registerCallback(this);
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -54,6 +56,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mAuthManager.setFacebookCallback(mFacebookLoginButton);
 
         mPresenter = new LoginPresenter(this);
+    }
+
+    @Override
+    public void onAuthenticationSuccess() {
+        goToMain();
+    }
+
+    @Override
+    public void onAuthenticationFailure() {
+
     }
 
     @Override
@@ -76,8 +88,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         else {
             mAuthManager.facebookActivityResult(requestCode, resultCode, data);
         }
-        // finish();
-        goToMain();
     }
 
     @Override

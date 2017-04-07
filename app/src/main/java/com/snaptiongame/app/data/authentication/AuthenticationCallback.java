@@ -5,5 +5,6 @@ package com.snaptiongame.app.data.authentication;
  */
 
 public interface AuthenticationCallback {
-    void updateView();
+    void onAuthenticationSuccess();
+    void onAuthenticationFailure();
 }

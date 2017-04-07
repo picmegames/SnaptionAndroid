@@ -2,10 +2,9 @@ package com.snaptiongame.app.presentation.view.friends;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -415,9 +414,10 @@ public class FriendsDialogFragment extends DialogFragment {
         else {
             UserProvider.getUserWithEmail(search.getText().toString())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::showFriend,
-                            Timber::e,
-                            () -> Timber.i("Found user successfully"));
+                    .subscribe(
+                            this::showFriend,
+                            Timber::e
+                    );
         }
 
     }
@@ -459,12 +459,8 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.addFriend(mAuthManager.getUserId(), new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        request -> {
-                            //Update the background fragment with the new friend(s)
-                            updateFriendFragment();
-                        },
-                        Timber::e,
-                        () -> Timber.i("Successfully added friend!")
+                        request -> updateFriendFragment(),
+                        Timber::e
                 );
     }
 

@@ -183,15 +183,17 @@ public final class AuthenticationManager {
         SessionProvider.userOAuthFacebook(new OAuthRequest(accessToken, deviceToken, getInviteToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        session -> saveUserId(session.userId),
+                        session -> {
+                            saveUserId(session.userId);
+                            getUserInfo(getUserId());
+                        },
                         e -> {
                             Timber.e(e);
                             logout();
                             Toast.makeText(SnaptionApplication.getContext(),
                                     R.string.login_failure, Toast.LENGTH_LONG).show();
-                            fireCallback();
-                        },
-                        () -> getUserInfo(getUserId())
+                            fireFailureCallback();
+                        }
                 );
     }
 
@@ -199,15 +201,17 @@ public final class AuthenticationManager {
         SessionProvider.userOAuthGoogle(new OAuthRequest(token, deviceToken, getInviteToken()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        session -> saveUserId(session.userId),
+                        session -> {
+                            saveUserId(session.userId);
+                            getUserInfo(getUserId());
+                        },
                         e -> {
                             Timber.e(e);
                             Toast.makeText(SnaptionApplication.getContext(),
                                     R.string.login_failure, Toast.LENGTH_LONG).show();
                             logout();
-                            fireCallback();
-                        },
-                        () -> getUserInfo(getUserId())
+                            fireFailureCallback();
+                        }
                 );
     }
 
@@ -223,10 +227,15 @@ public final class AuthenticationManager {
         googleApiClient.disconnect();
     }
 
-    private void fireCallback() {
+    private void fireSuccessCallback() {
         if (callback != null) {
-            callback.updateView();
-            callback = null;
+            callback.onAuthenticationSuccess();
+        }
+    }
+
+    private void fireFailureCallback() {
+        if (callback != null) {
+            callback.onAuthenticationFailure();
         }
     }
 
@@ -264,10 +273,6 @@ public final class AuthenticationManager {
 
     public void registerCallback(AuthenticationCallback callback) {
         this.callback = callback;
-    }
-
-    public void unregisterCallback() {
-        this.callback = null;
     }
 
     private void saveUserId(int snaptionUserId) {
@@ -361,12 +366,12 @@ public final class AuthenticationManager {
                             if (user.imageUrl != null) {
                                 saveProfileImage(user.imageUrl);
                             }
+
+                            fireSuccessCallback();
                         },
-                        Timber::e,
-                        () -> {
-                            if (callback != null) {
-                                callback.updateView();
-                            }
+                        e -> {
+                            Timber.e(e);
+                            fireFailureCallback();
                         }
                 );
     }

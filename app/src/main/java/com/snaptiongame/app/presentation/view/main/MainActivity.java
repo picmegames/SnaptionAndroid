@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
 
         mAuthManager = AuthenticationManager.getInstance();
-        mAuthManager.registerCallback(this::setHeader);
 
         mUserId = mAuthManager.getUserId();
 
@@ -127,25 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        if (!mAuthManager.isLoggedIn()) {
-            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
-            mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
-            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
-            mActionBar.setTitle(R.string.discover);
-            setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
-        }
-        else {
-            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
-            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
-            mActionBar.setTitle(R.string.my_wall);
-            setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
-        }
-
-        resetFabPosition(true);
-        fragTag = WallFragment.TAG;
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, mCurrentFragment).commit();
-        mNavigationView.getMenu().getItem(0).setChecked(true);
+        setupWallBottomNavigation();
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -184,6 +165,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Glide.clear(mCoverPhoto);
         mNameView.setText(getString(R.string.welcome_message));
         mEmailView.setText("");
+    }
+
+    private void setupWallBottomNavigation() {
+        if (!mAuthManager.isLoggedIn()) {
+            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
+            mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
+            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
+            mActionBar.setTitle(R.string.discover);
+            setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
+        }
+        else {
+            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
+            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
+            mActionBar.setTitle(R.string.my_wall);
+            setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+        }
+
+        resetFabPosition(true);
+        fragTag = WallFragment.TAG;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frame, mCurrentFragment)
+                .commit();
+        mNavigationView.getMenu().getItem(0).setChecked(true);
     }
 
     private void setUserHeader() {
@@ -416,12 +421,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToLogin();
         }
         else {
-            if (fragTag.equals(WallFragment.TAG)) {
-                goToCreateGame();
-            }
-            else if (fragTag.equals(FriendsFragment.TAG)) {
-                ((FriendsFragment) mCurrentFragment).inviteFriends();
-            }
+            handleFabAction();
+        }
+    }
+
+    private void handleFabAction() {
+        if (fragTag.equals(WallFragment.TAG)) {
+            goToCreateGame();
+        }
+        else if (fragTag.equals(FriendsFragment.TAG)) {
+            ((FriendsFragment) mCurrentFragment).inviteFriends();
         }
     }
 
