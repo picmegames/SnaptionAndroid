@@ -71,7 +71,6 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
 
         holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
 
-        /**
         holder.mFitBCaptionCard.setOnClickListener(v -> {
             mCaptionClickListener.captionClicked(v, position);
 
@@ -85,7 +84,7 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
                 v.setBackground(mOriginalBackground);
                 areCardsChecked.set(position, false);
             }
-        });*/
+        });
     }
 
 

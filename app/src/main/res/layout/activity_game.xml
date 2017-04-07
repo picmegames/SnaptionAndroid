@@ -130,10 +130,19 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
+                                    <android.support.design.widget.TextInputLayout
+                                        android:id="@+id/fitbEditTextLayout"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="TESTESTEST" />
+                                        android:visibility="invisible">
+
+                                        <android.support.design.widget.TextInputEditText
+                                            android:id="@+id/fitbEditText"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="@string/fill_in_the_blank" />
+
+                                    </android.support.design.widget.TextInputLayout>
 
                                 </LinearLayout>
 
@@ -157,7 +166,8 @@
                 <LinearLayout
                     android:id="@+id/switch_caption_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+
                     android:orientation="vertical">
 
                     <android.support.v4.widget.SwipeRefreshLayout
@@ -184,10 +194,7 @@
                     android:orientation="vertical"
                     android:layout_height="match_parent">
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="LALLAl"/>
+
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/caption_card_holder"
                         android:layout_width="wrap_content"
@@ -197,24 +204,12 @@
                         android:descendantFocusability="blocksDescendants"
                         android:gravity="center"
                         android:horizontalSpacing="6dp"
-                        android:numColumns="2"
+
                         android:stretchMode="columnWidth"
                         android:verticalSpacing="6dp" />
 
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/fitbEditTextLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="invisible">
 
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/fitbEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/fill_in_the_blank" />
-
-                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
