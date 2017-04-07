@@ -3,7 +3,6 @@ package com.snaptiongame.app.presentation.view.game;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -464,10 +463,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                             ActionBar actionBar = getSupportActionBar();
 
                             if (actionBar != null) {
-                                final Drawable upArrow = ContextCompat.getDrawable(
-                                        GameActivity.this, R.drawable.abc_ic_ab_back_material);
-                                upArrow.setColorFilter(ContextCompat.getColor(GameActivity.this, R.color.grey_800), PorterDuff.Mode.SRC_ATOP);
-                                actionBar.setHomeAsUpIndicator(upArrow);
+                                actionBar.setHomeAsUpIndicator(ContextCompat.getDrawable(
+                                        GameActivity.this, R.drawable.ic_arrow_back_grey_800_24dp));
 
                                 final Drawable more = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_more_vert_grey_800_24dp, null);
                                 mToolbar.setOverflowIcon(more);
