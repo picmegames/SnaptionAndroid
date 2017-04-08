@@ -101,8 +101,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
     private static final String EMOJI_REGEX = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])";
-    private static final String EMOJI_ERROR = "Tags cannot contain emojis";
-    private static final String COMPRESSION_ERROR = "Could not compress image";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -215,13 +213,13 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void showImageCompressionFailure() {
         mProgressDialog.dismiss();
-        Toast.makeText(this, COMPRESSION_ERROR, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.compression_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showUploadFailure() {
         mProgressDialog.dismiss();
-        Toast.makeText(this, EMOJI_ERROR, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -332,7 +330,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             }
         }
         else {
-            Toast.makeText(this, EMOJI_ERROR, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
         }
     }
 
