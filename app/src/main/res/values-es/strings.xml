@@ -75,4 +75,5 @@
     <string name="empty_username">El nombre de usuario no puede estar vacío</string>
     <string name="emoji_error">Las etiquetas no pueden contener emojis</string>
     <string name="compression_error">No se pudo comprimir la imagen</string>
+    <string name="upload_error">No se pudo subir el juego</string>
 </resources>

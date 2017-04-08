@@ -69,6 +69,7 @@
     <string name="empty_username">Username cannot be empty</string>
     <string name="emoji_error">Tags cannot contain emojis</string>
     <string name="compression_error">Could not compress image</string>
+    <string name="upload_error">Could not upload game</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

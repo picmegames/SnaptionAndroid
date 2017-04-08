@@ -276,7 +276,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 }
                 break;
             case R.id.create_game:
-                startCreateGame();
+                if (AuthManager.isLoggedIn()) {
+                    startCreateGame();
+                }
+                else {
+                    goToLogin();
+                }
                 break;
             case R.id.share:
                 mPresenter.shareToFacebook(this, mImage);

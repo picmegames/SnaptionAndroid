@@ -328,6 +328,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                         .cancelable(false)
                         .show();
             }
+            else {
+                Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
+            }
         }
         else {
             Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();

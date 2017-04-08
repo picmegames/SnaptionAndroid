@@ -93,7 +93,12 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             mMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.create_game:
-                        startCreateGame();
+                        if (AuthManager.isLoggedIn()) {
+                            startCreateGame();
+                        }
+                        else {
+                            goToLogin();
+                        }
                         break;
                     case R.id.share:
                         FacebookShareProvider.shareToFacebook((AppCompatActivity) mContext, mImage);
