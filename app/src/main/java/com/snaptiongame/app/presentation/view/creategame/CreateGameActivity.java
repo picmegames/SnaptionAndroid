@@ -85,6 +85,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private ActionBar mActionBar;
     private MaterialDialog mProgressDialog;
     private MaterialDialog mFriendsDialog;
+    private DatePickerDialog mDatePickerDialog;
     private FriendsAdapter mFriendsAdapter;
 
     private CreateGameContract.Presenter mPresenter;
@@ -337,13 +338,19 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.set_date_field)
     public void showDatePicker() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (DatePicker view, int year, int month, int dayOfMonth) -> {
-            mYear = year;
-            mMonth = month;
-            mDayOfMonth = dayOfMonth;
-            mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
-        }, mYear, mMonth, mDayOfMonth);
-        datePickerDialog.show();
+        if (mDatePickerDialog == null) {
+            mDatePickerDialog = new DatePickerDialog(this, (DatePicker view, int year, int month, int dayOfMonth) -> {
+                mYear = year;
+                mMonth = month;
+                mDayOfMonth = dayOfMonth;
+                mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+            }, mYear, mMonth, mDayOfMonth);
+            mDatePickerDialog.getDatePicker().setMinDate(mCalendar.getTime().getTime());
+            mDatePickerDialog.show();
+        }
+        else {
+            mDatePickerDialog.show();
+        }
     }
 
     @Override
