@@ -26,7 +26,7 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 
-public class ImageConverter {
+public class ImageUtils {
 
     private static final float MAX_WIDTH = 1280.0f;
     private static final float MAX_HEIGHT = 1280.0f;
@@ -34,7 +34,7 @@ public class ImageConverter {
     private static final int NUM_BYTES = 1024;
     private static final float MIDDLE_FACTOR = 2.0f;
     private static final int QUALITY = 100;
-    private static final String FOLDER = "snaption/images";
+    private static final String FOLDER = "Pictures/Snaption";
     private static final String JPEG = ".jpg";
 
     public static Observable<String> getCompressedImage(Uri uri) {

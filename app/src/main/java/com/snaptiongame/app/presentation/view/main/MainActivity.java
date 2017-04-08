@@ -39,7 +39,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ActionBar mActionBar;
     NachoTextView mFilterTextView;
 
-    private AuthenticationManager mAuthManager;
+    private AuthManager mAuthManager;
     private Fragment mCurrentFragment;
     private MaterialDialog mFilterDialog;
     private Menu mMenu;
@@ -100,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager = AuthManager.getInstance();
 
-        mUserId = mAuthManager.getUserId();
+        mUserId = AuthManager.getUserId();
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mEmailView = ButterKnife.findById(headerView, R.id.email);
 
         headerView.setOnClickListener(view -> {
-            if (mAuthManager.isLoggedIn()) {
+            if (AuthManager.isLoggedIn()) {
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
-                profileIntent.putExtra(User.ID, mAuthManager.getUserId());
+                profileIntent.putExtra(User.ID, AuthManager.getUserId());
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(this, mProfilePicture, ViewCompat.getTransitionName(mProfilePicture));
                 startActivity(profileIntent, transitionActivityOptions.toBundle());
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupWallBottomNavigation() {
-        if (!mAuthManager.isLoggedIn()) {
+        if (!AuthManager.isLoggedIn()) {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
             mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
@@ -192,9 +192,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setUserHeader() {
-        String profileImageUrl = mAuthManager.getProfileImageUrl();
-        String name = mAuthManager.getUsername();
-        String email = mAuthManager.getEmail();
+        String profileImageUrl = AuthManager.getProfileImageUrl();
+        String name = AuthManager.getUsername();
+        String email = AuthManager.getEmail();
 
         Glide.with(this)
                 .load(profileImageUrl)
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setHeader() {
-        if (mAuthManager.isLoggedIn()) {
+        if (AuthManager.isLoggedIn()) {
             setUserHeader();
         }
         else {
@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mMenu.findItem(R.id.filter).setVisible(true);
 
             case R.id.my_wall:
-                if (mAuthManager.isLoggedIn()) {
+                if (AuthManager.isLoggedIn()) {
                     mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
                     fragTag = WallFragment.TAG;
                     mActionBar.setTitle(R.string.my_wall);
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.log_out:
-                if (mAuthManager.isLoggedIn()) {
+                if (AuthManager.isLoggedIn()) {
                     mAuthManager.logout();
                     goToLogin();
                 }
@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @OnClick(R.id.fab)
     public void createGame() {
-        if (!mAuthManager.isLoggedIn()) {
+        if (!AuthManager.isLoggedIn()) {
             goToLogin();
         }
         else {

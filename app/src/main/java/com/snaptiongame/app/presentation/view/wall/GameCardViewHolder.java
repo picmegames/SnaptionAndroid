@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
@@ -25,6 +26,7 @@ import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
+import com.snaptiongame.app.presentation.view.login.LoginActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,7 +80,14 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             mImage.setClipToOutline(true);
         }
 
-        mUpvoteButton.setOnClickListener(view -> setBeenUpvoted());
+        mUpvoteButton.setOnClickListener(view -> {
+            if (AuthManager.isLoggedIn()) {
+                setBeenUpvoted();
+            }
+            else {
+                goToLogin();
+            }
+        });
 
         itemView.setOnLongClickListener(view -> {
             mMenu.setOnMenuItemClickListener(item -> {
@@ -90,10 +99,13 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                         FacebookShareProvider.shareToFacebook((AppCompatActivity) mContext, mImage);
                         break;
                     case R.id.flag:
-                        setBeenFlagged();
-                        break;
                     case R.id.unflag:
-                        setBeenFlagged();
+                        if (AuthManager.isLoggedIn()) {
+                            setBeenFlagged();
+                        }
+                        else {
+                            goToLogin();
+                        }
                         break;
                     default:
                         break;
@@ -118,6 +130,11 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                             mImage, ViewCompat.getTransitionName(mImage));
             mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
         });
+    }
+
+    private void goToLogin() {
+        Intent loginIntent = new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(loginIntent);
     }
 
     public void hasBeenUpvotedOrFlagged(boolean beenUpvoted, boolean beenFlagged) {

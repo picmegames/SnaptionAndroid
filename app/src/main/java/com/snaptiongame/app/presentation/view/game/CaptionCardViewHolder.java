@@ -16,9 +16,11 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.CaptionProvider;
+import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 
 import butterknife.BindView;
@@ -61,9 +63,21 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         mView = itemView;
         ButterKnife.bind(this, itemView);
 
-        mUpvote.setOnClickListener(view -> setBeenUpvoted());
+        mUpvote.setOnClickListener(view -> {
+            if (AuthManager.isLoggedIn()) {
+                setBeenUpvoted();
+            }
+            else {
+                goToLogin();
+            }
+        });
         itemView.setOnLongClickListener(view -> {
-            setBeenFlagged();
+            if (AuthManager.isLoggedIn()) {
+                setBeenFlagged();
+            }
+            else {
+                goToLogin();
+            }
             return true;
         });
 
@@ -79,6 +93,11 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                             ViewCompat.getTransitionName(mUserImage));
             mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
         });
+    }
+
+    private void goToLogin() {
+        Intent loginIntent = new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(loginIntent);
     }
 
     public void setHasBeenUpvotedOrFlagged(boolean beenUpvoted, boolean beenFlagged) {

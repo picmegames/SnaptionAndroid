@@ -7,7 +7,7 @@ import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.providers.FriendProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
-import com.snaptiongame.app.data.utils.ImageConverter;
+import com.snaptiongame.app.data.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void createGame(String type, Uri uri, int userId, boolean isPublic) {
-        Disposable disposable = ImageConverter.getCompressedImage(uri)
+        Disposable disposable = ImageUtils.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

@@ -66,6 +66,7 @@
     <string name="clear">Clear</string>
     <string name="upvote">Upvote</string>
     <string name="upvoted">Upvoted!</string>
+    <string name="empty_username">Username cannot be empty</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

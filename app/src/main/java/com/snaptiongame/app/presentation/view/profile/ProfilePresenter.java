@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.UserProvider;
-import com.snaptiongame.app.data.utils.ImageConverter;
+import com.snaptiongame.app.data.utils.ImageUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -27,7 +27,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
-    private AuthenticationManager mAuthManager;
+    private AuthManager mAuthManager;
 
     private String mEncodedImage;
 
@@ -35,7 +35,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         mProfileView = profileView;
         mDisposables = new CompositeDisposable();
         mProfileView.setPresenter(this);
-        mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager = AuthManager.getInstance();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void convertImage(String type, Uri uri) {
-        Disposable disposable = ImageConverter.getCompressedImage(uri)
+        Disposable disposable = ImageUtils.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -94,7 +94,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void logout() {
-        if (mAuthManager.isLoggedIn()) {
+        if (AuthManager.isLoggedIn()) {
             mAuthManager.logout();
             mProfileView.goToLogin();
         }
