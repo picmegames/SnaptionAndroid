@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupWallBottomNavigation() {
         if (!AuthManager.isLoggedIn()) {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
+            mNavigationView.getMenu().findItem(R.id.friends).setVisible(false);
             mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
             mActionBar.setTitle(R.string.discover);
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
+            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
             mActionBar.setTitle(R.string.my_wall);
             setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
