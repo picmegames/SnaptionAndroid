@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,7 +44,7 @@ import com.hootsuite.nachos.chip.ChipSpanChipCreator;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
@@ -84,12 +85,13 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private ActionBar mActionBar;
     private MaterialDialog mProgressDialog;
     private MaterialDialog mFriendsDialog;
+    private DatePickerDialog mDatePickerDialog;
     private FriendsAdapter mFriendsAdapter;
 
     private CreateGameContract.Presenter mPresenter;
 
-    private AuthenticationManager mAuthManager;
     private Uri mUri;
+    private String mImageUrl;
     private Calendar mCalendar;
     private int mYear;
     private int mMonth;
@@ -99,8 +101,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
     private static final String EMOJI_REGEX = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])";
-    private static final String EMOJI_ERROR = "Tags cannot contain emojis";
-    private static final String COMPRESSION_ERROR = "Could not compress image";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,14 +108,16 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         setContentView(R.layout.activity_create_game);
         ButterKnife.bind(this);
 
-        mAuthManager = AuthenticationManager.getInstance();
-        mPresenter = new CreateGamePresenter(mAuthManager.getUserId(), this);
+        mPresenter = new CreateGamePresenter(AuthManager.getUserId(), this);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Game.IMAGE_URL)) {
+            mImageUrl = intent.getStringExtra(Game.IMAGE_URL);
+            ViewCompat.setTransitionName(mNewGameImage, mImageUrl);
+
             supportPostponeEnterTransition();
             Glide.with(this)
-                    .load(intent.getStringExtra(Game.IMAGE_URL))
+                    .load(mImageUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .priority(Priority.IMMEDIATE)
                     .fitCenter()
@@ -211,13 +213,13 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void showImageCompressionFailure() {
         mProgressDialog.dismiss();
-        Toast.makeText(this, COMPRESSION_ERROR, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.compression_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showUploadFailure() {
         mProgressDialog.dismiss();
-        Toast.makeText(this, EMOJI_ERROR, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -317,30 +319,36 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void createGame() {
         if (!containsEmoji(mTagTextView.getChipValues())) {
             if (mUri != null) {
-                mPresenter.createGame(getContentResolver().getType(mUri), mUri, mAuthManager.getUserId(),
-                        !mPrivateSwitch.isChecked());
+                mPresenter.createGame(getContentResolver().getType(mUri), mUri,
+                        AuthManager.getUserId(), !mPrivateSwitch.isChecked());
+                mProgressDialog = new MaterialDialog.Builder(this)
+                        .title(R.string.upload_title)
+                        .content(R.string.upload_message)
+                        .progress(true, 0)
+                        .cancelable(false)
+                        .show();
             }
-            mProgressDialog = new MaterialDialog.Builder(this)
-                    .title(R.string.upload_title)
-                    .content(R.string.upload_message)
-                    .progress(true, 0)
-                    .cancelable(false)
-                    .show();
         }
         else {
-            Toast.makeText(this, EMOJI_ERROR, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
         }
     }
 
     @OnClick(R.id.set_date_field)
     public void showDatePicker() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (DatePicker view, int year, int month, int dayOfMonth) -> {
-            mYear = year;
-            mMonth = month;
-            mDayOfMonth = dayOfMonth;
-            mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
-        }, mYear, mMonth, mDayOfMonth);
-        datePickerDialog.show();
+        if (mDatePickerDialog == null) {
+            mDatePickerDialog = new DatePickerDialog(this, (DatePicker view, int year, int month, int dayOfMonth) -> {
+                mYear = year;
+                mMonth = month;
+                mDayOfMonth = dayOfMonth;
+                mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+            }, mYear, mMonth, mDayOfMonth);
+            mDatePickerDialog.getDatePicker().setMinDate(mCalendar.getTime().getTime());
+            mDatePickerDialog.show();
+        }
+        else {
+            mDatePickerDialog.show();
+        }
     }
 
     @Override
@@ -354,8 +362,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            mCreateGameButton.setEnabled(true);
             mUri = data.getData();
+            mCreateGameButton.setEnabled(true);
             Glide.with(this)
                     .load(mUri)
                     .bitmapTransform(new FitCenter(this))

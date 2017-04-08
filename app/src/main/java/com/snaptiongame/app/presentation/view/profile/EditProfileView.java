@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,12 +44,10 @@ public class EditProfileView extends RelativeLayout {
     TextView mNameCount;
 
     private Context mContext;
-    private AuthenticationManager mAuthManager;
 
-    public EditProfileView(Context context, AuthenticationManager authenticationManager) {
+    public EditProfileView(Context context) {
         super(context, null);
         mContext = context;
-        mAuthManager = authenticationManager;
         init();
     }
 
@@ -70,14 +68,14 @@ public class EditProfileView extends RelativeLayout {
         ButterKnife.bind(this, view);
 
         Glide.with(mContext)
-                .load(mAuthManager.getProfileImageUrl())
+                .load(AuthManager.getProfileImageUrl())
                 .placeholder(new ColorDrawable(ContextCompat.getColor(mContext, R.color.grey_300)))
                 .dontAnimate()
                 .into(mProfileImage);
 
-        mFullName.setText(mAuthManager.getUserFullName());
-        mEmail.setText(mAuthManager.getEmail());
-        mUsername.setText(mAuthManager.getUsername());
+        mFullName.setText(AuthManager.getUserFullName());
+        mEmail.setText(AuthManager.getEmail());
+        mUsername.setText(AuthManager.getUsername());
 
         mProfileImage.setOnClickListener(imageView -> {
             Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
