@@ -71,6 +71,7 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
             mOriginalBackground = holder.mFitBCaptionCard.getBackground();
 
         FitBCaption curCaption = mCaptions.get(position);
+
         String fitbText = curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank;
         ArrayList<String> fitbs = new ArrayList<String>(
                 Arrays.asList(curCaption.beforeBlank,
@@ -80,37 +81,19 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         holder.mCaptionTemplateTextView.setText(fitbText);
 
         holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
-        
-
-
 
         holder.mFitBCaptionCard.setOnClickListener(v -> {
             mCaptionClickListener.captionClicked(v, position, fitbs);
             int previousSelection = mItemSelected;
-
             mItemSelected = holder.getAdapterPosition();
             notifyItemChanged(previousSelection);
             notifyItemChanged(mItemSelected);
-
-
-            //Determine which cards are checked and should be highlighted
-            /*if (!areCardsChecked.get(position)) {
-                mOriginalBackground = v.getBackground();
-                v.setBackgroundResource(R.drawable.card_border_color_pink);
-                areCardsChecked.set(position, true);
-            }
-            else {
-                //v.setBackground(mOriginalBackground);
-
-                areCardsChecked.set(position, false);
-            }*/
         });
         if(position == mItemSelected)
             holder.mFitBCaptionCard.setBackgroundResource(R.drawable.card_border_color_pink);
         else
             holder.mFitBCaptionCard.setBackground(mOriginalBackground);
     }
-
 
     @Override
     public long getItemId(int position) {
@@ -126,4 +109,6 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+
 }

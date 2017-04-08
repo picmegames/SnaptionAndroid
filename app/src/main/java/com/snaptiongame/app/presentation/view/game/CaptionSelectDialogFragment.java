@@ -33,7 +33,9 @@ import java.util.List;
  * Created by nickromero on 2/7/17.
  */
 
-public class CaptionSelectDialogFragment extends DialogFragment implements GameContract.CaptionDialogView,
+public class CaptionSelectDialogFragment {
+    /*extends
+} DialogFragment implements GameContract.CaptionDialogView,
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
 
     private static final int FITB_OFFSET = 1;
@@ -52,19 +54,19 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     /**
      * Title of a dialog that changes, depending on which dialog is shown
-     */
+     *
     private String mDialogTitle;
 
     /**
      * Header icon associated with a dialog title. Changes depending on which dialog is shown
-     */
+     *
     private int mHeaderIcon;
 
     private CaptionDialogToShow mDialogToShow;
 
     /**
      * Member variables used to create the two buttons at the bottom of a dialog
-     */
+     *
     private String sNegativeButtonText;
     private String sPositiveButtonText;
 
@@ -76,7 +78,7 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
 
     /**
      * Recycler view used to hold the results of a search query run by the user
-     */
+     *
     private LinearLayoutManager mLinearLayoutManager;
     private View mDialogView;
     private TextInputLayout fitBEditTextLayout;
@@ -314,6 +316,6 @@ public class CaptionSelectDialogFragment extends DialogFragment implements GameC
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(fitBEditText, InputMethodManager.SHOW_IMPLICIT);
     }
-
+*/
 
 }

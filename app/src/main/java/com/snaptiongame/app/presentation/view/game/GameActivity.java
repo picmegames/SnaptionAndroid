@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,8 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -25,10 +25,13 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -67,9 +70,9 @@ import com.snaptiongame.app.presentation.view.utils.ColorUtils;
 import com.snaptiongame.app.presentation.view.utils.GlideUtils;
 import com.snaptiongame.app.presentation.view.utils.ViewUtils;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,6 +86,8 @@ import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
+
+import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 /**
  * @author Tyler Wong
@@ -116,14 +121,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ViewSwitcher mSwitchCaptionTitles;
     @BindView(R.id.fitb_entry)
     EditText mFitBEditTextField;
-
+    @BindView(R.id.fab)
+    FloatingActionButton mAddCaptionFab;
+    @BindView(R.id.fitb_cancel_button)
+    ImageView mFitBCancelButton;
 
     @BindView(R.id.refresh_icon)
     ImageView mRefreshIcon;
     @BindView(R.id.switch_fitb_entry)
     LinearLayout mSwitchFitBEntry;
-
-
 
 
     private ActionBar mActionBar;
@@ -137,9 +143,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private CaptionSetAdapter mCaptionSetAdapter;
     private View mDialogView;
     private Drawable mOriginalCardViewBackground;
+    private int mCurrentCaption;
+    private List<String> mCurFitBPieces;
+    private String mUserCaptionEntry;
+    private int mFitBBeforeLength;
+    private int mFitBAfterLength;
 
-    private static final int NUM_CAPTION_PAGES = 2;
+    private enum CaptionState {
+        List, Random, Sets, Typed
+    }
 
+    private CaptionState mCurrentCaptionState;
 
     /**
      * Member variable to reference the game owner's image
@@ -195,6 +209,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private static final float SCRIM_ADJUSTMENT = 0.075f;
     private FITBCaptionAdapter mFitBAdapter;
     private RecyclerView mCaptionView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -258,8 +273,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this,
                 this.getLayoutInflater());
-
-
     }
 
     private void upvoteGame() {
@@ -440,49 +453,60 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (!mAuthManager.isLoggedIn()) {
             goToLogin();
         } else {
+            if (mCurrentCaptionState == CaptionState.Typed) {
+                confirmAndPrepareCaption();
+            }
             if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView) {
                 mCaptionViewSwitcher.showPrevious();
                 mHeaderViewSwitcher.showPrevious();
+                mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_add_white_24dp));
             } else {
-                mPresenter = new GamePresenter(mGameId, this);
 
+                mPresenter = new GamePresenter(mGameId, this);
+                mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_arrow_back_white_24dp));
                 mCaptionViewSwitcher.showNext();
                 mHeaderViewSwitcher.showNext();
                 initializeCaptionView();
-            }
 
+            }
         }
+    }
+
+    private void confirmAndPrepareCaption() {
+        String curEntry = mFitBEditTextField.getText().toString();
+        System.out.println(curEntry);
+        curEntry = curEntry.replace(mCurFitBPieces.get(0), "");
+        curEntry = curEntry.replace(mCurFitBPieces.get(2), "");
+
+        mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
+                curEntry);
+        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                R.drawable.ic_add_white_24dp));
+        mCurrentCaptionState = CaptionState.List;
     }
 
 
     private void initializeCaptionView() {
         mDialogView = mSwitchCreateCaptionView;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         mCaptionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
-
-        //if (mSetId == -1
+        mRefreshIcon.setVisibility(View.VISIBLE);
         mPresenter.loadRandomFITBCaptions();
-        /*
-        else {
-            mPresenter.loadFitBCaptions(mSetId);
-            mDialogBuilder.setNegativeButton(BACK, (DialogInterface dialog, int which) ->
-                    ((GameActivity) getActivity()).displaySetChoosingDialog()
-            );
-        }*/
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         mCaptionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
         mCaptionView.setLayoutManager(layoutManager);
 
-
-
         mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
 
         mCaptionView.setAdapter(mFitBAdapter);
 
-
+        mCurrentCaptionState = CaptionState.Random;
     }
 
     @OnClick(R.id.refresh_icon)
@@ -493,25 +517,29 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @OnFocusChange(R.id.fitb_entry)
     public void removeFITBUnderScores() {
         String curText = mFitBEditTextField.getText().toString();
-        System.out.println(curText);
         if (curText.matches("/[_]/"))
             mFitBEditTextField.setText("");
+    }
+
+    @OnClick(R.id.fitb_cancel_button)
+    public void resetCaptionChoosing() {
+        mSwitchCaptionTitles.showNext();
+        mCurrentCaptionState = CaptionState.Random;
 
     }
 
 
-
     @OnClick(R.id.caption_sets)
     public void loadCaptionSets() {
-
         mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
 
         mPresenter.loadCaptionSets();
-        //GridLayoutManager g = new GridLayoutManager(this.getApplicationContext(), 2);
 
         mCaptionView.setAdapter(mCaptionSetAdapter);
 
         mRefreshIcon.setVisibility(View.INVISIBLE);
+
+        mCurrentCaptionState = CaptionState.Sets;
     }
 
     public void showGame(String image, int id, int pickerId, boolean beenUpvoted, boolean beenFlagged) {
@@ -645,39 +673,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 );
     }
 
-    public void displayCaptionChoosingDialog(int setChosen) {
-        mCaptionSetDialogFragment.dismiss();
-        mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
-                CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
-                mGameId, setChosen);
-        mCaptionDialogFragment.show(getFragmentManager(), "dialog");
-
-    }
-
-
-
-    public void displaySetChoosingDialog() {
-        mCaptionSetDialogFragment.dismiss();
-        mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
-                CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
-                mGameId, -1);
-        mCaptionDialogFragment.show(getFragmentManager(), "dialog");
-    }
-
-    public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
-        if (mCaptionDialogFragment != null)
-            mCaptionDialogFragment.dismiss();
-
-        if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER) {
-            if (mCaptionSetDialogFragment != null)
-                mCaptionSetDialogFragment.dismiss();
-        } else {
-            if (mCaptionDialogFragment != null)
-                mCaptionDialogFragment.dismiss();
-            //mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
-        }
-
-    }
 
     private void goToLogin() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -719,37 +714,42 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void captionClicked(View v, int position, List<String> fitbs) {
         int start = fitbs.get(0).length();
+        mCurrentCaption = position;
+        mCurFitBPieces = fitbs;
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                R.drawable.ic_check_white_24dp));
 
         mFitBEditTextField.setVisibility(View.VISIBLE);
         mFitBEditTextField.setText(fitbs.get(0) + "" + fitbs.get(2));
         mFitBEditTextField.setSelection(start);
 
+        mFitBBeforeLength = fitbs.get(0).length();
+        mFitBAfterLength = fitbs.get(2).length();
+
         mFitBEditTextField.requestFocus();
+        imm.showSoftInput(mFitBEditTextField, InputMethodManager.SHOW_IMPLICIT);
+
         if (mSwitchCaptionTitles.getCurrentView() != mSwitchFitBEntry)
             mSwitchCaptionTitles.showNext();
 
         if (mOriginalCardViewBackground == null)
             mOriginalCardViewBackground = v.getBackground();
 
-        int childCount = mCaptionView.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View layout = mCaptionView.getChildAt(i);
-            if (i == position)
-                layout.findViewById(R.id.fitb_caption_card).setBackgroundResource(R.drawable.card_border_color_pink);
-            else
-                layout.findViewById(R.id.fitb_caption_card).setBackground(mOriginalCardViewBackground);
-        }
+        mCurrentCaptionState = CaptionState.Typed; //User is entering or about to fill in a caption
+
     }
 
     @Override
     public void showFitBCaptions(List<FitBCaption> captions) {
+        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this, getLayoutInflater());
         mCaptionView.setAdapter(mFitBAdapter);
         mFitBAdapter.setCaptions(captions);
     }
 
     @Override
     public void showRandomCaptions(List<FitBCaption> captions) {
-
         mFitBAdapter.setCaptions(captions);
         mFitBAdapter.notifyDataSetChanged();
     }
@@ -761,7 +761,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void captionSetClicked(View v, int position) {
-
         mPresenter.loadFitBCaptions(position);
 
     }

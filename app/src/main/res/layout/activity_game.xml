@@ -117,7 +117,6 @@
                                         android:layout_centerVertical="true"
                                         android:layout_toEndOf="@id/caption_sets"
                                         android:padding="8dp"
-                                        android:text="LALALAL"
                                         android:textColor="@color/colorAccent"
                                         android:textSize="20sp"
                                         android:textStyle="bold" />
@@ -130,6 +129,11 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:orientation="horizontal">
+                                    <ImageView
+                                        android:id="@+id/fitb_cancel_button"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_cancel_grey_800_24dp"/>
 
 
                                     <EditText
