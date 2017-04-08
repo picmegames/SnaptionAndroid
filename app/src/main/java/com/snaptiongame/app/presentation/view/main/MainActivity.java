@@ -41,6 +41,7 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.authentication.AuthenticationManager;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.data.utils.TextStyleUtils;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
@@ -278,12 +279,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .negativeText(R.string.clear)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         if (fragTag.equals(WallFragment.TAG)) {
+                            TextStyleUtils.chipifyNachoText(mFilterTextView);
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
                     .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         clearFilterView();
                         if (fragTag.equals(WallFragment.TAG)) {
+                            TextStyleUtils.chipifyNachoText(mFilterTextView);
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
