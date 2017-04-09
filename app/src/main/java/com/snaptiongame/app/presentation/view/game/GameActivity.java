@@ -14,6 +14,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -31,10 +33,12 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -120,7 +124,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @BindView(R.id.switch_caption_titles)
     ViewSwitcher mSwitchCaptionTitles;
     @BindView(R.id.fitb_entry)
-    EditText mFitBEditTextField;
+    TextInputEditText mFitBEditTextField;
+    @BindView(R.id.fitb_entry_layout)
+    TextInputLayout mFitBEditTextLayout;
+
+
+    //@BindView(R.id.fitb_entry)
+    //EditText mFitBEditTextField;
     @BindView(R.id.fab)
     FloatingActionButton mAddCaptionFab;
     @BindView(R.id.fitb_cancel_button)
@@ -129,7 +139,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @BindView(R.id.refresh_icon)
     ImageView mRefreshIcon;
     @BindView(R.id.switch_fitb_entry)
-    LinearLayout mSwitchFitBEntry;
+    RelativeLayout mSwitchFitBEntry;
 
 
     private ActionBar mActionBar;
@@ -138,16 +148,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private InsetDividerDecoration mDecoration;
     private AuthenticationManager mAuthManager;
     private GameContract.Presenter mPresenter;
-    private CaptionSelectDialogFragment mCaptionDialogFragment;
-    private CaptionSelectDialogFragment mCaptionSetDialogFragment;
     private CaptionSetAdapter mCaptionSetAdapter;
-    private View mDialogView;
     private Drawable mOriginalCardViewBackground;
     private int mCurrentCaption;
     private List<String> mCurFitBPieces;
-    private String mUserCaptionEntry;
-    private int mFitBBeforeLength;
-    private int mFitBAfterLength;
 
     private enum CaptionState {
         List, Random, Sets, Typed
@@ -201,12 +205,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
 
+    public static final String EMPTY_CAPTION = "Nothing entered for caption.";
     public static final String JOIN_SNAPTION = "Join Snaption!";
     public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
     public static final String INVITE_CHANNEL = "GameInvite";
     public static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
+    final OvershootInterpolator interpolator = new OvershootInterpolator();
+
     private FITBCaptionAdapter mFitBAdapter;
     private RecyclerView mCaptionView;
 
@@ -450,22 +457,41 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @OnClick(R.id.fab)
     public void showAddCaptionDialog() {
+        boolean successfulCaptionSubmission = true;
         if (!mAuthManager.isLoggedIn()) {
             goToLogin();
         } else {
             if (mCurrentCaptionState == CaptionState.Typed) {
-                confirmAndPrepareCaption();
+                successfulCaptionSubmission = confirmAndPrepareCaption();
             }
-            if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView) {
+            //
+            if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
+                    && successfulCaptionSubmission) {
                 mCaptionViewSwitcher.showPrevious();
                 mHeaderViewSwitcher.showPrevious();
-                mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_add_white_24dp));
-            } else {
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.animate(mAddCaptionFab)
+                        .rotation(0f)
+                        .withLayer()
+                        .setDuration(300)
+                        .setInterpolator(interpolator)
+                        .start();
+            }
+
+            //Shown when a user first enters the caption view
+            else if (successfulCaptionSubmission) {
 
                 mPresenter = new GamePresenter(mGameId, this);
-                mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_arrow_back_white_24dp));
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.animate(mAddCaptionFab)
+                        .rotation(45f)
+                        .withLayer()
+                        .setDuration(300)
+                        .setInterpolator(interpolator)
+                        .start();
+
+                //mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                 //       R.drawable.ic_arrow_back_white_24dp));
                 mCaptionViewSwitcher.showNext();
                 mHeaderViewSwitcher.showNext();
                 initializeCaptionView();
@@ -474,22 +500,28 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
     }
 
-    private void confirmAndPrepareCaption() {
+    private boolean confirmAndPrepareCaption() {
         String curEntry = mFitBEditTextField.getText().toString();
-        System.out.println(curEntry);
-        curEntry = curEntry.replace(mCurFitBPieces.get(0), "");
-        curEntry = curEntry.replace(mCurFitBPieces.get(2), "");
 
-        mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
-                curEntry);
-        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                R.drawable.ic_add_white_24dp));
-        mCurrentCaptionState = CaptionState.List;
+        //Ensure the fitb isn't empty
+        if (curEntry.trim().length() > 0) {
+            mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
+                    curEntry);
+            mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    R.drawable.ic_add_white_24dp));
+            mCurrentCaptionState = CaptionState.List;
+            return true;
+        }
+        else {
+            Toast.makeText(this, EMPTY_CAPTION, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
     }
 
 
     private void initializeCaptionView() {
-        mDialogView = mSwitchCreateCaptionView;
+        View mDialogView = mSwitchCreateCaptionView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         mCaptionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
@@ -525,7 +557,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void resetCaptionChoosing() {
         mSwitchCaptionTitles.showNext();
         mCurrentCaptionState = CaptionState.Random;
+        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                R.drawable.ic_add_white_24dp));
 
+        ViewCompat.animate(mAddCaptionFab)
+                .rotation(45f)
+                .withLayer()
+                .setDuration(300)
+                .setInterpolator(interpolator)
+                .start();
     }
 
 
@@ -714,6 +754,18 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void captionClicked(View v, int position, List<String> fitbs) {
         int start = fitbs.get(0).length();
+        final String beforeBlank = fitbs.get(0);
+        final String afterBlank = fitbs.get(2);
+        final String placeHolder = "______";
+
+        ViewCompat.animate(mAddCaptionFab)
+                .rotation(0f)
+                .withLayer()
+                .setDuration(300)
+                .setInterpolator(interpolator)
+                .start();
+
+        mFitBEditTextField.setText("");
         mCurrentCaption = position;
         mCurFitBPieces = fitbs;
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -721,14 +773,28 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                 R.drawable.ic_check_white_24dp));
 
-        mFitBEditTextField.setVisibility(View.VISIBLE);
-        mFitBEditTextField.setText(fitbs.get(0) + "" + fitbs.get(2));
-        mFitBEditTextField.setSelection(start);
-
-        mFitBBeforeLength = fitbs.get(0).length();
-        mFitBAfterLength = fitbs.get(2).length();
-
+        mFitBEditTextLayout.setVisibility(View.VISIBLE);
+        mFitBEditTextField.setHint("Fill in the blank!");
+        mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
         mFitBEditTextField.requestFocus();
+        mFitBEditTextField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mFitBEditTextLayout.setHint(beforeBlank + s + afterBlank);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         imm.showSoftInput(mFitBEditTextField, InputMethodManager.SHOW_IMPLICIT);
 
         if (mSwitchCaptionTitles.getCurrentView() != mSwitchFitBEntry)
@@ -738,7 +804,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mOriginalCardViewBackground = v.getBackground();
 
         mCurrentCaptionState = CaptionState.Typed; //User is entering or about to fill in a caption
-
     }
 
     @Override
@@ -762,7 +827,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void captionSetClicked(View v, int position) {
         mPresenter.loadFitBCaptions(position);
-
     }
 }
 
