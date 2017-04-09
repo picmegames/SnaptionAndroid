@@ -126,15 +126,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     TextInputEditText mFitBEditTextField;
     @BindView(R.id.fitb_entry_layout)
     TextInputLayout mFitBEditTextLayout;
-
-
-    //@BindView(R.id.fitb_entry)
-    //EditText mFitBEditTextField;
     @BindView(R.id.fab)
     FloatingActionButton mAddCaptionFab;
     @BindView(R.id.fitb_cancel_button)
     ImageView mFitBCancelButton;
-
     @BindView(R.id.refresh_icon)
     ImageView mRefreshIcon;
     @BindView(R.id.switch_fitb_entry)
