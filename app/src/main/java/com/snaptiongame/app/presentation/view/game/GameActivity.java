@@ -140,6 +140,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private Menu mMenu;
     private CaptionAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
+    private AuthenticationManager mAuthManager;
     private GameContract.Presenter mPresenter;
     private CaptionSetAdapter mCaptionSetAdapter;
     private Drawable mOriginalCardViewBackground;
