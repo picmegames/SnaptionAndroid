@@ -140,7 +140,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private Menu mMenu;
     private CaptionAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
-    private AuthenticationManager mAuthManager;
     private GameContract.Presenter mPresenter;
     private CaptionSetAdapter mCaptionSetAdapter;
     private Drawable mOriginalCardViewBackground;
@@ -465,7 +464,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void showAddCaptionDialog() {
 
         boolean successfulCaptionSubmission = true;
-        if (!mAuthManager.isLoggedIn()) {
+        if (!AuthManager.isLoggedIn()) {
             goToLogin();
         } else {
             if (mCurrentCaptionState == CaptionState.Typed) {
