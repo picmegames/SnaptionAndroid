@@ -14,7 +14,9 @@ import com.snaptiongame.app.data.models.User;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
@@ -40,7 +42,7 @@ public interface SnaptionApi {
      * @return An observable that emits a Session
      */
     @POST("/OAuth/Facebook/")
-    Observable<Session> userOAuthFacebook(@Body OAuthRequest request);
+    Single<Session> userOAuthFacebook(@Body OAuthRequest request);
 
     /**
      * This method authenticates a user with Google on with
@@ -50,7 +52,7 @@ public interface SnaptionApi {
      * @return An observable that emits a Session object
      */
     @POST("/OAuth/Google/")
-    Observable<Session> userOAuthGoogle(@Body OAuthRequest request);
+    Single<Session> userOAuthGoogle(@Body OAuthRequest request);
 
     /**
      * This method sends a request for a user with a GET request.
@@ -59,7 +61,7 @@ public interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @GET("/Users/{userId}/")
-    Observable<User> getUser(@Path("userId") int userId);
+    Single<User> getUser(@Path("userId") int userId);
 
     /**
      * This method sends a request to add a friend
@@ -70,7 +72,7 @@ public interface SnaptionApi {
      * @return An observable that emits an AddFriendRequest object
      */
     @POST("/UserFriends/{userId}/")
-    Observable<AddFriendRequest> addFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
+    Single<AddFriendRequest> addFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
     /**
      * This method sends a request to delete a friend
@@ -81,7 +83,7 @@ public interface SnaptionApi {
      * @return An observable that emits an AddFriendRequest object
      */
     @HTTP(method = "DELETE", path = "/UserFriends/{userId}/", hasBody = true)
-    Observable<AddFriendRequest> deleteFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
+    Completable deleteFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
 
     /**
      * This method sends a request for a user with a GET request.
@@ -90,7 +92,7 @@ public interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @GET("/Users?email=")
-    Observable<User> getUserByEmail(@Query("email") String userEmail);
+    Single<User> getUserByEmail(@Query("email") String userEmail);
 
     /**
      * This method sends a request for a user with a GET request.
@@ -99,7 +101,7 @@ public interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @GET("/Users?facebookID=")
-    Observable<User> getUserByFacebook(@Query("facebookID") String facebookID);
+    Single<User> getUserByFacebook(@Query("facebookID") String facebookID);
 
     /**
      * This method sends a request to update a user with a PUT request.
@@ -108,7 +110,7 @@ public interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @PUT("/Users/")
-    Observable<User> updateUser(@Body User user);
+    Single<User> updateUser(@Body User user);
 
     /**
      * This method sends a request to get a list of games
@@ -163,7 +165,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/{gameId}/")
-    Observable<Game> getGame(@Path("gameId") int gameId, @Query("linkToken") String token);
+    Single<Game> getGame(@Path("gameId") int gameId, @Query("linkToken") String token);
 
     /**
      * This method sends a request to upvote or flag a game with
@@ -173,7 +175,7 @@ public interface SnaptionApi {
      * @return An observable that emits a GameAction object
      */
     @PUT("/UserXGame/")
-    Observable<GameAction> upvoteOrFlagGame(@Body GameAction request);
+    Completable upvoteOrFlagGame(@Body GameAction request);
 
     /**
      * This method sends a request to add a game with
@@ -183,7 +185,7 @@ public interface SnaptionApi {
      * @return An observable that emits a Game object
      */
     @POST("/Games/")
-    Observable<Game> addGame(@Body Game snaption);
+    Completable addGame(@Body Game snaption);
 
     /**
      * This method sends a request to get a user's friends
@@ -214,7 +216,7 @@ public interface SnaptionApi {
      * @return An observable that emits a Caption object
      */
     @POST("/Games/{game_id}/Captions/")
-    Observable<Caption> addCaption(@Path("game_id") int gameId, @Body Caption caption);
+    Completable addCaption(@Path("game_id") int gameId, @Body Caption caption);
 
     /**
      * This method sends a request to upvote or flag a caption
@@ -224,7 +226,7 @@ public interface SnaptionApi {
      * @return An observable that emits a GameAction object
      */
     @PUT("/UserXCaption/")
-    Observable<GameAction> upvoteOrFlagCaption(@Body GameAction request);
+    Completable upvoteOrFlagCaption(@Body GameAction request);
 
     /**
      * This method sends a request to retrieve all fill in the blank from snaption.
@@ -259,5 +261,5 @@ public interface SnaptionApi {
      * @return An observable that emits a deep link token
      */
     @POST("/DeepLink/")
-    Observable<String> getToken(@Body DeepLinkRequest deepLinkRequest);
+    Single<String> getToken(@Body DeepLinkRequest deepLinkRequest);
 }

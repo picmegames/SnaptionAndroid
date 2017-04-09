@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -54,7 +53,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
@@ -146,7 +145,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private Menu mMenu;
     private CaptionAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
-    private AuthenticationManager mAuthManager;
     private GameContract.Presenter mPresenter;
     private CaptionSetAdapter mCaptionSetAdapter;
     private Drawable mOriginalCardViewBackground;
@@ -223,7 +221,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ButterKnife.bind(this);
-        mAuthManager = AuthenticationManager.getInstance();
 
         Intent intent = getIntent();
         ViewCompat.setTransitionName(mImage, intent.getStringExtra(Game.IMAGE_URL));
@@ -241,7 +238,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 }
                 // ELSE display information from the game invite
                 else {
-                    mAuthManager.saveToken(mInvite.inviteToken);
+                    AuthManager.saveToken(mInvite.inviteToken);
                     loadInvitedGame();
                 }
                 Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
@@ -330,13 +327,21 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 onBackPressed();
                 break;
             case R.id.flag:
-                flagGame();
-                break;
             case R.id.unflag:
-                flagGame();
+                if (AuthManager.isLoggedIn()) {
+                    flagGame();
+                }
+                else {
+                    goToLogin();
+                }
                 break;
             case R.id.create_game:
-                startCreateGame();
+                if (AuthManager.isLoggedIn()) {
+                    startCreateGame();
+                }
+                else {
+                    goToLogin();
+                }
                 break;
             case R.id.share:
                 mPresenter.shareToFacebook(this, mImage);
@@ -345,7 +350,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mPresenter.getBranchToken(mGameId);
                 break;
             case R.id.upvote:
-                upvoteGame();
+                if (AuthManager.isLoggedIn()) {
+                    upvoteGame();
+                }
+                else {
+                    goToLogin();
+                }
                 break;
             default:
                 break;
@@ -457,6 +467,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @OnClick(R.id.fab)
     public void showAddCaptionDialog() {
+
         boolean successfulCaptionSubmission = true;
         if (!mAuthManager.isLoggedIn()) {
             goToLogin();
@@ -635,10 +646,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                             ActionBar actionBar = getSupportActionBar();
 
                             if (actionBar != null) {
-                                final Drawable upArrow = ContextCompat.getDrawable(
-                                        GameActivity.this, R.drawable.abc_ic_ab_back_material);
-                                upArrow.setColorFilter(ContextCompat.getColor(GameActivity.this, R.color.grey_800), PorterDuff.Mode.SRC_ATOP);
-                                actionBar.setHomeAsUpIndicator(upArrow);
+                                actionBar.setHomeAsUpIndicator(ContextCompat.getDrawable(
+                                        GameActivity.this, R.drawable.ic_arrow_back_grey_800_24dp));
 
                                 final Drawable more = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_more_vert_grey_800_24dp, null);
                                 mToolbar.setOverflowIcon(more);
@@ -704,12 +713,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     };
 
     public void loadInvitedGame() {
-        GameProvider.getGame(mInvite.gameId, mAuthManager.getInviteToken())
+        GameProvider.getGame(mInvite.gameId, AuthManager.getInviteToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         game -> showGame(game.imageUrl, game.id, game.pickerId, game.beenUpvoted, game.beenFlagged),
-                        Timber::e,
-                        () -> Timber.i("Loading game completed successfully.")
+                        Timber::e
                 );
     }
 

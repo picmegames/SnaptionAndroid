@@ -1,12 +1,12 @@
 package com.snaptiongame.app.data.providers;
 
-import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.api.SnaptionApi;
+import com.snaptiongame.app.data.models.User;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,10 +23,10 @@ public class UserProviderTest {
     public void setup() {
         service = mock(SnaptionApi.class);
         user = new User("");
-        when(service.getUser(0)).thenReturn(Observable.just(user));
-        when(service.getUserByEmail("")).thenReturn(Observable.just(user));
-        when(service.getUserByFacebook("")).thenReturn(Observable.just(user));
-        when(service.updateUser(user)).thenReturn(Observable.just(user));
+        when(service.getUser(0)).thenReturn(Single.just(user));
+        when(service.getUserByEmail("")).thenReturn(Single.just(user));
+        when(service.getUserByFacebook("")).thenReturn(Single.just(user));
+        when(service.updateUser(user)).thenReturn(Single.just(user));
     }
 
     @Test

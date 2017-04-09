@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.FriendProvider;
@@ -50,13 +50,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     @BindView(R.id.refresh_layout_friends)
     SwipeRefreshLayout mRefreshLayout;
 
-    private FriendsContract.Presenter mPresenter;
+    protected FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
     private List<Friend> friends = new ArrayList<>();
     private String query = null;
 
-    private AuthenticationManager mAuthManager;
     private Unbinder mUnbinder;
     private FriendsDialogFragment mDialogFragmentDefault;
     private FriendsDialogFragment mDialogFragmentFriendSearch;
@@ -74,8 +73,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         View view = inflater.inflate(R.layout.friends_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mAuthManager = AuthenticationManager.getInstance();
-        mPresenter = new FriendsPresenter(this, mAuthManager.getUserId());
+        mPresenter = new FriendsPresenter(this, AuthManager.getUserId());
 
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -212,10 +210,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     }
 
     private void removeFriend(int id) {
-        FriendProvider.removeFriend(mAuthManager.getUserId(), new AddFriendRequest(id))
+        FriendProvider.removeFriend(AuthManager.getUserId(), new AddFriendRequest(id))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(request -> {
-                }, Timber::e, () -> Timber.i("Successfully removed friend!"));
+                .subscribe(
+                        () -> Timber.i("Successfully removed friend!"),
+                        Timber::e
+                );
     }
 
     public List<Friend> getFriends() {

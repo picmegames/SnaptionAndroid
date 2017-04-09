@@ -66,6 +66,10 @@
     <string name="clear">Clear</string>
     <string name="upvote">Upvote</string>
     <string name="upvoted">Upvoted!</string>
+    <string name="empty_username">Username cannot be empty</string>
+    <string name="emoji_error">Tags cannot contain emojis</string>
+    <string name="compression_error">Could not compress image</string>
+    <string name="upload_error">Could not upload game</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -91,6 +95,7 @@
     <!-- Invite Friends Dialog -->
     <string name="add_a_friend">Add a Friend!</string>
     <string name="update_failure">Duplicate username</string>
+    <string name="invalid_char">Invalid symbol in username</string>
     <string name="no_friends">No friends could be found</string>
 
     <!-- Delete Friend Dialog -->

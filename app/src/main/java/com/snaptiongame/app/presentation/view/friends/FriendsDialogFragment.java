@@ -2,9 +2,9 @@ package com.snaptiongame.app.presentation.view.friends;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.User;
@@ -155,11 +155,6 @@ public class FriendsDialogFragment extends DialogFragment {
      */
     private int sUserID;
 
-    /**
-     * Authentication manager used to grab a user's Game ID
-     */
-    private AuthenticationManager mAuthManager;
-
     private FriendsDialogInterface mFriendsDialogInterface;
 
     private TextView mEmpty;
@@ -198,8 +193,6 @@ public class FriendsDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAuthManager = AuthenticationManager.getInstance();
 
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
 
@@ -357,17 +350,18 @@ public class FriendsDialogFragment extends DialogFragment {
          * previous dialog.
          */
         mDialogBuilder.setPositiveButton(sPositiveButtonText, (dialogInterface, i) -> {
-
             //add all selected friends if in the facebook dialog
             if (mWhichDialog.equals(DialogToShow.FACEBOOK_INVITE)) {
                 for (Integer friendId : mAdapter.getSelectedFriendIds()) {
                     addFriend(friendId);
                 }
             }
+
             //Only send an outer app if we are still on the first dialog screen. Otherwise
             //we handle the friend invite in app
-            else if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG))
+            else if (!mWhichDialog.equals(DialogToShow.STANDARD_DIALOG)) {
                 addFriend(sUserID);
+            }
         }).setNegativeButton(sNegativeButtonText, (dialogInterface, i) -> {
 
             Intent data = new Intent();
@@ -415,9 +409,10 @@ public class FriendsDialogFragment extends DialogFragment {
         else {
             UserProvider.getUserWithEmail(search.getText().toString())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::showFriend,
-                            Timber::e,
-                            () -> Timber.i("Found user successfully"));
+                    .subscribe(
+                            this::showFriend,
+                            Timber::e
+                    );
         }
 
     }
@@ -456,13 +451,11 @@ public class FriendsDialogFragment extends DialogFragment {
      * Add a friendId to our list of users
      */
     private void addFriend(int userId) {
-        FriendProvider.addFriend(mAuthManager.getUserId(), new AddFriendRequest(userId))
+        FriendProvider.addFriend(AuthManager.getUserId(), new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        request -> {
-                        },
-                        Timber::e,
-                        () -> Timber.i("Successfully added friend!")
+                        request -> updateFriendFragment(),
+                        Timber::e
                 );
     }
 
@@ -602,5 +595,9 @@ public class FriendsDialogFragment extends DialogFragment {
         }
     }
 
+    public void updateFriendFragment() {
+        FriendsFragment frag = (FriendsFragment) this.getTargetFragment();
+        frag.mPresenter.loadFriends();
+    }
 
 }

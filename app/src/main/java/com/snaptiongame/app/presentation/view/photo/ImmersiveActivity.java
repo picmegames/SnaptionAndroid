@@ -19,6 +19,7 @@ import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author Tyler Wong
@@ -62,5 +63,10 @@ public class ImmersiveActivity extends AppCompatActivity {
         }
 
         TransitionUtils.setupArcTransition(this, getWindow());
+    }
+
+    @OnClick(R.id.photo_view)
+    public void closeImmersiveActivity() {
+        super.onBackPressed();
     }
 }

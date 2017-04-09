@@ -1,8 +1,8 @@
 package com.snaptiongame.app.data.providers;
 
+import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.data.api.SnaptionApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,8 +35,8 @@ public class FriendProviderTest {
         friends.add(new Friend(0, "", "", "", "", "", "", ""));
         when(service.getFriends(0)).thenReturn(Observable.just(friends));
         request = new AddFriendRequest(0);
-        when(service.addFriend(0, request)).thenReturn(Observable.just(request));
-        when(service.deleteFriend(0, request)).thenReturn(Observable.just(request));
+        when(service.addFriend(0, request)).thenReturn(Single.just(request));
+        when(service.deleteFriend(0, request)).thenReturn(Completable.complete());
     }
 
     @Test

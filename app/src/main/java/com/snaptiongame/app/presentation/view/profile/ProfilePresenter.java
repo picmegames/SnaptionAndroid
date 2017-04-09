@@ -3,15 +3,18 @@ package com.snaptiongame.app.presentation.view.profile;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.R;
+import com.snaptiongame.app.SnaptionApplication;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.UserProvider;
-import com.snaptiongame.app.data.utils.ImageConverter;
+import com.snaptiongame.app.data.utils.ImageUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 import timber.log.Timber;
 
 /**
@@ -24,7 +27,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
-    private AuthenticationManager mAuthManager;
+    private AuthManager mAuthManager;
 
     private String mEncodedImage;
 
@@ -32,7 +35,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         mProfileView = profileView;
         mDisposables = new CompositeDisposable();
         mProfileView.setPresenter(this);
-        mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager = AuthManager.getInstance();
     }
 
     @Override
@@ -40,12 +43,14 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         Disposable disposable = UserProvider.updateUser(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        newUser -> mProfileView.saveProfilePicture(newUser.imageUrl),
+                        newUser -> {
+                            mProfileView.saveProfilePicture(newUser.imageUrl);
+                            mProfileView.showProfilePictureSuccess();
+                        },
                         e -> {
                             Timber.e(e);
                             mProfileView.showProfilePictureFailure();
-                        },
-                        () -> mProfileView.showProfilePictureSuccess()
+                        }
                 );
         mDisposables.add(disposable);
     }
@@ -55,19 +60,28 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         Disposable disposable = UserProvider.updateUser(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        nextUser -> mProfileView.saveUsername(nextUser.username),
+                        nextUser -> {
+                            mProfileView.saveUsername(nextUser.username);
+                            mProfileView.showUsernameSuccess(oldUsername, user);
+                        },
                         e -> {
                             Timber.e(e);
-                            mProfileView.showUsernameFailure(oldUsername, user);
-                        },
-                        () -> mProfileView.showUsernameSuccess(oldUsername, user)
+                            String msg = SnaptionApplication.getContext().getString(R.string.update_failure);
+                            if (e instanceof HttpException) {
+                                //Show the invalid character message if the error code is 500
+                                if (((HttpException) e).code() == 500) {
+                                    msg = SnaptionApplication.getContext().getString(R.string.invalid_char);
+                                }
+                            }
+                            mProfileView.showUsernameFailure(msg);
+                        }
                 );
         mDisposables.add(disposable);
     }
 
     @Override
     public void convertImage(String type, Uri uri) {
-        Disposable disposable = ImageConverter.getCompressedImage(uri)
+        Disposable disposable = ImageUtils.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -80,7 +94,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void logout() {
-        if (mAuthManager.isLoggedIn()) {
+        if (AuthManager.isLoggedIn()) {
             mAuthManager.logout();
             mProfileView.goToLogin();
         }

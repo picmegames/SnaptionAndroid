@@ -38,7 +38,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
@@ -98,7 +98,6 @@ public class ProfileActivity extends AppCompatActivity
     private int mColorPrimary;
     private int mTransparent;
 
-    private AuthenticationManager mAuthManager;
     private ProfileContract.Presenter mPresenter;
     private boolean mIsUserProfile;
     private boolean mHasSameUserId;
@@ -111,6 +110,7 @@ public class ProfileActivity extends AppCompatActivity
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
     private static final int BLUR_RADIUS = 40;
+    private static final String SPACES_DELIMITER = "\\s+";
 
     public static final String IS_CURRENT_USER = "is_current_user";
 
@@ -125,18 +125,17 @@ public class ProfileActivity extends AppCompatActivity
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         mPresenter = new ProfilePresenter(this);
-        mAuthManager = AuthenticationManager.getInstance();
 
         // GET previous intent
         Intent profileIntent = getIntent();
         mUserId = profileIntent.getIntExtra(User.ID, 0);
         mIsUserProfile = profileIntent.getBooleanExtra(IS_CURRENT_USER, true);
-        mHasSameUserId = (mUserId == mAuthManager.getUserId());
+        mHasSameUserId = (mUserId == AuthManager.getUserId());
 
         // IF we are viewing the logged-in user's profile
         if (mIsUserProfile || mHasSameUserId) {
-            mName = mAuthManager.getUsername();
-            mPicture = mAuthManager.getProfileImageUrl();
+            mName = AuthManager.getUsername();
+            mPicture = AuthManager.getProfileImageUrl();
         }
         else {
             mName = profileIntent.getStringExtra(User.USERNAME);
@@ -184,17 +183,22 @@ public class ProfileActivity extends AppCompatActivity
     public void showEditDialog() {
         if (isStoragePermissionGranted()) {
             if (mEditDialog == null) {
-                mEditView = new EditProfileView(this, mAuthManager);
+                mEditView = new EditProfileView(this);
 
                 mEditDialog = new MaterialDialog.Builder(this)
                         .title(getString(R.string.update_info))
                         .customView(mEditView, false)
                         .positiveText(getString(R.string.confirm))
                         .negativeText(R.string.cancel)
-                        .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                                mPresenter.updateUsername(mAuthManager.getUsername(),
-                                        new User(mEditView.getNewUsername()))
-                        )
+                        .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
+                            String newUsername = mEditView.getNewUsername();
+                            if (!newUsername.replaceAll(SPACES_DELIMITER, "").isEmpty()) {
+                                mPresenter.updateUsername(AuthManager.getUsername(), new User(newUsername));
+                            }
+                            else {
+                                showUsernameFailure(getString(R.string.empty_username));
+                            }
+                        })
                         .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
 
                         })
@@ -249,12 +253,12 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void saveProfilePicture(String picture) {
-        mAuthManager.saveProfileImage(picture);
+        AuthManager.saveProfileImage(picture);
     }
 
     @Override
     public void saveUsername(String username) {
-        mAuthManager.saveUsername(username);
+        AuthManager.saveUsername(username);
     }
 
     @Override
@@ -319,7 +323,7 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void showProfilePictureSuccess() {
         Snackbar.make(mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
-        mPicture = mAuthManager.getProfileImageUrl();
+        mPicture = AuthManager.getProfileImageUrl();
         updateProfilePicture();
     }
 
@@ -340,8 +344,8 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
-    public void showUsernameFailure(String oldUsername, User user) {
-        Snackbar.make(mLayout, getString(R.string.update_failure), Snackbar.LENGTH_LONG)
+    public void showUsernameFailure(String message) {
+        Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.try_again), view -> mEditDialog.show())
                 .show();
     }

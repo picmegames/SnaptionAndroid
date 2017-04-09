@@ -8,7 +8,9 @@ import com.snaptiongame.app.data.providers.api.ApiProvider;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * @author Tyler Wong
@@ -45,15 +47,15 @@ public class GameProvider {
                 .map(GameProvider::reverseGames);
     }
 
-    public static Observable<Game> getGame(int gameId, String token) {
+    public static Single<Game> getGame(int gameId, String token) {
         return apiService.getGame(gameId, token);
     }
 
-    public static Observable<GameAction> upvoteOrFlagGame(GameAction request) {
+    public static Completable upvoteOrFlagGame(GameAction request) {
         return apiService.upvoteOrFlagGame(request);
     }
 
-    public static Observable<Game> addGame(Game snaption) {
+    public static Completable addGame(Game snaption) {
         return apiService.addGame(snaption);
     }
 }

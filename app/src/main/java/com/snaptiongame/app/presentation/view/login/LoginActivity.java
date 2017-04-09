@@ -11,7 +11,8 @@ import com.bumptech.glide.Glide;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
+import com.snaptiongame.app.data.auth.AuthCallback;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import butterknife.BindView;
@@ -22,7 +23,7 @@ import butterknife.OnClick;
  * @author Tyler Wong
  */
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View {
+public class LoginActivity extends AppCompatActivity implements LoginContract.View, AuthCallback {
     @BindView(R.id.logo)
     ImageView mLogo;
     @BindView(R.id.facebook_login_button)
@@ -30,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @BindView(R.id.google_sign_in_button)
     SignInButton mGoogleSignInButton;
 
-    private AuthenticationManager mAuthManager;
+    private AuthManager mAuthManager;
     private LoginContract.Presenter mPresenter;
 
     private static final int RC_SIGN_IN = 2222;
@@ -40,7 +41,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         super.onCreate(savedInstanceState);
 
         // Initialize Authentication Manager
-        mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager = AuthManager.getInstance();
+        mAuthManager.registerCallback(this);
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -54,6 +56,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mAuthManager.setFacebookCallback(mFacebookLoginButton);
 
         mPresenter = new LoginPresenter(this);
+    }
+
+    @Override
+    public void onAuthenticationSuccess() {
+        goToMain();
+    }
+
+    @Override
+    public void onAuthenticationFailure() {
+
     }
 
     @Override
@@ -76,8 +88,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         else {
             mAuthManager.facebookActivityResult(requestCode, resultCode, data);
         }
-        // finish();
-        goToMain();
     }
 
     @Override

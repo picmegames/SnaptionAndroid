@@ -4,7 +4,7 @@ import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by BrianGouldsberry on 2/27/17.
@@ -13,7 +13,7 @@ import io.reactivex.Observable;
 public class DeepLinkProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
-    public static Observable<String> getToken(DeepLinkRequest invite) {
+    public static Single<String> getToken(DeepLinkRequest invite) {
         return apiService.getToken(invite);
     }
 }

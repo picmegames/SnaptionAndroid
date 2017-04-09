@@ -22,6 +22,7 @@
     <string name="undo">Deshacer</string>
     <string name="update_success">Nombre de usuario actualizado con éxito</string>
     <string name="update_failure">Nombre de usuario duplicado</string>
+    <string name="invalid_char">Símbolo no válido en el nombre de usuario</string>
     <string name="update_profile_picture_success">Imagen de perfil actualizada con éxito</string>
     <string name="try_again">Inténtalo de Nuevo</string>
     <string name="update_info">Actualizar Información</string>
@@ -71,4 +72,8 @@
     <string name="clear">Claro</string>
     <string name="upvote">Votar</string>
     <string name="upvoted">¡Votado!</string>
+    <string name="empty_username">El nombre de usuario no puede estar vacío</string>
+    <string name="emoji_error">Las etiquetas no pueden contener emojis</string>
+    <string name="compression_error">No se pudo comprimir la imagen</string>
+    <string name="upload_error">No se pudo subir el juego</string>
 </resources>
