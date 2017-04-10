@@ -33,8 +33,7 @@ public class GamePresenter implements GameContract.Presenter {
     private GameContract.View mGameView;
     @NonNull
     private CompositeDisposable mDisposables;
-    @NonNull
-    private GameContract.CaptionDialogView mGameDialogView;
+
 
     private int mGameId;
     private int mPickerId;
@@ -50,11 +49,11 @@ public class GamePresenter implements GameContract.Presenter {
         mCaptions = new ArrayList<>();
     }
 
-    public GamePresenter(int gameId, @NonNull GameContract.CaptionDialogView view) {
+    public GamePresenter(int gameId, @NonNull GameContract.View view) {
         mGameId = gameId;
         mDisposables = new CompositeDisposable();
-        mGameDialogView = view;
-        mGameDialogView.setPresenter(this);
+        mGameView = view;
+
         mCaptions = new ArrayList<>();
 
     }
@@ -120,7 +119,7 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.getCaptionSets()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameDialogView::showCaptionSets,
+                        ((GameActivity) mGameView)::showCaptionSets,
                         Timber::e,
                         () -> Timber.i("Loading caption sets worked")
                 );
@@ -133,7 +132,7 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.getFitBCaptions(setId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameDialogView::showFitBCaptions,
+                        ((GameActivity) mGameView)::showFitBCaptions,
                         Timber::e,
                         () -> Timber.i("Successfully got Fitb's!")
                 );
@@ -171,12 +170,11 @@ public class GamePresenter implements GameContract.Presenter {
             randomCaptions.add(captions.get(nextCaption));
             captions.remove(nextCaption);
         }
-        mGameDialogView.showRandomCaptions(randomCaptions);
+        ((GameActivity) mGameView).showRandomCaptions(randomCaptions);
     }
 
     private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
         if (start == numSets) {
-            //mCaptions = captions;
             List<FitBCaption> tempList = new ArrayList<>(captions);
 
             buildRandomCaptions(mCaptions);

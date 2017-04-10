@@ -15,6 +15,7 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,4 +98,6 @@ public class CaptionAdapter extends RecyclerView.Adapter {
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+
 }

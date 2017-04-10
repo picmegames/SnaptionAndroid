@@ -33,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -51,6 +50,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.auth.api.Auth;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -202,7 +202,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private boolean isDark = false;
 
 
-    public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
     public static final String INVITE_CHANNEL = "GameInvite";
     public static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
@@ -468,25 +467,29 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             if (mCurrentCaptionState == CaptionState.Typed) {
                 successfulCaptionSubmission = confirmAndPrepareCaption();
             }
-            //
+
             if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
                     && successfulCaptionSubmission) {
                 mCaptionViewSwitcher.showPrevious();
                 mHeaderViewSwitcher.showPrevious();
-                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                
                 ViewCompat.animate(mAddCaptionFab)
                         .rotation(NO_ROTATION)
                         .withLayer()
                         .setDuration(SHORT_ROTATION_DURATION)
                         .setInterpolator(interpolator)
                         .start();
+                mPresenter = new GamePresenter(mGameId, this);
+                mPresenter.loadCaptions();
+                
+
             }
 
             //Shown when a user first enters the caption view
             else if (successfulCaptionSubmission) {
-
+                mFitBAdapter.clearCaptions();
                 mPresenter = new GamePresenter(mGameId, this);
-                final OvershootInterpolator interpolator = new OvershootInterpolator();
+
                 ViewCompat.animate(mAddCaptionFab)
                         .rotation(FORTY_FIVE_DEGREE_ROTATION)
                         .withLayer()
@@ -494,8 +497,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         .setInterpolator(interpolator)
                         .start();
 
-                //mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                //       R.drawable.ic_arrow_back_white_24dp));
                 mCaptionViewSwitcher.showNext();
                 mHeaderViewSwitcher.showNext();
                 initializeCaptionView();
@@ -514,6 +515,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                     R.drawable.ic_add_white_24dp));
             mCurrentCaptionState = CaptionState.List;
+
+
+            mRefreshLayout.setRefreshing(false);
+
             return true;
         } else {
             Toast.makeText(this, getResources().getText(R.string.empty_caption), Toast.LENGTH_SHORT).show();
@@ -524,14 +529,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
 
     private void initializeCaptionView() {
-        View mDialogView = mSwitchCreateCaptionView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         mRefreshIcon.setVisibility(View.VISIBLE);
         mPresenter.loadRandomFITBCaptions();
 
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
 
         mCaptionView.setLayoutManager(layoutManager);
 
@@ -558,6 +561,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void resetCaptionChoosing() {
         mSwitchCaptionTitles.showNext();
         mCurrentCaptionState = CaptionState.Random;
+        mFitBAdapter.resetCaption();
         mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                 R.drawable.ic_add_white_24dp));
 
@@ -728,7 +732,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
                 .setTitle(getResources().getText(R.string.join_snaption).toString())
-                .setContentDescription(SNAPTION_DESCRIPTION)
+                .setContentDescription(getResources().getString(R.string.snaption_description))
                 .setContentImageUrl(mImageUrl)
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
                 .addContentMetadata(GameInvite.INVITE_TOKEN, inviteToken)
@@ -755,6 +759,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         final String afterBlank = fitbs.get(2);
         final String placeHolder = "______";
 
+
         ViewCompat.animate(mAddCaptionFab)
                 .rotation(NO_ROTATION)
                 .withLayer()
@@ -776,9 +781,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mFitBEditTextField.requestFocus();
         mFitBEditTextField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -786,9 +789,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
 

@@ -52,6 +52,14 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void resetCaption() {
+        FitBCaption tmp = mCaptions.get(mItemSelected);
+        mCaptions.remove(mItemSelected);
+        mCaptions.set(mItemSelected, tmp);
+        notifyItemChanged(mItemSelected);
+        mItemSelected = -1;
+    }
+
     public FitBCaption getCaption(int index) {
         return mCaptions.get(index);
     }
@@ -111,4 +119,8 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
     }
 
 
+    public void clearCaptions() {
+        mCaptions.clear();
+        notifyDataSetChanged();
+    }
 }
