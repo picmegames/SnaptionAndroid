@@ -98,6 +98,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
     public static final float NO_ROTATION = 0f;
     public static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
+    public static final float REVERSE_ROTATION = -90f;
     public static final int SHORT_ROTATION_DURATION = 300;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -470,21 +471,20 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
             if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
                     && successfulCaptionSubmission) {
-                mCaptionViewSwitcher.showPrevious();
-                mHeaderViewSwitcher.showPrevious();
+
                 
                 ViewCompat.animate(mAddCaptionFab)
-                        .rotation(NO_ROTATION)
+                        .rotation(REVERSE_ROTATION)
                         .withLayer()
                         .setDuration(SHORT_ROTATION_DURATION)
                         .setInterpolator(interpolator)
                         .start();
+
+                mCaptionViewSwitcher.showPrevious();
+                mHeaderViewSwitcher.showPrevious();
                 mPresenter = new GamePresenter(mGameId, this);
                 mPresenter.loadCaptions();
-
-
             }
-
             //Shown when a user first enters the caption view
             else if (successfulCaptionSubmission) {
                 mFitBAdapter.clearCaptions();
