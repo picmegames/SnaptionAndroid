@@ -25,6 +25,12 @@ public class GameContract {
         void setPickerInfo(String profileUrl, String name);
 
         void generateInviteUrl(String inviteToken);
+
+        void showCaptionSets(List<CaptionSet> captionSets);
+
+        void showFitBCaptions(List<FitBCaption> fitBCaptions);
+
+        void showRandomCaptions(List<FitBCaption> randomCaptions);
     }
 
     interface Presenter extends BasePresenter {

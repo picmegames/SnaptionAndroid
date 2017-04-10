@@ -482,8 +482,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
                 mCaptionViewSwitcher.showPrevious();
                 mHeaderViewSwitcher.showPrevious();
-                mPresenter = new GamePresenter(mGameId, this);
-                mPresenter.loadCaptions();
             }
             //Shown when a user first enters the caption view
             else if (successfulCaptionSubmission) {
@@ -500,7 +498,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mCaptionViewSwitcher.showNext();
                 mHeaderViewSwitcher.showNext();
                 initializeCaptionView();
-
             }
         }
     }
@@ -512,21 +509,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (curEntry.trim().length() > 0) {
             mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
                     curEntry);
+            mRefreshLayout.setRefreshing(true);
             mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                     R.drawable.ic_add_white_24dp));
             mCurrentCaptionState = CaptionState.List;
-
-
-            mRefreshLayout.setRefreshing(false);
-
             return true;
         } else {
             Toast.makeText(this, getResources().getText(R.string.empty_caption), Toast.LENGTH_SHORT).show();
             return false;
         }
-
     }
-
 
     private void initializeCaptionView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
