@@ -149,6 +149,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private Drawable mOriginalCardViewBackground;
     private int mCurrentCaption;
     private List<String> mCurFitBPieces;
+    private TextWatcher mTextWatcher;
 
     private enum CaptionState {
         List, Random, Sets, Typed
@@ -745,6 +746,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
 
+
     @Override
     public void captionClicked(View v, int position, List<String> fitbs) {
         final String beforeBlank = fitbs.get(0);
@@ -771,7 +773,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mFitBEditTextField.setHint(getResources().getText(R.string.fitb));
         mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
         mFitBEditTextField.requestFocus();
-        mFitBEditTextField.addTextChangedListener(new TextWatcher() {
+        if (mTextWatcher != null)
+            mFitBEditTextField.removeTextChangedListener(mTextWatcher);
+        mTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -782,7 +786,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
             @Override
             public void afterTextChanged(Editable s) {}
-        });
+        };
+        mFitBEditTextField.addTextChangedListener(mTextWatcher);
 
 
         imm.showSoftInput(mFitBEditTextField, InputMethodManager.SHOW_IMPLICIT);
@@ -790,8 +795,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (mSwitchCaptionTitles.getCurrentView() != mSwitchFitBEntry)
             mSwitchCaptionTitles.showNext();
 
-        if (mOriginalCardViewBackground == null)
-            mOriginalCardViewBackground = v.getBackground();
+        //if (mOriginalCardViewBackground == null)
+         //   mOriginalCardViewBackground = v.getBackground();
 
         mCurrentCaptionState = CaptionState.Typed; //User is entering or about to fill in a caption
     }

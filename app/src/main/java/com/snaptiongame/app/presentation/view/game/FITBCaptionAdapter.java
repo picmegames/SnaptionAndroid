@@ -97,10 +97,10 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
             notifyItemChanged(previousSelection);
             notifyItemChanged(mItemSelected);
         });
-        if(position == mItemSelected)
-            holder.mFitBCaptionCard.setBackgroundResource(R.drawable.card_border_color_pink);
-        else
-            holder.mFitBCaptionCard.setBackground(mOriginalBackground);
+        //if(position == mItemSelected)
+        //    holder.mFitBCaptionCard.setBackgroundResource(R.drawable.card_border_color_pink);
+       // else
+          //  holder.mFitBCaptionCard.setBackground(mOriginalBackground);
     }
 
     @Override
