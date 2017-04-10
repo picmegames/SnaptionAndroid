@@ -2,7 +2,6 @@ package com.snaptiongame.app.presentation.view.game;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -75,7 +74,6 @@ import com.snaptiongame.app.presentation.view.utils.ViewUtils;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -209,7 +207,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
-    final OvershootInterpolator interpolator = new OvershootInterpolator();
+    private final OvershootInterpolator interpolator = new OvershootInterpolator();
 
     private FITBCaptionAdapter mFitBAdapter;
 
