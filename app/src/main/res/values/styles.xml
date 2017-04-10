@@ -9,19 +9,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-
     <style name="LoginTheme" parent="AppTheme"/>
-
     <style name="CreateGameTheme" parent="AppTheme"/>
-
-
     <style name="StatusBarTheme" parent="AppTheme" />
-
     <style name="AppBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

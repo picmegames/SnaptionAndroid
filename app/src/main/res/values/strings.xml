@@ -70,6 +70,9 @@
     <string name="emoji_error">Tags cannot contain emojis</string>
     <string name="compression_error">Could not compress image</string>
     <string name="upload_error">Could not upload game</string>
+    <string name="empty_caption">Nothing entered for caption.</string>
+    <string name="join_snaption">Join Snaption!</string>
+    <string name="fitb">Fill in the blank!</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -109,5 +112,4 @@
     <!-- More Info Fragment -->
     <string name="experience">Experience:</string>
     <string name="rank">Rank:</string>
-    <string name="title_activity_caption_list">CaptionListActivity</string>
 </resources>

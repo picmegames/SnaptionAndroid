@@ -98,6 +98,9 @@ import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 public class GameActivity extends AppCompatActivity implements GameContract.View, GameContract.CaptionDialogView,
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
+    public static final float NO_ROTATION = 0f;
+    public static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
+    public static final int SHORT_ROTATION_DURATION = 300;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -134,6 +137,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ImageView mRefreshIcon;
     @BindView(R.id.switch_fitb_entry)
     RelativeLayout mSwitchFitBEntry;
+    @BindView(R.id.caption_card_holder)
+    RecyclerView mCaptionView;
 
 
     private ActionBar mActionBar;
@@ -198,8 +203,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
 
-    public static final String EMPTY_CAPTION = "Nothing entered for caption.";
-    public static final String JOIN_SNAPTION = "Join Snaption!";
+
     public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
     public static final String INVITE_CHANNEL = "GameInvite";
     public static final String INVITE = "invite";
@@ -208,7 +212,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     final OvershootInterpolator interpolator = new OvershootInterpolator();
 
     private FITBCaptionAdapter mFitBAdapter;
-    private RecyclerView mCaptionView;
 
 
     @Override
@@ -325,16 +328,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             case R.id.unflag:
                 if (AuthManager.isLoggedIn()) {
                     flagGame();
-                }
-                else {
+                } else {
                     goToLogin();
                 }
                 break;
             case R.id.create_game:
                 if (AuthManager.isLoggedIn()) {
                     startCreateGame();
-                }
-                else {
+                } else {
                     goToLogin();
                 }
                 break;
@@ -347,8 +348,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             case R.id.upvote:
                 if (AuthManager.isLoggedIn()) {
                     upvoteGame();
-                }
-                else {
+                } else {
                     goToLogin();
                 }
                 break;
@@ -477,9 +477,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mHeaderViewSwitcher.showPrevious();
                 final OvershootInterpolator interpolator = new OvershootInterpolator();
                 ViewCompat.animate(mAddCaptionFab)
-                        .rotation(0f)
+                        .rotation(NO_ROTATION)
                         .withLayer()
-                        .setDuration(300)
+                        .setDuration(SHORT_ROTATION_DURATION)
                         .setInterpolator(interpolator)
                         .start();
             }
@@ -490,14 +490,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mPresenter = new GamePresenter(mGameId, this);
                 final OvershootInterpolator interpolator = new OvershootInterpolator();
                 ViewCompat.animate(mAddCaptionFab)
-                        .rotation(45f)
+                        .rotation(FORTY_FIVE_DEGREE_ROTATION)
                         .withLayer()
-                        .setDuration(300)
+                        .setDuration(SHORT_ROTATION_DURATION)
                         .setInterpolator(interpolator)
                         .start();
 
                 //mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                 //       R.drawable.ic_arrow_back_white_24dp));
+                //       R.drawable.ic_arrow_back_white_24dp));
                 mCaptionViewSwitcher.showNext();
                 mHeaderViewSwitcher.showNext();
                 initializeCaptionView();
@@ -517,9 +517,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     R.drawable.ic_add_white_24dp));
             mCurrentCaptionState = CaptionState.List;
             return true;
-        }
-        else {
-            Toast.makeText(this, EMPTY_CAPTION, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getResources().getText(R.string.empty_caption), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -530,14 +529,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         View mDialogView = mSwitchCreateCaptionView;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
-        mCaptionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
         mRefreshIcon.setVisibility(View.VISIBLE);
         mPresenter.loadRandomFITBCaptions();
 
-
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        mCaptionView = ((RecyclerView) mDialogView.findViewById(R.id.caption_card_holder));
+
         mCaptionView.setLayoutManager(layoutManager);
 
         mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
@@ -567,9 +564,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 R.drawable.ic_add_white_24dp));
 
         ViewCompat.animate(mAddCaptionFab)
-                .rotation(45f)
+                .rotation(FORTY_FIVE_DEGREE_ROTATION)
                 .withLayer()
-                .setDuration(300)
+                .setDuration(SHORT_ROTATION_DURATION)
                 .setInterpolator(interpolator)
                 .start();
     }
@@ -732,7 +729,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void generateInviteUrl(String inviteToken) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
-                .setTitle(JOIN_SNAPTION)
+                .setTitle(getResources().getText(R.string.join_snaption).toString())
                 .setContentDescription(SNAPTION_DESCRIPTION)
                 .setContentImageUrl(mImageUrl)
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
@@ -756,15 +753,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void captionClicked(View v, int position, List<String> fitbs) {
-        int start = fitbs.get(0).length();
         final String beforeBlank = fitbs.get(0);
         final String afterBlank = fitbs.get(2);
         final String placeHolder = "______";
 
         ViewCompat.animate(mAddCaptionFab)
-                .rotation(0f)
+                .rotation(NO_ROTATION)
                 .withLayer()
-                .setDuration(300)
+                .setDuration(SHORT_ROTATION_DURATION)
                 .setInterpolator(interpolator)
                 .start();
 
@@ -777,7 +773,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 R.drawable.ic_check_white_24dp));
 
         mFitBEditTextLayout.setVisibility(View.VISIBLE);
-        mFitBEditTextField.setHint("Fill in the blank!");
+        mFitBEditTextField.setHint(getResources().getText(R.string.fitb));
         mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
         mFitBEditTextField.requestFocus();
         mFitBEditTextField.addTextChangedListener(new TextWatcher() {

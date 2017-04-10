@@ -76,4 +76,7 @@
     <string name="emoji_error">Las etiquetas no pueden contener emojis</string>
     <string name="compression_error">No se pudo comprimir la imagen</string>
     <string name="upload_error">No se pudo subir el juego</string>
+    <string name="empty_caption">Nada entró para el subtítulo.</string>
+    <string name="join_snaption">¡Únete a Snaption!</string>
+    <string name="fitb">¡Llena el espacio en blanco!</string>
 </resources>
