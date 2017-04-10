@@ -36,7 +36,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
-import static com.snaptiongame.app.presentation.view.game.GameActivity.EMPTY_CAPTION;
 
 /**
  * Created by nickromero on 1/20/17.
