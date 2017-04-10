@@ -481,7 +481,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         .start();
                 mPresenter = new GamePresenter(mGameId, this);
                 mPresenter.loadCaptions();
-                
+
 
             }
 
