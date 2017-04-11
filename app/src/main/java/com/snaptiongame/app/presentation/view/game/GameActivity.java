@@ -50,7 +50,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.gms.auth.api.Auth;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -100,6 +99,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
     public static final float REVERSE_ROTATION = -90f;
     public static final int SHORT_ROTATION_DURATION = 300;
+    private static final int BACKEND_CAPTION_SET_OFFSET_OR_ONE = 1;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -821,7 +821,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void captionSetClicked(View v, int position) {
-        mPresenter.loadFitBCaptions(position);
+        mPresenter.loadFitBCaptions(position + BACKEND_CAPTION_SET_OFFSET_OR_ONE);
     }
 }
 
