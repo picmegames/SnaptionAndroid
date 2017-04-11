@@ -96,7 +96,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
     public static final float FULL_ROTATION = 360f;
     public static final int LONG_DURATION = 1000;
-    public static final float HALF_ROTATION = 180f;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
