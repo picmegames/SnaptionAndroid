@@ -94,6 +94,9 @@ import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 public class GameActivity extends AppCompatActivity implements GameContract.View,
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
+    public static final float FULL_ROTATION = 360f;
+    public static final int LONG_DURATION = 1000;
+    public static final float HALF_ROTATION = 180f;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -144,7 +147,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private TextWatcher mTextWatcher;
 
     private enum CaptionState {
-        List, Random, Sets, Typed
+        List, Random, Sets, Typed, Typed_Empty
     }
 
     private CaptionState mCurrentCaptionState;
@@ -195,9 +198,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
 
+    private static final int REFRESH_ICON = 1;
+    private static final int FAB_ICON = 0;
+
     private static final float NO_ROTATION = 0f;
     private static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
-    private static final float REVERSE_ROTATION = -90f;
+    private static final float REVERSE_FORTY_FIVE_DEGREE_ROTATION = -45f;
     private static final float HALF_ROTATION = 180f;
     private static final int SHORT_ROTATION_DURATION = 300;
     private static final int BACKEND_CAPTION_SET_OFFSET_OR_ONE = 1;
@@ -402,6 +408,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     .cancelable(true)
                     .show();
         }
+
     }
 
     private void startCreateGame() {
@@ -480,7 +487,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             //Go back to caption view
             if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
                     && successfulCaptionSubmission) {
-                rotateIcon(REVERSE_ROTATION, SHORT_ROTATION_DURATION, 0);
+                rotateIcon(FULL_ROTATION, LONG_DURATION, FAB_ICON);
                 mCaptionViewSwitcher.showPrevious();//Switches between list and fitbs
                 mOuterTitleViewSwitcher.showPrevious();//Switches bettween icons and edit text
                 mSwitchCaptionTitles.showNext();
@@ -490,32 +497,38 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     && mCaptionViewSwitcher.getCurrentView() == mSwitchCaptionListView) {
                 mFitBAdapter.clearCaptions();
                 mPresenter = new GamePresenter(mGameId, this);
-                rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, 0);
+                rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                 mCaptionViewSwitcher.showNext();//Good
                 mOuterTitleViewSwitcher.showNext();//Good
                 initializeCaptionView();
             }
             //when a user clicks cancel on the fab
             else {
-                mCurrentCaptionState = CaptionState.List;
+
                 mCaptionViewSwitcher.showPrevious();
                 mOuterTitleViewSwitcher.showPrevious();
                 mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
-                rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
+                rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+
+                if (mCurrentCaptionState == CaptionState.Typed_Empty)
+                    mSwitchCaptionTitles.showPrevious();
+
+                mCurrentCaptionState = CaptionState.List;
+
             }
         }
     }
 
     private void rotateIcon(float rotation, int duration, int whichIcon) {
         View v;
-        if (whichIcon == 0) {
+        if (whichIcon == FAB_ICON) {
             v = mAddCaptionFab;
         }
         else {
             v = mRefreshIcon;
         }
         ViewCompat.animate(v)
-                .rotation(rotation)
+                .rotationBy(rotation)
                 .withLayer()
                 .setDuration(duration)
                 .setInterpolator(interpolator)
@@ -533,7 +546,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
                     curEntry);
             mRefreshLayout.setRefreshing(true);
-            rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
+
             mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                     R.drawable.ic_add_white_24dp));
             mCurrentCaptionState = CaptionState.List;
@@ -553,18 +566,25 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
         mCaptionView.setAdapter(mFitBAdapter);
         mCurrentCaptionState = CaptionState.Random;
+        mRefreshIcon.setOnClickListener((v -> refreshCaptions()));
     }
 
-    @OnClick(R.id.refresh_icon)
-    public void refreshCaptions() {
+    //@OnClick(R.id.refresh_icon)
+    private void refreshCaptions() {
+
         mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
+        System.out.println("INSIDE REFRESH");
+        rotateIcon(GameActivity.HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+
         mCaptionView.setAdapter(mFitBAdapter);
         mPresenter.refreshCaptions();
 
         if (mCurrentCaptionState == CaptionState.Sets) {
-            rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 1);
+            rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
             mCurrentCaptionState = CaptionState.Random;
         }
+        //else
+         //   rotateIcon(180f, 600, 1);
     }
 
     @OnFocusChange(R.id.fitb_entry)
@@ -583,7 +603,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mFitBAdapter.resetCaption();
         mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                 R.drawable.ic_add_white_24dp));
-        rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, 0);
+        rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
     }
 
 
@@ -595,7 +615,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mRefreshIcon.setImageResource(R.drawable.ic_arrow_forward_grey_800_24dp);
         mRefreshIcon.setOnClickListener(v -> refreshCaptions());
 
-        rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, 1);
+        rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
 
         mCurrentCaptionState = CaptionState.Sets;
     }
@@ -782,26 +802,29 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         final String afterBlank = fitbs.get(2);
         final String placeHolder = "______";
 
-        rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
+        if (mTextWatcher != null) {
+            mFitBEditTextField.removeTextChangedListener(mTextWatcher);
+        }
 
         mFitBEditTextField.setText("");
+        mCurrentCaptionState = CaptionState.Typed_Empty;
         mCurrentCaption = position;
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                R.drawable.ic_check_white_24dp));
+
 
         mFitBEditTextLayout.setVisibility(View.VISIBLE);
         mFitBEditTextField.setHint(getString(R.string.fitb));
         mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
         mFitBEditTextField.requestFocus();
 
-        if (mTextWatcher != null) {
-            mFitBEditTextField.removeTextChangedListener(mTextWatcher);
-        }
+
         mTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                mCurrentCaptionState = CaptionState.Typed_Empty;
+                mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_check_white_24dp));
             }
 
             @Override
@@ -811,6 +834,19 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                if (!s.toString().isEmpty()) {
+                    mCurrentCaptionState = CaptionState.Typed;
+                    System.out.println(mAddCaptionFab.getRotation());
+                    if (mAddCaptionFab.getRotation() == FORTY_FIVE_DEGREE_ROTATION)
+                        rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+                }
+                else {
+                    mCurrentCaptionState = CaptionState.Typed_Empty;
+                    mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                            R.drawable.ic_add_white_24dp));
+                    rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+                }
             }
         };
         mFitBEditTextField.addTextChangedListener(mTextWatcher);
@@ -820,8 +856,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (mSwitchCaptionTitles.getCurrentView() != mSwitchFitBEntry) {
             mSwitchCaptionTitles.showNext();
         }
-
-        mCurrentCaptionState = CaptionState.Typed; //User is entering or about to fill in a caption
     }
 
     @Override
