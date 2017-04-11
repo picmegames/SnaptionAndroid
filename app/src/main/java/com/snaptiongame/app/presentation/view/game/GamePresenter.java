@@ -131,7 +131,6 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void loadFitBCaptions(int setId) {
-
         Disposable disposable = CaptionProvider.getFitBCaptions(setId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

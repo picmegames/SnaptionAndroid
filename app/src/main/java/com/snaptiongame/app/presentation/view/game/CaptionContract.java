@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CaptionContract {
     public interface CaptionSetClickListener {
-        void captionSetClicked(View v, int position);
+        void captionSetClicked(View v, int setId, int position);
     }
 
     public interface CaptionClickListener {

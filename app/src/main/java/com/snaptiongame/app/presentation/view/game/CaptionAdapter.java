@@ -22,8 +22,8 @@ import java.util.List;
  */
 
 public class CaptionAdapter extends RecyclerView.Adapter {
+
     private List<Caption> mCaptions;
-    private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 40;
 

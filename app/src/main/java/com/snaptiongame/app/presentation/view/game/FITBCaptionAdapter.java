@@ -25,8 +25,6 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
     private CaptionContract.CaptionClickListener mCaptionClickListener;
     private FitBCaption mSelectedCaption;
 
-    private int lastPosition = -1;
-
     private static final int RESTING_ELEVATION = 2;
     private static final int SELECTED_ELEVATION = 8;
 

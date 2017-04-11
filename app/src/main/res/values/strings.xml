@@ -19,6 +19,8 @@
     <string name="add_caption">Add a Caption</string>
     <string name="update_info">Update Information</string>
     <string name="filter_games_title">Filter by Tags</string>
+    <string name="random_captions">Random Captions</string>
+    <string name="caption_sets">Caption Sets</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
@@ -74,8 +76,6 @@
     <string name="join_snaption">Join Snaption!</string>
     <string name="fitb">Fill in the blank!</string>
     <string name="snaption_description">Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. </string>
-
-
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

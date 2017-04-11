@@ -94,8 +94,6 @@ import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 public class GameActivity extends AppCompatActivity implements GameContract.View,
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
-    public static final float FULL_ROTATION = 360f;
-    public static final int LONG_DURATION = 1000;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -130,11 +128,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ImageView mFitBCancelButton;
     @BindView(R.id.refresh_icon)
     ImageView mRefreshIcon;
+    @BindView(R.id.caption_chooser_title)
+    TextView mCaptionChooserTitle;
     @BindView(R.id.switch_fitb_entry)
     RelativeLayout mSwitchFitBEntry;
     @BindView(R.id.caption_card_holder)
     RecyclerView mCaptionView;
-
 
     private ActionBar mActionBar;
     private Menu mMenu;
@@ -150,6 +149,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     private CaptionState mCurrentCaptionState;
+    private CaptionState mPreviousCaptionState;
 
     /**
      * Member variable to reference the game owner's image
@@ -197,19 +197,20 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
 
+    private final OvershootInterpolator interpolator = new OvershootInterpolator();
+
     private static final int REFRESH_ICON = 1;
     private static final int FAB_ICON = 0;
-
     private static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
     private static final float REVERSE_FORTY_FIVE_DEGREE_ROTATION = -45f;
     private static final float HALF_ROTATION = 180f;
+    private static final float FULL_ROTATION = 360f;
+    private static final int LONG_DURATION = 1000;
     private static final int SHORT_ROTATION_DURATION = 300;
-    private static final int BACKEND_CAPTION_SET_OFFSET_OR_ONE = 1;
     private static final String INVITE_CHANNEL = "GameInvite";
     private static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
-    private final OvershootInterpolator interpolator = new OvershootInterpolator();
 
     private FITBCaptionAdapter mFitBAdapter;
 
@@ -239,7 +240,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     loadInvitedGame();
                 }
                 Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
-            } else {
+            }
+            else {
                 Timber.e("Branch errored with " + error.getMessage());
             }
         }, intent.getData(), this);
@@ -280,14 +282,17 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (isUpvoted) {
             if (!isDark) {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
-            } else {
+            }
+            else {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
             }
             isUpvoted = false;
-        } else {
+        }
+        else {
             if (!isDark) {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
-            } else {
+            }
+            else {
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
             }
             isUpvoted = true;
@@ -304,13 +309,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         if (isFlagged) {
             mMenu.findItem(R.id.unflag).setVisible(true);
             mMenu.findItem(R.id.flag).setVisible(false);
-        } else {
+        }
+        else {
             mMenu.findItem(R.id.unflag).setVisible(false);
             mMenu.findItem(R.id.flag).setVisible(true);
         }
+
         if (isUpvoted) {
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
-        } else {
+        }
+        else {
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
         }
 
@@ -327,14 +335,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             case R.id.unflag:
                 if (AuthManager.isLoggedIn()) {
                     flagGame();
-                } else {
+                }
+                else {
                     goToLogin();
                 }
                 break;
             case R.id.create_game:
                 if (AuthManager.isLoggedIn()) {
                     startCreateGame();
-                } else {
+                }
+                else {
                     goToLogin();
                 }
                 break;
@@ -347,7 +357,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             case R.id.upvote:
                 if (AuthManager.isLoggedIn()) {
                     upvoteGame();
-                } else {
+                }
+                else {
                     goToLogin();
                 }
                 break;
@@ -380,7 +391,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID));
             mMenu.findItem(R.id.unflag).setVisible(false);
             mMenu.findItem(R.id.flag).setVisible(true);
-        } else {
+        }
+        else {
             new MaterialDialog.Builder(this)
                     .title(R.string.flag_alert_game)
                     .content(R.string.ask_flag_game)
@@ -396,7 +408,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     .cancelable(true)
                     .show();
         }
-
     }
 
     private void startCreateGame() {
@@ -431,7 +442,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)))
                     .dontAnimate()
                     .into(mPickerImage);
-        } else {
+        }
+        else {
             mPickerImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(AVATAR_SIZE)
@@ -466,53 +478,57 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         if (!AuthManager.isLoggedIn()) {
             goToLogin();
-        } else {
+        }
+        else {
             if (mCurrentCaptionState == CaptionState.Typed) {
                 successfulCaptionSubmission = confirmAndPrepareCaption();
             }
-            //Go back to caption view
+            // Go back to caption view
             if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
                     && successfulCaptionSubmission) {
                 rotateIcon(FULL_ROTATION, LONG_DURATION, FAB_ICON);
-                mCaptionViewSwitcher.showPrevious();//Switches between list and fitbs
-                mOuterTitleViewSwitcher.showPrevious();//Switches bettween icons and edit text
+                // Switches between list and fitbs
+                mCaptionViewSwitcher.showPrevious();
+                // Switches bettween icons and edit text
+                mOuterTitleViewSwitcher.showPrevious();
                 mSwitchCaptionTitles.showNext();
             }
-            //Shown when a user first enters the caption view
+            // Shown when a user first enters the caption view
             else if (mCurrentCaptionState == CaptionState.List
                     && mCaptionViewSwitcher.getCurrentView() == mSwitchCaptionListView) {
+                mCaptionChooserTitle.setText(getString(R.string.random_captions));
                 mFitBAdapter.clearCaptions();
-                mPresenter = new GamePresenter(mGameId, this);
                 rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
-                mCaptionViewSwitcher.showNext();//Good
-                mOuterTitleViewSwitcher.showNext();//Good
+                mCaptionViewSwitcher.showNext();
+                mOuterTitleViewSwitcher.showNext();
                 initializeCaptionView();
             }
-            //when a user clicks cancel on the fab
+            // when a user clicks cancel on the fab
             else {
-
                 mCaptionViewSwitcher.showPrevious();
                 mOuterTitleViewSwitcher.showPrevious();
                 mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
                 rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
 
-                if (mCurrentCaptionState == CaptionState.Typed_Empty)
+                if (mCurrentCaptionState == CaptionState.Typed_Empty) {
                     mSwitchCaptionTitles.showPrevious();
+                }
 
                 mCurrentCaptionState = CaptionState.List;
-
             }
         }
+        hideKeyboard();
     }
 
     private void rotateIcon(float rotation, int duration, int whichIcon) {
-        View v;
+        View viewToRotate;
         if (whichIcon == FAB_ICON) {
-            v = mAddCaptionFab;
-        } else {
-            v = mRefreshIcon;
+            viewToRotate = mAddCaptionFab;
         }
-        ViewCompat.animate(v)
+        else {
+            viewToRotate = mRefreshIcon;
+        }
+        ViewCompat.animate(viewToRotate)
                 .rotationBy(rotation)
                 .withLayer()
                 .setDuration(duration)
@@ -525,21 +541,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mFitBEditTextField.setText("");
         mFitBEditTextLayout.setHint("");
-
-        //Ensure the fitb isn't empty
-        if (curEntry.trim().length() > 0) {
-            mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
-                    curEntry);
-            mRefreshLayout.setRefreshing(true);
-
-            mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.ic_add_white_24dp));
-            mCurrentCaptionState = CaptionState.List;
-            return true;
-        } else {
-            Toast.makeText(this, getResources().getText(R.string.empty_caption), Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
+                curEntry);
+        mRefreshLayout.setRefreshing(true);
+        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                R.drawable.ic_add_white_24dp));
+        mCurrentCaptionState = CaptionState.List;
+        return true;
     }
 
     private void initializeCaptionView() {
@@ -547,16 +555,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mRefreshIcon.setVisibility(View.VISIBLE);
         mPresenter.loadRandomFITBCaptions();
         mCaptionView.setLayoutManager(layoutManager);
-        mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
         mCaptionView.setAdapter(mFitBAdapter);
         mCurrentCaptionState = CaptionState.Random;
-        mRefreshIcon.setOnClickListener((v -> refreshCaptions()));
     }
 
-    private void refreshCaptions() {
-
+    @OnClick(R.id.refresh_icon)
+    public void refreshCaptions() {
+        mCaptionChooserTitle.setText(getString(R.string.random_captions));
         mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
-        rotateIcon(GameActivity.HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+        rotateIcon(FULL_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
 
         mCaptionView.setAdapter(mFitBAdapter);
         mPresenter.refreshCaptions();
@@ -577,26 +584,28 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @OnClick(R.id.fitb_cancel_button)
     public void resetCaptionChoosing() {
+        if (mCurrentCaptionState == CaptionState.Typed) {
+            mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    R.drawable.ic_add_white_24dp));
+            rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+        }
+
         hideKeyboard();
         mSwitchCaptionTitles.showNext();
-        mCurrentCaptionState = CaptionState.Random;
+        mCurrentCaptionState = mPreviousCaptionState;
         mFitBAdapter.resetCaption();
-        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                R.drawable.ic_add_white_24dp));
-        rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
     }
-
 
     @OnClick(R.id.caption_sets)
     public void loadCaptionSets() {
+        mCaptionChooserTitle.setText(getString(R.string.caption_sets));
         mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
         mPresenter.loadCaptionSets();
         mCaptionView.setAdapter(mCaptionSetAdapter);
-        mRefreshIcon.setImageResource(R.drawable.ic_arrow_forward_grey_800_24dp);
-        mRefreshIcon.setOnClickListener(v -> refreshCaptions());
-
-        rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
-
+        if (mCurrentCaptionState != CaptionState.Sets) {
+            mRefreshIcon.setImageResource(R.drawable.ic_arrow_forward_grey_800_24dp);
+            rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+        }
         mCurrentCaptionState = CaptionState.Sets;
     }
 
@@ -606,6 +615,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         isFlagged = beenFlagged;
 
         supportPostponeEnterTransition();
+
         Glide.with(this)
                 .load(image)
                 .dontAnimate()
@@ -613,14 +623,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 .priority(Priority.IMMEDIATE)
                 .listener(imageLoadListener)
                 .into(mImage);
+
         mGameId = id;
         mPickerId = pickerId;
 
         mPresenter = new GamePresenter(id, pickerId, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
-        mRefreshLayout.setColorSchemeColors(
-                ContextCompat.getColor(this, R.color.colorAccent)
-        );
+        mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
 
@@ -645,7 +654,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         @ColorUtils.Lightness int lightness = ColorUtils.isDark(palette);
                         if (lightness == ColorUtils.LIGHTNESS_UNKNOWN) {
                             isDark = ColorUtils.isDark(bitmap, bitmap.getWidth() / 2, 0);
-                        } else {
+                        }
+                        else {
                             isDark = lightness == ColorUtils.IS_DARK;
                         }
 
@@ -661,7 +671,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
                                 if (isUpvoted) {
                                     mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
-                                } else {
+                                }
+                                else {
                                     mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
                                 }
                             }
@@ -767,7 +778,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             if (error == null) {
                 Timber.i("got my Branch link to share: " + url);
                 inviteFriendIntent(url);
-            } else {
+            }
+            else {
                 Timber.e("Branch " + error);
             }
         });
@@ -779,6 +791,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         final String afterBlank = fitbs.get(2);
         final String placeHolder = "______";
 
+        if (mCurrentCaptionState != CaptionState.Typed && mCurrentCaptionState != CaptionState.Typed_Empty) {
+            mPreviousCaptionState = mCurrentCaptionState;
+        }
+
+        if (mCurrentCaptionState == CaptionState.Typed) {
+            mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    R.drawable.ic_add_white_24dp));
+            rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+        }
+
         if (mTextWatcher != null) {
             mFitBEditTextField.removeTextChangedListener(mTextWatcher);
         }
@@ -788,39 +810,44 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCurrentCaption = position;
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-
         mFitBEditTextLayout.setVisibility(View.VISIBLE);
         mFitBEditTextField.setHint(getString(R.string.fitb));
         mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
         mFitBEditTextField.requestFocus();
 
-
         mTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mCurrentCaptionState = CaptionState.Typed_Empty;
-                mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_check_white_24dp));
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mFitBEditTextLayout.setHint(beforeBlank + s + afterBlank);
+
+                if (!s.toString().isEmpty()) {
+                    if (mCurrentCaptionState != CaptionState.Typed) {
+                        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                                R.drawable.ic_check_white_24dp));
+                        rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+                    }
+
+                    mCurrentCaptionState = CaptionState.Typed;
+                }
+                else {
+                    if (mCurrentCaptionState != CaptionState.Typed_Empty) {
+                        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                                R.drawable.ic_add_white_24dp));
+                        rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+                    }
+
+                    mCurrentCaptionState = CaptionState.Typed_Empty;
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (!s.toString().isEmpty()) {
-                    mCurrentCaptionState = CaptionState.Typed;
-                    if (mAddCaptionFab.getRotation() == FORTY_FIVE_DEGREE_ROTATION)
-                        rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
-                } else {
-                    mCurrentCaptionState = CaptionState.Typed_Empty;
-                    mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                            R.drawable.ic_add_white_24dp));
-                    rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
-                }
             }
         };
         mFitBEditTextField.addTextChangedListener(mTextWatcher);
@@ -851,7 +878,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     @Override
-    public void captionSetClicked(View v, int position) {
-        mPresenter.loadFitBCaptions(position + BACKEND_CAPTION_SET_OFFSET_OR_ONE);
+    public void captionSetClicked(View v, int setId, int position) {
+        mCaptionChooserTitle.setText(mCaptionSetAdapter.getSetName(position));
+        mPresenter.loadFitBCaptions(setId);
     }
 }

@@ -15,11 +15,12 @@ import java.util.List;
  */
 
 public class CaptionSetAdapter extends RecyclerView.Adapter {
-    public static final float NON_ACTIVE_SET_FADE = .25f;
+
     private List<CaptionSet> mSets;
     private CaptionContract.CaptionSetClickListener mCaptionSetClickListener;
 
-    private int lastPosition = -1;
+    private static final float NO_ALPHA = 1.0f;
+    private static final float NON_ACTIVE_SET_FADE = .25f;
 
     public CaptionSetAdapter(List<CaptionSet> sets, CaptionContract.CaptionSetClickListener captionSetClickListener) {
         mSets = sets;
@@ -44,9 +45,16 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
         if (!curSet.isCaptionSetActive) {
             holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
         }
+        else {
+            holder.itemView.setAlpha(NO_ALPHA);
+        }
 
         setViewHolder.itemView.setOnClickListener(v ->
-                mCaptionSetClickListener.captionSetClicked(v, setViewHolder.getAdapterPosition()));
+                mCaptionSetClickListener.captionSetClicked(v, curSet.id, position));
+    }
+
+    public String getSetName(int position) {
+        return mSets.get(position).getSetName();
     }
 
     @Override
