@@ -230,6 +230,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @Override
     public List<String> getTags() {
+        mTagTextView.chipifyAllUnterminatedTokens();
         return mTagTextView.getChipValues();
     }
 
@@ -240,6 +241,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @Override
     public List<String> getAddedFriends() {
+        mFriendsTextView.chipifyAllUnterminatedTokens();
         return mFriendsTextView.getChipValues();
     }
 
@@ -317,6 +319,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
+        mTagTextView.chipifyAllUnterminatedTokens();
         if (!containsEmoji(mTagTextView.getChipValues())) {
             if (mUri != null) {
                 mPresenter.createGame(getContentResolver().getType(mUri), mUri,
