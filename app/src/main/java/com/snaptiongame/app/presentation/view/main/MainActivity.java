@@ -41,7 +41,6 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
-import com.snaptiongame.app.data.utils.TextStyleUtils;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
@@ -269,9 +268,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mFilterTextView.setChipSpacing(R.dimen.chip_spacing);
             mFilterTextView.setChipTextSize(R.dimen.chip_text_size);
             mFilterTextView.setChipVerticalSpacing(R.dimen.chip_vertical_spacing);
-            mFilterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-            mFilterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-            mFilterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+            mFilterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+            mFilterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+            mFilterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
             mFilterTextView.enableEditChipOnTouch(false, true);
 
             mFilterDialog = new MaterialDialog.Builder(this)
@@ -281,14 +280,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .negativeText(R.string.clear)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         if (fragTag.equals(WallFragment.TAG)) {
-                            TextStyleUtils.chipifyNachoText(mFilterTextView);
+                            mFilterTextView.chipifyAllUnterminatedTokens();
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
                     .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         clearFilterView();
                         if (fragTag.equals(WallFragment.TAG)) {
-                            TextStyleUtils.chipifyNachoText(mFilterTextView);
+                            mFilterTextView.chipifyAllUnterminatedTokens();
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })

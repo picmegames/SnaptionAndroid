@@ -46,7 +46,6 @@ import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.data.utils.TextStyleUtils;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
@@ -231,7 +230,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @Override
     public List<String> getTags() {
-        TextStyleUtils.chipifyNachoText(mTagTextView);
+        mTagTextView.chipifyAllUnterminatedTokens();
         return mTagTextView.getChipValues();
     }
 
@@ -242,7 +241,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @Override
     public List<String> getAddedFriends() {
-        TextStyleUtils.chipifyNachoText(mFriendsTextView);
+        mFriendsTextView.chipifyAllUnterminatedTokens();
         return mFriendsTextView.getChipValues();
     }
 
@@ -320,7 +319,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        TextStyleUtils.chipifyNachoText(mTagTextView);
+        mTagTextView.chipifyAllUnterminatedTokens();
         if (!containsEmoji(mTagTextView.getChipValues())) {
             if (mUri != null) {
                 mPresenter.createGame(getContentResolver().getType(mUri), mUri,
