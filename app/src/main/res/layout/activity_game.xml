@@ -154,26 +154,19 @@
                 android:layout_height="match_parent"
                 android:background="@null">
 
-                <LinearLayout
-                    android:id="@+id/switch_caption_list"
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/refresh_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:background="@null">
 
-                    <android.support.v4.widget.SwipeRefreshLayout
-                        android:id="@+id/refresh_layout"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/caption_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@null">
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/caption_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@null"
-                            android:scrollbars="none"/>
-                    </android.support.v4.widget.SwipeRefreshLayout>
-                </LinearLayout>
+                        android:background="@null"
+                        android:scrollbars="none"/>
+                </android.support.v4.widget.SwipeRefreshLayout>
 
                 <FrameLayout
                     android:id="@+id/switch_create_caption"

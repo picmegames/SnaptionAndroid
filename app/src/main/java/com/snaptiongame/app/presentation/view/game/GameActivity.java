@@ -35,7 +35,6 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -114,8 +113,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     ViewSwitcher mCaptionViewSwitcher;
     @BindView(R.id.switch_title_picker)
     ViewSwitcher mOuterTitleViewSwitcher;
-    @BindView(R.id.switch_caption_list)
-    LinearLayout mSwitchCaptionListView;
     @BindView(R.id.switch_create_caption)
     FrameLayout mSwitchCreateCaptionView;
     @BindView(R.id.switch_caption_titles)
@@ -489,8 +486,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 successfulCaptionSubmission = confirmAndPrepareCaption();
             }
             // Go back to caption view
-            if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
-                    && successfulCaptionSubmission) {
+            if (!mCaptionViewSwitcher.getCurrentView().equals(mRefreshLayout) && successfulCaptionSubmission) {
                 rotateIcon(FULL_ROTATION, LONG_DURATION, FAB_ICON);
                 // Switches between list and fitbs
                 mCaptionViewSwitcher.showPrevious();
@@ -500,7 +496,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             }
             // Shown when a user first enters the caption view
             else if (mCurrentCaptionState == CaptionState.List
-                    && mCaptionViewSwitcher.getCurrentView() == mSwitchCaptionListView) {
+                    && mCaptionViewSwitcher.getCurrentView().equals(mRefreshLayout)) {
                 mCaptionChooserTitle.setText(getString(R.string.random_captions));
                 mFitBAdapter.clearCaptions();
                 rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
