@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@null"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:id="@+id/layout"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:background="@null"
+                                                 android:descendantFocusability="beforeDescendants"
+                                                 android:focusableInTouchMode="true">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                         android:layout_gravity="center_vertical"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/app_name"
-                        android:maxHeight="280dp" />
+                        android:maxHeight="280dp"/>
 
                     <ViewSwitcher
                         android:id="@+id/switch_title_picker"
@@ -58,7 +58,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_marginEnd="16dp"
-                                android:transitionName="@string/profile_transition" />
+                                android:transitionName="@string/profile_transition"/>
 
                             <TextView
                                 android:id="@+id/picker_name"
@@ -66,8 +66,9 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+                                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
                         </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/switch_caption_header_layout"
                             android:layout_width="match_parent"
@@ -89,10 +90,10 @@
                                         android:layout_height="24dp"
                                         android:layout_alignParentStart="true"
                                         android:layout_centerVertical="true"
-                                        android:layout_marginStart="16dp"
                                         android:layout_marginEnd="8dp"
+                                        android:layout_marginStart="16dp"
                                         android:clickable="true"
-                                        android:src="@drawable/ic_refresh_grey_800_24dp" />
+                                        android:src="@drawable/ic_refresh_grey_800_24dp"/>
 
                                     <ImageView
                                         android:id="@+id/caption_sets"
@@ -102,7 +103,7 @@
                                         android:layout_margin="8dp"
                                         android:layout_toEndOf="@id/refresh_icon"
                                         android:clickable="true"
-                                        android:src="@drawable/snaption_icon" />
+                                        android:src="@drawable/snaption_icon"/>
 
                                     <TextView
                                         android:id="@+id/caption_chooser_title"
@@ -113,14 +114,13 @@
                                         android:padding="8dp"
                                         android:textColor="@color/colorAccent"
                                         android:textSize="20sp"
-                                        android:textStyle="bold" />
+                                        android:textStyle="bold"/>
                                 </RelativeLayout>
 
                                 <RelativeLayout
                                     android:id="@+id/switch_fitb_entry"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    >
+                                    android:layout_height="match_parent">
 
                                     <ImageView
                                         android:id="@+id/fitb_cancel_button"
@@ -130,8 +130,7 @@
                                         android:layout_marginEnd="8dp"
                                         android:layout_marginStart="16dp"
                                         android:rotation="45"
-                                        android:src="@drawable/ic_add_grey_800_24dp"
-                                        />
+                                        android:src="@drawable/ic_add_grey_800_24dp"/>
 
                                     <android.support.design.widget.TextInputLayout
                                         android:id="@+id/fitb_entry_layout"
@@ -146,7 +145,7 @@
                                         <android.support.design.widget.TextInputEditText
                                             android:id="@+id/fitb_entry"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"/>
                                     </android.support.design.widget.TextInputLayout>
                                 </RelativeLayout>
                             </ViewSwitcher>
@@ -154,7 +153,6 @@
                     </ViewSwitcher>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
 
             <ViewSwitcher
                 android:id="@+id/caption_view_switcher"
@@ -179,11 +177,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@null"
-                            android:scrollbars="none" />
+                            android:scrollbars="none"/>
                     </android.support.v4.widget.SwipeRefreshLayout>
                 </LinearLayout>
 
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <LinearLayout
                     android:id="@+id/switch_create_caption"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -196,9 +194,9 @@
                         android:choiceMode="singleChoice"
                         android:descendantFocusability="blocksDescendants"
                         android:gravity="center"
-                        android:horizontalSpacing="6dp"
+                        android:horizontalSpacing="@dimen/item_spacing"
                         android:stretchMode="columnWidth"
-                        android:verticalSpacing="6dp" />
+                        android:verticalSpacing="@dimen/item_spacing"/>
                 </LinearLayout>
             </ViewSwitcher>
         </LinearLayout>
@@ -209,7 +207,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@null"
             android:theme="@style/AppBarTheme"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -222,6 +220,6 @@
         app:backgroundTint="@color/colorAccent"
         app:fabSize="normal"
         app:layout_anchor="@id/game_image"
-        app:layout_anchorGravity="bottom|right|end" />
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>

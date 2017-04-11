@@ -9,12 +9,12 @@ import android.view.View;
  * @author Tyler Wong
  */
 
-public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+public class WallSpacesItemDecoration extends RecyclerView.ItemDecoration {
     private final int mSpace;
 
     private static final int RIGHT = 1;
 
-    public SpacesItemDecoration(int space) {
+    public WallSpacesItemDecoration(int space) {
         this.mSpace = space;
     }
 

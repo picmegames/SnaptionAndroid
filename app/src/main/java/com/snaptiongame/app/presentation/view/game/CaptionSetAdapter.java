@@ -24,7 +24,6 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
         mCaptionSetClickListener = captionSetClickListener;
     }
 
-
     @Override
     public CaptionSetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -40,8 +39,9 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
         setViewHolder.mSetName.setText(curSet.getSetName());
         setViewHolder.mSetImage.setImageResource(R.drawable.snaption_logo);
 
-        if (!curSet.isCaptionSetActive)
+        if (!curSet.isCaptionSetActive) {
             holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
+        }
 
         setViewHolder.itemView.setOnClickListener(v ->
                 mCaptionSetClickListener.captionSetClicked(v, setViewHolder.getAdapterPosition()));
@@ -53,16 +53,12 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
     }
 
     public void setCaptionSets(List<CaptionSet> captionSets) {
-        mSets.clear();
         mSets = captionSets;
         notifyDataSetChanged();
-
     }
 
     @Override
     public int getItemCount() {
         return mSets.size();
     }
-
-
 }

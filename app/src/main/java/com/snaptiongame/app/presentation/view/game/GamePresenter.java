@@ -109,7 +109,10 @@ public class GamePresenter implements GameContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::loadCaptions,
-                        Timber::e
+                        e -> {
+                            Timber.e(e);
+                            mGameView.setRefreshing(false);
+                        }
                 );
         mDisposables.add(disposable);
     }
@@ -124,7 +127,6 @@ public class GamePresenter implements GameContract.Presenter {
                         () -> Timber.i("Loading caption sets worked")
                 );
         mDisposables.add(disposable);
-
     }
 
     @Override
@@ -155,19 +157,15 @@ public class GamePresenter implements GameContract.Presenter {
     private void countSets(List<CaptionSet> sets) {
         int numSets = sets.size();
         List<FitBCaption> captions = new ArrayList<>();
-
         getRandomCaptions(numSets, captions, 0);
-
     }
 
     private void buildRandomCaptions(List<FitBCaption> captions) {
-
         Random random = new Random();
         List<FitBCaption> randomCaptions = new ArrayList<>();
 
         for (int i = 0; i < captions.size(); i++) {
             int nextCaption = random.nextInt(captions.size());
-
             randomCaptions.add(captions.get(nextCaption));
             captions.remove(nextCaption);
         }
@@ -176,13 +174,12 @@ public class GamePresenter implements GameContract.Presenter {
 
     private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
         if (start == numSets) {
-            List<FitBCaption> tempList = new ArrayList<>(captions);
-
             buildRandomCaptions(mCaptions);
         }
         else {
-            for (FitBCaption c : captions)
+            for (FitBCaption c : captions) {
                 mCaptions.add(c);
+            }
             final int nextStart = ++start;
             Disposable disposable = CaptionProvider.getFitBCaptions(start)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -220,9 +217,5 @@ public class GamePresenter implements GameContract.Presenter {
     @Override
     public void unsubscribe() {
         mDisposables.clear();
-    }
-
-    public void loadGame() {
-
     }
 }
