@@ -35,8 +35,8 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -130,7 +130,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @BindView(R.id.caption_chooser_title)
     TextView mCaptionChooserTitle;
     @BindView(R.id.switch_fitb_entry)
-    RelativeLayout mSwitchFitBEntry;
+    LinearLayout mSwitchFitBEntry;
     @BindView(R.id.caption_card_holder)
     RecyclerView mCaptionView;
     @BindView(R.id.progress_bar)
@@ -827,7 +827,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mFitBEditTextLayout.setHint(beforeBlank + s + afterBlank);
 
-                if (!s.toString().isEmpty()) {
+                if (!s.toString().replaceAll("\\s+","").isEmpty()) {
                     if (mCurrentCaptionState != CaptionState.Typed) {
                         mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                                 R.drawable.ic_check_white_24dp));
@@ -843,6 +843,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                     }
 
+                    mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
                     mCurrentCaptionState = CaptionState.Typed_Empty;
                 }
             }
