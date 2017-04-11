@@ -20,8 +20,6 @@ public class GameContract {
     interface View extends BaseView<Presenter> {
         void showCaptions(List<Caption> captions);
 
-        void addCaption(Caption caption);
-
         void setPickerInfo(String profileUrl, String name);
 
         void generateInviteUrl(String inviteToken);
@@ -31,6 +29,8 @@ public class GameContract {
         void showFitBCaptions(List<FitBCaption> fitBCaptions);
 
         void showRandomCaptions(List<FitBCaption> randomCaptions);
+
+        void setRefreshing(boolean isRefreshing);
     }
 
     interface Presenter extends BasePresenter {
@@ -51,13 +51,5 @@ public class GameContract {
         void getBranchToken(int gameId);
 
         void refreshCaptions();
-    }
-
-    interface CaptionDialogView extends BaseView<Presenter> {
-        void showFitBCaptions(List<FitBCaption> captions);
-
-        void showCaptionSets(List<CaptionSet> captionSets);
-
-        void showRandomCaptions(List<FitBCaption> captions);
     }
 }

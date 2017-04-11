@@ -33,5 +33,9 @@ public class FITBCaptionCardViewHolder extends RecyclerView.ViewHolder {
         mCaptionTemplate = mCaptionTemplateTextView.getText().toString();
         mCurFitB = mCurrentFitB.getText().toString();
         mFitBCaptionCard.findViewById(R.id.fitb_caption_card);
+
+        view.setOnClickListener(v -> {
+
+        });
     }
 }
