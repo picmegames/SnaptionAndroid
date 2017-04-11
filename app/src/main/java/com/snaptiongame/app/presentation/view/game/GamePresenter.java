@@ -29,16 +29,17 @@ import timber.log.Timber;
  */
 
 public class GamePresenter implements GameContract.Presenter {
+
     @NonNull
     private GameContract.View mGameView;
     @NonNull
     private CompositeDisposable mDisposables;
 
-
     private int mGameId;
     private int mPickerId;
     private List<FitBCaption> mCaptions;
 
+    public static final int MAX_FITBS_SHOWN = 8;
 
     public GamePresenter(int gameId, int pickerId, @NonNull GameContract.View view) {
         mGameId = gameId;
@@ -47,18 +48,6 @@ public class GamePresenter implements GameContract.Presenter {
         mDisposables = new CompositeDisposable();
         mGameView.setPresenter(this);
         mCaptions = new ArrayList<>();
-    }
-
-    public GamePresenter(int gameId, @NonNull GameContract.View view) {
-        mGameId = gameId;
-        mDisposables = new CompositeDisposable();
-        mGameView = view;
-
-        mCaptions = new ArrayList<>();
-
-    }
-
-    public void loadGame(int gameId) {
     }
 
     @Override
@@ -163,11 +152,12 @@ public class GamePresenter implements GameContract.Presenter {
         Random random = new Random();
         List<FitBCaption> randomCaptions = new ArrayList<>();
 
-        for (int i = 0; i < captions.size(); i++) {
+        for (int i = 0; i < MAX_FITBS_SHOWN; i++) {
             int nextCaption = random.nextInt(captions.size());
             randomCaptions.add(captions.get(nextCaption));
             captions.remove(nextCaption);
         }
+
         mGameView.showRandomCaptions(randomCaptions);
     }
 
