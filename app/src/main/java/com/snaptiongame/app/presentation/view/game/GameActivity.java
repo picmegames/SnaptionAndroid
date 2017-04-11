@@ -814,7 +814,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
                 if (!s.toString().isEmpty()) {
                     mCurrentCaptionState = CaptionState.Typed;
-                    System.out.println(mAddCaptionFab.getRotation());
                     if (mAddCaptionFab.getRotation() == FORTY_FIVE_DEGREE_ROTATION)
                         rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                 } else {
