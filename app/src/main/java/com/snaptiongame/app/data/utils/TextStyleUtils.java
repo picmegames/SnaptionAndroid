@@ -3,8 +3,6 @@ package com.snaptiongame.app.data.utils;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 
-import com.hootsuite.nachos.NachoTextView;
-
 /**
  * @author Tyler Wong
  */
