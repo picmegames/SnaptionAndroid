@@ -103,7 +103,6 @@ public class Game {
                 && this.id == ((Game) obj).id
                 && this.beenUpvoted == ((Game) obj).beenUpvoted
                 && this.beenFlagged == ((Game) obj).beenFlagged
-                && this.topCaption.equals(((Game) obj).topCaption)
                 && ((this.topCaption == null && ((Game) obj).topCaption == null)
                 || (this.topCaption != null && this.topCaption.equals(((Game) obj).topCaption)));
     }
