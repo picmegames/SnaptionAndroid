@@ -153,9 +153,10 @@ public class GamePresenter implements GameContract.Presenter {
         List<FitBCaption> randomCaptions = new ArrayList<>();
 
         for (int i = 0; i < MAX_FITBS_SHOWN; i++) {
-            int nextCaption = random.nextInt(captions.size());
-            randomCaptions.add(captions.get(nextCaption));
-            captions.remove(nextCaption);
+            if (!captions.isEmpty()) {
+                int nextCaption = random.nextInt(captions.size());
+                randomCaptions.add(captions.remove(nextCaption));
+            }
         }
 
         mGameView.showRandomCaptions(randomCaptions);
@@ -165,7 +166,6 @@ public class GamePresenter implements GameContract.Presenter {
         if (start == numSets) {
             buildRandomCaptions(mCaptions);
         }
-
         else {
             if (start == 0)
                 mCaptions = new ArrayList<>();

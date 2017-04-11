@@ -106,10 +106,10 @@
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
                                     android:layout_toEndOf="@id/caption_sets"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
                                     android:padding="8dp"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"/>
+                                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -175,7 +175,7 @@
                     </android.support.v4.widget.SwipeRefreshLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/switch_create_caption"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -188,8 +188,15 @@
                         android:choiceMode="singleChoice"
                         android:descendantFocusability="blocksDescendants"
                         android:gravity="center_vertical"
-                        android:stretchMode="columnWidth"/>
-                </LinearLayout>
+                        android:stretchMode="columnWidth"
+                        android:visibility="gone"/>
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
             </ViewSwitcher>
         </LinearLayout>
 

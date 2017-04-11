@@ -33,8 +33,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,7 +117,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @BindView(R.id.switch_caption_list)
     LinearLayout mSwitchCaptionListView;
     @BindView(R.id.switch_create_caption)
-    LinearLayout mSwitchCreateCaptionView;
+    FrameLayout mSwitchCreateCaptionView;
     @BindView(R.id.switch_caption_titles)
     ViewSwitcher mSwitchCaptionTitles;
     @BindView(R.id.fitb_entry)
@@ -134,6 +136,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     RelativeLayout mSwitchFitBEntry;
     @BindView(R.id.caption_card_holder)
     RecyclerView mCaptionView;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     private ActionBar mActionBar;
     private Menu mMenu;
@@ -475,6 +479,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @OnClick(R.id.fab)
     public void showAddCaptionDialog() {
         boolean successfulCaptionSubmission = false;
+        mPresenter.unsubscribe();
 
         if (!AuthManager.isLoggedIn()) {
             goToLogin();
@@ -557,6 +562,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCaptionView.setLayoutManager(layoutManager);
         mCaptionView.setAdapter(mFitBAdapter);
         mCurrentCaptionState = CaptionState.Random;
+        showProgressHideRecyclerView();
     }
 
     @OnClick(R.id.refresh_icon)
@@ -589,7 +595,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     R.drawable.ic_add_white_24dp));
             rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
         }
-
         hideKeyboard();
         mSwitchCaptionTitles.showNext();
         mCurrentCaptionState = mPreviousCaptionState;
@@ -601,6 +606,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCaptionChooserTitle.setText(getString(R.string.caption_sets));
         mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
         mPresenter.loadCaptionSets();
+        showProgressHideRecyclerView();
         mCaptionView.setAdapter(mCaptionSetAdapter);
         if (mCurrentCaptionState != CaptionState.Sets) {
             mRefreshIcon.setImageResource(R.drawable.ic_arrow_forward_grey_800_24dp);
@@ -859,27 +865,41 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
     }
 
+    private void showRecyclerViewHideProgress() {
+        mCaptionView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void showProgressHideRecyclerView() {
+        mCaptionView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void showFitBCaptions(List<FitBCaption> captions) {
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
         mCaptionView.setAdapter(mFitBAdapter);
         mFitBAdapter.setCaptions(captions);
+        showRecyclerViewHideProgress();
     }
 
     @Override
     public void showRandomCaptions(List<FitBCaption> captions) {
         mFitBAdapter.setCaptions(captions);
         mFitBAdapter.notifyDataSetChanged();
+        showRecyclerViewHideProgress();
     }
 
     @Override
     public void showCaptionSets(List<CaptionSet> captionSets) {
         mCaptionSetAdapter.setCaptionSets(captionSets);
+        showRecyclerViewHideProgress();
     }
 
     @Override
     public void captionSetClicked(View v, int setId, int position) {
         mCaptionChooserTitle.setText(mCaptionSetAdapter.getSetName(position));
         mPresenter.loadFitBCaptions(setId);
+        showProgressHideRecyclerView();
     }
 }
