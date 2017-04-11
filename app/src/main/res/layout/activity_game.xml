@@ -86,8 +86,8 @@
 
                                     <ImageView
                                         android:id="@+id/refresh_icon"
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
                                         android:layout_centerVertical="true"
                                         android:layout_marginEnd="8dp"
@@ -189,14 +189,12 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/caption_card_holder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:choiceMode="singleChoice"
                         android:descendantFocusability="blocksDescendants"
-                        android:gravity="center"
-                        android:horizontalSpacing="@dimen/item_spacing"
-                        android:stretchMode="columnWidth"
-                        android:verticalSpacing="@dimen/item_spacing"/>
+                        android:gravity="center_vertical"
+                        android:stretchMode="columnWidth"/>
                 </LinearLayout>
             </ViewSwitcher>
         </LinearLayout>

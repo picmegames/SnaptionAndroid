@@ -19,6 +19,8 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
     private List<CaptionSet> mSets;
     private CaptionContract.CaptionSetClickListener mCaptionSetClickListener;
 
+    private int lastPosition = -1;
+
     public CaptionSetAdapter(List<CaptionSet> sets, CaptionContract.CaptionSetClickListener captionSetClickListener) {
         mSets = sets;
         mCaptionSetClickListener = captionSetClickListener;

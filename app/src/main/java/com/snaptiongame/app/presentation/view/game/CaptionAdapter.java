@@ -15,7 +15,6 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +22,8 @@ import java.util.List;
  */
 
 public class CaptionAdapter extends RecyclerView.Adapter {
-
     private List<Caption> mCaptions;
+    private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 40;
 

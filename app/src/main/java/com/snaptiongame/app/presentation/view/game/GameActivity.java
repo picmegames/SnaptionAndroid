@@ -22,7 +22,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -95,12 +94,6 @@ import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 public class GameActivity extends AppCompatActivity implements GameContract.View,
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
-    public static final float NO_ROTATION = 0f;
-    public static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
-    public static final float REVERSE_ROTATION = -90f;
-    public static final int SHORT_ROTATION_DURATION = 300;
-    private static final int BACKEND_CAPTION_SET_OFFSET_OR_ONE = 1;
-    public static final float HALF_ROTATION = 180f;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -149,7 +142,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private CaptionSetAdapter mCaptionSetAdapter;
     private int mCurrentCaption;
     private TextWatcher mTextWatcher;
-    private View.OnClickListener mGenerateFitBListener;
 
     private enum CaptionState {
         List, Random, Sets, Typed
@@ -203,8 +195,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
 
-    public static final String INVITE_CHANNEL = "GameInvite";
-    public static final String INVITE = "invite";
+    private static final float NO_ROTATION = 0f;
+    private static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
+    private static final float REVERSE_ROTATION = -90f;
+    private static final float HALF_ROTATION = 180f;
+    private static final int SHORT_ROTATION_DURATION = 300;
+    private static final int BACKEND_CAPTION_SET_OFFSET_OR_ONE = 1;
+    private static final String INVITE_CHANNEL = "GameInvite";
+    private static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -479,13 +477,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             if (mCurrentCaptionState == CaptionState.Typed) {
                 successfulCaptionSubmission = confirmAndPrepareCaption();
             }
-
             //Go back to caption view
             if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
                     && successfulCaptionSubmission) {
-
                 rotateIcon(REVERSE_ROTATION, SHORT_ROTATION_DURATION, 0);
-
                 mCaptionViewSwitcher.showPrevious();//Switches between list and fitbs
                 mOuterTitleViewSwitcher.showPrevious();//Switches bettween icons and edit text
                 mSwitchCaptionTitles.showNext();
@@ -494,23 +489,18 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             else if (mCurrentCaptionState == CaptionState.List
                     && mCaptionViewSwitcher.getCurrentView() == mSwitchCaptionListView) {
                 mFitBAdapter.clearCaptions();
-
                 mPresenter = new GamePresenter(mGameId, this);
-
                 rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, 0);
-
                 mCaptionViewSwitcher.showNext();//Good
                 mOuterTitleViewSwitcher.showNext();//Good
                 initializeCaptionView();
             }
             //when a user clicks cancel on the fab
             else {
-
                 mCurrentCaptionState = CaptionState.List;
                 mCaptionViewSwitcher.showPrevious();
                 mOuterTitleViewSwitcher.showPrevious();
                 mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
-
                 rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
             }
         }
@@ -518,10 +508,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private void rotateIcon(float rotation, int duration, int whichIcon) {
         View v;
-        if (whichIcon == 0)
+        if (whichIcon == 0) {
             v = mAddCaptionFab;
-        else
+        }
+        else {
             v = mRefreshIcon;
+        }
         ViewCompat.animate(v)
                 .rotation(rotation)
                 .withLayer()
@@ -535,14 +527,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mFitBEditTextField.setText("");
         mFitBEditTextLayout.setHint("");
+
         //Ensure the fitb isn't empty
         if (curEntry.trim().length() > 0) {
             mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
                     curEntry);
             mRefreshLayout.setRefreshing(true);
-
             rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
-
             mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                     R.drawable.ic_add_white_24dp));
             mCurrentCaptionState = CaptionState.List;
@@ -555,7 +546,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     private void initializeCaptionView() {
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRefreshIcon.setVisibility(View.VISIBLE);
         mPresenter.loadRandomFITBCaptions();
         mCaptionView.setLayoutManager(layoutManager);
@@ -574,14 +565,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 1);
             mCurrentCaptionState = CaptionState.Random;
         }
-
     }
 
     @OnFocusChange(R.id.fitb_entry)
     public void removeFITBUnderScores() {
         String curText = mFitBEditTextField.getText().toString();
-        if (curText.matches("/[_]/"))
+        if (curText.matches("/[_]/")) {
             mFitBEditTextField.setText("");
+        }
     }
 
     @OnClick(R.id.fitb_cancel_button)

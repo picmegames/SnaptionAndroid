@@ -74,6 +74,8 @@ public class Caption {
                 && this.id == ((Caption) obj).id
                 && this.beenUpvoted == ((Caption) obj).beenUpvoted
                 && this.beenFlagged == ((Caption) obj).beenFlagged
-                && this.numVotes == ((Caption) obj).numVotes;
+                && this.numVotes == ((Caption) obj).numVotes
+                && this.creatorName.equals(((Caption) obj).creatorName)
+                && this.creatorPicture.equals(((Caption) obj).creatorPicture);
     }
 }
