@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.os.CancellationSignal;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -268,9 +270,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mFilterTextView.setChipSpacing(R.dimen.chip_spacing);
             mFilterTextView.setChipTextSize(R.dimen.chip_text_size);
             mFilterTextView.setChipVerticalSpacing(R.dimen.chip_vertical_spacing);
-            mFilterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-            mFilterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-            mFilterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+            mFilterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+            mFilterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+            mFilterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
             mFilterTextView.enableEditChipOnTouch(false, true);
 
             mFilterDialog = new MaterialDialog.Builder(this)
@@ -280,18 +282,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .negativeText(R.string.clear)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         if (fragTag.equals(WallFragment.TAG)) {
+                            mFilterTextView.chipifyAllUnterminatedTokens();
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
                     .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         clearFilterView();
                         if (fragTag.equals(WallFragment.TAG)) {
+                            mFilterTextView.chipifyAllUnterminatedTokens();
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
+                    .cancelListener(dialogInterface -> {
+                        mFilterTextView.chipifyAllUnterminatedTokens();
+                        ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
+                    })
                     .cancelable(true)
                     .show();
-
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFilterTextView.getLayoutParams();
             layoutParams.setMargins(rightMargin, rightMargin, rightMargin, rightMargin);
         }
