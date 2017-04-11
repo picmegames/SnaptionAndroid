@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.main;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.os.CancellationSignal;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -291,9 +293,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
                         }
                     })
+                    .cancelListener(dialogInterface -> {
+                        mFilterTextView.chipifyAllUnterminatedTokens();
+                        ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
+                    })
                     .cancelable(true)
                     .show();
-
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFilterTextView.getLayoutParams();
             layoutParams.setMargins(rightMargin, rightMargin, rightMargin, rightMargin);
         }
