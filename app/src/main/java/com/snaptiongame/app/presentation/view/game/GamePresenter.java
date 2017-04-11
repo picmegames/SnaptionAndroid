@@ -29,6 +29,7 @@ import timber.log.Timber;
  */
 
 public class GamePresenter implements GameContract.Presenter {
+    public static final int MAX_FITBS_SHOWN = 6;
     @NonNull
     private GameContract.View mGameView;
     @NonNull
@@ -164,11 +165,12 @@ public class GamePresenter implements GameContract.Presenter {
         Random random = new Random();
         List<FitBCaption> randomCaptions = new ArrayList<>();
 
-        for (int i = 0; i < captions.size(); i++) {
+        for (int i = 0; i < MAX_FITBS_SHOWN; i++) {
             int nextCaption = random.nextInt(captions.size());
             randomCaptions.add(captions.get(nextCaption));
             captions.remove(nextCaption);
         }
+
         mGameView.showRandomCaptions(randomCaptions);
     }
 

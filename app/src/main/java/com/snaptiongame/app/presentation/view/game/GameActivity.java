@@ -96,7 +96,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
     public static final float FULL_ROTATION = 360f;
     public static final int LONG_DURATION = 1000;
-    public static final float HALF_ROTATION = 180f;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -548,7 +547,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mRefreshIcon.setVisibility(View.VISIBLE);
         mPresenter.loadRandomFITBCaptions();
         mCaptionView.setLayoutManager(layoutManager);
-        mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
+        //mRefreshIcon.setOnClickListener(v -> mPresenter.refreshCaptions());
         mCaptionView.setAdapter(mFitBAdapter);
         mCurrentCaptionState = CaptionState.Random;
         mRefreshIcon.setOnClickListener((v -> refreshCaptions()));
