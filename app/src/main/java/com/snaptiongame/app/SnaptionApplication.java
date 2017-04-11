@@ -3,7 +3,7 @@ package com.snaptiongame.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.squareup.leakcanary.LeakCanary;
 
 import io.branch.referral.Branch;
@@ -11,7 +11,7 @@ import timber.log.Timber;
 
 /**
  * This is the entry point for the application. When the application is started up, the
- * AuthenticationManager, LeakCanary, and Timber are initialized.
+ * AuthManager, LeakCanary, and Timber are initialized.
  *
  * @author Tyler Wong
  * @version 1.0
@@ -29,7 +29,7 @@ public class SnaptionApplication extends Application {
         Branch.getAutoInstance(this);
 
         // INIT Authentication Manager
-        AuthenticationManager.init(context);
+        AuthManager.init(context);
 
         // INIT Leak Canary (Memory leak checking)
         if (LeakCanary.isInAnalyzerProcess(this)) {

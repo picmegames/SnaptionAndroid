@@ -6,9 +6,9 @@ import org.junit.Test;
  * @author Tyler Wong
  */
 
-public class ImageConverterTest {
+public class ImageUtilsTest {
     @Test
     public void testConvertImage() {
-        ImageConverter.getCompressedImage(null);
+        ImageUtils.getCompressedImage(null);
     }
 }

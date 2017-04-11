@@ -9,6 +9,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="LoginTheme" parent="AppTheme"/>
+
     <style name="CreateGameTheme" parent="AppTheme"/>
 
     <style name="StatusBarTheme" parent="AppTheme"/>

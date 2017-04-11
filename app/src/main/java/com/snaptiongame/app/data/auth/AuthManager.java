@@ -1,4 +1,4 @@
-package com.snaptiongame.app.data.authentication;
+package com.snaptiongame.app.data.auth;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,12 +36,12 @@ import timber.log.Timber;
  * @author Tyler Wong
  */
 
-public final class AuthenticationManager {
-    private static AuthenticationManager authenticationManager;
+public final class AuthManager {
+    private static AuthManager authManager;
     private CallbackManager callbackManager;
     private GoogleApiClient googleApiClient;
-    private SharedPreferences preferences;
-    private AuthenticationCallback callback;
+    private static SharedPreferences preferences;
+    private AuthCallback callback;
 
     private static final String LOGGED_IN = "logged in";
 
@@ -58,7 +58,7 @@ public final class AuthenticationManager {
 
     private static final String INVITE_TOKEN = "token";
 
-    private AuthenticationManager(Context context) {
+    private AuthManager(Context context) {
         // INIT Shared Preferences Editor
         preferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
 
@@ -66,8 +66,7 @@ public final class AuthenticationManager {
         callbackManager = CallbackManager.Factory.create();
 
         // INIT Google Sign In APIs
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.google_client_id))
                 .requestEmail()
                 .build();
@@ -80,12 +79,12 @@ public final class AuthenticationManager {
 
     public static void init(Context context) {
         // INIT an instance of an Authentication Manager
-        authenticationManager = new AuthenticationManager(context);
+        authManager = new AuthManager(context);
     }
 
-    public static AuthenticationManager getInstance() {
+    public static AuthManager getInstance() {
         // RETURN an instance of Authentication Manager
-        return authenticationManager;
+        return authManager;
     }
 
     public void googleActivityResult(Intent data) {
@@ -239,7 +238,7 @@ public final class AuthenticationManager {
         }
     }
 
-    public boolean isLoggedIn() {
+    public static boolean isLoggedIn() {
         return preferences.getBoolean(LOGGED_IN, false);
     }
 
@@ -271,36 +270,32 @@ public final class AuthenticationManager {
         clearLoginInfo();
     }
 
-    public void registerCallback(AuthenticationCallback callback) {
+    public void registerCallback(AuthCallback callback) {
         this.callback = callback;
     }
 
-    private void saveUserId(int snaptionUserId) {
+    private static void saveUserId(int snaptionUserId) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(USER_ID, snaptionUserId);
         editor.apply();
     }
 
-    public void saveUsername(String username) {
+    public static void saveUsername(String username) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(USERNAME, username);
         editor.apply();
     }
 
-    public void saveProfileImage(String profileImage) {
+    public static void saveProfileImage(String profileImage) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PROFILE_IMAGE_URL, profileImage);
         editor.apply();
     }
 
-    public void saveToken(String token) {
+    public static void saveToken(String token) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(INVITE_TOKEN, token);
         editor.apply();
-    }
-
-    public String getInviteToken() {
-        return preferences.getString(INVITE_TOKEN, "");
     }
 
     private void saveLoginInfo(String imageUrl, String name, String email) {
@@ -321,23 +316,27 @@ public final class AuthenticationManager {
         editor.apply();
     }
 
-    public int getUserId() {
+    public static String getInviteToken() {
+        return preferences.getString(INVITE_TOKEN, "");
+    }
+
+    public static int getUserId() {
         return preferences.getInt(USER_ID, 0);
     }
 
-    public String getUsername() {
+    public static String getUsername() {
         return preferences.getString(USERNAME, "");
     }
 
-    public String getProfileImageUrl() {
+    public static String getProfileImageUrl() {
         return preferences.getString(PROFILE_IMAGE_URL, "");
     }
 
-    public String getUserFullName() {
+    public static String getUserFullName() {
         return preferences.getString(FULL_NAME, "");
     }
 
-    public String getEmail() {
+    public static String getEmail() {
         return preferences.getString(EMAIL, "");
     }
 

@@ -1,10 +1,10 @@
-package com.snaptiongame.app.data.authentication;
+package com.snaptiongame.app.data.auth;
 
 /**
  * @author Tyler Wong
  */
 
-public interface AuthenticationCallback {
+public interface AuthCallback {
     void onAuthenticationSuccess();
     void onAuthenticationFailure();
 }

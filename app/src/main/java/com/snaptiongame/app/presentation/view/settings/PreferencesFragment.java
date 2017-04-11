@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.authentication.AuthenticationManager;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 
@@ -23,13 +23,13 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private Preference mVersionPreference;
     private Preference mLogoutPreference;
 
-    private AuthenticationManager mAuthManager;
+    private AuthManager mAuthManager;
     private boolean mListStyled = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthManager = AuthenticationManager.getInstance();
+        mAuthManager = AuthManager.getInstance();
 
         View rootView = getView();
         ListView list = null;
@@ -64,9 +64,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     }
 
     protected void updateLoginField() {
-        if (mAuthManager.isLoggedIn()) {
+        if (AuthManager.isLoggedIn()) {
             mLogoutPreference.setTitle(R.string.log_out_label);
-            mLogoutPreference.setSummary(String.format(getString(R.string.current_login), mAuthManager.getUsername()));
+            mLogoutPreference.setSummary(String.format(getString(R.string.current_login),
+                    AuthManager.getUsername()));
         }
         else {
             mLogoutPreference.setTitle(R.string.log_in_label);
@@ -101,7 +102,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
-            if (mAuthManager.isLoggedIn()) {
+            if (AuthManager.isLoggedIn()) {
                 mAuthManager.logout();
                 updateLoginField();
             }
