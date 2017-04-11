@@ -176,7 +176,10 @@ public class GamePresenter implements GameContract.Presenter {
         if (start == numSets) {
             buildRandomCaptions(mCaptions);
         }
+
         else {
+            if (start == 0)
+                mCaptions = new ArrayList<>();
             for (FitBCaption c : captions) {
                 mCaptions.add(c);
             }

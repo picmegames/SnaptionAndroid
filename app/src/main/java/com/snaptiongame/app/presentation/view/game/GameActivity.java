@@ -100,6 +100,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public static final float REVERSE_ROTATION = -90f;
     public static final int SHORT_ROTATION_DURATION = 300;
     private static final int BACKEND_CAPTION_SET_OFFSET_OR_ONE = 1;
+    public static final float HALF_ROTATION = 180f;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -117,7 +118,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @BindView(R.id.caption_view_switcher)
     ViewSwitcher mCaptionViewSwitcher;
     @BindView(R.id.switch_title_picker)
-    ViewSwitcher mHeaderViewSwitcher;
+    ViewSwitcher mOuterTitleViewSwitcher;
     @BindView(R.id.switch_caption_list)
     LinearLayout mSwitchCaptionListView;
     @BindView(R.id.switch_create_caption)
@@ -148,6 +149,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private CaptionSetAdapter mCaptionSetAdapter;
     private int mCurrentCaption;
     private TextWatcher mTextWatcher;
+    private View.OnClickListener mGenerateFitBListener;
 
     private enum CaptionState {
         List, Random, Sets, Typed
@@ -270,6 +272,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         });
 
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
+        mCurrentCaptionState = CaptionState.List;
     }
 
     private void upvoteGame() {
@@ -467,7 +470,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @OnClick(R.id.fab)
     public void showAddCaptionDialog() {
-        boolean successfulCaptionSubmission = true;
+        boolean successfulCaptionSubmission = false;
 
         if (!AuthManager.isLoggedIn()) {
             goToLogin();
@@ -477,52 +480,68 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 successfulCaptionSubmission = confirmAndPrepareCaption();
             }
 
+            //Go back to caption view
             if (mCaptionViewSwitcher.getCurrentView() != mSwitchCaptionListView
                     && successfulCaptionSubmission) {
-                ViewCompat.animate(mAddCaptionFab)
-                        .rotation(REVERSE_ROTATION)
-                        .withLayer()
-                        .setDuration(SHORT_ROTATION_DURATION)
-                        .setInterpolator(interpolator)
-                        .start();
 
-                mCaptionViewSwitcher.showPrevious();
-                mHeaderViewSwitcher.showPrevious();
+                rotateIcon(REVERSE_ROTATION, SHORT_ROTATION_DURATION, 0);
+
+                mCaptionViewSwitcher.showPrevious();//Switches between list and fitbs
+                mOuterTitleViewSwitcher.showPrevious();//Switches bettween icons and edit text
+                mSwitchCaptionTitles.showNext();
             }
             //Shown when a user first enters the caption view
-            else if (successfulCaptionSubmission) {
+            else if (mCurrentCaptionState == CaptionState.List
+                    && mCaptionViewSwitcher.getCurrentView() == mSwitchCaptionListView) {
                 mFitBAdapter.clearCaptions();
+
                 mPresenter = new GamePresenter(mGameId, this);
 
-                ViewCompat.animate(mAddCaptionFab)
-                        .rotation(FORTY_FIVE_DEGREE_ROTATION)
-                        .withLayer()
-                        .setDuration(SHORT_ROTATION_DURATION)
-                        .setInterpolator(interpolator)
-                        .start();
+                rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, 0);
 
-                mCaptionViewSwitcher.showNext();
-                mHeaderViewSwitcher.showNext();
+                mCaptionViewSwitcher.showNext();//Good
+                mOuterTitleViewSwitcher.showNext();//Good
                 initializeCaptionView();
             }
+            //when a user clicks cancel on the fab
+            else {
+
+                mCurrentCaptionState = CaptionState.List;
+                mCaptionViewSwitcher.showPrevious();
+                mOuterTitleViewSwitcher.showPrevious();
+                mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
+
+                rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
+            }
         }
+    }
+
+    private void rotateIcon(float rotation, int duration, int whichIcon) {
+        View v;
+        if (whichIcon == 0)
+            v = mAddCaptionFab;
+        else
+            v = mRefreshIcon;
+        ViewCompat.animate(v)
+                .rotation(rotation)
+                .withLayer()
+                .setDuration(duration)
+                .setInterpolator(interpolator)
+                .start();
     }
 
     private boolean confirmAndPrepareCaption() {
         String curEntry = mFitBEditTextField.getText().toString();
 
+        mFitBEditTextField.setText("");
+        mFitBEditTextLayout.setHint("");
         //Ensure the fitb isn't empty
         if (curEntry.trim().length() > 0) {
             mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
                     curEntry);
             mRefreshLayout.setRefreshing(true);
 
-            ViewCompat.animate(mAddCaptionFab)
-                    .rotation(NO_ROTATION)
-                    .withLayer()
-                    .setDuration(SHORT_ROTATION_DURATION)
-                    .setInterpolator(interpolator)
-                    .start();
+            rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
 
             mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                     R.drawable.ic_add_white_24dp));
@@ -547,7 +566,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @OnClick(R.id.refresh_icon)
     public void refreshCaptions() {
-        mPresenter.loadRandomFITBCaptions();
+        mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
+        mCaptionView.setAdapter(mFitBAdapter);
+        mPresenter.refreshCaptions();
+
+        if (mCurrentCaptionState == CaptionState.Sets) {
+            rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 1);
+            mCurrentCaptionState = CaptionState.Random;
+        }
+
     }
 
     @OnFocusChange(R.id.fitb_entry)
@@ -565,13 +592,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mFitBAdapter.resetCaption();
         mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                 R.drawable.ic_add_white_24dp));
-
-        ViewCompat.animate(mAddCaptionFab)
-                .rotation(FORTY_FIVE_DEGREE_ROTATION)
-                .withLayer()
-                .setDuration(SHORT_ROTATION_DURATION)
-                .setInterpolator(interpolator)
-                .start();
+        rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, 0);
     }
 
 
@@ -580,7 +601,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
         mPresenter.loadCaptionSets();
         mCaptionView.setAdapter(mCaptionSetAdapter);
-        mRefreshIcon.setVisibility(View.INVISIBLE);
+        mRefreshIcon.setImageResource(R.drawable.ic_arrow_forward_grey_800_24dp);
+        mRefreshIcon.setOnClickListener(v -> refreshCaptions());
+
+        rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, 1);
+
         mCurrentCaptionState = CaptionState.Sets;
     }
 
@@ -766,12 +791,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         final String afterBlank = fitbs.get(2);
         final String placeHolder = "______";
 
-        ViewCompat.animate(mAddCaptionFab)
-                .rotation(NO_ROTATION)
-                .withLayer()
-                .setDuration(SHORT_ROTATION_DURATION)
-                .setInterpolator(interpolator)
-                .start();
+        rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, 0);
 
         mFitBEditTextField.setText("");
         mCurrentCaption = position;
