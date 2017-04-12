@@ -83,5 +83,9 @@
 Competir para crear el mejor subtítulo para una foto rellenando el espacio en blanco en un subtítulo con la palabra o la frase de su opción</string>
     <string name="random_captions">Leyendas aleatorias</string>
     <string name="caption_sets">Conjuntos de Subtítulos</string>
+    <string name="skip">Omitir</string>
+    <string name="next">Siguiente</string>
+    <string name="done">Hecho</string>
+    <string name="previous">Anterior</string>
 
 </resources>

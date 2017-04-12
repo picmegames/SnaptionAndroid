@@ -12,8 +12,6 @@
     <string name="fab_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior</string>
     <string name="bottom_nav_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.BottomNavigationScrollBehavior</string>
 
-    <!-- Urls -->
-
     <!-- Titles -->
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="add_caption">Add a Caption</string>
@@ -76,6 +74,10 @@
     <string name="join_snaption">Join Snaption!</string>
     <string name="fitb">Fill in the blank!</string>
     <string name="snaption_description">Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. </string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="previous">Previous</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
