@@ -198,6 +198,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private String mImageUrl;
 
     private boolean isDark = false;
+    private float lastRefreshIconRotation = 0.0f;
 
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
 
@@ -490,12 +491,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             }
             // Go back to caption view
             if (!mCaptionViewSwitcher.getCurrentView().equals(mRefreshLayout) && successfulCaptionSubmission) {
-                ViewCompat.animate(mAddCaptionFab)
-                        .rotation(FULL_ROTATION)
-                        .withLayer()
-                        .setDuration(LONG_DURATION)
-                        .setInterpolator(interpolator)
-                        .start();
+                rotateIcon(FULL_ROTATION, LONG_DURATION, FAB_ICON);
                 // Switches between list and fitbs
                 mCaptionViewSwitcher.showPrevious();
                 // Switches bettween icons and edit text
@@ -519,6 +515,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
                 rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                 rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+                lastRefreshIconRotation = NO_ROTATION;
 
                 if (mCurrentCaptionState == CaptionState.Typed_Empty) {
                     mSwitchCaptionTitles.showPrevious();
@@ -576,13 +573,22 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void refreshCaptions() {
         mCaptionChooserTitle.setText(getString(R.string.random_captions));
         mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
-        rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+
+        if (lastRefreshIconRotation == FULL_ROTATION) {
+            rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+            lastRefreshIconRotation = NO_ROTATION;
+        }
+        else {
+            rotateIcon(FULL_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+            lastRefreshIconRotation = FULL_ROTATION;
+        }
 
         mCaptionView.setAdapter(mFitBAdapter);
         mPresenter.refreshCaptions();
 
         if (mCurrentCaptionState == CaptionState.Sets) {
             rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+            lastRefreshIconRotation = NO_ROTATION;
             mCurrentCaptionState = CaptionState.Random;
         }
     }
