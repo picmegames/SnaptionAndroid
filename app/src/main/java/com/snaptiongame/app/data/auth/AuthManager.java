@@ -44,18 +44,19 @@ public final class AuthManager {
     private AuthCallback callback;
 
     private static final String LOGGED_IN = "logged in";
-
     private static final String FB_FIELDS = "fields";
     private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large)";
-
     private static final String USER_ID = "user_id";
     private static final String USERNAME = "username";
     private static final String PROFILE_IMAGE_URL = "image_url";
     private static final String FULL_NAME = "full_name";
+    private static final String PICTURE = "picture";
+    private static final String DATA = "data";
+    private static final String URL = "url";
+    private static final String NAME = "name";
     private static final String EMAIL = "email";
     private static final String FACEBOOK_LOGIN = "facebook";
     private static final String GOOGLE_SIGN_IN = "google";
-
     private static final String INVITE_TOKEN = "token";
 
     private AuthManager(Context context) {
@@ -79,7 +80,9 @@ public final class AuthManager {
 
     public static void init(Context context) {
         // INIT an instance of an Authentication Manager
-        authManager = new AuthManager(context);
+        if (authManager == null) {
+            authManager = new AuthManager(context);
+        }
     }
 
     public static AuthManager getInstance() {
@@ -117,11 +120,11 @@ public final class AuthManager {
                             String email = "";
 
                             try {
-                                profileImageUrl = object.getJSONObject("picture")
-                                        .getJSONObject("data")
-                                        .getString("url");
-                                name = object.getString("name");
-                                email = object.getString("email");
+                                profileImageUrl = object.getJSONObject(PICTURE)
+                                        .getJSONObject(DATA)
+                                        .getString(URL);
+                                name = object.getString(NAME);
+                                email = object.getString(EMAIL);
 
                                 saveLoginInfo(profileImageUrl, name, email);
                             }
@@ -228,13 +231,15 @@ public final class AuthManager {
 
     private void fireSuccessCallback() {
         if (callback != null) {
-            callback.onAuthenticationSuccess();
+            callback.onAuthSuccess();
+            callback = null;
         }
     }
 
     private void fireFailureCallback() {
         if (callback != null) {
-            callback.onAuthenticationFailure();
+            callback.onAuthFailure();
+            callback = null;
         }
     }
 
