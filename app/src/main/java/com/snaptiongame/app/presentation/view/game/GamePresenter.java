@@ -56,7 +56,10 @@ public class GamePresenter implements GameContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processCaptions,
-                        Timber::e,
+                        e -> {
+                            Timber.e(e);
+                            mGameView.setRefreshing(false);
+                        },
                         () -> Timber.i("Loading captions completed successfully.")
                 );
         mDisposables.add(disposable);
