@@ -63,6 +63,7 @@ import com.snaptiongame.app.data.models.GameInvite;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
+import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
@@ -102,7 +103,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @BindView(R.id.caption_list)
     RecyclerView mCaptionList;
     @BindView(R.id.game_image)
-    ImageView mImage;
+    FourThreeImageView mImage;
     @BindView(R.id.picker_image)
     ImageView mPickerImage;
     @BindView(R.id.picker_name)
@@ -223,6 +224,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         Intent intent = getIntent();
         ViewCompat.setTransitionName(mImage, intent.getStringExtra(Game.IMAGE_URL));
+
+        supportPostponeEnterTransition();
 
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
@@ -615,8 +618,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mImageUrl = image;
         isUpvoted = beenUpvoted;
         isFlagged = beenFlagged;
-
-        supportPostponeEnterTransition();
 
         Glide.with(this)
                 .load(image)
