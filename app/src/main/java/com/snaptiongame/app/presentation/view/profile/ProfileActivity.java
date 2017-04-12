@@ -405,7 +405,9 @@ public class ProfileActivity extends AppCompatActivity
             mToolbar.setBackgroundColor(mTransparent);
         }
 
-        mLayout.setPadding(0, (int) Math.floor(ProfileImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mLayout.setPadding(0, (int) Math.floor(ProfileImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);
+        }
     }
 
     private void handleToolbarTitleVisibility(float percentage) {
