@@ -37,4 +37,8 @@ public class FitBCaption {
         this.setID = setID;
         this.userEntry = "";
     }
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof FitBCaption && ((FitBCaption) obj).id == id;
+    }
 }

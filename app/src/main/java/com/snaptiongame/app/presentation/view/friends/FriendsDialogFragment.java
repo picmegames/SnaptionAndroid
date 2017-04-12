@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
@@ -496,6 +497,9 @@ public class FriendsDialogFragment extends DialogFragment {
         private final String[] mInviteOptions = {"Add via Phone #",
                 "Add via Facebook", "Add via Email", "Invite to Game!"};
 
+        private final int PHONE_POSITION = 0;
+        private final String COMING_SOON_MESSAGE = "Coming Soon!";
+
 
         /**
          * Container for the various icons to display with a selected invite option
@@ -576,6 +580,9 @@ public class FriendsDialogFragment extends DialogFragment {
             view.setOnClickListener(view1 -> {
                 if (position == INVITE_TO_SNAPTION_POSITION)
                     sendInviteIntent();
+                else if (position == PHONE_POSITION) {
+                    Toast.makeText(getActivity(), COMING_SOON_MESSAGE, Toast.LENGTH_SHORT).show();
+                }
                 else {
                     Intent data = new Intent();
                     data.putExtra("which", mDialogOptions[position]);

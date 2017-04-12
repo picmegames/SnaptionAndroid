@@ -32,9 +32,10 @@ public class CaptionAdapterTest {
     private View mockView;
     private Fragment mockFragment;
     private CaptionCardViewHolder holder;
+
     @Before
     public void setup() {
-       // mockFragment = Robolectric.buildFragment(CaptionSelectDialogFragment.class)
+        // mockFragment = Robolectric.buildFragment(CaptionSelectDialogFragment.class)
         //        .create().resume().get();
 
         captions = new ArrayList<>();
@@ -43,12 +44,20 @@ public class CaptionAdapterTest {
         captions.add(new Caption(0, "Third caption"));
 
         captions2 = new ArrayList<>();
-        captions2.add(new Caption(123, "First caption"));
-        captions2.add(new Caption(234, "Second caption"));
-        captions2.add(new Caption(345, "Third caption"));
+        Caption caption1 = new Caption(123, "First caption");
+        Caption caption2 = new Caption(234, "Second caption");
+        Caption caption3 = new Caption(345, "Third caption");
+        caption1.creatorName = "hi";
+        caption2.creatorName = "hi";
+        caption3.creatorName = "hi";
+        caption1.creatorPicture = "http://url.com";
+        caption2.creatorPicture = "http://url.com";
+        caption3.creatorName = "http://url.com";
+        captions2.add(caption1);
+        captions2.add(caption2);
+        captions2.add(caption3);
 
         captionAdapter = new CaptionAdapter(captions);
-
     }
 
     @Test
@@ -56,6 +65,7 @@ public class CaptionAdapterTest {
         captionAdapter.setCaptions(captions2);
         assertEquals(captionAdapter.getCaptions(), captions2);
     }
+
     @Test
     public void testGetCaption() {
 
@@ -72,7 +82,7 @@ public class CaptionAdapterTest {
         LayoutInflater inflater =
                 (LayoutInflater) RuntimeEnvironment.application.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View listitemview = inflater.inflate(R.layout.caption_chooser_dialog, null, false);
+        View listitemview = inflater.inflate(R.layout.caption_chooser_view, null, false);
         holder = new CaptionCardViewHolder(listitemview);
         captionAdapter.onBindViewHolder(holder, 0);
         assertEquals(holder.captionId, 0);

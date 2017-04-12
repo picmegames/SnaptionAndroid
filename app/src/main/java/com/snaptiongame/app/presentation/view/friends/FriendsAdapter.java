@@ -114,17 +114,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
 
-        setAnimation(holder.itemView, position);
-    }
-
-    private void setAnimation(View viewToAnimate, int position) {
-        if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(
-                    viewToAnimate.getContext(), (position > lastPosition) ?
-                            R.anim.up_from_bottom : R.anim.down_from_top);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(),
+                (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
+        holder.itemView.startAnimation(animation);
+        lastPosition = position;
     }
 
     @Override

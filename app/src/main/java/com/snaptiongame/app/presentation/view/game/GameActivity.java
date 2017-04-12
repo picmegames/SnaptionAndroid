@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -10,6 +11,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -21,13 +25,21 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,6 +55,8 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.models.Caption;
+import com.snaptiongame.app.data.models.CaptionSet;
+import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.GameInvite;
@@ -65,6 +79,7 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
@@ -72,11 +87,14 @@ import io.branch.referral.util.LinkProperties;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
+import static com.snaptiongame.app.SnaptionApplication.getContext;
+
 /**
  * @author Tyler Wong
  */
 
-public class GameActivity extends AppCompatActivity implements GameContract.View {
+public class GameActivity extends AppCompatActivity implements GameContract.View,
+        CaptionContract.CaptionSetClickListener, CaptionContract.CaptionClickListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.refresh_layout)
@@ -91,14 +109,48 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     TextView mPickerName;
     @BindView(R.id.layout)
     CoordinatorLayout mLayout;
+    @BindView(R.id.caption_view_switcher)
+    ViewSwitcher mCaptionViewSwitcher;
+    @BindView(R.id.switch_title_picker)
+    ViewSwitcher mOuterTitleViewSwitcher;
+    @BindView(R.id.switch_create_caption)
+    FrameLayout mSwitchCreateCaptionView;
+    @BindView(R.id.switch_caption_titles)
+    ViewSwitcher mSwitchCaptionTitles;
+    @BindView(R.id.fitb_entry)
+    TextInputEditText mFitBEditTextField;
+    @BindView(R.id.fitb_entry_layout)
+    TextInputLayout mFitBEditTextLayout;
+    @BindView(R.id.fab)
+    FloatingActionButton mAddCaptionFab;
+    @BindView(R.id.fitb_cancel_button)
+    ImageView mFitBCancelButton;
+    @BindView(R.id.refresh_icon)
+    ImageView mRefreshIcon;
+    @BindView(R.id.caption_chooser_title)
+    TextView mCaptionChooserTitle;
+    @BindView(R.id.switch_fitb_entry)
+    LinearLayout mSwitchFitBEntry;
+    @BindView(R.id.caption_card_holder)
+    RecyclerView mCaptionView;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     private ActionBar mActionBar;
     private Menu mMenu;
     private CaptionAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
     private GameContract.Presenter mPresenter;
-    private CaptionSelectDialogFragment mCaptionDialogFragment;
-    private CaptionSelectDialogFragment mCaptionSetDialogFragment;
+    private CaptionSetAdapter mCaptionSetAdapter;
+    private int mCurrentCaption;
+    private TextWatcher mTextWatcher;
+
+    private enum CaptionState {
+        List, Random, Sets, Typed, Typed_Empty
+    }
+
+    private CaptionState mCurrentCaptionState;
+    private CaptionState mPreviousCaptionState;
 
     /**
      * Member variable to reference the game owner's image
@@ -146,12 +198,22 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
 
-    public static final String JOIN_SNAPTION = "Join Snaption!";
-    public static final String SNAPTION_DESCRIPTION = "Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. ";
-    public static final String INVITE_CHANNEL = "GameInvite";
-    public static final String INVITE = "invite";
+    private final OvershootInterpolator interpolator = new OvershootInterpolator();
+
+    private static final int REFRESH_ICON = 1;
+    private static final int FAB_ICON = 0;
+    private static final float FORTY_FIVE_DEGREE_ROTATION = 45f;
+    private static final float REVERSE_FORTY_FIVE_DEGREE_ROTATION = -45f;
+    private static final float HALF_ROTATION = 180f;
+    private static final float FULL_ROTATION = 360f;
+    private static final int LONG_DURATION = 1000;
+    private static final int SHORT_ROTATION_DURATION = 300;
+    private static final String INVITE_CHANNEL = "GameInvite";
+    private static final String INVITE = "invite";
     private static final int AVATAR_SIZE = 40;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
+
+    private FITBCaptionAdapter mFitBAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -212,6 +274,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     this, mImage, ViewCompat.getTransitionName(mImage));
             startActivity(immersiveIntent, transitionActivityOptions.toBundle());
         });
+
+        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
+        mCurrentCaptionState = CaptionState.List;
     }
 
     private void upvoteGame() {
@@ -250,6 +315,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mMenu.findItem(R.id.unflag).setVisible(false);
             mMenu.findItem(R.id.flag).setVisible(true);
         }
+
         if (isUpvoted) {
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
         }
@@ -403,21 +469,146 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     @Override
-    public void addCaption(Caption caption) {
-        mAdapter.addCaption(caption);
+    public void setRefreshing(boolean isRefreshing) {
+        mRefreshLayout.setRefreshing(isRefreshing);
     }
 
     @OnClick(R.id.fab)
     public void showAddCaptionDialog() {
+        boolean successfulCaptionSubmission = false;
+        mPresenter.unsubscribe();
+
         if (!AuthManager.isLoggedIn()) {
             goToLogin();
         }
         else {
-            mCaptionSetDialogFragment = CaptionSelectDialogFragment.newInstance(
-                    CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
-                    mGameId, -1);
-            mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
+            if (mCurrentCaptionState == CaptionState.Typed) {
+                successfulCaptionSubmission = confirmAndPrepareCaption();
+            }
+            // Go back to caption view
+            if (!mCaptionViewSwitcher.getCurrentView().equals(mRefreshLayout) && successfulCaptionSubmission) {
+                rotateIcon(FULL_ROTATION, LONG_DURATION, FAB_ICON);
+                // Switches between list and fitbs
+                mCaptionViewSwitcher.showPrevious();
+                // Switches bettween icons and edit text
+                mOuterTitleViewSwitcher.showPrevious();
+                mSwitchCaptionTitles.showNext();
+            }
+            // Shown when a user first enters the caption view
+            else if (mCurrentCaptionState == CaptionState.List
+                    && mCaptionViewSwitcher.getCurrentView().equals(mRefreshLayout)) {
+                mCaptionChooserTitle.setText(getString(R.string.random_captions));
+                mFitBAdapter.clearCaptions();
+                rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+                mCaptionViewSwitcher.showNext();
+                mOuterTitleViewSwitcher.showNext();
+                initializeCaptionView();
+            }
+            // when a user clicks cancel on the fab
+            else {
+                mCaptionViewSwitcher.showPrevious();
+                mOuterTitleViewSwitcher.showPrevious();
+                mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
+                rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+
+                if (mCurrentCaptionState == CaptionState.Typed_Empty) {
+                    mSwitchCaptionTitles.showPrevious();
+                }
+
+                mCurrentCaptionState = CaptionState.List;
+            }
         }
+        hideKeyboard();
+    }
+
+    private void rotateIcon(float rotation, int duration, int whichIcon) {
+        View viewToRotate;
+        if (whichIcon == FAB_ICON) {
+            viewToRotate = mAddCaptionFab;
+        }
+        else {
+            viewToRotate = mRefreshIcon;
+        }
+        ViewCompat.animate(viewToRotate)
+                .rotationBy(rotation)
+                .withLayer()
+                .setDuration(duration)
+                .setInterpolator(interpolator)
+                .start();
+    }
+
+    private boolean confirmAndPrepareCaption() {
+        String curEntry = mFitBEditTextField.getText().toString();
+
+        mFitBEditTextField.setText("");
+        mFitBEditTextLayout.setHint("");
+        mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
+                curEntry);
+        mRefreshLayout.setRefreshing(true);
+        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                R.drawable.ic_add_white_24dp));
+        mCurrentCaptionState = CaptionState.List;
+        return true;
+    }
+
+    private void initializeCaptionView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRefreshIcon.setVisibility(View.VISIBLE);
+        mPresenter.loadRandomFITBCaptions();
+        mCaptionView.setLayoutManager(layoutManager);
+        mCaptionView.setAdapter(mFitBAdapter);
+        mCurrentCaptionState = CaptionState.Random;
+        showProgressHideRecyclerView();
+    }
+
+    @OnClick(R.id.refresh_icon)
+    public void refreshCaptions() {
+        mCaptionChooserTitle.setText(getString(R.string.random_captions));
+        mRefreshIcon.setImageResource(R.drawable.ic_refresh_grey_800_24dp);
+        rotateIcon(FULL_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+
+        mCaptionView.setAdapter(mFitBAdapter);
+        mPresenter.refreshCaptions();
+
+        if (mCurrentCaptionState == CaptionState.Sets) {
+            rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+            mCurrentCaptionState = CaptionState.Random;
+        }
+    }
+
+    @OnFocusChange(R.id.fitb_entry)
+    public void removeFITBUnderScores() {
+        String curText = mFitBEditTextField.getText().toString();
+        if (curText.matches("/[_]/")) {
+            mFitBEditTextField.setText("");
+        }
+    }
+
+    @OnClick(R.id.fitb_cancel_button)
+    public void resetCaptionChoosing() {
+        if (mCurrentCaptionState == CaptionState.Typed) {
+            mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    R.drawable.ic_add_white_24dp));
+            rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+        }
+        hideKeyboard();
+        mSwitchCaptionTitles.showNext();
+        mCurrentCaptionState = mPreviousCaptionState;
+        mFitBAdapter.resetCaption();
+    }
+
+    @OnClick(R.id.caption_sets)
+    public void loadCaptionSets() {
+        mCaptionChooserTitle.setText(getString(R.string.caption_sets));
+        mCaptionSetAdapter = new CaptionSetAdapter(new ArrayList<>(), this);
+        mPresenter.loadCaptionSets();
+        showProgressHideRecyclerView();
+        mCaptionView.setAdapter(mCaptionSetAdapter);
+        if (mCurrentCaptionState != CaptionState.Sets) {
+            mRefreshIcon.setImageResource(R.drawable.ic_arrow_forward_grey_800_24dp);
+            rotateIcon(HALF_ROTATION, SHORT_ROTATION_DURATION, REFRESH_ICON);
+        }
+        mCurrentCaptionState = CaptionState.Sets;
     }
 
     public void showGame(String image, int id, int pickerId, boolean beenUpvoted, boolean beenFlagged) {
@@ -426,6 +617,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         isFlagged = beenFlagged;
 
         supportPostponeEnterTransition();
+
         Glide.with(this)
                 .load(image)
                 .dontAnimate()
@@ -433,14 +625,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 .priority(Priority.IMMEDIATE)
                 .listener(imageLoadListener)
                 .into(mImage);
+
         mGameId = id;
         mPickerId = pickerId;
 
         mPresenter = new GamePresenter(id, pickerId, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
-        mRefreshLayout.setColorSchemeColors(
-                ContextCompat.getColor(this, R.color.colorAccent)
-        );
+        mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
 
@@ -550,37 +741,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 );
     }
 
-    public void displayCaptionChoosingDialog(int setChosen) {
-        mCaptionSetDialogFragment.dismiss();
-        mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
-                CaptionSelectDialogFragment.CaptionDialogToShow.CAPTION_CHOOSER,
-                mGameId, setChosen);
-        mCaptionDialogFragment.show(getFragmentManager(), "dialog");
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
 
-    }
-
-    public void displaySetChoosingDialog() {
-        mCaptionSetDialogFragment.dismiss();
-        mCaptionDialogFragment = CaptionSelectDialogFragment.newInstance(
-                CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER,
-                mGameId, -1);
-        mCaptionDialogFragment.show(getFragmentManager(), "dialog");
-    }
-
-    public void negativeButtonClicked(CaptionSelectDialogFragment.CaptionDialogToShow whichDialog) {
-        if (mCaptionDialogFragment != null)
-            mCaptionDialogFragment.dismiss();
-
-        if (whichDialog == CaptionSelectDialogFragment.CaptionDialogToShow.SET_CHOOSER) {
-            if (mCaptionSetDialogFragment != null)
-                mCaptionSetDialogFragment.dismiss();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        else {
-            if (mCaptionDialogFragment != null)
-                mCaptionDialogFragment.dismiss();
-            //mCaptionSetDialogFragment.show(getFragmentManager(), "dialog");
-        }
-
     }
 
     private void goToLogin() {
@@ -598,8 +765,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void generateInviteUrl(String inviteToken) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
-                .setTitle(JOIN_SNAPTION)
-                .setContentDescription(SNAPTION_DESCRIPTION)
+                .setTitle(getResources().getText(R.string.join_snaption).toString())
+                .setContentDescription(getResources().getString(R.string.snaption_description))
                 .setContentImageUrl(mImageUrl)
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
                 .addContentMetadata(GameInvite.INVITE_TOKEN, inviteToken)
@@ -618,5 +785,118 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 Timber.e("Branch " + error);
             }
         });
+    }
+
+    @Override
+    public void captionClicked(View v, int position, List<String> fitbs) {
+        final String beforeBlank = fitbs.get(0);
+        final String afterBlank = fitbs.get(2);
+        final String placeHolder = "______";
+
+        if (mCurrentCaptionState != CaptionState.Typed && mCurrentCaptionState != CaptionState.Typed_Empty) {
+            mPreviousCaptionState = mCurrentCaptionState;
+        }
+
+        if (mCurrentCaptionState == CaptionState.Typed) {
+            mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    R.drawable.ic_add_white_24dp));
+            rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+        }
+
+        if (mTextWatcher != null) {
+            mFitBEditTextField.removeTextChangedListener(mTextWatcher);
+        }
+
+        mFitBEditTextField.setText("");
+        mCurrentCaptionState = CaptionState.Typed_Empty;
+        mCurrentCaption = position;
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mFitBEditTextLayout.setVisibility(View.VISIBLE);
+        mFitBEditTextField.setHint(getString(R.string.fitb));
+        mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
+        mFitBEditTextField.requestFocus();
+
+        mTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mFitBEditTextLayout.setHint(beforeBlank + s + afterBlank);
+
+                if (!s.toString().replaceAll("\\s+","").isEmpty()) {
+                    if (mCurrentCaptionState != CaptionState.Typed) {
+                        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                                R.drawable.ic_check_white_24dp));
+                        rotateIcon(REVERSE_FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+                    }
+
+                    mCurrentCaptionState = CaptionState.Typed;
+                }
+                else {
+                    if (mCurrentCaptionState != CaptionState.Typed_Empty) {
+                        mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                                R.drawable.ic_add_white_24dp));
+                        rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
+                    }
+
+                    mFitBEditTextLayout.setHint(beforeBlank + placeHolder + afterBlank);
+                    mCurrentCaptionState = CaptionState.Typed_Empty;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        mFitBEditTextField.addTextChangedListener(mTextWatcher);
+
+        imm.showSoftInput(mFitBEditTextField, InputMethodManager.SHOW_IMPLICIT);
+
+        if (mSwitchCaptionTitles.getCurrentView() != mSwitchFitBEntry) {
+            mSwitchCaptionTitles.showNext();
+        }
+    }
+
+    private void showRecyclerViewHideProgress() {
+        mCaptionView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void showProgressHideRecyclerView() {
+        mCaptionView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showFitBCaptions(List<FitBCaption> captions) {
+        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
+        mCaptionView.setAdapter(mFitBAdapter);
+        mFitBAdapter.setCaptions(captions);
+        showRecyclerViewHideProgress();
+    }
+
+    @Override
+    public void showRandomCaptions(List<FitBCaption> captions) {
+        mFitBAdapter.setCaptions(captions);
+        mFitBAdapter.notifyDataSetChanged();
+        showRecyclerViewHideProgress();
+    }
+
+    @Override
+    public void showCaptionSets(List<CaptionSet> captionSets) {
+        mCaptionSetAdapter.setCaptionSets(captionSets);
+        showRecyclerViewHideProgress();
+    }
+
+    @Override
+    public void captionSetClicked(View v, int setId, int position) {
+        mCaptionChooserTitle.setText(mCaptionSetAdapter.getSetName(position));
+        mPresenter.loadFitBCaptions(setId);
+        showProgressHideRecyclerView();
     }
 }

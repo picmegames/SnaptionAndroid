@@ -1,62 +1,93 @@
 package com.snaptiongame.app.presentation.view.game;
 
-import android.graphics.drawable.Drawable;
+import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.FitBCaption;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by nickromero on 2/7/17.
  */
 
-public class FITBCaptionAdapter extends BaseAdapter {
+/**
+ * A FITBCaptionAdapter is used by the the FITB Dialog View to display sets of empty captions.
+ */
+public class FITBCaptionAdapter extends RecyclerView.Adapter {
     private List<FitBCaption> mCaptions;
     private CaptionContract.CaptionClickListener mCaptionClickListener;
-    private LayoutInflater mInflater;
-    private Drawable mOriginalBackground;
-    private List<Boolean> areCardsChecked;
+    private FitBCaption mSelectedCaption;
 
-    public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener,
-                              LayoutInflater inflater) {
+    private static final int RESTING_ELEVATION = 2;
+    private static final int SELECTED_ELEVATION = 8;
+
+    public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener) {
         mCaptions = captions;
-        areCardsChecked = new ArrayList<>();
-
-        for (int i = 0; i < captions.size(); i++)
-            areCardsChecked.add(false);
-
         mCaptionClickListener = captionClickListener;
-        mInflater = inflater;
     }
 
     public void setCaptions(List<FitBCaption> captions) {
         this.mCaptions = captions;
-        areCardsChecked = new ArrayList<>();
-        for (int i = 0; i < captions.size(); i++)
-            areCardsChecked.add(false);
         notifyDataSetChanged();
+    }
+
+    public void resetCaption() {
+        notifyItemChanged(mCaptions.indexOf(mSelectedCaption));
+        mSelectedCaption = null;
     }
 
     public FitBCaption getCaption(int index) {
         return mCaptions.get(index);
     }
 
-
     @Override
-    public int getCount() {
-        return mCaptions.size();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fitb_caption_card, parent, false);
+        return new FITBCaptionCardViewHolder(view);
     }
 
     @Override
-    public Object getItem(int position) {
-        return mCaptions.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        FITBCaptionCardViewHolder holder = (FITBCaptionCardViewHolder) viewHolder;
+        FitBCaption curCaption = mCaptions.get(position);
+
+        String fitbText = curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank;
+        ArrayList<String> fitbs = new ArrayList<>(
+                Arrays.asList(curCaption.beforeBlank,
+                        curCaption.placeholderText,
+                        curCaption.afterBlank)
+        );
+
+        holder.mCaptionTemplateTextView.setText(fitbText);
+
+        holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
+
+        holder.mFitBCaptionCard.setOnClickListener(v -> {
+            mCaptionClickListener.captionClicked(v, holder.getAdapterPosition(), fitbs);
+            int oldSelectedCaptionPos = mCaptions.indexOf(mSelectedCaption);
+            mSelectedCaption = curCaption;
+            notifyItemChanged(oldSelectedCaptionPos);
+            notifyItemChanged(position);
+        });
+
+        if (curCaption.equals(mSelectedCaption)) {
+            holder.mFitBCaptionCard.setCardElevation(TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, SELECTED_ELEVATION, holder.mFitBCaptionCard.getContext()
+                            .getResources().getDisplayMetrics()));
+        }
+        else {
+            holder.mFitBCaptionCard.setCardElevation(TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, RESTING_ELEVATION, holder.mFitBCaptionCard.getContext()
+                            .getResources().getDisplayMetrics()));
+        }
     }
 
     @Override
@@ -65,35 +96,17 @@ public class FITBCaptionAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null)
-            view = mInflater.inflate(R.layout.fitb_caption_card, parent, false);
+    public int getItemCount() {
+        return mCaptions.size();
+    }
 
-        view.setSelected(true);
-        FitBCaption curCaption = mCaptions.get(position);
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
 
-
-        TextView fitbText = (TextView) view.findViewById(R.id.fitb_caption_card_text);
-        fitbText.setText(curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank);
-        TextView curFITB = (TextView) view.findViewById(R.id.cur_fitb);
-        curFITB.setText((position + 1) + "/" + mCaptions.size());
-
-        view.setTag(position);
-
-        view.findViewById(R.id.fitb_caption_card).setOnClickListener(v -> {
-            mCaptionClickListener.captionClicked(v, position);
-
-            if (!areCardsChecked.get(position)) {
-                mOriginalBackground = v.getBackground();
-                v.setBackgroundResource(R.drawable.card_border_color_pink);
-                areCardsChecked.set(position, true);
-            }
-            else {
-                v.setBackground(mOriginalBackground);
-                areCardsChecked.set(position, false);
-            }
-        });
-        return view;
+    public void clearCaptions() {
+        mCaptions.clear();
+        notifyDataSetChanged();
     }
 }

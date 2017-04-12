@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.snaptiongame.app"
           android:installLocation="auto">
@@ -38,7 +39,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarTheme"
             android:windowSoftInputMode="adjustPan">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -87,11 +87,11 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:scheme="https"
-                    android:host="snaption.app.link"/>
+                    android:host="snaption.app.link"
+                    android:scheme="https"/>
                 <data
-                    android:scheme="https"
-                    android:host="snaption.test-app.link"/>
+                    android:host="snaption.test-app.link"
+                    android:scheme="https"/>
             </intent-filter>
 
             <meta-data
@@ -99,23 +99,21 @@
                 android:value="com.snaptiongame.app.presentation.view.main.MainActivity"/>
         </activity>
 
-        <activity android:name=".presentation.view.photo.ImmersiveActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="adjustPan"
-                  android:theme="@style/ImmersiveTheme"/>
+        <activity
+            android:name=".presentation.view.photo.ImmersiveActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImmersiveTheme"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data android:scheme="@string/fb_login_protocol_scheme"/>
             </intent-filter>
         </activity>
@@ -125,25 +123,25 @@
             android:authorities="com.facebook.app.FacebookContentProvider359612531056210"
             android:exported="true"/>
 
-        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+        <receiver
+            android:name="io.branch.referral.InstallListener"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
 
-        <!--<service-->
-        <!--android:name=".data.services.GameUploadService"-->
-        <!--android:exported="false"/>-->
+        <!-- <service -->
+        <!-- android:name=".data.services.GameUploadService" -->
+        <!-- android:exported="false"/> -->
 
-        <service
-            android:name=".data.services.notifications.NotificationService">
+        <service android:name=".data.services.notifications.NotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
-        <service
-            android:name=".data.services.notifications.IdentificationService">
+        <service android:name=".data.services.notifications.IdentificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

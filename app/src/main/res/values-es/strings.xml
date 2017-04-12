@@ -76,4 +76,12 @@
     <string name="emoji_error">Las etiquetas no pueden contener emojis</string>
     <string name="compression_error">No se pudo comprimir la imagen</string>
     <string name="upload_error">No se pudo subir el juego</string>
+    <string name="empty_caption">Nada entró para el subtítulo.</string>
+    <string name="join_snaption">¡Únete a Snaption!</string>
+    <string name="fitb">¡Llena el espacio en blanco!</string>
+    <string name="snaption_description">
+Competir para crear el mejor subtítulo para una foto rellenando el espacio en blanco en un subtítulo con la palabra o la frase de su opción</string>
+    <string name="random_captions">Leyendas aleatorias</string>
+    <string name="caption_sets">Conjuntos de Subtítulos</string>
+
 </resources>

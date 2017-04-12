@@ -29,17 +29,17 @@ import timber.log.Timber;
  */
 
 public class GamePresenter implements GameContract.Presenter {
+
     @NonNull
     private GameContract.View mGameView;
     @NonNull
     private CompositeDisposable mDisposables;
-    @NonNull
-    private GameContract.CaptionDialogView mGameDialogView;
 
     private int mGameId;
     private int mPickerId;
     private List<FitBCaption> mCaptions;
 
+    public static final int MAX_FITBS_SHOWN = 8;
 
     public GamePresenter(int gameId, int pickerId, @NonNull GameContract.View view) {
         mGameId = gameId;
@@ -47,16 +47,7 @@ public class GamePresenter implements GameContract.Presenter {
         mGameView = view;
         mDisposables = new CompositeDisposable();
         mGameView.setPresenter(this);
-    }
-
-    public GamePresenter(int gameId, @NonNull GameContract.CaptionDialogView view) {
-        mGameId = gameId;
-        mDisposables = new CompositeDisposable();
-        mGameDialogView = view;
-        mGameDialogView.setPresenter(this);
-    }
-
-    public void loadGame(int gameId) {
+        mCaptions = new ArrayList<>();
     }
 
     @Override
@@ -106,8 +97,11 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Timber.i("Added caption"),
-                        Timber::e
+                        this::loadCaptions,
+                        e -> {
+                            Timber.e(e);
+                            mGameView.setRefreshing(false);
+                        }
                 );
         mDisposables.add(disposable);
     }
@@ -117,12 +111,11 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.getCaptionSets()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameDialogView::showCaptionSets,
+                        mGameView::showCaptionSets,
                         Timber::e,
                         () -> Timber.i("Loading caption sets worked")
                 );
         mDisposables.add(disposable);
-
     }
 
     @Override
@@ -130,7 +123,7 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.getFitBCaptions(setId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameDialogView::showFitBCaptions,
+                        mGameView::showFitBCaptions,
                         Timber::e,
                         () -> Timber.i("Successfully got Fitb's!")
                 );
@@ -156,27 +149,29 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     private void buildRandomCaptions(List<FitBCaption> captions) {
-
         Random random = new Random();
         List<FitBCaption> randomCaptions = new ArrayList<>();
 
-        for (int i = 0; i < 6; i++) {
-            int nextCaption = random.nextInt(captions.size());
-
-            randomCaptions.add(captions.get(nextCaption));
-            captions.remove(nextCaption);
+        for (int i = 0; i < MAX_FITBS_SHOWN; i++) {
+            if (!captions.isEmpty()) {
+                int nextCaption = random.nextInt(captions.size());
+                randomCaptions.add(captions.remove(nextCaption));
+            }
         }
-        mGameDialogView.showRandomCaptions(randomCaptions);
+
+        mGameView.showRandomCaptions(randomCaptions);
     }
 
     private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
         if (start == numSets) {
-            mCaptions = captions;
-            List<FitBCaption> tempList = new ArrayList<>(captions);
-
-            buildRandomCaptions(tempList);
+            buildRandomCaptions(mCaptions);
         }
         else {
+            if (start == 0)
+                mCaptions = new ArrayList<>();
+            for (FitBCaption c : captions) {
+                mCaptions.add(c);
+            }
             final int nextStart = ++start;
             Disposable disposable = CaptionProvider.getFitBCaptions(start)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -214,9 +209,5 @@ public class GamePresenter implements GameContract.Presenter {
     @Override
     public void unsubscribe() {
         mDisposables.clear();
-    }
-
-    public void loadGame() {
-
     }
 }

@@ -33,10 +33,13 @@ public class CaptionTest {
     public void testEqualsCaptionTrue() {
         Caption caption1 = new Caption(32, "I'm a caption");
         caption1.numVotes = 200;
+        caption1.creatorName = "hi";
+        caption1.creatorPicture = "http://url.com";
         Caption caption2 = new Caption(32, "I'm a caption");
         caption2.numVotes = 200;
+        caption2.creatorName = "hi";
+        caption2.creatorPicture = "http://url.com";
         assertTrue(caption1.equals(caption2));
-
     }
 
     @Test

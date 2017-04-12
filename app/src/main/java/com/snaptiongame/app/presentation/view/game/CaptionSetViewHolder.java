@@ -20,8 +20,6 @@ public class CaptionSetViewHolder extends RecyclerView.ViewHolder {
     TextView mSetName;
     @BindView(R.id.set_image)
     ImageView mSetImage;
-    @BindView(R.id.set_count)
-    TextView sSetCount;
 
     public Context mContext;
 

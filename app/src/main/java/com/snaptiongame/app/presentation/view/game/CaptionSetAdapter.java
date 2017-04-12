@@ -15,15 +15,17 @@ import java.util.List;
  */
 
 public class CaptionSetAdapter extends RecyclerView.Adapter {
-    public static final float NON_ACTIVE_SET_FADE = .25f;
+
     private List<CaptionSet> mSets;
     private CaptionContract.CaptionSetClickListener mCaptionSetClickListener;
+
+    private static final float NO_ALPHA = 1.0f;
+    private static final float NON_ACTIVE_SET_FADE = .25f;
 
     public CaptionSetAdapter(List<CaptionSet> sets, CaptionContract.CaptionSetClickListener captionSetClickListener) {
         mSets = sets;
         mCaptionSetClickListener = captionSetClickListener;
     }
-
 
     @Override
     public CaptionSetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,13 +41,20 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
         CaptionSet curSet = mSets.get(position);
         setViewHolder.mSetName.setText(curSet.getSetName());
         setViewHolder.mSetImage.setImageResource(R.drawable.snaption_logo);
-        setViewHolder.sSetCount.setText(mSets.get(position).getCaptionsUnlocked() + "/" +
-                mSets.get(position).getTotalCaptions());
-        if (!curSet.isCaptionSetActive)
+
+        if (!curSet.isCaptionSetActive) {
             holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
+        }
+        else {
+            holder.itemView.setAlpha(NO_ALPHA);
+        }
 
         setViewHolder.itemView.setOnClickListener(v ->
-                mCaptionSetClickListener.captionSetClicked(v, setViewHolder.getAdapterPosition()));
+                mCaptionSetClickListener.captionSetClicked(v, curSet.id, position));
+    }
+
+    public String getSetName(int position) {
+        return mSets.get(position).getSetName();
     }
 
     @Override
@@ -54,16 +63,12 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
     }
 
     public void setCaptionSets(List<CaptionSet> captionSets) {
-        mSets.clear();
         mSets = captionSets;
         notifyDataSetChanged();
-
     }
 
     @Override
     public int getItemCount() {
         return mSets.size();
     }
-
-
 }

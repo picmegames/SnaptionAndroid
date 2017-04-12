@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.presentation.view.customviews.SpacesItemDecoration;
+import com.snaptiongame.app.presentation.view.customviews.WallSpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class WallFragment extends Fragment implements WallContract.View {
         mPresenter = new WallPresenter(this, mUserId, mType);
 
         mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
-        mWall.addItemDecoration(new SpacesItemDecoration(
+        mWall.addItemDecoration(new WallSpacesItemDecoration(
                 getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
         mWall.setHasFixedSize(true);
 
