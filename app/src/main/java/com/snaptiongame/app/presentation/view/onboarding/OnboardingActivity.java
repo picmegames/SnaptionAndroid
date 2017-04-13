@@ -40,15 +40,12 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private List<OnboardingInfo> mOnboardingInfo;
     private SharedPreferences mPreferences;
-
-    private int originalWidth;
     private boolean isLastPage = false;
 
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
 
     private static final float FULL_ROTATION = 360.0f;
     private static final float REVERSE_FULL_ROTATION = 0.0f;
-    private static final long SHORT_RESIZE_DURATION = 300;
     private static final long LONG_ROTATION_DURATION = 1000;
     private static final int BUTTON_ALPHA = 72;
 
@@ -68,12 +65,10 @@ public class OnboardingActivity extends AppCompatActivity {
             mNextDoneButton.getBackground().setAlpha(BUTTON_ALPHA);
             mSkipPrevButton.getBackground().setAlpha(BUTTON_ALPHA);
 
-            originalWidth = mSkipPrevButton.getWidth();
-
             mOnboardingInfo = new ArrayList<>();
-            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.drawable.snaption_icon));
-            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.drawable.snaption_icon));
-            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.drawable.snaption_icon));
+            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.mipmap.ic_launcher));
+            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.mipmap.ic_launcher));
+            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.mipmap.ic_launcher));
 
             mViewPager.setAdapter(new OnboardingPagerAdapter(getSupportFragmentManager(), mOnboardingInfo));
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
