@@ -66,9 +66,9 @@ public class OnboardingActivity extends AppCompatActivity {
             mSkipPrevButton.getBackground().setAlpha(BUTTON_ALPHA);
 
             mOnboardingInfo = new ArrayList<>();
-            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.mipmap.ic_launcher));
-            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.mipmap.ic_launcher));
-            mOnboardingInfo.add(new OnboardingInfo(R.string.app_name, R.string.snaption_description, R.mipmap.ic_launcher));
+            mOnboardingInfo.add(new OnboardingInfo(R.string.title_1, R.string.desc_1, R.string.anim_1));
+            mOnboardingInfo.add(new OnboardingInfo(R.string.title_2, R.string.desc_2, R.string.anim_2));
+            mOnboardingInfo.add(new OnboardingInfo(R.string.title_3, R.string.desc_3, R.string.anim_3));
 
             mViewPager.setAdapter(new OnboardingPagerAdapter(getSupportFragmentManager(), mOnboardingInfo));
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

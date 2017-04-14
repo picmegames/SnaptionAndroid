@@ -126,6 +126,7 @@ gotten the project to build successfully!
 * [facebook/facebook-android-sdk](https://github.com/facebook/facebook-android-sdk)
 * [bumptech/glide](https://github.com/bumptech/glide)
 * [wasabeef/glide-transformations](https://github.com/wasabeef/glide-transformations)
+* [airbnb/lottie-android](https://github.com/airbnb/lottie-android)
 * [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs)
 * [hootsuite/nachos](https://github.com/hootsuite/nachos)
 * [square/okhttp](https://github.com/square/okhttp)

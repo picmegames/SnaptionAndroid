@@ -91,5 +91,11 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="clear_cache_fail">Error al borrar la memoria caché</string>
     <string name="clear_cache_success">Caché correctamente eliminado</string>
     <string name="current_size">Tamaño Actual: %1$s</string>
+    <string name="desc_1">Elige cualquier imagen de tu teléfono para iniciar un juego.</string>
+    <string name="desc_2">Elija entre las plantillas existentes para crear el mejor título para la foto.</string>
+    <string name="desc_3">Invite a amigos a su juego para que puedan subtítulos también. ¡Vote por sus subtítulos favoritos y gane el más votado!</string>
+    <string name="title_1">Publicar fotos.\nCuanto más divertido, mejor.</string>
+    <string name="title_2">Añadir subtítulos.</string>
+    <string name="title_3">Jugar con amigos.\n¡Comparte los memes con todo el mundo!</string>
 
 </resources>

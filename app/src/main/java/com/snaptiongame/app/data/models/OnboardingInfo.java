@@ -7,16 +7,15 @@ package com.snaptiongame.app.data.models;
 public class OnboardingInfo {
     public int titleId;
     public int descriptionId;
-    public int drawableId;
+    public int animationId;
 
     public static final String TITLE_ID = "title";
     public static final String DESCRIPTION_ID = "description";
-    public static final String DRAWABLE_ID = "drawableId";
-    public static final String IMAGE_PATH = "imagePath";
+    public static final String ANIMATION = "animation";
 
-    public OnboardingInfo(int titleId, int descriptionId, int drawableId) {
+    public OnboardingInfo(int titleId, int descriptionId, int animationId) {
         this.titleId = titleId;
         this.descriptionId = descriptionId;
-        this.drawableId = drawableId;
+        this.animationId = animationId;
     }
 }

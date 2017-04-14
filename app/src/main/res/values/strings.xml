@@ -1,6 +1,23 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Snaption</string>
+    <string name="welcome_message">Welcome to Snaption!</string>
+    <string name="add_caption">Add a Caption</string>
+    <string name="update_info">Update Information</string>
+    <string name="filter_games_title">Filter by Tags</string>
+    <string name="random_captions">Random Captions</string>
+    <string name="caption_sets">Caption Sets</string>
+
+    <!-- Onboarding -->
+    <string name="anim_1" translatable="false">tada_image.json</string>
+    <string name="title_1">Post photos.\nThe funnier the better.</string>
+    <string name="desc_1">Choose any picture from your phone to start a game.</string>
+    <string name="anim_2" translatable="false">mail_sent.json</string>
+    <string name="title_2">Add captions.</string>
+    <string name="desc_2">Choose from existing templates to make the best caption for the photo.</string>
+    <string name="anim_3" translatable="false">emoji_tongue.json</string>
+    <string name="title_3">Play with friends.\nShare the memes with everyone!</string>
+    <string name="desc_3">Invite friends to your game so they can caption as well. Vote for your favorite captions and the highest voted one wins!</string>
 
     <!-- Tags -->
     <string name="open_drawer" translatable="false">Navigation View Open</string>
@@ -11,14 +28,6 @@
     <string name="toolbar_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ToolbarScrollBehavior</string>
     <string name="fab_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior</string>
     <string name="bottom_nav_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.BottomNavigationScrollBehavior</string>
-
-    <!-- Titles -->
-    <string name="welcome_message">Welcome to Snaption!</string>
-    <string name="add_caption">Add a Caption</string>
-    <string name="update_info">Update Information</string>
-    <string name="filter_games_title">Filter by Tags</string>
-    <string name="random_captions">Random Captions</string>
-    <string name="caption_sets">Caption Sets</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>

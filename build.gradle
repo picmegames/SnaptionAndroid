@@ -61,6 +61,7 @@ ext {
     facebookSdkVersion = '4.21.1'
     glideVersion = '3.7.0'
     glideTransformationsVersion = '2.0.2'
+    lottieVersion = '2.0.0-beta4'
     materialDialogsVersion = '0.9.4.3'
     nachosVersion = '1.1.0'
     okHttpVersion = '3.6.0'

@@ -6,9 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.OnboardingInfo;
 
@@ -25,8 +25,8 @@ public class OnboardingInfoFragment extends Fragment {
     TextView mTitleText;
     @BindView(R.id.description)
     TextView mDescriptionText;
-    @BindView(R.id.image)
-    ImageView mImage;
+    @BindView(R.id.animation_view)
+    LottieAnimationView mAnimationView;
 
     private Unbinder unbinder;
 
@@ -35,7 +35,7 @@ public class OnboardingInfoFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt(OnboardingInfo.TITLE_ID, info.titleId);
         args.putInt(OnboardingInfo.DESCRIPTION_ID, info.descriptionId);
-        args.putInt(OnboardingInfo.DRAWABLE_ID, info.drawableId);
+        args.putInt(OnboardingInfo.ANIMATION, info.animationId);
         frag.setArguments(args);
         return frag;
     }
@@ -51,7 +51,9 @@ public class OnboardingInfoFragment extends Fragment {
 
         mTitleText.setText(getString(args.getInt(OnboardingInfo.TITLE_ID)));
         mDescriptionText.setText(getString(args.getInt(OnboardingInfo.DESCRIPTION_ID)));
-        mImage.setImageResource(args.getInt(OnboardingInfo.DRAWABLE_ID));
+        mAnimationView.setAnimation(getString(args.getInt(OnboardingInfo.ANIMATION)));
+        mAnimationView.loop(true);
+        mAnimationView.playAnimation();
 
         return view;
     }
