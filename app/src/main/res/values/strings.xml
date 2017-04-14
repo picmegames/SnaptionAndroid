@@ -78,6 +78,8 @@
     <string name="next">Next</string>
     <string name="done">Done</string>
     <string name="previous">Previous</string>
+    <string name="delete_cache">Delete Cache</string>
+    <string name="cache_success">Successfully deleted cache</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

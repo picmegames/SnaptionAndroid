@@ -87,5 +87,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="next">Siguiente</string>
     <string name="done">Hecho</string>
     <string name="previous">Anterior</string>
+    <string name="delete_cache">Eliminar Caché</string>
 
 </resources>

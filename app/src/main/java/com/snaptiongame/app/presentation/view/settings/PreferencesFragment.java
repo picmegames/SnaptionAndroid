@@ -6,22 +6,28 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.auth.AuthManager;
+import com.snaptiongame.app.data.utils.CacheUtils;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
-import com.snaptiongame.app.presentation.view.main.MainActivity;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
  * @author Tyler Wong
  */
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
-    private Preference mVersionPreference;
+    private Preference mCachePreference;
     private Preference mLogoutPreference;
+    private Preference mVersionPreference;
 
     private AuthManager mAuthManager;
     private boolean mListStyled = false;
@@ -37,7 +43,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             list = (ListView) rootView.findViewById(android.R.id.list);
         }
         if (list != null) {
-            list.setDivider(null);
+            list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
         }
 
         PackageInfo packageInfo = null;
@@ -52,9 +58,14 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         addPreferencesFromResource(R.xml.preferences);
 
-        mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_label));
+        mCachePreference = getPreferenceScreen().findPreference(getString(R.string.delete_cache));
+        mCachePreference.setOnPreferenceClickListener(this);
+        mCachePreference.setSummary(String.valueOf(CacheUtils.getCacheSize()));
+
+
         mLogoutPreference = getPreferenceScreen().findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
+        mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_label));
 
         updateLoginField();
 
@@ -83,7 +94,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             if (rootView != null) {
                 ListView list = (ListView) rootView.findViewById(android.R.id.list);
                 list.setPadding(0, 0, 0, 0);
-                list.setDivider(null);
+                list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
                 mListStyled = true;
             }
         }
@@ -92,11 +103,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private void goToLogin() {
         Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
         startActivity(loginIntent);
-    }
-
-    private void goToMain() {
-        Intent mainIntent = new Intent(getActivity(), MainActivity.class);
-        startActivity(mainIntent);
     }
 
     @Override
@@ -108,6 +114,15 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             }
             goToLogin();
             getActivity().finish();
+        }
+        else if(preference.getKey().equals(getString(R.string.delete_cache))) {
+            CacheUtils.clearCache()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                        Toast.makeText(SnaptionApplication.getContext(), getString(R.string.cache_success), Toast.LENGTH_LONG).show();
+                        mCachePreference.setSummary(String.valueOf(CacheUtils.getCacheSize()));
+                    }, Timber::e);
         }
         return true;
     }
