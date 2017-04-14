@@ -58,23 +58,27 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         addPreferencesFromResource(R.xml.preferences);
 
-        mCachePreference = getPreferenceScreen().findPreference(getString(R.string.delete_cache));
+        mCachePreference = getPreferenceScreen().findPreference(getString(R.string.clear_cache));
         mCachePreference.setOnPreferenceClickListener(this);
-        mCachePreference.setSummary(String.valueOf(CacheUtils.getCacheSize()));
-
 
         mLogoutPreference = getPreferenceScreen().findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
         mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_label));
 
-        updateLoginField();
+        updateCacheSummary();
+        updateLoginSummary();
 
         if (packageInfo != null) {
             mVersionPreference.setSummary(packageInfo.versionName);
         }
     }
 
-    protected void updateLoginField() {
+    private void updateCacheSummary() {
+        mCachePreference.setSummary(
+                String.format(getString(R.string.current_size), CacheUtils.getCacheSize()));
+    }
+
+    private void updateLoginSummary() {
         if (AuthManager.isLoggedIn()) {
             mLogoutPreference.setTitle(R.string.log_out_label);
             mLogoutPreference.setSummary(String.format(getString(R.string.current_login),
@@ -98,6 +102,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 mListStyled = true;
             }
         }
+        updateCacheSummary();
     }
 
     private void goToLogin() {
@@ -110,19 +115,23 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
             if (AuthManager.isLoggedIn()) {
                 mAuthManager.logout();
-                updateLoginField();
+                updateLoginSummary();
             }
             goToLogin();
             getActivity().finish();
         }
-        else if(preference.getKey().equals(getString(R.string.delete_cache))) {
+        else if (preference.getKey().equals(getString(R.string.clear_cache))) {
             CacheUtils.clearCache()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> {
-                        Toast.makeText(SnaptionApplication.getContext(), getString(R.string.cache_success), Toast.LENGTH_LONG).show();
-                        mCachePreference.setSummary(String.valueOf(CacheUtils.getCacheSize()));
-                    }, Timber::e);
+                                Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_success), Toast.LENGTH_LONG).show();
+                                mCachePreference.setSummary(String.valueOf(CacheUtils.getCacheSize()));
+                            },
+                            e -> {
+                                Timber.e(e);
+                                Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_fail), Toast.LENGTH_LONG).show();
+                            });
         }
         return true;
     }

@@ -3,6 +3,7 @@ package com.snaptiongame.app.data.utils;
 import com.snaptiongame.app.SnaptionApplication;
 
 import java.io.File;
+import java.util.Locale;
 
 import io.reactivex.Completable;
 import timber.log.Timber;
@@ -13,8 +14,10 @@ import timber.log.Timber;
 
 public class CacheUtils {
 
-    private static final long MB = 1000;
-    private static final String MEGABYTES = " MB";
+    private static final long MB = 1024;
+    private static final String SIZE_FORMAT = "%.1f %sB";
+    private static final String PREFIX = "KMGTPE";
+    private static final String BYTE = " B";
 
     public static Completable clearCache() {
         return Completable.defer(CacheUtils::deleteCache);
@@ -22,13 +25,33 @@ public class CacheUtils {
 
     public static String getCacheSize() {
         long size = 0;
-        File[] files = SnaptionApplication.getContext().getCacheDir().listFiles();
+        size += getDirSize(SnaptionApplication.getContext().getCacheDir());
+        size += getDirSize(SnaptionApplication.getContext().getExternalCacheDir());
+        return humanReadableByteCount(size);
+    }
 
-        for (File file : files) {
-            size += file.length();
+    private static long getDirSize(File dir) {
+        long size = 0;
+
+        for (File file : dir.listFiles()) {
+            if (file != null && file.isDirectory()) {
+                size += getDirSize(file);
+            }
+            else if (file != null && file.isFile()) {
+                size += file.length();
+            }
         }
 
-        return String.valueOf((float) size / (float) MB) + MEGABYTES;
+        return size;
+    }
+
+    private static String humanReadableByteCount(long bytes) {
+        if (bytes < MB) {
+            return bytes + BYTE;
+        }
+        int exp = (int) (Math.log(bytes) / Math.log(MB));
+        char pre = PREFIX.charAt(exp - 1);
+        return String.format(Locale.US, SIZE_FORMAT, bytes / Math.pow(MB, exp), pre);
     }
 
     private static Completable deleteCache() {

@@ -78,8 +78,10 @@
     <string name="next">Next</string>
     <string name="done">Done</string>
     <string name="previous">Previous</string>
-    <string name="delete_cache">Delete Cache</string>
-    <string name="cache_success">Successfully deleted cache</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="clear_cache_success">Successfully cleared cache</string>
+    <string name="clear_cache_fail">Failed to clear cache</string>
+    <string name="current_size">Current Size: %1$s</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
