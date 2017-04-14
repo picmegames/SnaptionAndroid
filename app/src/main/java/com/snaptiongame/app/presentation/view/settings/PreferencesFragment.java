@@ -13,29 +13,31 @@ import android.widget.Toast;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
-import com.snaptiongame.app.data.auth.AuthManager;
-import com.snaptiongame.app.data.utils.CacheUtils;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
  * @author Tyler Wong
  */
-public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class PreferencesFragment extends PreferenceFragment implements PreferencesContract.View,
+        Preference.OnPreferenceClickListener {
     private Preference mCachePreference;
     private Preference mLogoutPreference;
     private Preference mVersionPreference;
 
-    private AuthManager mAuthManager;
+    private PreferencesContract.Presenter mPresenter;
+
     private boolean mListStyled = false;
+
+    public static PreferencesFragment newInstance() {
+        return new PreferencesFragment();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthManager = AuthManager.getInstance();
+        mPresenter = new PreferencesPresenter(this);
 
         View rootView = getView();
         ListView list = null;
@@ -65,29 +67,45 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         mLogoutPreference.setOnPreferenceClickListener(this);
         mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_label));
 
-        updateCacheSummary();
-        updateLoginSummary();
-
         if (packageInfo != null) {
             mVersionPreference.setSummary(packageInfo.versionName);
         }
+
+        mPresenter.subscribe();
     }
 
-    private void updateCacheSummary() {
+    @Override
+    public void updateCacheSummary(String cacheSize) {
         mCachePreference.setSummary(
-                String.format(getString(R.string.current_size), CacheUtils.getCacheSize()));
+                String.format(getString(R.string.current_size), cacheSize));
     }
 
-    private void updateLoginSummary() {
-        if (AuthManager.isLoggedIn()) {
+    @Override
+    public void clearCacheSuccess() {
+        Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_success), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void clearCacheFailure() {
+        Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_fail), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void updateLoginSummary() {
+        if (mPresenter.isLoggedIn()) {
             mLogoutPreference.setTitle(R.string.log_out_label);
             mLogoutPreference.setSummary(String.format(getString(R.string.current_login),
-                    AuthManager.getUsername()));
+                    mPresenter.getUsername()));
         }
         else {
             mLogoutPreference.setTitle(R.string.log_in_label);
             mLogoutPreference.setSummary("");
         }
+    }
+
+    @Override
+    public void setPresenter(PreferencesContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
     @Override
@@ -102,37 +120,30 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 mListStyled = true;
             }
         }
-        updateCacheSummary();
+        mPresenter.subscribe();
     }
 
-    private void goToLogin() {
+    @Override
+    public void goToLogin() {
         Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
         startActivity(loginIntent);
+        getActivity().finish();
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
-            if (AuthManager.isLoggedIn()) {
-                mAuthManager.logout();
-                updateLoginSummary();
-            }
-            goToLogin();
-            getActivity().finish();
+            mPresenter.logout();
         }
         else if (preference.getKey().equals(getString(R.string.clear_cache))) {
-            CacheUtils.clearCache()
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                                Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_success), Toast.LENGTH_LONG).show();
-                                mCachePreference.setSummary(String.valueOf(CacheUtils.getCacheSize()));
-                            },
-                            e -> {
-                                Timber.e(e);
-                                Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_fail), Toast.LENGTH_LONG).show();
-                            });
+            mPresenter.clearCache();
         }
         return true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.unsubscribe();
     }
 }
