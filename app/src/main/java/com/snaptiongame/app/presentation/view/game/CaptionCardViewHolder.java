@@ -20,6 +20,7 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.CaptionProvider;
+import com.snaptiongame.app.data.utils.ItemListener;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 
@@ -49,6 +50,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     public Context mContext;
     public View mView;
+    private ItemListener mListener;
 
     public String imageUrl;
     public String username;
@@ -57,11 +59,12 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     public boolean isFlagged = false;
     public int captionId;
 
-    public CaptionCardViewHolder(View itemView) {
+    public CaptionCardViewHolder(View itemView, ItemListener listener) {
         super(itemView);
         mContext = itemView.getContext();
         mView = itemView;
         ButterKnife.bind(this, itemView);
+        mListener = listener;
 
         mUpvote.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
@@ -158,6 +161,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void upvoteCaption(int captionId, boolean isUpvoted) {
+        mListener.updateUpvote(isUpvoted, getAdapterPosition());
         CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isUpvoted, GameAction.UPVOTE, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -167,6 +171,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void flagCaption(int captionId, boolean isFlagged) {
+        mListener.updateFlag(isFlagged, getAdapterPosition());
         CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isFlagged, GameAction.FLAGGED, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

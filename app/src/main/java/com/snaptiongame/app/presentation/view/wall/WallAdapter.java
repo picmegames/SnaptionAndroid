@@ -18,6 +18,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.data.utils.ItemListener;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 
 public class WallAdapter extends RecyclerView.Adapter {
     private List<Game> mGames;
+    private final ItemListener mCallback;
 
     private int lastPosition = -1;
     private long currentTime;
@@ -37,13 +39,25 @@ public class WallAdapter extends RecyclerView.Adapter {
 
     public WallAdapter(List<Game> snaptions) {
         this.mGames = snaptions;
+
+        mCallback = new ItemListener() {
+            @Override
+            public void updateUpvote(boolean value, int index) {
+                mGames.get(index).beenUpvoted = value;
+            }
+
+            @Override
+            public void updateFlag(boolean value, int index) {
+                mGames.get(index).beenFlagged = value;
+            }
+        };
     }
 
     @Override
     public GameCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.game_card, parent, false);
-        return new GameCardViewHolder(view);
+        return new GameCardViewHolder(view, mCallback);
     }
 
     @Override
@@ -123,6 +137,14 @@ public class WallAdapter extends RecyclerView.Adapter {
             currentTime = System.currentTimeMillis() / MILLIS;
             notifyDataSetChanged();
         }
+    }
+
+    protected void updateUpvote(boolean upvoted, int index) {
+        mGames.get(index).beenUpvoted = upvoted;
+    }
+
+    protected void updateFlagged(boolean flagged, int index) {
+        mGames.get(index).beenFlagged = flagged;
     }
 
     @Override

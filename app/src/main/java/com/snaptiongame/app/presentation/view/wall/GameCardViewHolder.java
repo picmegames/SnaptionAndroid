@@ -23,6 +23,7 @@ import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
+import com.snaptiongame.app.data.utils.ItemListener;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
@@ -57,6 +58,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public Context mContext;
     public PopupMenu mMenu;
     public View mView;
+    private ItemListener mListener;
+
 
     public int mGameId;
     public int mPickerId;
@@ -65,11 +68,12 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public boolean isUpvoted = false;
     public boolean isFlagged = false;
 
-    public GameCardViewHolder(View itemView) {
+    public GameCardViewHolder(View itemView, ItemListener listener) {
         super(itemView);
         mContext = itemView.getContext();
         mView = itemView;
         ButterKnife.bind(this, itemView);
+        mListener = listener;
 
         mMenu = new PopupMenu(mContext, itemView);
         mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
@@ -216,6 +220,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void upvoteGame(int gameId, boolean isUpvoted) {
+        mListener.updateUpvote(isUpvoted, getAdapterPosition());
         GameProvider.upvoteOrFlagGame(new GameAction(gameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -225,6 +230,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void flagGame(int gameId, boolean isFlagged) {
+        mListener.updateFlag(isFlagged, getAdapterPosition());
         GameProvider.upvoteOrFlagGame(new GameAction(gameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
