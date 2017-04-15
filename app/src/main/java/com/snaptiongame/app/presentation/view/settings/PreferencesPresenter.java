@@ -61,8 +61,6 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
     public void logout() {
         if (AuthManager.isLoggedIn()) {
             mAuthManager.logout();
-            mPreferencesView.updateLoginSummary();
-            mPreferencesView.goToLogin();
         }
     }
 

@@ -16,8 +16,6 @@ public class PreferencesContract {
         void clearCacheFailure();
 
         void updateLoginSummary();
-
-        void goToLogin();
     }
 
     interface Presenter extends BasePresenter {

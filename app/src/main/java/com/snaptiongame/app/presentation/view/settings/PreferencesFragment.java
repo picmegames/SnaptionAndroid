@@ -123,8 +123,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         mPresenter.subscribe();
     }
 
-    @Override
-    public void goToLogin() {
+    private void goToLogin() {
         Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
         startActivity(loginIntent);
         getActivity().finish();
@@ -134,6 +133,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
             mPresenter.logout();
+            goToLogin();
         }
         else if (preference.getKey().equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
