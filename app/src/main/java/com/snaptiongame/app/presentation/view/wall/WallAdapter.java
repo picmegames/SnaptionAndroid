@@ -139,14 +139,6 @@ public class WallAdapter extends RecyclerView.Adapter {
         }
     }
 
-    protected void updateUpvote(boolean upvoted, int index) {
-        mGames.get(index).beenUpvoted = upvoted;
-    }
-
-    protected void updateFlagged(boolean flagged, int index) {
-        mGames.get(index).beenFlagged = flagged;
-    }
-
     @Override
     public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
         ((GameCardViewHolder) holder).itemView.clearAnimation();

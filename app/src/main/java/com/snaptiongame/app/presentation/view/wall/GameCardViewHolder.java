@@ -60,7 +60,6 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public View mView;
     private ItemListener mListener;
 
-
     public int mGameId;
     public int mPickerId;
     public String mImageUrl;

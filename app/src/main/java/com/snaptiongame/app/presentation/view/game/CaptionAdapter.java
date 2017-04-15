@@ -59,7 +59,6 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         CaptionCardViewHolder holder = (CaptionCardViewHolder) viewHolder;
         Caption curCaption = mCaptions.get(position);
 
-
         if (curCaption.creatorPicture != null) {
             Glide.with(holder.mContext)
                     .load(curCaption.creatorPicture)
