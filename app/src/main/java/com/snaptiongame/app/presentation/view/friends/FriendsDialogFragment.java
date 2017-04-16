@@ -47,13 +47,8 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
 
 public class FriendsDialogFragment extends DialogFragment {
 
-
     private static final int INVITE_TO_SNAPTION_POSITION = 3;
-    public static final String INVITE_FRIEND_VIA = "Invite friend via";
-    public static final String INVITE_MESSAGE = "Hey there download this nifty app called Snaption!\n";
-    public static final String PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.snaptiongame.app&hl=en";
     private AddFriendsAdapter mAddFriendsAdapter;
-
 
     /**
      * A representation of what dialog to show. Enum is used for readability.
@@ -122,17 +117,6 @@ public class FriendsDialogFragment extends DialogFragment {
     private final int NEGATIVE_BUTTON_RESULT_CODE = 1;
     private int INVITE_OPTION_SELECT_CODE = 2;
 
-    private final String CANCEL = "Cancel";
-    private final String BACK = "Back";
-    private final String ADD_FRIEND_TITLE = "Add A Friend!";
-    private final String FIND_FRIEND = "Find your friends!";
-    private final String INVITE_FRIEND_LONG = "Invite a friend to Game!";
-    private final String INVITE_FRIEND_SHORT = "Invite Friend";
-    private final String[] mHints = {"Ex: (555)-444-3333", "Ex: Bill Johnson", "Ex: sk8rdude@aol.com"};
-
-    //private final InputType EMAIL_INPUT = InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS;
-
-
     /**
      * Custom adapter used to display the various options to invite friends
      */
@@ -195,9 +179,9 @@ public class FriendsDialogFragment extends DialogFragment {
 
         mWhichDialog = (DialogToShow) getArguments().getSerializable("whichDialog");
 
-        sNegativeButtonText = BACK;
-        sPositiveButtonText = INVITE_FRIEND_SHORT;
-        mDialogTitle = FIND_FRIEND;
+        sNegativeButtonText = getString(R.string.back);
+        sPositiveButtonText = getString(R.string.add_friend);
+        mDialogTitle = getString(R.string.find_friends);
 
         /**
          * Depending on what stage of Invite Friends a user is on, and what option they have
@@ -208,25 +192,25 @@ public class FriendsDialogFragment extends DialogFragment {
 
                 //Standard dialog option containing all of the options
                 case STANDARD_DIALOG:
-                    mDialogTitle = ADD_FRIEND_TITLE;
+                    mDialogTitle = getString(R.string.add_a_friend);
                     mHeaderIcon = R.drawable.snaption_icon;
                     sPositiveButtonText = "";
-                    sNegativeButtonText = CANCEL;
+                    sNegativeButtonText = getString(R.string.cancel);
                     break;
                 //User selected to invite friends via phone #
                 case PHONE_INVITE:
                     mHeaderIcon = R.drawable.ic_phone;
-                    sHint = mHints[0];
+                    sHint = getString(R.string.phone_hint);
                     break;
                 //User selected to invite friends via Facebook
                 case FACEBOOK_INVITE:
                     mHeaderIcon = R.drawable.ic_facebook;
-                    sHint = mHints[1];
+                    sHint = getString(R.string.name_hint);
                     break;
                 //User selected to invite friends via email
                 case EMAIL_INVITE:
                     mHeaderIcon = R.drawable.ic_email;
-                    sHint = mHints[2];
+                    sHint = getString(R.string.email_hint);
                     break;
             }
         }
@@ -384,14 +368,14 @@ public class FriendsDialogFragment extends DialogFragment {
 
     private void sendInviteIntent() {
 
-        String smsBody = INVITE_MESSAGE +
-                PLAY_STORE_LINK;
+        String smsBody = getString(R.string.invite_message) +
+                getString(R.string.store_url);
 
         Intent inviteIntent = new Intent(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
         inviteIntent.setType("text/plain");
 
-        Intent chooser = Intent.createChooser(inviteIntent, INVITE_FRIEND_VIA);
+        Intent chooser = Intent.createChooser(inviteIntent, getString(R.string.invite_friend_via));
 
         startActivity(chooser);
     }

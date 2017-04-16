@@ -110,24 +110,27 @@ be ready to run your app on your own device!
 If you have any questions feel free to ask me or anyone else who has
 gotten the project to build successfully!
 
-### Developer Dependencies
-* [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
-* [square/leakcanary](https://github.com/square/leakcanary)
-* [orfjackal/retrolambda](https://github.com/orfjackal/retrolambda)
-* [JakeWharton/timber](https://github.com/JakeWharton/timber)
-
 ### Testing Dependencies
 * [mockito/mockito](https://github.com/mockito/mockito)
 * [robolectric/robolectric](https://github.com/robolectric/robolectric)
 
+### Developer Dependencies
+* [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
+* [evant/gradle-retrolambda](https://github.com/evant/gradle-retrolambda)
+* [square/leakcanary](https://github.com/square/leakcanary)
+* [JakeWharton/timber](https://github.com/JakeWharton/timber)
+
 ### Application Dependencies
+* [BranchMetrics/android-branch-deep-linking](https://github.com/BranchMetrics/android-branch-deep-linking)
 * [hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
 * [facebook/facebook-android-sdk](https://github.com/facebook/facebook-android-sdk)
 * [bumptech/glide](https://github.com/bumptech/glide)
 * [wasabeef/glide-transformations](https://github.com/wasabeef/glide-transformations)
+* [airbnb/lottie-android](https://github.com/airbnb/lottie-android)
 * [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs)
 * [hootsuite/nachos](https://github.com/hootsuite/nachos)
 * [square/okhttp](https://github.com/square/okhttp)
+* [chrisbanes/PhotoView](https://github.com/chrisbanes/PhotoView)
 * [square/retrofit](https://github.com/square/retrofit)
 * [ReactiveX/RxAndroid](https://github.com/ReactiveX/RxAndroid)
 * [ReactiveX/RxJava](https://github.com/ReactiveX/RxJava)

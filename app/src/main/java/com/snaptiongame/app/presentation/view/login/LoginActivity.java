@@ -59,12 +59,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void onAuthenticationSuccess() {
+    public void onAuthSuccess() {
         goToMain();
     }
 
     @Override
-    public void onAuthenticationFailure() {
+    public void onAuthFailure() {
 
     }
 

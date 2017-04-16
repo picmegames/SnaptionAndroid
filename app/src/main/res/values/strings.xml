@@ -1,6 +1,23 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Snaption</string>
+    <string name="welcome_message">Welcome to Snaption!</string>
+    <string name="add_caption">Add a Caption</string>
+    <string name="update_info">Update Information</string>
+    <string name="filter_games_title">Filter by Tags</string>
+    <string name="random_captions">Random Captions</string>
+    <string name="caption_sets">Caption Sets</string>
+
+    <!-- Onboarding -->
+    <string name="anim_1" translatable="false">tada_image.json</string>
+    <string name="title_1">Post photos.\nThe funnier the better.</string>
+    <string name="desc_1">Choose any picture from your phone to start a game.</string>
+    <string name="anim_2" translatable="false">mail_sent.json</string>
+    <string name="title_2">Add captions.</string>
+    <string name="desc_2">Choose from existing templates to make the best caption for the photo.</string>
+    <string name="anim_3" translatable="false">emoji_tongue.json</string>
+    <string name="title_3">Play with friends.\nShare the memes with everyone!</string>
+    <string name="desc_3">Invite friends to your game so they can caption as well. Vote for your favorite captions and the highest voted one wins!</string>
 
     <!-- Tags -->
     <string name="open_drawer" translatable="false">Navigation View Open</string>
@@ -11,16 +28,6 @@
     <string name="toolbar_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ToolbarScrollBehavior</string>
     <string name="fab_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior</string>
     <string name="bottom_nav_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.BottomNavigationScrollBehavior</string>
-
-    <!-- Urls -->
-
-    <!-- Titles -->
-    <string name="welcome_message">Welcome to Snaption!</string>
-    <string name="add_caption">Add a Caption</string>
-    <string name="update_info">Update Information</string>
-    <string name="filter_games_title">Filter by Tags</string>
-    <string name="random_captions">Random Captions</string>
-    <string name="caption_sets">Caption Sets</string>
 
     <!-- Labels -->
     <string name="wall_label">Wall</string>
@@ -50,6 +57,11 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="add_friends">Add Friends</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="find_friends">Find your friends!</string>
+    <string name="phone_hint" translatable="false">Ex: (555)-444-3333</string>
+    <string name="name_hint" translatable="false">Ex: Bill Johnson</string>
+    <string name="email_hint" translatable="false">Ex: john@snaption.com</string>
     <string name="upload_title">Uploading New Game</string>
     <string name="upload_message">Upload in progress&#8230;</string>
     <string name="upload_complete_title">Upload Complete</string>
@@ -76,6 +88,15 @@
     <string name="join_snaption">Join Snaption!</string>
     <string name="fitb">Fill in the blank!</string>
     <string name="snaption_description">Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. </string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="previous">Previous</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="clear_cache_success">Successfully cleared cache</string>
+    <string name="clear_cache_fail">Failed to clear cache</string>
+    <string name="current_size">Current Size: %1$s</string>
+    <string name="back">Back</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -103,6 +124,9 @@
     <string name="update_failure">Duplicate username</string>
     <string name="invalid_char">Invalid symbol in username</string>
     <string name="no_friends">No friends could be found</string>
+    <string name="invite_friend_via">Invite friend via</string>
+    <string name="invite_message">Hey there download this nifty app called Snaption!\n</string>
+    <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.snaptiongame.app</string>
 
     <!-- Delete Friend Dialog -->
     <string name="delete_pre">Are you sure you want to remove</string>
