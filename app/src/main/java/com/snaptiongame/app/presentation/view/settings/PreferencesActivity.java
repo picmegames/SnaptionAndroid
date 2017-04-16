@@ -26,7 +26,7 @@ public class PreferencesActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.frame, new PreferencesFragment())
+                .replace(R.id.frame, PreferencesFragment.newInstance())
                 .commit();
 
         setSupportActionBar(mToolbar);

@@ -13,15 +13,16 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
         versionName "1.0"
-        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         debug {
             debuggable true
             minifyEnabled false
             testCoverageEnabled true
         }
+
         release {
             debuggable false
             minifyEnabled true
@@ -29,6 +30,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     signingConfigs {
         debug {
             storeFile file('keystores/debug.keystore')
@@ -37,16 +39,20 @@ android {
             storePassword 'android'
         }
     }
+
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
     lintOptions {
         abortOnError false
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     testOptions {
         unitTests.all {
             jacoco {
@@ -74,93 +80,102 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Unit Testing Libraries
-    androidTestCompile "com.android.support:support-annotations:$rootProject.supportLibVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    androidTestCompile "com.android.support.test:runner:$rootProject.androidTestVersion"
-    androidTestCompile "com.android.support.test:rules:$rootProject.androidTestVersion"
-
-    // JUnit
-    testCompile "junit:junit:$rootProject.junitVersion"
+    // Testing Dependencies
 
     // AssertJ
-    testCompile "org.assertj:assertj-core:$rootProject.assertjVersion"
-
-    // Mockito
-    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
-
-    // Robolectric
-    testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
-    testCompile "org.robolectric:shadows-support-v4:$rootProject.robolectricVersion"
+    testCompile "org.assertj:assertj-core:${assertjVersion}"
 
     // Json
-    testCompile "org.json:json:$rootProject.jsonVersion"
+    testCompile "org.json:json:${jsonVersion}"
 
-    // Android Support Libraries
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
-    compile "com.android.support:design:$rootProject.supportLibVersion"
-    compile "com.android.support:palette-v7:$rootProject.supportLibVersion"
+    // JUnit
+    testCompile "junit:junit:${junitVersion}"
 
-    // Leak Canary
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    // Mockito
+    testCompile "org.mockito:mockito-core:${mockitoVersion}"
 
-    // Timber
-    compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    // Robolectric
+    testCompile "org.robolectric:robolectric:${robolectricVersion}"
+    testCompile "org.robolectric:shadows-support-v4:${robolectricVersion}"
 
-    // Circle ImageView
-    compile "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
+    // Support Testing Libraries
+    androidTestCompile "com.android.support:support-annotations:${supportLibVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
+    androidTestCompile "com.android.support.test:runner:${androidTestVersion}"
+    androidTestCompile "com.android.support.test:rules:${androidTestVersion}"
 
-    // Text Drawable
-    compile "com.amulyakhare:com.amulyakhare.textdrawable:$rootProject.textDrawableVersion"
-
-    // Material Dialogs
-    compile "com.afollestad.material-dialogs:core:$rootProject.materialDialogsVersion"
-
-    // Nachos
-    compile "com.hootsuite.android:nachos:$rootProject.nachosVersion"
-
-    // Facebook Login
-    compile "com.facebook.android:facebook-android-sdk:$rootProject.facebookSdkVersion"
-
-    // Google Login
-    compile "com.google.android.gms:play-services-auth:$rootProject.playServicesVersion"
-
-    // Firebase
-    compile "com.google.firebase:firebase-core:$rootProject.playServicesVersion"
-    compile "com.google.firebase:firebase-messaging:$rootProject.playServicesVersion"
-    compile "com.google.firebase:firebase-crash:$rootProject.playServicesVersion"
+    // Developer Dependencies
 
     // Butterknife
-    compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
-    apt "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
+    compile "com.jakewharton:butterknife:${butterknifeVersion}"
+    apt "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
 
-    // Glide
-    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-    compile "jp.wasabeef:glide-transformations:$rootProject.glideTransformationsVersion"
+    // Leak Canary
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
 
-    // PhotoView
-    compile "com.github.chrisbanes:PhotoView:$rootProject.photoViewVersion"
+    // Timber
+    compile "com.jakewharton.timber:timber:${timberVersion}"
 
-    // OkHttp
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$rootProject.okHttpVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
+    // Application Dependencies
 
-    // Retrofit
-    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
-
-    // RxJava
-    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
-
-    // Branch.io
-    compile ("io.branch.sdk.android:library:$rootProject.branchioVersion") {
+    // Branch
+    compile ("io.branch.sdk.android:library:${branchVersion}") {
         exclude module: 'answers-shim'
     }
+
+    // Circle ImageView
+    compile "de.hdodenhof:circleimageview:${circleImageViewVersion}"
+
+    // Facebook Login
+    compile "com.facebook.android:facebook-android-sdk:${facebookSdkVersion}"
+
+    // Firebase
+    compile "com.google.firebase:firebase-core:${playServicesVersion}"
+    compile "com.google.firebase:firebase-messaging:${playServicesVersion}"
+    compile "com.google.firebase:firebase-crash:${playServicesVersion}"
+
+    // Glide
+    compile "com.github.bumptech.glide:glide:${glideVersion}"
+    compile "jp.wasabeef:glide-transformations:${glideTransformationsVersion}"
+
+    // Google Login
+    compile "com.google.android.gms:play-services-auth:${playServicesVersion}"
+
+    // Lottie
+    compile "com.airbnb.android:lottie:${lottieVersion}"
+
+    // Material Dialogs
+    compile "com.afollestad.material-dialogs:core:${materialDialogsVersion}"
+
+    // Nachos
+    compile "com.hootsuite.android:nachos:${nachosVersion}"
+
+    // OkHttp
+    compile "com.squareup.okhttp3:okhttp-urlconnection:${okHttpVersion}"
+    compile "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
+
+    // PhotoView
+    compile "com.github.chrisbanes:PhotoView:${photoViewVersion}"
+
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+
+    // RxJava
+    compile "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+    compile "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+
+    // Support Libraries
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:palette-v7:${supportLibVersion}"
+
+    // Text Drawable
+    compile "com.amulyakhare:com.amulyakhare.textdrawable:${textDrawableVersion}"
 }
 
 apply plugin: 'com.google.gms.google-services'

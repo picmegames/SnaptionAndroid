@@ -34,16 +34,23 @@
             android:value="key_test_pmtypg2TpClC962jJYluHkmkuqpzD4km"/>
 
         <activity
-            android:name=".presentation.view.main.MainActivity"
+            android:name=".presentation.view.onboarding.OnboardingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/StatusBarTheme"
+            android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.view.main.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/StatusBarTheme"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".presentation.view.login.LoginActivity"
