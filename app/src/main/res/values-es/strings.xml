@@ -83,5 +83,24 @@
 Competir para crear el mejor subtítulo para una foto rellenando el espacio en blanco en un subtítulo con la palabra o la frase de su opción</string>
     <string name="random_captions">Leyendas aleatorias</string>
     <string name="caption_sets">Conjuntos de Subtítulos</string>
+    <string name="skip">Omitir</string>
+    <string name="next">Siguiente</string>
+    <string name="done">Hecho</string>
+    <string name="previous">Anterior</string>
+    <string name="clear_cache">Limpiar Cache</string>
+    <string name="clear_cache_fail">Error al borrar la memoria caché</string>
+    <string name="clear_cache_success">Caché correctamente eliminado</string>
+    <string name="current_size">Tamaño Actual: %1$s</string>
+    <string name="desc_1">Elige cualquier imagen de tu teléfono para iniciar un juego.</string>
+    <string name="desc_2">Elija entre las plantillas existentes para crear el mejor título para la foto.</string>
+    <string name="desc_3">Invite a amigos a su juego para que puedan subtítulos también. ¡Vote por sus subtítulos favoritos y gane el más votado!</string>
+    <string name="title_1">Publicar fotos.\nCuanto más divertido, mejor.</string>
+    <string name="title_2">Añadir subtítulos.</string>
+    <string name="title_3">Jugar con amigos.\n¡Comparte los memes con todo el mundo!</string>
+    <string name="invite_friend_via">Invitar amigo a través de</string>
+    <string name="invite_message">Hola descarga esta aplicación ingeniosa llamada Snaption!\n</string>
+    <string name="back">Espalda</string>
+    <string name="add_friend">Añade Amigo</string>
+    <string name="find_friends">¡Encuentra a tus amigos!</string>
 
 </resources>

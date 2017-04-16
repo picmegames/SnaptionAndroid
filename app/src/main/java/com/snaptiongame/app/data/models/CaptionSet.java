@@ -17,23 +17,20 @@ public class CaptionSet {
     @SerializedName(ACTIVE)
     public boolean isCaptionSetActive;
 
+    private int mTotalCaptions;
+    private int mCaptionsUnlocked;
+
     public static final String TITLE = "title";
     public static final String ID = "id";
     public static final String ACTIVE = "active";
-
-    private int mTotalCaptions;
-    private int mCaptionsUnlocked;
 
     private static final int MAX_CAPTIONS = 10;
     private static final int MIN_CAPTIONS = 0;
 
     public CaptionSet() {
-
         mCaptionsUnlocked = MIN_CAPTIONS;
         mTotalCaptions = MAX_CAPTIONS;
-
     }
-
 
     public int getTotalCaptions() {
         return MAX_CAPTIONS;
@@ -46,5 +43,4 @@ public class CaptionSet {
     public String getSetName() {
         return captionSetTitle;
     }
-
 }
