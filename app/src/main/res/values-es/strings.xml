@@ -97,5 +97,10 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="title_1">Publicar fotos.\nCuanto más divertido, mejor.</string>
     <string name="title_2">Añadir subtítulos.</string>
     <string name="title_3">Jugar con amigos.\n¡Comparte los memes con todo el mundo!</string>
+    <string name="invite_friend_via">Invitar amigo a través de</string>
+    <string name="invite_message">Hola descarga esta aplicación ingeniosa llamada Snaption!\n</string>
+    <string name="back">Espalda</string>
+    <string name="add_friend">Añade Amigo</string>
+    <string name="find_friends">¡Encuentra a tus amigos!</string>
 
 </resources>

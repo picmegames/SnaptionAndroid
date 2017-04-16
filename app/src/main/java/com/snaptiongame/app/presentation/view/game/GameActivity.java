@@ -357,7 +357,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mPresenter.shareToFacebook(this, mImage);
                 break;
             case R.id.invite_friend_to_game:
-                mPresenter.getBranchToken(mGameId);
+                if (AuthManager.isLoggedIn()) {
+                    mPresenter.getBranchToken(mGameId);
+                }
+                else {
+                    goToLogin();
+                }
                 break;
             case R.id.upvote:
                 if (AuthManager.isLoggedIn()) {
