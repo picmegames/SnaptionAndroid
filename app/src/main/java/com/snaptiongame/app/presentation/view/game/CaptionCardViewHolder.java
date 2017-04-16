@@ -68,7 +68,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
         mUpvote.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
-                setBeenUpvoted();
+                upvoteCaption();
             }
             else {
                 goToLogin();
@@ -133,15 +133,12 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) + 1));
             Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
-        upvoteCaption(captionId, isUpvoted);
+        mListener.updateUpvote(isUpvoted, getAdapterPosition());
     }
 
     private void setBeenFlagged() {
         if (isFlagged) {
-            mFlag.setVisibility(View.INVISIBLE);
-            isFlagged = false;
-            flagCaption(captionId, isFlagged);
-            Toast.makeText(mContext, "Unflagged", Toast.LENGTH_SHORT).show();
+            flagCaption();
         }
         else {
             new MaterialDialog.Builder(mContext)
@@ -150,32 +147,41 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mFlag.setVisibility(View.VISIBLE);
-                        isFlagged = true;
-                        flagCaption(captionId, isFlagged);
-                        Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+                        flagCaption();
                     })
                     .cancelable(true)
                     .show();
         }
     }
 
-    private void upvoteCaption(int captionId, boolean isUpvoted) {
-        mListener.updateUpvote(isUpvoted, getAdapterPosition());
-        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isUpvoted, GameAction.UPVOTE, GameAction.CAPTION_ID))
+    private void upvoteCaption() {
+        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, !isUpvoted, GameAction
+                .UPVOTE, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Timber.i("Successfully liked caption!"),
+                        this::setBeenUpvoted,
                         Timber::e
                 );
     }
 
-    private void flagCaption(int captionId, boolean isFlagged) {
-        mListener.updateFlag(isFlagged, getAdapterPosition());
-        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, isFlagged, GameAction.FLAGGED, GameAction.CAPTION_ID))
+    private void flagCaption() {
+        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, !isFlagged, GameAction
+                .FLAGGED, GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Timber.i("Successfully flagged caption"),
+                        () -> {
+                            if (isFlagged) {
+                                mFlag.setVisibility(View.INVISIBLE);
+                                isFlagged = false;
+                                Toast.makeText(mContext, "Unflagged", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                mFlag.setVisibility(View.VISIBLE);
+                                isFlagged = true;
+                                Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+                            }
+                            mListener.updateFlag(isFlagged, getAdapterPosition());
+                        },
                         Timber::e
                 );
     }
