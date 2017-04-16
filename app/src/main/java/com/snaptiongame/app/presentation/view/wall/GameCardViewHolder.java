@@ -192,9 +192,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                     .content(R.string.ask_flag_game)
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
-                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        flagGame();
-                    })
+                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> flagGame())
                     .cancelable(true)
                     .show();
         }
@@ -237,8 +235,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                                 mMenu.getMenu().findItem(R.id.flag).setVisible(false);
                                 mMenu.getMenu().findItem(R.id.unflag).setVisible(true);
                                 isFlagged = true;
-                                Timber.i("Successfully flagged game");
-                                Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.flagged, Toast.LENGTH_SHORT).show();
                             }
                             mListener.updateFlag(isFlagged, getAdapterPosition());
                         },

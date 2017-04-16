@@ -146,9 +146,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                     .content(R.string.ask_flag_caption)
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
-                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        flagCaption();
-                    })
+                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> flagCaption())
                     .cancelable(true)
                     .show();
         }
@@ -173,12 +171,12 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                             if (isFlagged) {
                                 mFlag.setVisibility(View.INVISIBLE);
                                 isFlagged = false;
-                                Toast.makeText(mContext, "Unflagged", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.unflagged, Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 mFlag.setVisibility(View.VISIBLE);
                                 isFlagged = true;
-                                Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.flagged, Toast.LENGTH_SHORT).show();
                             }
                             mListener.updateFlag(isFlagged, getAdapterPosition());
                         },
