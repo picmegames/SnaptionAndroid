@@ -22,16 +22,8 @@
             android:value="@string/facebook_app_id"/>
 
         <meta-data
-            android:name="io.branch.sdk.TestMode"
-            android:value="false"/>
-
-        <meta-data
             android:name="io.branch.sdk.BranchKey"
-            android:value="key_live_haBBfa2QhslFWX9oNYgBTicfvrlEuS32"/>
-
-        <meta-data
-            android:name="io.branch.sdk.BranchKey.test"
-            android:value="key_test_pmtypg2TpClC962jJYluHkmkuqpzD4km"/>
+            android:value="key_live_ojtqja2UgqbsW97lR1aDTeciAAdszI18"/>
 
         <activity
             android:name=".presentation.view.onboarding.OnboardingActivity"
@@ -89,15 +81,11 @@
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="snaption.app.link"
-                    android:scheme="https"/>
-                <data
-                    android:host="snaption.test-app.link"
                     android:scheme="https"/>
             </intent-filter>
 

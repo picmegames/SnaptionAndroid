@@ -157,9 +157,11 @@ public class ProfileActivity extends AppCompatActivity
         }
 
         mProfileImg.setOnClickListener(view -> {
-            Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
-            immersiveIntent.putExtra(ImmersiveActivity.IMAGE_URL, mPicture);
-            startActivity(immersiveIntent);
+            if (mPicture != null && !mPicture.isEmpty()) {
+                Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
+                immersiveIntent.putExtra(ImmersiveActivity.IMAGE_URL, mPicture);
+                startActivity(immersiveIntent);
+            }
         });
 
         setSupportActionBar(mToolbar);
