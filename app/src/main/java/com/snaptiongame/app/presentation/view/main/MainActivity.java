@@ -1,7 +1,6 @@
 package com.snaptiongame.app.presentation.view.main;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -16,7 +15,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.os.CancellationSignal;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -129,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         setupWallBottomNavigation();
+        setupInitialWall();
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -169,30 +168,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mEmailView.setText("");
     }
 
-    private void setupWallBottomNavigation() {
+    private void setupInitialWall() {
         if (!AuthManager.isLoggedIn()) {
-            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
-            mNavigationView.getMenu().findItem(R.id.friends).setVisible(false);
-            mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
+            mBottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
             mActionBar.setTitle(R.string.discover);
             setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
         }
         else {
-            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
-            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
+            mBottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
             mActionBar.setTitle(R.string.my_wall);
             setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
         }
 
-        resetFabPosition(true);
         fragTag = WallFragment.TAG;
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame, mCurrentFragment)
                 .commit();
-        mNavigationView.getMenu().getItem(0).setChecked(true);
+    }
+
+    private void setupWallBottomNavigation() {
+        mNavigationView.getMenu().findItem(R.id.wall).setChecked(true);
+        mBottomNavigationView.setVisibility(View.VISIBLE);
+        resetFabPosition(true);
+
+        if (!AuthManager.isLoggedIn()) {
+            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
+            mNavigationView.getMenu().findItem(R.id.friends).setVisible(false);
+            mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
+        }
+        else {
+            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
+            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);
+            if (mBottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
+                mBottomNavigationView.getMenu()
+                        .add(0, R.id.my_wall, Menu.FIRST, getString(R.string.my_wall))
+                        .setIcon(R.drawable.ic_face_white_24dp);
+            }
+        }
     }
 
     private void setUserHeader() {
@@ -232,18 +247,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         setHeader();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuthManager.connectGoogleApi();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAuthManager.disconnectGoogleApi();
+        if (fragTag.equals(WallFragment.TAG) || !AuthManager.isLoggedIn()) {
+            setupWallBottomNavigation();
+            setupInitialWall();
+        }
     }
 
     @Override
@@ -322,8 +330,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.wall:
-                mBottomNavigationView.setVisibility(View.VISIBLE);
-                resetFabPosition(true);
+                setupWallBottomNavigation();
                 mMenu.findItem(R.id.filter).setVisible(true);
 
             case R.id.my_wall:
@@ -331,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
                     fragTag = WallFragment.TAG;
                     mActionBar.setTitle(R.string.my_wall);
-                    mBottomNavigationView.getMenu().getItem(0).setChecked(true);
+                    mBottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
                     setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                     clearFilterView();
                     break;
@@ -369,8 +376,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.log_out:
                 if (AuthManager.isLoggedIn()) {
-                    mAuthManager.logout();
-                    goToLogin();
+                    logout();
                 }
                 break;
 
@@ -381,6 +387,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.replace(R.id.frame, mCurrentFragment).commit();
 
         return true;
+    }
+
+    private void logout() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.log_out_label)
+                .content(R.string.log_out_content)
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no)
+                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                    mAuthManager.logout();
+                    goToLogin();
+                })
+                .show();
     }
 
     private void setAppStatusBarColors(int colorResource, int colorResourceDark) {
@@ -410,11 +429,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             coordinatorParams.setBehavior(fabScrollBehavior);
             layoutParams.setMargins(0, 0, rightMargin, bottomMargin);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Don't allow back button in MainActivity
     }
 
     /**

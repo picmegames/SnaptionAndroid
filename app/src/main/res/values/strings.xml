@@ -103,6 +103,7 @@
     <string name="empty_wall">Nothing here!</string>
     <string name="give_feedback">Rate and Give Feedback</string>
     <string name="leaving_content">Are you sure you want to exit Snaption and go to the Google Play Store?</string>
+    <string name="log_out_content">Are you sure you want to log out?</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
