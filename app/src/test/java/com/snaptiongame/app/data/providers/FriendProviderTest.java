@@ -33,10 +33,10 @@ public class FriendProviderTest {
         friends.add(new Friend(0, "", "", "", "", "", "", ""));
         friends.add(new Friend(0, "", "", "", "", "", "", ""));
         friends.add(new Friend(0, "", "", "", "", "", "", ""));
-        when(service.getFriends(0)).thenReturn(Observable.just(friends));
+        when(service.getFriends()).thenReturn(Observable.just(friends));
         request = new AddFriendRequest(0);
-        when(service.addFriend(0, request)).thenReturn(Single.just(request));
-        when(service.deleteFriend(0, request)).thenReturn(Completable.complete());
+        when(service.addFriend(request)).thenReturn(Single.just(request));
+        when(service.deleteFriend(request)).thenReturn(Completable.complete());
     }
 
     @Test
