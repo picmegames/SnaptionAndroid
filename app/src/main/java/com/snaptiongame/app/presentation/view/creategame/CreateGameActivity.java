@@ -108,7 +108,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         setContentView(R.layout.activity_create_game);
         ButterKnife.bind(this);
 
-        mPresenter = new CreateGamePresenter(AuthManager.getUserId(), this);
+        mPresenter = new CreateGamePresenter(this);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Game.IMAGE_URL)) {

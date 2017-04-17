@@ -29,12 +29,10 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     private CompositeDisposable mDisposables;
 
     private List<Friend> mFriends;
-    private int mUserId;
     // private byte[] mEncodedImage;
     private String mEncodedImage;
 
-    public CreateGamePresenter(int userId, @NonNull CreateGameContract.View createGameView) {
-        mUserId = userId;
+    public CreateGamePresenter(@NonNull CreateGameContract.View createGameView) {
         mCreateGameView = createGameView;
         mDisposables = new CompositeDisposable();
         mCreateGameView.setPresenter(this);
@@ -112,7 +110,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider.loadFriends(mUserId)
+        Disposable disposable = FriendProvider.loadFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processFriends,

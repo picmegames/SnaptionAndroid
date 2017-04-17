@@ -80,6 +80,7 @@ public class WallPresenter implements WallContract.Presenter {
                         mWallView::showGames,
                         e -> {
                             Timber.e(e);
+                            mWallView.showEmptyView();
                             mWallView.setRefreshing(false);
                         },
                         () -> {

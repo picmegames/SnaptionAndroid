@@ -67,23 +67,21 @@ public interface SnaptionApi {
      * This method sends a request to add a friend
      * with a POST request.
      *
-     * @param userID        The id of the user to be added
      * @param friendRequest The AddFriendRequest body
      * @return An observable that emits an AddFriendRequest object
      */
-    @POST("/UserFriends/{userId}/")
-    Single<AddFriendRequest> addFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
+    @POST("/UserFriends/")
+    Single<AddFriendRequest> addFriend(@Body AddFriendRequest friendRequest);
 
     /**
      * This method sends a request to delete a friend
      * with a custom DELETE request.
      *
-     * @param userID        The id of the user to be deleted
      * @param friendRequest The AddFriendRequest body
      * @return An observable that emits an AddFriendRequest object
      */
-    @HTTP(method = "DELETE", path = "/UserFriends/{userId}/", hasBody = true)
-    Completable deleteFriend(@Path("userId") int userID, @Body AddFriendRequest friendRequest);
+    @HTTP(method = "DELETE", path = "/UserFriends/", hasBody = true)
+    Completable deleteFriend(@Body AddFriendRequest friendRequest);
 
     /**
      * This method sends a request for a user with a GET request.
@@ -191,11 +189,10 @@ public interface SnaptionApi {
      * This method sends a request to get a user's friends
      * with a GET request.
      *
-     * @param userId The id of the user whose friends we want
      * @return An observable that emits a list of Friend objects
      */
-    @GET("/UserFriends/{userId}/")
-    Observable<List<Friend>> getFriends(@Path("userId") int userId);
+    @GET("/UserFriends/")
+    Observable<List<Friend>> getFriends();
 
     /**
      * This method sends a request to get a list of captions

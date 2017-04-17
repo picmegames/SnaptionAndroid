@@ -13,9 +13,17 @@ import java.util.List;
 public class FriendsContract {
     interface View extends BaseView<Presenter> {
         void processFriends(List<Friend> friends);
+
+        void showEmptyView();
+
+        void showFriendList();
+
+        void setRefreshing(boolean isRefreshing);
     }
 
     interface Presenter extends BasePresenter {
         void loadFriends();
+
+        void removeFriend(int friendId);
     }
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
@@ -35,6 +36,8 @@ public class WallFragment extends Fragment implements WallContract.View {
     RecyclerView mWall;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.empty_view)
+    LinearLayout mEmptyView;
 
     private WallContract.Presenter mPresenter;
 
@@ -135,7 +138,31 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     @Override
     public void showGames(List<Game> games) {
-        mAdapter.setGames(games);
+        if (games.isEmpty()) {
+            showEmptyView();
+        }
+        else {
+            showWall();
+            mAdapter.setGames(games);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        mEmptyView.setVisibility(View.VISIBLE);
+
+        if (mType != WallContract.HISTORY) {
+            mWall.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showWall() {
+        mEmptyView.setVisibility(View.GONE);
+
+        if (mType != WallContract.HISTORY) {
+            mWall.setVisibility(View.VISIBLE);
+        }
     }
 
     /**

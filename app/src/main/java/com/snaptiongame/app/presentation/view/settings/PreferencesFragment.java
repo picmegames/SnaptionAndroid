@@ -3,14 +3,18 @@ package com.snaptiongame.app.presentation.view.settings;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
@@ -25,6 +29,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private Preference mCachePreference;
     private Preference mLogoutPreference;
     private Preference mVersionPreference;
+    private Preference mFeedbackPreference;
 
     private PreferencesContract.Presenter mPresenter;
 
@@ -66,6 +71,8 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         mLogoutPreference = getPreferenceScreen().findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
         mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_label));
+        mFeedbackPreference = getPreferenceScreen().findPreference(getString(R.string.give_feedback));
+        mFeedbackPreference.setOnPreferenceClickListener(this);
 
         if (packageInfo != null) {
             mVersionPreference.setSummary(packageInfo.versionName);
@@ -137,6 +144,18 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         }
         else if (preference.getKey().equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
+        }
+        else if(preference.getKey().equals(getString(R.string.give_feedback))) {
+            new MaterialDialog.Builder(getActivity())
+                    .title(R.string.leaving_title)
+                    .content(R.string.leaving_content)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
+                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.store_url)));
+                        startActivity(browserIntent);
+                    })
+                    .show();
         }
         return true;
     }

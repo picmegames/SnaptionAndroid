@@ -14,7 +14,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
 
 import butterknife.BindView;
@@ -29,6 +28,8 @@ public class ImmersiveActivity extends AppCompatActivity {
     @BindView(R.id.photo_view)
     PhotoView mPhotoView;
 
+    public static final String IMAGE_URL = "imageUrl";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,7 @@ public class ImmersiveActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        String imageUrl = intent.getStringExtra(Game.IMAGE_URL);
+        String imageUrl = intent.getStringExtra(IMAGE_URL);
         ViewCompat.setTransitionName(mPhotoView, imageUrl);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {

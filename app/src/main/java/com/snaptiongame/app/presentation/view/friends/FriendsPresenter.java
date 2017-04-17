@@ -2,6 +2,7 @@ package com.snaptiongame.app.presentation.view.friends;
 
 import android.support.annotation.NonNull;
 
+import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.providers.FriendProvider;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,24 +22,40 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
-    private int mUserId;
-
-    public FriendsPresenter(@NonNull FriendsContract.View friendView, int userId) {
+    public FriendsPresenter(@NonNull FriendsContract.View friendView) {
         mFriendView = friendView;
         mDisposables = new CompositeDisposable();
-        mUserId = userId;
         mFriendView.setPresenter(this);
     }
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider.loadFriends(mUserId)
+        Disposable disposable = FriendProvider.loadFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mFriendView::processFriends,
-                        Timber::e,
-                        () -> Timber.i("Getting friends was successful"));
+                        e -> {
+                            Timber.e(e);
+                            mFriendView.showEmptyView();
+                            mFriendView.setRefreshing(false);
+                        },
+                        () -> {
+                            Timber.i("Getting friends was successful");
+                            mFriendView.setRefreshing(false);
+                        });
         mDisposables.add(disposable);
+    }
+
+    @Override
+    public void removeFriend(int friendId) {
+        FriendProvider.removeFriend(new AddFriendRequest(friendId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            Timber.i("Successfully removed friend!");
+                        },
+                        Timber::e
+                );
     }
 
     @Override

@@ -102,5 +102,9 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="back">Espalda</string>
     <string name="add_friend">Añade Amigo</string>
     <string name="find_friends">¡Encuentra a tus amigos!</string>
+    <string name="empty_wall">¡Nada aquí!</string>
+    <string name="give_feedback">Valora y Da Tu Opinión</string>
+    <string name="leaving_content">¿Seguro que quieres salir de Snaption e ir a Google Play Store?</string>
+    <string name="leaving_title">Ahora estás dejando Snaption</string>
 
 </resources>

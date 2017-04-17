@@ -18,12 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.auth.AuthManager;
-import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.data.providers.FriendProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +29,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 import static com.snaptiongame.app.presentation.view.friends.FriendsDialogFragment.DialogToShow.STANDARD_DIALOG;
 
@@ -49,6 +45,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     Button clear;
     @BindView(R.id.refresh_layout_friends)
     SwipeRefreshLayout mRefreshLayout;
+    @BindView(R.id.empty_view)
+    LinearLayout mEmptyView;
 
     protected FriendsContract.Presenter mPresenter;
 
@@ -73,7 +71,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         View view = inflater.inflate(R.layout.friends_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mPresenter = new FriendsPresenter(this, AuthManager.getUserId());
+        mPresenter = new FriendsPresenter(this);
 
         mFriends.setHasFixedSize(true);
         mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -121,15 +119,19 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
                     int index = viewHolder.getAdapterPosition();
                     DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
                         switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE: //yes clicked
+                            case DialogInterface.BUTTON_POSITIVE:
                                 int id = mAdapter.getFriends().get(index).id;
-                                removeFriend(id);
+                                mPresenter.removeFriend(id);
                                 mAdapter.getFriends().remove(index);
                                 mAdapter.notifyItemRemoved(index);
-                                //Delete on backend
+                                if (mAdapter.getFriends().isEmpty()) {
+                                    showEmptyView();
+                                }
+                                else {
+                                    showFriendList();
+                                }
                                 break;
-                            case DialogInterface.BUTTON_NEGATIVE: //no clicked
-                                //No button clicked
+                            case DialogInterface.BUTTON_NEGATIVE:
                                 mAdapter.notifyItemChanged(index);
                                 break;
                         }
@@ -174,6 +176,16 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     }
 
     @Override
+    public void showEmptyView() {
+        mEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showFriendList() {
+        mEmptyView.setVisibility(View.GONE);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
@@ -209,26 +221,28 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         }
     }
 
-    private void removeFriend(int id) {
-        FriendProvider.removeFriend(AuthManager.getUserId(), new AddFriendRequest(id))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> Timber.i("Successfully removed friend!"),
-                        Timber::e
-                );
-    }
-
     public List<Friend> getFriends() {
         return friends;
     }
 
     @Override
+    public void setRefreshing(boolean isRefreshing) {
+        mRefreshLayout.setRefreshing(isRefreshing);
+    }
+
+    @Override
     public void processFriends(List<Friend> friends) {
-        this.friends = friends;
-        mAdapter.clearFriends();
-        mAdapter.setFriends(filterList(this.friends, query));
-        mAdapter.notifyDataSetChanged();
-        mRefreshLayout.setRefreshing(false);
+        if (friends.isEmpty()) {
+            showEmptyView();
+        }
+        else {
+            showFriendList();
+            this.friends = friends;
+            mAdapter.clearFriends();
+            mAdapter.setFriends(filterList(this.friends, query));
+            mAdapter.notifyDataSetChanged();
+            mRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

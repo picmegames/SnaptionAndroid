@@ -6,4 +6,6 @@
                 android:title="@string/log_out_label"/>
     <Preference android:key="@string/version_label"
                 android:title="@string/version_label"/>
+    <Preference android:key="@string/give_feedback"
+                android:title="@string/give_feedback"/>
 </PreferenceScreen>

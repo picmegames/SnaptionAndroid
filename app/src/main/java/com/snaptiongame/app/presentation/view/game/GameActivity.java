@@ -272,7 +272,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mImage.setOnClickListener(view -> {
             Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
-            immersiveIntent.putExtra(Game.IMAGE_URL, mImageUrl);
+            immersiveIntent.putExtra(ImmersiveActivity.IMAGE_URL, mImageUrl);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     this, mImage, ViewCompat.getTransitionName(mImage));

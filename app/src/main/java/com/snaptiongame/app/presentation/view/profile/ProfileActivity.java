@@ -42,6 +42,7 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
 import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
 
 import butterknife.BindView;
@@ -154,6 +155,12 @@ public class ProfileActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
         }
+
+        mProfileImg.setOnClickListener(view -> {
+            Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
+            immersiveIntent.putExtra(ImmersiveActivity.IMAGE_URL, mPicture);
+            startActivity(immersiveIntent);
+        });
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();

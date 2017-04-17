@@ -18,19 +18,19 @@ import io.reactivex.Single;
 public class FriendProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
-    public static Observable<List<Friend>> loadFriends(int userId) {
-        return apiService.getFriends(userId);
+    public static Observable<List<Friend>> loadFriends() {
+        return apiService.getFriends();
     }
 
     public static Observable<List<Friend>> getFacebookFriends() {
         return apiService.getFacebookFriends();
     }
 
-    public static Single<AddFriendRequest> addFriend(int myId, AddFriendRequest request) {
-        return apiService.addFriend(myId, request);
+    public static Single<AddFriendRequest> addFriend(AddFriendRequest request) {
+        return apiService.addFriend(request);
     }
 
-    public static Completable removeFriend(int myId, AddFriendRequest request) {
-        return apiService.deleteFriend(myId, request);
+    public static Completable removeFriend(AddFriendRequest request) {
+        return apiService.deleteFriend(request);
     }
 }

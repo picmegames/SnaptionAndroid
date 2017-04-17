@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.User;
@@ -434,7 +433,7 @@ public class FriendsDialogFragment extends DialogFragment {
      * Add a friendId to our list of users
      */
     private void addFriend(int userId) {
-        FriendProvider.addFriend(AuthManager.getUserId(), new AddFriendRequest(userId))
+        FriendProvider.addFriend(new AddFriendRequest(userId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         request -> updateFriendFragment(),

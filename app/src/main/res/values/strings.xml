@@ -7,6 +7,7 @@
     <string name="filter_games_title">Filter by Tags</string>
     <string name="random_captions">Random Captions</string>
     <string name="caption_sets">Caption Sets</string>
+    <string name="leaving_title">You Are Now Leaving Snaption</string>
 
     <!-- Onboarding -->
     <string name="anim_1" translatable="false">tada_image.json</string>
@@ -97,6 +98,9 @@
     <string name="clear_cache_fail">Failed to clear cache</string>
     <string name="current_size">Current Size: %1$s</string>
     <string name="back">Back</string>
+    <string name="empty_wall">Nothing here!</string>
+    <string name="give_feedback">Rate and Give Feedback</string>
+    <string name="leaving_content">Are you sure you want to exit Snaption and go to the Google Play Store?</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
