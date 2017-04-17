@@ -108,5 +108,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="give_feedback">Valora y Da Tu Opinión</string>
     <string name="leaving_content">¿Seguro que quieres salir de Snaption e ir a Google Play Store?</string>
     <string name="leaving_title">Ahora estás dejando Snaption</string>
+    <string name="failed_caption_submission">Falló la subproducción de subtítulos</string>
 
 </resources>
