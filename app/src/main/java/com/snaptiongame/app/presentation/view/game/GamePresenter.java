@@ -1,8 +1,10 @@
 package com.snaptiongame.app.presentation.view.game;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
@@ -48,6 +50,7 @@ public class GamePresenter implements GameContract.Presenter {
         mDisposables = new CompositeDisposable();
         mGameView.setPresenter(this);
         mCaptions = new ArrayList<>();
+
     }
 
     @Override
@@ -104,6 +107,8 @@ public class GamePresenter implements GameContract.Presenter {
                         e -> {
                             Timber.e(e);
                             mGameView.setRefreshing(false);
+                            Toast.makeText((GameActivity) mGameView,
+                                    "Caption Submission Failed", Toast.LENGTH_SHORT).show();
                         }
                 );
         mDisposables.add(disposable);
