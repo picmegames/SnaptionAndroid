@@ -30,6 +30,8 @@ public class GameContract {
 
         void showRandomCaptions(List<FitBCaption> randomCaptions);
 
+        void updateGame(String type);
+
         void setRefreshing(boolean isRefreshing);
     }
 

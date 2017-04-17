@@ -97,6 +97,8 @@
     <string name="clear_cache_fail">Failed to clear cache</string>
     <string name="current_size">Current Size: %1$s</string>
     <string name="back">Back</string>
+    <string name="flagged">Flagged</string>
+    <string name="unflagged">Unflagged</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

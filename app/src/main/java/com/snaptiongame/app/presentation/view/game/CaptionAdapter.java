@@ -13,6 +13,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Caption;
+import com.snaptiongame.app.data.utils.ItemListener;
 import com.snaptiongame.app.data.utils.TextStyleUtils;
 
 import java.util.List;
@@ -24,18 +25,33 @@ import java.util.List;
 public class CaptionAdapter extends RecyclerView.Adapter {
 
     private List<Caption> mCaptions;
+    private ItemListener mCallback;
 
     private static final int AVATAR_SIZE = 40;
 
     public CaptionAdapter(List<Caption> captions) {
         this.mCaptions = captions;
+
+        mCallback = new ItemListener() {
+            @Override
+            public void updateUpvote(boolean value, int index) {
+                mCaptions.get(index).beenUpvoted = value;
+                mCaptions.get(index).numVotes = value ? mCaptions.get(index)
+                        .numVotes + 1 : mCaptions.get(index).numVotes - 1;
+            }
+
+            @Override
+            public void updateFlag(boolean value, int index) {
+                mCaptions.get(index).beenFlagged = value;
+            }
+        };
     }
 
     @Override
     public CaptionCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.caption_card, parent, false);
-        return new CaptionCardViewHolder(view);
+        return new CaptionCardViewHolder(view, mCallback);
     }
 
     @Override
