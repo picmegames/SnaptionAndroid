@@ -303,7 +303,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             isUpvoted = true;
             Toast.makeText(this, getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
-        mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID));
     }
 
     @Override
@@ -339,7 +338,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             case R.id.flag:
             case R.id.unflag:
                 if (AuthManager.isLoggedIn()) {
-                    flagGame();
+                    flagDialog();
                 }
                 else {
                     goToLogin();
@@ -366,7 +365,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 break;
             case R.id.upvote:
                 if (AuthManager.isLoggedIn()) {
-                    upvoteGame();
+                    mPresenter.upvoteOrFlagGame(new GameAction(mGameId, !isUpvoted, GameAction.UPVOTE,
+                            GameAction.GAME_ID));
                 }
                 else {
                     goToLogin();
@@ -395,12 +395,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         startActivity(chooser);
     }
 
-    private void flagGame() {
+    private void flagDialog() {
         if (isFlagged) {
-            isFlagged = false;
-            mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID));
-            mMenu.findItem(R.id.unflag).setVisible(false);
-            mMenu.findItem(R.id.flag).setVisible(true);
+            mPresenter.upvoteOrFlagGame(new GameAction(mGameId, !isFlagged, GameAction.FLAGGED,
+                    GameAction.GAME_ID));
         }
         else {
             new MaterialDialog.Builder(this)
@@ -409,14 +407,25 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        isFlagged = true;
-                        mPresenter.upvoteOrFlagGame(new GameAction(mGameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID));
-                        mMenu.findItem(R.id.unflag).setVisible(true);
-                        mMenu.findItem(R.id.flag).setVisible(false);
-                        Toast.makeText(this, "Flagged", Toast.LENGTH_SHORT).show();
+                        mPresenter.upvoteOrFlagGame(new GameAction(mGameId, !isFlagged,
+                                GameAction.FLAGGED, GameAction.GAME_ID));
                     })
                     .cancelable(true)
                     .show();
+        }
+    }
+
+    private void flagGame() {
+        if (isFlagged) {
+            isFlagged = false;
+            mMenu.findItem(R.id.unflag).setVisible(false);
+            mMenu.findItem(R.id.flag).setVisible(true);
+        }
+        else {
+            isFlagged = true;
+            mMenu.findItem(R.id.unflag).setVisible(true);
+            mMenu.findItem(R.id.flag).setVisible(false);
+            Toast.makeText(this, "Flagged", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -907,6 +916,16 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mFitBAdapter.setCaptions(captions);
         mFitBAdapter.notifyDataSetChanged();
         showRecyclerViewHideProgress();
+    }
+
+    @Override
+    public void updateGame(String type) {
+        if (type.equals(GameAction.UPVOTE)) {
+            upvoteGame();
+        }
+        else {
+            flagGame();
+        }
     }
 
     @Override

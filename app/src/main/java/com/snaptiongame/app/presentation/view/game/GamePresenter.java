@@ -80,7 +80,7 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Timber.i("Successfully flagged snaption"),
+                        () -> mGameView.updateGame(request.choiceType),
                         Timber::e
                 );
         mDisposables.add(disposable);

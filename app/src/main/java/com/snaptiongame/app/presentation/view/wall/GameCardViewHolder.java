@@ -23,6 +23,7 @@ import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
+import com.snaptiongame.app.data.utils.ItemListener;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
@@ -57,6 +58,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public Context mContext;
     public PopupMenu mMenu;
     public View mView;
+    private ItemListener mListener;
 
     public int mGameId;
     public int mPickerId;
@@ -65,11 +67,12 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public boolean isUpvoted = false;
     public boolean isFlagged = false;
 
-    public GameCardViewHolder(View itemView) {
+    public GameCardViewHolder(View itemView, ItemListener listener) {
         super(itemView);
         mContext = itemView.getContext();
         mView = itemView;
         ButterKnife.bind(this, itemView);
+        mListener = listener;
 
         mMenu = new PopupMenu(mContext, itemView);
         mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
@@ -82,7 +85,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
         mUpvoteButton.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
-                setBeenUpvoted();
+                upvoteGame();
             }
             else {
                 goToLogin();
@@ -175,16 +178,13 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             isUpvoted = true;
             Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
-        upvoteGame(mGameId, isUpvoted);
+        Timber.i("Successfully updated upvote!");
+        mListener.updateUpvote(isUpvoted, getAdapterPosition());
     }
 
     private void setBeenFlagged() {
         if (isFlagged) {
-            mFlagIcon.setVisibility(View.INVISIBLE);
-            mMenu.getMenu().findItem(R.id.flag).setVisible(true);
-            mMenu.getMenu().findItem(R.id.unflag).setVisible(false);
-            isFlagged = false;
-            flagGame(mGameId, isFlagged);
+            flagGame();
         }
         else {
             new MaterialDialog.Builder(mContext)
@@ -192,14 +192,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                     .content(R.string.ask_flag_game)
                     .positiveText(R.string.confirm)
                     .negativeText(R.string.cancel)
-                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mFlagIcon.setVisibility(View.VISIBLE);
-                        mMenu.getMenu().findItem(R.id.flag).setVisible(false);
-                        mMenu.getMenu().findItem(R.id.unflag).setVisible(true);
-                        isFlagged = true;
-                        flagGame(mGameId, isFlagged);
-                        Toast.makeText(mContext, "Flagged", Toast.LENGTH_SHORT).show();
-                    })
+                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> flagGame())
                     .cancelable(true)
                     .show();
         }
@@ -215,20 +208,37 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         mContext.startActivity(createGameIntent, transitionActivityOptions.toBundle());
     }
 
-    private void upvoteGame(int gameId, boolean isUpvoted) {
-        GameProvider.upvoteOrFlagGame(new GameAction(gameId, isUpvoted, GameAction.UPVOTE, GameAction.GAME_ID))
+    private void upvoteGame() {
+        GameProvider.upvoteOrFlagGame(new GameAction(mGameId, !isUpvoted, GameAction.UPVOTE,
+                GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Timber.i("Successfully upvoted game!"),
+                        this::setBeenUpvoted,
                         Timber::e
                 );
     }
 
-    private void flagGame(int gameId, boolean isFlagged) {
-        GameProvider.upvoteOrFlagGame(new GameAction(gameId, isFlagged, GameAction.FLAGGED, GameAction.GAME_ID))
+    private void flagGame() {
+        GameProvider.upvoteOrFlagGame(new GameAction(mGameId, !isFlagged, GameAction.FLAGGED,
+                GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Timber.i("Successfully flagged game"),
+                        () -> {
+                            if (isFlagged) {
+                                mFlagIcon.setVisibility(View.INVISIBLE);
+                                mMenu.getMenu().findItem(R.id.flag).setVisible(true);
+                                mMenu.getMenu().findItem(R.id.unflag).setVisible(false);
+                                isFlagged = false;
+                            }
+                            else {
+                                mFlagIcon.setVisibility(View.VISIBLE);
+                                mMenu.getMenu().findItem(R.id.flag).setVisible(false);
+                                mMenu.getMenu().findItem(R.id.unflag).setVisible(true);
+                                isFlagged = true;
+                                Toast.makeText(mContext, R.string.flagged, Toast.LENGTH_SHORT).show();
+                            }
+                            mListener.updateFlag(isFlagged, getAdapterPosition());
+                        },
                         Timber::e
                 );
     }
