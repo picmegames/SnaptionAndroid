@@ -51,7 +51,6 @@ public class GamePresenter implements GameContract.Presenter {
         mDisposables = new CompositeDisposable();
         mGameView.setPresenter(this);
         mCaptions = new ArrayList<>();
-
     }
 
     @Override
