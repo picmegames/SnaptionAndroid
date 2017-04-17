@@ -922,7 +922,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void updateGame(String type) {
         if (type.equals(GameAction.UPVOTE)) {
             upvoteGame();
-        } else {
+        }
+        else {
             flagGame();
         }
     }
