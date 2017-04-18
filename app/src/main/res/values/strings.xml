@@ -41,7 +41,7 @@
     <string name="date_label">End Date</string>
     <string name="tags_label">Tags</string>
     <string name="add_tags_label">Add Some Tags!</string>
-    <string name="share">Share</string>
+    <string name="share">Share to Facebook</string>
     <string name="create_game">Create Game</string>
     <string name="flag">Flag as Inappropriate</string>
     <string name="unflag">Undo Flag</string>
@@ -146,4 +146,6 @@
     <!-- More Info Fragment -->
     <string name="experience">Experience:</string>
     <string name="rank">Rank:</string>
+    <string name="no_facebook">Facebook not installed</string>
+    <string name="facebook_app" translatable="false">com.facebook.katana</string>
 </resources>
