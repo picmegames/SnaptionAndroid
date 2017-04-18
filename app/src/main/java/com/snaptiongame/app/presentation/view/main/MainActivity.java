@@ -242,15 +242,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setDefaultHeader();
         }
     }
-
+    private boolean lastLoggedInState = false;
     @Override
     protected void onResume() {
         super.onResume();
         setHeader();
 
-        if (fragTag.equals(WallFragment.TAG) || !AuthManager.isLoggedIn()) {
+        if (lastLoggedInState != AuthManager.isLoggedIn()) {
             setupWallBottomNavigation();
             setupInitialWall();
+            lastLoggedInState = AuthManager.isLoggedIn();
         }
     }
 
