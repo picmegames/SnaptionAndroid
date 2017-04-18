@@ -239,7 +239,6 @@ public final class AuthManager {
     private void fireFailureCallback() {
         if (callback != null) {
             callback.onAuthFailure();
-            callback = null;
         }
     }
 

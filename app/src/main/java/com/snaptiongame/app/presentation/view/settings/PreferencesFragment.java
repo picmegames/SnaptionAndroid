@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 
 import timber.log.Timber;
@@ -133,14 +134,26 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private void goToLogin() {
         Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
         startActivity(loginIntent);
-        getActivity().finish();
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals(getString(R.string.log_out_label))) {
-            mPresenter.logout();
-            goToLogin();
+            if (AuthManager.isLoggedIn()) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.log_out_label)
+                        .content(R.string.log_out_content)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                            mPresenter.logout();
+                            goToLogin();
+                        })
+                        .show();
+            }
+            else {
+                goToLogin();
+            }
         }
         else if (preference.getKey().equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();

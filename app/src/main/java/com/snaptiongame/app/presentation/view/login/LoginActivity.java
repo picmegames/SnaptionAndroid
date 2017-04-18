@@ -11,9 +11,8 @@ import com.bumptech.glide.Glide;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.auth.AuthCallback;
-import com.snaptiongame.app.presentation.view.main.MainActivity;
+import com.snaptiongame.app.data.auth.AuthManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,12 +59,30 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void onAuthSuccess() {
-        goToMain();
+        finish();
     }
 
     @Override
     public void onAuthFailure() {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuthManager.connectGoogleApi();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuthManager.disconnectGoogleApi();
+    }
+
+    @Override
+    public void onBackPressed() {
+        mAuthManager.registerCallback(null);
+        finish();
     }
 
     @Override
@@ -88,16 +105,5 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         else {
             mAuthManager.facebookActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        goToMain();
-    }
-
-    private void goToMain() {
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        startActivity(mainIntent);
     }
 }

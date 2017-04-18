@@ -381,12 +381,25 @@ public class ProfileActivity extends AppCompatActivity
                 onBackPressed();
                 break;
             case R.id.log_out:
-                mPresenter.logout();
+                logout();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void logout() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.log_out_label)
+                .content(R.string.log_out_content)
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no)
+                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                    mPresenter.logout();
+                    finish();
+                })
+                .show();
     }
 
     @Override
