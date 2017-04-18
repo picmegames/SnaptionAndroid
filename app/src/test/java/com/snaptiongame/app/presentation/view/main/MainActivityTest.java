@@ -39,12 +39,12 @@ public class MainActivityTest {
                 .get();
     }
 
-    @Test
-    public void clickingBack_shouldDoNothing() {
-        ShadowActivity shadowActivity = shadowOf(mainActivity);
-        mainActivity.onBackPressed();
-        assertTrue(shadowActivity.isFinishing());
-    }
+//    @Test
+//    public void clickingBack_shouldDoNothing() {
+//        ShadowActivity shadowActivity = shadowOf(mainActivity);
+//        mainActivity.onBackPressed();
+//        assertTrue(shadowActivity.isFinishing());
+//    }
 
     @Test
     public void clickingHeaderView_shouldStartLoginActivity() {

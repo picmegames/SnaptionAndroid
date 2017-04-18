@@ -137,7 +137,9 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,
                             mImage, ViewCompat.getTransitionName(mImage));
-            ((MainActivity) mContext).setComingFromGameActivity(true);
+            if (mContext instanceof MainActivity) {
+                ((MainActivity) mContext).setComingFromGameActivity(true);
+            }
             mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
         });
     }
