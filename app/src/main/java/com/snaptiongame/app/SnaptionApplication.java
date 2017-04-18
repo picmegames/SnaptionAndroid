@@ -1,9 +1,12 @@
 package com.snaptiongame.app;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 
 import com.snaptiongame.app.data.auth.AuthManager;
+import com.snaptiongame.app.data.utils.NetworkListener;
 import com.squareup.leakcanary.LeakCanary;
 
 import io.branch.referral.Branch;
@@ -19,11 +22,14 @@ import timber.log.Timber;
 public class SnaptionApplication extends Application {
     private static Context context;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         SnaptionApplication.context = getApplicationContext();
+
+
 
         // INIT Branch
         Branch.getAutoInstance(this);
@@ -42,6 +48,8 @@ public class SnaptionApplication extends Application {
             // INIT Timber (Logger for debug builds)
             Timber.plant(new Timber.DebugTree());
         }
+
+
     }
 
     public static Context getContext() {

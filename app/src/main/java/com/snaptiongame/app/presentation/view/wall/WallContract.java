@@ -28,6 +28,8 @@ public class WallContract {
 
         void showEmptyView();
 
+        void showDisconnectedView();
+
         void showWall();
 
         void setRefreshing(boolean isRefreshing);
