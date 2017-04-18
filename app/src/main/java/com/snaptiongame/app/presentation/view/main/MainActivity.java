@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int mUserId;
     private int rightMargin;
     private int bottomMargin;
+    private boolean lastLoggedInState = false;
+    private boolean comingFromGameActivity = false;
 
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
@@ -126,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        setupWallBottomNavigation();
-        setupInitialWall();
+        setupWall();
+        initializeWallFragments();
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -168,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mEmailView.setText("");
     }
 
-    private void setupInitialWall() {
+    private void initializeWallFragments() {
         if (!AuthManager.isLoggedIn()) {
             mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
             mBottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
@@ -189,15 +191,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .commit();
     }
 
-    private void setupWallBottomNavigation() {
+    private void setupWall() {
         mNavigationView.getMenu().findItem(R.id.wall).setChecked(true);
         mBottomNavigationView.setVisibility(View.VISIBLE);
         resetFabPosition(true);
+
+        int initItem = mBottomNavigationView.getSelectedItemId();
 
         if (!AuthManager.isLoggedIn()) {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
             mNavigationView.getMenu().findItem(R.id.friends).setVisible(false);
             mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
+            if (initItem == R.id.my_wall) {
+                mBottomNavigationView.setSelectedItemId(R.id.discover);
+            }
+            else {
+                mBottomNavigationView.setSelectedItemId(initItem);
+            }
         }
         else {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
@@ -207,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .add(0, R.id.my_wall, Menu.FIRST, getString(R.string.my_wall))
                         .setIcon(R.drawable.ic_face_white_24dp);
             }
+            mBottomNavigationView.setSelectedItemId(initItem);
         }
     }
 
@@ -242,16 +253,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setDefaultHeader();
         }
     }
-    private boolean lastLoggedInState = false;
+
+    public void setComingFromGameActivity(boolean comingFromGameActivity) {
+        this.comingFromGameActivity = comingFromGameActivity;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         setHeader();
 
         if (lastLoggedInState != AuthManager.isLoggedIn()) {
-            setupWallBottomNavigation();
-            setupInitialWall();
+            setupWall();
             lastLoggedInState = AuthManager.isLoggedIn();
+
+            if (!comingFromGameActivity) {
+                initializeWallFragments();
+                comingFromGameActivity = false;
+            }
         }
     }
 
@@ -331,15 +350,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.wall:
-                setupWallBottomNavigation();
                 mMenu.findItem(R.id.filter).setVisible(true);
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
                     mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
                     fragTag = WallFragment.TAG;
-                    mActionBar.setTitle(R.string.my_wall);
                     mBottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
+                    mActionBar.setTitle(R.string.my_wall);
                     setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                     clearFilterView();
                     break;
@@ -348,6 +366,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.discover:
                 mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
                 fragTag = WallFragment.TAG;
+                mBottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
                 mActionBar.setTitle(R.string.discover);
                 setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
                 clearFilterView();
@@ -356,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.popular:
                 mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.POPULAR);
                 fragTag = WallFragment.TAG;
+                mBottomNavigationView.getMenu().findItem(R.id.popular).setChecked(true);
                 mActionBar.setTitle(R.string.popular);
                 setAppStatusBarColors(R.color.colorPopular, R.color.colorPopularDark);
                 clearFilterView();

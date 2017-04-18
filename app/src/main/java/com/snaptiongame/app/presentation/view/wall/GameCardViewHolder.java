@@ -28,6 +28,7 @@ import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,6 +137,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,
                             mImage, ViewCompat.getTransitionName(mImage));
+            ((MainActivity) mContext).setComingFromGameActivity(true);
             mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
         });
     }

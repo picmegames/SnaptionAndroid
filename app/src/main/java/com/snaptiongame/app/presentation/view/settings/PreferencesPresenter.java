@@ -59,9 +59,7 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
 
     @Override
     public void logout() {
-        if (AuthManager.isLoggedIn()) {
-            mAuthManager.logout();
-        }
+        mAuthManager.logout();
     }
 
     @Override
