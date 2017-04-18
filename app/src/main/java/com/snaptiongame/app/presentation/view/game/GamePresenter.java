@@ -108,7 +108,7 @@ public class GamePresenter implements GameContract.Presenter {
                             Timber.e(e);
                             mGameView.setRefreshing(false);
                             Toast.makeText(SnaptionApplication.getContext(),
-                                    ((GameActivity) mGameView)
+                                    SnaptionApplication.getContext()
                                             .getResources()
                                             .getString(R.string.failed_caption_submission),
                                     Toast.LENGTH_LONG).show();
