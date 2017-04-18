@@ -350,6 +350,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.wall:
+                setupWall();
                 mMenu.findItem(R.id.filter).setVisible(true);
 
             case R.id.my_wall:
