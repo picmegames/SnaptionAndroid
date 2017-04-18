@@ -3,23 +3,17 @@ package com.snaptiongame.app.data.utils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
-import android.provider.Settings;
-import android.widget.Toast;
 
-import com.snaptiongame.app.SnaptionApplication;
-import com.snaptiongame.app.presentation.view.game.GameContract;
-import com.snaptiongame.app.presentation.view.game.GamePresenter;
-import com.snaptiongame.app.presentation.view.wall.WallContract;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import android.provider.Settings;
 
 /**
  * Created by nickromero on 4/18/17.
  */
 
 public class NetworkListener extends BroadcastReceiver {
-    private  NetworkListener mNetworkListener;
     private ConnectivityManager connectivityManager;
     private Context mContext;
 
@@ -34,8 +28,6 @@ public class NetworkListener extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
     }
-
-
 
     public boolean isConnectedToWifi() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
@@ -60,6 +52,4 @@ public class NetworkListener extends BroadcastReceiver {
         else
             return isConnectedToMobile() || isConnectedToWifi();
     }
-
-
 }
