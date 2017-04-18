@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view;
+package com.snaptiongame.app.presentation.view.main;
 
 import android.content.Intent;
 import android.os.Build;
@@ -9,7 +9,6 @@ import android.view.View;
 import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
-import com.snaptiongame.app.presentation.view.main.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +19,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -45,7 +43,7 @@ public class MainActivityTest {
     public void clickingBack_shouldDoNothing() {
         ShadowActivity shadowActivity = shadowOf(mainActivity);
         mainActivity.onBackPressed();
-        assertFalse(shadowActivity.isFinishing());
+        assertTrue(shadowActivity.isFinishing());
     }
 
     @Test
