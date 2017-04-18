@@ -3,7 +3,10 @@ package com.snaptiongame.app.presentation.view.game;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.snaptiongame.app.R;
+import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
@@ -104,6 +107,9 @@ public class GamePresenter implements GameContract.Presenter {
                         e -> {
                             Timber.e(e);
                             mGameView.setRefreshing(false);
+                            Toast.makeText(SnaptionApplication.getContext(),
+                                    R.string.failed_caption_submission,
+                                    Toast.LENGTH_LONG).show();
                         }
                 );
         mDisposables.add(disposable);
