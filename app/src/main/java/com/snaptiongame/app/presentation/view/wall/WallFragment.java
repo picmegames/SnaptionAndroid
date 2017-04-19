@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.wall;
 
-import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,14 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.data.utils.NetworkListener;
 import com.snaptiongame.app.presentation.view.customviews.WallSpacesItemDecoration;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +50,6 @@ public class WallFragment extends Fragment implements WallContract.View {
     TextView mWallState;
 
     private WallContract.Presenter mPresenter;
-    private NetworkListener mNetworkListener;
-
     private WallAdapter mAdapter;
     private Unbinder mUnbinder;
     private int mUserId;
@@ -103,8 +96,6 @@ public class WallFragment extends Fragment implements WallContract.View {
         mUserId = getArguments().getInt(USER_ID);
         mType = getArguments().getInt(TYPE);
         mPresenter = new WallPresenter(this, mUserId, mType);
-        mNetworkListener = new NetworkListener(getContext());
-        getContext().registerReceiver(mNetworkListener, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
         mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
         mWall.addItemDecoration(new WallSpacesItemDecoration(

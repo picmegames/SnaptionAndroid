@@ -127,13 +127,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".data.utils.NetworkListener"
-            android:label="NetworkConnection">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
-
         <!-- <service -->
         <!-- android:name=".data.services.GameUploadService" -->
         <!-- android:exported="false"/> -->

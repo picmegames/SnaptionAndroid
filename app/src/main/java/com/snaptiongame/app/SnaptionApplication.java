@@ -1,12 +1,9 @@
 package com.snaptiongame.app;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.IntentFilter;
 
 import com.snaptiongame.app.data.auth.AuthManager;
-import com.snaptiongame.app.data.utils.NetworkListener;
 import com.squareup.leakcanary.LeakCanary;
 
 import io.branch.referral.Branch;
