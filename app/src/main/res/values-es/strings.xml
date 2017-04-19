@@ -111,4 +111,5 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="log_out_content">¿Seguro que quieres salir?</string>
     <string name="failed_caption_submission">Falló la subproducción de subtítulos</string>
     <string name="no_facebook">Facebook no está instalado</string>
+    <string name="no_internet">Sin conexión a Internet</string>
 </resources>

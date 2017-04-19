@@ -175,7 +175,7 @@ public class WallFragment extends Fragment implements WallContract.View {
     public void showDisconnectedView() {
         mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
         mWallStateImage.setImageResource(ic_signal_wifi_off_grey_800_24dp);
-        mWallState.setText(R.string.no_internet_connection);
+        mWallState.setText(R.string.no_internet);
 
         if (mType != WallContract.HISTORY) {
             mWall.setVisibility(View.GONE);
