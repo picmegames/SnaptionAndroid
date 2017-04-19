@@ -17,8 +17,14 @@ public class BranchConverter implements JsonSerializer<DeepLinkRequest> {
 
     public static GameInvite deserializeGameInvite(JsonElement json) {
         JsonObject content = json.getAsJsonObject();
-        String inviteToken = content.get(GameInvite.INVITE_TOKEN).getAsString();
-        int gameId = content.get(GameInvite.GAME_ID).getAsInt();
+        String inviteToken = null;
+        int gameId = 0;
+
+        if (content.get(GameInvite.INVITE_TOKEN) != null && content.get(GameInvite.GAME_ID) != null) {
+            inviteToken = content.get(GameInvite.INVITE_TOKEN).getAsString();
+            gameId = content.get(GameInvite.GAME_ID).getAsInt();
+        }
+
         return new GameInvite(inviteToken, gameId);
     }
 
