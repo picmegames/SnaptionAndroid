@@ -12,6 +12,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.snaptiongame.app.R.drawable.ic_signal_wifi_off_grey_800_24dp;
+import static com.snaptiongame.app.R.drawable.snaption_icon_gray;
+
 /**
  * The Wall Fragment is a fragment that shows the wall to the user.
  * When the wall is first shown it will load in a list of games
@@ -43,10 +47,12 @@ public class WallFragment extends Fragment implements WallContract.View {
     RecyclerView mWall;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.empty_view)
-    LinearLayout mEmptyView;
-    @BindView(R.id.disconnected_view)
-    LinearLayout mDisconnectedView;
+    @BindView(R.id.empty_or_disconnected_view)
+    LinearLayout mEmptyOrDisconnectedView;
+    @BindView(R.id.wall_state_image)
+    ImageView mWallStateImage;
+    @BindView(R.id.wall_state)
+    TextView mWallState;
 
     private WallContract.Presenter mPresenter;
     private NetworkListener mNetworkListener;
@@ -60,6 +66,8 @@ public class WallFragment extends Fragment implements WallContract.View {
     public static final int NUM_COLUMNS = 2;
     public static final String USER_ID = "userId";
     public static final String TYPE = "type";
+    public static final int EMPTY_VIEW = 0;
+    public static final int DISCONNECTED_VIEW = 1;
 
 
     /**
@@ -107,21 +115,14 @@ public class WallFragment extends Fragment implements WallContract.View {
         mWall.setAdapter(mAdapter);
 
 
-        mRefreshLayout.setOnRefreshListener(this::checkNetworkStatus);
+        mRefreshLayout.setOnRefreshListener( () -> mPresenter.loadGames(mType, null));
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
-        if (mNetworkListener.isConnectedToInternet()) {
-            // Need to subscribe if on Discover tab because onResume will
-            // not subscribe if we are on Discover tab
-            if (mType == WallContract.DISCOVER) {
-                mPresenter.subscribe();
-            }
+        if (mType == WallContract.DISCOVER) {
+            mPresenter.subscribe();
         }
-        else
-            showDisconnectedView();
-
 
         return view;
     }
@@ -134,15 +135,13 @@ public class WallFragment extends Fragment implements WallContract.View {
         super.onResume();
 
         // Do not refresh wall in onResume if on Discover tab
-        if (mNetworkListener.isConnectedToInternet()) {
-            // Need to subscribe if on Discover tab because onResume will
-            // not subscribe if we are on Discover tab
-            if (mType == WallContract.DISCOVER) {
-                mPresenter.subscribe();
-            }
+        // Need to subscribe if on Discover tab because onResume will
+        // not subscribe if we are on Discover tab
+        if (mType == WallContract.DISCOVER) {
+            mPresenter.subscribe();
         }
-        else
-            showDisconnectedView();
+
+
     }
 
     /**
@@ -152,16 +151,6 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     public void filterGames(List<String> tags) {
         mPresenter.loadGames(mType, tags);
-    }
-
-    private void checkNetworkStatus() {
-        if (mNetworkListener.isConnectedToInternet()) {
-            mPresenter.loadGames(mType, null);
-        }
-        else {
-            showDisconnectedView();
-            setRefreshing(false);
-        }
     }
 
     /**
@@ -174,8 +163,7 @@ public class WallFragment extends Fragment implements WallContract.View {
     public void showGames(List<Game> games) {
         if (games.isEmpty()) {
             showEmptyView();
-        }
-        else {
+        } else {
             showWall();
             mAdapter.setGames(games);
         }
@@ -183,7 +171,9 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     @Override
     public void showEmptyView() {
-        mEmptyView.setVisibility(View.VISIBLE);
+        mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+        mWallStateImage.setImageResource(snaption_icon_gray);
+        mWallState.setText(R.string.nothing_here);
 
         if (mType != WallContract.HISTORY) {
             mWall.setVisibility(View.GONE);
@@ -192,7 +182,9 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     @Override
     public void showDisconnectedView() {
-        mDisconnectedView.setVisibility(View.VISIBLE);
+        mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+        mWallStateImage.setImageResource(ic_signal_wifi_off_grey_800_24dp);
+        mWallState.setText(R.string.no_internet_connection);
 
         if (mType != WallContract.HISTORY) {
             mWall.setVisibility(View.GONE);
@@ -201,8 +193,8 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     @Override
     public void showWall() {
-        mEmptyView.setVisibility(View.GONE);
-        mDisconnectedView.setVisibility(View.GONE);
+        mEmptyOrDisconnectedView.setVisibility(View.GONE);
+
         if (mType != WallContract.HISTORY) {
             mWall.setVisibility(View.VISIBLE);
         }

@@ -18,7 +18,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
-        android:id="@+id/empty_view"
+        android:id="@+id/empty_or_disconnected_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -27,47 +27,19 @@
         android:visibility="gone">
 
         <ImageView
+            android:id="@+id/wall_state_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:src="@drawable/snaption_icon_gray"/>
+            android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/wall_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:text="@string/empty_wall"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/disconnected_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="56dp"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_signal_wifi_off_grey_800_24dp"/>
-
-        <TextView
-            android:id="@+id/connection_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/no_internet_connection"
             android:layout_marginTop="8dp"
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold"/>
     </LinearLayout>
-
 </FrameLayout>
