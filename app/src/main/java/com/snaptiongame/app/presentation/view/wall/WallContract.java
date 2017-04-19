@@ -26,6 +26,8 @@ public class WallContract {
     interface View extends BaseView<Presenter> {
         void showGames(List<Game> games);
 
+        void showDisconnectedView();
+
         void showEmptyView();
 
         void showWall();

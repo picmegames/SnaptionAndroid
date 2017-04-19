@@ -105,6 +105,7 @@
     <string name="leaving_content">Are you sure you want to exit Snaption and open your browser?</string>
     <string name="log_out_content">Are you sure you want to log out?</string>
     <string name="failed_caption_submission">Caption Submission Failed</string>
+    <string name="no_internet">No Internet Connection</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
