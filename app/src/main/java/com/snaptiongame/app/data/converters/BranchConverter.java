@@ -1,15 +1,11 @@
 package com.snaptiongame.app.data.converters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.GameInvite;
-
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 
@@ -19,9 +15,11 @@ import java.lang.reflect.Type;
 
 public class BranchConverter implements JsonSerializer<DeepLinkRequest> {
 
-    public static GameInvite deserializeGameInvite(JSONObject json) {
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(String.valueOf(json), GameInvite.class);
+    public static GameInvite deserializeGameInvite(JsonElement json) {
+        JsonObject content = json.getAsJsonObject();
+        String inviteToken = content.get(GameInvite.INVITE_TOKEN).getAsString();
+        int gameId = content.get(GameInvite.GAME_ID).getAsInt();
+        return new GameInvite(inviteToken, gameId);
     }
 
     @Override

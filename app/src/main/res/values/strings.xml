@@ -101,8 +101,8 @@
     <string name="flagged">Flagged</string>
     <string name="unflagged">Unflagged</string>
     <string name="empty_wall">Nothing here!</string>
-    <string name="give_feedback">Rate and Give Feedback</string>
-    <string name="leaving_content">Are you sure you want to exit Snaption and go to the Google Play Store?</string>
+    <string name="give_feedback">Give Feedback</string>
+    <string name="leaving_content">Are you sure you want to exit Snaption and open your browser?</string>
     <string name="log_out_content">Are you sure you want to log out?</string>
     <string name="failed_caption_submission">Caption Submission Failed</string>
 
@@ -134,7 +134,10 @@
     <string name="no_friends">No friends could be found</string>
     <string name="invite_friend_via">Invite friend via</string>
     <string name="invite_message">Hey there download this nifty app called Snaption!\n</string>
+
+    <!-- Links -->
     <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.snaptiongame.app</string>
+    <string name="feedback_url" translatable="false">https://docs.google.com/forms/d/e/1FAIpQLSdxx3G_deM6OJV8nj3SN94T2DkBq_rxB875qJ_H-e2q9mqf8g/viewform</string>
 
     <!-- Delete Friend Dialog -->
     <string name="delete_pre">Are you sure you want to remove</string>

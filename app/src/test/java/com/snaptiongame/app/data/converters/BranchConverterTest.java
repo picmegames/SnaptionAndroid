@@ -1,12 +1,10 @@
 package com.snaptiongame.app.data.converters;
 
 import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.GameInvite;
 
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +17,7 @@ public class BranchConverterTest {
     private GameInvite invite;
     private DeepLinkRequest req;
     private JsonObject requestObject;
-    private JSONObject inviteObject;
+    private JsonObject inviteObject;
     BranchConverter converter;
 
     @Before
@@ -27,11 +25,11 @@ public class BranchConverterTest {
         invite = new GameInvite("test", 1);
         req = new DeepLinkRequest(1, "b@gmail.com", "911", "12", "11");
 
-        inviteObject = new JSONObject();
+        inviteObject = new JsonObject();
         requestObject = new JsonObject();
 
-        inviteObject.put(GameInvite.INVITE_TOKEN, invite.inviteToken);
-        inviteObject.put(GameInvite.GAME_ID, invite.gameId);
+        inviteObject.addProperty(GameInvite.INVITE_TOKEN, invite.inviteToken);
+        inviteObject.addProperty(GameInvite.GAME_ID, invite.gameId);
         requestObject.addProperty(DeepLinkRequest.GAMEID, req.gameId);
         requestObject.addProperty(DeepLinkRequest.EMAIL, req.email);
         requestObject.addProperty(DeepLinkRequest.FACEBOOKID, req.facebookID);
@@ -45,6 +43,6 @@ public class BranchConverterTest {
     @Test
     public void testSerialize() {
         assertEquals(converter.serialize(req, GameInvite.class, null), requestObject);
-        assertEquals(converter.deserializeGameInvite(inviteObject), invite);
+        assertEquals(BranchConverter.deserializeGameInvite(inviteObject), invite);
     }
 }
