@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@+id/wall_state_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
             android:layout_gravity="center"/>
 
         <TextView
