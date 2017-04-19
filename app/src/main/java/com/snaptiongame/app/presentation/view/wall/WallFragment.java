@@ -58,9 +58,6 @@ public class WallFragment extends Fragment implements WallContract.View {
     public static final int NUM_COLUMNS = 2;
     public static final String USER_ID = "userId";
     public static final String TYPE = "type";
-    public static final int EMPTY_VIEW = 0;
-    public static final int DISCONNECTED_VIEW = 1;
-
 
     /**
      * This method provides a new instance of a Wall Fragment.
