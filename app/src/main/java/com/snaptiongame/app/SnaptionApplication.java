@@ -19,14 +19,11 @@ import timber.log.Timber;
 public class SnaptionApplication extends Application {
     private static Context context;
 
-
     @Override
     public void onCreate() {
         super.onCreate();
 
         SnaptionApplication.context = getApplicationContext();
-
-
 
         // INIT Branch
         Branch.getAutoInstance(this);
@@ -45,8 +42,6 @@ public class SnaptionApplication extends Application {
             // INIT Timber (Logger for debug builds)
             Timber.plant(new Timber.DebugTree());
         }
-
-
     }
 
     public static Context getContext() {
