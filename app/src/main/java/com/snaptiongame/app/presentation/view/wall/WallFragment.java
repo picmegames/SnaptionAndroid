@@ -1,8 +1,6 @@
 package com.snaptiongame.app.presentation.view.wall;
 
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,11 +20,9 @@ import com.snaptiongame.app.presentation.view.customviews.WallSpacesItemDecorati
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.snaptiongame.app.R.drawable.ic_signal_wifi_off_grey_800_24dp;
 import static com.snaptiongame.app.R.drawable.ic_signal_wifi_off_grey_800_48dp;
 import static com.snaptiongame.app.R.drawable.snaption_icon_gray;
 
