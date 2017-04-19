@@ -106,11 +106,13 @@ public class WallFragment extends Fragment implements WallContract.View {
         mWall.setAdapter(mAdapter);
 
 
-        mRefreshLayout.setOnRefreshListener( () -> mPresenter.loadGames(mType, null));
+        mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType, null));
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
+        // Need to subscribe if on Discover tab because onResume will
+        // not subscribe if we are on Discover tab
         if (mType == WallContract.DISCOVER) {
             mPresenter.subscribe();
         }
@@ -126,13 +128,9 @@ public class WallFragment extends Fragment implements WallContract.View {
         super.onResume();
 
         // Do not refresh wall in onResume if on Discover tab
-        // Need to subscribe if on Discover tab because onResume will
-        // not subscribe if we are on Discover tab
-        if (mType == WallContract.DISCOVER) {
+        if (mType != WallContract.DISCOVER) {
             mPresenter.subscribe();
         }
-
-
     }
 
     /**
@@ -154,7 +152,8 @@ public class WallFragment extends Fragment implements WallContract.View {
     public void showGames(List<Game> games) {
         if (games.isEmpty()) {
             showEmptyView();
-        } else {
+        }
+        else {
             showWall();
             mAdapter.setGames(games);
         }
