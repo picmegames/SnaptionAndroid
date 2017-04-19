@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.snaptiongame.app.R.drawable.ic_signal_wifi_off_grey_800_24dp;
+import static com.snaptiongame.app.R.drawable.ic_signal_wifi_off_grey_800_48dp;
 import static com.snaptiongame.app.R.drawable.snaption_icon_gray;
 
 /**
@@ -161,6 +162,7 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     @Override
     public void showEmptyView() {
+        mAdapter.clear();
         mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
         mWallStateImage.setImageResource(snaption_icon_gray);
         mWallState.setText(R.string.nothing_here);
@@ -172,8 +174,9 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     @Override
     public void showDisconnectedView() {
+        mAdapter.clear();
         mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
-        mWallStateImage.setImageResource(ic_signal_wifi_off_grey_800_24dp);
+        mWallStateImage.setImageResource(ic_signal_wifi_off_grey_800_48dp);
         mWallState.setText(R.string.no_internet);
 
         if (mType != WallContract.HISTORY) {
