@@ -94,7 +94,9 @@ public class WallFragment extends Fragment implements WallContract.View {
         mAdapter = new WallAdapter(new ArrayList<>());
         mWall.setAdapter(mAdapter);
 
+
         mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType, null));
+
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
