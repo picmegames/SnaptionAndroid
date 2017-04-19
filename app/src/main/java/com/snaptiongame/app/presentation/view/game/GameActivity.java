@@ -51,6 +51,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.gson.JsonParser;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -232,7 +233,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         branch.initSession((referringParams, error) -> {
             // CALLED when the async initSession returns, won't error if no branch data is found
             if (error == null) {
-                mInvite = BranchConverter.deserializeGameInvite(referringParams);
+                Timber.i(referringParams.toString());
+                mInvite = BranchConverter.deserializeGameInvite(
+                        new JsonParser().parse(referringParams.toString()));
                 // IF branch returns a null or invalid invite then display the intent information
                 if (mInvite == null || mInvite.gameId == 0) {
                     showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),

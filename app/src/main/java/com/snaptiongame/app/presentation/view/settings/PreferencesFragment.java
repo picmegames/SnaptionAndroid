@@ -165,7 +165,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                     .positiveText(R.string.yes)
                     .negativeText(R.string.no)
                     .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.store_url)));
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.feedback_url)));
                         startActivity(browserIntent);
                     })
                     .show();

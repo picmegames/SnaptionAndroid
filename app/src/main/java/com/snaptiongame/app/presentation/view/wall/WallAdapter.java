@@ -153,4 +153,9 @@ public class WallAdapter extends RecyclerView.Adapter {
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+    public void clear() {
+        mGames.clear();
+        notifyDataSetChanged();
+    }
 }

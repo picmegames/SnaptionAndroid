@@ -3,6 +3,7 @@ package com.snaptiongame.app.presentation.view.main;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -400,6 +401,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (AuthManager.isLoggedIn()) {
                     logout();
                 }
+                break;
+
+            case R.id.feedback:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.feedback_url)));
+                startActivity(browserIntent);
                 break;
 
             default:
