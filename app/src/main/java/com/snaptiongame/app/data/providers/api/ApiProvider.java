@@ -14,8 +14,8 @@ import com.snaptiongame.app.data.converters.CaptionConverter;
 import com.snaptiongame.app.data.converters.CaptionSetConverter;
 import com.snaptiongame.app.data.converters.FitBCaptionConverter;
 import com.snaptiongame.app.data.converters.FriendConverter;
-import com.snaptiongame.app.data.converters.GameConverter;
 import com.snaptiongame.app.data.converters.GameActionConverter;
+import com.snaptiongame.app.data.converters.GameConverter;
 import com.snaptiongame.app.data.converters.OAuthConverter;
 import com.snaptiongame.app.data.converters.SessionConverter;
 import com.snaptiongame.app.data.converters.UserConverter;
@@ -47,6 +47,7 @@ import java.security.cert.CertificateFactory;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -74,7 +75,6 @@ public class ApiProvider {
     private static SnaptionApi apiService;
     private static X509TrustManager trustManager;
 
-    private static final String SNAPTION_SERVER_URL = "https://api.snaptiongame.com";
     private static final String CERT_TYPE = "X.509";
     private static final String CA = "ca";
     private static final String TLS = "TLS";
@@ -89,7 +89,7 @@ public class ApiProvider {
     public static SnaptionApi getApiService() {
         if (apiService == null) {
             apiService = new Retrofit.Builder()
-                    .baseUrl(SNAPTION_SERVER_URL)
+                    .baseUrl(BuildConfig.SERVER_ENDPOINT)
                     .client(makeOkHttpClient())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .addConverterFactory(GsonConverterFactory.create(setupGson()))
@@ -117,21 +117,22 @@ public class ApiProvider {
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
         try {
-            SSLSocketFactory socketFactory = getSSLConfig(SnaptionApplication.getContext()).getSocketFactory();
-            okHttpClientBuilder
-                    .sslSocketFactory(socketFactory, trustManager)
-                    .cookieJar(cookieJar);
+            okHttpClientBuilder.cookieJar(cookieJar);
 
             if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                 okHttpClientBuilder.addInterceptor(interceptor);
+                okHttpClientBuilder.hostnameVerifier((String hostname, SSLSession session) -> true);
+            }
+            else {
+                SSLSocketFactory socketFactory = getSSLConfig(SnaptionApplication.getContext()).getSocketFactory();
+                okHttpClientBuilder.sslSocketFactory(socketFactory, trustManager);
             }
         }
         catch (CertificateException | KeyStoreException | NoSuchAlgorithmException |
                 KeyManagementException | IOException e) {
             Timber.e("Could not initialize OkHttpClient with SSL Certificate", e);
-
             okHttpClientBuilder.cookieJar(cookieJar);
         }
 
