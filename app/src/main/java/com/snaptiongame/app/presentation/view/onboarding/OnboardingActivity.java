@@ -28,7 +28,7 @@ import butterknife.OnClick;
  * @author Tyler Wong
  */
 
-public class OnboardingActivity extends AppCompatActivity {
+public class OnboardingActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     @BindView(R.id.prev_button)
     ImageButton mSkipPrevButton;
     @BindView(R.id.next_button)
@@ -71,44 +71,44 @@ public class OnboardingActivity extends AppCompatActivity {
             mOnboardingInfo.add(new OnboardingInfo(R.string.title_3, R.string.desc_3, R.string.anim_3));
 
             mViewPager.setAdapter(new OnboardingPagerAdapter(getSupportFragmentManager(), mOnboardingInfo));
-            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    if (position == mOnboardingInfo.size() - 1) {
-                        isLastPage = true;
-                        animate(mNextDoneButton, R.drawable.ic_check_white_24dp, FULL_ROTATION, LONG_ROTATION_DURATION);
-                    }
-                    else {
-                        if (isLastPage) {
-                            isLastPage = false;
-                            animate(mNextDoneButton, R.drawable.ic_arrow_forward_white_24dp, REVERSE_FULL_ROTATION, LONG_ROTATION_DURATION);
-                        }
-                    }
-
-                    if (position == 0) {
-                        mSkipPrevButton.setVisibility(View.INVISIBLE);
-                    }
-                    else {
-                        mSkipPrevButton.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
+            mViewPager.addOnPageChangeListener(this);
 
             mDotTabLayout.setupWithViewPager(mViewPager, true);
         }
         else {
             goToMain();
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position == mOnboardingInfo.size() - 1) {
+            isLastPage = true;
+            animate(mNextDoneButton, R.drawable.ic_check_white_24dp, FULL_ROTATION, LONG_ROTATION_DURATION);
+        }
+        else {
+            if (isLastPage) {
+                isLastPage = false;
+                animate(mNextDoneButton, R.drawable.ic_arrow_forward_white_24dp, REVERSE_FULL_ROTATION, LONG_ROTATION_DURATION);
+            }
+        }
+
+        if (position == 0) {
+            mSkipPrevButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            mSkipPrevButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     @OnClick(R.id.prev_button)

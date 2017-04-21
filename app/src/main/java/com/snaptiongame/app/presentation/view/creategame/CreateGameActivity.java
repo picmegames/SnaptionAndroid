@@ -19,17 +19,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -69,8 +70,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     Toolbar mToolbar;
     @BindView(R.id.image)
     ImageView mNewGameImage;
-    @BindView(R.id.content_spinner)
-    Spinner mContentSpinner;
+    @BindView(R.id.camera_animation)
+    LottieAnimationView mAnimationView;
     @BindView(R.id.private_switch)
     Switch mPrivateSwitch;
     @BindView(R.id.create_game)
@@ -138,8 +139,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .into(mNewGameImage);
             mCreateGameButton.setEnabled(true);
         }
-
-        assignValues();
+        else {
+            mAnimationView.setVisibility(View.VISIBLE);
+            mAnimationView.setAnimation(getString(R.string.anim_4));
+            mAnimationView.playAnimation();
+        }
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -188,13 +192,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
-    }
-
-    private void assignValues() {
-        ArrayAdapter contentAdapter = ArrayAdapter.createFromResource(this,
-                R.array.content_ratings_array, android.R.layout.simple_spinner_item);
-        contentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mContentSpinner.setAdapter(contentAdapter);
     }
 
     private boolean containsEmoji(List<String> tags) {
@@ -368,6 +365,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            mAnimationView.pauseAnimation();
+            mAnimationView.setVisibility(View.GONE);
             mUri = data.getData();
             mCreateGameButton.setEnabled(true);
             Glide.with(this)

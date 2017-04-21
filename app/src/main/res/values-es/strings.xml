@@ -45,11 +45,6 @@
     <string name="upload_message">Carga en progreso&#8230;</string>
     <string name="upload_title">Subiendo Nuevo Juego</string>
     <string name="no_friends">No se pudo encontrar amigos</string>
-
-    <string-array name="content_ratings_array">
-        <item>Familia</item>
-        <item>Maduro</item>
-    </string-array>
     <string name="log_in_label">Iniciar Sesión</string>
     <string name="current_login">Conectado como: %1$s</string>
     <string name="unflag">Deshacer la Bandera</string>

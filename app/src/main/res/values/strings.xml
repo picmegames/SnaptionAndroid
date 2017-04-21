@@ -10,15 +10,18 @@
     <string name="leaving_title">You Are Now Leaving Snaption</string>
 
     <!-- Onboarding -->
-    <string name="anim_1" translatable="false">tada_image.json</string>
     <string name="title_1">Post photos.\nThe funnier the better.</string>
     <string name="desc_1">Choose any picture from your phone to start a game.</string>
-    <string name="anim_2" translatable="false">mail_sent.json</string>
     <string name="title_2">Add captions.</string>
     <string name="desc_2">Choose from existing templates to make the best caption for the photo.</string>
-    <string name="anim_3" translatable="false">emoji_tongue.json</string>
     <string name="title_3">Play with friends.\nShare the memes with everyone!</string>
     <string name="desc_3">Invite friends to your game so they can caption as well. Vote for your favorite captions and the highest voted one wins!</string>
+
+    <!-- Animations -->
+    <string name="anim_1" translatable="false">tada_image.json</string>
+    <string name="anim_2" translatable="false">mail_sent.json</string>
+    <string name="anim_3" translatable="false">emoji_tongue.json</string>
+    <string name="anim_4" translatable="false">camera.json</string>
 
     <!-- Tags -->
     <string name="open_drawer" translatable="false">Navigation View Open</string>
@@ -120,13 +123,6 @@
     <!-- Create New Game Labels -->
     <string name="content_level_label">Content Level</string>
     <string name="privacy_label">Private Game</string>
-
-    <!-- Content Rating Labels-->
-
-    <string-array name="content_ratings_array">
-        <item>Family</item>
-        <item>Mature</item>
-    </string-array>
 
     <!-- Invite Friends Dialog -->
     <string name="add_a_friend">Add a Friend!</string>
