@@ -198,6 +198,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
      */
     private String mImageUrl;
 
+    private boolean fitbsAreReady = false;
+
     private boolean isDark = false;
     private float lastRefreshIconRotation = 0.0f;
 
@@ -524,6 +526,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mCaptionViewSwitcher.showNext();
                 mOuterTitleViewSwitcher.showNext();
                 initializeCaptionView();
+
+                if (fitbsAreReady)
+                    mPresenter.refreshCaptions();
             }
             // when a user clicks cancel on the fab
             else {
@@ -582,8 +587,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCaptionView.setLayoutManager(layoutManager);
         mCaptionView.setAdapter(mFitBAdapter);
         mCurrentCaptionState = CaptionState.Random;
-        showProgressHideRecyclerView();
-        mPresenter.refreshCaptions();
     }
 
     @OnClick(R.id.refresh_icon)
@@ -911,13 +914,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
         mCaptionView.setAdapter(mFitBAdapter);
         mFitBAdapter.setCaptions(captions);
-        showRecyclerViewHideProgress();
     }
 
     @Override
     public void showRandomCaptions(List<FitBCaption> captions) {
         mFitBAdapter.setCaptions(captions);
         mFitBAdapter.notifyDataSetChanged();
+        fitbsAreReady = true;
         showRecyclerViewHideProgress();
     }
 

@@ -205,7 +205,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void refreshCaptions() {
-        buildRandomCaptions(new ArrayList<>(mCaptions));
+        buildRandomCaptions(mCaptions);
     }
 
     @Override
