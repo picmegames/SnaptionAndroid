@@ -284,6 +284,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
         mCurrentCaptionState = CaptionState.List;
+        mPresenter.loadRandomFITBCaptions();
     }
 
     private void upvoteGame() {
@@ -579,11 +580,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private void initializeCaptionView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRefreshIcon.setVisibility(View.VISIBLE);
-        mPresenter.loadRandomFITBCaptions();
         mCaptionView.setLayoutManager(layoutManager);
         mCaptionView.setAdapter(mFitBAdapter);
         mCurrentCaptionState = CaptionState.Random;
         showProgressHideRecyclerView();
+        mPresenter.refreshCaptions();
     }
 
     @OnClick(R.id.refresh_icon)
