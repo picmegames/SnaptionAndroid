@@ -284,7 +284,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
         mCurrentCaptionState = CaptionState.List;
-        mPresenter.loadRandomFITBCaptions();
     }
 
     private void upvoteGame() {

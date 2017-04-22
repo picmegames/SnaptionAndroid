@@ -212,6 +212,7 @@ public class GamePresenter implements GameContract.Presenter {
     public void subscribe() {
         loadCaptions();
         loadPickerInfo();
+        loadRandomFITBCaptions();
     }
 
     @Override
