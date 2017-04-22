@@ -103,6 +103,7 @@ public class WallFragment extends Fragment implements WallContract.View {
 
 
         mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType, null));
+
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );

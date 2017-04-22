@@ -80,7 +80,13 @@ public class WallPresenter implements WallContract.Presenter {
                         mWallView::showGames,
                         e -> {
                             Timber.e(e);
-                            mWallView.showDisconnectedView();
+
+                            //There is a strange thing happening where if I have an empty history
+                            //it keeps showing a disconnected view. Hence beautiful fix
+                            if (type == WallContract.MY_WALL)
+                                mWallView.showEmptyView();
+                            else
+                                mWallView.showDisconnectedView();
                             mWallView.setRefreshing(false);
                         },
                         () -> {
