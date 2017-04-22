@@ -86,7 +86,7 @@ public class WallPresenter implements WallContract.Presenter {
                             if (type == WallContract.MY_WALL)
                                 mWallView.showEmptyView();
                             else
-                                mWallView.showEmptyView();
+                                mWallView.showDisconnectedView();
                             mWallView.setRefreshing(false);
                         },
                         () -> {
