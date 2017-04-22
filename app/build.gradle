@@ -21,6 +21,7 @@ android {
             debuggable true
             minifyEnabled false
             testCoverageEnabled true
+            buildConfigField "String", "SERVER_ENDPOINT", "\"https://35.184.24.183/\""
         }
 
         release {
@@ -28,6 +29,7 @@ android {
             minifyEnabled true
             testCoverageEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "SERVER_ENDPOINT", "\"https://api.snaptiongame.com/\""
         }
     }
 
