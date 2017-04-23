@@ -227,8 +227,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         Intent intent = getIntent();
         ViewCompat.setTransitionName(mImage, intent.getStringExtra(Game.IMAGE_URL));
 
-        supportPostponeEnterTransition();
-
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
             // CALLED when the async initSession returns, won't error if no branch data is found
@@ -675,7 +673,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         public boolean onResourceReady(GlideDrawable resource, String model,
                                        Target<GlideDrawable> target, boolean isFromMemoryCache,
                                        boolean isFirstResource) {
-            supportStartPostponedEnterTransition();
             final Bitmap bitmap = GlideUtils.getBitmap(resource);
             final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     24, getResources().getDisplayMetrics());
@@ -758,7 +755,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         @Override
         public boolean onException(Exception e, String model, Target<GlideDrawable> target,
                                    boolean isFirstResource) {
-            supportStartPostponedEnterTransition();
             return false;
         }
     };

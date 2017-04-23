@@ -9,9 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
@@ -41,25 +38,11 @@ public class ImmersiveActivity extends AppCompatActivity {
         ViewCompat.setTransitionName(mPhotoView, imageUrl);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            supportPostponeEnterTransition();
             Glide.with(this)
                     .load(imageUrl)
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .priority(Priority.IMMEDIATE)
-                    .listener(new RequestListener<String, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            supportStartPostponedEnterTransition();
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            supportStartPostponedEnterTransition();
-                            return false;
-                        }
-                    })
                     .into(mPhotoView);
         }
 
