@@ -519,7 +519,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             else if (mCurrentCaptionState == CaptionState.List
                     && mCaptionViewSwitcher.getCurrentView().equals(mRefreshLayout)) {
                 mCaptionChooserTitle.setText(getString(R.string.random_captions));
-                mFitBAdapter.clearCaptions();
                 rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                 mCaptionViewSwitcher.showNext();
                 mOuterTitleViewSwitcher.showNext();
@@ -579,11 +578,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private void initializeCaptionView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRefreshIcon.setVisibility(View.VISIBLE);
-        mPresenter.loadRandomFITBCaptions();
         mCaptionView.setLayoutManager(layoutManager);
         mCaptionView.setAdapter(mFitBAdapter);
         mCurrentCaptionState = CaptionState.Random;
-        showProgressHideRecyclerView();
     }
 
     @OnClick(R.id.refresh_icon)
@@ -908,9 +905,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void showFitBCaptions(List<FitBCaption> captions) {
-        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
+        mFitBAdapter = new FITBCaptionAdapter(captions, this);
         mCaptionView.setAdapter(mFitBAdapter);
-        mFitBAdapter.setCaptions(captions);
         showRecyclerViewHideProgress();
     }
 

@@ -167,13 +167,12 @@ public class GamePresenter implements GameContract.Presenter {
                 randomCaptions.add(captions.remove(nextCaption));
             }
         }
-
         mGameView.showRandomCaptions(randomCaptions);
     }
 
     private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
         if (start == numSets) {
-            buildRandomCaptions(mCaptions);
+            buildRandomCaptions(new ArrayList<>(mCaptions));
         }
         else {
             if (start == 0)
@@ -213,6 +212,7 @@ public class GamePresenter implements GameContract.Presenter {
     public void subscribe() {
         loadCaptions();
         loadPickerInfo();
+        loadRandomFITBCaptions();
     }
 
     @Override
