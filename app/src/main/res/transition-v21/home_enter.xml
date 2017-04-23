@@ -18,31 +18,16 @@
 <transitionSet
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <fade
-        android:duration="300"
-        android:interpolator="@android:interpolator/linear_out_slow_in">
-        <targets>
-            <target android:targetId="@id/search_background" />
-        </targets>
-    </fade>
-
-    <fade
-        android:startDelay="400"
-        android:duration="400"
-        android:interpolator="@android:interpolator/linear_out_slow_in">
-        <targets>
-            <target android:targetId="@id/search_view" />
-        </targets>
-    </fade>
-
-    <fade
-        android:duration="400"
+    <transition
+        class="com.snaptiongame.app.presentation.view.transitions.Pop"
+        android:duration="@android:integer/config_shortAnimTime"
+        android:startDelay="@android:integer/config_shortAnimTime"
         android:interpolator="@android:interpolator/fast_out_slow_in">
         <targets>
-            <target android:targetId="@android:id/statusBarBackground"/>
-            <target android:targetId="@android:id/navigationBarBackground" />
+            <target android:targetId="@id/fab" />
         </targets>
-    </fade>
+    </transition>
+
+    <fade />
 
 </transitionSet>
-
