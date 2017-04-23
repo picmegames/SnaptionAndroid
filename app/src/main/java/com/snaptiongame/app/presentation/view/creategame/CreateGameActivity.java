@@ -96,6 +96,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
+    private static final long TWO_WEEKS = 1209600000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -314,6 +315,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
             }, mYear, mMonth, mDayOfMonth);
             mDatePickerDialog.getDatePicker().setMinDate(mCalendar.getTime().getTime());
+            mDatePickerDialog.getDatePicker().setMaxDate(mCalendar.getTime().getTime() + TWO_WEEKS);
             mDatePickerDialog.show();
         }
         else {
