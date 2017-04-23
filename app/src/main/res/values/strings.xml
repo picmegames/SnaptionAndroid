@@ -1,6 +1,7 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Snaption</string>
+    <string name="app_name_styled">SN@PTi*N</string>
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="sub_welcome_message">Click the icon above to login</string>
     <string name="add_caption">Add a Caption</string>
