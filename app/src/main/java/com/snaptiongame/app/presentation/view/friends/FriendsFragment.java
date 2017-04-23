@@ -87,7 +87,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 List<Friend> results = filterList(friends, mQuery.getText().toString());
                 mAdapter.setFriends(results);
-                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -99,7 +98,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
             query = null;
             mQuery.setText("");
             mAdapter.setFriends(friends);
-            mAdapter.notifyDataSetChanged();
         });
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
@@ -238,9 +236,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         else {
             showFriendList();
             this.friends = friends;
-            mAdapter.clearFriends();
             mAdapter.setFriends(filterList(this.friends, query));
-            mAdapter.notifyDataSetChanged();
             mRefreshLayout.setRefreshing(false);
         }
     }

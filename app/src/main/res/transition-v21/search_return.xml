@@ -38,6 +38,7 @@
         android:duration="400"
         android:interpolator="@android:interpolator/fast_out_slow_in">
         <targets>
+            <target android:targetId="@android:id/statusBarBackground"/>
             <target android:targetId="@android:id/navigationBarBackground"/>
         </targets>
     </fade>

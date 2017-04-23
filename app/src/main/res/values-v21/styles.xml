@@ -11,6 +11,13 @@
         <item name="android:windowActivityTransitions">true</item>
     </style>
 
+    <style name="MainTheme" parent="StatusBarTheme">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowEnterTransition">@transition/home_enter</item>
+    </style>
+
     <style name="SearchTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowAnimationStyle">@style/SearchWindowAnimations</item>
         <item name="android:windowEnterTransition">@transition/search_enter</item>
@@ -31,7 +38,7 @@
     </style>
 
     <style name="SearchViewTheme" parent="@android:style/ThemeOverlay.Material.Dark.ActionBar">
-        <item name="colorControlActivated">?android:colorAccent</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
         <item name="android:searchViewStyle">@style/SearchView</item>
     </style>
 
