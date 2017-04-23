@@ -45,6 +45,7 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
+import com.snaptiongame.app.presentation.view.friends.SearchActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
@@ -277,14 +278,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.filter_menu, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         mMenu = menu;
+        mMenu.findItem(R.id.search).setVisible(false);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.search:
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                View searchMenuView = mToolbar.findViewById(R.id.search);
+                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
+                        getString(R.string.transition_search_back)).toBundle();
+                startActivity(searchIntent, options);
+                break;
             case R.id.filter:
                 showFilterDialog();
                 break;
@@ -353,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.wall:
                 setupWall();
                 mMenu.findItem(R.id.filter).setVisible(true);
+                mMenu.findItem(R.id.search).setVisible(false);
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
@@ -391,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 mMenu.findItem(R.id.filter).setVisible(false);
+                mMenu.findItem(R.id.search).setVisible(true);
                 break;
 
             case R.id.settings:
