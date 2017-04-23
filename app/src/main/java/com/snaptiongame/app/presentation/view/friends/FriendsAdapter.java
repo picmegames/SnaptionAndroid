@@ -126,7 +126,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void setFriends(List<Friend> friends) {
-        this.mFriends = friends;
+        if (!friends.equals(mFriends)) {
+            mFriends = friends;
+            notifyDataSetChanged();
+        }
     }
 
     public void addFriend(Friend friend) {
