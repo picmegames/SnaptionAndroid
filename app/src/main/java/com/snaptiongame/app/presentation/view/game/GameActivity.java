@@ -198,8 +198,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
      */
     private String mImageUrl;
 
-    private boolean fitbsAreReady = false;
-
     private boolean isDark = false;
     private float lastRefreshIconRotation = 0.0f;
 
@@ -521,14 +519,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             else if (mCurrentCaptionState == CaptionState.List
                     && mCaptionViewSwitcher.getCurrentView().equals(mRefreshLayout)) {
                 mCaptionChooserTitle.setText(getString(R.string.random_captions));
-                mFitBAdapter.clearCaptions();
                 rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                 mCaptionViewSwitcher.showNext();
                 mOuterTitleViewSwitcher.showNext();
                 initializeCaptionView();
-
-                if (fitbsAreReady)
-                    mPresenter.refreshCaptions();
             }
             // when a user clicks cancel on the fab
             else {
@@ -911,16 +905,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void showFitBCaptions(List<FitBCaption> captions) {
-        mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
+        mFitBAdapter = new FITBCaptionAdapter(captions, this);
         mCaptionView.setAdapter(mFitBAdapter);
-        mFitBAdapter.setCaptions(captions);
+        showRecyclerViewHideProgress();
     }
 
     @Override
     public void showRandomCaptions(List<FitBCaption> captions) {
         mFitBAdapter.setCaptions(captions);
         mFitBAdapter.notifyDataSetChanged();
-        fitbsAreReady = true;
         showRecyclerViewHideProgress();
     }
 
