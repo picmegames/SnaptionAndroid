@@ -16,8 +16,8 @@ public class OnboardingPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<OnboardingInfo> mOnboardingInfo;
 
-    public OnboardingPagerAdapter(FragmentManager fm, List<OnboardingInfo> onboardingInfo) {
-        super(fm);
+    public OnboardingPagerAdapter(FragmentManager manager, List<OnboardingInfo> onboardingInfo) {
+        super(manager);
         mOnboardingInfo = onboardingInfo;
     }
 

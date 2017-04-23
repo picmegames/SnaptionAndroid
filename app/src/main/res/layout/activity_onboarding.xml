@@ -24,15 +24,16 @@
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp">
 
         <ImageButton
             android:id="@+id/prev_button"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="32dp"
-            android:layout_marginStart="32dp"
             android:background="@drawable/round_button"
             android:gravity="end"
             android:rotation="180"
@@ -44,8 +45,6 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="32dp"
             android:background="@drawable/round_button"
             android:gravity="end"
             android:src="@drawable/ic_arrow_forward_white_24dp"/>

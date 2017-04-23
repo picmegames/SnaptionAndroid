@@ -214,6 +214,7 @@ public class ProfileActivity extends AppCompatActivity
                         .show();
             }
             else {
+                mEditView.clearUsernameField();
                 mEditDialog.show();
             }
         }
@@ -355,7 +356,7 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void showUsernameFailure(String message) {
         Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.try_again), view -> mEditDialog.show())
+                .setAction(getString(R.string.try_again), view -> showEditDialog())
                 .show();
     }
 

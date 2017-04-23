@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     ImageView mFlag;
     @BindView(R.id.number_of_upvotes)
     TextView mNumberOfUpvotes;
+    @BindView(R.id.upvote_view)
+    LinearLayout mUpvoteView;
 
     public Context mContext;
     public View mView;
@@ -66,7 +69,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
         mListener = listener;
 
-        mUpvote.setOnClickListener(view -> {
+        mUpvoteView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
                 upvoteCaption();
             }
@@ -84,7 +87,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             return true;
         });
 
-        itemView.setOnClickListener(view -> {
+        mUserImage.setOnClickListener(view -> {
             Intent profileIntent = new Intent(mContext, ProfileActivity.class);
             profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
             profileIntent.putExtra(User.USERNAME, username);

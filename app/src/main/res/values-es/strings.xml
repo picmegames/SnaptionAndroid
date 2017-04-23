@@ -14,6 +14,7 @@
     <string name="content_level_label">Nivel de Contenido</string>
     <string name="privacy_label">Juego Privado</string>
     <string name="welcome_message">¡Bienvenido a Snaption!</string>
+    <string name="sub_welcome_message">Haga clic en el icono de arriba para iniciar sesión</string>
     <string name="add_caption">Agrega un Subtítulo</string>
     <string name="game_closed">CERRADO</string>
     <string name="default_caption">¡Sea el primero en subtítulos esta imagen!</string>
@@ -45,11 +46,6 @@
     <string name="upload_message">Carga en progreso&#8230;</string>
     <string name="upload_title">Subiendo Nuevo Juego</string>
     <string name="no_friends">No se pudo encontrar amigos</string>
-
-    <string-array name="content_ratings_array">
-        <item>Familia</item>
-        <item>Maduro</item>
-    </string-array>
     <string name="log_in_label">Iniciar Sesión</string>
     <string name="current_login">Conectado como: %1$s</string>
     <string name="unflag">Deshacer la Bandera</string>
