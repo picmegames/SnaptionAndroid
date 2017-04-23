@@ -19,24 +19,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.chip.ChipSpan;
@@ -46,14 +43,13 @@ import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,9 +64,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.image)
-    ImageView mNewGameImage;
-    @BindView(R.id.content_spinner)
-    Spinner mContentSpinner;
+    FourThreeImageView mNewGameImage;
+    @BindView(R.id.camera_animation)
+    LottieAnimationView mAnimationView;
     @BindView(R.id.private_switch)
     Switch mPrivateSwitch;
     @BindView(R.id.create_game)
@@ -100,7 +96,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
-    private static final String EMOJI_REGEX = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])";
+    private static final long TWO_WEEKS = 1209600000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,31 +111,20 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mImageUrl = intent.getStringExtra(Game.IMAGE_URL);
             ViewCompat.setTransitionName(mNewGameImage, mImageUrl);
 
-            supportPostponeEnterTransition();
             Glide.with(this)
                     .load(mImageUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .priority(Priority.IMMEDIATE)
                     .fitCenter()
                     .dontAnimate()
-                    .listener(new RequestListener<String, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            supportStartPostponedEnterTransition();
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            supportStartPostponedEnterTransition();
-                            return false;
-                        }
-                    })
                     .into(mNewGameImage);
             mCreateGameButton.setEnabled(true);
         }
-
-        assignValues();
+        else {
+            mAnimationView.setVisibility(View.VISIBLE);
+            mAnimationView.setAnimation(getString(R.string.anim_4));
+            mAnimationView.playAnimation();
+        }
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -188,26 +173,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
-    }
-
-    private void assignValues() {
-        ArrayAdapter contentAdapter = ArrayAdapter.createFromResource(this,
-                R.array.content_ratings_array, android.R.layout.simple_spinner_item);
-        contentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mContentSpinner.setAdapter(contentAdapter);
-    }
-
-    private boolean containsEmoji(List<String> tags) {
-        Matcher matcher;
-        Pattern emojiPattern = Pattern.compile(EMOJI_REGEX);
-
-        for (String tag : tags) {
-            matcher = emojiPattern.matcher(tag);
-            if (matcher.find()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -320,7 +285,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.create_game)
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
-        if (!containsEmoji(mTagTextView.getChipValues())) {
+        if (!mPresenter.containsEmojis(mTagTextView.getChipValues())) {
             if (mUri != null) {
                 mPresenter.createGame(getContentResolver().getType(mUri), mUri,
                         AuthManager.getUserId(), !mPrivateSwitch.isChecked());
@@ -350,6 +315,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
             }, mYear, mMonth, mDayOfMonth);
             mDatePickerDialog.getDatePicker().setMinDate(mCalendar.getTime().getTime());
+            mDatePickerDialog.getDatePicker().setMaxDate(mCalendar.getTime().getTime() + TWO_WEEKS);
             mDatePickerDialog.show();
         }
         else {
@@ -368,6 +334,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            mAnimationView.pauseAnimation();
+            mAnimationView.setVisibility(View.GONE);
             mUri = data.getData();
             mCreateGameButton.setEnabled(true);
             Glide.with(this)
@@ -380,6 +348,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void onResume() {
         super.onResume();
+        mAnimationView.playAnimation();
         mPresenter.subscribe();
     }
 

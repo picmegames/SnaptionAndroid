@@ -49,8 +49,8 @@ public class OnboardingInfoFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         Bundle args = getArguments();
 
-        mTitleText.setText(getString(args.getInt(OnboardingInfo.TITLE_ID)));
-        mDescriptionText.setText(getString(args.getInt(OnboardingInfo.DESCRIPTION_ID)));
+        mTitleText.setText(args.getInt(OnboardingInfo.TITLE_ID));
+        mDescriptionText.setText(args.getInt(OnboardingInfo.DESCRIPTION_ID));
         mAnimationView.setAnimation(getString(args.getInt(OnboardingInfo.ANIMATION)));
         mAnimationView.loop(true);
         mAnimationView.playAnimation();

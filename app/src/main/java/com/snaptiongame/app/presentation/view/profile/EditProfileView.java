@@ -94,13 +94,16 @@ public class EditProfileView extends RelativeLayout {
 
     public void updateUsername(String username) {
         mUsername.setText(username);
-        mEditText.setText("");
     }
 
     @OnTextChanged(R.id.name_input)
     public void textChanged(CharSequence sequence) {
         mNameCount.setText(
                 String.format(mContext.getString(R.string.count_format), sequence.length()));
+    }
+
+    public void clearUsernameField() {
+        mEditText.setText("");
     }
 
     public String getNewUsername() {

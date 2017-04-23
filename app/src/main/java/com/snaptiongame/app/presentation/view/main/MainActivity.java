@@ -167,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .dontAnimate()
                 .into(mProfilePicture);
         Glide.clear(mCoverPhoto);
-        mNameView.setText(getString(R.string.welcome_message));
-        mEmailView.setText("");
+        mNameView.setText(R.string.welcome_message);
+        mEmailView.setText(R.string.sub_welcome_message);
     }
 
     private void initializeWallFragments() {
