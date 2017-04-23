@@ -30,6 +30,7 @@
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
     <string name="shared_transition" translatable="false">snaption_transition</string>
     <string name="profile_transition" translatable="false">profile_transition</string>
+    <string name="transition_search_back" translatable="false">transition_search_back</string>
     <string name="profile_image_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior</string>
     <string name="toolbar_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ToolbarScrollBehavior</string>
     <string name="fab_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior</string>
@@ -111,6 +112,7 @@
     <string name="log_out_content">Are you sure you want to log out?</string>
     <string name="failed_caption_submission">Caption Submission Failed</string>
     <string name="no_internet">No Internet Connection</string>
+    <string name="search">Search</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
