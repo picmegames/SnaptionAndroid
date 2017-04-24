@@ -8,6 +8,7 @@
         android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@null"
         android:elevation="4dp"
         android:outlineProvider="bounds"
         android:theme="@style/SearchViewTheme"
@@ -25,14 +26,15 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:iconifiedByDefault="false"
-            android:transitionGroup="true"/>
+            android:transitionGroup="true"
+            android:queryHint="@string/search_friends"/>
 
         <!-- wrapping layout needed for the touch ripple -->
         <FrameLayout
             android:id="@+id/searchback_container"
             android:layout_width="96dp"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
+            android:background="@null"
             android:paddingStart="4dp">
 
             <ImageButton
@@ -44,6 +46,40 @@
                 android:transitionName="@string/transition_search_back"/>
 
         </FrameLayout>
+    </FrameLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/snaption_icon_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/empty_wall"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

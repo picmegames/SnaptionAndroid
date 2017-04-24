@@ -295,10 +295,10 @@ public class FriendsDialogFragment extends DialogFragment {
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        List<Friend> results = FriendsFragment.filterList(mFacebookFriends,
-                                search.getText().toString());
-                        mAdapter.setFriends(results);
-                        mAdapter.notifyDataSetChanged();
+//                        List<Friend> results = FriendsFragment.filterList(mFacebookFriends,
+//                                search.getText().toString());
+//                        mAdapter.setFriends(results);
+//                        mAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -449,7 +449,7 @@ public class FriendsDialogFragment extends DialogFragment {
         FriendProvider.getFacebookFriends()
                 .filter(friends -> {
                     //This will break NOT ANYMORE
-                    friends.removeAll(mFriendsDialogInterface.getFriends());
+                    //friends.removeAll(mFriendsDialogInterface.getFriends());
                     return true;
                 })
                 .observeOn(AndroidSchedulers.mainThread())

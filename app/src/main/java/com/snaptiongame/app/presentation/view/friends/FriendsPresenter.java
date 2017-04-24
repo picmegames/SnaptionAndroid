@@ -3,7 +3,11 @@ package com.snaptiongame.app.presentation.view.friends;
 import android.support.annotation.NonNull;
 
 import com.snaptiongame.app.data.models.AddFriendRequest;
+import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.FriendProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -22,10 +26,13 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
+    private List<Friend> mFriends;
+
     public FriendsPresenter(@NonNull FriendsContract.View friendView) {
         mFriendView = friendView;
         mDisposables = new CompositeDisposable();
         mFriendView.setPresenter(this);
+        mFriends = new ArrayList<>();
     }
 
     @Override
@@ -33,7 +40,10 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Disposable disposable = FriendProvider.loadFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mFriendView::processFriends,
+                        friends -> {
+                            mFriendView.processFriends(friends);
+                            mFriends = friends;
+                        },
                         e -> {
                             Timber.e(e);
                             mFriendView.showEmptyView();
@@ -51,11 +61,28 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         FriendProvider.removeFriend(new AddFriendRequest(friendId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> {
-                            Timber.i("Successfully removed friend!");
-                        },
+                        () -> Timber.i("Successfully removed friend!"),
                         Timber::e
                 );
+    }
+
+    @Override
+    public void searchFriends(String query) {
+        mFriendView.processFriends(filterList(mFriends, query));
+    }
+
+    public static List<Friend> filterList(List<Friend> friends, String query) {
+        if (query != null && query.length() > 0) {
+            ArrayList<Friend> filtered = new ArrayList<>();
+            for (Friend pal : friends) {
+                String mashedNames = pal.fullName + " " + pal.username;
+                if (mashedNames.toLowerCase().contains(query.toLowerCase())) {
+                    filtered.add(pal);
+                }
+            }
+            return filtered;
+        }
+        return friends;
     }
 
     @Override

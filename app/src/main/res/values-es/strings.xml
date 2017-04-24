@@ -109,4 +109,7 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="no_facebook">Facebook no está instalado</string>
     <string name="no_internet">Sin conexión a Internet</string>
     <string name="search">Buscar</string>
+    <string name="facebook_login">Iniciar sesión con Facebook</string>
+    <string name="google_login">Iniciar sesión con Google</string>
+    <string name="search_friends">Buscar amigos</string>
 </resources>
