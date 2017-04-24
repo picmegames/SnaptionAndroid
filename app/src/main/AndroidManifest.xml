@@ -95,7 +95,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.friends.SearchActivity"
+            android:name=".presentation.view.friends.FriendSearchActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/SearchTheme"

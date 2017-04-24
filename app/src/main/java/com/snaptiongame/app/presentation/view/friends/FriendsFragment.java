@@ -11,17 +11,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Friend;
+import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +35,7 @@ import static com.snaptiongame.app.presentation.view.friends.FriendsDialogFragme
 
 public class FriendsFragment extends Fragment implements FriendsContract.View, FriendsDialogInterface {
     @BindView(R.id.friend_list)
-    RecyclerView mFriends;
-    @BindView(R.id.query_field)
-    EditText mQuery;
-    @BindView(R.id.clear_button)
-    Button clear;
+    RecyclerView mFriendsList;
     @BindView(R.id.refresh_layout_friends)
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.empty_view)
@@ -51,8 +44,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     protected FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
-    private List<Friend> friends = new ArrayList<>();
-    private String query = null;
+    private InsetDividerDecoration mDecoration;
 
     private Unbinder mUnbinder;
     private FriendsDialogFragment mDialogFragmentDefault;
@@ -73,32 +65,17 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
         mPresenter = new FriendsPresenter(this);
 
-        mFriends.setHasFixedSize(true);
-        mFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new FriendsAdapter(friends);
-        mFriends.setAdapter(mAdapter);
+        mDecoration = new InsetDividerDecoration(
+                FriendViewHolder.class,
+                getResources().getDimensionPixelSize(R.dimen.divider_height),
+                getResources().getDimensionPixelSize(R.dimen.keyline_1),
+                ContextCompat.getColor(getContext(), R.color.divider));
+        mFriendsList.addItemDecoration(mDecoration);
 
-        mQuery.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                List<Friend> results = filterList(friends, mQuery.getText().toString());
-                mAdapter.setFriends(results);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        clear.setOnClickListener(theView -> {
-            query = null;
-            mQuery.setText("");
-            mAdapter.setFriends(friends);
-        });
+        mFriendsList.setHasFixedSize(true);
+        mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new FriendsAdapter(new ArrayList<>());
+        mFriendsList.setAdapter(mAdapter);
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
         mRefreshLayout.setColorSchemeColors(
@@ -145,25 +122,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
             }
         };
 
-        new ItemTouchHelper(simpleCallback).attachToRecyclerView(mFriends);
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(mFriendsList);
         mPresenter.subscribe();
 
         return view;
-    }
-
-    //Returns a subset of friends where each friend has the query in either their name or username
-    public static List<Friend> filterList(List<Friend> friends, String query) {
-        if (query != null && query.length() > 0) {
-            ArrayList<Friend> filtered = new ArrayList<>();
-            for (Friend pal : friends) {
-                String mashedNames = pal.fullName + " " + pal.username;
-                if (mashedNames.toLowerCase().contains(query.toLowerCase())) {
-                    filtered.add(pal);
-                }
-            }
-            return filtered;
-        }
-        return friends;
     }
 
     public void inviteFriends() {
@@ -176,11 +138,13 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
     @Override
     public void showEmptyView() {
         mEmptyView.setVisibility(View.VISIBLE);
+        mFriendsList.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showFriendList() {
         mEmptyView.setVisibility(View.GONE);
+        mFriendsList.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -219,10 +183,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         }
     }
 
-    public List<Friend> getFriends() {
-        return friends;
-    }
-
     @Override
     public void setRefreshing(boolean isRefreshing) {
         mRefreshLayout.setRefreshing(isRefreshing);
@@ -235,8 +195,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         }
         else {
             showFriendList();
-            this.friends = friends;
-            mAdapter.setFriends(filterList(this.friends, query));
+            mAdapter.setFriends(friends);
             mRefreshLayout.setRefreshing(false);
         }
     }

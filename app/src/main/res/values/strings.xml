@@ -1,7 +1,7 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Snaption</string>
-    <string name="app_name_styled">SN@PTi*N</string>
+    <string name="app_name_styled" translatable="false">SN@PTi*N</string>
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="sub_welcome_message">Click the icon above to login</string>
     <string name="add_caption">Add a Caption</string>
@@ -10,6 +10,10 @@
     <string name="random_captions">Random Captions</string>
     <string name="caption_sets">Caption Sets</string>
     <string name="leaving_title">You Are Now Leaving Snaption</string>
+
+    <!-- Login -->
+    <string name="facebook_login">Log in with Facebook</string>
+    <string name="google_login">Log in with Google</string>
 
     <!-- Onboarding -->
     <string name="title_1">Post photos.\nThe funnier the better.</string>
@@ -113,6 +117,7 @@
     <string name="failed_caption_submission">Caption Submission Failed</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="search">Search</string>
+    <string name="search_friends">Search for friends</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

@@ -44,8 +44,8 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
+import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
-import com.snaptiongame.app.presentation.view.friends.SearchActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search:
-                Intent searchIntent = new Intent(this, SearchActivity.class);
+                Intent searchIntent = new Intent(this, FriendSearchActivity.class);
                 View searchMenuView = mToolbar.findViewById(R.id.search);
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
                         getString(R.string.transition_search_back)).toBundle();
