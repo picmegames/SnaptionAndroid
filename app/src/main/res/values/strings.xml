@@ -131,6 +131,7 @@
     <string name="friend_notifications_summary">Be notified when someone adds you as a friend</string>
     <string name="search_friends">Search for friends</string>
     <string name="search">Search</string>
+    <string name="search_friends">Search for friends</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

@@ -46,7 +46,6 @@ import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
-import com.snaptiongame.app.presentation.view.friends.SearchActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
