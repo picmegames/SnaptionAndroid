@@ -25,5 +25,7 @@ public class FriendsContract {
         void loadFriends();
 
         void removeFriend(int friendId);
+
+        void searchFriends(String query);
     }
 }

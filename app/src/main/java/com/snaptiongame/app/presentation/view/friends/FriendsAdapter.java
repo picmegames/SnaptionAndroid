@@ -11,8 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -113,16 +111,6 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     .buildRound(curFriend.username.substring(0, 1),
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
-
-        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(),
-                (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-        holder.itemView.startAnimation(animation);
-        lastPosition = position;
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
-        ((FriendViewHolder) holder).itemView.clearAnimation();
     }
 
     public void setFriends(List<Friend> friends) {

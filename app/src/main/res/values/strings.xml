@@ -11,6 +11,10 @@
     <string name="caption_sets">Caption Sets</string>
     <string name="leaving_title">You Are Now Leaving Snaption</string>
 
+    <!-- Login -->
+    <string name="facebook_login">Log in with Facebook</string>
+    <string name="google_login">Log in with Google</string>
+
     <!-- Onboarding -->
     <string name="title_1">Post photos.\nThe funnier the better.</string>
     <string name="desc_1">Choose any picture from your phone to start a game.</string>
@@ -126,6 +130,7 @@
     <string name="friend_notifications">Friend Notifications</string>
     <string name="friend_notifications_summary">Be notified when someone adds you as a friend</string>
     <string name="search">Search</string>
+    <string name="search_friends">Search for friends</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
