@@ -12,14 +12,9 @@ buildscript {
         // Retrolambda Gradle
         classpath 'me.tatarka:gradle-retrolambda:3.6.0'
 
-        // Retrolambda Gradle Proguard
-        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
-
         // Annotation Processing
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
-
-    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
 
 allprojects {
