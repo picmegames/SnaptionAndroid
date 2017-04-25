@@ -43,7 +43,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     @Override
-    public void createGame(String type, Uri uri, int userId, boolean isPublic) {
+    public void createGame(String type, Uri uri, int userId, boolean isPublic, long gameDuration) {
         Disposable disposable = ImageUtils.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,7 +53,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                             Timber.e(e);
                             mCreateGameView.showImageCompressionFailure();
                         },
-                        () -> uploadGame(userId, isPublic, type)
+                        () -> uploadGame(userId, isPublic, type, gameDuration)
                 );
         mDisposables.add(disposable);
     }
@@ -71,10 +71,10 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         return false;
     }
 
-    private void uploadGame(int userId, boolean isPublic, String type) {
+    private void uploadGame(int userId, boolean isPublic, String type, long gameDuration) {
         Disposable disposable = GameProvider.addGame(
-                new Game(userId, isPublic, 1, mEncodedImage, type, mCreateGameView.getTags(),
-                        getFriendIds(mCreateGameView.getAddedFriends())))
+                new Game(userId, isPublic, mEncodedImage, type, mCreateGameView.getTags(),
+                        getFriendIds(mCreateGameView.getAddedFriends()), gameDuration))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mCreateGameView::showUploadComplete,

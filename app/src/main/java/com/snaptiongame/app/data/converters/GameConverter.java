@@ -30,9 +30,9 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
         JsonObject json = new JsonObject();
         json.addProperty(Game.USER_ID, src.userId);
         json.addProperty(Game.IS_PUBLIC, src.isPublic);
-        json.addProperty(Game.RATING, src.rating);
         json.addProperty(Game.PICTURE, src.picture);
         json.addProperty(Game.IMG_TYPE, src.type);
+        json.addProperty(Game.GAME_DURATION, src.gameDuration);
 
         JsonArray tags = new JsonArray();
         if (src.sendTags != null && !src.sendTags.isEmpty()) {
@@ -60,7 +60,6 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 content.get(Game.ID).getAsInt(),
                 content.get(Game.START_DATE).getAsLong(),
                 content.get(Game.IS_PUBLIC).getAsBoolean(),
-                content.get(Game.RATING).getAsInt(),
                 content.get(Game.PICKER_ID).getAsInt(), "", "");
 
         JsonObject picture = content.getAsJsonObject(Game.PICTURE);
