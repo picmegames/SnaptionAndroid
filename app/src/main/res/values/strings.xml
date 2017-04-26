@@ -1,7 +1,7 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Snaption</string>
-    <string name="app_name_styled">SN@PTi*N</string>
+    <string name="app_name_styled" translatable="false">SN@PTi*N</string>
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="sub_welcome_message">Click the icon above to login</string>
     <string name="add_caption">Add a Caption</string>
@@ -111,6 +111,13 @@
     <string name="log_out_content">Are you sure you want to log out?</string>
     <string name="failed_caption_submission">Caption Submission Failed</string>
     <string name="no_internet">No Internet Connection</string>
+    <string name="add_friend_failure">Failed to add %1$s</string>
+    <string name="add_friend_success">Successfully added %1$s!</string>
+    <string name="remove_friend_failure">Failed to remove %1$s</string>
+    <string name="remove_friend_success">Successfully removed %1$s as a friend</string>
+    <string name="remove_friend">Remove Friend</string>
+    <string name="add_friend_body">Are you sure you want to add %1$s as a friend?</string>
+    <string name="remove_friend_body">Are you sure you want to remove %1$s as a friend?</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
