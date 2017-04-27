@@ -108,4 +108,17 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="failed_caption_submission">Falló la subproducción de subtítulos</string>
     <string name="no_facebook">Facebook no está instalado</string>
     <string name="no_internet">Sin conexión a Internet</string>
+    <string name="add_friend_failure">No se pudo agregar %1$s</string>
+    <string name="add_friend_success">¡Has añadido %1$s!</string>
+    <string name="remove_friend_success">Eliminó correctamente %1$s como amigo</string>
+    <string name="remove_friend_failure">Error al eliminar %1$s</string>
+    <string name="remove_friend">Eliminar amigo</string>
+    <string name="general">General</string>
+    <string name="add_friend_body">¿Estás seguro de que quieres agregar %1$s como amigo?</string>
+    <string name="remove_friend_body">¿Estás seguro de que quieres eliminar %1$s como amigo?</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="friend_notifications">Notificaciones de amigos</string>
+    <string name="game_notifications">Notificaciones del juego</string>
+    <string name="game_notifications_summary">Sea notificado cuando alguien le agrega a su juego o sus subtítulos</string>
+    <string name="friend_notifications_summary">Ser notificado cuando alguien te añade como amigo</string>
 </resources>

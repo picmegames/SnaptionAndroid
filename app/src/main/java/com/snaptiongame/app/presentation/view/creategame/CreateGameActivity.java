@@ -100,6 +100,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private static final long MILLIS = 1000;
     private static final long TWO_WEEKS_OFFSET = 1123200000;
     private static final long TWO_WEEKS = 1209600000;
+    private static final long ONE_DAY = 86400000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -176,6 +177,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
+        mDays = ONE_DAY / MILLIS;
     }
 
     @Override

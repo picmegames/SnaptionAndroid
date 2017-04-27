@@ -117,6 +117,7 @@ public class WallAdapter extends RecyclerView.Adapter {
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);
+        holder.mNumberOfUpvotes.setText(String.valueOf(curGame.numUpvotes));
 
         if (curGame.endDate - currentTime <= 0) {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));

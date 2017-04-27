@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:key="@string/clear_cache"
-                android:title="@string/clear_cache"/>
-    <Preference android:key="@string/log_out_label"
-                android:title="@string/log_out_label"/>
-    <Preference android:key="@string/version_label"
-                android:title="@string/version_label"/>
-    <Preference android:key="@string/give_feedback"
-                android:title="@string/give_feedback"/>
+    <PreferenceCategory
+        android:title="@string/general"/>
+    <Preference
+        android:key="@string/clear_cache"
+        android:title="@string/clear_cache"/>
+    <Preference
+        android:key="@string/log_out_label"
+        android:title="@string/log_out_label"/>
+    <Preference
+        android:key="@string/version_label"
+        android:title="@string/version_label"/>
+    <Preference
+        android:key="@string/give_feedback"
+        android:title="@string/give_feedback"/>
+    <PreferenceCategory
+        android:key="@string/notifications"
+        android:title="@string/notifications"/>
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/game_notifications"
+        android:title="@string/game_notifications"
+        android:summary="@string/game_notifications_summary"/>
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/friend_notifications"
+        android:title="@string/friend_notifications"
+        android:summary="@string/friend_notifications_summary"/>
 </PreferenceScreen>

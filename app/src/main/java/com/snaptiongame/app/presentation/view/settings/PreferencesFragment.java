@@ -6,7 +6,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -31,8 +34,12 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private Preference mLogoutPreference;
     private Preference mVersionPreference;
     private Preference mFeedbackPreference;
+    private PreferenceCategory mNotificationsCategory;
+    private SwitchPreference mGameNotificationsPreference;
+    private SwitchPreference mFriendNotificationsPreference;
 
     private PreferencesContract.Presenter mPresenter;
+    private PreferenceScreen mPreferenceScreen;
 
     private boolean mListStyled = false;
 
@@ -66,13 +73,29 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         addPreferencesFromResource(R.xml.preferences);
 
-        mCachePreference = getPreferenceScreen().findPreference(getString(R.string.clear_cache));
+        mPreferenceScreen = getPreferenceScreen();
+
+        mNotificationsCategory = (PreferenceCategory) mPreferenceScreen.findPreference(
+                getString(R.string.notifications));
+        mGameNotificationsPreference = (SwitchPreference) mPreferenceScreen.findPreference(
+                getString(R.string.game_notifications));
+        mFriendNotificationsPreference = (SwitchPreference) mPreferenceScreen.findPreference(
+                getString(R.string.friend_notifications));
+
+        setupNotificationStatus();
+
+        mGameNotificationsPreference.setOnPreferenceClickListener(this);
+        mFriendNotificationsPreference.setOnPreferenceClickListener(this);
+
+        setNotificationPreferencesVisibility();
+
+        mCachePreference = mPreferenceScreen.findPreference(getString(R.string.clear_cache));
         mCachePreference.setOnPreferenceClickListener(this);
 
-        mLogoutPreference = getPreferenceScreen().findPreference(getString(R.string.log_out_label));
+        mLogoutPreference = mPreferenceScreen.findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
-        mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_label));
-        mFeedbackPreference = getPreferenceScreen().findPreference(getString(R.string.give_feedback));
+        mVersionPreference = mPreferenceScreen.findPreference(getString(R.string.version_label));
+        mFeedbackPreference = mPreferenceScreen.findPreference(getString(R.string.give_feedback));
         mFeedbackPreference.setOnPreferenceClickListener(this);
 
         if (packageInfo != null) {
@@ -128,6 +151,8 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 mListStyled = true;
             }
         }
+        setupNotificationStatus();
+        setNotificationPreferencesVisibility();
         mPresenter.subscribe();
     }
 
@@ -136,9 +161,29 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         startActivity(loginIntent);
     }
 
+    private void setNotificationPreferencesVisibility() {
+        if (!AuthManager.isLoggedIn()) {
+            mPreferenceScreen.removePreference(mNotificationsCategory);
+            mPreferenceScreen.removePreference(mGameNotificationsPreference);
+            mPreferenceScreen.removePreference(mFriendNotificationsPreference);
+        }
+        else {
+            mPreferenceScreen.addPreference(mNotificationsCategory);
+            mPreferenceScreen.addPreference(mGameNotificationsPreference);
+            mPreferenceScreen.addPreference(mFriendNotificationsPreference);
+        }
+    }
+
+    private void setupNotificationStatus() {
+        mGameNotificationsPreference.setChecked(AuthManager.isGameNotificationsEnabled());
+        mFriendNotificationsPreference.setChecked(AuthManager.isFriendNotificationsEnabled());
+    }
+
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if (preference.getKey().equals(getString(R.string.log_out_label))) {
+        String key = preference.getKey();
+
+        if (key.equals(getString(R.string.log_out_label))) {
             if (AuthManager.isLoggedIn()) {
                 new MaterialDialog.Builder(getActivity())
                         .title(R.string.log_out_label)
@@ -155,10 +200,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 goToLogin();
             }
         }
-        else if (preference.getKey().equals(getString(R.string.clear_cache))) {
+        else if (key.equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
         }
-        else if(preference.getKey().equals(getString(R.string.give_feedback))) {
+        else if (key.equals(getString(R.string.give_feedback))) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.leaving_title)
                     .content(R.string.leaving_content)
@@ -169,6 +214,16 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                         startActivity(browserIntent);
                     })
                     .show();
+        }
+        else if (key.equals(getString(R.string.game_notifications))) {
+            boolean userChoice = !AuthManager.isGameNotificationsEnabled();
+            mGameNotificationsPreference.setChecked(userChoice);
+            AuthManager.setGameNotificationsEnabled(userChoice);
+        }
+        else if (key.equals(getString(R.string.friend_notifications))) {
+            boolean userChoice = !AuthManager.isFriendNotificationsEnabled();
+            mFriendNotificationsPreference.setChecked(userChoice);
+            AuthManager.setFriendNotificationsEnabled(userChoice);
         }
         return true;
     }

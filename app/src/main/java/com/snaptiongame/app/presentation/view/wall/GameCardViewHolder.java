@@ -12,6 +12,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,10 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     TextView mCaptionerName;
     @BindView(R.id.upvote)
     ImageView mUpvoteButton;
+    @BindView(R.id.upvote_view)
+    LinearLayout mUpvoteView;
+    @BindView(R.id.number_of_upvotes)
+    TextView mNumberOfUpvotes;
     @BindView(R.id.flag)
     ImageView mFlagIcon;
     @BindView(R.id.game_status)
@@ -84,7 +89,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             mImage.setClipToOutline(true);
         }
 
-        mUpvoteButton.setOnClickListener(view -> {
+        mUpvoteView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
                 upvoteGame();
             }
@@ -176,10 +181,12 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         if (isUpvoted) {
             mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
             isUpvoted = false;
+            mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) - 1));
         }
         else {
             mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
             isUpvoted = true;
+            mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) + 1));
             Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
         Timber.i("Successfully updated upvote!");

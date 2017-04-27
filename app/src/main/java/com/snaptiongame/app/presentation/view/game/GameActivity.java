@@ -63,6 +63,7 @@ import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.GameInvite;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.GameProvider;
+import com.snaptiongame.app.data.services.notifications.NotificationService;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
@@ -225,7 +226,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        ViewCompat.setTransitionName(mImage, intent.getStringExtra(Game.IMAGE_URL));
 
         Branch branch = Branch.getInstance(getApplicationContext());
         branch.initSession((referringParams, error) -> {
@@ -236,9 +236,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         new JsonParser().parse(referringParams.toString()));
                 // IF branch returns a null or invalid invite then display the intent information
                 if (mInvite == null || mInvite.gameId == 0) {
-                    showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
-                            intent.getIntExtra(Game.PICKER_ID, 0), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
-                            intent.getBooleanExtra(Game.BEEN_FLAGGED, false));
+                    if (intent.hasExtra(NotificationService.FROM_NOTIFICATION)) {
+                        mInvite = new GameInvite("", intent.getIntExtra(Game.ID, 0));
+                        loadInvitedGame();
+                    }
+                    else {
+                        showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
+                                intent.getIntExtra(Game.PICKER_ID, 0), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
+                                intent.getBooleanExtra(Game.BEEN_FLAGGED, false));
+                    }
                 }
                 // ELSE display information from the game invite
                 else {
@@ -561,7 +567,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean confirmAndPrepareCaption() {
         String curEntry = mFitBEditTextField.getText().toString();
-
+        mFitBAdapter.resetCaption();
         mFitBEditTextField.setText("");
         mFitBEditTextLayout.setHint("");
         mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
@@ -646,6 +652,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mImageUrl = image;
         isUpvoted = beenUpvoted;
         isFlagged = beenFlagged;
+
+        ViewCompat.setTransitionName(mImage, mImageUrl);
 
         Glide.with(this)
                 .load(image)

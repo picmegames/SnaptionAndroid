@@ -24,7 +24,15 @@ public class ProfileContract {
 
         void saveUsername(String username);
 
+        void showAddFriendResult(boolean success);
+
+        void showRemoveFriendResult(boolean success);
+
         void goToLogin();
+
+        void showUser(User user);
+
+        void showHideAddFriend(boolean isVisible);
     }
 
     interface Presenter extends BasePresenter {
@@ -33,6 +41,14 @@ public class ProfileContract {
         void updateUsername(String oldUsername, User user);
 
         void convertImage(String type, Uri uri);
+
+        void loadUser(int userId);
+
+        void loadShouldHideAddFriend(int userId);
+
+        void addFriend(int userId);
+
+        void removeFriend(int userId);
 
         void logout();
     }

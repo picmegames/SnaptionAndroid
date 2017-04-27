@@ -124,7 +124,7 @@ public class WallFragment extends Fragment implements WallContract.View {
         super.onResume();
 
         // Do not refresh wall in onResume if on Discover tab
-        if (mType != WallContract.DISCOVER) {
+        if (mType != WallContract.DISCOVER && mWall != null) {
             mPresenter.subscribe();
         }
     }
@@ -158,9 +158,15 @@ public class WallFragment extends Fragment implements WallContract.View {
     @Override
     public void showEmptyView() {
         mAdapter.clear();
-        mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
-        mWallStateImage.setImageResource(snaption_icon_gray);
-        mWallState.setText(R.string.nothing_here);
+
+        if (mEmptyOrDisconnectedView != null) {
+            mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+        }
+
+        if (mWallState != null && mWallStateImage != null) {
+            mWallState.setText(R.string.nothing_here);
+            mWallStateImage.setImageResource(snaption_icon_gray);
+        }
 
         if (mType != WallContract.HISTORY) {
             mWall.setVisibility(View.GONE);
@@ -170,20 +176,28 @@ public class WallFragment extends Fragment implements WallContract.View {
     @Override
     public void showDisconnectedView() {
         mAdapter.clear();
-        mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
-        mWallStateImage.setImageResource(ic_signal_wifi_off_grey_600_48dp);
-        mWallState.setText(R.string.no_internet);
 
-        if (mType != WallContract.HISTORY) {
+        if (mEmptyOrDisconnectedView != null) {
+            mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+        }
+
+        if (mWallState != null && mWallStateImage != null) {
+            mWallState.setText(R.string.no_internet);
+            mWallStateImage.setImageResource(ic_signal_wifi_off_grey_600_48dp);
+        }
+
+        if (mType != WallContract.HISTORY && mWall != null) {
             mWall.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void showWall() {
-        mEmptyOrDisconnectedView.setVisibility(View.GONE);
+        if (mEmptyOrDisconnectedView != null) {
+            mEmptyOrDisconnectedView.setVisibility(View.GONE);
+        }
 
-        if (mType != WallContract.HISTORY) {
+        if (mType != WallContract.HISTORY && mWall != null) {
             mWall.setVisibility(View.VISIBLE);
         }
     }
@@ -206,7 +220,9 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     @Override
     public void setRefreshing(boolean isRefreshing) {
-        mRefreshLayout.setRefreshing(isRefreshing);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.setRefreshing(isRefreshing);
+        }
     }
 
     /**

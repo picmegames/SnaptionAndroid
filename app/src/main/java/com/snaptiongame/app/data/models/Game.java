@@ -48,6 +48,8 @@ public class Game {
     public boolean beenFlagged;
     @SerializedName(GAME_DURATION)
     public long gameDuration;
+    @SerializedName(NUM_UPVOTES)
+    public int numUpvotes;
 
     public static final String ID = "id";
     public static final String USER_ID = "userId";
@@ -70,6 +72,7 @@ public class Game {
     public static final String BEEN_UPVOTED = "beenUpvoted";
     public static final String BEEN_FLAGGED = "beenFlagged";
     public static final String GAME_DURATION = "gameDuration";
+    public static final String NUM_UPVOTES = "numUpvotes";
 
     public Game() {
 
