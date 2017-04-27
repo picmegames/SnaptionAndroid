@@ -137,7 +137,6 @@ public class FriendsDialogFragment extends DialogFragment {
      */
     private int sUserID;
 
-    private FriendsDialogInterface mFriendsDialogInterface;
 
     private TextView mEmpty;
 
@@ -356,14 +355,6 @@ public class FriendsDialogFragment extends DialogFragment {
         return mDialogBuilder.create();
 
     }
-
-    public void setDialogInterface(FriendsDialogInterface friendsDialogInterface, DialogToShow whichDialog) {
-        mFriendsDialogInterface = friendsDialogInterface;
-        mAddFriendsAdapter = new AddFriendsAdapter();
-        if (whichDialog == DialogToShow.FACEBOOK_INVITE)
-            loadFacebookFriends();
-    }
-
 
     private void sendInviteIntent() {
 

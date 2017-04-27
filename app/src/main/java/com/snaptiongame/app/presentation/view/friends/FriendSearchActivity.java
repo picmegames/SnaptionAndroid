@@ -77,24 +77,8 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mAdapter.clearFriends();
 
 
-        //if (newText.isEmpty())
-        //    mPresenter.loadFriends();
-        //else {
-            //Probably implies user hit the delete
-            ///if (oldText.length() < newText.length())
 
-            // TODO SEARCH FOR ALL THE FRIENDS EVERYWHERE:
-            // User current friends
-            // User by email
-            // User by phone
-            // User by username
-
-            // User by name
-            // Filter out duplicates
-            // Display results in recyclerview mSearchResults
             mPresenter.findFriends(newText);
-        //}
-
         return true;
     }
 
