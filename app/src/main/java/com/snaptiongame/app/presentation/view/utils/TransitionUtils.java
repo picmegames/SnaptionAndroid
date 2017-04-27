@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.transitions;
+package com.snaptiongame.app.presentation.view.utils;
 
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;

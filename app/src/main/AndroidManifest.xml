@@ -93,6 +93,13 @@
         </activity>
 
         <activity
+            android:name=".presentation.view.friends.SearchActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/SearchTheme"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
             android:name=".presentation.view.photo.ImmersiveActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"

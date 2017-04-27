@@ -121,4 +121,5 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="game_notifications">Notificaciones del juego</string>
     <string name="game_notifications_summary">Sea notificado cuando alguien le agrega a su juego o sus subtítulos</string>
     <string name="friend_notifications_summary">Ser notificado cuando alguien te añade como amigo</string>
+    <string name="search">Buscar</string>
 </resources>

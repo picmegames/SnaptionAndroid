@@ -11,7 +11,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
+import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -46,7 +46,7 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
-import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
+import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
