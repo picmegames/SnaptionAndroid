@@ -4,6 +4,9 @@ import com.snaptiongame.app.data.api.SnaptionApi;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
 
+import java.util.List;
+
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -22,10 +25,14 @@ public class UserProvider {
     }
 
     public static Single<User> getUserWithFacebook(String id) {
-        return apiService.getUserByFacebook(id);
+        return apiService.getUserByFacebookID(id);
     }
 
     public static Single<User> updateUser(User user) {
         return apiService.updateUser(user);
+    }
+
+    public static Observable<List<User>> loadUsers(String username) {
+        return apiService.getUserByUsername(username);
     }
 }

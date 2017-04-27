@@ -33,16 +33,19 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private List<String> mSelectedNames;
     private boolean mSelectable;
     private int lastPosition = -1;
+    private FriendsContract.Presenter mPresenter;
 
     private static final int AVATAR_SIZE = 40;
     private static final float DIM = .6F;
     private static final float BRIGHT = 1F;
+    private static final int EMPTY_VIEW = 10;
 
-    public FriendsAdapter(List<Friend> friends) {
+    public FriendsAdapter(List<Friend> friends, FriendsContract.Presenter presenter) {
         this.mFriends = friends;
         mSelectedIds = new ArrayList<>();
         mSelectedNames = new ArrayList<>();
         mSelectable = false;
+        mPresenter = presenter;
     }
 
     public void setSelectable() {
@@ -111,17 +114,30 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     .buildRound(curFriend.username.substring(0, 1),
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
+
+        holder.remove_friend_icon.setOnClickListener(v -> {
+            mPresenter.removeFriend(mFriends.get(position).id);
+            removeFriend(position);
+        });
     }
 
     public void setFriends(List<Friend> friends) {
         if (!friends.equals(mFriends)) {
             mFriends = friends;
+        }
+        notifyDataSetChanged();
+    }
+
+    public void addFriend(Friend friend) {
+        if (!this.mFriends.contains(friend)) {
+            this.mFriends.add(friend);
             notifyDataSetChanged();
         }
     }
 
-    public void addFriend(Friend friend) {
-        this.mFriends.add(friend);
+    public void removeFriend (int position) {
+        this.mFriends.remove(position);
+        notifyItemRemoved(position);
     }
 
     public void selectFriend(int position) {
@@ -150,6 +166,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
     public void clearFriends() {
         mFriends.clear();
+        notifyDataSetChanged();
     }
 
     @Override

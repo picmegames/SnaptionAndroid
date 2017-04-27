@@ -14,6 +14,8 @@ public class FriendsContract {
     interface View extends BaseView<Presenter> {
         void processFriends(List<Friend> friends);
 
+        void addFriend(Friend friend);
+
         void showEmptyView();
 
         void showFriendList();
@@ -27,5 +29,7 @@ public class FriendsContract {
         void removeFriend(int friendId);
 
         void searchFriends(String query);
+
+        void findFriends(String query);
     }
 }
