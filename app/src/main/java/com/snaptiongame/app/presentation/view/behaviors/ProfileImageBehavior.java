@@ -27,7 +27,6 @@ public class ProfileImageBehavior extends CoordinatorLayout.Behavior<ImageView> 
     private int mFinalXPosition;
     private float mChangeBehaviorPoint;
 
-    private static final int CUSTOM_Y_START_OFFSET = 88;
     private static final int CUSTOM_Y_OFFSET = 12;
     private static final int CUSTOM_X_OFFSET = 30;
 
