@@ -40,6 +40,10 @@ public class Friend {
 
     }
 
+    public Friend(int id) {
+        this.id = id;
+    }
+
     //Convert a Friend to a User
     public Friend(User user) {
         this.id = user.id;

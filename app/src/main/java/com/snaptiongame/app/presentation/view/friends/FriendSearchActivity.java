@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.snaptiongame.app.R;
@@ -35,8 +34,8 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     SearchView mSearchView;
     @BindView(R.id.search_results)
     RecyclerView mSearchResults;
-    @BindView(R.id.empty_view)
-    LinearLayout mEmptyView;
+    //@BindView(R.id.empty_view)
+    //LinearLayout mEmptyView;
 
 
     private FriendsContract.Presenter mPresenter;
@@ -65,6 +64,8 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));
         mSearchResults.setAdapter(mAdapter);
         mSearchView.setOnQueryTextListener(this);
+        //mEmptyView.setVisibility(View.GONE);
+        mSearchResults.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -75,9 +76,9 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     public boolean onQueryTextChange(String newText) {
         mAdapter.clearFriends();
-
-
-
+        if (newText.isEmpty())
+            mPresenter.loadFriends();
+        else
             mPresenter.findFriends(newText);
         return true;
     }
@@ -89,13 +90,13 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public void processFriends(List<Friend> friends) {
-        if (friends.isEmpty()) {
-            showEmptyView();
-        }
-        else {
+        //if (friends.isEmpty()) {
+       //     showEmptyView();
+        //}
+        //else {
             showFriendList();
             mAdapter.setFriends(friends);
-        }
+        //}
     }
 
     @Override
@@ -105,13 +106,13 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public void showEmptyView() {
-        mEmptyView.setVisibility(View.VISIBLE);
+        //mEmptyView.setVisibility(View.VISIBLE);
         mSearchResults.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showFriendList() {
-        mEmptyView.setVisibility(View.GONE);
+        //mEmptyView.setVisibility(View.GONE);
         mSearchResults.setVisibility(View.VISIBLE);
     }
 
@@ -134,6 +135,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @OnClick(R.id.searchback)
     public void searchBack() {
+        mAdapter.clearFriends();
         super.onBackPressed();
     }
 }

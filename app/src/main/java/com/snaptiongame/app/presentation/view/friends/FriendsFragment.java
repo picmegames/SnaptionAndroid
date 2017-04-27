@@ -146,14 +146,14 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @Override
     public void processFriends(List<Friend> friends) {
-        if (friends.isEmpty()) {
-            showEmptyView();
-        }
-        else {
+        //if (friends.isEmpty()) {
+        //    showEmptyView();
+        //}
+        //else {
             showFriendList();
             mAdapter.setFriends(friends);
             mRefreshLayout.setRefreshing(false);
-        }
+        //}
     }
 
     @Override
