@@ -105,13 +105,10 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void loadShouldHideAddFriend(int userId) {
-        Disposable disposable = FriendProvider.loadFriends()
-                .flatMapIterable(friend -> friend)
-                .filter(friend -> friend.id == userId)
-                .toList()
+        Disposable disposable = FriendProvider.isFriend(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        friends -> mProfileView.showHideAddFriend(friends.isEmpty()),
+                        isFriend -> mProfileView.showHideAddFriend(!isFriend),
                         Timber::e
                 );
         mDisposables.add(disposable);

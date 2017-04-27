@@ -37,6 +37,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
@@ -187,19 +190,13 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void showHideAddFriend(boolean isVisible) {
-        if (mHasSameUserId) {
-            mMenu.findItem(R.id.add_friend).setVisible(false);
+        if (isVisible) {
+            mMenu.findItem(R.id.add_friend).setVisible(true);
             mMenu.findItem(R.id.remove_friend).setVisible(false);
         }
         else {
-            if (isVisible) {
-                mMenu.findItem(R.id.add_friend).setVisible(true);
-                mMenu.findItem(R.id.remove_friend).setVisible(false);
-            }
-            else {
-                mMenu.findItem(R.id.add_friend).setVisible(false);
-                mMenu.findItem(R.id.remove_friend).setVisible(true);
-            }
+            mMenu.findItem(R.id.add_friend).setVisible(false);
+            mMenu.findItem(R.id.remove_friend).setVisible(true);
         }
     }
 
@@ -339,6 +336,7 @@ public class ProfileActivity extends AppCompatActivity
                             .endConfig()
                             .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)))
                     .dontAnimate()
+                    .listener(listener)
                     .into(mProfileImg);
 
             Glide.with(this)
@@ -350,6 +348,8 @@ public class ProfileActivity extends AppCompatActivity
                             new CenterCrop(this),
                             new BlurTransformation(this, BLUR_RADIUS),
                             new ColorFilterTransformation(this, R.color.colorPrimary))
+                    .dontAnimate()
+                    .listener(listener)
                     .into(mCoverPhoto);
         }
         else {
@@ -364,6 +364,24 @@ public class ProfileActivity extends AppCompatActivity
             mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
     }
+
+    private RequestListener listener = new RequestListener<String, GlideDrawable>() {
+        @Override
+        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            if (!mHasSameUserId) {
+                mPresenter.loadShouldHideAddFriend(mUserId);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            if (!mHasSameUserId) {
+                mPresenter.loadShouldHideAddFriend(mUserId);
+            }
+            return false;
+        }
+    };
 
     @Override
     public void showProfilePictureSuccess() {
@@ -434,7 +452,6 @@ public class ProfileActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         mMenu = menu;
-        mPresenter.loadShouldHideAddFriend(mUserId);
         return true;
     }
 
@@ -451,7 +468,7 @@ public class ProfileActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                super.onBackPressed();
                 break;
             case R.id.add_friend:
                 addFriend();

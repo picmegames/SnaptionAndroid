@@ -33,4 +33,11 @@ public class FriendProvider {
     public static Completable removeFriend(AddFriendRequest request) {
         return apiService.deleteFriend(request);
     }
+
+    public static Single<Boolean> isFriend(int userId) {
+        return loadFriends()
+                .flatMapIterable(friend -> friend)
+                .map(friend -> friend.id)
+                .contains(userId);
+    }
 }

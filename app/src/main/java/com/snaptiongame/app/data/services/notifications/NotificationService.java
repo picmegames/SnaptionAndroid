@@ -17,13 +17,19 @@ import com.snaptiongame.app.presentation.view.game.GameActivity;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 
+import java.util.Date;
+import java.util.Map;
+
 /**
  * @author Tyler Wong
  */
 
 public class NotificationService extends FirebaseMessagingService {
 
+    private static final long THOUSAND = 1000L;
     private static final String TYPE = "type";
+    private static final String TITLE = "title";
+    private static final String MESSAGE = "message";
     private static final String GAME = "game";
     private static final String FRIEND = "user";
     private static final String PICTURE = "picture";
@@ -31,36 +37,55 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody());
+        Map<String, String> data = remoteMessage.getData();
+        String title = "";
+        String message = "";
 
-        Intent resultIntent = new Intent(this, MainActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        if (data.size() > 0) {
+            if (data.containsKey(TITLE) && data.containsKey(MESSAGE)) {
+                title = data.get(TITLE);
+                message = data.get(MESSAGE);
+            }
 
-        if (remoteMessage.getData().size() > 0) {
-            if (remoteMessage.getData().get(TYPE).equals(GAME)) {
-                resultIntent = new Intent(this, GameActivity.class);
-                resultIntent.putExtra(Game.ID, Integer.valueOf(remoteMessage.getData().get(Game.ID)));
-                resultIntent.putExtra(Game.IMAGE_URL, remoteMessage.getData().get(PICTURE));
-                resultIntent.putExtra(FROM_NOTIFICATION, true);
-                stackBuilder.addParentStack(GameActivity.class);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                    .setContentTitle(title)
+                    .setContentText(message);
+
+            Intent resultIntent = new Intent(this, MainActivity.class);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+            if (data.containsKey(TYPE)) {
+                if (data.get(TYPE).equals(GAME)) {
+                    resultIntent = new Intent(this, GameActivity.class);
+
+                    if (data.containsKey(Game.ID)) {
+                        resultIntent.putExtra(Game.ID, Integer.valueOf(data.get(Game.ID)));
+                    }
+                    if (data.containsKey(PICTURE)) {
+                        resultIntent.putExtra(Game.IMAGE_URL, data.get(PICTURE));
+                    }
+                    resultIntent.putExtra(FROM_NOTIFICATION, true);
+                    stackBuilder.addParentStack(GameActivity.class);
+                }
+                else if (data.get(TYPE).equals(FRIEND)) {
+                    resultIntent = new Intent(this, ProfileActivity.class);
+
+                    if (data.containsKey(User.ID)) {
+                        resultIntent.putExtra(User.ID, Integer.valueOf(data.get(User.ID)));
+                    }
+                    resultIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
+                    stackBuilder.addParentStack(ProfileActivity.class);
+                }
             }
-            else if (remoteMessage.getData().get(TYPE).equals(FRIEND)) {
-                resultIntent = new Intent(this, ProfileActivity.class);
-                resultIntent.putExtra(User.ID, Integer.valueOf(remoteMessage.getData().get(User.ID)));
-                resultIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
-                stackBuilder.addParentStack(ProfileActivity.class);
-            }
+
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(resultPendingIntent);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify((int) ((new Date().getTime() / THOUSAND) % Integer.MAX_VALUE), builder.build());
         }
-
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(resultPendingIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
     }
 }
