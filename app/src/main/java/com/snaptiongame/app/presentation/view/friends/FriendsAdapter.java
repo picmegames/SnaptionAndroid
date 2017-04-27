@@ -115,23 +115,15 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     .buildRound(curFriend.username.substring(0, 1),
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
-/*
+
         if (curFriend.isSnaptionFriend) {
             holder.add_remove_friend_icon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-            holder.add_remove_friend_icon.setOnClickListener(v -> {
-                holder.add_remove_friend_icon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-                mPresenter.removeFriend(mFriends.get(position).id);
-                removeFriend(position);
-            });
+            holder.add_remove_friend_icon.setOnClickListener(swapViewsAndListeners(holder.add_remove_friend_icon, true, position));
         }
         else {
             holder.add_remove_friend_icon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-            holder.add_remove_friend_icon.setOnClickListener(v -> {
-                holder.add_remove_friend_icon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-                mPresenter.addFriend(mFriends.get(position).id);
-                addFriend(mFriends.get(position));
-            });
-        }*/
+            holder.add_remove_friend_icon.setOnClickListener(swapViewsAndListeners(holder.add_remove_friend_icon, false, position));
+        }
     }
 
     private View.OnClickListener swapViewsAndListeners(ImageView viewHolder, boolean addFriendView, int lastPosition) {
@@ -142,6 +134,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     viewHolder.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
                     mPresenter.removeFriend(mFriends.get(lastPosition).id);
                     removeFriend(lastPosition);
+                    viewHolder.setOnClickListener(swapViewsAndListeners(viewHolder, false, lastPosition));
                 }
             };
         }
@@ -152,6 +145,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     viewHolder.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
                     mPresenter.addFriend(mFriends.get(lastPosition).id);
                     addFriend(mFriends.get(lastPosition));
+                    viewHolder.setOnClickListener(swapViewsAndListeners(viewHolder, true, lastPosition));
                 }
             };
         }
@@ -173,14 +167,14 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 this.mFriends.add(0, friend);
             else
                 this.mFriends.add(friend);
-            notifyDataSetChanged();
         }
-
+        notifyDataSetChanged();
     }
 
     public void removeFriend (int position) {
         this.mFriends.remove(position);
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     public void selectFriend(int position) {

@@ -43,30 +43,32 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
         Observable friends = FriendProvider
                 .loadFriends()
+
                 .flatMapIterable(friend -> friend)
                 .filter(friend -> friend.username.contains(query));
 
         Observable email = UserProvider.getUserWithEmail(query).map(Friend::new).toObservable();
         Observable usernames = UserProvider.loadUsers(query).flatMapIterable(user -> user).map(Friend::new);
-        Observable emailXusernames = Observable.concat(usernames, email.defaultIfEmpty("NO_EFFECT"));
+        Observable emailXusernames = Observable.concat(usernames.defaultIfEmpty("NO_EFFECT"), email.defaultIfEmpty("NO_EFFECT"));
 
         //Note the order of concat matter
         //If an observable ends up being empty, it will trash the entire call. That is dumb
         //This is solved by using .defaultIsEmpty("NO_EFFECT")
         Disposable disposable =
-                Observable.concat(friends, emailXusernames)
-                .distinct()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        friend ->
-                        {
-                            mFriendView.addFriend((Friend) friend);
-                        },
-                        e -> {
-                            Timber.e((Throwable) e);
+                Observable.concat(friends.defaultIfEmpty("NO_EFFECT"), emailXusernames)
+                        .distinct()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                friend ->
+                                {
+                                    mFriendView.addFriend((Friend) friend);
+                                },
+                                e -> {
+                                    Timber.e((Throwable) e);
 
-                        });
+                                });
         mDisposables.add(disposable);
+
     }
 
     @Override
