@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -114,7 +115,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     .buildRound(curFriend.username.substring(0, 1),
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
-
+/*
         if (curFriend.isSnaptionFriend) {
             holder.add_remove_friend_icon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
             holder.add_remove_friend_icon.setOnClickListener(v -> {
@@ -130,17 +131,29 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 mPresenter.addFriend(mFriends.get(position).id);
                 addFriend(mFriends.get(position));
             });
-        }
+        }*/
     }
 
-    private View.OnClickListener swapViewsAndListeners(View viewHolder, boolean addFriendView) {
+    private View.OnClickListener swapViewsAndListeners(ImageView viewHolder, boolean addFriendView, int lastPosition) {
         if (addFriendView) {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    viewHolder.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+                    mPresenter.removeFriend(mFriends.get(lastPosition).id);
+                    removeFriend(lastPosition);
                 }
-            }
+            };
+        }
+        else {
+            return new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewHolder.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                    mPresenter.addFriend(mFriends.get(lastPosition).id);
+                    addFriend(mFriends.get(lastPosition));
+                }
+            };
         }
 
     }
