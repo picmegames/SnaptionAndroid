@@ -20,9 +20,11 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="@string/game_notifications"
-        android:title="@string/game_notifications"/>
+        android:title="@string/game_notifications"
+        android:summary="@string/game_notifications_summary"/>
     <SwitchPreference
         android:defaultValue="true"
         android:key="@string/friend_notifications"
-        android:title="@string/friend_notifications"/>
+        android:title="@string/friend_notifications"
+        android:summary="@string/friend_notifications_summary"/>
 </PreferenceScreen>

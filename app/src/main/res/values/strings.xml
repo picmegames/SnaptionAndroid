@@ -121,7 +121,9 @@
     <string name="general">General</string>
     <string name="notifications">Notifications</string>
     <string name="game_notifications">Game Notifications</string>
+    <string name="game_notifications_summary">Be notified when someone adds you to their game or captions yours</string>
     <string name="friend_notifications">Friend Notifications</string>
+    <string name="friend_notifications_summary">Be notified when someone adds you as a friend</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
