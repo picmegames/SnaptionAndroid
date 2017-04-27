@@ -58,6 +58,8 @@ public final class AuthManager {
     private static final String FACEBOOK_LOGIN = "facebook";
     private static final String GOOGLE_SIGN_IN = "google";
     private static final String INVITE_TOKEN = "token";
+    private static final String GAME_NOTIFICATIONS = "gameNotifications";
+    private static final String FRIEND_NOTIFICATIONS = "friendNotifications";
 
     private AuthManager(Context context) {
         // INIT Shared Preferences Editor
@@ -76,6 +78,9 @@ public final class AuthManager {
         googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
                 .build();
+
+        // INIT Notification Preferences
+        initNotifications();
     }
 
     public static void init(Context context) {
@@ -242,6 +247,35 @@ public final class AuthManager {
         }
     }
 
+    private void initNotifications() {
+        if (!preferences.contains(GAME_NOTIFICATIONS) && !preferences.contains(FRIEND_NOTIFICATIONS)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(GAME_NOTIFICATIONS, true);
+            editor.putBoolean(FRIEND_NOTIFICATIONS, true);
+            editor.apply();
+        }
+    }
+
+    public static boolean isGameNotificationsEnabled() {
+        return preferences.getBoolean(GAME_NOTIFICATIONS, true);
+    }
+
+    public static boolean isFriendNotificationsEnabled() {
+        return preferences.getBoolean(FRIEND_NOTIFICATIONS, true);
+    }
+
+    public static void setGameNotificationsEnabled(boolean isEnabled) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(GAME_NOTIFICATIONS, isEnabled);
+        editor.apply();
+    }
+
+    public static void setFriendNotificationsEnabled(boolean isEnabled) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(FRIEND_NOTIFICATIONS, isEnabled);
+        editor.apply();
+    }
+
     public static boolean isLoggedIn() {
         return preferences.getBoolean(LOGGED_IN, false);
     }
@@ -271,6 +305,8 @@ public final class AuthManager {
         editor.putBoolean(LOGGED_IN, false);
         editor.apply();
 
+        setGameNotificationsEnabled(true);
+        setFriendNotificationsEnabled(true);
         clearLoginInfo();
     }
 

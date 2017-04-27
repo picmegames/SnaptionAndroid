@@ -11,6 +11,7 @@ import android.support.v4.app.TaskStackBuilder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
@@ -38,6 +39,21 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Map<String, String> data = remoteMessage.getData();
+        String type;
+
+        if (data.containsKey(TYPE)) {
+            type = data.get(TYPE);
+
+            if (type.equals(GAME) && AuthManager.isGameNotificationsEnabled()) {
+                handleNotification(data, type);
+            }
+            else if(type.equals(FRIEND) && AuthManager.isFriendNotificationsEnabled()) {
+                handleNotification(data, type);
+            }
+        }
+    }
+
+    private void handleNotification(Map<String, String> data, String type) {
         String title = "";
         String message = "";
 
@@ -57,28 +73,26 @@ public class NotificationService extends FirebaseMessagingService {
             Intent resultIntent = new Intent(this, MainActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
-            if (data.containsKey(TYPE)) {
-                if (data.get(TYPE).equals(GAME)) {
-                    resultIntent = new Intent(this, GameActivity.class);
+            if (type.equals(GAME)) {
+                resultIntent = new Intent(this, GameActivity.class);
 
-                    if (data.containsKey(Game.ID)) {
-                        resultIntent.putExtra(Game.ID, Integer.valueOf(data.get(Game.ID)));
-                    }
-                    if (data.containsKey(PICTURE)) {
-                        resultIntent.putExtra(Game.IMAGE_URL, data.get(PICTURE));
-                    }
-                    resultIntent.putExtra(FROM_NOTIFICATION, true);
-                    stackBuilder.addParentStack(GameActivity.class);
+                if (data.containsKey(Game.ID)) {
+                    resultIntent.putExtra(Game.ID, Integer.valueOf(data.get(Game.ID)));
                 }
-                else if (data.get(TYPE).equals(FRIEND)) {
-                    resultIntent = new Intent(this, ProfileActivity.class);
+                if (data.containsKey(PICTURE)) {
+                    resultIntent.putExtra(Game.IMAGE_URL, data.get(PICTURE));
+                }
+                resultIntent.putExtra(FROM_NOTIFICATION, true);
+                stackBuilder.addParentStack(GameActivity.class);
+            }
+            else if (type.equals(FRIEND)) {
+                resultIntent = new Intent(this, ProfileActivity.class);
 
-                    if (data.containsKey(User.ID)) {
-                        resultIntent.putExtra(User.ID, Integer.valueOf(data.get(User.ID)));
-                    }
-                    resultIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
-                    stackBuilder.addParentStack(ProfileActivity.class);
+                if (data.containsKey(User.ID)) {
+                    resultIntent.putExtra(User.ID, Integer.valueOf(data.get(User.ID)));
                 }
+                resultIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
+                stackBuilder.addParentStack(ProfileActivity.class);
             }
 
             stackBuilder.addNextIntent(resultIntent);

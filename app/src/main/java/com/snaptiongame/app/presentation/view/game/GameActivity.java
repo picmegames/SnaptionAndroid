@@ -567,7 +567,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean confirmAndPrepareCaption() {
         String curEntry = mFitBEditTextField.getText().toString();
-
+        mFitBAdapter.resetCaption();
         mFitBEditTextField.setText("");
         mFitBEditTextLayout.setHint("");
         mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,

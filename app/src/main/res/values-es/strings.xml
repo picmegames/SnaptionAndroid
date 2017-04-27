@@ -113,4 +113,10 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="remove_friend_success">Eliminó correctamente %1$s como amigo</string>
     <string name="remove_friend_failure">Error al eliminar %1$s</string>
     <string name="remove_friend">Eliminar amigo</string>
+    <string name="general">General</string>
+    <string name="add_friend_body">¿Estás seguro de que quieres agregar %1$s como amigo?</string>
+    <string name="remove_friend_body">¿Estás seguro de que quieres eliminar %1$s como amigo?</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="friend_notifications">Notificaciones de amigos</string>
+    <string name="game_notifications">Notificaciones del juego</string>
 </resources>

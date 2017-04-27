@@ -8,6 +8,7 @@ import com.snaptiongame.app.presentation.BaseView;
  */
 
 public class PreferencesContract {
+
     interface View extends BaseView<Presenter> {
         void updateCacheSummary(String cacheSize);
 
