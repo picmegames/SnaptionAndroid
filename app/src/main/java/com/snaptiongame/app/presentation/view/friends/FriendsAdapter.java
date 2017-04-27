@@ -35,23 +35,27 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private boolean mSelectable;
     private int lastPosition = -1;
     private FriendsContract.Presenter mPresenter;
+    private Context mContext;
 
     private static final int AVATAR_SIZE = 40;
     private static final float DIM = .6F;
     private static final float BRIGHT = 1F;
     private static final int EMPTY_VIEW = 10;
 
-    public FriendsAdapter(List<Friend> friends, FriendsContract.Presenter presenter) {
+    public FriendsAdapter(List<Friend> friends) {
         this.mFriends = friends;
         mSelectedIds = new ArrayList<>();
         mSelectedNames = new ArrayList<>();
         mSelectable = false;
-        mPresenter = presenter;
     }
 
     public void setSelectable() {
         mSelectable = true;
     }
+
+    public void setPresenter(FriendsContract.Presenter presenter) {mPresenter = presenter;}
+
+    public void setContextForDialog(Context context) {mContext = context;}
 
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -116,13 +120,14 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
 
-        if (curFriend.isSnaptionFriend) {
-            holder.add_remove_friend_icon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-            holder.add_remove_friend_icon.setOnClickListener(swapViewsAndListeners(holder.add_remove_friend_icon, true, position));
-        }
-        else {
-            holder.add_remove_friend_icon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-            holder.add_remove_friend_icon.setOnClickListener(swapViewsAndListeners(holder.add_remove_friend_icon, false, position));
+        if (mContext != null) {
+            if (curFriend.isSnaptionFriend) {
+                holder.add_remove_friend_icon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+                holder.add_remove_friend_icon.setOnClickListener(swapViewsAndListeners(holder.add_remove_friend_icon, true, position));
+            } else {
+                holder.add_remove_friend_icon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                holder.add_remove_friend_icon.setOnClickListener(swapViewsAndListeners(holder.add_remove_friend_icon, false, position));
+            }
         }
     }
 

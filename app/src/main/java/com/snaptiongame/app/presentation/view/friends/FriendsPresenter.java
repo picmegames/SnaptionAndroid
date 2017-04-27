@@ -151,7 +151,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                             mFriends = friends;
 
                             if (mMyFriendsSaved.size() == 0)
-                                mMyFriendsSaved = new ArrayList<Friend>(mFriends);
+                                mMyFriendsSaved = new ArrayList<>(mFriends);
                         },
                         e -> {
                             Timber.e(e);

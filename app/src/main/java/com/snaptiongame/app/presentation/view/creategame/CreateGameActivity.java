@@ -264,7 +264,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @Override
     public void showFriendsDialog() {
-        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends(), null);
+        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
         mFriendsAdapter.setSelectable();
 
         mFriendsDialog = new MaterialDialog.Builder(this)

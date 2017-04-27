@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 
@@ -43,9 +44,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     private InsetDividerDecoration mDecoration;
 
     private Unbinder mUnbinder;
-    private FriendsDialogFragment mDialogFragmentDefault;
-    private FriendsDialogFragment mDialogFragmentFriendSearch;
-
     public static final String TAG = FriendsFragment.class.getSimpleName();
 
     public static FriendsFragment getInstance() {
@@ -70,7 +68,10 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
         mFriendsList.setHasFixedSize(true);
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new FriendsAdapter(new ArrayList<>(), mPresenter);
+        mAdapter = new FriendsAdapter(new ArrayList<>());
+        mAdapter.setPresenter(mPresenter);
+        mAdapter.setContextForDialog(SnaptionApplication.getContext());
+        
         mFriendsList.setAdapter(mAdapter);
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
@@ -165,4 +166,21 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     public void setPresenter(FriendsContract.Presenter presenter) {
         mPresenter = presenter;
     }
+
+    /**
+     *
+     private void sendInviteIntent() {
+
+     String smsBody = getString(R.string.invite_message) +
+     getString(R.string.store_url);
+
+     Intent inviteIntent = new Intent(Intent.ACTION_SEND);
+     inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
+     inviteIntent.setType("text/plain");
+
+     Intent chooser = Intent.createChooser(inviteIntent, getString(R.string.invite_friend_via));
+
+     startActivity(chooser);
+     }
+     */
 }
