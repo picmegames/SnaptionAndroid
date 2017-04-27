@@ -71,7 +71,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mAdapter = new FriendsAdapter(new ArrayList<>());
         mAdapter.setPresenter(mPresenter);
         mAdapter.setContextForDialog(SnaptionApplication.getContext());
-        
+
         mFriendsList.setAdapter(mAdapter);
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
