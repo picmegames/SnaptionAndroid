@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 
@@ -20,8 +21,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 /**
  * @author Tyler Wong
@@ -56,10 +55,13 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
                 FriendViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
-                ContextCompat.getColor(getContext(), R.color.divider));
+                ContextCompat.getColor(SnaptionApplication.getContext(), R.color.divider));
         mSearchResults.addItemDecoration(mDecoration);
 
-        mAdapter = new FriendsAdapter(new ArrayList<>(), mPresenter);
+        mAdapter = new FriendsAdapter(new ArrayList<>());
+        mAdapter.setPresenter(mPresenter);
+        mAdapter.setContextForDialog(SnaptionApplication.getContext());
+
         mSearchResults.setHasFixedSize(true);
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));
         mSearchResults.setAdapter(mAdapter);
