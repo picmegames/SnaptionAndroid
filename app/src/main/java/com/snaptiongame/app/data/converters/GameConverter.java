@@ -62,6 +62,8 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 content.get(Game.IS_PUBLIC).getAsBoolean(),
                 content.get(Game.PICKER_ID).getAsInt(), "", "");
 
+        game.numUpvotes = content.get(Game.NUM_UPVOTES).getAsInt();
+
         JsonObject picture = content.getAsJsonObject(Game.PICTURE);
         game.imageUrl = picture.get(Game.IMAGE_URL).getAsString();
         game.imageWidth = picture.get(Game.IMAGE_WIDTH).getAsInt();
