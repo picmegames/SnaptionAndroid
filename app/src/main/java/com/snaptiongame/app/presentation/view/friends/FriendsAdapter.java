@@ -149,7 +149,6 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 }
             };
         }
-
     }
 
     public void setFriends(List<Friend> friends) {

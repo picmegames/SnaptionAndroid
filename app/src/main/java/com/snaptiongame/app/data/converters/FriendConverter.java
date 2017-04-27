@@ -27,18 +27,19 @@ public class FriendConverter implements JsonSerializer<Friend>, JsonDeserializer
     @Override
     public Friend deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+        JsonObject object = json.getAsJsonObject();
+        Friend newFriend = new Friend();
 
-            JsonObject object = json.getAsJsonObject();
-            Friend newFriend = new Friend();
+        newFriend.id = object.get(User.ID).getAsInt();
+        newFriend.username = object.get(User.USERNAME).getAsString();
 
-            newFriend.id = object.get(User.ID).getAsInt();
-            newFriend.username = object.get(User.USERNAME).getAsString();
-
+        if (!object.get(User.PICTURE).isJsonNull()) {
             JsonObject pictureObject = object.getAsJsonObject(User.PICTURE);
             newFriend.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
             newFriend.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
-            newFriend.isSnaptionFriend = true;
             newFriend.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
-            return newFriend;
+        }
+        newFriend.isSnaptionFriend = true;
+        return newFriend;
     }
 }
