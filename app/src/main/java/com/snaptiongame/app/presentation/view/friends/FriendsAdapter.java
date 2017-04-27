@@ -115,10 +115,34 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
 
-        holder.remove_friend_icon.setOnClickListener(v -> {
-            mPresenter.removeFriend(mFriends.get(position).id);
-            removeFriend(position);
-        });
+        if (curFriend.isSnaptionFriend) {
+            holder.add_remove_friend_icon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+            holder.add_remove_friend_icon.setOnClickListener(v -> {
+                holder.add_remove_friend_icon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                mPresenter.removeFriend(mFriends.get(position).id);
+                removeFriend(position);
+            });
+        }
+        else {
+            holder.add_remove_friend_icon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+            holder.add_remove_friend_icon.setOnClickListener(v -> {
+                holder.add_remove_friend_icon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+                mPresenter.addFriend(mFriends.get(position).id);
+                addFriend(mFriends.get(position));
+            });
+        }
+    }
+
+    private View.OnClickListener swapViewsAndListeners(View viewHolder, boolean addFriendView) {
+        if (addFriendView) {
+            return new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            }
+        }
+
     }
 
     public void setFriends(List<Friend> friends) {
@@ -129,10 +153,16 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void addFriend(Friend friend) {
+
+        //Ensures that users who are not your friend appear at the top of the list
         if (!this.mFriends.contains(friend)) {
-            this.mFriends.add(friend);
+            if (!friend.isSnaptionFriend)
+                this.mFriends.add(0, friend);
+            else
+                this.mFriends.add(friend);
             notifyDataSetChanged();
         }
+
     }
 
     public void removeFriend (int position) {

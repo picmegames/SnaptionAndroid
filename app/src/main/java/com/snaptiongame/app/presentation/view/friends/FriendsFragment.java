@@ -1,13 +1,11 @@
 package com.snaptiongame.app.presentation.view.friends;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -27,13 +25,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.snaptiongame.app.presentation.view.friends.FriendsDialogFragment.DialogToShow.STANDARD_DIALOG;
-
 /**
  * @author Brian Gouldsberry
  */
 
-public class FriendsFragment extends Fragment implements FriendsContract.View, FriendsDialogInterface {
+public class FriendsFragment extends Fragment implements FriendsContract.View {
     @BindView(R.id.friend_list)
     RecyclerView mFriendsList;
     @BindView(R.id.refresh_layout_friends)
@@ -111,13 +107,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
                                 break;
                         }
                     };
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage(getString(R.string.delete_pre) + " " + mAdapter.getFriends()
-                            .get(index).username + " " + getString(R.string.delete_post))
-                            .setCancelable(false)
-                            .setPositiveButton(getString(R.string.yes), dialogClickListener)
-                            .setNegativeButton(getString(R.string.no), dialogClickListener).show();
                 }
             }
         };
@@ -126,13 +115,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         mPresenter.subscribe();
 
         return view;
-    }
-
-    public void inviteFriends() {
-        mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG);
-        mDialogFragmentDefault.setTargetFragment(this, 1);
-        mDialogFragmentDefault.show(getFragmentManager(), "dialog");
-        mDialogFragmentDefault.setDialogInterface(this, STANDARD_DIALOG);
     }
 
     @Override
@@ -154,33 +136,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
         mPresenter.unsubscribe();
     }
 
-    public void updateFriendsDialog(FriendsDialogFragment.DialogToShow dialogToShow) {
-        mDialogFragmentDefault.dismiss();
-        mDialogFragmentFriendSearch = FriendsDialogFragment.newInstance(dialogToShow);
-        mDialogFragmentFriendSearch.setTargetFragment(this, 1);
-        mDialogFragmentFriendSearch.show(getFragmentManager(), "dialog");
-        mDialogFragmentFriendSearch.setDialogInterface(this, dialogToShow);
-    }
-
-    /**
-     * This method determines what should be shown to a user after they click the negative
-     * button on a dialog. For a standard dialog we just want to dismiss the dialog,
-     * otherwise we return to the previous dialog
-     *
-     * @param whichDialog holder for the type of dialog currently being shown
-     */
-    public void negativeButtonClicked(FriendsDialogFragment.DialogToShow whichDialog) {
-        if (whichDialog == STANDARD_DIALOG) {
-            mDialogFragmentDefault.dismiss();
-            if (mDialogFragmentFriendSearch != null)
-                mDialogFragmentFriendSearch.dismiss();
-        }
-        else {
-            mDialogFragmentFriendSearch.dismiss();
-            mDialogFragmentDefault = FriendsDialogFragment.newInstance(STANDARD_DIALOG);
-            mDialogFragmentDefault.setTargetFragment(this, 1);
-            mDialogFragmentDefault.show(getFragmentManager(), "dialog");
-        }
+    public void inviteFriends() {
     }
 
     @Override
@@ -202,24 +158,11 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
     @Override
     public void addFriend(Friend friend) {
-
+        mPresenter.addFriend(friend.id);
     }
 
     @Override
     public void setPresenter(FriendsContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        FriendsDialogFragment.DialogToShow toShow = (FriendsDialogFragment.DialogToShow) data.getSerializableExtra("which");
-        switch (resultCode) {
-            case 1:
-                negativeButtonClicked(toShow);
-                break;
-            case 2:
-                updateFriendsDialog(toShow);
-                break;
-        }
     }
 }

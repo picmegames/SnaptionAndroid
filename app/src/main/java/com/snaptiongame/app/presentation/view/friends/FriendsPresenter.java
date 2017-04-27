@@ -48,14 +48,20 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
         Observable email = UserProvider.getUserWithEmail(query).map(Friend::new).toObservable();
         Observable usernames = UserProvider.loadUsers(query).flatMapIterable(user -> user).map(Friend::new);
+        Observable emailXusernames = Observable.concat(usernames, email.defaultIfEmpty("NO_EFFECT"));
 
-        Disposable disposable = Observable.concat(usernames, email)
-                .startWith(friends)
+        //Note the order of concat matter
+        //If an observable ends up being empty, it will trash the entire call. That is dumb
+        //This is solved by using .defaultIsEmpty("NO_EFFECT")
+        Disposable disposable =
+                Observable.concat(friends, emailXusernames)
                 .distinct()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         friend ->
-                        {mFriendView.addFriend((Friend) friend);},
+                        {
+                            mFriendView.addFriend((Friend) friend);
+                        },
                         e -> {
                             Timber.e((Throwable) e);
 
@@ -69,18 +75,8 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         friends -> {
-                            for (int i = 0; i < friends.size(); i++) {
-                                Friend tmpFriend = friends.get(i);
-                                tmpFriend.setSnaptionFriend(true);
-                                friends.set(i, tmpFriend);
-                            }
-                            for (Friend friend : friends)
-                                System.out.println(friend.isSnaptionFriend);
                             mFriendView.processFriends(friends);
                             mFriends = friends;
-
-
-
                         },
                         e -> {
                             Timber.e(e);
@@ -102,6 +98,13 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                         () -> Timber.i("Successfully removed friend!"),
                         Timber::e
                 );
+    }
+
+    @Override
+    public void addFriend(int friendId) {
+        FriendProvider.addFriend(new AddFriendRequest(friendId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     @Override

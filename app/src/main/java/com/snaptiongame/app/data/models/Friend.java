@@ -61,7 +61,7 @@ public class Friend {
         this.picture = picture;
         this.cover = cover;
         this.email = email;
-        isSnaptionFriend = false;
+        isSnaptionFriend = true;
     }
 
     @Override

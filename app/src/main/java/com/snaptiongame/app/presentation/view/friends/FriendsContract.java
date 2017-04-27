@@ -28,6 +28,8 @@ public class FriendsContract {
 
         void removeFriend(int friendId);
 
+        void addFriend(int friendId);
+
         void searchFriends(String query);
 
         void findFriends(String query);

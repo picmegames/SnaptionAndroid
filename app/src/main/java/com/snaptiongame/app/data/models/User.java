@@ -26,6 +26,7 @@ public class User {
     public int exp;
     @SerializedName(RANK_ID)
     public int rankId;
+    public boolean isSnaptionFriend;
 
     public static final String ID = "id";
     public static final String USERNAME = "username";
@@ -36,6 +37,7 @@ public class User {
     public static final String TYPE = "imgType";
     public static final String EXP = "exp";
     public static final String RANK_ID = "rank_id";
+
 
     public User() {
 
