@@ -71,7 +71,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
         if (!mSelectable) {
             Context context = holder.itemView.getContext();
-            holder.itemView.setOnClickListener(view -> {
+            holder.mImage.setOnClickListener(view -> {
                 Intent profileIntent = new Intent(context, ProfileActivity.class);
                 profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
                 profileIntent.putExtra(User.USERNAME, curFriend.username);
