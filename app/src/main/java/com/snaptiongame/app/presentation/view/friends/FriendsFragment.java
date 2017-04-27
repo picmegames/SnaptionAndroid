@@ -74,7 +74,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
 
         mFriendsList.setHasFixedSize(true);
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new FriendsAdapter(new ArrayList<>());
+        mAdapter = new FriendsAdapter(new ArrayList<>(), mPresenter);
         mFriendsList.setAdapter(mAdapter);
 
         mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
@@ -198,6 +198,11 @@ public class FriendsFragment extends Fragment implements FriendsContract.View, F
             mAdapter.setFriends(friends);
             mRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void addFriend(Friend friend) {
+
     }
 
     @Override

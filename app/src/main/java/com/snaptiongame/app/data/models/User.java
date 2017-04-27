@@ -41,6 +41,16 @@ public class User {
 
     }
 
+    //Convert a Friend to a User
+    public User(Friend friend) {
+        this.id = friend.id;
+        this.picture = friend.picture;
+        this.username = friend.username;
+        this.imageWidth = friend.imageWidth;
+        this.imageHeight = friend.imageHeight;
+        this.imageUrl = friend.imageUrl;
+    }
+
     public User(String username) {
         this.username = username;
     }
@@ -48,5 +58,14 @@ public class User {
     public User(String picture, String type) {
         this.picture = picture;
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof User) {
+            User other = (User) o;
+            return (id == ((User) o).id);
+        }
+        return false;
     }
 }

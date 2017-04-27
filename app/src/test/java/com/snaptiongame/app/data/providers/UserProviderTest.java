@@ -25,7 +25,7 @@ public class UserProviderTest {
         user = new User("");
         when(service.getUser(0)).thenReturn(Single.just(user));
         when(service.getUserByEmail("")).thenReturn(Single.just(user));
-        when(service.getUserByFacebook("")).thenReturn(Single.just(user));
+        when(service.getUserByFacebookID("")).thenReturn(Single.just(user));
         when(service.updateUser(user)).thenReturn(Single.just(user));
     }
 

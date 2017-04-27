@@ -5,10 +5,12 @@ import android.support.annotation.NonNull;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.FriendProvider;
+import com.snaptiongame.app.data.providers.UserProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -36,13 +38,49 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     }
 
     @Override
+    public void findFriends(String query) {
+        mDisposables.clear();
+
+        Observable friends = FriendProvider
+                .loadFriends()
+                .flatMapIterable(friend -> friend)
+                .filter(friend -> friend.username.contains(query));
+
+        Observable email = UserProvider.getUserWithEmail(query).map(Friend::new).toObservable();
+        Observable usernames = UserProvider.loadUsers(query).flatMapIterable(user -> user).map(Friend::new);
+
+        Disposable disposable = Observable.concat(usernames, email)
+                .startWith(friends)
+                .distinct()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        friend ->
+                        {mFriendView.addFriend((Friend) friend);},
+                        e -> {
+                            Timber.e((Throwable) e);
+
+                        });
+        mDisposables.add(disposable);
+    }
+
+    @Override
     public void loadFriends() {
         Disposable disposable = FriendProvider.loadFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         friends -> {
+                            for (int i = 0; i < friends.size(); i++) {
+                                Friend tmpFriend = friends.get(i);
+                                tmpFriend.setSnaptionFriend(true);
+                                friends.set(i, tmpFriend);
+                            }
+                            for (Friend friend : friends)
+                                System.out.println(friend.isSnaptionFriend);
                             mFriendView.processFriends(friends);
                             mFriends = friends;
+
+
+
                         },
                         e -> {
                             Timber.e(e);

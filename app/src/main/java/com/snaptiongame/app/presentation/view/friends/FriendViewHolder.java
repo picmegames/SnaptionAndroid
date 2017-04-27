@@ -3,6 +3,7 @@ package com.snaptiongame.app.presentation.view.friends;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.snaptiongame.app.R;
@@ -22,6 +23,10 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     CircleImageView mImage;
     @BindView(R.id.secondary_text)
     TextView mUsernameField;
+    @BindView(R.id.remove_friend_icon)
+    ImageView remove_friend_icon;
+    @BindView(R.id.add_friend_icon)
+    ImageView add_friend_icon;
 
     public Context mContext;
 

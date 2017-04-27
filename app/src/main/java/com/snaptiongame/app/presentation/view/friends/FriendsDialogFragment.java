@@ -313,7 +313,7 @@ public class FriendsDialogFragment extends DialogFragment {
             mResults = ButterKnife.findById(view, R.id.search_results);
             mResults.setLayoutManager(new LinearLayoutManager(view.getContext()));
             ArrayList<Friend> friends = new ArrayList<>();
-            mAdapter = new FriendsAdapter(friends);
+           // mAdapter = new FriendsAdapter(friends);
             mAdapter.setSelectable();
             mResults.setAdapter(mAdapter);
 

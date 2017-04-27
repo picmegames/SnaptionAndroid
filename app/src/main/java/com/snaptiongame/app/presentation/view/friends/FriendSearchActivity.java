@@ -38,10 +38,13 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @BindView(R.id.empty_view)
     LinearLayout mEmptyView;
 
+
     private FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
+
+    private String oldText = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
                 ContextCompat.getColor(getContext(), R.color.divider));
         mSearchResults.addItemDecoration(mDecoration);
 
-        mAdapter = new FriendsAdapter(new ArrayList<>());
+        mAdapter = new FriendsAdapter(new ArrayList<>(), mPresenter);
         mSearchResults.setHasFixedSize(true);
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));
         mSearchResults.setAdapter(mAdapter);
@@ -71,15 +74,27 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        // TODO SEARCH FOR ALL THE FRIENDS EVERYWHERE:
-        // User current friends
-        // User by email
-        // User by phone
-        // User by username
-        // User by name
-        // Filter out duplicates
-        // Display results in recyclerview mSearchResults
-        mPresenter.searchFriends(newText);
+        mAdapter.clearFriends();
+
+
+        //if (newText.isEmpty())
+        //    mPresenter.loadFriends();
+        //else {
+            //Probably implies user hit the delete
+            ///if (oldText.length() < newText.length())
+
+            // TODO SEARCH FOR ALL THE FRIENDS EVERYWHERE:
+            // User current friends
+            // User by email
+            // User by phone
+            // User by username
+
+            // User by name
+            // Filter out duplicates
+            // Display results in recyclerview mSearchResults
+            mPresenter.findFriends(newText);
+        //}
+
         return true;
     }
 
@@ -97,6 +112,11 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
             showFriendList();
             mAdapter.setFriends(friends);
         }
+    }
+
+    @Override
+    public void addFriend(Friend friend) {
+        mAdapter.addFriend(friend);
     }
 
     @Override
