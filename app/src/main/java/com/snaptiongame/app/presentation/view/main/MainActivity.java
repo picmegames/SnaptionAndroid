@@ -402,6 +402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 mMenu.findItem(R.id.filter).setVisible(false);
                 mMenu.findItem(R.id.search).setVisible(true);
+                mFab.setVisibility(View.GONE);//Don't need the fab anymore
                 break;
 
             case R.id.settings:
@@ -490,9 +491,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void handleFabAction() {
         if (fragTag.equals(WallFragment.TAG)) {
             goToCreateGame();
-        }
-        else if (fragTag.equals(FriendsFragment.TAG)) {
-            ((FriendsFragment) mCurrentFragment).inviteFriends();
         }
     }
 

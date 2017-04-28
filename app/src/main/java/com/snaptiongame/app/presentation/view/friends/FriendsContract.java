@@ -33,5 +33,7 @@ public class FriendsContract {
         void searchFriends(String query);
 
         void findFriends(String query);
+
+        void addFriendTemp(Friend friend);
     }
 }
