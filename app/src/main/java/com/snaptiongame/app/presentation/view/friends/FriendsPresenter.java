@@ -183,6 +183,11 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     }
 
     @Override
+    public void addFriendTemp(Friend friend) {
+        mMyFriendsSaved.add(friend);
+    }
+
+    @Override
     public void searchFriends(String query) {
         mFriendView.processFriends(filterList(mFriends, query));
     }

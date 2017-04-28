@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 
@@ -70,7 +69,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(new ArrayList<>());
         mAdapter.setPresenter(mPresenter);
-        mAdapter.setContextForDialog(SnaptionApplication.getContext());
+        mAdapter.setContextForDialog(getActivity());
+        mAdapter.setShouldDisplayAddRemoveOption(true);
 
         mFriendsList.setAdapter(mAdapter);
 
@@ -147,14 +147,14 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @Override
     public void processFriends(List<Friend> friends) {
-        //if (friends.isEmpty()) {
-        //    showEmptyView();
-        //}
-        //else {
+        if (friends.isEmpty()) {
+            showEmptyView();
+        }
+        else {
             showFriendList();
             mAdapter.setFriends(friends);
             mRefreshLayout.setRefreshing(false);
-        //}
+        }
     }
 
     @Override
