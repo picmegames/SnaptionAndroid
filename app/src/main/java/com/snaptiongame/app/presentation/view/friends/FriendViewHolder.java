@@ -24,7 +24,7 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.secondary_text)
     TextView mUsernameField;
     @BindView(R.id.add_remove_friend_icon)
-    ImageView add_remove_friend_icon;
+    ImageView mAddRemoveFriendIcon;
 
     public Context mContext;
 

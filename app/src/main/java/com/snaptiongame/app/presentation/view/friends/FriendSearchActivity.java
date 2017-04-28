@@ -34,7 +34,6 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @BindView(R.id.search_results)
     RecyclerView mSearchResults;
 
-
     private FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
@@ -73,10 +72,12 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     public boolean onQueryTextChange(String newText) {
         mAdapter.clearFriends();
-        if (newText.isEmpty())
+        if (newText.isEmpty()) {
             mPresenter.loadFriends();
-        else
+        }
+        else {
             mPresenter.findFriends(newText);
+        }
         return true;
     }
 

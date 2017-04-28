@@ -44,21 +44,20 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void findFriends(String query) {
-
-        Observable friends = FriendProvider
-                .loadFriends()
+        Observable friends = FriendProvider.loadFriends()
                 .flatMapIterable(friend -> friend)
                 .filter(friend -> checkMyFriendsWithQuery(query, friend));
 
-
-        Observable email = UserProvider
-                .getUserWithEmail(query)
+        Observable email = UserProvider.getUserWithEmail(query)
                 .filter(user -> checkMyFriendsForDuplicate(user, EMAIL_QUERY))
-                .map(user -> convertPossibleFriend(user)).toObservable()
+                .map(this::convertPossibleFriend)
+                .toObservable()
                 .defaultIfEmpty(new Friend(-1));
 
-        Observable usernames = UserProvider.loadUsers(query).flatMapIterable(user -> user)
-                .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY)).map(Friend::new);
+        Observable usernames = UserProvider.loadUsers(query)
+                .flatMapIterable(user -> user)
+                .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
+                .map(Friend::new);
 
         //Observable emailXusernames = Observable.concat(usernames.defaultIfEmpty(new Friend(-1)), email.defaultIfEmpty(new Friend(-1)));
 
@@ -68,16 +67,14 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Disposable disposable = Observable.concat(usernames, friends, email)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        friend ->
-                        {
+                        friend -> {
                             //Handle the defaultIfEmpty case
-                            if (((Friend) friend).id != -1)
+                            if (((Friend) friend).id != -1) {
                                 mFriendView.addFriend((Friend) friend);
+                            }
                         },
-                        e -> {
-                            Timber.e((Throwable) e);
-
-                        });
+                        e -> Timber.e((Throwable) e)
+                );
         mDisposables.add(disposable);
     }
 
@@ -86,6 +83,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
      * Currently when we loadFriends() we do not get emails with the request. So we have to check if
      * the id from the email user matches any ids in our friends list. If it does we can create a new
      * Friend with the appropriate isSnaptionFriend bool set.
+     *
      * @param posFriend Each friend emitted by the observable
      * @return a new friend with the correct isSnaptionFriend bool
      */
@@ -107,7 +105,8 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     /**
      * This filter will scan our friends list with the entered query from the SearchActivity. At the
      * moment we want to check if the query can be found in EITHER the username or the email.
-     * @param query The entered text in SearchActivity
+     *
+     * @param query     The entered text in SearchActivity
      * @param posFriend friends emmitted by the loadFriends() Observable
      * @return true if a user matches the search query
      */
@@ -117,22 +116,21 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         //don't initialize username/email fields
         return (posFriend.username != null && posFriend.username.contains(query)) ||
                 (posFriend.email != null) && posFriend.email.contains(query);
-
     }
 
     /**
      * This filter will scan our friends to see if they would have already been loaded y an observable.
      * We want to check this because if we have duplicate users, we want to only display the ones that
      * are our friends.
-     * @param user User emitted by an observable
+     *
+     * @param user       User emitted by an observable
      * @param whichQuery The type of observable we are checking against.
      * @return true if a user is not in our friends list
      */
     private boolean checkMyFriendsForDuplicate(User user, int whichQuery) {
-        for (Friend friend1 : mMyFriendsSaved) {
-
+        for (Friend friend : mMyFriendsSaved) {
             //True if we already have this queried user in our friends list
-            if (friend1.id == user.id) {
+            if (friend.id == user.id) {
                 //If this is an email query we return true because our friends list does not contain any
                 //users with emails. The filtering of this will be handled in convertPossibleFriend
                 return whichQuery == EMAIL_QUERY;
@@ -150,8 +148,9 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                             mFriendView.processFriends(friends);
                             mFriends = friends;
 
-                            if (mMyFriendsSaved.size() == 0)
+                            if (mMyFriendsSaved.isEmpty()) {
                                 mMyFriendsSaved = new ArrayList<>(mFriends);
+                            }
                         },
                         e -> {
                             Timber.e(e);
