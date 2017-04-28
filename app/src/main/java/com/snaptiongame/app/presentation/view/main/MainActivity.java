@@ -195,6 +195,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupWall() {
+        if (mMenu != null) {
+            mMenu.findItem(R.id.filter).setVisible(true);
+            mMenu.findItem(R.id.search).setVisible(false);
+            mMenu.findItem(R.id.share).setVisible(false);
+        }
+
         mNavigationView.getMenu().findItem(R.id.wall).setChecked(true);
         mBottomNavigationView.setVisibility(View.VISIBLE);
         resetFabPosition(true);
@@ -376,9 +382,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.wall:
                 setupWall();
-                mMenu.findItem(R.id.filter).setVisible(true);
-                mMenu.findItem(R.id.search).setVisible(false);
-                mMenu.findItem(R.id.share).setVisible(false);
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
@@ -419,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mMenu.findItem(R.id.filter).setVisible(false);
                 mMenu.findItem(R.id.search).setVisible(true);
                 mMenu.findItem(R.id.share).setVisible(true);
-                mFab.setVisibility(View.GONE);//Don't need the fab anymore
+                mFab.setVisibility(View.GONE);
                 break;
 
             case R.id.settings:

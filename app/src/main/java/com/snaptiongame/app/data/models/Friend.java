@@ -44,7 +44,7 @@ public class Friend {
         this.id = id;
     }
 
-    //Convert a Friend to a User
+    // Convert a User to a Friend
     public Friend(User user) {
         this.id = user.id;
         this.picture = user.picture;
@@ -69,15 +69,7 @@ public class Friend {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof Friend) {
-            Friend other = (Friend) o;
-            return (username.equals(other.username));
-        }
-        return false;
-    }
-
-    public void setSnaptionFriend(boolean isFriend) {
-        isSnaptionFriend = isFriend;
+    public boolean equals(Object other) {
+        return this.id == ((Friend) other).id;
     }
 }

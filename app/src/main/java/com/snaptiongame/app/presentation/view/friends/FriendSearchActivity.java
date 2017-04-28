@@ -1,5 +1,6 @@
 package com.snaptiongame.app.presentation.view.friends;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -7,11 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
 
@@ -50,7 +51,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
                 FriendViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
-                ContextCompat.getColor(SnaptionApplication.getContext(), R.color.divider));
+                ContextCompat.getColor(this, R.color.divider));
         mSearchResults.addItemDecoration(mDecoration);
 
         mAdapter = new FriendsAdapter(new ArrayList<>());
@@ -62,6 +63,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));
         mSearchResults.setAdapter(mAdapter);
         mSearchView.setOnQueryTextListener(this);
+        mPresenter.subscribe();
     }
 
     @Override
@@ -71,14 +73,34 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        handleSearch(newText);
+        return true;
+    }
+
+    private void handleSearch(String query) {
         mAdapter.clearFriends();
-        if (newText.isEmpty()) {
+        if (query.isEmpty()) {
             mPresenter.loadFriends();
         }
         else {
-            mPresenter.findFriends(newText);
+            mPresenter.findFriends(query);
         }
-        return true;
+    }
+
+    private void showInputMethod() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    private void hideInputMethod() {
+        View view = getCurrentFocus();
+
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -115,7 +137,14 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.subscribe();
+        showInputMethod();
+        handleSearch(mSearchView.getQuery().toString());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideInputMethod();
     }
 
     @Override
@@ -126,7 +155,12 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @OnClick(R.id.searchback)
     public void searchBack() {
-        mAdapter.clearFriends();
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
         super.onBackPressed();
+        mSearchResults.setVisibility(View.INVISIBLE);
     }
 }

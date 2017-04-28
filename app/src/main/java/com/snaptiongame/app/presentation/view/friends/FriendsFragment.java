@@ -124,7 +124,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @Override
     public void addFriend(Friend friend) {
-        mPresenter.addFriend(friend.id);
     }
 
     @Override

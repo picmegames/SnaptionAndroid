@@ -1,11 +1,13 @@
 package com.snaptiongame.app.presentation.view.friends;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.app.R;
 
 import butterknife.BindView;
@@ -26,11 +28,59 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.add_remove_friend_icon)
     ImageView mAddRemoveFriendIcon;
 
+    private FriendItemListener mCallback;
+    public boolean isSnaptionFriend = false;
+    public String friendName;
+    public boolean isCurrentUser = false;
+
     public Context mContext;
 
-    public FriendViewHolder(View itemView) {
+    public FriendViewHolder(View itemView, FriendItemListener callback) {
         super(itemView);
         mContext = itemView.getContext();
+        mCallback = callback;
         ButterKnife.bind(this, itemView);
+
+        mAddRemoveFriendIcon.setOnClickListener(view -> {
+            if (isSnaptionFriend) {
+                new MaterialDialog.Builder(mContext)
+                        .title(mContext.getString(R.string.remove_friend))
+                        .content(String.format(mContext.getString(R.string.remove_friend_body), friendName))
+                        .positiveText(R.string.yes)
+                        .onPositive((materialDialog, dialogAction) -> {
+                            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                            mCallback.setFriendAddRemoveState(friendName, true, getAdapterPosition());
+                            isSnaptionFriend = false;
+                        })
+                        .negativeText(R.string.no)
+                        .positiveColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                        .negativeColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                        .show();
+            }
+            else {
+                new MaterialDialog.Builder(mContext)
+                        .title(mContext.getString(R.string.add_friend))
+                        .content(String.format(mContext.getString(R.string.add_friend_body), friendName))
+                        .positiveText(R.string.yes)
+                        .onPositive((materialDialog, dialogAction) -> {
+                            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+                            mCallback.setFriendAddRemoveState(friendName, false, getAdapterPosition());
+                            isSnaptionFriend = true;
+                        })
+                        .negativeText(R.string.no)
+                        .positiveColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                        .negativeColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                        .show();
+            }
+        });
+    }
+
+    public void setAddRemoveFriendIcon() {
+        if (isSnaptionFriend) {
+            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+        }
+        else {
+            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+        }
     }
 }

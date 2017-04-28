@@ -90,7 +90,7 @@ public interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @GET("/Users")
-    Single<User> getUserByEmail(@Query("email") String userEmail);
+    Observable<List<User>> getUsersByEmail(@Query("email") String userEmail);
 
     /**
      * This method sends a request for a user with a GET request.
@@ -99,11 +99,16 @@ public interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @GET("/Users")
-    Single<User> getUserByFacebookID(@Query("facebookID") String facebookID);
+    Observable<List<User>> getUsersByFacebookID(@Query("facebookID") String facebookID);
 
-
+    /**
+     * This method sends a request for a user with a GET request.
+     *
+     * @param username The desired user's username
+     * @return An observable that emits a User object
+     */
     @GET("/Users")
-    Observable<List<User>> getUserByUsername(@Query("username") String username);
+    Observable<List<User>> getUsersByUsername(@Query("username") String username);
 
     /**
      * This method sends a request to update a user with a PUT request.

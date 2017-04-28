@@ -20,19 +20,19 @@ public class UserProvider {
         return apiService.getUser(userId);
     }
 
-    public static Single<User> getUserWithEmail(String email) {
-        return apiService.getUserByEmail(email);
+    public static Observable<List<User>> getUsersWithEmail(String email) {
+        return apiService.getUsersByEmail(email);
     }
 
-    public static Single<User> getUserWithFacebook(String id) {
-        return apiService.getUserByFacebookID(id);
+    public static Observable<List<User>> getUsersWithFacebook(String facebookId) {
+        return apiService.getUsersByFacebookID(facebookId);
     }
 
     public static Single<User> updateUser(User user) {
         return apiService.updateUser(user);
     }
 
-    public static Observable<List<User>> loadUsers(String username) {
-        return apiService.getUserByUsername(username);
+    public static Observable<List<User>> getUsersByUsername(String username) {
+        return apiService.getUsersByUsername(username);
     }
 }

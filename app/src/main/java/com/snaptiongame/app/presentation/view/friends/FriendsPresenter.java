@@ -1,7 +1,10 @@
 package com.snaptiongame.app.presentation.view.friends;
 
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
+import com.snaptiongame.app.R;
+import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.User;
@@ -49,18 +52,21 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .flatMapIterable(friend -> friend)
                 .filter(friend -> checkMyFriendsWithQuery(query, friend));
 
-        Observable<Friend> email = UserProvider.getUserWithEmail(query)
+        Observable<Friend> email = UserProvider.getUsersWithEmail(query)
+                .flatMapIterable(user -> user)
                 .filter(user -> checkMyFriendsForDuplicate(user, EMAIL_QUERY))
-                .map(this::convertPossibleFriend)
-                .toObservable()
-                .defaultIfEmpty(new Friend(-1));
+                .map(this::convertPossibleFriend);
 
-        Observable<Friend> usernames = UserProvider.loadUsers(query)
+        Observable<Friend> usernames = UserProvider.getUsersByUsername(query)
                 .flatMapIterable(user -> user)
                 .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
-                .map(Friend::new);
+                .map(this::convertPossibleFriend);
 
-        //Observable emailXusernames = Observable.concat(usernames.defaultIfEmpty(new Friend(-1)), email.defaultIfEmpty(new Friend(-1)));
+        // Do we need to? They should come up from the username search
+        // We need this if we want to specify that they came from Facebook
+//        Observable<Friend> facebook = FriendProvider.getFacebookFriends()
+//                .flatMapIterable(friend -> friend)
+//                .filter(friend -> checkMyFriendsWithQuery(query, friend));
 
         //Note the order of concat matter
         //If an observable ends up being empty, it will trash the entire call. That is dumb
@@ -68,12 +74,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Disposable disposable = Observable.concat(usernames, friends, email)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        friend -> {
-                            //Handle the defaultIfEmpty case
-                            if (friend.id != -1) {
-                                mFriendView.addFriend(friend);
-                            }
-                        },
+                        mFriendView::addFriend,
                         Timber::e
                 );
         mDisposables.add(disposable);
@@ -93,9 +94,8 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
         //Go through all of our friends
         for (Friend friend : mMyFriendsSaved) {
-
             //If we find a matching user then we want to use that user's info.
-            if (friend.id == posFriend.id) {
+            if (friend.id == newFriend.id) {
                 newFriend.isSnaptionFriend = true;
                 return newFriend;
             }
@@ -113,10 +113,10 @@ public class FriendsPresenter implements FriendsContract.Presenter {
      */
     private boolean checkMyFriendsWithQuery(String query, Friend posFriend) {
 
-        //We have to check that the searchable fields are not null as certain network calls
-        //don't initialize username/email fields
-        return (posFriend.username != null && posFriend.username.contains(query)) ||
-                (posFriend.email != null) && posFriend.email.contains(query);
+        // We have to check that the searchable fields are not null as certain network calls
+        // don't initialize username/email fields
+        return (posFriend.username != null && posFriend.username.toLowerCase().contains(query.toLowerCase())) ||
+                (posFriend.email != null) && posFriend.email.toLowerCase().contains(query.toLowerCase());
     }
 
     /**
@@ -124,7 +124,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
      * We want to check this because if we have duplicate users, we want to only display the ones that
      * are our friends.
      *
-     * @param user       User emitted by an observable
+     * @param user User emitted by an observable
      * @param whichQuery The type of observable we are checking against.
      * @return true if a user is not in our friends list
      */
@@ -148,10 +148,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                         friends -> {
                             mFriendView.processFriends(friends);
                             mFriends = friends;
-
-                            if (mMyFriendsSaved.isEmpty()) {
-                                mMyFriendsSaved = new ArrayList<>(mFriends);
-                            }
+                            mMyFriendsSaved = new ArrayList<>(friends);
                         },
                         e -> {
                             Timber.e(e);
@@ -166,20 +163,37 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     }
 
     @Override
-    public void removeFriend(int friendId) {
+    public void removeFriend(String name, int friendId) {
         FriendProvider.removeFriend(new AddFriendRequest(friendId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Timber.i("Successfully removed friend!"),
-                        Timber::e
+                        () -> Toast.makeText(SnaptionApplication.getContext(),
+                                String.format(SnaptionApplication.getContext().getString(R.string.remove_friend_success), name),
+                                Toast.LENGTH_LONG).show(),
+                        e -> {
+                            Timber.e(e);
+                            Toast.makeText(SnaptionApplication.getContext(),
+                                    String.format(SnaptionApplication.getContext().getString(R.string.remove_friend_failure), name),
+                                    Toast.LENGTH_LONG).show();
+                        }
                 );
     }
 
     @Override
-    public void addFriend(int friendId) {
+    public void addFriend(String name, int friendId) {
         FriendProvider.addFriend(new AddFriendRequest(friendId))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+                .subscribe(
+                        result -> Toast.makeText(SnaptionApplication.getContext(),
+                                String.format(SnaptionApplication.getContext().getString(R.string.add_friend_success), name),
+                                Toast.LENGTH_LONG).show(),
+                        e -> {
+                            Timber.e(e);
+                            Toast.makeText(SnaptionApplication.getContext(),
+                                    String.format(SnaptionApplication.getContext().getString(R.string.add_friend_failure), name),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                );
     }
 
     @Override
@@ -187,30 +201,9 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         mMyFriendsSaved.add(friend);
     }
 
-
-    public void removeTempFriend(int id) {
-        for (int i = 0; i < mMyFriendsSaved.size(); i++)
-            if (mMyFriendsSaved.get(i).id == id)
-                mMyFriendsSaved.remove(i);
-    }
-
     @Override
-    public void searchFriends(String query) {
-        mFriendView.processFriends(filterList(mFriends, query));
-    }
-
-    public static List<Friend> filterList(List<Friend> friends, String query) {
-        if (query != null && query.length() > 0) {
-            ArrayList<Friend> filtered = new ArrayList<>();
-            for (Friend pal : friends) {
-                String mashedNames = pal.fullName + " " + pal.username;
-                if (mashedNames.toLowerCase().contains(query.toLowerCase())) {
-                    filtered.add(pal);
-                }
-            }
-            return filtered;
-        }
-        return friends;
+    public void removeTempFriend(Friend friend) {
+        mMyFriendsSaved.remove(friend);
     }
 
     @Override

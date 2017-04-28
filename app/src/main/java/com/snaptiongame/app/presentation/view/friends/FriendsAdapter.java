@@ -12,11 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -34,6 +34,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private List<String> mSelectedNames;
     private boolean mSelectable;
     private FriendsContract.Presenter mPresenter;
+    private FriendItemListener mCallback;
     private Context mContext;
 
     private static final int AVATAR_SIZE = 40;
@@ -46,6 +47,17 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         mSelectedIds = new ArrayList<>();
         mSelectedNames = new ArrayList<>();
         mSelectable = false;
+
+        mCallback = (name, isAdded, position) -> {
+            if (isAdded) {
+                mPresenter.removeFriend(name, mFriends.get(position).id);
+                mPresenter.removeTempFriend(mFriends.get(position));
+            }
+            else {
+                mPresenter.addFriend(name, mFriends.get(position).id);
+                mPresenter.addFriendTemp(mFriends.get(position));
+            }
+        };
     }
 
     public void setSelectable() {
@@ -68,7 +80,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.friend_card, parent, false);
-        return new FriendViewHolder(view);
+        return new FriendViewHolder(view, mCallback);
     }
 
     @Override
@@ -127,51 +139,17 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
 
-        if (mShouldDisplayAddRemoveIcon) {
-            if (curFriend.isSnaptionFriend) {
-                holder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-                holder.mAddRemoveFriendIcon.setOnClickListener(
-                        swapViewsAndListeners(holder, true, holder.getAdapterPosition()));
-            }
-            else {
-                holder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-                holder.mAddRemoveFriendIcon.setOnClickListener(
-                        swapViewsAndListeners(holder, false, holder.getAdapterPosition()));
-            }
-        }
+        holder.friendName = curFriend.username;
+        holder.isSnaptionFriend = curFriend.isSnaptionFriend;
+        holder.isCurrentUser = curFriend.id == AuthManager.getUserId();
 
-    }
-
-    private View.OnClickListener swapViewsAndListeners(FriendViewHolder viewHolder, boolean addFriendView, int pos) {
-        String finalFriendUsername = mFriends.get(pos).username;
-        View.OnClickListener listener;
-        if (addFriendView) {
-            listener = view -> new MaterialDialog.Builder(mContext)
-                .title(mContext.getString(R.string.remove_friend))
-                .content(String.format(mContext.getString(R.string.remove_friend_body), finalFriendUsername))
-                .positiveText(R.string.yes)
-                .onPositive((materialDialog, dialogAction) -> {
-                    viewHolder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-                    mPresenter.removeFriend(mFriends.get(pos).id);
-                    mPresenter.removeTempFriend(mFriends.get(pos).id);
-                })
-                .negativeText(R.string.no)
-                .show();
+        if (mShouldDisplayAddRemoveIcon && !holder.isCurrentUser) {
+            holder.mAddRemoveFriendIcon.setVisibility(View.VISIBLE);
+            holder.setAddRemoveFriendIcon();
         }
         else {
-            listener = view -> new MaterialDialog.Builder(mContext)
-                .title(mContext.getString(R.string.add_friend))
-                .content(String.format(mContext.getString(R.string.add_friend_body), finalFriendUsername))
-                .positiveText(R.string.yes)
-                .onPositive((materialDialog, dialogAction) -> {
-                    viewHolder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-                    mPresenter.addFriend(mFriends.get(pos).id);
-                    mPresenter.addFriendTemp(mFriends.get(pos));
-                })
-                .negativeText(R.string.no)
-                .show();
+            holder.mAddRemoveFriendIcon.setVisibility(View.GONE);
         }
-        return listener;
     }
 
     public void setFriends(List<Friend> friends) {
@@ -182,39 +160,17 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void addFriend(Friend friend) {
-        //Ensures that users who are not your friend appear at the top of the list
-        if (!this.mFriends.contains(friend)) {
+        // Ensures that users who are not your friend appear at the top of the list
+        if (!mFriends.contains(friend)) {
             if (!friend.isSnaptionFriend) {
-                this.mFriends.add(0, friend);
+                mFriends.add(0, friend);
                 notifyItemInserted(0);
             }
             else {
-                this.mFriends.add(friend);
+                mFriends.add(friend);
                 notifyItemInserted(mFriends.size() - 1);
             }
         }
-    }
-
-    public void removeFriend(int position) {
-        this.mFriends.remove(position);
-        notifyItemRemoved(position);
-        notifyDataSetChanged();
-    }
-
-    public void selectFriend(int position) {
-        this.mSelectedIds.add(mFriends.get(position).id);
-    }
-
-    public void deselectFriend(int position) {
-        this.mSelectedIds.remove(position);
-    }
-
-    public boolean isSelected(int position) {
-        return mSelectedIds.contains(mFriends.get(position).id);
-    }
-
-    public List<Integer> getSelectedFriendIds() {
-        return mSelectedIds;
     }
 
     public List<String> getSelectedFriendNames() {
