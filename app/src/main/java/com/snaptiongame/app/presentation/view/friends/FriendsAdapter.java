@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -32,10 +34,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private List<Friend> mFriends;
     private List<Integer> mSelectedIds;
     private List<String> mSelectedNames;
-    private boolean mSelectable;
     private FriendsContract.Presenter mPresenter;
     private FriendItemListener mCallback;
-    private Context mContext;
+    private boolean mSelectable;
+    private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 40;
     private static final float DIM = .6F;
@@ -66,10 +68,6 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
     public void setPresenter(FriendsContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    public void setContextForDialog(Context context) {
-        mContext = context;
     }
 
     public void setShouldDisplayAddRemoveOption(boolean should) {
@@ -150,6 +148,19 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         else {
             holder.mAddRemoveFriendIcon.setVisibility(View.GONE);
         }
+
+        setAnimation(holder.itemView, position);
+    }
+
+    private void setAnimation(View view, int position) {
+        Animation animation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_in);
+        view.startAnimation(animation);
+        lastPosition = position;
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        ((FriendViewHolder) holder).itemView.clearAnimation();
     }
 
     public void setFriends(List<Friend> friends) {

@@ -59,7 +59,6 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mAdapter = new FriendsAdapter(new ArrayList<>());
         mAdapter.setPresenter(mPresenter);
         mAdapter.setShouldDisplayAddRemoveOption(true);
-        mAdapter.setContextForDialog(FriendSearchActivity.this);
 
         mSearchResults.setHasFixedSize(true);
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));

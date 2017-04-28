@@ -126,9 +126,13 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_open));
         }
 
-        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(),
+        setAnimation(holder.itemView, position);
+    }
+
+    private void setAnimation(View view, int position) {
+        Animation animation = AnimationUtils.loadAnimation(view.getContext(),
                 (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-        holder.itemView.startAnimation(animation);
+        view.startAnimation(animation);
         lastPosition = position;
     }
 

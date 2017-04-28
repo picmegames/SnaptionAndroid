@@ -67,7 +67,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new FriendsAdapter(new ArrayList<>());
         mAdapter.setPresenter(mPresenter);
-        mAdapter.setContextForDialog(getActivity());
         mAdapter.setShouldDisplayAddRemoveOption(true);
 
         mFriendsList.setAdapter(mAdapter);
