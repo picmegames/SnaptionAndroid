@@ -125,7 +125,4 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="google_login">Iniciar sesión con Google</string>
     <string name="search_friends">Buscar amigos</string>
     <string name="search">Buscar</string>
-    <string name="facebook_login">Iniciar sesión con Facebook</string>
-    <string name="google_login">Iniciar sesión con Google</string>
-    <string name="search_friends">Buscar amigos</string>
 </resources>

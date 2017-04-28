@@ -348,7 +348,6 @@ public class ProfileActivity extends AppCompatActivity
                             new CenterCrop(this),
                             new BlurTransformation(this, BLUR_RADIUS),
                             new ColorFilterTransformation(this, R.color.colorPrimary))
-                    .dontAnimate()
                     .listener(listener)
                     .into(mCoverPhoto);
         }
