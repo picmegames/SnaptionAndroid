@@ -75,7 +75,7 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setAddRemoveFriendIcon() {
+    public void setAddRemoveFriendIcon(boolean isSnaptionFriend) {
         if (isSnaptionFriend) {
             mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
         }

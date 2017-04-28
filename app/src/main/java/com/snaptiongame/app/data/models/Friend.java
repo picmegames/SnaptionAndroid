@@ -21,8 +21,7 @@ public class Friend {
     public int imageHeight;
     public String cover;
     public String email;
-    public boolean isSnaptionFriend;
-
+    public boolean isSnaptionFriend = false;
 
     public static final String ID = "id";
     public static final String USERNAME = "username";

@@ -119,7 +119,8 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             });
         }
 
-        holder.mName.setText(curFriend.fullName);
+        // Soon, soon
+        // holder.mName.setText(curFriend.fullName);
         holder.mUsernameField.setText(curFriend.username);
         if (curFriend.imageUrl != null && !curFriend.imageUrl.isEmpty()) {
             Glide.with(holder.mContext)
@@ -140,12 +141,11 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         }
 
         holder.friendName = curFriend.username;
-        holder.isSnaptionFriend = curFriend.isSnaptionFriend;
         holder.isCurrentUser = curFriend.id == AuthManager.getUserId();
 
         if (mShouldDisplayAddRemoveIcon && !holder.isCurrentUser) {
             holder.mAddRemoveFriendIcon.setVisibility(View.VISIBLE);
-            holder.setAddRemoveFriendIcon();
+            holder.setAddRemoveFriendIcon(holder.isSnaptionFriend = curFriend.isSnaptionFriend);
         }
         else {
             holder.mAddRemoveFriendIcon.setVisibility(View.GONE);

@@ -40,6 +40,8 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     private FriendsAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
 
+    private static final String BLANK_DELIMITER = "\\s+";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,6 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));
         mSearchResults.setAdapter(mAdapter);
         mSearchView.setOnQueryTextListener(this);
-        mPresenter.subscribe();
     }
 
     @Override
@@ -78,12 +79,14 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     }
 
     private void handleSearch(String query) {
+        String realQuery = query.replaceAll(BLANK_DELIMITER,"");
         mAdapter.clearFriends();
-        if (query.isEmpty()) {
-            mPresenter.loadFriends();
+
+        if (realQuery.isEmpty()) {
+            mPresenter.subscribe();
         }
         else {
-            mPresenter.findFriends(query);
+            mPresenter.findFriends(realQuery);
         }
     }
 
@@ -137,6 +140,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     protected void onResume() {
         super.onResume();
+        mPresenter.subscribe();
         showInputMethod();
         handleSearch(mSearchView.getQuery().toString());
     }

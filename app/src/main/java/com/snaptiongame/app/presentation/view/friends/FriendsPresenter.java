@@ -33,7 +33,6 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     private CompositeDisposable mDisposables;
 
     private List<Friend> mFriends;
-    private List<Friend> mMyFriendsSaved;
 
     private static final int EMAIL_QUERY = 1;
     private static final int USERNAMES_QUERY = 2;
@@ -43,21 +42,20 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         mDisposables = new CompositeDisposable();
         mFriendView.setPresenter(this);
         mFriends = new ArrayList<>();
-        mMyFriendsSaved = new ArrayList<>();
     }
 
     @Override
     public void findFriends(String query) {
-        Observable<Friend> friends = FriendProvider.loadFriends()
+        Observable<Friend> friendResults = FriendProvider.loadFriends()
                 .flatMapIterable(friend -> friend)
                 .filter(friend -> checkMyFriendsWithQuery(query, friend));
 
-        Observable<Friend> email = UserProvider.getUsersWithEmail(query)
+        Observable<Friend> emailResults = UserProvider.getUsersWithEmail(query)
                 .flatMapIterable(user -> user)
                 .filter(user -> checkMyFriendsForDuplicate(user, EMAIL_QUERY))
                 .map(this::convertPossibleFriend);
 
-        Observable<Friend> usernames = UserProvider.getUsersByUsername(query)
+        Observable<Friend> usernameResults = UserProvider.getUsersByUsername(query)
                 .flatMapIterable(user -> user)
                 .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
                 .map(this::convertPossibleFriend);
@@ -71,7 +69,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         //Note the order of concat matter
         //If an observable ends up being empty, it will trash the entire call. That is dumb
         //This is solved by using .defaultIsEmpty(new Friend(-1))
-        Disposable disposable = Observable.concat(usernames, friends, email)
+        Disposable disposable = Observable.concat(usernameResults, friendResults, emailResults)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mFriendView::addFriend,
@@ -93,7 +91,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Friend newFriend = new Friend(posFriend);
 
         //Go through all of our friends
-        for (Friend friend : mMyFriendsSaved) {
+        for (Friend friend : mFriends) {
             //If we find a matching user then we want to use that user's info.
             if (friend.id == newFriend.id) {
                 newFriend.isSnaptionFriend = true;
@@ -129,7 +127,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
      * @return true if a user is not in our friends list
      */
     private boolean checkMyFriendsForDuplicate(User user, int whichQuery) {
-        for (Friend friend : mMyFriendsSaved) {
+        for (Friend friend : mFriends) {
             //True if we already have this queried user in our friends list
             if (friend.id == user.id) {
                 //If this is an email query we return true because our friends list does not contain any
@@ -147,8 +145,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .subscribe(
                         friends -> {
                             mFriendView.processFriends(friends);
-                            mFriends = friends;
-                            mMyFriendsSaved = new ArrayList<>(friends);
+                            mFriends = new ArrayList<>(friends);
                         },
                         e -> {
                             Timber.e(e);
@@ -198,12 +195,12 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void addFriendTemp(Friend friend) {
-        mMyFriendsSaved.add(friend);
+        mFriends.add(friend);
     }
 
     @Override
     public void removeTempFriend(Friend friend) {
-        mMyFriendsSaved.remove(friend);
+        mFriends.remove(friend);
     }
 
     @Override
