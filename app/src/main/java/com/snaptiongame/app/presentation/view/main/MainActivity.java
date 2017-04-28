@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean lastLoggedInState = false;
     private boolean comingFromGameActivity = false;
 
+    private static final String TEXT_TYPE = "text/plain";
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
@@ -281,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.main_menu, menu);
         mMenu = menu;
         mMenu.findItem(R.id.search).setVisible(false);
+        mMenu.findItem(R.id.share).setVisible(false);
         return true;
     }
 
@@ -293,6 +295,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
                         getString(R.string.transition_search_back)).toBundle();
                 startActivity(searchIntent, options);
+                break;
+            case R.id.share:
+                sendInviteIntent();
                 break;
             case R.id.filter:
                 showFilterDialog();
@@ -351,6 +356,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void sendInviteIntent() {
+        String smsBody = getString(R.string.invite_message) +
+                getString(R.string.store_url);
+        Intent inviteIntent = new Intent(Intent.ACTION_SEND);
+        inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
+        inviteIntent.setType(TEXT_TYPE);
+        Intent chooser = Intent.createChooser(inviteIntent, getString(R.string.invite_friend_via));
+        startActivity(chooser);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawerLayout.closeDrawers();
@@ -363,6 +378,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setupWall();
                 mMenu.findItem(R.id.filter).setVisible(true);
                 mMenu.findItem(R.id.search).setVisible(false);
+                mMenu.findItem(R.id.share).setVisible(false);
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
@@ -402,6 +418,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 mMenu.findItem(R.id.filter).setVisible(false);
                 mMenu.findItem(R.id.search).setVisible(true);
+                mMenu.findItem(R.id.share).setVisible(true);
                 mFab.setVisibility(View.GONE);//Don't need the fab anymore
                 break;
 

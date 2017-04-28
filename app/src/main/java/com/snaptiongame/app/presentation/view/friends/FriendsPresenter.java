@@ -23,8 +23,6 @@ import timber.log.Timber;
 
 public class FriendsPresenter implements FriendsContract.Presenter {
 
-    private static final int EMAIL_QUERY = 1;
-    private static final int USERNAMES_QUERY = 2;
     @NonNull
     private final FriendsContract.View mFriendView;
 
@@ -33,6 +31,9 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     private List<Friend> mFriends;
     private List<Friend> mMyFriendsSaved;
+
+    private static final int EMAIL_QUERY = 1;
+    private static final int USERNAMES_QUERY = 2;
 
     public FriendsPresenter(@NonNull FriendsContract.View friendView) {
         mFriendView = friendView;
@@ -44,17 +45,17 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void findFriends(String query) {
-        Observable friends = FriendProvider.loadFriends()
+        Observable<Friend> friends = FriendProvider.loadFriends()
                 .flatMapIterable(friend -> friend)
                 .filter(friend -> checkMyFriendsWithQuery(query, friend));
 
-        Observable email = UserProvider.getUserWithEmail(query)
+        Observable<Friend> email = UserProvider.getUserWithEmail(query)
                 .filter(user -> checkMyFriendsForDuplicate(user, EMAIL_QUERY))
                 .map(this::convertPossibleFriend)
                 .toObservable()
                 .defaultIfEmpty(new Friend(-1));
 
-        Observable usernames = UserProvider.loadUsers(query)
+        Observable<Friend> usernames = UserProvider.loadUsers(query)
                 .flatMapIterable(user -> user)
                 .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
                 .map(Friend::new);
@@ -69,11 +70,11 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .subscribe(
                         friend -> {
                             //Handle the defaultIfEmpty case
-                            if (((Friend) friend).id != -1) {
-                                mFriendView.addFriend((Friend) friend);
+                            if (friend.id != -1) {
+                                mFriendView.addFriend(friend);
                             }
                         },
-                        e -> Timber.e((Throwable) e)
+                        Timber::e
                 );
         mDisposables.add(disposable);
     }

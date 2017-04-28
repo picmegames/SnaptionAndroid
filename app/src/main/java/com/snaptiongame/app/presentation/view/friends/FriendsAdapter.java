@@ -147,31 +147,29 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         View.OnClickListener listener;
         if (addFriendView) {
             listener = view -> new MaterialDialog.Builder(mContext)
-                            .title(mContext.getString(R.string.remove_friend))
-                            .content(String.format(mContext.getString(R.string.remove_friend_body), finalFriendUsername))
-                            .positiveText(R.string.yes)
-                            .onPositive((materialDialog, dialogAction) -> {
-                                viewHolder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-                                mPresenter.removeFriend(mFriends.get(pos).id);
-                                mPresenter.removeTempFriend(mFriends.get(pos).id);
-
-                            })
-                            .negativeText(R.string.no)
-                            .show();
+                .title(mContext.getString(R.string.remove_friend))
+                .content(String.format(mContext.getString(R.string.remove_friend_body), finalFriendUsername))
+                .positiveText(R.string.yes)
+                .onPositive((materialDialog, dialogAction) -> {
+                    viewHolder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+                    mPresenter.removeFriend(mFriends.get(pos).id);
+                    mPresenter.removeTempFriend(mFriends.get(pos).id);
+                })
+                .negativeText(R.string.no)
+                .show();
         }
         else {
             listener = view -> new MaterialDialog.Builder(mContext)
-                            .title(mContext.getString(R.string.add_friend))
-                            .content(String.format(mContext.getString(R.string.add_friend_body), finalFriendUsername))
-                            .positiveText(R.string.yes)
-                            .onPositive((materialDialog, dialogAction) -> {
-                                viewHolder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-                                addFriend(mFriends.get(pos));
-                                mPresenter.addFriend(mFriends.get(pos).id);
-                                mPresenter.addFriendTemp(mFriends.get(pos));
-                            })
-                            .negativeText(R.string.no)
-                            .show();
+                .title(mContext.getString(R.string.add_friend))
+                .content(String.format(mContext.getString(R.string.add_friend_body), finalFriendUsername))
+                .positiveText(R.string.yes)
+                .onPositive((materialDialog, dialogAction) -> {
+                    viewHolder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                    mPresenter.addFriend(mFriends.get(pos).id);
+                    mPresenter.addFriendTemp(mFriends.get(pos));
+                })
+                .negativeText(R.string.no)
+                .show();
         }
         return listener;
     }

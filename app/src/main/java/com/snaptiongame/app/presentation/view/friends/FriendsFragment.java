@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.friends;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,43 +77,13 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    int index = viewHolder.getAdapterPosition();
-                    DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                int id = mAdapter.getFriends().get(index).id;
-                                mPresenter.removeFriend(id);
-                                mAdapter.getFriends().remove(index);
-                                mAdapter.notifyItemRemoved(index);
-                                if (mAdapter.getFriends().isEmpty()) {
-                                    showEmptyView();
-                                }
-                                else {
-                                    showFriendList();
-                                }
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                mAdapter.notifyItemChanged(index);
-                                break;
-                        }
-                    };
-                }
-            }
-        };
-
-        new ItemTouchHelper(simpleCallback).attachToRecyclerView(mFriendsList);
-        mPresenter.subscribe();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
     }
 
     @Override
@@ -135,9 +103,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         super.onDestroyView();
         mUnbinder.unbind();
         mPresenter.unsubscribe();
-    }
-
-    public void inviteFriends() {
     }
 
     @Override
@@ -166,17 +131,4 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     public void setPresenter(FriendsContract.Presenter presenter) {
         mPresenter = presenter;
     }
-
-    /**
-     *
-     private void sendInviteIntent() {
-     String smsBody = getString(R.string.invite_message) +
-     getString(R.string.store_url);
-     Intent inviteIntent = new Intent(Intent.ACTION_SEND);
-     inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
-     inviteIntent.setType("text/plain");
-     Intent chooser = Intent.createChooser(inviteIntent, getString(R.string.invite_friend_via));
-     startActivity(chooser);
-     }
-     */
 }

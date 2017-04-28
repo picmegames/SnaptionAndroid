@@ -126,7 +126,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @OnClick(R.id.searchback)
     public void searchBack() {
-        mPresenter.loadFriends();
+        mAdapter.clearFriends();
         super.onBackPressed();
     }
 }
