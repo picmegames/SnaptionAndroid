@@ -186,6 +186,13 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         mMyFriendsSaved.add(friend);
     }
 
+
+    public void removeTempFriend(int id) {
+        for (int i = 0; i < mMyFriendsSaved.size(); i++)
+            if (mMyFriendsSaved.get(i).id == id)
+                mMyFriendsSaved.remove(i);
+    }
+
     @Override
     public void searchFriends(String query) {
         mFriendView.processFriends(filterList(mFriends, query));

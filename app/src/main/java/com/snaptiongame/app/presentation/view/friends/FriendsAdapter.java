@@ -153,7 +153,8 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                             .onPositive((materialDialog, dialogAction) -> {
                                 viewHolder.mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
                                 mPresenter.removeFriend(mFriends.get(pos).id);
-                                removeFriend(pos);
+                                mPresenter.removeTempFriend(mFriends.get(pos).id);
+
                             })
                             .negativeText(R.string.no)
                             .show();
