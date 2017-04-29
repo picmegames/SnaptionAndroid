@@ -75,14 +75,11 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
                     mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
                 else
                     mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-                mAddRemoveFriendIcon.setAnimation(growAnim);
+                mAddRemoveFriendIcon.startAnimation(growAnim);
             }
         });
 
-
-
         mAddRemoveFriendIcon.setOnClickListener(view -> {
-
             if (isSnaptionFriend) {
                 new MaterialDialog.Builder(mContext)
                         .title(mContext.getString(R.string.remove_friend))
