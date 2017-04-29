@@ -46,7 +46,7 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
-import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
+import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -348,7 +348,6 @@ public class ProfileActivity extends AppCompatActivity
                             new CenterCrop(this),
                             new BlurTransformation(this, BLUR_RADIUS),
                             new ColorFilterTransformation(this, R.color.colorPrimary))
-                    .dontAnimate()
                     .listener(listener)
                     .into(mCoverPhoto);
         }
@@ -362,6 +361,10 @@ public class ProfileActivity extends AppCompatActivity
                     .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)));
 
             mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+            if (!mHasSameUserId) {
+                mPresenter.loadShouldHideAddFriend(mUserId);
+            }
         }
     }
 

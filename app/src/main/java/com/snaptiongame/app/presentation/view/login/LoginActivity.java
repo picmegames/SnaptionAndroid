@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.snaptiongame.app.R;
@@ -38,23 +36,24 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         // Initialize Authentication Manager
         mAuthManager = AuthManager.getInstance();
         mAuthManager.registerCallback(this);
-
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-
-        // Set Logo
-        Glide.with(this)
-                .load(R.mipmap.ic_launcher)
-                .fitCenter()
-                .into(mLogo);
-
         mAuthManager.setFacebookCallback(mFacebookLoginButton);
-
         mPresenter = new LoginPresenter(this);
+    }
+
+    @OnClick(R.id.facebook_login_button_styled)
+    public void facebookLogin() {
+        mFacebookLoginButton.performClick();
+    }
+
+    @OnClick(R.id.google_sign_in_button_styled)
+    public void googleSignIn() {
+        startActivityForResult(mAuthManager.getGoogleIntent(), RC_SIGN_IN);
     }
 
     @Override
@@ -88,11 +87,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    @OnClick(R.id.google_sign_in_button)
-    public void googleLogin(View view) {
-        startActivityForResult(mAuthManager.getGoogleIntent(), RC_SIGN_IN);
     }
 
     @Override

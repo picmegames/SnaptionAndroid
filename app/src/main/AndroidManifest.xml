@@ -41,7 +41,7 @@
             android:name=".presentation.view.main.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/StatusBarTheme"
+            android:theme="@style/MainTheme"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
@@ -91,6 +91,13 @@
                     android:scheme="https"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.view.friends.FriendSearchActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/SearchTheme"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".presentation.view.photo.ImmersiveActivity"

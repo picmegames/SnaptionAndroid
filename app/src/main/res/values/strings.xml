@@ -11,6 +11,10 @@
     <string name="caption_sets">Caption Sets</string>
     <string name="leaving_title">You Are Now Leaving Snaption</string>
 
+    <!-- Login -->
+    <string name="facebook_login">Log in with Facebook</string>
+    <string name="google_login">Log in with Google</string>
+
     <!-- Onboarding -->
     <string name="title_1">Post photos.\nThe funnier the better.</string>
     <string name="desc_1">Choose any picture from your phone to start a game.</string>
@@ -30,6 +34,7 @@
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
     <string name="shared_transition" translatable="false">snaption_transition</string>
     <string name="profile_transition" translatable="false">profile_transition</string>
+    <string name="transition_search_back" translatable="false">transition_search_back</string>
     <string name="profile_image_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior</string>
     <string name="toolbar_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ToolbarScrollBehavior</string>
     <string name="fab_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior</string>
@@ -46,7 +51,7 @@
     <string name="date_label">End Date</string>
     <string name="tags_label">Tags</string>
     <string name="add_tags_label">Add Some Tags!</string>
-    <string name="share">Share to Facebook</string>
+    <string name="share_to_facebook">Share to Facebook</string>
     <string name="create_game">Create Game</string>
     <string name="flag">Flag as Inappropriate</string>
     <string name="unflag">Undo Flag</string>
@@ -124,6 +129,9 @@
     <string name="game_notifications_summary">Be notified when someone adds you to their game or captions yours</string>
     <string name="friend_notifications">Friend Notifications</string>
     <string name="friend_notifications_summary">Be notified when someone adds you as a friend</string>
+    <string name="search">Search</string>
+    <string name="search_friends">Search for friends</string>
+    <string name="share">Share</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
