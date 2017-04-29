@@ -63,7 +63,7 @@ ext {
     playServicesVersion = '10.2.4'
     retrofitVersion = '2.2.0'
     rxAndroidVersion = '2.0.1'
-    rxJavaVersion = '2.0.9'
+    rxJavaVersion = '2.1.0'
     supportLibVersion = '25.3.1'
     textDrawableVersion = '1.0.1'
 }
