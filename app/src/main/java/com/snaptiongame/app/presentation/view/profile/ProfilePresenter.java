@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.auth.AuthManager;
+import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.data.providers.FriendProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 import com.snaptiongame.app.data.utils.ImageUtils;
 
@@ -51,6 +53,63 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                             Timber.e(e);
                             mProfileView.showProfilePictureFailure();
                         }
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void addFriend(int userId) {
+        Disposable disposable = FriendProvider.addFriend(new AddFriendRequest(userId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        request -> {
+                            mProfileView.showHideAddFriend(false);
+                            mProfileView.showAddFriendResult(true);
+                        },
+                        e -> {
+                            Timber.e(e);
+                            mProfileView.showHideAddFriend(true);
+                            mProfileView.showAddFriendResult(false);
+                        }
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void removeFriend(int userId) {
+        Disposable disposable = FriendProvider.removeFriend(new AddFriendRequest(userId))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            mProfileView.showHideAddFriend(true);
+                            mProfileView.showRemoveFriendResult(true);
+                        },
+                        e -> {
+                            mProfileView.showHideAddFriend(false);
+                            mProfileView.showRemoveFriendResult(false);
+                        }
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void loadUser(int userId) {
+        Disposable disposable = UserProvider.getUser(userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mProfileView::showUser,
+                        Timber::e
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void loadShouldHideAddFriend(int userId) {
+        Disposable disposable = FriendProvider.isFriend(userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        isFriend -> mProfileView.showHideAddFriend(!isFriend),
+                        Timber::e
                 );
         mDisposables.add(disposable);
     }

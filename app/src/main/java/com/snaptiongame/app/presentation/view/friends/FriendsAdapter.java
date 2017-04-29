@@ -18,6 +18,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -33,29 +34,51 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private List<Friend> mFriends;
     private List<Integer> mSelectedIds;
     private List<String> mSelectedNames;
+    private FriendsContract.Presenter mPresenter;
+    private FriendItemListener mCallback;
     private boolean mSelectable;
     private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 40;
     private static final float DIM = .6F;
     private static final float BRIGHT = 1F;
+    private boolean mShouldDisplayAddRemoveIcon;
 
     public FriendsAdapter(List<Friend> friends) {
         this.mFriends = friends;
         mSelectedIds = new ArrayList<>();
         mSelectedNames = new ArrayList<>();
         mSelectable = false;
+
+        mCallback = (name, isAdded, position) -> {
+            if (isAdded) {
+                mPresenter.removeFriend(name, mFriends.get(position).id);
+                mPresenter.removeTempFriend(mFriends.get(position));
+            }
+            else {
+                mPresenter.addFriend(name, mFriends.get(position).id);
+                mPresenter.addFriendTemp(mFriends.get(position));
+            }
+        };
     }
 
     public void setSelectable() {
         mSelectable = true;
     }
 
+    public void setPresenter(FriendsContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    public void setShouldDisplayAddRemoveOption(boolean should) {
+        mShouldDisplayAddRemoveIcon = should;
+    }
+
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.friend_card, parent, false);
-        return new FriendViewHolder(view);
+        return new FriendViewHolder(view, mCallback);
     }
 
     @Override
@@ -65,7 +88,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
         if (!mSelectable) {
             Context context = holder.itemView.getContext();
-            holder.itemView.setOnClickListener(view -> {
+            holder.mImage.setOnClickListener(view -> {
                 Intent profileIntent = new Intent(context, ProfileActivity.class);
                 profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
                 profileIntent.putExtra(User.USERNAME, curFriend.username);
@@ -94,7 +117,8 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             });
         }
 
-        holder.mName.setText(curFriend.fullName);
+        // Soon, soon
+        // holder.mName.setText(curFriend.fullName);
         holder.mUsernameField.setText(curFriend.username);
         if (curFriend.imageUrl != null && !curFriend.imageUrl.isEmpty()) {
             Glide.with(holder.mContext)
@@ -114,39 +138,52 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                             ColorGenerator.MATERIAL.getColor(curFriend.username)));
         }
 
-        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(),
-                (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-        holder.itemView.startAnimation(animation);
-        lastPosition = position;
+        holder.friendName = curFriend.username;
+        holder.isCurrentUser = curFriend.id == AuthManager.getUserId();
+
+        if (mShouldDisplayAddRemoveIcon && !holder.isCurrentUser) {
+            holder.mAddRemoveFriendIcon.setVisibility(View.VISIBLE);
+            holder.setAddRemoveFriendIcon(holder.isSnaptionFriend = curFriend.isSnaptionFriend);
+        }
+        else {
+            holder.mAddRemoveFriendIcon.setVisibility(View.GONE);
+        }
+
+        setAnimation(holder.itemView, position);
+    }
+
+    private void setAnimation(View view, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_in);
+            view.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
-    public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
         ((FriendViewHolder) holder).itemView.clearAnimation();
     }
 
     public void setFriends(List<Friend> friends) {
-        this.mFriends = friends;
+        if (!friends.equals(mFriends)) {
+            mFriends = friends;
+        }
+        notifyDataSetChanged();
     }
 
     public void addFriend(Friend friend) {
-        this.mFriends.add(friend);
-    }
-
-    public void selectFriend(int position) {
-        this.mSelectedIds.add(mFriends.get(position).id);
-    }
-
-    public void deselectFriend(int position) {
-        this.mSelectedIds.remove(position);
-    }
-
-    public boolean isSelected(int position) {
-        return mSelectedIds.contains(mFriends.get(position).id);
-    }
-
-    public List<Integer> getSelectedFriendIds() {
-        return mSelectedIds;
+        // Ensures that users who are not your friend appear at the top of the list
+        if (!mFriends.contains(friend)) {
+            if (!friend.isSnaptionFriend) {
+                mFriends.add(0, friend);
+                notifyItemInserted(0);
+            }
+            else {
+                mFriends.add(friend);
+                notifyItemInserted(mFriends.size() - 1);
+            }
+        }
     }
 
     public List<String> getSelectedFriendNames() {
@@ -159,6 +196,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
     public void clearFriends() {
         mFriends.clear();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -170,6 +208,4 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-
-
 }

@@ -4,8 +4,6 @@ import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
@@ -63,10 +61,6 @@ public class FriendsFragmentTest {
     public void startingFragment_viewsAppear() {
         RecyclerView friends = (RecyclerView) friendsFragment.getView().findViewById(R.id.friend_list);
         assertNotNull(friends);
-        EditText query = (EditText) friendsFragment.getView().findViewById(R.id.query_field);
-        assertNotNull(query);
-        Button clear = (Button) friendsFragment.getView().findViewById(R.id.clear_button);
-        assertNotNull(clear);
     }
 
     @Test

@@ -21,8 +21,6 @@ public class Game {
     public boolean isPublic;
     @SerializedName(IMG_TYPE)
     public String type;
-    @SerializedName(RATING)
-    public int rating;
     @SerializedName(PICKER_NAME)
     public String pickerName;
     @SerializedName(PICKER_ID)
@@ -48,6 +46,10 @@ public class Game {
     public boolean beenUpvoted;
     @SerializedName(BEEN_FLAGGED)
     public boolean beenFlagged;
+    @SerializedName(GAME_DURATION)
+    public long gameDuration;
+    @SerializedName(NUM_UPVOTES)
+    public int numUpvotes;
 
     public static final String ID = "id";
     public static final String USER_ID = "userId";
@@ -56,7 +58,6 @@ public class Game {
     public static final String IS_PUBLIC = "isPublic";
     public static final String PICKER_ID = "picker_id";
     public static final String PICKER_NAME = "picker_name";
-    public static final String RATING = "rating";
     public static final String IMG_TYPE = "imgType";
     public static final String PICTURE = "picture";
     public static final String IMAGE_URL = "url";
@@ -70,28 +71,28 @@ public class Game {
     public static final String USERS = "users";
     public static final String BEEN_UPVOTED = "beenUpvoted";
     public static final String BEEN_FLAGGED = "beenFlagged";
+    public static final String GAME_DURATION = "gameDuration";
+    public static final String NUM_UPVOTES = "numUpvotes";
 
     public Game() {
 
     }
 
-    public Game(int userId, boolean isPublic, int rating, String picture, String type,
-                List<String> tags, List<Integer> friendIds) {
+    public Game(int userId, boolean isPublic, String picture, String type,
+                List<String> tags, List<Integer> friendIds, long gameDuration) {
         this.userId = userId;
         this.isPublic = isPublic;
-        this.rating = rating;
         this.picture = picture;
         this.type = type;
         this.sendTags = tags;
         this.friendIds = friendIds;
+        this.gameDuration = gameDuration;
     }
 
-    public Game(int id, long startDate, boolean isPublic, int rating,
-                int pickerId, String picture, String type) {
+    public Game(int id, long startDate, boolean isPublic, int pickerId, String picture, String type) {
         this.id = id;
         this.startDate = startDate;
         this.isPublic = isPublic;
-        this.rating = rating;
         this.pickerId = pickerId;
         this.picture = picture;
         this.type = type;

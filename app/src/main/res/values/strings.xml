@@ -1,7 +1,7 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Snaption</string>
-    <string name="app_name_styled">SN@PTi*N</string>
+    <string name="app_name_styled" translatable="false">SN@PTi*N</string>
     <string name="welcome_message">Welcome to Snaption!</string>
     <string name="sub_welcome_message">Click the icon above to login</string>
     <string name="add_caption">Add a Caption</string>
@@ -10,6 +10,10 @@
     <string name="random_captions">Random Captions</string>
     <string name="caption_sets">Caption Sets</string>
     <string name="leaving_title">You Are Now Leaving Snaption</string>
+
+    <!-- Login -->
+    <string name="facebook_login">Log in with Facebook</string>
+    <string name="google_login">Log in with Google</string>
 
     <!-- Onboarding -->
     <string name="title_1">Post photos.\nThe funnier the better.</string>
@@ -30,6 +34,7 @@
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
     <string name="shared_transition" translatable="false">snaption_transition</string>
     <string name="profile_transition" translatable="false">profile_transition</string>
+    <string name="transition_search_back" translatable="false">transition_search_back</string>
     <string name="profile_image_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior</string>
     <string name="toolbar_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.ToolbarScrollBehavior</string>
     <string name="fab_behavior" translatable="false">com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior</string>
@@ -46,7 +51,7 @@
     <string name="date_label">End Date</string>
     <string name="tags_label">Tags</string>
     <string name="add_tags_label">Add Some Tags!</string>
-    <string name="share">Share to Facebook</string>
+    <string name="share_to_facebook">Share to Facebook</string>
     <string name="create_game">Create Game</string>
     <string name="flag">Flag as Inappropriate</string>
     <string name="unflag">Undo Flag</string>
@@ -111,6 +116,22 @@
     <string name="log_out_content">Are you sure you want to log out?</string>
     <string name="failed_caption_submission">Caption Submission Failed</string>
     <string name="no_internet">No Internet Connection</string>
+    <string name="add_friend_failure">Failed to add %1$s</string>
+    <string name="add_friend_success">Successfully added %1$s!</string>
+    <string name="remove_friend_failure">Failed to remove %1$s</string>
+    <string name="remove_friend_success">Successfully removed %1$s as a friend</string>
+    <string name="remove_friend">Remove Friend</string>
+    <string name="add_friend_body">Are you sure you want to add %1$s as a friend?</string>
+    <string name="remove_friend_body">Are you sure you want to remove %1$s as a friend?</string>
+    <string name="general">General</string>
+    <string name="notifications">Notifications</string>
+    <string name="game_notifications">Game Notifications</string>
+    <string name="game_notifications_summary">Be notified when someone adds you to their game or captions yours</string>
+    <string name="friend_notifications">Friend Notifications</string>
+    <string name="friend_notifications_summary">Be notified when someone adds you as a friend</string>
+    <string name="search">Search</string>
+    <string name="search_friends">Search for friends</string>
+    <string name="share">Share</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

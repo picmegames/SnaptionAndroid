@@ -37,13 +37,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
-import com.snaptiongame.app.presentation.view.transitions.TransitionUtils;
+import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,6 +94,7 @@ public class ProfileActivity extends AppCompatActivity
     private EditProfileView mEditView;
     private ActionBar mActionBar;
     private Uri mUri;
+    private Menu mMenu;
 
     private String mName;
     private String mPicture;
@@ -130,26 +134,25 @@ public class ProfileActivity extends AppCompatActivity
         // GET previous intent
         Intent profileIntent = getIntent();
         mUserId = profileIntent.getIntExtra(User.ID, 0);
-        mIsUserProfile = profileIntent.getBooleanExtra(IS_CURRENT_USER, true);
+        mIsUserProfile = profileIntent.getBooleanExtra(IS_CURRENT_USER, false);
         mHasSameUserId = (mUserId == AuthManager.getUserId());
 
         // IF we are viewing the logged-in user's profile
         if (mIsUserProfile || mHasSameUserId) {
             mName = AuthManager.getUsername();
             mPicture = AuthManager.getProfileImageUrl();
+            setupView();
         }
-        else {
+        else if (profileIntent.hasExtra(User.USERNAME)) {
             mName = profileIntent.getStringExtra(User.USERNAME);
             mPicture = profileIntent.getStringExtra(User.IMAGE_URL);
             mFab.setVisibility(View.GONE);
+            setupView();
         }
-
-        // SETUP toolbar and title with user's name
-        mTitle.setText(mName);
-        mMainTitle.setText(mName);
-
-        // SHOW profile picture
-        updateProfilePicture();
+        else {
+            mFab.setVisibility(View.GONE);
+            mPresenter.loadUser(mUserId);
+        }
 
         // IF the device is running Lollipop or higher, set elevation on the image
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -183,6 +186,26 @@ public class ProfileActivity extends AppCompatActivity
         mTransparent = ContextCompat.getColor(this, transparent);
 
         TransitionUtils.setupArcTransition(this, getWindow());
+    }
+
+    @Override
+    public void showHideAddFriend(boolean isVisible) {
+        if (isVisible) {
+            mMenu.findItem(R.id.add_friend).setVisible(true);
+            mMenu.findItem(R.id.remove_friend).setVisible(false);
+        }
+        else {
+            mMenu.findItem(R.id.add_friend).setVisible(false);
+            mMenu.findItem(R.id.remove_friend).setVisible(true);
+        }
+    }
+
+    @Override
+    public void showUser(User user) {
+        mName = user.username;
+        mPicture = user.imageUrl;
+
+        setupView();
     }
 
     /**
@@ -230,6 +253,15 @@ public class ProfileActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         mPresenter.unsubscribe();
+    }
+
+    private void setupView() {
+        // SETUP toolbar and title with user's name
+        mTitle.setText(mName);
+        mMainTitle.setText(mName);
+
+        // SHOW profile picture
+        updateProfilePicture();
     }
 
     public boolean isStoragePermissionGranted() {
@@ -304,6 +336,7 @@ public class ProfileActivity extends AppCompatActivity
                             .endConfig()
                             .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)))
                     .dontAnimate()
+                    .listener(listener)
                     .into(mProfileImg);
 
             Glide.with(this)
@@ -315,6 +348,7 @@ public class ProfileActivity extends AppCompatActivity
                             new CenterCrop(this),
                             new BlurTransformation(this, BLUR_RADIUS),
                             new ColorFilterTransformation(this, R.color.colorPrimary))
+                    .listener(listener)
                     .into(mCoverPhoto);
         }
         else {
@@ -327,8 +361,30 @@ public class ProfileActivity extends AppCompatActivity
                     .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)));
 
             mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+            if (!mHasSameUserId) {
+                mPresenter.loadShouldHideAddFriend(mUserId);
+            }
         }
     }
+
+    private RequestListener listener = new RequestListener<String, GlideDrawable>() {
+        @Override
+        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            if (!mHasSameUserId) {
+                mPresenter.loadShouldHideAddFriend(mUserId);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            if (!mHasSameUserId) {
+                mPresenter.loadShouldHideAddFriend(mUserId);
+            }
+            return false;
+        }
+    };
 
     @Override
     public void showProfilePictureSuccess() {
@@ -354,15 +410,51 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
+    public void showRemoveFriendResult(boolean success) {
+        String message = String.format(getString(R.string.remove_friend_failure), mName);
+        Snackbar snackbar;
+
+        if (success) {
+            message = String.format(getString(R.string.remove_friend_success), mName);
+            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.undo, view -> mPresenter.addFriend(mUserId));
+        }
+        else {
+            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.try_again, view -> mPresenter.removeFriend(mUserId));
+        }
+
+        snackbar.show();
+    }
+
+    @Override
+    public void showAddFriendResult(boolean success) {
+        String message = String.format(getString(R.string.add_friend_failure), mName);
+        Snackbar snackbar;
+
+        if (success) {
+            message = String.format(getString(R.string.add_friend_success), mName);
+            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.undo, view -> mPresenter.removeFriend(mUserId));
+        }
+        else {
+            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.try_again, view -> mPresenter.addFriend(mUserId));
+        }
+        snackbar.show();
+    }
+
+    @Override
     public void showUsernameFailure(String message) {
         Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.try_again), view -> showEditDialog())
+                .setAction(R.string.try_again, view -> showEditDialog())
                 .show();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu, menu);
+        mMenu = menu;
         return true;
     }
 
@@ -379,7 +471,13 @@ public class ProfileActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                super.onBackPressed();
+                break;
+            case R.id.add_friend:
+                addFriend();
+                break;
+            case R.id.remove_friend:
+                removeFriend();
                 break;
             case R.id.log_out:
                 logout();
@@ -388,6 +486,28 @@ public class ProfileActivity extends AppCompatActivity
                 break;
         }
         return true;
+    }
+
+    private void addFriend() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.add_friend)
+                .content(String.format(getString(R.string.add_friend_body), mName))
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no)
+                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> mPresenter.addFriend(mUserId))
+                .cancelable(true)
+                .show();
+    }
+
+    private void removeFriend() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.remove_friend)
+                .content(String.format(getString(R.string.remove_friend_body), mName))
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no)
+                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> mPresenter.removeFriend(mUserId))
+                .cancelable(true)
+                .show();
     }
 
     private void logout() {

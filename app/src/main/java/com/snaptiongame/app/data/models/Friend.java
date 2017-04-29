@@ -21,7 +21,7 @@ public class Friend {
     public int imageHeight;
     public String cover;
     public String email;
-    public boolean isSnaptionFriend;
+    public boolean isSnaptionFriend = false;
 
     public static final String ID = "id";
     public static final String USERNAME = "username";
@@ -39,13 +39,19 @@ public class Friend {
 
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Friend) {
-            Friend other = (Friend) o;
-            return (username.equals(other.username));
-        }
-        return false;
+    public Friend(int id) {
+        this.id = id;
+    }
+
+    // Convert a User to a Friend
+    public Friend(User user) {
+        this.id = user.id;
+        this.picture = user.picture;
+        this.username = user.username;
+        this.imageWidth = user.imageWidth;
+        this.imageHeight = user.imageHeight;
+        this.imageUrl = user.imageUrl;
+        this.isSnaptionFriend = false;
     }
 
     public Friend(int id, String first, String last, String fullName, String username, String picture,
@@ -58,6 +64,11 @@ public class Friend {
         this.picture = picture;
         this.cover = cover;
         this.email = email;
-        isSnaptionFriend = false;
+        isSnaptionFriend = true;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return this.id == ((Friend) other).id;
     }
 }

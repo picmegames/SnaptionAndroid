@@ -9,6 +9,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="MainTheme" parent="StatusBarTheme"/>
+    <style name="SearchTheme" parent="AppTheme"/>
     <style name="LoginTheme" parent="AppTheme"/>
     <style name="CreateGameTheme" parent="AppTheme"/>
     <style name="StatusBarTheme" parent="AppTheme" />
@@ -17,17 +19,4 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="FacebookLoginButton">
-        <item name="android:textSize">16sp</item>
-        <item name="android:background">@drawable/facebook_button</item>
-        <item name="android:layout_margin">16dp</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-    </style>
-
-    <style name="GoogleSignInButton">
-        <item name="android:textSize">16sp</item>
-        <item name="android:background">@drawable/facebook_button</item>
-        <item name="android:layout_margin">16dp</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-    </style>
 </resources>

@@ -44,6 +44,7 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
+import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean lastLoggedInState = false;
     private boolean comingFromGameActivity = false;
 
+    private static final String TEXT_TYPE = "text/plain";
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
@@ -193,6 +195,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupWall() {
+        if (mMenu != null) {
+            mMenu.findItem(R.id.filter).setVisible(true);
+            mMenu.findItem(R.id.search).setVisible(false);
+            mMenu.findItem(R.id.share).setVisible(false);
+        }
+
         mNavigationView.getMenu().findItem(R.id.wall).setChecked(true);
         mBottomNavigationView.setVisibility(View.VISIBLE);
         resetFabPosition(true);
@@ -277,14 +285,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.filter_menu, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         mMenu = menu;
+        mMenu.findItem(R.id.search).setVisible(false);
+        mMenu.findItem(R.id.share).setVisible(false);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.search:
+                Intent searchIntent = new Intent(this, FriendSearchActivity.class);
+                View searchMenuView = mToolbar.findViewById(R.id.search);
+                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
+                        getString(R.string.transition_search_back)).toBundle();
+                startActivity(searchIntent, options);
+                break;
+            case R.id.share:
+                sendInviteIntent();
+                break;
             case R.id.filter:
                 showFilterDialog();
                 break;
@@ -342,6 +362,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void sendInviteIntent() {
+        String smsBody = getString(R.string.invite_message) +
+                getString(R.string.store_url);
+        Intent inviteIntent = new Intent(Intent.ACTION_SEND);
+        inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
+        inviteIntent.setType(TEXT_TYPE);
+        Intent chooser = Intent.createChooser(inviteIntent, getString(R.string.invite_friend_via));
+        startActivity(chooser);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawerLayout.closeDrawers();
@@ -352,7 +382,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.wall:
                 setupWall();
-                mMenu.findItem(R.id.filter).setVisible(true);
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
@@ -391,6 +420,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 mMenu.findItem(R.id.filter).setVisible(false);
+                mMenu.findItem(R.id.search).setVisible(true);
+                mMenu.findItem(R.id.share).setVisible(true);
+                mFab.setVisibility(View.GONE);
                 break;
 
             case R.id.settings:
@@ -479,9 +511,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void handleFabAction() {
         if (fragTag.equals(WallFragment.TAG)) {
             goToCreateGame();
-        }
-        else if (fragTag.equals(FriendsFragment.TAG)) {
-            ((FriendsFragment) mCurrentFragment).inviteFriends();
         }
     }
 

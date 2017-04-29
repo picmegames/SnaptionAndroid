@@ -95,11 +95,6 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void addCaption(Caption caption) {
-        mCaptions.add(caption);
-        notifyDataSetChanged();
-    }
-
     public List<Caption> getCaptions() {
         return mCaptions;
     }

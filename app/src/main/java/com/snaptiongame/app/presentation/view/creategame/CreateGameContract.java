@@ -37,7 +37,7 @@ public class CreateGameContract {
     }
 
     interface Presenter extends BasePresenter {
-        void createGame(String type, Uri uri, int userId, boolean isPublic);
+        void createGame(String type, Uri uri, int userId, boolean isPublic, long gameDuration);
 
         int getFriendIdByName(String name);
 

@@ -19,18 +19,18 @@ public class GameTest {
 
     @Test
     public void testConstructorSendGame() {
-        Game testGame = new Game(0, false, 0, "", "", new ArrayList<>(), new ArrayList<>());
+        Game testGame = new Game(0, false, "", "", new ArrayList<>(), new ArrayList<>(), 0);
         assertTrue(testGame.userId == 0);
         assertTrue(!testGame.isPublic);
-        assertTrue(testGame.rating == 0);
         assertTrue(testGame.picture.isEmpty());
         assertTrue(testGame.type.isEmpty());
         assertTrue(testGame.friendIds.isEmpty());
+        assertTrue(testGame.gameDuration == 0);
     }
 
     @Test
     public void testConstructorGame() {
-        Game testGame = new Game(0, 0, false, 0, 0, "", "");
+        Game testGame = new Game(0, 0, false, 0, "", "");
         assertTrue(testGame.id == 0);
     }
 }
