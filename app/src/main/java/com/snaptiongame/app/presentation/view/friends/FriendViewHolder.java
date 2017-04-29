@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,14 +43,53 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
         mCallback = callback;
         ButterKnife.bind(this, itemView);
 
+        final ScaleAnimation growAnim = new ScaleAnimation(0f, 1.0f, 0f, 1.0f, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+        final ScaleAnimation shrinkAnim = new ScaleAnimation(1.0f, 0f, 1.0f, 0f, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+
+        growAnim.setDuration(300);
+        shrinkAnim.setDuration(300);
+
+        growAnim.setAnimationListener(new Animation.AnimationListener()
+        {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animation animation){}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {}
+        });
+        shrinkAnim.setAnimationListener(new Animation.AnimationListener()
+        {
+            @Override
+            public void onAnimationStart(Animation animation){}
+
+            @Override
+            public void onAnimationRepeat(Animation animation){}
+
+            @Override
+            public void onAnimationEnd(Animation animation)
+            {
+                if (isSnaptionFriend)
+                    mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+                else
+                    mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                mAddRemoveFriendIcon.setAnimation(growAnim);
+            }
+        });
+
+
+
         mAddRemoveFriendIcon.setOnClickListener(view -> {
+
             if (isSnaptionFriend) {
                 new MaterialDialog.Builder(mContext)
                         .title(mContext.getString(R.string.remove_friend))
                         .content(String.format(mContext.getString(R.string.remove_friend_body), friendName))
                         .positiveText(R.string.yes)
                         .onPositive((materialDialog, dialogAction) -> {
-                            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                            mAddRemoveFriendIcon.startAnimation(shrinkAnim);
                             mCallback.setFriendAddRemoveState(friendName, true, getAdapterPosition());
                             isSnaptionFriend = false;
                         })
@@ -63,7 +104,7 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
                         .content(String.format(mContext.getString(R.string.add_friend_body), friendName))
                         .positiveText(R.string.yes)
                         .onPositive((materialDialog, dialogAction) -> {
-                            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+                            mAddRemoveFriendIcon.startAnimation(shrinkAnim);
                             mCallback.setFriendAddRemoveState(friendName, false, getAdapterPosition());
                             isSnaptionFriend = true;
                         })

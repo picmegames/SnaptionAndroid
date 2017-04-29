@@ -50,6 +50,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         mSelectedNames = new ArrayList<>();
         mSelectable = false;
 
+
         mCallback = (name, isAdded, position) -> {
             if (isAdded) {
                 mPresenter.removeFriend(name, mFriends.get(position).id);
