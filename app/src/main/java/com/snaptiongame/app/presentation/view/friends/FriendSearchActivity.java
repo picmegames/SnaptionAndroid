@@ -1,5 +1,6 @@
 package com.snaptiongame.app.presentation.view.friends;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -7,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.snaptiongame.app.R;
@@ -22,8 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.snaptiongame.app.SnaptionApplication.getContext;
-
 /**
  * @author Tyler Wong
  */
@@ -35,13 +34,13 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     SearchView mSearchView;
     @BindView(R.id.search_results)
     RecyclerView mSearchResults;
-    @BindView(R.id.empty_view)
-    LinearLayout mEmptyView;
 
     private FriendsContract.Presenter mPresenter;
 
     private FriendsAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
+
+    private static final String BLANK_DELIMITER = "\\s+";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,10 +53,13 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
                 FriendViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
-                ContextCompat.getColor(getContext(), R.color.divider));
+                ContextCompat.getColor(this, R.color.divider));
         mSearchResults.addItemDecoration(mDecoration);
 
         mAdapter = new FriendsAdapter(new ArrayList<>());
+        mAdapter.setPresenter(mPresenter);
+        mAdapter.setShouldDisplayAddRemoveOption(true);
+
         mSearchResults.setHasFixedSize(true);
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));
         mSearchResults.setAdapter(mAdapter);
@@ -71,16 +73,36 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        // TODO SEARCH FOR ALL THE FRIENDS EVERYWHERE:
-        // User current friends
-        // User by email
-        // User by phone
-        // User by username
-        // User by name
-        // Filter out duplicates
-        // Display results in recyclerview mSearchResults
-        mPresenter.searchFriends(newText);
+        handleSearch(newText);
         return true;
+    }
+
+    private void handleSearch(String query) {
+        String realQuery = query.replaceAll(BLANK_DELIMITER,"");
+        mAdapter.clearFriends();
+
+        if (realQuery.isEmpty()) {
+            mPresenter.subscribe();
+        }
+        else {
+            mPresenter.findFriends(realQuery);
+        }
+    }
+
+    private void showInputMethod() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    private void hideInputMethod() {
+        View view = getCurrentFocus();
+
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -90,24 +112,22 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public void processFriends(List<Friend> friends) {
-        if (friends.isEmpty()) {
-            showEmptyView();
-        }
-        else {
-            showFriendList();
-            mAdapter.setFriends(friends);
-        }
+        showFriendList();
+        mAdapter.setFriends(friends);
+    }
+
+    @Override
+    public void addFriend(Friend friend) {
+        mAdapter.addFriend(friend);
     }
 
     @Override
     public void showEmptyView() {
-        mEmptyView.setVisibility(View.VISIBLE);
         mSearchResults.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showFriendList() {
-        mEmptyView.setVisibility(View.GONE);
         mSearchResults.setVisibility(View.VISIBLE);
     }
 
@@ -120,6 +140,14 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     protected void onResume() {
         super.onResume();
         mPresenter.subscribe();
+        showInputMethod();
+        handleSearch(mSearchView.getQuery().toString());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideInputMethod();
     }
 
     @Override
@@ -130,6 +158,12 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @OnClick(R.id.searchback)
     public void searchBack() {
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
         super.onBackPressed();
+        mSearchResults.setVisibility(View.INVISIBLE);
     }
 }

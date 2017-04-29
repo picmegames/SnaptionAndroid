@@ -39,6 +39,7 @@ public class FriendConverter implements JsonSerializer<Friend>, JsonDeserializer
             newFriend.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
             newFriend.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
         }
+        newFriend.isSnaptionFriend = true;
         return newFriend;
     }
 }

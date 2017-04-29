@@ -3,9 +3,6 @@ package com.snaptiongame.app.data.converters;
 import com.google.gson.JsonObject;
 import com.snaptiongame.app.data.models.Friend;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,13 +16,13 @@ public class FriendConverterTest {
     private Friend pal;
     private JsonObject jsonObjectSerialize;
     private JsonObject jsonObjectDeserialize;
-    private JSONObject inviteObject;
     FriendConverter converter;
 
     @Before
-    public void setup() throws JSONException {
+    public void setup() {
         pal = new Friend(1, "Bill", "Nye", "Bill Nye", "sciencedude12", "fakeurl.com",
                 "anotherone.com", "j@j.com");
+        pal.isSnaptionFriend = false;
 
         jsonObjectSerialize = new JsonObject();
         jsonObjectDeserialize = new JsonObject();

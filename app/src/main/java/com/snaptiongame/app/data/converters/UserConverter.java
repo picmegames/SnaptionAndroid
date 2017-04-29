@@ -23,8 +23,7 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
         if (src.username == null) {
             json.addProperty(User.PICTURE, src.picture);
             json.addProperty(User.TYPE, src.type);
-        }
-        else {
+        } else {
             json.addProperty(User.USERNAME, src.username);
         }
         return json;
@@ -32,9 +31,13 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
     @Override
     public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+
         JsonObject object;
         if (json.isJsonArray()) {
-            object = json.getAsJsonArray().get(0).getAsJsonObject();
+            if (json.getAsJsonArray().size() > 0)
+                object = json.getAsJsonArray().get(0).getAsJsonObject();
+            else
+                return null;
         }
         else {
             object = json.getAsJsonObject();
@@ -55,5 +58,7 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
         newUser.rankId = object.get(User.RANK_ID).getAsInt();
         return newUser;
+
     }
+
 }

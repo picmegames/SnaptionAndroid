@@ -18,7 +18,7 @@
         <item name="android:windowEnterTransition">@transition/home_enter</item>
     </style>
 
-    <style name="SearchTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="SearchTheme" parent="MainTheme">
         <item name="android:windowAnimationStyle">@style/SearchWindowAnimations</item>
         <item name="android:windowEnterTransition">@transition/search_enter</item>
         <item name="android:windowReturnTransition">@transition/search_return</item>

@@ -6,6 +6,10 @@ import com.snaptiongame.app.data.models.User;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 import static org.mockito.Mockito.mock;
@@ -23,9 +27,11 @@ public class UserProviderTest {
     public void setup() {
         service = mock(SnaptionApi.class);
         user = new User("");
+        List<User> users = new ArrayList<>();
+        users.add(user);
         when(service.getUser(0)).thenReturn(Single.just(user));
-        when(service.getUserByEmail("")).thenReturn(Single.just(user));
-        when(service.getUserByFacebook("")).thenReturn(Single.just(user));
+        when(service.getUsersByEmail("")).thenReturn(Observable.just(users));
+        when(service.getUsersByFacebookID("")).thenReturn(Observable.just(users));
         when(service.updateUser(user)).thenReturn(Single.just(user));
     }
 

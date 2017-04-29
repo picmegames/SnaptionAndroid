@@ -51,7 +51,7 @@
     <string name="date_label">End Date</string>
     <string name="tags_label">Tags</string>
     <string name="add_tags_label">Add Some Tags!</string>
-    <string name="share">Share to Facebook</string>
+    <string name="share_to_facebook">Share to Facebook</string>
     <string name="create_game">Create Game</string>
     <string name="flag">Flag as Inappropriate</string>
     <string name="unflag">Undo Flag</string>
@@ -131,6 +131,7 @@
     <string name="friend_notifications_summary">Be notified when someone adds you as a friend</string>
     <string name="search">Search</string>
     <string name="search_friends">Search for friends</string>
+    <string name="share">Share</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

@@ -20,7 +20,7 @@
     <item
         android:id="@+id/share"
         android:checked="false"
-        android:title="@string/share"/>
+        android:title="@string/share_to_facebook"/>
 
     <item
         android:id="@+id/invite_friend_to_game"
