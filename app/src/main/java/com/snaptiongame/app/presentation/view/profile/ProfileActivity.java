@@ -361,6 +361,10 @@ public class ProfileActivity extends AppCompatActivity
                     .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)));
 
             mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+            if (!mHasSameUserId) {
+                mPresenter.loadShouldHideAddFriend(mUserId);
+            }
         }
     }
 

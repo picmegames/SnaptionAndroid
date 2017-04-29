@@ -37,44 +37,56 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
 
     public Context mContext;
 
+    private static final long ANIMATION_DURATION = 150;
+    private static final float GONE_SIZE = 0f;
+    private static final float HALF_SIZE = 0.5f;
+    private static final float FULL_SIZE = 1.0f;
+
     public FriendViewHolder(View itemView, FriendItemListener callback) {
         super(itemView);
         mContext = itemView.getContext();
         mCallback = callback;
         ButterKnife.bind(this, itemView);
 
-        final ScaleAnimation growAnim = new ScaleAnimation(0f, 1.0f, 0f, 1.0f, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
-        final ScaleAnimation shrinkAnim = new ScaleAnimation(1.0f, 0f, 1.0f, 0f, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+        final ScaleAnimation growAnim = new ScaleAnimation(GONE_SIZE, FULL_SIZE, GONE_SIZE, FULL_SIZE,
+                Animation.RELATIVE_TO_SELF, HALF_SIZE, Animation.RELATIVE_TO_SELF, HALF_SIZE);
+        final ScaleAnimation shrinkAnim = new ScaleAnimation(FULL_SIZE, GONE_SIZE, FULL_SIZE, GONE_SIZE,
+                Animation.RELATIVE_TO_SELF, HALF_SIZE, Animation.RELATIVE_TO_SELF, HALF_SIZE);
 
-        growAnim.setDuration(300);
-        shrinkAnim.setDuration(300);
+        growAnim.setDuration(ANIMATION_DURATION);
+        shrinkAnim.setDuration(ANIMATION_DURATION);
 
-        growAnim.setAnimationListener(new Animation.AnimationListener()
-        {
+        growAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animation animation){}
+            public void onAnimationRepeat(Animation animation) {
+            }
 
             @Override
-            public void onAnimationEnd(Animation animation) {}
+            public void onAnimationEnd(Animation animation) {
+            }
         });
-        shrinkAnim.setAnimationListener(new Animation.AnimationListener()
-        {
+
+        shrinkAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation){}
+            public void onAnimationStart(Animation animation) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animation animation){}
+            public void onAnimationRepeat(Animation animation) {
+            }
 
             @Override
-            public void onAnimationEnd(Animation animation)
-            {
-                if (isSnaptionFriend)
+            public void onAnimationEnd(Animation animation) {
+                if (isSnaptionFriend) {
                     mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-                else
+                }
+                else {
                     mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+                }
                 mAddRemoveFriendIcon.startAnimation(growAnim);
             }
         });

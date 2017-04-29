@@ -50,7 +50,6 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         mSelectedNames = new ArrayList<>();
         mSelectable = false;
 
-
         mCallback = (name, isAdded, position) -> {
             if (isAdded) {
                 mPresenter.removeFriend(name, mFriends.get(position).id);
@@ -154,9 +153,11 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     private void setAnimation(View view, int position) {
-        Animation animation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_in);
-        view.startAnimation(animation);
-        lastPosition = position;
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_in);
+            view.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
