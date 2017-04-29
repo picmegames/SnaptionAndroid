@@ -10,7 +10,16 @@
     </style>
 
     <style name="MainTheme" parent="StatusBarTheme"/>
-    <style name="SearchTheme" parent="AppTheme"/>
+
+    <style name="SearchTheme" parent="MainTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
     <style name="LoginTheme" parent="AppTheme"/>
     <style name="CreateGameTheme" parent="AppTheme"/>
     <style name="StatusBarTheme" parent="AppTheme" />

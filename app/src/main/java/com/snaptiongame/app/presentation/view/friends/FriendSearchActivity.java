@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.friends;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.snaptiongame.app.R;
@@ -64,6 +67,14 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mSearchResults.setLayoutManager(new LinearLayoutManager(this));
         mSearchResults.setAdapter(mAdapter);
         mSearchView.setOnQueryTextListener(this);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            int searchIconId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+            ImageView searchIcon = ButterKnife.findById(this, searchIconId);
+            if (searchIcon != null) {
+                searchIcon.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+            }
+        }
     }
 
     @Override
