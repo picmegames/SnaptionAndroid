@@ -4,21 +4,23 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@null"
-        android:elevation="4dp"
-        android:outlineProvider="bounds"
-        android:theme="@style/SearchViewTheme"
-        android:transitionGroup="false">
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:theme="@style/SearchViewTheme">
 
-        <View
-            android:id="@+id/search_background"
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/searchback"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"/>
+            android:background="@null"
+            android:paddingStart="4dp"
+            android:src="@drawable/ic_arrow_back_white"
+            android:tint="@android:color/white"
+            android:transitionName="@string/transition_search_back"/>
 
         <SearchView
             android:id="@+id/search_view"
@@ -26,35 +28,12 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:iconifiedByDefault="false"
-            android:transitionGroup="true"
-            android:queryHint="@string/search_friends"/>
+            android:queryHint="@string/search_friends"
+            android:transitionGroup="true"/>
+    </LinearLayout>
 
-        <!-- wrapping layout needed for the touch ripple -->
-        <FrameLayout
-            android:id="@+id/searchback_container"
-            android:layout_width="96dp"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:paddingStart="4dp">
-
-            <ImageButton
-                android:id="@+id/searchback"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_arrow_back_white"
-                android:transitionName="@string/transition_search_back"/>
-
-        </FrameLayout>
-    </FrameLayout>
-
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_results"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/search_results"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 </LinearLayout>
