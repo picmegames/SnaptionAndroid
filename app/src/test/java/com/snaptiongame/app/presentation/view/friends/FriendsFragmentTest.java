@@ -69,9 +69,9 @@ public class FriendsFragmentTest {
         RecyclerView friends = (RecyclerView) friendsFragment.getView().findViewById(R.id.friend_list);
         assertNotNull(friends);
         List<Friend> inst = new ArrayList<>();
-        inst.add(new Friend(1, "John", "Cena", "John Cena", "jcena1234", "", "", ""));
-        inst.add(new Friend(2, "Steve", "Buscemi", "Steve Buscemi", "raddude17", "", "", ""));
-        inst.add(new Friend(4, "Steve", "Cenamopolis", "Steve Cenamopolis", "somefakeperson",
+        inst.add(new Friend(1, "John Cena", "jcena1234", "", "", ""));
+        inst.add(new Friend(2, "Steve Buscemi", "raddude17", "", "", ""));
+        inst.add(new Friend(4, "Steve Cenamopolis", "somefakeperson",
                 "", "", ""));
         friendsFragment.processFriends(inst);
         FriendsAdapter a  = (FriendsAdapter) friends.getAdapter();

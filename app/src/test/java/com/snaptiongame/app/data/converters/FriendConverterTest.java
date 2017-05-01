@@ -20,7 +20,7 @@ public class FriendConverterTest {
 
     @Before
     public void setup() {
-        pal = new Friend(1, "Bill", "Nye", "Bill Nye", "sciencedude12", "fakeurl.com",
+        pal = new Friend(1, "Bill Nye", "sciencedude12", "fakeurl.com",
                 "anotherone.com", "j@j.com");
         pal.isSnaptionFriend = false;
 
@@ -28,8 +28,6 @@ public class FriendConverterTest {
         jsonObjectDeserialize = new JsonObject();
 
         jsonObjectSerialize.addProperty(Friend.ID, pal.id);
-        jsonObjectSerialize.addProperty(Friend.FIRST, pal.firstName);
-        jsonObjectSerialize.addProperty(Friend.LAST, pal.lastName);
         jsonObjectSerialize.addProperty(Friend.FULL_NAME, pal.fullName);
         jsonObjectSerialize.addProperty(Friend.USERNAME, pal.username);
         jsonObjectSerialize.addProperty(Friend.PICTURE, pal.picture);
@@ -40,8 +38,6 @@ public class FriendConverterTest {
         jsonObjectSerialize.addProperty("isSnaptionFriend", false);
 
         jsonObjectDeserialize.addProperty(Friend.ID, pal.id);
-        jsonObjectDeserialize.addProperty(Friend.FIRST, pal.firstName);
-        jsonObjectDeserialize.addProperty(Friend.LAST, pal.lastName);
         jsonObjectDeserialize.addProperty(Friend.FULL_NAME, pal.fullName);
         jsonObjectDeserialize.addProperty(Friend.USERNAME, pal.username);
         JsonObject picture = new JsonObject();
