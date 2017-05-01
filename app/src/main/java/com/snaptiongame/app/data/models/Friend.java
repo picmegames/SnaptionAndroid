@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName;
  * @author Brian Gouldsberry
  */
 public class Friend {
+    @SerializedName(ID)
     public int id;
-    public String firstName;
-    public String lastName;
+    @SerializedName(FULL_NAME)
     public String fullName;
     @SerializedName(USERNAME)
     public String username;
@@ -30,8 +30,6 @@ public class Friend {
     public static final String IMAGE_URL = "url";
     public static final String IMAGE_WIDTH = "width";
     public static final String IMAGE_HEIGHT = "height";
-    public static final String FIRST = "firstName";
-    public static final String LAST = "lastName";
     public static final String COVER = "cover";
     public static final String EMAIL = "email";
 
@@ -48,17 +46,16 @@ public class Friend {
         this.id = user.id;
         this.picture = user.picture;
         this.username = user.username;
+        this.fullName = user.fullName;
         this.imageWidth = user.imageWidth;
         this.imageHeight = user.imageHeight;
         this.imageUrl = user.imageUrl;
         this.isSnaptionFriend = false;
     }
 
-    public Friend(int id, String first, String last, String fullName, String username, String picture,
+    public Friend(int id, String fullName, String username, String picture,
                   String cover, String email) {
         this.id = id;
-        this.firstName = first;
-        this.lastName = last;
         this.fullName = fullName;
         this.username = username;
         this.picture = picture;

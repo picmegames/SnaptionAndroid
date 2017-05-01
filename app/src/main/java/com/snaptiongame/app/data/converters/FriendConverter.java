@@ -30,14 +30,18 @@ public class FriendConverter implements JsonSerializer<Friend>, JsonDeserializer
         JsonObject object = json.getAsJsonObject();
         Friend newFriend = new Friend();
 
-        newFriend.id = object.get(User.ID).getAsInt();
-        newFriend.username = object.get(User.USERNAME).getAsString();
+        newFriend.id = object.get(Friend.ID).getAsInt();
+        newFriend.username = object.get(Friend.USERNAME).getAsString();
+
+        if (!object.get(Friend.FULL_NAME).isJsonNull()) {
+            newFriend.fullName = object.get(Friend.FULL_NAME).getAsString();
+        }
 
         if (!object.get(User.PICTURE).isJsonNull()) {
-            JsonObject pictureObject = object.getAsJsonObject(User.PICTURE);
-            newFriend.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
-            newFriend.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
-            newFriend.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
+            JsonObject pictureObject = object.getAsJsonObject(Friend.PICTURE);
+            newFriend.imageUrl = pictureObject.get(Friend.IMAGE_URL).getAsString();
+            newFriend.imageWidth = pictureObject.get(Friend.IMAGE_WIDTH).getAsInt();
+            newFriend.imageHeight = pictureObject.get(Friend.IMAGE_HEIGHT).getAsInt();
         }
         newFriend.isSnaptionFriend = true;
         return newFriend;
