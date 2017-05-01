@@ -56,13 +56,20 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
     public Game deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject content = json.getAsJsonObject();
+        JsonObject pickerObject = content.get(Game.PICKER).getAsJsonObject();
+
         Game game = new Game(
                 content.get(Game.ID).getAsInt(),
                 content.get(Game.START_DATE).getAsLong(),
                 content.get(Game.IS_PUBLIC).getAsBoolean(),
-                content.get(Game.PICKER_ID).getAsInt(), "", "");
+                pickerObject.get(Game.PICKER_ID).getAsInt(), "", "");
 
         game.numUpvotes = content.get(Game.NUM_UPVOTES).getAsInt();
+        game.pickerName = pickerObject.get(User.USERNAME).getAsString();
+
+        if (pickerObject.get(User.PICTURE) != null) {
+            game.pickerImage = pickerObject.get(User.PICTURE).getAsJsonObject().get(User.IMAGE_URL).getAsString();
+        }
 
         JsonObject picture = content.getAsJsonObject(Game.PICTURE);
         game.imageUrl = picture.get(Game.IMAGE_URL).getAsString();
