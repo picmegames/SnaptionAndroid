@@ -81,12 +81,7 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (isSnaptionFriend) {
-                    mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
-                }
-                else {
-                    mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
-                }
+                setAddRemoveFriendIcon(isSnaptionFriend);
                 mAddRemoveFriendIcon.startAnimation(growAnim);
             }
         });
