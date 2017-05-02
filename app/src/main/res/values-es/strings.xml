@@ -58,8 +58,8 @@
     <string name="filter">Filtrar</string>
     <string name="update">Actualizar</string>
     <string name="nothing_here">¡Nada aquí todavía!</string>
-    <string name="experience">Experiencia:</string>
-    <string name="rank">Rango:</string>
+    <string name="experience">Experiencia</string>
+    <string name="rank">Rango</string>
     <string name="ask_flag_game">¿Estás seguro de que quieres marcar este juego?</string>
     <string name="flag_alert_game">Juego de Bandera</string>
     <string name="flag_alert_caption">Leyenda de la Bandera</string>

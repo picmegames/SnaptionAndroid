@@ -9,6 +9,7 @@ import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.OAuthRequest;
+import com.snaptiongame.app.data.models.Rank;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.models.User;
 
@@ -62,6 +63,15 @@ public interface SnaptionApi {
      */
     @GET("/Users/{userId}/")
     Single<User> getUser(@Path("userId") int userId);
+
+    /**
+     * This method sends a request for a list of ranks with a GET
+     * request.
+     *
+     * @return An observable that emits a list of Ranks
+     */
+    @GET("/Ranks/")
+    Observable<List<Rank>> getRanks();
 
     /**
      * This method sends a request to add a friend

@@ -34,10 +34,12 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
         JsonObject object;
         if (json.isJsonArray()) {
-            if (json.getAsJsonArray().size() > 0)
+            if (json.getAsJsonArray().size() > 0) {
                 object = json.getAsJsonArray().get(0).getAsJsonObject();
-            else
+            }
+            else {
                 return null;
+            }
         }
         else {
             object = json.getAsJsonObject();
@@ -62,7 +64,5 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
         newUser.rankId = object.get(User.RANK_ID).getAsInt();
         return newUser;
-
     }
-
 }

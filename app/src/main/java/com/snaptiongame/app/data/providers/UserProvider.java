@@ -1,6 +1,7 @@
 package com.snaptiongame.app.data.providers;
 
 import com.snaptiongame.app.data.api.SnaptionApi;
+import com.snaptiongame.app.data.models.Rank;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
 
@@ -26,6 +27,12 @@ public class UserProvider {
 
     public static Observable<List<User>> getUsersWithFacebook(String facebookId) {
         return apiService.getUsersByFacebookID(facebookId);
+    }
+
+    public static Observable<Rank> getRank(int rankId) {
+        return apiService.getRanks()
+                .flatMapIterable(rank -> rank)
+                .filter(rank -> rank.id == rankId);
     }
 
     public static Single<User> updateUser(User user) {
