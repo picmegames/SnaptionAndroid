@@ -20,7 +20,7 @@ public class ProfileInfoPageAdapter extends FragmentPagerAdapter {
     private static final int PAGE_COUNT = 2;
     private static final int HISTORY_PAGE = 0;
     private static final int MORE_INFO_PAGE = 1;
-    private static final String tabTitles[] = new String[]{"History", "More Info"};
+    private static final String tabTitles[] = new String[]{"History", "Followers"};
 
     public ProfileInfoPageAdapter(FragmentManager manager, int userId) {
         super(manager);

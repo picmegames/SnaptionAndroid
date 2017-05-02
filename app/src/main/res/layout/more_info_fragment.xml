@@ -1,58 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
-    <LinearLayout
-        android:layout_height="50dp"
-        android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-        <ImageView android:layout_width="0dp"
-                   android:layout_height="50dp"
-                   android:layout_weight="3"
-                   android:src="@drawable/ic_stars_black_24dp"
-                   android:contentDescription=""
-                   android:gravity="center"/>
-        <TextView android:layout_width="50dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="5"
-                  android:text="@string/experience"
-                  android:gravity="center_vertical"
-                  android:textAlignment="viewStart"
-                  android:textSize="30sp"/>
-        <TextView android:id="@+id/exp"
-                  android:layout_width="50dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="3"
-                  android:gravity="center"
-                  android:textAlignment="viewStart" android:textSize="30sp"/>
-    </LinearLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-        <ImageView android:layout_width="0dp"
-                   android:layout_height="50dp"
-                   android:layout_weight="3"
-                   android:contentDescription=""
-                   android:gravity="center"
-                   android:src="@drawable/ic_assessment_black_24dp"/>
-        <TextView android:layout_width="50dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="5"
-                  android:gravity="center_vertical"
-                  android:text="@string/rank"
-                  android:textAlignment="viewStart"
-                  android:textSize="30sp"/>
-        <TextView android:id="@+id/rank"
-                  android:layout_width="50dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="3"
-                  android:gravity="center"
-                  android:textAlignment="viewStart" android:textSize="30sp"/>
-    </LinearLayout>
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/follower_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</FrameLayout>

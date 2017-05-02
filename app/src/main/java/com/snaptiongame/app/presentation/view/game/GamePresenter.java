@@ -16,7 +16,6 @@ import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
-import com.snaptiongame.app.data.providers.UserProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +38,12 @@ public class GamePresenter implements GameContract.Presenter {
     private CompositeDisposable mDisposables;
 
     private int mGameId;
-    private int mPickerId;
     private List<FitBCaption> mCaptions;
 
     public static final int MAX_FITBS_SHOWN = 8;
 
-    public GamePresenter(int gameId, int pickerId, @NonNull GameContract.View view) {
+    public GamePresenter(int gameId, @NonNull GameContract.View view) {
         mGameId = gameId;
-        mPickerId = pickerId;
         mGameView = view;
         mDisposables = new CompositeDisposable();
         mGameView.setPresenter(this);
@@ -64,16 +61,6 @@ public class GamePresenter implements GameContract.Presenter {
                             mGameView.setRefreshing(false);
                         },
                         () -> Timber.i("Loading captions completed successfully.")
-                );
-        mDisposables.add(disposable);
-    }
-
-    private void loadPickerInfo() {
-        Disposable disposable = UserProvider.getUser(mPickerId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        user -> mGameView.setPickerInfo(user.imageUrl, user.username),
-                        Timber::e
                 );
         mDisposables.add(disposable);
     }
@@ -211,7 +198,6 @@ public class GamePresenter implements GameContract.Presenter {
     @Override
     public void subscribe() {
         loadCaptions();
-        loadPickerInfo();
         loadRandomFITBCaptions();
     }
 

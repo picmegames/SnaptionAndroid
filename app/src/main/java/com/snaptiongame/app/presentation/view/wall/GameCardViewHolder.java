@@ -68,6 +68,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
     public int mGameId;
     public int mPickerId;
+    public String mPickerName;
+    public String mPickerImage;
     public String mImageUrl;
 
     public boolean isUpvoted = false;
@@ -134,6 +136,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(view -> {
             Intent gameIntent = new Intent(mContext, GameActivity.class);
             gameIntent.putExtra(Game.ID, mGameId);
+            gameIntent.putExtra(Game.PICKER_NAME, mPickerName);
+            gameIntent.putExtra(Game.PICKER_IMAGE, mPickerImage);
             gameIntent.putExtra(Game.PICKER_ID, mPickerId);
             gameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
             gameIntent.putExtra(Game.BEEN_UPVOTED, isUpvoted);

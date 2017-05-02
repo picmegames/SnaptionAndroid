@@ -20,8 +20,6 @@ public class GameContract {
     interface View extends BaseView<Presenter> {
         void showCaptions(List<Caption> captions);
 
-        void setPickerInfo(String profileUrl, String name);
-
         void generateInviteUrl(String inviteToken);
 
         void showCaptionSets(List<CaptionSet> captionSets);
