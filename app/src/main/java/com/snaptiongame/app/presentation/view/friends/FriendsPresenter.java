@@ -46,7 +46,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void findFriends(String query) {
-        Observable<Friend> friendResults = FriendProvider.loadFriends()
+        Observable<Friend> friendResults = FriendProvider.getFriends()
                 .flatMapIterable(friend -> friend)
                 .filter(friend -> checkMyFriendsWithQuery(query, friend));
 
@@ -80,7 +80,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     /**
      * This filter is used to determine if a user received from an email call is already a friend.
-     * Currently when we loadFriends() we do not get emails with the request. So we have to check if
+     * Currently when we getFriends() we do not get emails with the request. So we have to check if
      * the id from the email user matches any ids in our friends list. If it does we can create a new
      * Friend with the appropriate isSnaptionFriend bool set.
      *
@@ -106,7 +106,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
      * moment we want to check if the query can be found in EITHER the username or the email.
      *
      * @param query     The entered text in SearchActivity
-     * @param posFriend friends emmitted by the loadFriends() Observable
+     * @param posFriend friends emmitted by the getFriends() Observable
      * @return true if a user matches the search query
      */
     private boolean checkMyFriendsWithQuery(String query, Friend posFriend) {
@@ -140,7 +140,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider.loadFriends()
+        Disposable disposable = FriendProvider.getFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         friends -> {

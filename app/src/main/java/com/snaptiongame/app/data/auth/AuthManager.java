@@ -45,7 +45,7 @@ public final class AuthManager {
 
     private static final String LOGGED_IN = "logged in";
     private static final String FB_FIELDS = "fields";
-    private static final String FB_REQUEST_FIELDS = "id, name, email, picture.type(large)";
+    private static final String FB_PERMISSIONS = "id, name, email, picture.type(large)";
     private static final String USER_ID = "user_id";
     private static final String USERNAME = "username";
     private static final String PROFILE_IMAGE_URL = "image_url";
@@ -142,7 +142,7 @@ public final class AuthManager {
                         }
                 );
                 Bundle parameters = new Bundle();
-                parameters.putString(FB_FIELDS, FB_REQUEST_FIELDS);
+                parameters.putString(FB_FIELDS, FB_PERMISSIONS);
                 request.setParameters(parameters);
                 request.executeAsync();
             }

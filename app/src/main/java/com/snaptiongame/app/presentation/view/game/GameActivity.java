@@ -242,7 +242,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     }
                     else {
                         showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
-                                intent.getIntExtra(Game.PICKER_ID, 0), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
+                                intent.getIntExtra(Game.PICKER_ID, 0), intent.getStringExtra(Game.PICKER_NAME),
+                                intent.getStringExtra(Game.PICKER_IMAGE), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
                                 intent.getBooleanExtra(Game.BEEN_FLAGGED, false));
                     }
                 }
@@ -458,31 +459,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     @Override
-    public void setPickerInfo(String profileUrl, String name) {
-        mPickerImageUrl = profileUrl;
-        mPicker = name;
-
-        if (profileUrl != null && !profileUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(profileUrl)
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)))
-                    .dontAnimate()
-                    .into(mPickerImage);
-        }
-        else {
-            mPickerImage.setImageDrawable(TextDrawable.builder()
-                    .beginConfig()
-                    .width(AVATAR_SIZE)
-                    .height(AVATAR_SIZE)
-                    .toUpperCase()
-                    .endConfig()
-                    .buildRound(name.substring(0, 1),
-                            ColorGenerator.MATERIAL.getColor(name)));
-        }
-        mPickerName.setText(mPicker);
-    }
-
-    @Override
     public void setPresenter(GameContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -648,10 +624,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCurrentCaptionState = CaptionState.Sets;
     }
 
-    public void showGame(String image, int id, int pickerId, boolean beenUpvoted, boolean beenFlagged) {
+    public void showGame(String image, int id, int pickerId, String pickerName, String pickerImage, boolean beenUpvoted, boolean beenFlagged) {
         mImageUrl = image;
         isUpvoted = beenUpvoted;
         isFlagged = beenFlagged;
+        mPickerImageUrl = pickerImage;
+        mPicker = pickerName;
 
         ViewCompat.setTransitionName(mImage, mImageUrl);
 
@@ -666,7 +644,26 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mGameId = id;
         mPickerId = pickerId;
 
-        mPresenter = new GamePresenter(id, pickerId, this);
+        if (pickerImage != null && !pickerImage.isEmpty()) {
+            Glide.with(this)
+                    .load(pickerImage)
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)))
+                    .dontAnimate()
+                    .into(mPickerImage);
+        }
+        else {
+            mPickerImage.setImageDrawable(TextDrawable.builder()
+                    .beginConfig()
+                    .width(AVATAR_SIZE)
+                    .height(AVATAR_SIZE)
+                    .toUpperCase()
+                    .endConfig()
+                    .buildRound(pickerName.substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(pickerName)));
+        }
+        mPickerName.setText(mPicker);
+
+        mPresenter = new GamePresenter(id, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
 
@@ -771,7 +768,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         GameProvider.getGame(mInvite.gameId, AuthManager.getInviteToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        game -> showGame(game.imageUrl, game.id, game.pickerId, game.beenUpvoted, game.beenFlagged),
+                        game -> showGame(game.imageUrl, game.id, game.pickerId, game.pickerName,
+                                game.pickerImage, game.beenUpvoted, game.beenFlagged),
                         Timber::e
                 );
     }
@@ -862,7 +860,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mFitBEditTextLayout.setHint(beforeBlank + s + afterBlank);
 
-                if (!s.toString().replaceAll("\\s+","").isEmpty()) {
+                if (!s.toString().replaceAll("\\s+", "").isEmpty()) {
                     if (mCurrentCaptionState != CaptionState.Typed) {
                         mAddCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
                                 R.drawable.ic_check_white_24dp));

@@ -30,9 +30,9 @@ public class FriendProviderTest {
     public void setup() {
         service = mock(SnaptionApi.class);
         friends = new ArrayList<>();
-        friends.add(new Friend(0, "", "", "", "", "", "", ""));
-        friends.add(new Friend(0, "", "", "", "", "", "", ""));
-        friends.add(new Friend(0, "", "", "", "", "", "", ""));
+        friends.add(new Friend(0, "", "", "", "", ""));
+        friends.add(new Friend(0, "", "", "", "", ""));
+        friends.add(new Friend(0, "", "", "", "", ""));
         when(service.getFriends()).thenReturn(Observable.just(friends));
         request = new AddFriendRequest(0);
         when(service.addFriend(request)).thenReturn(Single.just(request));
@@ -42,7 +42,7 @@ public class FriendProviderTest {
     @Test
     public void testLoadFriends() {
         // TODO Fix test
-//      FriendProvider.loadFriends(0)
+//      FriendProvider.getFriends(0)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
 //                  returnedFriends -> assertTrue(returnedFriends.equals(friends)),

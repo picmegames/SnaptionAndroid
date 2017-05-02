@@ -127,7 +127,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider.loadFriends()
+        Disposable disposable = FriendProvider.getFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processFriends,

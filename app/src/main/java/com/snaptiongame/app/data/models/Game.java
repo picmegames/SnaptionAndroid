@@ -23,6 +23,8 @@ public class Game {
     public String type;
     @SerializedName(PICKER_NAME)
     public String pickerName;
+    @SerializedName(IMAGE_URL)
+    public String pickerImage;
     @SerializedName(PICKER_ID)
     public int pickerId;
     @SerializedName(PICTURE)
@@ -56,7 +58,8 @@ public class Game {
     public static final String START_DATE = "creationDate";
     public static final String END_DATE = "completedDate";
     public static final String IS_PUBLIC = "isPublic";
-    public static final String PICKER_ID = "picker_id";
+    public static final String PICKER = "picker";
+    public static final String PICKER_ID = "id";
     public static final String PICKER_NAME = "picker_name";
     public static final String IMG_TYPE = "imgType";
     public static final String PICTURE = "picture";
@@ -73,6 +76,7 @@ public class Game {
     public static final String BEEN_FLAGGED = "beenFlagged";
     public static final String GAME_DURATION = "gameDuration";
     public static final String NUM_UPVOTES = "numUpvotes";
+    public static final String PICKER_IMAGE = "pickerImage";
 
     public Game() {
 

@@ -12,6 +12,8 @@ public class User {
     public int id;
     @SerializedName(USERNAME)
     public String username;
+    @SerializedName(FULL_NAME)
+    public String fullName;
     @SerializedName(PICTURE)
     public String picture;
     @SerializedName(IMAGE_URL)
@@ -30,6 +32,7 @@ public class User {
 
     public static final String ID = "id";
     public static final String USERNAME = "username";
+    public static final String FULL_NAME = "fullName";
     public static final String PICTURE = "picture";
     public static final String IMAGE_URL = "url";
     public static final String IMAGE_WIDTH = "width";
@@ -37,7 +40,6 @@ public class User {
     public static final String TYPE = "imgType";
     public static final String EXP = "exp";
     public static final String RANK_ID = "rank_id";
-
 
     public User() {
 

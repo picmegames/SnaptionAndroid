@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.snaptiongame.app.R;
+
 /**
  * @author Tyler Wong
  */
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 @SuppressLint("AppCompatCustomView")
 public class DynamicImageView extends ImageView {
     private float mAspectRatio;
+    private int mMaxHeight;
 
     public DynamicImageView(Context context) {
         super(context);
@@ -19,6 +22,7 @@ public class DynamicImageView extends ImageView {
 
     public DynamicImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mMaxHeight = (int) context.getResources().getDimension(R.dimen.max_image_height);
     }
 
     public DynamicImageView(Context context, AttributeSet attrs, int defStyle) {
@@ -33,6 +37,11 @@ public class DynamicImageView extends ImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = (int) (width / mAspectRatio);
+
+        if (height > mMaxHeight) {
+            height = mMaxHeight;
+        }
+
         setMeasuredDimension(width, height);
     }
 }

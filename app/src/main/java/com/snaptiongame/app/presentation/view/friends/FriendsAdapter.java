@@ -117,8 +117,13 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             });
         }
 
-        // Soon, soon
-        // holder.mName.setText(curFriend.fullName);
+        if (curFriend.fullName != null && !curFriend.fullName.isEmpty()) {
+            holder.mName.setText(curFriend.fullName);
+        }
+        else {
+            holder.mName.setText(curFriend.username);
+        }
+
         holder.mUsernameField.setText(curFriend.username);
         if (curFriend.imageUrl != null && !curFriend.imageUrl.isEmpty()) {
             Glide.with(holder.mContext)
