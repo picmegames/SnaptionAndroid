@@ -362,29 +362,29 @@ public class ProfileActivity extends AppCompatActivity
 
             mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
-            if (!mHasSameUserId) {
-                mPresenter.loadShouldHideAddFriend(mUserId);
-            }
+            shouldLoadHideAddFriend();
         }
     }
 
     private RequestListener listener = new RequestListener<String, GlideDrawable>() {
         @Override
         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-            if (!mHasSameUserId) {
-                mPresenter.loadShouldHideAddFriend(mUserId);
-            }
+            shouldLoadHideAddFriend();
             return false;
         }
 
         @Override
         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-            if (!mHasSameUserId) {
-                mPresenter.loadShouldHideAddFriend(mUserId);
-            }
+            shouldLoadHideAddFriend();
             return false;
         }
     };
+
+    private void shouldLoadHideAddFriend() {
+        if (!mHasSameUserId && AuthManager.isLoggedIn()) {
+            mPresenter.loadShouldHideAddFriend(mUserId);
+        }
+    }
 
     @Override
     public void showProfilePictureSuccess() {
