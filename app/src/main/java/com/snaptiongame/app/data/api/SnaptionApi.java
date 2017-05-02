@@ -204,6 +204,15 @@ public interface SnaptionApi {
     Observable<List<Friend>> getFriends();
 
     /**
+     * This method sends a request to get a user's friends
+     * with a GET request.
+     *
+     * @return An observable that emits a list of Friend objects
+     */
+    @GET("/UserFriends/Followers")
+    Observable<List<Friend>> getFollowers();
+
+    /**
      * This method sends a request to get a list of captions
      * with a GET request.
      *

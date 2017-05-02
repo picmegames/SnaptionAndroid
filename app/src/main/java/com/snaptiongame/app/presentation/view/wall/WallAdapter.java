@@ -67,6 +67,8 @@ public class WallAdapter extends RecyclerView.Adapter {
 
         holder.mGameId = curGame.id;
         holder.mPickerId = curGame.pickerId;
+        holder.mPickerName = curGame.pickerName;
+        holder.mPickerImage = curGame.pickerImage;
 
         if (curGame.imageUrl != null) {
             holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);

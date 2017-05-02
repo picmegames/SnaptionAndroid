@@ -42,7 +42,7 @@ public class FriendProviderTest {
     @Test
     public void testLoadFriends() {
         // TODO Fix test
-//      FriendProvider.loadFriends(0)
+//      FriendProvider.getFriends(0)
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
 //                  returnedFriends -> assertTrue(returnedFriends.equals(friends)),
