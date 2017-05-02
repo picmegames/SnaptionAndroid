@@ -62,7 +62,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 content.get(Game.ID).getAsInt(),
                 content.get(Game.START_DATE).getAsLong(),
                 content.get(Game.IS_PUBLIC).getAsBoolean(),
-                pickerObject.get(Game.PICKER_ID).getAsInt(), "", "");
+                pickerObject.get(Game.ID).getAsInt(), "", "");
 
         game.numUpvotes = content.get(Game.NUM_UPVOTES).getAsInt();
         game.pickerName = pickerObject.get(User.USERNAME).getAsString();
