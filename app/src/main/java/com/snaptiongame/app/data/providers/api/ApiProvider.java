@@ -75,6 +75,7 @@ import static com.snaptiongame.app.SnaptionApplication.getContext;
  */
 public class ApiProvider {
     private static SnaptionApi apiService;
+    private static PersistentCookieStore cookieStore;
     private static X509TrustManager trustManager;
 
     private static final String CERT_TYPE = "X.509";
@@ -110,8 +111,8 @@ public class ApiProvider {
      * @return The development or production OkHttpClient
      */
     private static OkHttpClient makeOkHttpClient() {
-        PersistentCookieStore persistentCookieStore = new PersistentCookieStore(getContext());
-        CookieHandler cookieHandler = new CookieManager(persistentCookieStore, CookiePolicy.ACCEPT_ALL);
+        cookieStore = new PersistentCookieStore(getContext());
+        CookieHandler cookieHandler = new CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieHandler);
         JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
@@ -139,6 +140,10 @@ public class ApiProvider {
         }
 
         return okHttpClientBuilder.build();
+    }
+
+    public static void clearCookies() {
+        cookieStore.removeAll();
     }
 
     /**

@@ -25,6 +25,7 @@ import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.providers.SessionProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
+import com.snaptiongame.app.data.providers.api.ApiProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -308,6 +309,7 @@ public final class AuthManager {
         setGameNotificationsEnabled(true);
         setFriendNotificationsEnabled(true);
         clearLoginInfo();
+        ApiProvider.clearCookies();
     }
 
     public void registerCallback(AuthCallback callback) {
