@@ -126,4 +126,10 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="search_friends">Buscar amigos</string>
     <string name="search">Buscar</string>
     <string name="share">Compartir</string>
+    <string name="game_closed_title">¡Este Juego está Cerrado!</string>
+    <string name="game_closed_content">¿Te gustaría crear un nuevo juego con la misma imagen?</string>
+    <string name="dont_ask_again">No me preguntes de nuevo</string>
+    <string name="create_game_content">¡Siempre puedes crear un juego desde uno ya existente haciendo clic en el menú de arriba o subiendo el tuyo desde la pared!</string>
+    <string name="got_it">Lo tengo</string>
+    <string name="create_game_title">Creando Otro Juego</string>
 </resources>

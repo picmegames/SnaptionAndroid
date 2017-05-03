@@ -61,6 +61,7 @@ public final class AuthManager {
     private static final String INVITE_TOKEN = "token";
     private static final String GAME_NOTIFICATIONS = "gameNotifications";
     private static final String FRIEND_NOTIFICATIONS = "friendNotifications";
+    private static final String CLOSED_GAME_DIALOG = "closedGameDialog";
 
     private AuthManager(Context context) {
         // INIT Shared Preferences Editor
@@ -277,6 +278,16 @@ public final class AuthManager {
         editor.apply();
     }
 
+    public static boolean isClosedGameDialogEnabled() {
+        return preferences.getBoolean(CLOSED_GAME_DIALOG, true);
+    }
+
+    public static void setIsClosedGameDialogEnabled(boolean isEnabled) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(CLOSED_GAME_DIALOG, isEnabled);
+        editor.apply();
+    }
+
     public static boolean isLoggedIn() {
         return preferences.getBoolean(LOGGED_IN, false);
     }
@@ -308,6 +319,7 @@ public final class AuthManager {
 
         setGameNotificationsEnabled(true);
         setFriendNotificationsEnabled(true);
+        setIsClosedGameDialogEnabled(true);
         clearLoginInfo();
         ApiProvider.clearCookies();
     }

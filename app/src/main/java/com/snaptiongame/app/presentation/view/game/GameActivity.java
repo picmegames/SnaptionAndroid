@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,6 +65,7 @@ import com.snaptiongame.app.data.models.GameInvite;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.data.services.notifications.NotificationService;
+import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
@@ -244,7 +246,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
                                 intent.getIntExtra(Game.PICKER_ID, 0), intent.getStringExtra(Game.PICKER_NAME),
                                 intent.getStringExtra(Game.PICKER_IMAGE), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
-                                intent.getBooleanExtra(Game.BEEN_FLAGGED, false));
+                                intent.getBooleanExtra(Game.BEEN_FLAGGED, false), intent.getBooleanExtra(Game.IS_CLOSED, false));
                     }
                 }
                 // ELSE display information from the game invite
@@ -624,7 +626,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCurrentCaptionState = CaptionState.Sets;
     }
 
-    public void showGame(String image, int id, int pickerId, String pickerName, String pickerImage, boolean beenUpvoted, boolean beenFlagged) {
+    public void showGame(String image, int id, int pickerId, String pickerName, String pickerImage,
+                         boolean beenUpvoted, boolean beenFlagged, boolean isClosed) {
         mImageUrl = image;
         isUpvoted = beenUpvoted;
         isFlagged = beenFlagged;
@@ -662,6 +665,32 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                             ColorGenerator.MATERIAL.getColor(pickerName)));
         }
         mPickerName.setText(mPicker);
+
+        if (isClosed) {
+            mAddCaptionFab.setVisibility(View.GONE);
+
+            if (AuthManager.isLoggedIn() && AuthManager.isClosedGameDialogEnabled()) {
+                new MaterialDialog.Builder(this)
+                        .title(R.string.game_closed_title)
+                        .content(R.string.game_closed_content)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
+                            startCreateGame()
+                        )
+                        .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
+                            new MaterialDialog.Builder(this)
+                                    .title(R.string.create_game_title)
+                                    .content(R.string.create_game_content)
+                                    .positiveText(R.string.got_it)
+                                    .show()
+                        )
+                        .checkBoxPromptRes(R.string.dont_ask_again, false, (CompoundButton compoundButton, boolean isChecked) ->
+                                AuthManager.setIsClosedGameDialogEnabled(!isChecked)
+                        )
+                        .show();
+            }
+        }
 
         mPresenter = new GamePresenter(id, this);
         mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
@@ -769,7 +798,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         game -> showGame(game.imageUrl, game.id, game.pickerId, game.pickerName,
-                                game.pickerImage, game.beenUpvoted, game.beenFlagged),
+                                game.pickerImage, game.beenUpvoted, game.beenFlagged, DateUtils.isPastNow(game.endDate)),
                         Timber::e
                 );
     }

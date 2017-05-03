@@ -471,7 +471,7 @@ public class ProfileActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();
+                onBackPressed();
                 break;
             case R.id.add_friend:
                 addFriend();
@@ -486,6 +486,12 @@ public class ProfileActivity extends AppCompatActivity
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mFab.setVisibility(View.GONE);
     }
 
     private void addFriend() {
