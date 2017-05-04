@@ -90,9 +90,9 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     private void handleSearch(String query) {
         String realQuery = query.replaceAll(BLANK_DELIMITER,"");
-        mAdapter.clearFriends();
 
         if (realQuery.isEmpty()) {
+            mAdapter.clearFriends();
             mPresenter.subscribe();
         }
         else {

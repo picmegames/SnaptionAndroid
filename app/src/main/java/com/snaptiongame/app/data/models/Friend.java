@@ -21,7 +21,7 @@ public class Friend {
     public int imageHeight;
     public String cover;
     public String email;
-    public boolean isSnaptionFriend = false;
+    public boolean isSnaptionFriend;
 
     public static final String ID = "id";
     public static final String USERNAME = "username";
@@ -50,7 +50,7 @@ public class Friend {
         this.imageWidth = user.imageWidth;
         this.imageHeight = user.imageHeight;
         this.imageUrl = user.imageUrl;
-        this.isSnaptionFriend = false;
+        this.isSnaptionFriend = user.isFriend;
     }
 
     public Friend(int id, String fullName, String username, String picture,
