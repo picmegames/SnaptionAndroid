@@ -52,6 +52,8 @@ public class Game {
     public long gameDuration;
     @SerializedName(NUM_UPVOTES)
     public int numUpvotes;
+    @SerializedName(IS_CLOSED)
+    public boolean isClosed;
 
     public static final String ID = "id";
     public static final String USER_ID = "userId";
@@ -77,6 +79,7 @@ public class Game {
     public static final String GAME_DURATION = "gameDuration";
     public static final String NUM_UPVOTES = "numUpvotes";
     public static final String PICKER_IMAGE = "pickerImage";
+    public static final String IS_CLOSED = "isClosed";
 
     public Game() {
 

@@ -21,7 +21,7 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.CaptionProvider;
-import com.snaptiongame.app.data.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.utils.ItemListener;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 

@@ -1,4 +1,4 @@
-package com.snaptiongame.app.data.utils;
+package com.snaptiongame.app.presentation.view.utils;
 
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;

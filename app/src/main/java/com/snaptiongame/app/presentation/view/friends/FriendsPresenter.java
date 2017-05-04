@@ -53,12 +53,12 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Observable<Friend> emailResults = UserProvider.getUsersWithEmail(query)
                 .flatMapIterable(user -> user)
                 .filter(user -> checkMyFriendsForDuplicate(user, EMAIL_QUERY))
-                .map(this::convertPossibleFriend);
+                .map(Friend::new);
 
         Observable<Friend> usernameResults = UserProvider.getUsersByUsername(query)
                 .flatMapIterable(user -> user)
                 .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
-                .map(this::convertPossibleFriend);
+                .map(Friend::new);
 
         // Do we need to? They should come up from the username search
         // We need this if we want to specify that they came from Facebook
@@ -79,29 +79,6 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     }
 
     /**
-     * This filter is used to determine if a user received from an email call is already a friend.
-     * Currently when we getFriends() we do not get emails with the request. So we have to check if
-     * the id from the email user matches any ids in our friends list. If it does we can create a new
-     * Friend with the appropriate isSnaptionFriend bool set.
-     *
-     * @param posFriend Each friend emitted by the observable
-     * @return a new friend with the correct isSnaptionFriend bool
-     */
-    private Friend convertPossibleFriend(User posFriend) {
-        Friend newFriend = new Friend(posFriend);
-
-        //Go through all of our friends
-        for (Friend friend : mFriends) {
-            //If we find a matching user then we want to use that user's info.
-            if (friend.id == newFriend.id) {
-                newFriend.isSnaptionFriend = true;
-                return newFriend;
-            }
-        }
-        return newFriend;
-    }
-
-    /**
      * This filter will scan our friends list with the entered query from the SearchActivity. At the
      * moment we want to check if the query can be found in EITHER the username or the email.
      *
@@ -110,7 +87,6 @@ public class FriendsPresenter implements FriendsContract.Presenter {
      * @return true if a user matches the search query
      */
     private boolean checkMyFriendsWithQuery(String query, Friend posFriend) {
-
         // We have to check that the searchable fields are not null as certain network calls
         // don't initialize username/email fields
         return (posFriend.username != null && posFriend.username.toLowerCase().contains(query.toLowerCase())) ||
@@ -127,15 +103,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
      * @return true if a user is not in our friends list
      */
     private boolean checkMyFriendsForDuplicate(User user, int whichQuery) {
-        for (Friend friend : mFriends) {
-            //True if we already have this queried user in our friends list
-            if (friend.id == user.id) {
-                //If this is an email query we return true because our friends list does not contain any
-                //users with emails. The filtering of this will be handled in convertPossibleFriend
-                return whichQuery == EMAIL_QUERY;
-            }
-        }
-        return true;
+        return !user.isFriend || whichQuery == EMAIL_QUERY;
     }
 
     @Override

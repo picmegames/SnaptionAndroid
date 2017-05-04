@@ -18,8 +18,9 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.data.utils.ItemListener;
-import com.snaptiongame.app.data.utils.TextStyleUtils;
+import com.snaptiongame.app.data.utils.DateUtils;
+import com.snaptiongame.app.presentation.view.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.utils.TextStyleUtils;
 
 import java.util.List;
 
@@ -35,7 +36,6 @@ public class WallAdapter extends RecyclerView.Adapter {
     private long currentTime;
 
     private static final int AVATAR_SIZE = 30;
-    private static final int MILLIS = 1000;
 
     public WallAdapter(List<Game> snaptions) {
         this.mGames = snaptions;
@@ -121,7 +121,9 @@ public class WallAdapter extends RecyclerView.Adapter {
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);
         holder.mNumberOfUpvotes.setText(String.valueOf(curGame.numUpvotes));
 
-        if (curGame.endDate - currentTime <= 0) {
+        holder.isClosed = DateUtils.isPastDate(curGame.endDate, currentTime);
+
+        if (holder.isClosed) {
             holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
         }
         else {
@@ -141,7 +143,7 @@ public class WallAdapter extends RecyclerView.Adapter {
     public void setGames(List<Game> games) {
         if (!mGames.equals(games)) {
             mGames = games;
-            currentTime = System.currentTimeMillis() / MILLIS;
+            currentTime = DateUtils.getNow();
             notifyDataSetChanged();
         }
     }

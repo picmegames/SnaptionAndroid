@@ -1,4 +1,4 @@
-package com.snaptiongame.app.data.utils;
+package com.snaptiongame.app.presentation.view.utils;
 
 /**
  * Created by BrianGouldsberry on 4/13/17.

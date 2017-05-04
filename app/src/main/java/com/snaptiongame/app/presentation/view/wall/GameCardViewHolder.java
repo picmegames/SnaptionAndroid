@@ -24,7 +24,7 @@ import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
-import com.snaptiongame.app.data.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.utils.ItemListener;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
@@ -71,6 +71,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public String mPickerName;
     public String mPickerImage;
     public String mImageUrl;
+    public boolean isClosed;
 
     public boolean isUpvoted = false;
     public boolean isFlagged = false;
@@ -142,6 +143,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             gameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
             gameIntent.putExtra(Game.BEEN_UPVOTED, isUpvoted);
             gameIntent.putExtra(Game.BEEN_FLAGGED, isFlagged);
+            gameIntent.putExtra(Game.IS_CLOSED, isClosed);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,
