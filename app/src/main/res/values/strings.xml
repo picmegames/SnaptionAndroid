@@ -180,4 +180,7 @@
     <string name="rank">Rank</string>
     <string name="no_facebook">Facebook not installed</string>
     <string name="facebook_app" translatable="false">com.facebook.katana</string>
+    <string name="is_private">Private Game</string>
+    <string name="invited_users">Invited Users</string>
+    <string name="close">close</string>
 </resources>

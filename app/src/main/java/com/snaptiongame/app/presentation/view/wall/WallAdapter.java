@@ -69,6 +69,7 @@ public class WallAdapter extends RecyclerView.Adapter {
         holder.mCreatorId = curGame.creatorId;
         holder.mCreator = curGame.creatorName;
         holder.mCreatorImageUrl = curGame.creatorImage;
+        holder.isPublic = curGame.isPublic;
 
         if (curGame.imageUrl != null) {
             holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
