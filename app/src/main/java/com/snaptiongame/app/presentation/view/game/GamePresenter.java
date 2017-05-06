@@ -11,7 +11,9 @@ import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.FitBCaption;
+import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.GameAction;
+import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
@@ -134,6 +136,23 @@ public class GamePresenter implements GameContract.Presenter {
                         this::countSets,
                         Timber::e,
                         () -> Timber.i("Loading caption sets worked")
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void loadInvitedUsers(int gameId) {
+        Disposable disposable = GameProvider.getGame(gameId, null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        game -> {
+                            List<Friend> users = new ArrayList<>();
+                            for (User user : game.users) {
+                                users.add(new Friend(user));
+                            }
+                            mGameView.showPrivateGameDialog(users);
+                        },
+                        Timber::e
                 );
         mDisposables.add(disposable);
     }

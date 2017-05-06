@@ -72,6 +72,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public String mPickerImage;
     public String mImageUrl;
     public boolean isClosed;
+    public boolean isPublic;
 
     public boolean isUpvoted = false;
     public boolean isFlagged = false;
@@ -144,6 +145,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             gameIntent.putExtra(Game.BEEN_UPVOTED, isUpvoted);
             gameIntent.putExtra(Game.BEEN_FLAGGED, isFlagged);
             gameIntent.putExtra(Game.IS_CLOSED, isClosed);
+            gameIntent.putExtra(Game.IS_PUBLIC, isPublic);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,

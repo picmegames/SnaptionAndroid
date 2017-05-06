@@ -81,6 +81,7 @@ public class Game {
     public static final String PICKER_IMAGE = "pickerImage";
     public static final String IS_CLOSED = "isClosed";
 
+
     public Game() {
 
     }
