@@ -133,6 +133,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="got_it">Lo tengo</string>
     <string name="create_game_title">Creando Otro Juego</string>
     <string name="isPrivate">Juego Privado</string>
-    <string name="invited_users">Usuarios invitados</string>
+    <string name="invited_users">Usuarios Invitados</string>
     <string name="close">cierre</string>
 </resources>
