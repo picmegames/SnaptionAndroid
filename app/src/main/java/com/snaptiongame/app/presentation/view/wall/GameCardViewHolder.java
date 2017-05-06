@@ -98,7 +98,6 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mImage.setClipToOutline(true);
-            mCreatorContent.setClipToOutline(true);
         }
 
         mUpvoteView.setOnClickListener(view -> {
