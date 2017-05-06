@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -47,8 +48,10 @@ public class WallAdapter extends RecyclerView.Adapter {
             }
 
             @Override
-            public void updateFlag(boolean value, int index) {
-                mGames.get(index).beenFlagged = value;
+            public void updateFlag(int index, RecyclerView.ViewHolder holder) {
+                mGames.remove(index);
+                notifyItemRemoved(index);
+                Toast.makeText(holder.itemView.getContext(), R.string.flagged, Toast.LENGTH_LONG).show();
             }
         };
     }
@@ -120,7 +123,7 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mTopCaption.setVisibility(View.GONE);
         }
 
-        holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);
+        holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted);
         holder.mNumberOfUpvotes.setText(String.valueOf(curGame.numUpvotes));
 
         holder.isClosed = DateUtils.isPastDate(curGame.endDate, currentTime);
@@ -148,6 +151,10 @@ public class WallAdapter extends RecyclerView.Adapter {
             currentTime = DateUtils.getNow();
             notifyDataSetChanged();
         }
+    }
+
+    public boolean isEmpty() {
+        return mGames.isEmpty();
     }
 
     @Override

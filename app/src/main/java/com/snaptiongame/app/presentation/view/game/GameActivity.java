@@ -264,7 +264,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mCaptionList.setLayoutManager(layoutManager);
-        mAdapter = new CaptionAdapter(new ArrayList<>());
+        mAdapter = new CaptionAdapter(new ArrayList<>(), mCaptionList);
         mCaptionList.setAdapter(mAdapter);
         mDecoration = new InsetDividerDecoration(
                 CaptionCardViewHolder.class,
@@ -320,15 +320,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         getMenuInflater().inflate(R.menu.game_menu, menu);
         mMenu = menu;
 
-        if (isFlagged) {
-            mMenu.findItem(R.id.unflag).setVisible(true);
-            mMenu.findItem(R.id.flag).setVisible(false);
-        }
-        else {
-            mMenu.findItem(R.id.unflag).setVisible(false);
-            mMenu.findItem(R.id.flag).setVisible(true);
-        }
-
         if (isUpvoted) {
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
         }
@@ -346,7 +337,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 onBackPressed();
                 break;
             case R.id.flag:
-            case R.id.unflag:
                 if (AuthManager.isLoggedIn()) {
                     flagDialog();
                 }
@@ -422,20 +412,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     })
                     .cancelable(true)
                     .show();
-        }
-    }
-
-    private void flagGame() {
-        if (isFlagged) {
-            isFlagged = false;
-            mMenu.findItem(R.id.unflag).setVisible(false);
-            mMenu.findItem(R.id.flag).setVisible(true);
-        }
-        else {
-            isFlagged = true;
-            mMenu.findItem(R.id.unflag).setVisible(true);
-            mMenu.findItem(R.id.flag).setVisible(false);
-            Toast.makeText(this, "Flagged", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -954,7 +930,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             upvoteGame();
         }
         else {
-            flagGame();
+            // TODO handle flagged game here
         }
     }
 
