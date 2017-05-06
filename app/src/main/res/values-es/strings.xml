@@ -134,7 +134,7 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="create_game_title">Creando Otro Juego</string>
     <string name="posted_by">Publicado por %1$s</string>
     <string name="no_captions">No hay Subtítulos!</string>
-    <string name="isPrivate">Juego Privado</string>
+    <string name="is_private">Juego Privado</string>
     <string name="invited_users">Usuarios Invitados</string>
     <string name="close">cierre</string>
 </resources>

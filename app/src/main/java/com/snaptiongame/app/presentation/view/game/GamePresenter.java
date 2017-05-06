@@ -142,16 +142,10 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void loadInvitedUsers(int gameId) {
-        Disposable disposable = GameProvider.getGame(gameId, null)
+        Disposable disposable = GameProvider.getPrivateGameUsers(gameId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        game -> {
-                            List<Friend> users = new ArrayList<>();
-                            for (User user : game.users) {
-                                users.add(new Friend(user));
-                            }
-                            mGameView.showPrivateGameDialog(users);
-                        },
+                        users -> mGameView.showPrivateGameDialog(users),
                         Timber::e
                 );
         mDisposables.add(disposable);

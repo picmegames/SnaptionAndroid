@@ -1,6 +1,7 @@
 package com.snaptiongame.app.data.providers;
 
 import com.snaptiongame.app.data.api.SnaptionApi;
+import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
@@ -49,6 +50,15 @@ public class GameProvider {
 
     public static Single<Game> getGame(int gameId, String token) {
         return apiService.getGame(gameId, token);
+    }
+
+    public static Single<List<Friend>> getPrivateGameUsers(int gameId) {
+        return getGame(gameId, null)
+                .map(game -> game.users)
+                .toObservable()
+                .flatMapIterable(users -> users)
+                .map(Friend::new)
+                .toList();
     }
 
     public static Completable upvoteOrFlagGame(GameAction request) {

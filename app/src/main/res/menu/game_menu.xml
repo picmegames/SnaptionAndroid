@@ -30,7 +30,7 @@
     <item
         android:id="@+id/isPrivate"
         android:icon="@drawable/ic_lock_white_24dp"
-        android:title="@string/isPrivate"
+        android:title="@string/is_private"
         android:visible="false"
         app:showAsAction="ifRoom"/>
 
