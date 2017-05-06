@@ -89,6 +89,7 @@ public class WallAdapter extends RecyclerView.Adapter {
         if (curGame.topCaption != null) {
             holder.mCaptionerImage.setVisibility(View.VISIBLE);
             holder.mCaptionerName.setVisibility(View.VISIBLE);
+            holder.mTopCaption.setVisibility(View.VISIBLE);
 
             if (curGame.topCaption.creatorPicture != null) {
                 Glide.with(holder.mContext)
@@ -116,7 +117,7 @@ public class WallAdapter extends RecyclerView.Adapter {
         else {
             holder.mCaptionerImage.setVisibility(View.GONE);
             holder.mCaptionerName.setVisibility(View.GONE);
-            holder.mTopCaption.setText(holder.mContext.getString(R.string.nothing_here));
+            holder.mTopCaption.setVisibility(View.GONE);
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);
