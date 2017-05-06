@@ -360,20 +360,20 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 onBackPressed();
                 break;
             case R.id.flag:
-            case R.id.isPrivate:
-                if (mPrivateGameDialog == null) {
-                    mPresenter.loadInvitedUsers(mGameId);
-                }
-                else {
-                    mPrivateGameDialog.show();
-                }
-                break;
             case R.id.unflag:
                 if (AuthManager.isLoggedIn()) {
                     flagDialog();
                 }
                 else {
                     goToLogin();
+                }
+                break;
+            case R.id.isPrivate:
+                if (mPrivateGameDialog == null) {
+                    mPresenter.loadInvitedUsers(mGameId);
+                }
+                else {
+                    mPrivateGameDialog.show();
                 }
                 break;
             case R.id.create_game:
