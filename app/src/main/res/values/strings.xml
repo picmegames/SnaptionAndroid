@@ -181,6 +181,6 @@
     <string name="no_facebook">Facebook not installed</string>
     <string name="facebook_app" translatable="false">com.facebook.katana</string>
     <string name="isPrivate">Private Game</string>
-    <string name="invited_users">Invited users</string>
+    <string name="invited_users">Invited Users</string>
     <string name="close">close</string>
 </resources>
