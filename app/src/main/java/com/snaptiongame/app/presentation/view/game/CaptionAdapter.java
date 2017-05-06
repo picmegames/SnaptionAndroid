@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,11 +27,13 @@ public class CaptionAdapter extends RecyclerView.Adapter {
 
     private List<Caption> mCaptions;
     private ItemListener mCallback;
+    private RecyclerView mRecyclerView;
 
     private static final int AVATAR_SIZE = 40;
 
-    public CaptionAdapter(List<Caption> captions) {
+    public CaptionAdapter(List<Caption> captions, final RecyclerView recyclerView) {
         this.mCaptions = captions;
+        this.mRecyclerView = recyclerView;
 
         mCallback = new ItemListener() {
             @Override
@@ -41,8 +44,16 @@ public class CaptionAdapter extends RecyclerView.Adapter {
             }
 
             @Override
-            public void updateFlag(boolean value, int index) {
-                mCaptions.get(index).beenFlagged = value;
+            public void updateFlag(int index, RecyclerView.ViewHolder holder) {
+                final Caption tempCaption = mCaptions.remove(index);
+                notifyItemRemoved(index);
+                Snackbar.make(mRecyclerView, R.string.flagged, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.undo, view -> {
+                            ((CaptionCardViewHolder) holder).unflagCaption();
+                            mCaptions.add(index, tempCaption);
+                            notifyItemInserted(index);
+                        })
+                        .show();
             }
         };
     }
@@ -85,7 +96,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         holder.mName.setText(curCaption.creatorName);
         holder.username = curCaption.creatorName;
         holder.mNumberOfUpvotes.setText(String.valueOf(curCaption.numVotes));
-        holder.setHasBeenUpvotedOrFlagged(curCaption.beenUpvoted, curCaption.beenFlagged);
+        holder.setHasBeenUpvotedOrFlagged(curCaption.beenUpvoted);
     }
 
     public void setCaptions(List<Caption> captions) {
