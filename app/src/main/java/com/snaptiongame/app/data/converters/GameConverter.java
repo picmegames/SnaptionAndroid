@@ -65,10 +65,10 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 pickerObject.get(Game.ID).getAsInt(), "", "");
 
         game.numUpvotes = content.get(Game.NUM_UPVOTES).getAsInt();
-        game.pickerName = pickerObject.get(User.USERNAME).getAsString();
+        game.creatorName = pickerObject.get(User.USERNAME).getAsString();
 
         if (!pickerObject.get(User.PICTURE).isJsonNull()) {
-            game.pickerImage = pickerObject.get(User.PICTURE).getAsJsonObject().get(User.IMAGE_URL).getAsString();
+            game.creatorImage = pickerObject.get(User.PICTURE).getAsJsonObject().get(User.IMAGE_URL).getAsString();
         }
 
         JsonObject picture = content.getAsJsonObject(Game.PICTURE);

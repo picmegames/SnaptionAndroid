@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -26,6 +28,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
 
     private List<Caption> mCaptions;
     private ItemListener mCallback;
+    private int lastPosition = -1;
 
     private static final int AVATAR_SIZE = 40;
 
@@ -86,6 +89,21 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         holder.username = curCaption.creatorName;
         holder.mNumberOfUpvotes.setText(String.valueOf(curCaption.numVotes));
         holder.setHasBeenUpvotedOrFlagged(curCaption.beenUpvoted, curCaption.beenFlagged);
+
+        setAnimation(holder.itemView, position);
+    }
+
+    private void setAnimation(View view, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_in);
+            view.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        ((CaptionCardViewHolder) holder).itemView.clearAnimation();
     }
 
     public void setCaptions(List<Caption> captions) {

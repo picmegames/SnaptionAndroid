@@ -244,8 +244,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     }
                     else {
                         showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
-                                intent.getIntExtra(Game.PICKER_ID, 0), intent.getStringExtra(Game.PICKER_NAME),
-                                intent.getStringExtra(Game.PICKER_IMAGE), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
+                                intent.getIntExtra(Game.CREATOR_ID, 0), intent.getStringExtra(Game.CREATOR_NAME),
+                                intent.getStringExtra(Game.CREATOR_IMAGE), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
                                 intent.getBooleanExtra(Game.BEEN_FLAGGED, false), intent.getBooleanExtra(Game.IS_CLOSED, false));
                     }
                 }
@@ -797,8 +797,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         GameProvider.getGame(mInvite.gameId, AuthManager.getInviteToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        game -> showGame(game.imageUrl, game.id, game.pickerId, game.pickerName,
-                                game.pickerImage, game.beenUpvoted, game.beenFlagged, DateUtils.isPastNow(game.endDate)),
+                        game -> showGame(game.imageUrl, game.id, game.creatorId, game.creatorName,
+                                game.creatorImage, game.beenUpvoted, game.beenFlagged, DateUtils.isPastNow(game.endDate)),
                         Timber::e
                 );
     }
