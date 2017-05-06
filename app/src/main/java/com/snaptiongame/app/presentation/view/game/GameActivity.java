@@ -59,6 +59,7 @@ import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.FitBCaption;
+import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.GameInvite;
@@ -69,6 +70,7 @@ import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
+import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -149,6 +151,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private CaptionSetAdapter mCaptionSetAdapter;
     private int mCurrentCaption;
     private TextWatcher mTextWatcher;
+    private MaterialDialog mPrivateGameDialog;
+    private FriendsAdapter mFriendsAdapter;
 
     private enum CaptionState {
         List, Random, Sets, Typed, Typed_Empty
@@ -202,6 +206,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private String mImageUrl;
 
     private boolean isDark = false;
+    private boolean isPublic;
     private float lastRefreshIconRotation = 0.0f;
 
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -247,6 +252,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                                 intent.getIntExtra(Game.CREATOR_ID, 0), intent.getStringExtra(Game.CREATOR_NAME),
                                 intent.getStringExtra(Game.CREATOR_IMAGE), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
                                 intent.getBooleanExtra(Game.BEEN_FLAGGED, false), intent.getBooleanExtra(Game.IS_CLOSED, false));
+                        isPublic = intent.getBooleanExtra(Game.IS_PUBLIC, false);
                     }
                 }
                 // ELSE display information from the game invite
@@ -293,6 +299,12 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCurrentCaptionState = CaptionState.List;
     }
 
+    private void loadPrivateMenu(boolean isPublic) {
+        if (!isPublic) {
+            mMenu.findItem(R.id.isPrivate).setVisible(true);
+        }
+    }
+
     private void upvoteGame() {
         if (isUpvoted) {
             if (!isDark) {
@@ -327,6 +339,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
         }
 
+        loadPrivateMenu(isPublic);
+
         return true;
     }
 
@@ -342,6 +356,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 }
                 else {
                     goToLogin();
+                }
+                break;
+            case R.id.isPrivate:
+                if (mPrivateGameDialog == null) {
+                    mPresenter.loadInvitedUsers(mGameId);
+                }
+                else {
+                    mPrivateGameDialog.show();
                 }
                 break;
             case R.id.create_game:
@@ -499,6 +521,18 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             }
         }
         hideKeyboard();
+    }
+
+    @Override
+    public void showPrivateGameDialog(List<Friend> invitedUsers) {
+        mFriendsAdapter = new FriendsAdapter(invitedUsers);
+
+        mPrivateGameDialog = new MaterialDialog.Builder(this)
+                .title(R.string.invited_users)
+                .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                .positiveText(R.string.close)
+                .cancelable(true)
+                .show();
     }
 
     private void rotateIcon(float rotation, int duration, int whichIcon) {
@@ -709,6 +743,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                                 final Drawable more = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_more_vert_grey_800_24dp, null);
                                 mToolbar.setOverflowIcon(more);
 
+                                mMenu.findItem(R.id.isPrivate).setIcon(R.drawable.ic_lock_grey_800_24dp);
                                 if (isUpvoted) {
                                     mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
                                 }
