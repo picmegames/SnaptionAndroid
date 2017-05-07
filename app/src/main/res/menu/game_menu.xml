@@ -28,6 +28,13 @@
         android:title="@string/invite_friend"/>
 
     <item
+        android:id="@+id/isPrivate"
+        android:icon="@drawable/ic_lock_white_24dp"
+        android:title="@string/is_private"
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/upvote"
         android:checked="false"
         android:icon="@drawable/ic_favorite_border_white_24dp"

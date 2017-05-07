@@ -66,9 +66,10 @@ public class WallAdapter extends RecyclerView.Adapter {
         Game curGame = mGames.get(position);
 
         holder.mGameId = curGame.id;
-        holder.mPickerId = curGame.pickerId;
-        holder.mPickerName = curGame.pickerName;
-        holder.mPickerImage = curGame.pickerImage;
+        holder.mCreatorId = curGame.creatorId;
+        holder.mCreator = curGame.creatorName;
+        holder.mCreatorImageUrl = curGame.creatorImage;
+        holder.isPublic = curGame.isPublic;
 
         if (curGame.imageUrl != null) {
             holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
@@ -84,10 +85,12 @@ public class WallAdapter extends RecyclerView.Adapter {
         else {
             Glide.clear(holder.mImage);
         }
+        holder.mCreatorName.setText(String.format(holder.mContext.getString(R.string.posted_by), curGame.creatorName));
 
         if (curGame.topCaption != null) {
             holder.mCaptionerImage.setVisibility(View.VISIBLE);
             holder.mCaptionerName.setVisibility(View.VISIBLE);
+            holder.mTopCaption.setVisibility(View.VISIBLE);
 
             if (curGame.topCaption.creatorPicture != null) {
                 Glide.with(holder.mContext)
@@ -115,7 +118,7 @@ public class WallAdapter extends RecyclerView.Adapter {
         else {
             holder.mCaptionerImage.setVisibility(View.GONE);
             holder.mCaptionerName.setVisibility(View.GONE);
-            holder.mTopCaption.setText(holder.mContext.getString(R.string.default_caption));
+            holder.mTopCaption.setVisibility(View.GONE);
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted, curGame.beenFlagged);

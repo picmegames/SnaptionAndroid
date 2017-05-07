@@ -50,6 +50,10 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     CircleImageView mCaptionerImage;
     @BindView(R.id.captioner_name)
     TextView mCaptionerName;
+    @BindView(R.id.creator_name)
+    TextView mCreatorName;
+    @BindView(R.id.creator_content)
+    LinearLayout mCreatorContent;
     @BindView(R.id.upvote)
     ImageView mUpvoteButton;
     @BindView(R.id.upvote_view)
@@ -67,14 +71,17 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     private ItemListener mListener;
 
     public int mGameId;
-    public int mPickerId;
-    public String mPickerName;
-    public String mPickerImage;
+    public int mCreatorId;
+    public String mCreator;
+    public String mCreatorImageUrl;
     public String mImageUrl;
     public boolean isClosed;
+    public boolean isPublic;
 
     public boolean isUpvoted = false;
     public boolean isFlagged = false;
+
+    private static final int CREATOR_ALPHA = 128;
 
     public GameCardViewHolder(View itemView, ItemListener listener) {
         super(itemView);
@@ -82,6 +89,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         mView = itemView;
         ButterKnife.bind(this, itemView);
         mListener = listener;
+
+        mCreatorContent.getBackground().setAlpha(CREATOR_ALPHA);
 
         mMenu = new PopupMenu(mContext, itemView);
         mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
@@ -137,13 +146,14 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(view -> {
             Intent gameIntent = new Intent(mContext, GameActivity.class);
             gameIntent.putExtra(Game.ID, mGameId);
-            gameIntent.putExtra(Game.PICKER_NAME, mPickerName);
-            gameIntent.putExtra(Game.PICKER_IMAGE, mPickerImage);
-            gameIntent.putExtra(Game.PICKER_ID, mPickerId);
+            gameIntent.putExtra(Game.CREATOR_NAME, mCreator);
+            gameIntent.putExtra(Game.CREATOR_IMAGE, mCreatorImageUrl);
+            gameIntent.putExtra(Game.CREATOR_ID, mCreatorId);
             gameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
             gameIntent.putExtra(Game.BEEN_UPVOTED, isUpvoted);
             gameIntent.putExtra(Game.BEEN_FLAGGED, isFlagged);
             gameIntent.putExtra(Game.IS_CLOSED, isClosed);
+            gameIntent.putExtra(Game.IS_PUBLIC, isPublic);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((AppCompatActivity) mContext,

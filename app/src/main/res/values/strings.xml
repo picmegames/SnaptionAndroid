@@ -58,7 +58,7 @@
     <string name="flag">Flag as Inappropriate</string>
     <string name="unflag">Undo Flag</string>
     <string name="default_caption">Be the first to caption this image!</string>
-    <string name="game_open">OPEN</string>
+    <string name="game_open">OPEN!</string>
     <string name="game_closed">CLOSED</string>
     <string name="username">Username</string>
     <string name="undo">Undo</string>
@@ -138,6 +138,8 @@
     <string name="dont_ask_again">Don\'t ask me again</string>
     <string name="create_game_content">You can always create a game from an existing one by clicking the menu above, or uploading your own from the wall!</string>
     <string name="got_it">Got it</string>
+    <string name="posted_by">Posted by %1$s</string>
+    <string name="no_captions">No Captions!</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -178,4 +180,7 @@
     <string name="rank">Rank</string>
     <string name="no_facebook">Facebook not installed</string>
     <string name="facebook_app" translatable="false">com.facebook.katana</string>
+    <string name="is_private">Private Game</string>
+    <string name="invited_users">Invited Users</string>
+    <string name="close">close</string>
 </resources>

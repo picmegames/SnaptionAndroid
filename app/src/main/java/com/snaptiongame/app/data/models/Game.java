@@ -21,12 +21,12 @@ public class Game {
     public boolean isPublic;
     @SerializedName(IMG_TYPE)
     public String type;
-    @SerializedName(PICKER_NAME)
-    public String pickerName;
+    @SerializedName(CREATOR_NAME)
+    public String creatorName;
     @SerializedName(IMAGE_URL)
-    public String pickerImage;
-    @SerializedName(PICKER_ID)
-    public int pickerId;
+    public String creatorImage;
+    @SerializedName(CREATOR_ID)
+    public int creatorId;
     @SerializedName(PICTURE)
     public String picture;
     @SerializedName(IMAGE_URL)
@@ -61,8 +61,8 @@ public class Game {
     public static final String END_DATE = "completedDate";
     public static final String IS_PUBLIC = "isPublic";
     public static final String PICKER = "picker";
-    public static final String PICKER_ID = "picker_id";
-    public static final String PICKER_NAME = "picker_name";
+    public static final String CREATOR_ID = "creator_id";
+    public static final String CREATOR_NAME = "picker_name";
     public static final String IMG_TYPE = "imgType";
     public static final String PICTURE = "picture";
     public static final String IMAGE_URL = "url";
@@ -78,7 +78,7 @@ public class Game {
     public static final String BEEN_FLAGGED = "beenFlagged";
     public static final String GAME_DURATION = "gameDuration";
     public static final String NUM_UPVOTES = "numUpvotes";
-    public static final String PICKER_IMAGE = "pickerImage";
+    public static final String CREATOR_IMAGE = "creatorImage";
     public static final String IS_CLOSED = "isClosed";
 
     public Game() {
@@ -96,11 +96,11 @@ public class Game {
         this.gameDuration = gameDuration;
     }
 
-    public Game(int id, long startDate, boolean isPublic, int pickerId, String picture, String type) {
+    public Game(int id, long startDate, boolean isPublic, int creatorId, String picture, String type) {
         this.id = id;
         this.startDate = startDate;
         this.isPublic = isPublic;
-        this.pickerId = pickerId;
+        this.creatorId = creatorId;
         this.picture = picture;
         this.type = type;
     }
