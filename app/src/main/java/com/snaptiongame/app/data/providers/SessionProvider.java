@@ -21,4 +21,8 @@ public class SessionProvider {
     public static Single<Session> userOAuthGoogle(OAuthRequest request) {
         return apiService.userOAuthGoogle(request);
     }
+
+    public static Single<Session> logout() {
+        return apiService.logout();
+    }
 }

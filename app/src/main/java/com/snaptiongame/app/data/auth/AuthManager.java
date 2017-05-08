@@ -293,35 +293,42 @@ public final class AuthManager {
     }
 
     public void logout() {
-        SharedPreferences.Editor editor = preferences.edit();
-        boolean isFacebook = preferences.getBoolean(FACEBOOK_LOGIN, false);
-        boolean isGoogle = preferences.getBoolean(GOOGLE_SIGN_IN, false);
-        // IF we are logged in with Facebook
-        if (isFacebook && !isGoogle) {
-            // Call Facebook's logout method
-            LoginManager.getInstance().logOut();
-        }
-        else if (isGoogle && !isFacebook) {
-            // ELSE Call Google's sign out method
-            if (googleApiClient.isConnected()) {
-                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(status -> {
-                    if (status.isSuccess()) {
-                        Timber.i("Sign out of Google success");
-                    }
-                    else {
-                        Timber.e("Could not sign out of Google");
-                    }
-                });
-            }
-        }
-        editor.putBoolean(LOGGED_IN, false);
-        editor.apply();
+        SessionProvider.logout()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(session -> {
+                            SharedPreferences.Editor editor = preferences.edit();
+                            boolean isFacebook = preferences.getBoolean(FACEBOOK_LOGIN, false);
+                            boolean isGoogle = preferences.getBoolean(GOOGLE_SIGN_IN, false);
+                            // IF we are logged in with Facebook
+                            if (isFacebook && !isGoogle) {
+                                // Call Facebook's logout method
+                                LoginManager.getInstance().logOut();
+                            }
+                            else if (isGoogle && !isFacebook) {
+                                // ELSE Call Google's sign out method
+                                if (googleApiClient.isConnected()) {
+                                    Auth.GoogleSignInApi.signOut(googleApiClient)
+                                            .setResultCallback(status -> {
+                                        if (status.isSuccess()) {
+                                            Timber.i("Sign out of Google success");
+                                        }
+                                        else {
+                                            Timber.e("Could not sign out of Google");
+                                        }
+                                    });
+                                }
+                            }
+                            editor.putBoolean(LOGGED_IN, false);
+                            editor.apply();
 
-        setGameNotificationsEnabled(true);
-        setFriendNotificationsEnabled(true);
-        setIsClosedGameDialogEnabled(true);
-        clearLoginInfo();
-        ApiProvider.clearCookies();
+                            setGameNotificationsEnabled(true);
+                            setFriendNotificationsEnabled(true);
+                            setIsClosedGameDialogEnabled(true);
+                            clearLoginInfo();
+                            ApiProvider.clearCookies();
+                        },
+                        e-> Timber.e("Could not log out of Snaption", e)
+                );
     }
 
     public void registerCallback(AuthCallback callback) {
