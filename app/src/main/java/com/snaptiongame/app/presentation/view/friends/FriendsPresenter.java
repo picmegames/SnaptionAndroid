@@ -7,7 +7,6 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.FriendProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 
@@ -34,10 +33,6 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     private List<Friend> mFriends;
 
-    private static final int EMAIL_QUERY = 1;
-    private static final int USERNAMES_QUERY = 2;
-    private static final int FULLNAME_QUERY = 3;
-
     public FriendsPresenter(@NonNull FriendsContract.View friendView) {
         mFriendView = friendView;
         mDisposables = new CompositeDisposable();
@@ -54,19 +49,16 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .filter(friend -> checkMyFriendsWithQuery(query, friend));
 
         Observable<Friend> emailResults = UserProvider.getUsersWithEmail(query)
-                .flatMapIterable(user -> user)
-                .filter(user -> checkMyFriendsForDuplicate(user, EMAIL_QUERY))
+                .flatMapIterable(users -> users)
                 .map(Friend::new);
 
         Observable<Friend> usernameResults = UserProvider.getUsersByUsername(query)
-                .flatMapIterable(user -> user)
-                .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
+                .flatMapIterable(users -> users)
                 .map(Friend::new);
 
-        Observable<Friend> fullnameResults = UserProvider.getUsersByFullName(query)
-                    .flatMapIterable(user -> user)
-                    .filter(user -> checkMyFriendsForDuplicate(user, FULLNAME_QUERY))
-                    .map(Friend::new);
+        Observable<Friend> fullNameResults = UserProvider.getUsersByFullName(query)
+                .flatMapIterable(users -> users)
+                .map(Friend::new);
 
         // Do we need to? They should come up from the username search
         // We need this if we want to specify that they came from Facebook
@@ -77,7 +69,8 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         //Note the order of concat matter
         //If an observable ends up being empty, it will trash the entire call. That is dumb
         //This is solved by using .defaultIsEmpty(new Friend(-1))
-        Disposable disposable = Observable.concat(usernameResults, friendResults, emailResults, fullnameResults)
+        Disposable disposable = Observable.concat(usernameResults, friendResults, emailResults, fullNameResults)
+                .distinct(friend -> friend.id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mFriendView::addFriend,
@@ -99,19 +92,6 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         // don't initialize username/email fields
         return (posFriend.username != null && posFriend.username.toLowerCase().contains(query.toLowerCase())) ||
                 (posFriend.email != null) && posFriend.email.toLowerCase().contains(query.toLowerCase());
-    }
-
-    /**
-     * This filter will scan our friends to see if they would have already been loaded y an observable.
-     * We want to check this because if we have duplicate users, we want to only display the ones that
-     * are our friends.
-     *
-     * @param user User emitted by an observable
-     * @param whichQuery The type of observable we are checking against.
-     * @return true if a user is not in our friends list
-     */
-    private boolean checkMyFriendsForDuplicate(User user, int whichQuery) {
-        return !user.isFriend || whichQuery == EMAIL_QUERY;
     }
 
     @Override
