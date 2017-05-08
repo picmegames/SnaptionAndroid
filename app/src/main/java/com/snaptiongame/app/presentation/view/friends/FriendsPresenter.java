@@ -96,6 +96,8 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void loadFriends() {
+        mDisposables.clear();
+
         Disposable disposable = FriendProvider.getFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -122,12 +124,12 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .subscribe(
                         () -> Toast.makeText(SnaptionApplication.getContext(),
                                 String.format(SnaptionApplication.getContext().getString(R.string.remove_friend_success), name),
-                                Toast.LENGTH_LONG).show(),
+                                Toast.LENGTH_SHORT).show(),
                         e -> {
                             Timber.e(e);
                             Toast.makeText(SnaptionApplication.getContext(),
                                     String.format(SnaptionApplication.getContext().getString(R.string.remove_friend_failure), name),
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_SHORT).show();
                         }
                 );
     }
@@ -139,12 +141,12 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .subscribe(
                         result -> Toast.makeText(SnaptionApplication.getContext(),
                                 String.format(SnaptionApplication.getContext().getString(R.string.add_friend_success), name),
-                                Toast.LENGTH_LONG).show(),
+                                Toast.LENGTH_SHORT).show(),
                         e -> {
                             Timber.e(e);
                             Toast.makeText(SnaptionApplication.getContext(),
                                     String.format(SnaptionApplication.getContext().getString(R.string.add_friend_failure), name),
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_SHORT).show();
                         }
                 );
     }
