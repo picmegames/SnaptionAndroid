@@ -30,7 +30,6 @@ public class CaptionAdapter extends RecyclerView.Adapter {
     private List<Caption> mCaptions;
     private ItemListener mCallback;
     private int lastPosition = -1;
-    private RecyclerView mRecyclerView;
 
     private RecyclerView mRecyclerView;
 
