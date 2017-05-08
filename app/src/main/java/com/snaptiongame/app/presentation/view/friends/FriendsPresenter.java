@@ -47,6 +47,10 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void findFriends(String query) {
+        mDisposables.clear();
+
+        Observable<Friend> fullnameResults = Observable.empty();
+
         Observable<Friend> friendResults = FriendProvider.getFriends()
                 .flatMapIterable(friend -> friend)
                 .filter(friend -> checkMyFriendsWithQuery(query, friend));
@@ -61,10 +65,13 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
                 .map(Friend::new);
 
-        Observable<Friend> fullnameResults = UserProvider.getUsersByFullName(query)
-                .flatMapIterable(user -> user)
-                .filter(user -> checkMyFriendsForDuplicate(user, FULLNAME_QUERY))
-                .map(Friend::new);
+        //Don't want to load friends based on whitespace
+        if (!query.isEmpty()) {
+            fullnameResults = UserProvider.getUsersByFullName(query)
+                    .flatMapIterable(user -> user)
+                    .filter(user -> checkMyFriendsForDuplicate(user, FULLNAME_QUERY))
+                    .map(Friend::new);
+        }
 
         // Do we need to? They should come up from the username search
         // We need this if we want to specify that they came from Facebook
