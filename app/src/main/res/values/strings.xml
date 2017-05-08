@@ -9,7 +9,6 @@
     <string name="filter_games_title">Filter by Tags</string>
     <string name="random_captions">Random Captions</string>
     <string name="caption_sets">Caption Sets</string>
-    <string name="leaving_title">You Are Now Leaving Snaption</string>
     <string name="game_closed_title">This Game is Closed!</string>
     <string name="create_game_title">Creating a New Game</string>
 
@@ -112,7 +111,6 @@
     <string name="flagged">Flagged</string>
     <string name="empty_wall">Nothing here!</string>
     <string name="give_feedback">Give Feedback</string>
-    <string name="leaving_content">Are you sure you want to exit Snaption and open your browser?</string>
     <string name="log_out_content">Are you sure you want to log out?</string>
     <string name="failed_caption_submission">Caption Submission Failed</string>
     <string name="no_internet">No Internet Connection</string>
@@ -138,6 +136,7 @@
     <string name="got_it">Got it</string>
     <string name="posted_by">Posted by %1$s</string>
     <string name="no_captions">No Captions!</string>
+    <string name="licenses">Open Source Licenses</string>
     <string name="participants">Participants</string>
     <string name="close">Close</string>
 
@@ -166,6 +165,7 @@
     <!-- Links -->
     <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.snaptiongame.app</string>
     <string name="feedback_url" translatable="false">https://docs.google.com/forms/d/e/1FAIpQLSdxx3G_deM6OJV8nj3SN94T2DkBq_rxB875qJ_H-e2q9mqf8g/viewform</string>
+    <string name="licenses_url" translatable="false">https://app.snaptiongame.com/android-licenses.html</string>
 
     <!-- Delete Friend Dialog -->
     <string name="delete_pre">Are you sure you want to remove</string>

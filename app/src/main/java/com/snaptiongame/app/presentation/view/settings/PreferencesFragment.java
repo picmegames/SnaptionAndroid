@@ -3,7 +3,6 @@ package com.snaptiongame.app.presentation.view.settings;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
@@ -13,6 +12,7 @@ import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,6 +33,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private Preference mCachePreference;
     private Preference mLogoutPreference;
     private Preference mVersionPreference;
+    private Preference mLicensesPreference;
     private Preference mFeedbackPreference;
     private PreferenceCategory mNotificationsCategory;
     private SwitchPreference mGameNotificationsPreference;
@@ -40,6 +41,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     private PreferencesContract.Presenter mPresenter;
     private PreferenceScreen mPreferenceScreen;
+    private MaterialDialog mLicensesDialog;
+    private MaterialDialog mFeedbackDialog;
+    private WebView mLicensesWebView;
+    private WebView mFeedbackWebView;
 
     private boolean mListStyled = false;
 
@@ -95,12 +100,17 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         mLogoutPreference = mPreferenceScreen.findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
         mVersionPreference = mPreferenceScreen.findPreference(getString(R.string.version_label));
+        mLicensesPreference = mPreferenceScreen.findPreference(getString(R.string.licenses));
+        mLicensesPreference.setOnPreferenceClickListener(this);
         mFeedbackPreference = mPreferenceScreen.findPreference(getString(R.string.give_feedback));
         mFeedbackPreference.setOnPreferenceClickListener(this);
 
         if (packageInfo != null) {
             mVersionPreference.setSummary(packageInfo.versionName);
         }
+        mLicensesWebView = new WebView(getActivity());
+        mFeedbackWebView = new WebView(getActivity());
+        mFeedbackWebView.getSettings().setJavaScriptEnabled(true);
 
         mPresenter.subscribe();
     }
@@ -203,17 +213,32 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         else if (key.equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
         }
+        else if (key.equals(getString(R.string.licenses))) {
+            mLicensesWebView.loadUrl(getString(R.string.licenses_url));
+            if (mLicensesDialog == null) {
+                mLicensesDialog = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.licenses)
+                        .customView(mLicensesWebView, false)
+                        .positiveText(R.string.close)
+                        .show();
+            }
+            else {
+                mLicensesDialog.show();
+            }
+        }
         else if (key.equals(getString(R.string.give_feedback))) {
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.leaving_title)
-                    .content(R.string.leaving_content)
-                    .positiveText(R.string.yes)
-                    .negativeText(R.string.no)
-                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.feedback_url)));
-                        startActivity(browserIntent);
-                    })
-                    .show();
+            mFeedbackWebView.reload();
+            mFeedbackWebView.loadUrl(getString(R.string.feedback_url));
+            if (mFeedbackDialog == null) {
+                mFeedbackDialog = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.give_feedback)
+                        .customView(mFeedbackWebView, false)
+                        .positiveText(R.string.close)
+                        .show();
+            }
+            else {
+                mFeedbackDialog.show();
+            }
         }
         else if (key.equals(getString(R.string.game_notifications))) {
             boolean userChoice = !AuthManager.isGameNotificationsEnabled();
