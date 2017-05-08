@@ -363,7 +363,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     mFriendsAdapter = new FriendsAdapter(new ArrayList<>());
 
                     mPrivateGameDialog = new MaterialDialog.Builder(this)
-                            .title(R.string.invited_users)
+                            .title(R.string.participants)
                             .adapter(mFriendsAdapter, new LinearLayoutManager(this))
                             .positiveText(R.string.close)
                             .cancelable(true)
