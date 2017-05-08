@@ -368,6 +368,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                             .positiveText(R.string.close)
                             .cancelable(true)
                             .show();
+
                     mPresenter.loadInvitedUsers(mGameId);
                 }
                 else {
