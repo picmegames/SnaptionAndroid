@@ -440,19 +440,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.feedback:
+                mWebView.reload();
                 mWebView.loadUrl(getString(R.string.feedback_url));
                 if (mFeedbackDialog == null) {
                     mFeedbackDialog = new MaterialDialog.Builder(this)
                             .title(R.string.give_feedback)
                             .customView(mWebView, false)
                             .positiveText(getString(R.string.close))
-                            .onAny((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                                mWebView.clearCache(true);
-                                mWebView.clearFormData();
-                                mWebView.clearHistory();
-                                mWebView.loadUrl(getString(R.string.about_blank));
-                                mWebView.reload();
-                            })
                             .show();
                 }
                 else {

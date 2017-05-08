@@ -164,7 +164,6 @@
     <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.snaptiongame.app</string>
     <string name="feedback_url" translatable="false">https://docs.google.com/forms/d/e/1FAIpQLSdxx3G_deM6OJV8nj3SN94T2DkBq_rxB875qJ_H-e2q9mqf8g/viewform</string>
     <string name="licenses_url" translatable="false">https://app.snaptiongame.com/android-licenses.html</string>
-    <string name="about_blank" translatable="false">about:blank</string>
 
     <!-- Delete Friend Dialog -->
     <string name="delete_pre">Are you sure you want to remove</string>
