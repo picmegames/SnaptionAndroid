@@ -120,6 +120,11 @@ public interface SnaptionApi {
     @GET("/Users")
     Observable<List<User>> getUsersByUsername(@Query("username") String username);
 
+
+
+    @GET("/Users")
+    Observable<List<User>> getUsersByFullName(@Query("fullName") String fullName);
+
     /**
      * This method sends a request to update a user with a PUT request.
      *

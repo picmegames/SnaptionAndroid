@@ -36,6 +36,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     private static final int EMAIL_QUERY = 1;
     private static final int USERNAMES_QUERY = 2;
+    private static final int FULLNAME_QUERY = 3;
 
     public FriendsPresenter(@NonNull FriendsContract.View friendView) {
         mFriendView = friendView;
@@ -60,6 +61,11 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .filter(user -> checkMyFriendsForDuplicate(user, USERNAMES_QUERY))
                 .map(Friend::new);
 
+        Observable<Friend> fullnameResults = UserProvider.getUsersByFullName(query)
+                .flatMapIterable(user -> user)
+                .filter(user -> checkMyFriendsForDuplicate(user, FULLNAME_QUERY))
+                .map(Friend::new);
+
         // Do we need to? They should come up from the username search
         // We need this if we want to specify that they came from Facebook
 //        Observable<Friend> facebook = FriendProvider.getFacebookFriends()
@@ -69,7 +75,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         //Note the order of concat matter
         //If an observable ends up being empty, it will trash the entire call. That is dumb
         //This is solved by using .defaultIsEmpty(new Friend(-1))
-        Disposable disposable = Observable.concat(usernameResults, friendResults, emailResults)
+        Disposable disposable = Observable.concat(usernameResults, friendResults, emailResults, fullnameResults)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mFriendView::addFriend,
