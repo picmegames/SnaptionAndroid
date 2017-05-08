@@ -295,7 +295,7 @@ public final class AuthManager {
     public void logout() {
         SessionProvider.logout()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(session -> {
+                .subscribe(() -> {
                             SharedPreferences.Editor editor = preferences.edit();
                             boolean isFacebook = preferences.getBoolean(FACEBOOK_LOGIN, false);
                             boolean isGoogle = preferences.getBoolean(GOOGLE_SIGN_IN, false);
@@ -327,7 +327,7 @@ public final class AuthManager {
                             clearLoginInfo();
                             ApiProvider.clearCookies();
                         },
-                        e-> Timber.e("Could not log out of Snaption", e)
+                        e -> Timber.e("Could not log out of Snaption", e)
                 );
     }
 

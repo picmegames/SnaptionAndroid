@@ -56,10 +56,10 @@ public interface SnaptionApi {
     Single<Session> userOAuthGoogle(@Body OAuthRequest request);
 
     /**
-     * This method will log a user out with a POST request.
+     * This method will log a user out with a GET request.
      */
-    @POST("/Logout/")
-    Single<Session> logout();
+    @GET("/Logout/")
+    Completable logout();
 
     /**
      * This method sends a request for a user with a GET request.

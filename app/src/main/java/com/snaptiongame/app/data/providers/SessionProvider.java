@@ -5,6 +5,7 @@ import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -22,7 +23,7 @@ public class SessionProvider {
         return apiService.userOAuthGoogle(request);
     }
 
-    public static Single<Session> logout() {
+    public static Completable logout() {
         return apiService.logout();
     }
 }
