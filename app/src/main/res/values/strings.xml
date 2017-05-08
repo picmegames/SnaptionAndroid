@@ -137,6 +137,8 @@
     <string name="posted_by">Posted by %1$s</string>
     <string name="no_captions">No Captions!</string>
     <string name="licenses">Open Source Licenses</string>
+    <string name="participants">Participants</string>
+    <string name="close">Close</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -179,6 +181,4 @@
     <string name="no_facebook">Facebook not installed</string>
     <string name="facebook_app" translatable="false">com.facebook.katana</string>
     <string name="is_private">Private Game</string>
-    <string name="invited_users">Invited Users</string>
-    <string name="close">close</string>
 </resources>

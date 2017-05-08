@@ -131,7 +131,7 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="posted_by">Publicado por %1$s</string>
     <string name="no_captions">No hay Subtítulos!</string>
     <string name="is_private">Juego Privado</string>
-    <string name="invited_users">Usuarios Invitados</string>
-    <string name="close">cierre</string>
     <string name="licenses">Licencias de Código Abierto</string>
+    <string name="participants">Participantes</string>
+    <string name="close">Cierre</string>
 </resources>
