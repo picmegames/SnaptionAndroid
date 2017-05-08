@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
+        mWebView = new WebView(this);
+        mWebView.getSettings().setJavaScriptEnabled(true);
 
         View headerView = mNavigationView.getHeaderView(0);
         mCoverPhoto = ButterKnife.findById(headerView, R.id.cover_photo);
@@ -444,6 +446,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             .title(R.string.give_feedback)
                             .customView(mWebView, false)
                             .positiveText(getString(R.string.close))
+                            .onAny((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+                                mWebView.clearCache(true);
+                                mWebView.clearFormData();
+                                mWebView.clearHistory();
+                                mWebView.loadUrl(getString(R.string.about_blank));
+                                mWebView.reload();
+                            })
                             .show();
                 }
                 else {

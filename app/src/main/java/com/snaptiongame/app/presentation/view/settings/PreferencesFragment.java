@@ -43,7 +43,8 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private PreferenceScreen mPreferenceScreen;
     private MaterialDialog mLicensesDialog;
     private MaterialDialog mFeedbackDialog;
-    private WebView mWebView;
+    private WebView mLicensesWebView;
+    private WebView mFeedbackWebView;
 
     private boolean mListStyled = false;
 
@@ -107,8 +108,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         if (packageInfo != null) {
             mVersionPreference.setSummary(packageInfo.versionName);
         }
-        mWebView = new WebView(getActivity());
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        mLicensesWebView = new WebView(getActivity());
+        mFeedbackWebView = new WebView(getActivity());
+        mFeedbackWebView.getSettings().setJavaScriptEnabled(true);
+
         mPresenter.subscribe();
     }
 
@@ -211,13 +214,12 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             mPresenter.clearCache();
         }
         else if (key.equals(getString(R.string.licenses))) {
-            mWebView.loadUrl(getString(R.string.licenses_url));
+            mLicensesWebView.loadUrl(getString(R.string.licenses_url));
             if (mLicensesDialog == null) {
                 mLicensesDialog = new MaterialDialog.Builder(getActivity())
                         .title(R.string.licenses)
-                        .customView(mWebView, false)
+                        .customView(mLicensesWebView, false)
                         .positiveText(R.string.close)
-                        .cancelable(true)
                         .show();
             }
             else {
@@ -225,12 +227,13 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             }
         }
         else if (key.equals(getString(R.string.give_feedback))) {
-            mWebView.loadUrl(getString(R.string.feedback_url));
+            mFeedbackWebView.reload();
+            mFeedbackWebView.loadUrl(getString(R.string.feedback_url));
             if (mFeedbackDialog == null) {
                 mFeedbackDialog = new MaterialDialog.Builder(getActivity())
                         .title(R.string.give_feedback)
-                        .customView(mWebView, false)
-                        .positiveText(getString(R.string.close))
+                        .customView(mFeedbackWebView, false)
+                        .positiveText(R.string.close)
                         .show();
             }
             else {
