@@ -42,4 +42,8 @@ public class UserProvider {
     public static Observable<List<User>> getUsersByUsername(String username) {
         return apiService.getUsersByUsername(username);
     }
+
+    public static Observable<List<User>> getUsersByFullName(String fullName) {
+        return apiService.getUsersByFullName(fullName);
+    }
 }
