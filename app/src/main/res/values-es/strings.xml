@@ -48,7 +48,6 @@
     <string name="no_friends">No se pudo encontrar amigos</string>
     <string name="log_in_label">Iniciar Sesión</string>
     <string name="current_login">Conectado como: %1$s</string>
-    <string name="unflag">Deshacer la Bandera</string>
     <string name="login_failure">Error al iniciar sesión</string>
     <string name="game_open">¡ABIERTO!</string>
     <string name="invite_friend">¡Invitar a un Amigo!</string>
@@ -60,10 +59,10 @@
     <string name="nothing_here">¡Nada aquí todavía!</string>
     <string name="experience">Experiencia</string>
     <string name="rank">Rango</string>
-    <string name="ask_flag_game">¿Estás seguro de que quieres marcar este juego?</string>
+    <string name="ask_flag_game">¿Estás seguro de que quieres marcar este juego? Esto eliminará el juego de la pared y no se puede deshacer.</string>
     <string name="flag_alert_game">Juego de Bandera</string>
     <string name="flag_alert_caption">Leyenda de la Bandera</string>
-    <string name="ask_flag_caption">¿Estás seguro de que quieres marcar este título?</string>
+    <string name="ask_flag_caption">¿Estás seguro de que quieres marcar este título? Esto eliminará el título de su lista.</string>
     <string name="filter_games_title">Filtrar por Etiquetas</string>
     <string name="clear">Claro</string>
     <string name="upvote">Votar</string>
@@ -99,7 +98,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="add_friend">Añade Amigo</string>
     <string name="find_friends">¡Encuentra a tus amigos!</string>
     <string name="flagged">Marcado</string>
-    <string name="unflagged">Bandera eliminada</string>
     <string name="empty_wall">¡Nada aquí!</string>
     <string name="give_feedback">Da Tu Opinión</string>
     <string name="leaving_content">¿Está seguro de que desea salir de Snaption y abrir su navegador?</string>

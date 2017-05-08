@@ -57,7 +57,7 @@ public class CaptionAdapterTest {
         captions2.add(caption2);
         captions2.add(caption3);
 
-        captionAdapter = new CaptionAdapter(captions);
+        captionAdapter = new CaptionAdapter(captions, null);
     }
 
     @Test

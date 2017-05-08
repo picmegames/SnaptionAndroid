@@ -57,12 +57,11 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.getCaptions(mGameId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::processCaptions,
+                        mGameView::showCaptions,
                         e -> {
                             Timber.e(e);
                             mGameView.setRefreshing(false);
-                        },
-                        () -> Timber.i("Loading captions completed successfully.")
+                        }
                 );
         mDisposables.add(disposable);
     }
@@ -81,10 +80,6 @@ public class GamePresenter implements GameContract.Presenter {
     @Override
     public void shareToFacebook(AppCompatActivity activity, ImageView image) {
         FacebookShareProvider.shareToFacebook(activity, image);
-    }
-
-    private void processCaptions(List<Caption> captions) {
-        mGameView.showCaptions(captions);
     }
 
     @Override
