@@ -56,7 +56,6 @@
     <string name="share_to_facebook">Share to Facebook</string>
     <string name="create_game">Create Game</string>
     <string name="flag">Flag as Inappropriate</string>
-    <string name="unflag">Undo Flag</string>
     <string name="default_caption">Be the first to caption this image!</string>
     <string name="game_open">OPEN!</string>
     <string name="game_closed">CLOSED</string>
@@ -87,9 +86,9 @@
     <string name="update">Update</string>
     <string name="nothing_here">Nothing here yet!</string>
     <string name="flag_alert_game">Flag Game</string>
-    <string name="ask_flag_game">Are you sure you want to flag this game?</string>
+    <string name="ask_flag_game">Are you sure you want to flag this game? This will remove the game from your wall and can\'t be undone.</string>
     <string name="flag_alert_caption">Flag Caption</string>
-    <string name="ask_flag_caption">Are you sure you want to flag this caption?</string>
+    <string name="ask_flag_caption">Are you sure you want to flag this caption? This will remove the caption from your list.</string>
     <string name="clear">Clear</string>
     <string name="upvote">Upvote</string>
     <string name="upvoted">Upvoted!</string>
@@ -111,7 +110,6 @@
     <string name="current_size">Current Size: %1$s</string>
     <string name="back">Back</string>
     <string name="flagged">Flagged</string>
-    <string name="unflagged">Unflagged</string>
     <string name="empty_wall">Nothing here!</string>
     <string name="give_feedback">Give Feedback</string>
     <string name="leaving_content">Are you sure you want to exit Snaption and open your browser?</string>

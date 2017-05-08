@@ -965,7 +965,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             upvoteGame();
         }
         else {
-            // TODO handle flagged game here
+            Toast.makeText(this, R.string.flagged, Toast.LENGTH_LONG).show();
+            onBackPressed();
         }
     }
 
