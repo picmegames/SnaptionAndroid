@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * @author Tyler Wong
@@ -19,8 +20,11 @@ import io.reactivex.Observable;
 public class CaptionProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
-    public static Observable<List<Caption>> getCaptions(int gameId) {
-        return apiService.getCaptions(gameId);
+    public static Single<List<Caption>> getCaptions(int gameId) {
+        return apiService.getCaptions(gameId)
+                .flatMapIterable(captions -> captions)
+                .filter(caption -> !caption.beenFlagged)
+                .toList();
     }
 
     public static Observable<List<FitBCaption>> getFitBCaptions(int setId) {

@@ -7,7 +7,7 @@ import com.snaptiongame.app.data.providers.GameProvider;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -58,7 +58,7 @@ public class WallPresenter implements WallContract.Presenter {
             mTags = tags;
         }
 
-        Observable<List<Game>> gameRequest;
+        Single<List<Game>> gameRequest;
         switch (type) {
             case WallContract.DISCOVER:
                 gameRequest = GameProvider.getDiscoverGames(mTags);
@@ -77,14 +77,14 @@ public class WallPresenter implements WallContract.Presenter {
         Disposable disposable = gameRequest
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mWallView::showGames,
+                        games -> {
+                            mWallView.showGames(games);
+                            Timber.i("Getting Snaptions completed successfully");
+                            mWallView.setRefreshing(false);
+                        },
                         e -> {
                             Timber.e(e);
                             mWallView.showDisconnectedView();
-                            mWallView.setRefreshing(false);
-                        },
-                        () -> {
-                            Timber.i("Getting Snaptions completed successfully");
                             mWallView.setRefreshing(false);
                         }
                 );
