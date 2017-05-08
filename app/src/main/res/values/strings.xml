@@ -138,6 +138,7 @@
     <string name="got_it">Got it</string>
     <string name="posted_by">Posted by %1$s</string>
     <string name="no_captions">No Captions!</string>
+    <string name="licenses">Open Source Licenses</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

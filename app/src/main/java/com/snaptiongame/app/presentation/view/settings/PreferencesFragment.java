@@ -33,6 +33,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private Preference mCachePreference;
     private Preference mLogoutPreference;
     private Preference mVersionPreference;
+    private Preference mLicensesPreference;
     private Preference mFeedbackPreference;
     private PreferenceCategory mNotificationsCategory;
     private SwitchPreference mGameNotificationsPreference;
@@ -95,6 +96,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         mLogoutPreference = mPreferenceScreen.findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
         mVersionPreference = mPreferenceScreen.findPreference(getString(R.string.version_label));
+        mLicensesPreference = mPreferenceScreen.findPreference(getString(R.string.licenses));
         mFeedbackPreference = mPreferenceScreen.findPreference(getString(R.string.give_feedback));
         mFeedbackPreference.setOnPreferenceClickListener(this);
 
@@ -202,6 +204,9 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         }
         else if (key.equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
+        }
+        else if (key.equals(getString(R.string.licenses))) {
+            // TODO go to list of libraries
         }
         else if (key.equals(getString(R.string.give_feedback))) {
             new MaterialDialog.Builder(getActivity())

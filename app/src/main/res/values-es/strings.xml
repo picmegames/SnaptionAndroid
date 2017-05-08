@@ -135,4 +135,5 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="is_private">Juego Privado</string>
     <string name="invited_users">Usuarios Invitados</string>
     <string name="close">cierre</string>
+    <string name="licenses">Licencias de Código Abierto</string>
 </resources>
