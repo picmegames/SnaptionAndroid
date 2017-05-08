@@ -360,6 +360,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 break;
             case R.id.isPrivate:
                 if (mPrivateGameDialog == null) {
+                    mFriendsAdapter = new FriendsAdapter(new ArrayList<>());
+
+                    mPrivateGameDialog = new MaterialDialog.Builder(this)
+                            .title(R.string.invited_users)
+                            .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                            .positiveText(R.string.close)
+                            .cancelable(true)
+                            .show();
                     mPresenter.loadInvitedUsers(mGameId);
                 }
                 else {
@@ -525,14 +533,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void showPrivateGameDialog(List<Friend> invitedUsers) {
-        mFriendsAdapter = new FriendsAdapter(invitedUsers);
-
-        mPrivateGameDialog = new MaterialDialog.Builder(this)
-                .title(R.string.invited_users)
-                .adapter(mFriendsAdapter, new LinearLayoutManager(this))
-                .positiveText(R.string.close)
-                .cancelable(true)
-                .show();
+        mFriendsAdapter.setFriends(invitedUsers);
     }
 
     private void rotateIcon(float rotation, int duration, int whichIcon) {
