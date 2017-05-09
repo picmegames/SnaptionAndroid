@@ -62,6 +62,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     TextView mNumberOfUpvotes;
     @BindView(R.id.game_status)
     TextView mGameStatus;
+    CircleImageView mCreatorImage;
 
     public Context mContext;
     public PopupMenu mMenu;
@@ -80,14 +81,19 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
     private static final int CREATOR_ALPHA = 128;
 
-    public GameCardViewHolder(View itemView, ItemListener listener) {
+    public GameCardViewHolder(View itemView, ItemListener listener, boolean isList) {
         super(itemView);
         mContext = itemView.getContext();
         mView = itemView;
         ButterKnife.bind(this, itemView);
         mListener = listener;
 
-        mCreatorContent.getBackground().setAlpha(CREATOR_ALPHA);
+        if (isList) {
+            mCreatorImage = ButterKnife.findById(itemView, R.id.creator_image);
+        }
+        else {
+            mCreatorContent.getBackground().setAlpha(CREATOR_ALPHA);
+        }
 
         mMenu = new PopupMenu(mContext, itemView);
         mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());

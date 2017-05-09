@@ -62,7 +62,7 @@ public class WallAdapter extends RecyclerView.Adapter {
     public GameCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(isList ? R.layout.game_card_list : R.layout.game_card_grid, parent, false);
-        return new GameCardViewHolder(view, mCallback);
+        return new GameCardViewHolder(view, mCallback, isList);
     }
 
     @Override
@@ -124,6 +124,27 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mCaptionerImage.setVisibility(View.GONE);
             holder.mCaptionerName.setVisibility(View.GONE);
             holder.mTopCaption.setVisibility(View.GONE);
+        }
+
+        if (isList) {
+            if (curGame.creatorImage != null) {
+                Glide.with(holder.mContext)
+                        .load(curGame.creatorImage)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                        .dontAnimate()
+                        .into(holder.mCreatorImage);
+            }
+            else {
+                holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
+                        .beginConfig()
+                        .width(AVATAR_SIZE_GRID)
+                        .height(AVATAR_SIZE_GRID)
+                        .toUpperCase()
+                        .endConfig()
+                        .buildRound(curGame.creatorName.substring(0, 1),
+                                ColorGenerator.MATERIAL.getColor(curGame.creatorName)));
+            }
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted);
