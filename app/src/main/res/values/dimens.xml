@@ -10,5 +10,4 @@
     <dimen name="divider_height">1px</dimen>
     <dimen name="keyline_1">72dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="max_image_height">500dp</dimen>
 </resources>
