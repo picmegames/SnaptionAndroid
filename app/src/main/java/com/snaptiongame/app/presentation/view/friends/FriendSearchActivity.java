@@ -43,7 +43,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     private FriendsAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
 
-    private static final String BLANK_DELIMITER = "\\s+";
+    private static final String SEARCH_ICON = "android:id/search_mag_icon";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mSearchView.setOnQueryTextListener(this);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            int searchIconId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+            int searchIconId = getResources().getIdentifier(SEARCH_ICON, null, null);
             ImageView searchIcon = ButterKnife.findById(this, searchIconId);
             if (searchIcon != null) {
                 searchIcon.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
@@ -89,7 +89,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     }
 
     private void handleSearch(String query) {
-        String realQuery = query.replaceAll(BLANK_DELIMITER, "");
+        String realQuery = query.trim();
         mAdapter.clearFriends();
 
         if (realQuery.isEmpty()) {

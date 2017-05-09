@@ -30,22 +30,34 @@ public class GameProvider {
                 .map(GameProvider::reverseGames);
     }
 
-    public static Observable<List<Game>> getUserGames(List<String> tags) {
+    public static Single<List<Game>> getUserGames(List<String> tags) {
         return apiService.getUserGames(tags)
-                .map(GameProvider::reverseGames);
+                .map(GameProvider::reverseGames)
+                .flatMapIterable(games -> games)
+                .filter(game -> !game.beenFlagged)
+                .toList();
     }
 
-    public static Observable<List<Game>> getDiscoverGames(List<String> tags) {
-        return apiService.getDiscoverGames(tags);
+    public static Single<List<Game>> getDiscoverGames(List<String> tags) {
+        return apiService.getDiscoverGames(tags)
+                .flatMapIterable(games -> games)
+                .filter(game -> !game.beenFlagged)
+                .toList();
     }
 
-    public static Observable<List<Game>> getPopularGames(List<String> tags) {
-        return apiService.getPopularGames(tags);
+    public static Single<List<Game>> getPopularGames(List<String> tags) {
+        return apiService.getPopularGames(tags)
+                .flatMapIterable(games -> games)
+                .filter(game -> !game.beenFlagged)
+                .toList();
     }
 
-    public static Observable<List<Game>> getUserGameHistory(int userId) {
+    public static Single<List<Game>> getUserGameHistory(int userId) {
         return apiService.getUserGameHistory(userId)
-                .map(GameProvider::reverseGames);
+                .map(GameProvider::reverseGames)
+                .flatMapIterable(games -> games)
+                .filter(game -> !game.beenFlagged)
+                .toList();
     }
 
     public static Single<Game> getGame(int gameId, String token) {

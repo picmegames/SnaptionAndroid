@@ -56,6 +56,12 @@ public interface SnaptionApi {
     Single<Session> userOAuthGoogle(@Body OAuthRequest request);
 
     /**
+     * This method will log a user out with a GET request.
+     */
+    @GET("/Logout/")
+    Completable logout();
+
+    /**
      * This method sends a request for a user with a GET request.
      *
      * @param userId The id of the desired user.
@@ -119,6 +125,14 @@ public interface SnaptionApi {
      */
     @GET("/Users")
     Observable<List<User>> getUsersByUsername(@Query("username") String username);
+
+    /**
+     * This method sends a request for a user with a GET request
+     * @param fullName The desired user's Full Name
+     * @return An observable that emits a list of potential matches
+     */
+    @GET("/Users")
+    Observable<List<User>> getUsersByFullName(@Query("fullName") String fullName);
 
     /**
      * This method sends a request to update a user with a PUT request.
