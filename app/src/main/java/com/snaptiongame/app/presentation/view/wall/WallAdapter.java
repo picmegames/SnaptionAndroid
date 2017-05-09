@@ -33,10 +33,12 @@ public class WallAdapter extends RecyclerView.Adapter {
     private List<Game> mGames;
     private final ItemListener mCallback;
 
+    private boolean isList = false;
     private int lastPosition = -1;
     private long currentTime;
 
-    private static final int AVATAR_SIZE = 30;
+    private static final int AVATAR_SIZE_GRID = 30;
+    private static final int AVATAR_SIZE_LIST = 40;
 
     public WallAdapter(List<Game> snaptions) {
         this.mGames = snaptions;
@@ -59,7 +61,7 @@ public class WallAdapter extends RecyclerView.Adapter {
     @Override
     public GameCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.game_card, parent, false);
+                .inflate(isList ? R.layout.game_card_list : R.layout.game_card_grid, parent, false);
         return new GameCardViewHolder(view, mCallback);
     }
 
@@ -106,8 +108,8 @@ public class WallAdapter extends RecyclerView.Adapter {
             else {
                 holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
                         .beginConfig()
-                        .width(AVATAR_SIZE)
-                        .height(AVATAR_SIZE)
+                        .width(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
+                        .height(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
                         .toUpperCase()
                         .endConfig()
                         .buildRound(curGame.topCaption.creatorName.substring(0, 1),
@@ -137,6 +139,10 @@ public class WallAdapter extends RecyclerView.Adapter {
         }
 
         setAnimation(holder.itemView, position);
+    }
+
+    public void setIsList(boolean isList) {
+        this.isList = isList;
     }
 
     private void setAnimation(View view, int position) {

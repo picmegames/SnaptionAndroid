@@ -37,7 +37,7 @@ public class ProfileInfoPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case HISTORY_PAGE:
-                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.HISTORY);
+                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.HISTORY, false);
                 break;
 
             case MORE_INFO_PAGE:
