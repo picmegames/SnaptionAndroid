@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.presentation.view.utils.AnimUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,38 +38,14 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
 
     public Context mContext;
 
-    private static final long ANIMATION_DURATION = 150;
-    private static final float GONE_SIZE = 0f;
-    private static final float HALF_SIZE = 0.5f;
-    private static final float FULL_SIZE = 1.0f;
-
     public FriendViewHolder(View itemView, FriendItemListener callback) {
         super(itemView);
         mContext = itemView.getContext();
         mCallback = callback;
         ButterKnife.bind(this, itemView);
 
-        final ScaleAnimation growAnim = new ScaleAnimation(GONE_SIZE, FULL_SIZE, GONE_SIZE, FULL_SIZE,
-                Animation.RELATIVE_TO_SELF, HALF_SIZE, Animation.RELATIVE_TO_SELF, HALF_SIZE);
-        final ScaleAnimation shrinkAnim = new ScaleAnimation(FULL_SIZE, GONE_SIZE, FULL_SIZE, GONE_SIZE,
-                Animation.RELATIVE_TO_SELF, HALF_SIZE, Animation.RELATIVE_TO_SELF, HALF_SIZE);
-
-        growAnim.setDuration(ANIMATION_DURATION);
-        shrinkAnim.setDuration(ANIMATION_DURATION);
-
-        growAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-        });
+        final ScaleAnimation growAnim = AnimUtils.getGrowAnim();
+        final ScaleAnimation shrinkAnim = AnimUtils.getShrinkAnim();
 
         shrinkAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
