@@ -95,11 +95,12 @@ public class NotificationService extends FirebaseMessagingService {
                 stackBuilder.addParentStack(ProfileActivity.class);
             }
 
+            int notificationIdentifier = (int) ((new Date().getTime() / THOUSAND) % Integer.MAX_VALUE);
             stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(notificationIdentifier, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify((int) ((new Date().getTime() / THOUSAND) % Integer.MAX_VALUE), builder.build());
+            notificationManager.notify(notificationIdentifier, builder.build());
         }
     }
 }

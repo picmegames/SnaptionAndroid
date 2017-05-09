@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
+import com.snaptiongame.app.presentation.view.utils.AnimUtils;
 import com.snaptiongame.app.presentation.view.utils.ItemListener;
 
 import butterknife.BindView;
@@ -104,8 +107,30 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             mImage.setClipToOutline(true);
         }
 
+        final ScaleAnimation growAnimation = AnimUtils.getGrowAnim();
+        final ScaleAnimation shrinkAnimation = AnimUtils.getShrinkAnim();
+
+        shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
+            boolean upvoted;//Race Condition fix
+            @Override
+            public void onAnimationStart(Animation animation) {
+                upvoted = isUpvoted;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setUpvoteIcon(upvoted);
+                mUpvoteButton.startAnimation(growAnimation);
+            }
+        });
+
         mUpvoteView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
+                mUpvoteButton.startAnimation(shrinkAnimation);
                 upvoteGame();
             }
             else {
@@ -184,15 +209,13 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setBeenUpvoted() {
         if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
             isUpvoted = false;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) - 1));
         }
         else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
             isUpvoted = true;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) + 1));
-            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
         }
         Timber.i("Successfully updated upvote!");
         mListener.updateUpvote(isUpvoted, getAdapterPosition());
@@ -245,5 +268,14 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                         () -> {},
                         Timber::e
                 );
+    }
+
+    private void setUpvoteIcon(boolean isGameUpvoted) {
+        if (isGameUpvoted) {
+            mUpvoteButton.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
+        }
+        else {
+            mUpvoteButton.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
+        }
     }
 }
