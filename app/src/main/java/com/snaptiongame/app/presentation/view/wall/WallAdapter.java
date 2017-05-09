@@ -142,7 +142,7 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .into(holder.mCreatorImage);
             }
             else {
-                holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
+                holder.mCreatorImage.setImageDrawable(TextDrawable.builder()
                         .beginConfig()
                         .width(AVATAR_SIZE_GRID)
                         .height(AVATAR_SIZE_GRID)
