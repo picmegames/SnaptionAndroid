@@ -35,6 +35,9 @@ public class ImageUtils {
     private static final int NUM_BYTES = 1024;
     private static final float MIDDLE_FACTOR = 2.0f;
     private static final int QUALITY = 100;
+    private static final int NINETY_DEGREES = 90;
+    private static final int ONE_EIGHTY_DEGREES = 180;
+    private static final int TWO_SEVENTY_DEGREES = 270;
     private static final String FOLDER = "Pictures/Snaption";
     private static final String JPEG = ".jpg";
 
@@ -127,13 +130,13 @@ public class ImageUtils {
             Matrix matrix = new Matrix();
 
             if (orientation == 6) {
-                matrix.postRotate(90);
+                matrix.postRotate(NINETY_DEGREES);
             }
             else if (orientation == 3) {
-                matrix.postRotate(180);
+                matrix.postRotate(ONE_EIGHTY_DEGREES);
             }
             else if (orientation == 8) {
-                matrix.postRotate(270);
+                matrix.postRotate(TWO_SEVENTY_DEGREES);
             }
             scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,
                     scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix,
