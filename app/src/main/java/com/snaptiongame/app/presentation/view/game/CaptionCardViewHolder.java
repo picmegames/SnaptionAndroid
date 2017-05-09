@@ -9,6 +9,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,9 +23,10 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.CaptionProvider;
-import com.snaptiongame.app.presentation.view.utils.ItemListener;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
+import com.snaptiongame.app.presentation.view.utils.AnimUtils;
+import com.snaptiongame.app.presentation.view.utils.ItemListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,8 +72,30 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
         mListener = listener;
 
+        final ScaleAnimation growAnimation = AnimUtils.getGrowAnim();
+        final ScaleAnimation shrinkAnimation = AnimUtils.getShrinkAnim();
+
+        shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
+            boolean upvoted;//Race Condition fix
+            @Override
+            public void onAnimationStart(Animation animation) {
+                upvoted = isUpvoted;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setUpvote(upvoted);
+                mUpvote.startAnimation(growAnimation);
+            }
+        });
+
         mUpvoteView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
+                mUpvote.startAnimation(shrinkAnimation);
                 upvoteCaption();
             }
             else {
@@ -126,15 +151,13 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setBeenUpvoted() {
         if (isUpvoted) {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
             isUpvoted = false;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) - 1));
         }
         else {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
             isUpvoted = true;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) + 1));
-            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
         }
         mListener.updateUpvote(isUpvoted, getAdapterPosition());
     }
@@ -185,5 +208,14 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                         },
                         Timber::e
                 );
+    }
+
+    private void setUpvote(boolean isGameUpvoted) {
+        if (isGameUpvoted) {
+            mUpvote.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
+        }
+        else {
+            mUpvote.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
+        }
     }
 }

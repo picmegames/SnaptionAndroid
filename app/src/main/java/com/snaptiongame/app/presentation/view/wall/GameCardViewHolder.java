@@ -226,7 +226,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         else {
             isUpvoted = true;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) + 1));
-            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
         }
         Timber.i("Successfully updated upvote!");
         mListener.updateUpvote(isUpvoted, getAdapterPosition());
