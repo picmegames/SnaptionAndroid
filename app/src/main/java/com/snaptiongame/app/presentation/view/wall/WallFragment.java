@@ -149,19 +149,22 @@ public class WallFragment extends Fragment implements WallContract.View {
     }
 
     public void switchLayout(boolean isList) {
-        mAdapter.setIsList(isList);
-        mWall.setAdapter(mAdapter);
-        mItemSpacesDecoration.setIsList(isList);
+        if (mAdapter != null && mWall != null && mItemSpacesDecoration != null) {
+            mAdapter.setIsList(isList);
+            mWall.setAdapter(mAdapter);
 
-        if (isList) {
-            mWall.setLayoutManager(mLinearLayoutManager);
-            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
+            mItemSpacesDecoration.setIsList(isList);
+
+            if (isList) {
+                mWall.setLayoutManager(mLinearLayoutManager);
+                mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
+            }
+            else {
+                mWall.setLayoutManager(mStaggeredGridLayoutManager);
+                mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
+            }
+            mItemSpacesDecoration.setSpacing(mSpace);
         }
-        else {
-            mWall.setLayoutManager(mStaggeredGridLayoutManager);
-            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
-        }
-        mItemSpacesDecoration.setSpacing(mSpace);
     }
 
     /**
