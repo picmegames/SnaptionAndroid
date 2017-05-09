@@ -90,7 +90,11 @@ public class WallAdapter extends RecyclerView.Adapter {
         else {
             Glide.clear(holder.mImage);
         }
-        holder.mCreatorName.setText(String.format(holder.mContext.getString(R.string.posted_by), curGame.creatorName));
+        String creatorName = String.format(holder.mContext.getString(R.string.posted_by), curGame.creatorName);
+        if (isList) {
+            creatorName = curGame.creatorName;
+        }
+        holder.mCreatorName.setText(creatorName);
 
         if (curGame.topCaption != null) {
             holder.mCaptionerImage.setVisibility(View.VISIBLE);
