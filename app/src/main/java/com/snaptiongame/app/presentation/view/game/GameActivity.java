@@ -323,7 +323,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
             }
             isUpvoted = true;
-            Toast.makeText(this, getString(R.string.upvoted), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -398,6 +397,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 if (AuthManager.isLoggedIn()) {
                     mPresenter.upvoteOrFlagGame(new GameAction(mGameId, !isUpvoted, GameAction.UPVOTE,
                             GameAction.GAME_ID));
+                    upvoteGame();
                 }
                 else {
                     goToLogin();
@@ -962,13 +962,24 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     @Override
-    public void updateGame(String type) {
+    public void onGameUpdated(String type) {
+        if (type.equals(GameAction.FLAGGED)) {
+            Toast.makeText(this, getString(R.string.flagged), Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
+        else if (type.equals(GameAction.UPVOTE) && isUpvoted) {
+            Toast.makeText(this, getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onGameErrored(String type) {
         if (type.equals(GameAction.UPVOTE)) {
             upvoteGame();
+            Toast.makeText(this, getString(R.string.upvote_fail), Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(this, R.string.flagged, Toast.LENGTH_LONG).show();
-            onBackPressed();
+            Toast.makeText(this, getString(R.string.flagged_fail), Toast.LENGTH_SHORT).show();
         }
     }
 

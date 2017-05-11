@@ -138,4 +138,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
         <item quantity="one">%d día restante</item>
         <item quantity="other">%d días restantes</item>
     </plurals>
+    <string name="upvote_fail">Falló al subir el juego</string>
+    <string name="flagged_fail">No pudo marcar el juego</string>
 </resources>
