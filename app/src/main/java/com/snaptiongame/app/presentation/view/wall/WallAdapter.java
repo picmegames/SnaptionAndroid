@@ -157,9 +157,16 @@ public class WallAdapter extends RecyclerView.Adapter {
             }
             ViewCompat.setTransitionName(holder.mCreatorImage, holder.mContext.getString(R.string.profile_transition));
 
-            int daysRemaining = DateUtils.getDaysRemaining(curGame.endDate);
-            holder.mDaysRemaining.setText(holder.mContext.getResources().getQuantityString(
-                    R.plurals.days_left, daysRemaining, daysRemaining));
+            int[] timeRemaining = DateUtils.getTimeRemaining(curGame.endDate);
+
+            if (timeRemaining[1] == DateUtils.DAY) {
+                holder.mDaysRemaining.setText(holder.mContext.getResources().getQuantityString(
+                        R.plurals.days_left, timeRemaining[0], timeRemaining[0]));
+            }
+            else {
+                holder.mDaysRemaining.setText(holder.mContext.getResources().getQuantityString(
+                        R.plurals.hours_left, timeRemaining[0], timeRemaining[0]));
+            }
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted);

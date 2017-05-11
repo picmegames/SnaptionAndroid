@@ -10,6 +10,9 @@ public class DateUtils {
     public static final long TWO_WEEKS_OFFSET = 1123200000;
     public static final long TWO_WEEKS = 1209600000;
     public static final long ONE_DAY = 86400000;
+    public static final long SECONDS_IN_HOUR = 3600;
+    public static final int DAY = 0;
+    public static final int HOUR = 1;
 
     public static long getNow() {
         return System.currentTimeMillis() / MILLIS;
@@ -23,11 +26,23 @@ public class DateUtils {
         return date <= getNow();
     }
 
-    public static int getDaysRemaining(long date) {
+    public static int[] getTimeRemaining(long date) {
         long dateDiff = date - getNow();
+        long daySeconds = ONE_DAY / MILLIS;
+        int[] timeArr = new int[2];
+
         if (dateDiff <= 0) {
-            return 0;
+            timeArr[0] = 0;
+            timeArr[1] = DAY;
         }
-        return (int) Math.ceil(dateDiff / (ONE_DAY / MILLIS));
+        else if (dateDiff < daySeconds) {
+            timeArr[0] = (int) Math.ceil(dateDiff / SECONDS_IN_HOUR);
+            timeArr[1] = HOUR;
+        }
+        else {
+            timeArr[0] = (int) Math.ceil(dateDiff / daySeconds);
+            timeArr[1] = DAY;
+        }
+        return timeArr;
     }
 }
