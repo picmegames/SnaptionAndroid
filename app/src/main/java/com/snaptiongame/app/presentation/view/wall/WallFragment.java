@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -51,23 +52,29 @@ public class WallFragment extends Fragment implements WallContract.View {
     private WallContract.Presenter mPresenter;
     private WallAdapter mAdapter;
     private Unbinder mUnbinder;
+    private LinearLayoutManager mLinearLayoutManager;
+    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
+    private WallSpacesItemDecoration mItemSpacesDecoration;
     private int mUserId;
     private int mType;
+    private int mSpace;
     public static final String TAG = WallFragment.class.getSimpleName();
 
     public static final int NUM_COLUMNS = 2;
     public static final String USER_ID = "userId";
     public static final String TYPE = "type";
+    public static final String IS_LIST = "isList";
 
     /**
      * This method provides a new instance of a Wall Fragment.
      *
      * @return An instance of a Wall Fragment
      */
-    public static WallFragment getInstance(int userId, int type) {
+    public static WallFragment getInstance(int userId, int type, boolean isList) {
         Bundle args = new Bundle();
         args.putInt(USER_ID, userId);
         args.putInt(TYPE, type);
+        args.putBoolean(IS_LIST, isList);
         WallFragment wallFragment = new WallFragment();
         wallFragment.setArguments(args);
         return wallFragment;
@@ -91,14 +98,26 @@ public class WallFragment extends Fragment implements WallContract.View {
         mUnbinder = ButterKnife.bind(this, view);
         mUserId = getArguments().getInt(USER_ID);
         mType = getArguments().getInt(TYPE);
+        boolean isList = getArguments().getBoolean(IS_LIST);
         mPresenter = new WallPresenter(this, mUserId, mType);
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
 
-        mWall.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
-        mWall.addItemDecoration(new WallSpacesItemDecoration(
-                getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing)));
+        if (isList) {
+            mWall.setLayoutManager(mLinearLayoutManager);
+            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
+        }
+        else {
+            mWall.setLayoutManager(mStaggeredGridLayoutManager);
+            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
+        }
+
+        mItemSpacesDecoration = new WallSpacesItemDecoration(mSpace, isList);
+        mWall.addItemDecoration(mItemSpacesDecoration);
         mWall.setHasFixedSize(true);
 
         mAdapter = new WallAdapter(new ArrayList<>());
+        mAdapter.setIsList(isList);
         mWall.setAdapter(mAdapter);
         
         mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType, null));
@@ -126,6 +145,25 @@ public class WallFragment extends Fragment implements WallContract.View {
         // Do not refresh wall in onResume if on Discover tab
         if (mType != WallContract.DISCOVER && mWall != null) {
             mPresenter.subscribe();
+        }
+    }
+
+    public void switchLayout(boolean isList) {
+        if (mAdapter != null && mWall != null && mItemSpacesDecoration != null) {
+            mAdapter.setIsList(isList);
+            mWall.setAdapter(mAdapter);
+
+            mItemSpacesDecoration.setIsList(isList);
+
+            if (isList) {
+                mWall.setLayoutManager(mLinearLayoutManager);
+                mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
+            }
+            else {
+                mWall.setLayoutManager(mStaggeredGridLayoutManager);
+                mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
+            }
+            mItemSpacesDecoration.setSpacing(mSpace);
         }
     }
 

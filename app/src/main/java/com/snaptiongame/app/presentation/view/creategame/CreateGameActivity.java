@@ -43,6 +43,7 @@ import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
+import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
@@ -97,10 +98,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
-    private static final long MILLIS = 1000;
-    private static final long TWO_WEEKS_OFFSET = 1123200000;
-    private static final long TWO_WEEKS = 1209600000;
-    private static final long ONE_DAY = 86400000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -177,7 +174,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
-        mDays = ONE_DAY / MILLIS;
+        mDays = DateUtils.ONE_DAY / DateUtils.MILLIS;
     }
 
     @Override
@@ -324,15 +321,15 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 long selectedDay = calendar.getTime().getTime();
                 mDays = selectedDay - today;
 
-                if (mDays > TWO_WEEKS) {
-                    mDays = TWO_WEEKS / MILLIS;
+                if (mDays > DateUtils.TWO_WEEKS) {
+                    mDays = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
                 }
                 else {
-                    mDays /= MILLIS;
+                    mDays /= DateUtils.MILLIS;
                 }
             }, mYear, mMonth, mDayOfMonth);
             mDatePickerDialog.getDatePicker().setMinDate(mCalendar.getTime().getTime());
-            mDatePickerDialog.getDatePicker().setMaxDate(mCalendar.getTime().getTime() + TWO_WEEKS_OFFSET);
+            mDatePickerDialog.getDatePicker().setMaxDate(mCalendar.getTime().getTime() + DateUtils.TWO_WEEKS_OFFSET);
             mDatePickerDialog.show();
         }
         else {

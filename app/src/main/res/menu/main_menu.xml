@@ -21,4 +21,11 @@
         android:title="@string/filter"
         android:orderInCategory="0"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/layout"
+        android:icon="@drawable/ic_view_stream_white_24dp"
+        android:title="@string/wall_label"
+        android:orderInCategory="0"
+        app:showAsAction="always"/>
 </menu>

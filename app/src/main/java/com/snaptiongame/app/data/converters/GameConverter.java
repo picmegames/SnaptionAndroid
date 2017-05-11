@@ -56,19 +56,19 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
     public Game deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject content = json.getAsJsonObject();
-        JsonObject pickerObject = content.get(Game.PICKER).getAsJsonObject();
+        JsonObject creatorObject = content.get(Game.PICKER).getAsJsonObject();
 
         Game game = new Game(
                 content.get(Game.ID).getAsInt(),
                 content.get(Game.START_DATE).getAsLong(),
                 content.get(Game.IS_PUBLIC).getAsBoolean(),
-                pickerObject.get(Game.ID).getAsInt(), "", "");
+                creatorObject.get(Game.ID).getAsInt(), "", "");
 
         game.numUpvotes = content.get(Game.NUM_UPVOTES).getAsInt();
-        game.creatorName = pickerObject.get(User.USERNAME).getAsString();
+        game.creatorName = creatorObject.get(User.USERNAME).getAsString();
 
-        if (!pickerObject.get(User.PICTURE).isJsonNull()) {
-            game.creatorImage = pickerObject.get(User.PICTURE).getAsJsonObject().get(User.IMAGE_URL).getAsString();
+        if (!creatorObject.get(User.PICTURE).isJsonNull()) {
+            game.creatorImage = creatorObject.get(User.PICTURE).getAsJsonObject().get(User.IMAGE_URL).getAsString();
         }
 
         JsonObject picture = content.getAsJsonObject(Game.PICTURE);
@@ -137,6 +137,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 caption.creatorPicture = topCaptionerPicture.getAsJsonObject().get(User.IMAGE_URL).getAsString();
             }
 
+            caption.creatorId = topCaption.getAsJsonObject().get(Caption.USER_ID).getAsInt();
             caption.creatorName = topCaption.getAsJsonObject().get(Caption.USERNAME).getAsString();
             game.topCaption = caption;
         }
