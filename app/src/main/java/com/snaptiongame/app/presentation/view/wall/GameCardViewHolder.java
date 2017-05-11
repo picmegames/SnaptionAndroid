@@ -170,7 +170,6 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                setUpvoteIcon(upvoted);
                 mUpvoteButton.startAnimation(growAnimation);
             }
         });
@@ -231,6 +230,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setBeenUpvoted() {
+        setUpvoteIcon(isUpvoted);
         if (isUpvoted) {
             isUpvoted = false;
             mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) - 1));
@@ -271,7 +271,10 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::setBeenUpvoted,
-                        Timber::e
+                        e -> {
+                            Toast.makeText(mContext, mContext.getString(R.string.upvote_fail), Toast.LENGTH_SHORT).show();
+                            Timber.e(e);
+                        }
                 );
     }
 
@@ -280,7 +283,10 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         () -> mListener.updateFlag(getAdapterPosition(), this),
-                        Timber::e
+                        e -> {
+                            Toast.makeText(mContext, mContext.getString(R.string.flagged_fail), Toast.LENGTH_SHORT).show();
+                            Timber.e(e);
+                        }
                 );
     }
 
