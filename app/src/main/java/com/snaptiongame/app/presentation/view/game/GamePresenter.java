@@ -11,9 +11,7 @@ import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.FitBCaption;
-import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.GameAction;
-import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
@@ -71,8 +69,11 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> mGameView.updateGame(request.choiceType),
-                        Timber::e
+                        () -> mGameView.onGameUpdated(request.choiceType),
+                        e -> {
+                            mGameView.onGameErrored(request.choiceType);
+                            Timber.e(e);
+                        }
                 );
         mDisposables.add(disposable);
     }
