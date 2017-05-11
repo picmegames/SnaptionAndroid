@@ -139,8 +139,10 @@
     <string name="licenses">Open Source Licenses</string>
     <string name="participants">Participants</string>
     <string name="close">Close</string>
-    <string name="day_remaining">1 day remaining</string>
-    <string name="days_remaining">%1$s days remaining</string>
+    <plurals name="days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

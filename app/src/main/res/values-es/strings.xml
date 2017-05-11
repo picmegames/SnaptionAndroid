@@ -134,6 +134,8 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="licenses">Licencias de Código Abierto</string>
     <string name="participants">Participantes</string>
     <string name="close">Cierre</string>
-    <string name="day_remaining">1 día restante</string>
-    <string name="days_remaining">%1$s días restantes</string>
+    <plurals name="days_left">
+        <item quantity="one">%d día restante</item>
+        <item quantity="other">%d días restantes</item>
+    </plurals>
 </resources>
