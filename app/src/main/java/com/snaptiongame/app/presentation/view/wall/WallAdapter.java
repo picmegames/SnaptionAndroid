@@ -121,7 +121,11 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .buildRound(curGame.topCaption.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curGame.topCaption.creatorName)));
             }
+            ViewCompat.setTransitionName(holder.mCaptionerImage, holder.mContext.getString(R.string.profile_transition));
             holder.mCaptionerName.setText(curGame.topCaption.creatorName);
+            holder.mCaptionerId = curGame.topCaption.creatorId;
+            holder.mCaptioner = curGame.topCaption.creatorName;
+            holder.mCaptionerImageUrl = curGame.topCaption.creatorPicture;
             holder.mTopCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
                     TextStyleUtils.getTextUnderlined(curGame.topCaption.caption),
                     curGame.topCaption.assocFitB.afterBlank));
@@ -150,6 +154,17 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .endConfig()
                         .buildRound(curGame.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curGame.creatorName)));
+            }
+            ViewCompat.setTransitionName(holder.mCreatorImage, holder.mContext.getString(R.string.profile_transition));
+
+            int daysRemaining = DateUtils.getDaysRemaining(curGame.endDate);
+
+            if (daysRemaining != 1) {
+                holder.mDaysRemaining.setText(String.format(
+                        holder.mContext.getString(R.string.days_remaining), String.valueOf(daysRemaining)));
+            }
+            else {
+                holder.mDaysRemaining.setText(holder.mContext.getString(R.string.day_remaining));
             }
         }
 

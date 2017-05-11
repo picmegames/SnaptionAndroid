@@ -11,26 +11,25 @@
         android:background="@drawable/rounded_corners"
         android:contentDescription="@string/app_name"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/creator_content"
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:layout_alignTop="@+id/image"
         android:background="@drawable/top_rounded_corners"
-        android:orientation="horizontal"
         android:padding="4dp">
 
         <TextView
             android:id="@+id/creator_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginStart="4dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@android:color/white"
             android:textSize="12sp"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/top_caption"

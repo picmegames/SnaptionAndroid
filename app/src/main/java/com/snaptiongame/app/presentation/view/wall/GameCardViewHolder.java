@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
+import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
@@ -31,6 +33,7 @@ import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
+import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.utils.AnimUtils;
 import com.snaptiongame.app.presentation.view.utils.ItemListener;
 
@@ -56,7 +59,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.creator_name)
     TextView mCreatorName;
     @BindView(R.id.creator_content)
-    LinearLayout mCreatorContent;
+    RelativeLayout mCreatorContent;
     @BindView(R.id.upvote)
     ImageView mUpvoteButton;
     @BindView(R.id.upvote_view)
@@ -66,6 +69,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.game_status)
     TextView mGameStatus;
     CircleImageView mCreatorImage;
+    TextView mDaysRemaining;
 
     public Context mContext;
     public PopupMenu mMenu;
@@ -76,6 +80,9 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     public int mCreatorId;
     public String mCreator;
     public String mCreatorImageUrl;
+    public int mCaptionerId;
+    public String mCaptioner;
+    public String mCaptionerImageUrl;
     public String mImageUrl;
     public boolean isClosed;
     public boolean isPublic;
@@ -91,17 +98,56 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
         mListener = listener;
 
+        PopupMenu.OnMenuItemClickListener menuItemClickListener = item -> {
+            switch (item.getItemId()) {
+                case R.id.create_game:
+                    if (AuthManager.isLoggedIn()) {
+                        startCreateGame();
+                    }
+                    else {
+                        goToLogin();
+                    }
+                    break;
+                case R.id.share:
+                    FacebookShareProvider.shareToFacebook((AppCompatActivity) mContext, mImage);
+                    break;
+                case R.id.flag:
+                    if (AuthManager.isLoggedIn()) {
+                        setBeenFlagged();
+                    }
+                    else {
+                        goToLogin();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        };
+
         if (isList) {
             mCreatorImage = ButterKnife.findById(itemView, R.id.creator_image);
+            mDaysRemaining = ButterKnife.findById(itemView, R.id.days_remaining);
+
+            ImageView moreButton = ButterKnife.findById(itemView, R.id.more_button);
+            mMenu = new PopupMenu(mContext, moreButton);
+            moreButton.setOnClickListener(view -> {
+                mMenu.setOnMenuItemClickListener(menuItemClickListener);
+                mMenu.show();
+            });
+
+            mCreatorImage.setOnClickListener(view -> goToProfile(mCreatorId, mCreator, mCreatorImageUrl, view));
         }
         else {
             mCreatorContent.getBackground().setAlpha(CREATOR_ALPHA);
-        }
 
-        mMenu = new PopupMenu(mContext, itemView);
-        mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
-        mMenu.getMenu().findItem(R.id.invite_friend_to_game).setVisible(false);
-        mMenu.getMenu().findItem(R.id.upvote).setVisible(false);
+            mMenu = new PopupMenu(mContext, mImage);
+            mImage.setOnLongClickListener(view -> {
+                mMenu.setOnMenuItemClickListener(menuItemClickListener);
+                mMenu.show();
+                return true;
+            });
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mImage.setClipToOutline(true);
@@ -111,7 +157,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         final ScaleAnimation shrinkAnimation = AnimUtils.getShrinkAnim();
 
         shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
-            boolean upvoted;//Race Condition fix
+            boolean upvoted;
+
             @Override
             public void onAnimationStart(Animation animation) {
                 upvoted = isUpvoted;
@@ -138,39 +185,11 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        itemView.setOnLongClickListener(view -> {
-            mMenu.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case R.id.create_game:
-                        if (AuthManager.isLoggedIn()) {
-                            startCreateGame();
-                        }
-                        else {
-                            goToLogin();
-                        }
-                        break;
-                    case R.id.share:
-                        FacebookShareProvider.shareToFacebook((AppCompatActivity) mContext, mImage);
-                        break;
-                    case R.id.flag:
-                        if (AuthManager.isLoggedIn()) {
-                            setBeenFlagged();
-                        }
-                        else {
-                            goToLogin();
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            });
+        mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
+        mMenu.getMenu().findItem(R.id.invite_friend_to_game).setVisible(false);
+        mMenu.getMenu().findItem(R.id.upvote).setVisible(false);
 
-            mMenu.show();
-            return true;
-        });
-
-        itemView.setOnClickListener(view -> {
+        mImage.setOnClickListener(view -> {
             Intent gameIntent = new Intent(mContext, GameActivity.class);
             gameIntent.putExtra(Game.ID, mGameId);
             gameIntent.putExtra(Game.CREATOR_NAME, mCreator);
@@ -189,6 +208,10 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             }
             mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
         });
+
+        mCaptionerImage.setOnClickListener(view ->
+                goToProfile(mCaptionerId, mCaptioner, mCaptionerImageUrl, view)
+        );
     }
 
     private void goToLogin() {
@@ -265,7 +288,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         GameProvider.upvoteOrFlagGame(new GameAction(mGameId, false, GameAction.FLAGGED, GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> {},
+                        () -> {
+                        },
                         Timber::e
                 );
     }
@@ -277,5 +301,17 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         else {
             mUpvoteButton.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
         }
+    }
+
+    private void goToProfile(int userId, String username, String userImageUrl, View view) {
+        Intent profileIntent = new Intent(mContext, ProfileActivity.class);
+        profileIntent.putExtra(User.USERNAME, username);
+        profileIntent.putExtra(User.IMAGE_URL, userImageUrl);
+        profileIntent.putExtra(User.ID, userId);
+
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation((AppCompatActivity) mContext, view,
+                        ViewCompat.getTransitionName(view));
+        mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
     }
 }

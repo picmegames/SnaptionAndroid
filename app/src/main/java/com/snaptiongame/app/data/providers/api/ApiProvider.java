@@ -81,7 +81,7 @@ public class ApiProvider {
     private static final String CERT_TYPE = "X.509";
     private static final String CA = "ca";
     private static final String TLS = "TLS";
-    private static final long CONNECTION_TIMEOUT = 10;
+    private static final long CONNECTION_TIMEOUT = 60;
 
     /**
      * This method provides and handles the creation of
@@ -117,6 +117,7 @@ public class ApiProvider {
         JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .readTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
 
         try {
