@@ -30,30 +30,30 @@ public class GameProvider {
                 .map(GameProvider::reverseGames);
     }
 
-    public static Single<List<Game>> getUserGames(List<String> tags) {
-        return apiService.getUserGames(tags)
+    public static Single<List<Game>> getUserGames(List<String> tags, int page) {
+        return apiService.getUserGames(tags, page)
                 .map(GameProvider::reverseGames)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
 
-    public static Single<List<Game>> getDiscoverGames(List<String> tags) {
-        return apiService.getDiscoverGames(tags)
+    public static Single<List<Game>> getDiscoverGames(List<String> tags, int page) {
+        return apiService.getDiscoverGames(tags, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
 
-    public static Single<List<Game>> getPopularGames(List<String> tags) {
-        return apiService.getPopularGames(tags)
+    public static Single<List<Game>> getPopularGames(List<String> tags, int page) {
+        return apiService.getPopularGames(tags, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
 
-    public static Single<List<Game>> getUserGameHistory(int userId) {
-        return apiService.getUserGameHistory(userId)
+    public static Single<List<Game>> getUserGameHistory(int userId, int page) {
+        return apiService.getUserGameHistory(userId, page)
                 .map(GameProvider::reverseGames)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)

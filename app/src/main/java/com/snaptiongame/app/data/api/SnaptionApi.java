@@ -159,7 +159,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/mine")
-    Observable<List<Game>> getUserGames(@Query("tag") List<String> tags);
+    Observable<List<Game>> getUserGames(@Query("tag") List<String> tags, @Query("page") int page);
 
     /**
      * This method sends a request to get a list of the current
@@ -168,7 +168,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/discover")
-    Observable<List<Game>> getDiscoverGames(@Query("tag") List<String> tags);
+    Observable<List<Game>> getDiscoverGames(@Query("tag") List<String> tags, @Query("page") int page);
 
     /**
      * This method sends a request to get a list of the current
@@ -177,7 +177,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/popular")
-    Observable<List<Game>> getPopularGames(@Query("tag") List<String> tags);
+    Observable<List<Game>> getPopularGames(@Query("tag") List<String> tags, @Query("page") int page);
 
     /**
      * This method sends a request to get a list of the games
@@ -186,7 +186,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/UserGame/History")
-    Observable<List<Game>> getUserGameHistory(@Query("creator") int userId);
+    Observable<List<Game>> getUserGameHistory(@Query("creator") int userId, @Query("page") int page);
 
     /**
      * This method sends a request to get a single game

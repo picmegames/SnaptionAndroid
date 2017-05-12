@@ -1,5 +1,10 @@
 package com.snaptiongame.app.data.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.snaptiongame.app.R;
+
 /**
  * @author Tyler Wong
  */
@@ -26,23 +31,22 @@ public class DateUtils {
         return date <= getNow();
     }
 
-    public static int[] getTimeRemaining(long date) {
+    public static String getTimeLeftLabel(Context context, long date) {
         long dateDiff = date - getNow();
         long daySeconds = ONE_DAY / MILLIS;
-        int[] timeArr = new int[2];
+        int timeLeft = 0;
+        Resources res = context.getResources();
 
         if (dateDiff <= 0) {
-            timeArr[0] = 0;
-            timeArr[1] = DAY;
+            return res.getQuantityString(R.plurals.days_left, timeLeft, timeLeft);
         }
         else if (dateDiff < daySeconds) {
-            timeArr[0] = (int) Math.ceil(dateDiff / SECONDS_IN_HOUR);
-            timeArr[1] = HOUR;
+            timeLeft = (int) Math.ceil(dateDiff / SECONDS_IN_HOUR);
+            return res.getQuantityString(R.plurals.hours_left, timeLeft, timeLeft);
         }
         else {
-            timeArr[0] = (int) Math.ceil(dateDiff / daySeconds);
-            timeArr[1] = DAY;
+            timeLeft = (int) Math.ceil(dateDiff / daySeconds);
+            return res.getQuantityString(R.plurals.days_left, timeLeft, timeLeft);
         }
-        return timeArr;
     }
 }

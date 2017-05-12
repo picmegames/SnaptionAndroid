@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.customviews;
+package com.snaptiongame.app.presentation.view.decorations;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

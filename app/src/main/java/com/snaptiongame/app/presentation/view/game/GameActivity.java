@@ -69,7 +69,7 @@ import com.snaptiongame.app.data.services.notifications.NotificationService;
 import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
-import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
+import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;

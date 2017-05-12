@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.utils;
+package com.snaptiongame.app.presentation.view.listeners;
 
 import android.support.v7.widget.RecyclerView;
 

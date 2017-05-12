@@ -26,7 +26,7 @@ import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.utils.AnimUtils;
-import com.snaptiongame.app.presentation.view.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
