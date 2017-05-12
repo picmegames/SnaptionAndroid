@@ -18,8 +18,9 @@ public abstract class InfiniteRecyclerViewScrollListener extends RecyclerView.On
     private int previousTotalItemCount = 0;
     // True if we are still waiting for the last set of data to load.
     private boolean loading = true;
+
     // Sets the starting page index
-    private int startingPageIndex = 0;
+    private static final int START_PAGE = 1;
 
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -27,7 +28,7 @@ public abstract class InfiniteRecyclerViewScrollListener extends RecyclerView.On
         mLayoutManager = layoutManager;
 
         if (layoutManager instanceof StaggeredGridLayoutManager) {
-            visibleThreshold = visibleThreshold * ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
+            visibleThreshold *= ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
         }
     }
 
@@ -64,7 +65,7 @@ public abstract class InfiniteRecyclerViewScrollListener extends RecyclerView.On
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
         if (totalItemCount < previousTotalItemCount) {
-            currentPage = startingPageIndex;
+            currentPage = START_PAGE;
             previousTotalItemCount = totalItemCount;
             if (totalItemCount == 0) {
                 loading = true;
@@ -95,7 +96,7 @@ public abstract class InfiniteRecyclerViewScrollListener extends RecyclerView.On
 
     // Call this method whenever performing new searches
     public void resetState() {
-        currentPage = startingPageIndex;
+        currentPage = START_PAGE;
         previousTotalItemCount = 0;
         loading = true;
     }
