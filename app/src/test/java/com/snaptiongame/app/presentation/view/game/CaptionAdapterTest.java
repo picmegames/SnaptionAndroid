@@ -62,7 +62,7 @@ public class CaptionAdapterTest {
 
     @Test
     public void testSetCaptions() {
-        captionAdapter.setCaptions(captions2);
+        captionAdapter.addCaptions(captions2);
         assertEquals(captionAdapter.getCaptions(), captions2);
     }
 
