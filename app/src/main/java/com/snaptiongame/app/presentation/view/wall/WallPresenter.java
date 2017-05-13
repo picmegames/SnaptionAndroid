@@ -96,7 +96,7 @@ public class WallPresenter implements WallContract.Presenter {
     @Override
     public void subscribe() {
         mWallView.setRefreshing(true);
-        loadGames(mType, null, 1);
+        loadGames(mType, mTags, 1);
     }
 
     /**
