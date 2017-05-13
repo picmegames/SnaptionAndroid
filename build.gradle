@@ -44,6 +44,7 @@ ext {
     butterknifeVersion = '8.5.1'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'
+    leakCanaryVersion = '1.5.1'
     mockitoVersion = '2.7.1'
     robolectricVersion = '3.3.2'
     timberVersion = '4.5.1'

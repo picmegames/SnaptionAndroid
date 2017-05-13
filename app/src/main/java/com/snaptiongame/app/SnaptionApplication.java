@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.snaptiongame.app.data.auth.AuthManager;
+import com.squareup.leakcanary.LeakCanary;
 
 import io.branch.referral.Branch;
 import timber.log.Timber;
@@ -29,6 +30,13 @@ public class SnaptionApplication extends Application {
 
         // INIT Authentication Manager
         AuthManager.init(context);
+
+        // INIT Leak Canary (Memory leak checking)
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+
+        LeakCanary.install(this);
 
         if (BuildConfig.DEBUG) {
             // INIT Timber (Logger for debug builds)
