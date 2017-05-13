@@ -118,11 +118,16 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         ((CaptionCardViewHolder) holder).itemView.clearAnimation();
     }
 
-    public void setCaptions(List<Caption> captions) {
-        if (!mCaptions.equals(captions)) {
-            mCaptions = captions;
-            notifyDataSetChanged();
-        }
+    public void addCaptions(List<Caption> captions) {
+        int oldSize = mCaptions.size();
+        mCaptions.addAll(captions);
+        notifyItemRangeInserted(oldSize, mCaptions.size() - 1);
+    }
+
+    public void clear() {
+        int oldSize = mCaptions.size();
+        mCaptions.clear();
+        notifyItemRangeRemoved(0, oldSize);
     }
 
     public List<Caption> getCaptions() {

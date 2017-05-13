@@ -71,6 +71,7 @@ import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
+import com.snaptiongame.app.presentation.view.listeners.InfiniteRecyclerViewScrollListener;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -153,6 +154,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private TextWatcher mTextWatcher;
     private MaterialDialog mPrivateGameDialog;
     private FriendsAdapter mFriendsAdapter;
+    private InfiniteRecyclerViewScrollListener mScrollListener;
 
     private enum CaptionState {
         List, Random, Sets, Typed, Typed_Empty
@@ -266,18 +268,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 Timber.e("Branch errored with " + error.getMessage());
             }
         }, intent.getData(), this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mCaptionList.setLayoutManager(layoutManager);
-        mAdapter = new CaptionAdapter(new ArrayList<>(), mCaptionList);
-        mCaptionList.setAdapter(mAdapter);
-        mDecoration = new InsetDividerDecoration(
-                CaptionCardViewHolder.class,
-                getResources().getDimensionPixelSize(R.dimen.divider_height),
-                getResources().getDimensionPixelSize(R.dimen.keyline_1),
-                ContextCompat.getColor(this, R.color.divider));
-        mCaptionList.addItemDecoration(mDecoration);
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -560,6 +550,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mFitBAdapter.resetCaption();
         mFitBEditTextField.setText("");
         mFitBEditTextLayout.setHint("");
+        mAdapter.clear();
         mPresenter.addCaption(mFitBAdapter.getCaption(mCurrentCaption).id,
                 curEntry);
         mRefreshLayout.setRefreshing(true);
@@ -705,7 +696,33 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
 
         mPresenter = new GamePresenter(id, this);
-        mRefreshLayout.setOnRefreshListener(mPresenter::loadCaptions);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mCaptionList.setLayoutManager(layoutManager);
+
+        mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mPresenter.loadCaptions(page);
+            }
+        };
+
+        mAdapter = new CaptionAdapter(new ArrayList<>(), mCaptionList);
+        mCaptionList.setAdapter(mAdapter);
+        mCaptionList.addOnScrollListener(mScrollListener);
+        mDecoration = new InsetDividerDecoration(
+                CaptionCardViewHolder.class,
+                getResources().getDimensionPixelSize(R.dimen.divider_height),
+                getResources().getDimensionPixelSize(R.dimen.keyline_1),
+                ContextCompat.getColor(this, R.color.divider));
+        mCaptionList.addItemDecoration(mDecoration);
+
+        mRefreshLayout.setOnRefreshListener(() -> {
+            mAdapter.clear();
+            mScrollListener.resetState();
+            mPresenter.loadCaptions(1);
+        });
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
@@ -832,8 +849,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     @Override
     public void showCaptions(List<Caption> captions) {
-        mAdapter.setCaptions(captions);
+        mAdapter.addCaptions(captions);
         mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void resetScrollState() {
+        mScrollListener.resetState();
     }
 
     @Override

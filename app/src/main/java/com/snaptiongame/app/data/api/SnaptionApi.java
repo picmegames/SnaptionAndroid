@@ -244,7 +244,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Caption objects
      */
     @GET("/Games/{gameId}/Captions/")
-    Observable<List<Caption>> getCaptions(@Path("gameId") int gameId);
+    Observable<List<Caption>> getCaptions(@Path("gameId") int gameId, @Query("page") int page);
 
     /**
      * This method sends a request to add a caption to a game
