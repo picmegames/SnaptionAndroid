@@ -175,7 +175,10 @@ public class WallFragment extends Fragment implements WallContract.View {
      * @param tags a list of user defined tags to filter by
      */
     public void filterGames(List<String> tags) {
+        setRefreshing(true);
+        mAdapter.clear();
         mTags = tags;
+        mScrollListener.resetState();
         mPresenter.loadGames(mType, mTags, 1);
     }
 
