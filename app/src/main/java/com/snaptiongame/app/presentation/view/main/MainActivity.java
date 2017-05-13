@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
-    private static final int CREATE_GAME_CODE = 7777;
+    private static final int RESULT_CODE = 7777;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -551,12 +551,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void goToCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-        startActivityForResult(createGameIntent, CREATE_GAME_CODE);
+        startActivityForResult(createGameIntent, RESULT_CODE);
     }
 
     private void goToLogin() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        startActivityForResult(loginIntent, RESULT_CODE);
     }
 
     private void hideKeyboard() {
@@ -572,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CREATE_GAME_CODE && resultCode == RESULT_OK) {
+        if (requestCode == RESULT_CODE && resultCode == RESULT_OK) {
             refreshWall();
         }
     }

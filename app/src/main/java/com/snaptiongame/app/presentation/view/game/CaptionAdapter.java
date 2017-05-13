@@ -121,7 +121,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
     public void addCaptions(List<Caption> captions) {
         int oldSize = mCaptions.size();
         mCaptions.addAll(captions);
-        notifyItemRangeInserted(oldSize, mCaptions.size() - 1);
+        notifyItemRangeInserted(oldSize, mCaptions.size());
     }
 
     public void clear() {

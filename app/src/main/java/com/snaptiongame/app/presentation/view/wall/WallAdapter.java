@@ -191,7 +191,7 @@ public class WallAdapter extends RecyclerView.Adapter {
         int oldSize = mGames.size();
         mGames.addAll(games);
         currentTime = DateUtils.getNow();
-        notifyItemRangeInserted(oldSize, mGames.size() - 1);
+        notifyItemRangeInserted(oldSize, mGames.size());
     }
 
     public void clear() {
