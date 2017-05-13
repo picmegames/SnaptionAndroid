@@ -44,6 +44,7 @@ android {
 
     dexOptions {
         javaMaxHeapSize "4g"
+        jumboMode true
     }
 
     lintOptions {
