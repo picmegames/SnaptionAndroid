@@ -146,4 +146,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="flagged_fail">No pudo marcar el juego</string>
     <string name="go_to_friends_page">Ir a la página de amigos</string>
     <string name="no_friends_yet">No hay amigos todavía</string>
+    <string name="no_friends_message">Parece que no has añadido ningún amigo todavía. ¡Dirija encendido encima a la página de los amigos para agregar algo!</string>
+
 </resources>
