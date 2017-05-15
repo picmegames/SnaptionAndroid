@@ -11,9 +11,7 @@ import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
 import com.snaptiongame.app.data.models.FitBCaption;
-import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.GameAction;
-import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
@@ -53,8 +51,8 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
-    public void loadCaptions() {
-        Disposable disposable = CaptionProvider.getCaptions(mGameId)
+    public void loadCaptions(int page) {
+        Disposable disposable = CaptionProvider.getCaptions(mGameId, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mGameView::showCaptions,
@@ -71,8 +69,11 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> mGameView.updateGame(request.choiceType),
-                        Timber::e
+                        () -> mGameView.onGameUpdated(request.choiceType),
+                        e -> {
+                            mGameView.onGameErrored(request.choiceType);
+                            Timber.e(e);
+                        }
                 );
         mDisposables.add(disposable);
     }
@@ -87,7 +88,10 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::loadCaptions,
+                        () -> {
+                            mGameView.resetScrollState();
+                            loadCaptions(1);
+                        },
                         e -> {
                             Timber.e(e);
                             mGameView.setRefreshing(false);
@@ -205,7 +209,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadCaptions();
+        loadCaptions(1);
         loadRandomFITBCaptions();
     }
 

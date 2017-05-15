@@ -31,13 +31,17 @@ public class GameContract {
 
         void showPrivateGameDialog(List<Friend> invitedUsers);
 
-        void updateGame(String type);
+        void onGameUpdated(String type);
+
+        void onGameErrored(String type);
 
         void setRefreshing(boolean isRefreshing);
+
+        void resetScrollState();
     }
 
     interface Presenter extends BasePresenter {
-        void loadCaptions();
+        void loadCaptions(int page);
 
         void loadCaptionSets();
 

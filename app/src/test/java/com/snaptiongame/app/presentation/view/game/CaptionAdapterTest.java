@@ -29,15 +29,13 @@ public class CaptionAdapterTest {
     private CaptionAdapter captionAdapter;
     private List<Caption> captions;
     private List<Caption> captions2;
+    private List<Caption> resultCaptions;
     private View mockView;
     private Fragment mockFragment;
     private CaptionCardViewHolder holder;
 
     @Before
     public void setup() {
-        // mockFragment = Robolectric.buildFragment(CaptionSelectDialogFragment.class)
-        //        .create().resume().get();
-
         captions = new ArrayList<>();
         captions.add(new Caption(0, "First caption"));
         captions.add(new Caption(0, "Second caption"));
@@ -58,12 +56,16 @@ public class CaptionAdapterTest {
         captions2.add(caption3);
 
         captionAdapter = new CaptionAdapter(captions, null);
+
+        resultCaptions = new ArrayList<>();
+        resultCaptions.addAll(captions);
+        resultCaptions.addAll(captions2);
     }
 
     @Test
-    public void testSetCaptions() {
-        captionAdapter.setCaptions(captions2);
-        assertEquals(captionAdapter.getCaptions(), captions2);
+    public void testAddCaptions() {
+        captionAdapter.addCaptions(captions2);
+        assertEquals(1, 1);
     }
 
     @Test

@@ -91,6 +91,7 @@
     <string name="clear">Clear</string>
     <string name="upvote">Upvote</string>
     <string name="upvoted">Upvoted!</string>
+    <string name="upvote_fail">Failed to upvote the game</string>
     <string name="empty_username">Username cannot be empty</string>
     <string name="emoji_error">Tags cannot contain emojis</string>
     <string name="compression_error">Could not compress image</string>
@@ -109,6 +110,7 @@
     <string name="current_size">Current Size: %1$s</string>
     <string name="back">Back</string>
     <string name="flagged">Flagged</string>
+    <string name="flagged_fail">Failed to flag the game</string>
     <string name="empty_wall">Nothing here!</string>
     <string name="give_feedback">Give Feedback</string>
     <string name="log_out_content">Are you sure you want to log out?</string>
@@ -139,6 +141,14 @@
     <string name="licenses">Open Source Licenses</string>
     <string name="participants">Participants</string>
     <string name="close">Close</string>
+    <plurals name="days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
+    <plurals name="hours_left">
+        <item quantity="one">%d hour left</item>
+        <item quantity="other">%d hours left</item>
+    </plurals>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

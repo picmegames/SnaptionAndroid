@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="item_spacing">8dp</dimen>
+    <dimen name="item_spacing_grid">8dp</dimen>
+    <dimen name="item_spacing_list">16dp</dimen>
     <dimen name="image_final_width">40dp</dimen>
     <dimen name="chip_height">32dp</dimen>
     <dimen name="chip_spacing">4dp</dimen>
@@ -9,5 +10,4 @@
     <dimen name="divider_height">1px</dimen>
     <dimen name="keyline_1">72dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="max_image_height">500dp</dimen>
 </resources>

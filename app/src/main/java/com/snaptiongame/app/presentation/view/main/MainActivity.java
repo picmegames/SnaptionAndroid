@@ -93,13 +93,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int mUserId;
     private int rightMargin;
     private int bottomMargin;
-    private boolean lastLoggedInState = false;
-    private boolean comingFromGameActivity = false;
+    private boolean mIsList = false;
+    private boolean mLastLoggedInState = false;
+    private boolean mComingFromGameActivity = false;
 
     private static final String TEXT_TYPE = "text/plain";
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
+    private static final int RESULT_CODE = 7777;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -179,13 +181,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initializeWallFragments() {
         if (!AuthManager.isLoggedIn()) {
-            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
+            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER, mIsList);
             mBottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
             mActionBar.setTitle(R.string.discover);
             setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
         }
         else {
-            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
+            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL, mIsList);
             mBottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
             mActionBar.setTitle(R.string.my_wall);
             setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -201,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupWall() {
         if (mMenu != null) {
             mMenu.findItem(R.id.filter).setVisible(true);
+            mMenu.findItem(R.id.layout).setVisible(true);
             mMenu.findItem(R.id.search).setVisible(false);
             mMenu.findItem(R.id.share).setVisible(false);
         }
@@ -228,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (mBottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
                 mBottomNavigationView.getMenu()
                         .add(0, R.id.my_wall, Menu.FIRST, getString(R.string.my_wall))
-                        .setIcon(R.drawable.ic_face_white_24dp);
+                        .setIcon(R.drawable.ic_account_circle_white_24dp);
             }
             mBottomNavigationView.setSelectedItemId(initItem);
         }
@@ -245,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .priority(Priority.IMMEDIATE)
                 .dontAnimate()
                 .into(mProfilePicture);
+
         Glide.with(this)
                 .load(profileImageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -254,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new BlurTransformation(this, BLUR_RADIUS),
                         new ColorFilterTransformation(this, R.color.colorPrimary))
                 .into(mCoverPhoto);
+
         mNameView.setText(name);
         mEmailView.setText(email);
     }
@@ -268,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setComingFromGameActivity(boolean comingFromGameActivity) {
-        this.comingFromGameActivity = comingFromGameActivity;
+        this.mComingFromGameActivity = comingFromGameActivity;
     }
 
     @Override
@@ -276,13 +281,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         setHeader();
 
-        if (lastLoggedInState != AuthManager.isLoggedIn()) {
+        if (mLastLoggedInState != AuthManager.isLoggedIn()) {
             setupWall();
-            lastLoggedInState = AuthManager.isLoggedIn();
+            mLastLoggedInState = AuthManager.isLoggedIn();
 
-            if (!comingFromGameActivity) {
+            if (!mComingFromGameActivity) {
                 initializeWallFragments();
-                comingFromGameActivity = false;
+                mComingFromGameActivity = false;
             }
         }
     }
@@ -311,6 +316,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.filter:
                 showFilterDialog();
+                break;
+            case R.id.layout:
+                mIsList = !mIsList;
+                ((WallFragment) mCurrentFragment).switchLayout(mIsList);
+
+                if (mIsList) {
+                    mMenu.findItem(R.id.layout).setIcon(R.drawable.ic_dashboard_white_24dp);
+                }
+                else {
+                    mMenu.findItem(R.id.layout).setIcon(R.drawable.ic_view_stream_white_24dp);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -366,6 +382,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void refreshWall() {
+        if (fragTag.equals(WallFragment.TAG)) {
+            ((WallFragment) mCurrentFragment).refreshWall();
+        }
+    }
+
     private void sendInviteIntent() {
         String smsBody = getString(R.string.invite_message) +
                 getString(R.string.store_url);
@@ -389,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
-                    mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL);
+                    mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL, mIsList);
                     fragTag = WallFragment.TAG;
                     mBottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
                     mActionBar.setTitle(R.string.my_wall);
@@ -399,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
             case R.id.discover:
-                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER);
+                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER, mIsList);
                 fragTag = WallFragment.TAG;
                 mBottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
                 mActionBar.setTitle(R.string.discover);
@@ -408,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.popular:
-                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.POPULAR);
+                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.POPULAR, mIsList);
                 fragTag = WallFragment.TAG;
                 mBottomNavigationView.getMenu().findItem(R.id.popular).setChecked(true);
                 mActionBar.setTitle(R.string.popular);
@@ -424,6 +446,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                 mMenu.findItem(R.id.filter).setVisible(false);
+                mMenu.findItem(R.id.layout).setVisible(false);
                 mMenu.findItem(R.id.search).setVisible(true);
                 mMenu.findItem(R.id.share).setVisible(true);
                 mFab.setVisibility(View.GONE);
@@ -518,12 +541,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToLogin();
         }
         else {
-            handleFabAction();
-        }
-    }
-
-    private void handleFabAction() {
-        if (fragTag.equals(WallFragment.TAG)) {
             goToCreateGame();
         }
     }
@@ -534,12 +551,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void goToCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-        startActivity(createGameIntent);
+        startActivityForResult(createGameIntent, RESULT_CODE);
     }
 
     private void goToLogin() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        startActivityForResult(loginIntent, RESULT_CODE);
     }
 
     private void hideKeyboard() {
@@ -548,6 +565,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_CODE && resultCode == RESULT_OK) {
+            refreshWall();
         }
     }
 }

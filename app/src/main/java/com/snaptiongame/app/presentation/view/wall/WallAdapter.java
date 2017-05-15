@@ -20,7 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
-import com.snaptiongame.app.presentation.view.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 import com.snaptiongame.app.presentation.view.utils.TextStyleUtils;
 
 import java.util.List;
@@ -33,10 +33,12 @@ public class WallAdapter extends RecyclerView.Adapter {
     private List<Game> mGames;
     private final ItemListener mCallback;
 
+    private boolean isList = false;
     private int lastPosition = -1;
     private long currentTime;
 
-    private static final int AVATAR_SIZE = 30;
+    private static final int AVATAR_SIZE_GRID = 30;
+    private static final int AVATAR_SIZE_LIST = 40;
 
     public WallAdapter(List<Game> snaptions) {
         this.mGames = snaptions;
@@ -59,8 +61,8 @@ public class WallAdapter extends RecyclerView.Adapter {
     @Override
     public GameCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.game_card, parent, false);
-        return new GameCardViewHolder(view, mCallback);
+                .inflate(isList ? R.layout.game_card_list : R.layout.game_card_grid, parent, false);
+        return new GameCardViewHolder(view, mCallback, isList);
     }
 
     @Override
@@ -88,7 +90,13 @@ public class WallAdapter extends RecyclerView.Adapter {
         else {
             Glide.clear(holder.mImage);
         }
-        holder.mCreatorName.setText(String.format(holder.mContext.getString(R.string.posted_by), curGame.creatorName));
+
+        String creatorName = String.format(holder.mContext.getString(R.string.posted_by), curGame.creatorName);
+
+        if (isList) {
+            creatorName = curGame.creatorName;
+        }
+        holder.mCreatorName.setText(creatorName);
 
         if (curGame.topCaption != null) {
             holder.mCaptionerImage.setVisibility(View.VISIBLE);
@@ -106,14 +114,18 @@ public class WallAdapter extends RecyclerView.Adapter {
             else {
                 holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
                         .beginConfig()
-                        .width(AVATAR_SIZE)
-                        .height(AVATAR_SIZE)
+                        .width(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
+                        .height(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
                         .toUpperCase()
                         .endConfig()
                         .buildRound(curGame.topCaption.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curGame.topCaption.creatorName)));
             }
+            ViewCompat.setTransitionName(holder.mCaptionerImage, holder.mContext.getString(R.string.profile_transition));
             holder.mCaptionerName.setText(curGame.topCaption.creatorName);
+            holder.mCaptionerId = curGame.topCaption.creatorId;
+            holder.mCaptioner = curGame.topCaption.creatorName;
+            holder.mCaptionerImageUrl = curGame.topCaption.creatorPicture;
             holder.mTopCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
                     TextStyleUtils.getTextUnderlined(curGame.topCaption.caption),
                     curGame.topCaption.assocFitB.afterBlank));
@@ -122,6 +134,30 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mCaptionerImage.setVisibility(View.GONE);
             holder.mCaptionerName.setVisibility(View.GONE);
             holder.mTopCaption.setVisibility(View.GONE);
+        }
+
+        if (isList) {
+            if (curGame.creatorImage != null) {
+                Glide.with(holder.mContext)
+                        .load(curGame.creatorImage)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                        .dontAnimate()
+                        .into(holder.mCreatorImage);
+            }
+            else {
+                holder.mCreatorImage.setImageDrawable(TextDrawable.builder()
+                        .beginConfig()
+                        .width(AVATAR_SIZE_GRID)
+                        .height(AVATAR_SIZE_GRID)
+                        .toUpperCase()
+                        .endConfig()
+                        .buildRound(curGame.creatorName.substring(0, 1),
+                                ColorGenerator.MATERIAL.getColor(curGame.creatorName)));
+            }
+            ViewCompat.setTransitionName(holder.mCreatorImage, holder.mContext.getString(R.string.profile_transition));
+
+            holder.mTimeLeft.setText(DateUtils.getTimeLeftLabel(holder.mContext, curGame.endDate));
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted);
@@ -139,19 +175,30 @@ public class WallAdapter extends RecyclerView.Adapter {
         setAnimation(holder.itemView, position);
     }
 
-    private void setAnimation(View view, int position) {
-        Animation animation = AnimationUtils.loadAnimation(view.getContext(),
-                (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-        view.startAnimation(animation);
-        lastPosition = position;
+    public void setIsList(boolean isList) {
+        this.isList = isList;
     }
 
-    public void setGames(List<Game> games) {
-        if (!mGames.equals(games)) {
-            mGames = games;
-            currentTime = DateUtils.getNow();
-            notifyDataSetChanged();
+    private void setAnimation(View view, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.up_from_bottom);
+            view.startAnimation(animation);
+            lastPosition = position;
         }
+    }
+
+    public void addGames(List<Game> games) {
+        int oldSize = mGames.size();
+        mGames.addAll(games);
+        currentTime = DateUtils.getNow();
+        notifyItemRangeInserted(oldSize, mGames.size());
+    }
+
+    public void clear() {
+        lastPosition = -1;
+        int oldSize = mGames.size();
+        mGames.clear();
+        notifyItemRangeRemoved(0, oldSize);
     }
 
     public boolean isEmpty() {
@@ -171,10 +218,5 @@ public class WallAdapter extends RecyclerView.Adapter {
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    public void clear() {
-        mGames.clear();
-        notifyDataSetChanged();
     }
 }
