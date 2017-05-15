@@ -61,7 +61,6 @@ import butterknife.OnClick;
  * @author Nick Romero
  */
 public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
-    public static final int RETURN_FROM_FRIEND_SEARCH = 35;
     @BindView(R.id.layout)
     CoordinatorLayout mLayout;
     @BindView(R.id.toolbar)
@@ -100,6 +99,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
+    public static final int RETURN_FROM_FRIEND_SEARCH = 35;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -271,9 +271,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void showFriendsDialog() {
         mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
         mFriendsAdapter.setSelectable();
-        final int numFriends = mPresenter.getFriends().size();
+        final boolean hasFriends = mPresenter.getFriends().isEmpty();
 
-        if (numFriends > 0) {
+        if (!hasFriends) {
             mFriendsDialog = new MaterialDialog.Builder(this)
                     .title(R.string.add_friends)
                     .adapter(mFriendsAdapter, new LinearLayoutManager(this))
@@ -372,9 +372,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .bitmapTransform(new FitCenter(this))
                     .into(mNewGameImage);
         }
+
         if (requestCode == RETURN_FROM_FRIEND_SEARCH) {
             mPresenter.loadFriends();
-            mFriendsAdapter.setFriends(mPresenter.getFriends());
             mFriendsDialog = null;
         }
     }
