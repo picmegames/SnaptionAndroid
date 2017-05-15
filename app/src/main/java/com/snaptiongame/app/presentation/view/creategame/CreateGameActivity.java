@@ -188,7 +188,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void showUploadFailure() {
         mProgressDialog.dismiss();
-        Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -306,23 +306,18 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.create_game)
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
-        if (!mPresenter.containsEmojis(mTagTextView.getChipValues())) {
-            if (mUri != null) {
-                mPresenter.createGame(getContentResolver().getType(mUri), mUri,
-                        AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
-                mProgressDialog = new MaterialDialog.Builder(this)
-                        .title(R.string.upload_title)
-                        .content(R.string.upload_message)
-                        .progress(true, 0)
-                        .cancelable(false)
-                        .show();
-            }
-            else {
-                Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
-            }
+        if (mUri != null) {
+            mPresenter.createGame(getContentResolver().getType(mUri), mUri,
+                    AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
+            mProgressDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.upload_title)
+                    .content(R.string.upload_message)
+                    .progress(true, 0)
+                    .cancelable(false)
+                    .show();
         }
         else {
-            Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
         }
     }
 
