@@ -40,6 +40,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         mCreateGameView = createGameView;
         mDisposables = new CompositeDisposable();
         mCreateGameView.setPresenter(this);
+        mFriends = new ArrayList<>();
     }
 
     @Override

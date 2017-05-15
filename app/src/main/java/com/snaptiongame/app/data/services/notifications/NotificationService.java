@@ -1,12 +1,12 @@
 package com.snaptiongame.app.data.services.notifications;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -14,6 +14,7 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.data.utils.ImageUtils;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
@@ -56,6 +57,7 @@ public class NotificationService extends FirebaseMessagingService {
     private void handleNotification(Map<String, String> data, String type) {
         String title = "";
         String message = "";
+        String imageUrl;
 
         if (data.size() > 0) {
             if (data.containsKey(TITLE) && data.containsKey(MESSAGE)) {
@@ -68,7 +70,8 @@ public class NotificationService extends FirebaseMessagingService {
                     .setSmallIcon(R.drawable.ic_notification)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                     .setContentTitle(title)
-                    .setContentText(message);
+                    .setContentText(message)
+                    .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
 
             Intent resultIntent = new Intent(this, MainActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -80,7 +83,13 @@ public class NotificationService extends FirebaseMessagingService {
                     resultIntent.putExtra(Game.ID, Integer.valueOf(data.get(Game.ID)));
                 }
                 if (data.containsKey(PICTURE)) {
-                    resultIntent.putExtra(Game.IMAGE_URL, data.get(PICTURE));
+                    imageUrl = data.get(PICTURE);
+                    NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
+                    style.setBigContentTitle(title);
+                    style.setSummaryText(message);
+                    style.bigPicture(ImageUtils.getBitmapFromURL(imageUrl));
+                    builder.setStyle(style);
+                    resultIntent.putExtra(Game.IMAGE_URL, imageUrl);
                 }
                 resultIntent.putExtra(FROM_NOTIFICATION, true);
                 stackBuilder.addParentStack(GameActivity.class);
@@ -91,15 +100,20 @@ public class NotificationService extends FirebaseMessagingService {
                 if (data.containsKey(User.ID)) {
                     resultIntent.putExtra(User.ID, Integer.valueOf(data.get(User.ID)));
                 }
+                if (data.containsKey(PICTURE)) {
+                    imageUrl = data.get(PICTURE);
+                    builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(imageUrl));
+                }
                 resultIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
                 stackBuilder.addParentStack(ProfileActivity.class);
             }
 
             int notificationIdentifier = (int) ((new Date().getTime() / THOUSAND) % Integer.MAX_VALUE);
             stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(notificationIdentifier, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                    notificationIdentifier, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
             notificationManager.notify(notificationIdentifier, builder.build());
         }
     }
