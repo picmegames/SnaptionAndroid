@@ -45,6 +45,7 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
+import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
@@ -60,6 +61,7 @@ import butterknife.OnClick;
  * @author Nick Romero
  */
 public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
+    public static final int RETURN_FROM_FRIEND_SEARCH = 35;
     @BindView(R.id.layout)
     CoordinatorLayout mLayout;
     @BindView(R.id.toolbar)
@@ -270,15 +272,31 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
         mFriendsAdapter.setSelectable();
 
-        mFriendsDialog = new MaterialDialog.Builder(this)
-                .title(R.string.add_friends)
-                .adapter(mFriendsAdapter, new LinearLayoutManager(this))
-                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                        addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
-                )
-                .positiveText(R.string.update)
-                .cancelable(false)
-                .show();
+        System.out.println(mPresenter.getFriends().size());
+        if (mPresenter.getFriends().size() != 0) {
+            mFriendsDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.add_friends)
+                    .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                    .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                            addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
+                    )
+                    .positiveText(R.string.update)
+                    .cancelable(true)
+                    .show();
+        }
+        else {
+            Intent findFriends = new Intent(this, FriendSearchActivity.class);
+
+            mFriendsDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.add_friends)
+                    .customView(R.layout.empty_friends_dialog, false)
+                    .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                    {startActivityForResult(findFriends, RETURN_FROM_FRIEND_SEARCH);})
+                    .positiveText(R.string.go_to_friends_page)
+                    .negativeText(R.string.cancel)
+                    .cancelable(true)
+                    .show();
+        }
     }
 
     private void addFriendsToTextView(List<String> selectedFriendNames) {
@@ -348,6 +366,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             mAnimationView.pauseAnimation();
             mAnimationView.setVisibility(View.GONE);
@@ -357,6 +376,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .load(mUri)
                     .bitmapTransform(new FitCenter(this))
                     .into(mNewGameImage);
+        }
+        if (requestCode == RETURN_FROM_FRIEND_SEARCH) {
+            mPresenter.loadFriends();
+            mFriendsAdapter.setFriends(mPresenter.getFriends());
+            mFriendsDialog = null;
         }
     }
 
