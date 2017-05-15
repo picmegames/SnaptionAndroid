@@ -10,14 +10,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
+import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +30,6 @@ import butterknife.OnClick;
  */
 
 public class FriendSearchActivity extends AppCompatActivity implements FriendsContract.View, SearchView.OnQueryTextListener {
-    @BindView(R.id.searchback)
-    ImageButton searchBack;
     @BindView(R.id.search_view)
     SearchView mSearchView;
     @BindView(R.id.search_results)

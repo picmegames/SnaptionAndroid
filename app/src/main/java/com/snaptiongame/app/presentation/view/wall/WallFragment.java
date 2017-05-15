@@ -17,7 +17,8 @@ import android.widget.TextView;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.presentation.view.customviews.WallSpacesItemDecoration;
+import com.snaptiongame.app.presentation.view.decorations.WallSpacesItemDecoration;
+import com.snaptiongame.app.presentation.view.listeners.InfiniteRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.snaptiongame.app.R.drawable.ic_signal_wifi_off_grey_600_48dp;
-import static com.snaptiongame.app.R.drawable.snaption_icon_gray;
 
 /**
  * The Wall Fragment is a fragment that shows the wall to the user.
@@ -52,9 +50,12 @@ public class WallFragment extends Fragment implements WallContract.View {
     private WallContract.Presenter mPresenter;
     private WallAdapter mAdapter;
     private Unbinder mUnbinder;
+    private RecyclerView.LayoutManager mCurrentLayoutManager;
     private LinearLayoutManager mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private WallSpacesItemDecoration mItemSpacesDecoration;
+    private InfiniteRecyclerViewScrollListener mScrollListener;
+    private List<String> mTags;
     private int mUserId;
     private int mType;
     private int mSpace;
@@ -103,14 +104,7 @@ public class WallFragment extends Fragment implements WallContract.View {
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
 
-        if (isList) {
-            mWall.setLayoutManager(mLinearLayoutManager);
-            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
-        }
-        else {
-            mWall.setLayoutManager(mStaggeredGridLayoutManager);
-            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
-        }
+        setLayoutManager(isList);
 
         mItemSpacesDecoration = new WallSpacesItemDecoration(mSpace, isList);
         mWall.addItemDecoration(mItemSpacesDecoration);
@@ -119,51 +113,59 @@ public class WallFragment extends Fragment implements WallContract.View {
         mAdapter = new WallAdapter(new ArrayList<>());
         mAdapter.setIsList(isList);
         mWall.setAdapter(mAdapter);
-        
-        mRefreshLayout.setOnRefreshListener(() -> mPresenter.loadGames(mType, null));
+
+        mScrollListener = new InfiniteRecyclerViewScrollListener(mCurrentLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mPresenter.loadGames(mType, mTags, page);
+            }
+        };
+
+        mWall.addOnScrollListener(mScrollListener);
+
+        mRefreshLayout.setOnRefreshListener(() -> {
+            setRefreshing(true);
+            mAdapter.clear();
+            mScrollListener.resetState();
+            mPresenter.loadGames(mType, mTags, 1);
+        });
 
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
-        // Need to subscribe if on Discover tab because onResume will
-        // not subscribe if we are on Discover tab
-        if (mType == WallContract.DISCOVER) {
-            mPresenter.subscribe();
-        }
+        mPresenter.subscribe();
 
         return view;
     }
 
-    /**
-     * This method is called when the fragment comes into view.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // Do not refresh wall in onResume if on Discover tab
-        if (mType != WallContract.DISCOVER && mWall != null) {
-            mPresenter.subscribe();
-        }
+    public void refreshWall() {
+        mAdapter.clear();
+        mPresenter.subscribe();
     }
 
     public void switchLayout(boolean isList) {
         if (mAdapter != null && mWall != null && mItemSpacesDecoration != null) {
             mAdapter.setIsList(isList);
             mWall.setAdapter(mAdapter);
+            setLayoutManager(isList);
 
+            mScrollListener.setLayoutManager(mCurrentLayoutManager);
             mItemSpacesDecoration.setIsList(isList);
-
-            if (isList) {
-                mWall.setLayoutManager(mLinearLayoutManager);
-                mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
-            }
-            else {
-                mWall.setLayoutManager(mStaggeredGridLayoutManager);
-                mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
-            }
             mItemSpacesDecoration.setSpacing(mSpace);
+        }
+    }
+
+    private void setLayoutManager(boolean isList) {
+        if (isList) {
+            mCurrentLayoutManager = mLinearLayoutManager;
+            mWall.setLayoutManager(mCurrentLayoutManager);
+            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
+        }
+        else {
+            mCurrentLayoutManager = mStaggeredGridLayoutManager;
+            mWall.setLayoutManager(mCurrentLayoutManager);
+            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
         }
     }
 
@@ -173,7 +175,11 @@ public class WallFragment extends Fragment implements WallContract.View {
      * @param tags a list of user defined tags to filter by
      */
     public void filterGames(List<String> tags) {
-        mPresenter.loadGames(mType, tags);
+        setRefreshing(true);
+        mAdapter.clear();
+        mTags = tags;
+        mScrollListener.resetState();
+        mPresenter.loadGames(mType, mTags, 1);
     }
 
     /**
@@ -184,12 +190,13 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     @Override
     public void showGames(List<Game> games) {
-        if (games.isEmpty()) {
-            showEmptyView();
+        mAdapter.addGames(games);
+
+        if (!mAdapter.isEmpty()) {
+            showWall();
         }
         else {
-            showWall();
-            mAdapter.setGames(games);
+            showEmptyView();
         }
     }
 
@@ -203,7 +210,7 @@ public class WallFragment extends Fragment implements WallContract.View {
 
         if (mWallState != null && mWallStateImage != null) {
             mWallState.setText(R.string.nothing_here);
-            mWallStateImage.setImageResource(snaption_icon_gray);
+            mWallStateImage.setImageResource(R.drawable.snaption_icon_gray);
         }
 
         if (mType != WallContract.HISTORY) {
@@ -213,19 +220,19 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     @Override
     public void showDisconnectedView() {
-        mAdapter.clear();
+        if (mAdapter.isEmpty()) {
+            if (mEmptyOrDisconnectedView != null) {
+                mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+            }
 
-        if (mEmptyOrDisconnectedView != null) {
-            mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
-        }
+            if (mWallState != null && mWallStateImage != null) {
+                mWallState.setText(R.string.no_internet);
+                mWallStateImage.setImageResource(R.drawable.ic_signal_wifi_off_grey_600_48dp);
+            }
 
-        if (mWallState != null && mWallStateImage != null) {
-            mWallState.setText(R.string.no_internet);
-            mWallStateImage.setImageResource(ic_signal_wifi_off_grey_600_48dp);
-        }
-
-        if (mType != WallContract.HISTORY && mWall != null) {
-            mWall.setVisibility(View.GONE);
+            if (mType != WallContract.HISTORY && mWall != null) {
+                mWall.setVisibility(View.GONE);
+            }
         }
     }
 

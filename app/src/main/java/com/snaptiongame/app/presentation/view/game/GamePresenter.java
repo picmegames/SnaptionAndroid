@@ -51,8 +51,8 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
-    public void loadCaptions() {
-        Disposable disposable = CaptionProvider.getCaptions(mGameId)
+    public void loadCaptions(int page) {
+        Disposable disposable = CaptionProvider.getCaptions(mGameId, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mGameView::showCaptions,
@@ -88,7 +88,10 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::loadCaptions,
+                        () -> {
+                            mGameView.resetScrollState();
+                            loadCaptions(1);
+                        },
                         e -> {
                             Timber.e(e);
                             mGameView.setRefreshing(false);
@@ -206,7 +209,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadCaptions();
+        loadCaptions(1);
         loadRandomFITBCaptions();
     }
 

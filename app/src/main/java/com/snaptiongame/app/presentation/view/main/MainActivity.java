@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
+    private static final int RESULT_CODE = 7777;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -381,6 +382,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void refreshWall() {
+        if (fragTag.equals(WallFragment.TAG)) {
+            ((WallFragment) mCurrentFragment).refreshWall();
+        }
+    }
+
     private void sendInviteIntent() {
         String smsBody = getString(R.string.invite_message) +
                 getString(R.string.store_url);
@@ -534,12 +541,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToLogin();
         }
         else {
-            handleFabAction();
-        }
-    }
-
-    private void handleFabAction() {
-        if (fragTag.equals(WallFragment.TAG)) {
             goToCreateGame();
         }
     }
@@ -550,12 +551,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void goToCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-        startActivity(createGameIntent);
+        startActivityForResult(createGameIntent, RESULT_CODE);
     }
 
     private void goToLogin() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
+        startActivityForResult(loginIntent, RESULT_CODE);
     }
 
     private void hideKeyboard() {
@@ -564,6 +565,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_CODE && resultCode == RESULT_OK) {
+            refreshWall();
         }
     }
 }

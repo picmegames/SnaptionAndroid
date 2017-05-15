@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.presentation.view.customviews.InsetDividerDecoration;
+import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

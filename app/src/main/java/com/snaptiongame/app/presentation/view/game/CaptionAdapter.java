@@ -16,7 +16,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Caption;
-import com.snaptiongame.app.presentation.view.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 import com.snaptiongame.app.presentation.view.utils.TextStyleUtils;
 
 import java.util.List;
@@ -118,11 +118,16 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         ((CaptionCardViewHolder) holder).itemView.clearAnimation();
     }
 
-    public void setCaptions(List<Caption> captions) {
-        if (!mCaptions.equals(captions)) {
-            mCaptions = captions;
-            notifyDataSetChanged();
-        }
+    public void addCaptions(List<Caption> captions) {
+        int oldSize = mCaptions.size();
+        mCaptions.addAll(captions);
+        notifyItemRangeInserted(oldSize, mCaptions.size());
+    }
+
+    public void clear() {
+        int oldSize = mCaptions.size();
+        mCaptions.clear();
+        notifyItemRangeRemoved(0, oldSize);
     }
 
     public List<Caption> getCaptions() {

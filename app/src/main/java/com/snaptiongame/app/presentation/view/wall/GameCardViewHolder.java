@@ -35,7 +35,7 @@ import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.utils.AnimUtils;
-import com.snaptiongame.app.presentation.view.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +69,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.game_status)
     TextView mGameStatus;
     CircleImageView mCreatorImage;
-    TextView mDaysRemaining;
+    TextView mTimeLeft;
 
     public Context mContext;
     public PopupMenu mMenu;
@@ -127,7 +127,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
         if (isList) {
             mCreatorImage = ButterKnife.findById(itemView, R.id.creator_image);
-            mDaysRemaining = ButterKnife.findById(itemView, R.id.days_remaining);
+            mTimeLeft = ButterKnife.findById(itemView, R.id.time_left);
 
             ImageView moreButton = ButterKnife.findById(itemView, R.id.more_button);
             mMenu = new PopupMenu(mContext, moreButton);

@@ -20,7 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
-import com.snaptiongame.app.presentation.view.utils.ItemListener;
+import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 import com.snaptiongame.app.presentation.view.utils.TextStyleUtils;
 
 import java.util.List;
@@ -157,16 +157,7 @@ public class WallAdapter extends RecyclerView.Adapter {
             }
             ViewCompat.setTransitionName(holder.mCreatorImage, holder.mContext.getString(R.string.profile_transition));
 
-            int[] timeRemaining = DateUtils.getTimeRemaining(curGame.endDate);
-
-            if (timeRemaining[1] == DateUtils.DAY) {
-                holder.mDaysRemaining.setText(holder.mContext.getResources().getQuantityString(
-                        R.plurals.days_left, timeRemaining[0], timeRemaining[0]));
-            }
-            else {
-                holder.mDaysRemaining.setText(holder.mContext.getResources().getQuantityString(
-                        R.plurals.hours_left, timeRemaining[0], timeRemaining[0]));
-            }
+            holder.mTimeLeft.setText(DateUtils.getTimeLeftLabel(holder.mContext, curGame.endDate));
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted);
@@ -189,18 +180,25 @@ public class WallAdapter extends RecyclerView.Adapter {
     }
 
     private void setAnimation(View view, int position) {
-        Animation animation = AnimationUtils.loadAnimation(view.getContext(),
-                (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-        view.startAnimation(animation);
-        lastPosition = position;
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.up_from_bottom);
+            view.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
-    public void setGames(List<Game> games) {
-        if (!mGames.equals(games)) {
-            mGames = games;
-            currentTime = DateUtils.getNow();
-            notifyDataSetChanged();
-        }
+    public void addGames(List<Game> games) {
+        int oldSize = mGames.size();
+        mGames.addAll(games);
+        currentTime = DateUtils.getNow();
+        notifyItemRangeInserted(oldSize, mGames.size());
+    }
+
+    public void clear() {
+        lastPosition = -1;
+        int oldSize = mGames.size();
+        mGames.clear();
+        notifyItemRangeRemoved(0, oldSize);
     }
 
     public boolean isEmpty() {
@@ -220,10 +218,5 @@ public class WallAdapter extends RecyclerView.Adapter {
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    public void clear() {
-        mGames.clear();
-        notifyDataSetChanged();
     }
 }

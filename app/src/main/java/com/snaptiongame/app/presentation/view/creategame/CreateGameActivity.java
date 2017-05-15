@@ -192,6 +192,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void showUploadComplete() {
         mProgressDialog.dismiss();
+        setResult(RESULT_OK);
         onBackPressed();
     }
 
