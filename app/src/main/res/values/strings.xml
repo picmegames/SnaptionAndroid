@@ -93,7 +93,6 @@
     <string name="upvoted">Upvoted!</string>
     <string name="upvote_fail">Failed to upvote the game</string>
     <string name="empty_username">Username cannot be empty</string>
-    <string name="emoji_error">Tags cannot contain emojis</string>
     <string name="compression_error">Could not compress image</string>
     <string name="upload_error">Could not upload game</string>
     <string name="empty_caption">Nothing entered for caption.</string>

@@ -34,8 +34,6 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     // private byte[] mEncodedImage;
     private String mEncodedImage;
 
-    private static final String EMOJI_REGEX = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])";
-
     public CreateGamePresenter(@NonNull CreateGameContract.View createGameView) {
         mCreateGameView = createGameView;
         mDisposables = new CompositeDisposable();
@@ -57,19 +55,6 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                         () -> uploadGame(userId, isPublic, type, gameDuration)
                 );
         mDisposables.add(disposable);
-    }
-
-    public boolean containsEmojis(List<String> tags) {
-        Matcher matcher;
-        Pattern emojiPattern = Pattern.compile(EMOJI_REGEX);
-
-        for (String tag : tags) {
-            matcher = emojiPattern.matcher(tag);
-            if (matcher.find()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void uploadGame(int userId, boolean isPublic, String type, long gameDuration) {

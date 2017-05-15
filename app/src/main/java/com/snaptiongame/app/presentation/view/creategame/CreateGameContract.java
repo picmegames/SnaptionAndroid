@@ -43,8 +43,6 @@ public class CreateGameContract {
 
         List<Friend> getFriends();
 
-        boolean containsEmojis(List<String> tags);
-
         void loadFriends();
     }
 }
