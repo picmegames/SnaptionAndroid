@@ -67,6 +67,7 @@ public class NotificationService extends FirebaseMessagingService {
         String title = "";
         String message = "";
         String imageUrl;
+        String userImageUrl;
 
         // IF there is data
         if (data.size() > 0) {
@@ -104,18 +105,27 @@ public class NotificationService extends FirebaseMessagingService {
                 if (data.containsKey(PICTURE)) {
                     // SET notification big picture
                     imageUrl = data.get(PICTURE);
-                    NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
-                    style.setBigContentTitle(title);
-                    style.setSummaryText(message);
-                    style.bigPicture(ImageUtils.getBitmapFromURL(imageUrl));
-                    builder.setStyle(style);
+
+                    // IF the picture is not null and not empty
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
+                        style.setBigContentTitle(title);
+                        style.setSummaryText(message);
+                        style.bigPicture(ImageUtils.getBitmapFromURL(imageUrl));
+                        builder.setStyle(style);
+                    }
                     // PASS image url to GameActivity
                     resultIntent.putExtra(Game.IMAGE_URL, imageUrl);
                 }
                 // IF the data has an associated user picture
                 if (data.containsKey(USER_PICTURE)) {
-                    // SET notification large icon
-                    builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(data.get(USER_PICTURE)));
+                    userImageUrl = data.get(USER_PICTURE);
+
+                    // IF the user picture is not null and not empty
+                    if (userImageUrl != null && !userImageUrl.isEmpty()) {
+                        // SET notification large icon
+                        builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(data.get(USER_PICTURE)));
+                    }
                 }
                 // SPECIFY we are coming from a clicked notification
                 resultIntent.putExtra(FROM_NOTIFICATION, true);
@@ -133,9 +143,13 @@ public class NotificationService extends FirebaseMessagingService {
                 }
                 // IF the data has a picture
                 if (data.containsKey(PICTURE)) {
-                    imageUrl = data.get(PICTURE);
-                    // SET notification large icon
-                    builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(imageUrl));
+                    userImageUrl = data.get(PICTURE);
+
+                    // IF the user picture is not null and not empty
+                    if (userImageUrl != null && !userImageUrl.isEmpty()) {
+                        // SET notification large icon
+                        builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(userImageUrl));
+                    }
                 }
                 // SPECIFY that the profile we are viewing is not the current user's
                 // (Impossible to get a friend notification from yourself)
