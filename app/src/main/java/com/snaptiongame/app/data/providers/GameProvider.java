@@ -6,11 +6,9 @@ import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
 
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -20,41 +18,29 @@ import io.reactivex.Single;
 public class GameProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
-    private static List<Game> reverseGames(List<Game> games) {
-        Collections.reverse(games);
-        return games;
-    }
-
-    public static Observable<List<Game>> getGames(boolean isPublic) {
-        return apiService.getGames(isPublic)
-                .map(GameProvider::reverseGames);
-    }
-
-    public static Single<List<Game>> getUserGames(List<String> tags, int page) {
-        return apiService.getUserGames(tags, page)
-                .map(GameProvider::reverseGames)
+    public static Single<List<Game>> getGamesMine(List<String> tags, int page) {
+        return apiService.getGamesMine(tags, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
 
-    public static Single<List<Game>> getDiscoverGames(List<String> tags, int page) {
-        return apiService.getDiscoverGames(tags, page)
+    public static Single<List<Game>> getGamesDiscover(List<String> tags, int page) {
+        return apiService.getGamesDiscover(tags, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
 
-    public static Single<List<Game>> getPopularGames(List<String> tags, int page) {
-        return apiService.getPopularGames(tags, page)
+    public static Single<List<Game>> getGamesPopular(List<String> tags, int page) {
+        return apiService.getGamesPopular(tags, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
 
-    public static Single<List<Game>> getUserGameHistory(int userId, int page) {
-        return apiService.getUserGameHistory(userId, page)
-                .map(GameProvider::reverseGames)
+    public static Single<List<Game>> getGamesHistory(int userId, int page) {
+        return apiService.getGamesHistory(userId, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();

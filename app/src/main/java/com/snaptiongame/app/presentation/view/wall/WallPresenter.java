@@ -59,16 +59,16 @@ public class WallPresenter implements WallContract.Presenter {
         Single<List<Game>> gameRequest;
         switch (type) {
             case WallContract.DISCOVER:
-                gameRequest = GameProvider.getDiscoverGames(mTags, page);
+                gameRequest = GameProvider.getGamesDiscover(mTags, page);
                 break;
             case WallContract.POPULAR:
-                gameRequest = GameProvider.getPopularGames(mTags, page);
+                gameRequest = GameProvider.getGamesPopular(mTags, page);
                 break;
             case WallContract.HISTORY:
-                gameRequest = GameProvider.getUserGameHistory(mUserId, page);
+                gameRequest = GameProvider.getGamesHistory(mUserId, page);
                 break;
             default:
-                gameRequest = GameProvider.getUserGames(mTags, page);
+                gameRequest = GameProvider.getGamesMine(mTags, page);
                 break;
         }
 

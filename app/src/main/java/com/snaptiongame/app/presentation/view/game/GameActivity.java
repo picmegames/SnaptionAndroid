@@ -473,6 +473,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mRefreshLayout.setRefreshing(isRefreshing);
     }
 
+    @Override
+    public void showCaptionSubmissionError() {
+        Toast.makeText(this, R.string.failed_caption_submission, Toast.LENGTH_LONG).show();
+    }
+
     @OnClick(R.id.fab)
     public void showAddCaptionDialog() {
         boolean successfulCaptionSubmission = false;
