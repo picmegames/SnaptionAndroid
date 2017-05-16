@@ -99,7 +99,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
-    public static final int RETURN_FROM_FRIEND_SEARCH = 35;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -284,13 +283,12 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .show();
         }
         else {
-            Intent findFriends = new Intent(this, FriendSearchActivity.class);
-
-            mFriendsDialog = new MaterialDialog.Builder(this)
+            new MaterialDialog.Builder(this)
                     .title(R.string.add_friends)
                     .content(R.string.no_friends_message)
                     .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                        startActivityForResult(findFriends, RETURN_FROM_FRIEND_SEARCH))
+                        startActivity(new Intent(this, FriendSearchActivity.class))
+                    )
                     .positiveText(R.string.search)
                     .negativeText(R.string.cancel)
                     .cancelable(true)
@@ -370,11 +368,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .load(mUri)
                     .bitmapTransform(new FitCenter(this))
                     .into(mNewGameImage);
-        }
-
-        if (requestCode == RETURN_FROM_FRIEND_SEARCH) {
-            mPresenter.loadFriends();
-            mFriendsDialog = null;
         }
     }
 
