@@ -94,7 +94,6 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        mQuery = newText;
         handleSearch(newText);
         return true;
     }
