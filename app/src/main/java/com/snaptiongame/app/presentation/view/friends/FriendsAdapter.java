@@ -53,11 +53,9 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         mCallback = (name, isAdded, position) -> {
             if (isAdded) {
                 mPresenter.removeFriend(name, mFriends.get(position).id);
-                mPresenter.removeTempFriend(mFriends.get(position));
             }
             else {
                 mPresenter.addFriend(name, mFriends.get(position).id);
-                mPresenter.addFriendTemp(mFriends.get(position));
             }
         };
     }
@@ -171,10 +169,18 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void setFriends(List<Friend> friends) {
-        if (!friends.equals(mFriends)) {
-            mFriends = friends;
-        }
+        mFriends = friends;
         notifyDataSetChanged();
+    }
+
+    public void addFriends(List<Friend> friends) {
+        int oldSize = mFriends.size();
+        mFriends.addAll(friends);
+        notifyItemRangeInserted(oldSize, mFriends.size());
+    }
+
+    public boolean isEmpty() {
+        return mFriends.isEmpty();
     }
 
     public void addFriend(Friend friend) {
@@ -199,9 +205,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         return mFriends;
     }
 
-    public void clearFriends() {
+    public void clear() {
+        int oldSize = mFriends.size();
         mFriends.clear();
-        notifyDataSetChanged();
+        notifyItemRangeRemoved(0, oldSize);
     }
 
     @Override

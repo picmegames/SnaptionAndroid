@@ -103,36 +103,17 @@ public interface SnaptionApi {
      * This method sends a request for a user with a GET request.
      *
      * @param userEmail The desired user's E-mail address
-     * @return An observable that emits a User object
-     */
-    @GET("/Users")
-    Observable<List<User>> getUsersByEmail(@Query("email") String userEmail);
-
-    /**
-     * This method sends a request for a user with a GET request.
-     *
-     * @param facebookID The desired user's facebookID
-     * @return An observable that emits a User object
-     */
-    @GET("/Users")
-    Observable<List<User>> getUsersByFacebookID(@Query("facebookID") String facebookID);
-
-    /**
-     * This method sends a request for a user with a GET request.
-     *
+     * @param facebookId The desired user's facebook id
      * @param username The desired user's username
+     * @param fullName The desired user's fullName
      * @return An observable that emits a User object
      */
     @GET("/Users")
-    Observable<List<User>> getUsersByUsername(@Query("username") String username);
-
-    /**
-     * This method sends a request for a user with a GET request
-     * @param fullName The desired user's Full Name
-     * @return An observable that emits a list of potential matches
-     */
-    @GET("/Users")
-    Observable<List<User>> getUsersByFullName(@Query("fullName") String fullName);
+    Observable<List<User>> searchUsers(@Query("email") String userEmail,
+                                       @Query("facebookID") String facebookId,
+                                       @Query("username") String username,
+                                       @Query("fullName") String fullName,
+                                       @Query("page") int page);
 
     /**
      * This method sends a request to update a user with a PUT request.
@@ -216,7 +197,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Friend objects
      */
     @GET("/UserFriends/")
-    Observable<List<Friend>> getFriends();
+    Observable<List<Friend>> getFriends(@Query("page") int page);
 
     /**
      * This method sends a request to get a user's friends

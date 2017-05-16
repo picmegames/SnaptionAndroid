@@ -11,8 +11,6 @@ import com.snaptiongame.app.data.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -113,7 +111,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider.getFriends()
+        Disposable disposable = FriendProvider.getAllFriends(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processFriends,
@@ -124,16 +122,17 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     private void processFriends(List<Friend> friends) {
-        mFriends = friends;
-        String[] names = new String[friends.size()];
-        for (int index = 0; index < names.length; index++) {
-            names[index] = friends.get(index).username;
+        mFriends.addAll(friends);
+        List<String> names = new ArrayList<>();
+        for (Friend friend : friends) {
+            names.add(friend.username);
         }
-        mCreateGameView.setFriendNames(names);
+        mCreateGameView.addFriendNames(names);
     }
 
     @Override
     public void subscribe() {
+        mFriends.clear();
         loadFriends();
     }
 

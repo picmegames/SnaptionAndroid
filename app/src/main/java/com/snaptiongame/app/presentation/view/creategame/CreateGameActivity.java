@@ -49,6 +49,7 @@ import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -85,6 +86,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private MaterialDialog mFriendsDialog;
     private DatePickerDialog mDatePickerDialog;
     private FriendsAdapter mFriendsAdapter;
+    private ArrayAdapter<String> mFriendNameAdapter;
 
     private CreateGameContract.Presenter mPresenter;
 
@@ -135,6 +137,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mActionBar.setDisplayHomeAsUpEnabled(true);
             mActionBar.setTitle(getString(R.string.create_game));
         }
+
+        mFriendNameAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_expandable_list_item_1, new ArrayList<>());
+        mFriendsTextView.setAdapter(mFriendNameAdapter);
 
         mTagTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mTagTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
@@ -349,10 +355,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     }
 
     @Override
-    public void setFriendNames(String[] friends) {
-        ArrayAdapter<String> friendsAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_expandable_list_item_1, friends);
-        mFriendsTextView.setAdapter(friendsAdapter);
+    public void addFriendNames(List<String> friendNames) {
+        mFriendNameAdapter.addAll(friendNames);
     }
 
     @Override
