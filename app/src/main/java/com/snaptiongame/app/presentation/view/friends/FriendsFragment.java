@@ -92,12 +92,12 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
+        mPresenter.subscribe();
+
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void refreshFriends() {
         mAdapter.clear();
         mScrollListener.resetState();
         mPresenter.subscribe();

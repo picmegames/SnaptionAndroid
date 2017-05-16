@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
     private static final int RESULT_CODE = 7777;
+    private static final int SEARCH_RESULT_CODE = 1414;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -309,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 View searchMenuView = mToolbar.findViewById(R.id.search);
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
                         getString(R.string.transition_search_back)).toBundle();
-                startActivity(searchIntent, options);
+                startActivityForResult(searchIntent, SEARCH_RESULT_CODE, options);
                 break;
             case R.id.share:
                 sendInviteIntent();
@@ -385,6 +386,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void refreshWall() {
         if (fragTag.equals(WallFragment.TAG)) {
             ((WallFragment) mCurrentFragment).refreshWall();
+        }
+    }
+
+    private void refreshFriends() {
+        if (fragTag.equals(FriendsFragment.TAG)) {
+            ((FriendsFragment) mCurrentFragment).refreshFriends();
         }
     }
 
@@ -574,6 +581,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (requestCode == RESULT_CODE && resultCode == RESULT_OK) {
             refreshWall();
+        }
+        else if (requestCode == SEARCH_RESULT_CODE && resultCode == RESULT_OK) {
+            refreshFriends();
         }
     }
 }

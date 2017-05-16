@@ -187,6 +187,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setResult(RESULT_OK);
         mSearchResults.setVisibility(View.INVISIBLE);
     }
 }

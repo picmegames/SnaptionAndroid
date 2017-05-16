@@ -180,11 +180,10 @@ public class WallAdapter extends RecyclerView.Adapter {
     }
 
     private void setAnimation(View view, int position) {
-        if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.up_from_bottom);
-            view.startAnimation(animation);
-            lastPosition = position;
-        }
+        Animation animation = AnimationUtils.loadAnimation(view.getContext(),
+                position > lastPosition ? R.anim.up_from_bottom : R.anim.down_from_top);
+        view.startAnimation(animation);
+        lastPosition = position;
     }
 
     public void addGames(List<Game> games) {
