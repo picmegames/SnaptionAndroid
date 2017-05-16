@@ -148,7 +148,7 @@
         <item quantity="one">%d hour left</item>
         <item quantity="other">%d hours left</item>
     </plurals>
-    <string name="go_to_friends_page">Search</string>
+    <string name="search_for_friends">Search</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

@@ -271,9 +271,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void showFriendsDialog() {
         mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
         mFriendsAdapter.setSelectable();
-        final boolean hasFriends = mPresenter.getFriends().isEmpty();
 
-        if (!hasFriends) {
+        if (!mPresenter.getFriends().isEmpty()) {
             mFriendsDialog = new MaterialDialog.Builder(this)
                     .title(R.string.add_friends)
                     .adapter(mFriendsAdapter, new LinearLayoutManager(this))
@@ -292,7 +291,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .content(R.string.no_friends_message)
                     .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
                         startActivityForResult(findFriends, RETURN_FROM_FRIEND_SEARCH))
-                    .positiveText(R.string.go_to_friends_page)
+                    .positiveText(R.string.search_for_friends)
                     .negativeText(R.string.cancel)
                     .cancelable(true)
                     .show();
