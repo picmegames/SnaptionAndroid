@@ -291,7 +291,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .content(R.string.no_friends_message)
                     .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
                         startActivityForResult(findFriends, RETURN_FROM_FRIEND_SEARCH))
-                    .positiveText(R.string.search_for_friends)
+                    .positiveText(R.string.search)
                     .negativeText(R.string.cancel)
                     .cancelable(true)
                     .show();
