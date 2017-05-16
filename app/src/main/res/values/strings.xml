@@ -148,6 +148,7 @@
         <item quantity="one">%d hour left</item>
         <item quantity="other">%d hours left</item>
     </plurals>
+    <string name="search_for_friends">Search</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>
@@ -190,4 +191,6 @@
     <string name="no_facebook">Facebook not installed</string>
     <string name="facebook_app" translatable="false">com.facebook.katana</string>
     <string name="is_private">Private Game</string>
+    <string name="no_friends_yet">No friends yet!</string>
+    <string name="no_friends_message">No friends yet. You can search for friends to add to this game!</string>
 </resources>

@@ -38,7 +38,7 @@ public class GameContract {
         void setRefreshing(boolean isRefreshing);
 
         void resetScrollState();
-
+      
         void showCaptionSubmissionError();
     }
 

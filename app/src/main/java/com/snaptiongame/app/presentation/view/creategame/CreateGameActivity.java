@@ -45,6 +45,7 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
+import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
@@ -270,15 +271,29 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
         mFriendsAdapter.setSelectable();
 
-        mFriendsDialog = new MaterialDialog.Builder(this)
-                .title(R.string.add_friends)
-                .adapter(mFriendsAdapter, new LinearLayoutManager(this))
-                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                        addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
-                )
-                .positiveText(R.string.update)
-                .cancelable(false)
-                .show();
+        if (!mPresenter.getFriends().isEmpty()) {
+            mFriendsDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.add_friends)
+                    .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                    .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                            addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
+                    )
+                    .positiveText(R.string.update)
+                    .cancelable(true)
+                    .show();
+        }
+        else {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.add_friends)
+                    .content(R.string.no_friends_message)
+                    .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                        startActivity(new Intent(this, FriendSearchActivity.class))
+                    )
+                    .positiveText(R.string.search)
+                    .negativeText(R.string.cancel)
+                    .cancelable(true)
+                    .show();
+        }
     }
 
     private void addFriendsToTextView(List<String> selectedFriendNames) {
@@ -343,6 +358,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             mAnimationView.pauseAnimation();
             mAnimationView.setVisibility(View.GONE);

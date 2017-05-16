@@ -169,7 +169,7 @@ public interface SnaptionApi {
      */
     @GET("/Games/popular")
     Observable<List<Game>> getGamesPopular(@Query("tag") List<String> tags, @Query("page") int page);
-
+  
     /**
      * This method sends a request to get a list of the games
      * a user has been involved in with a GET request.

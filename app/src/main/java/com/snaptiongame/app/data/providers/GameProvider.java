@@ -31,7 +31,7 @@ public class GameProvider {
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
-
+  
     public static Single<List<Game>> getGamesPopular(List<String> tags, int page) {
         return apiService.getGamesPopular(tags, page)
                 .flatMapIterable(games -> games)
