@@ -38,19 +38,14 @@ public class FriendProvider {
         return apiService.deleteFriend(request);
     }
 
-    public static Observable<List<Friend>> getAllFriends(int page) {
-        return getFriends(page)
-                .concatMap(friends -> {
-                    if (friends.isEmpty()) {
-                        return Observable.just(friends);
-                    }
-                    return Observable.just(friends)
-                            .concatWith(getAllFriends(page + 1));
-                });
+    public static Observable<List<Friend>> getAllFriends() {
+        return Observable.range(1, Integer.MAX_VALUE)
+                .concatMap(FriendProvider::getFriends)
+                .takeWhile(friends -> !friends.isEmpty());
     }
 
     public static Single<Boolean> isFriend(int userId) {
-        return getAllFriends(1)
+        return getAllFriends()
                 .flatMapIterable(friend -> friend)
                 .map(friend -> friend.id)
                 .contains(userId);
