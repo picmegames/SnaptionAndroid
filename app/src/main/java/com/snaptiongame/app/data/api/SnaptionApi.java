@@ -102,14 +102,14 @@ public interface SnaptionApi {
     /**
      * This method sends a request for a user with a GET request.
      *
-     * @param userEmail The desired user's E-mail address
+     * @param email The desired user's E-mail address
      * @param facebookId The desired user's facebook id
      * @param username The desired user's username
      * @param fullName The desired user's fullName
      * @return An observable that emits a User object
      */
     @GET("/Users")
-    Observable<List<User>> searchUsers(@Query("email") String userEmail,
+    Observable<List<User>> searchUsers(@Query("email") String email,
                                        @Query("facebookID") String facebookId,
                                        @Query("username") String username,
                                        @Query("fullName") String fullName,

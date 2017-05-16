@@ -100,14 +100,14 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     }
 
     private void handleSearch(String query) {
-        String realQuery = query.trim();
+        mQuery = query.trim();
         mAdapter.clear();
 
-        if (realQuery.isEmpty()) {
+        if (mQuery.isEmpty()) {
             mPresenter.subscribe();
         }
         else {
-            mPresenter.findFriends(realQuery, 1);
+            mPresenter.findFriends(mQuery, 1);
         }
     }
 
