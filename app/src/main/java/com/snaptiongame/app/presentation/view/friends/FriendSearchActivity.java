@@ -72,7 +72,12 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                mPresenter.findFriends(mQuery, page);
+                if (mQuery != null && !mQuery.isEmpty()) {
+                    mPresenter.findFriends(mQuery, page);
+                }
+                else {
+                    mPresenter.loadFriends(page);
+                }
             }
         };
 
@@ -101,6 +106,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     private void handleSearch(String query) {
         mQuery = query.trim();
         mAdapter.clear();
+        mScrollListener.resetState();
 
         if (mQuery.isEmpty()) {
             mPresenter.subscribe();
@@ -161,6 +167,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     protected void onResume() {
         super.onResume();
         mAdapter.clear();
+        mScrollListener.resetState();
         mPresenter.subscribe();
         showInputMethod();
         handleSearch(mSearchView.getQuery().toString());
