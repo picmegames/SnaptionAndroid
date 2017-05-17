@@ -17,6 +17,7 @@ import android.widget.SearchView;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
+import com.snaptiongame.app.presentation.view.listeners.InfiniteRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,9 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     RecyclerView mSearchResults;
 
     private FriendsContract.Presenter mPresenter;
+    private InfiniteRecyclerViewScrollListener mScrollListener;
 
+    private String mQuery;
     private FriendsAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
 
@@ -61,9 +64,24 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         mAdapter.setShouldDisplayAddRemoveOption(true);
 
         mSearchResults.setHasFixedSize(true);
-        mSearchResults.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mSearchResults.setLayoutManager(layoutManager);
         mSearchResults.setAdapter(mAdapter);
         mSearchView.setOnQueryTextListener(this);
+
+        mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (mQuery != null && !mQuery.isEmpty()) {
+                    mPresenter.findFriends(mQuery, page);
+                }
+                else {
+                    mPresenter.loadFriends(page);
+                }
+            }
+        };
+
+        mSearchResults.addOnScrollListener(mScrollListener);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             int searchIconId = getResources().getIdentifier(SEARCH_ICON, null, null);
@@ -86,14 +104,15 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     }
 
     private void handleSearch(String query) {
-        String realQuery = query.trim();
-        mAdapter.clearFriends();
+        mQuery = query.trim();
+        mAdapter.clear();
+        mScrollListener.resetState();
 
-        if (realQuery.isEmpty()) {
+        if (mQuery.isEmpty()) {
             mPresenter.subscribe();
         }
         else {
-            mPresenter.findFriends(realQuery);
+            mPresenter.findFriends(mQuery, 1);
         }
     }
 
@@ -121,7 +140,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     public void processFriends(List<Friend> friends) {
         showFriendList();
-        mAdapter.setFriends(friends);
+        mAdapter.addFriends(friends);
     }
 
     @Override
@@ -147,6 +166,8 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     protected void onResume() {
         super.onResume();
+        mAdapter.clear();
+        mScrollListener.resetState();
         mPresenter.subscribe();
         showInputMethod();
         handleSearch(mSearchView.getQuery().toString());
@@ -172,6 +193,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setResult(RESULT_OK);
         mSearchResults.setVisibility(View.INVISIBLE);
     }
 }
