@@ -24,6 +24,16 @@ public class MoreInfoFragment extends Fragment implements MoreInfoContract.View 
     TextView mRank;
     @BindView(R.id.experience)
     TextView mExperience;
+    @BindView(R.id.gamesCreated)
+    TextView mGamesCreated;
+    @BindView(R.id.captionsCreated)
+    TextView mCaptionsCreated;
+    @BindView(R.id.topGame)
+    TextView mTopGame;
+    @BindView(R.id.topCaption)
+    TextView mTopCaption;
+    @BindView(R.id.topCaptionCount)
+    TextView mTopCaptionCount;
 
     private MoreInfoContract.Presenter mPresenter;
     private Unbinder mUnbinder;
@@ -57,6 +67,15 @@ public class MoreInfoFragment extends Fragment implements MoreInfoContract.View 
     public void showUserInfo(String name, int experience) {
         mRank.setText(name);
         mExperience.setText(String.valueOf(experience));
+    }
+
+    @Override
+    public void showMoreInfo(int gamesCreated, int captionsCreated, int topGameUpvotes, int topCaptionUpvotes, int topCaptionCount) {
+        mGamesCreated.setText(String.valueOf(gamesCreated));
+        mCaptionsCreated.setText(String.valueOf(captionsCreated));
+        mTopGame.setText(String.valueOf(topGameUpvotes));
+        mTopCaption.setText(String.valueOf(topCaptionUpvotes));
+        mTopCaptionCount.setText(String.valueOf(topCaptionCount));
     }
 
     @Override

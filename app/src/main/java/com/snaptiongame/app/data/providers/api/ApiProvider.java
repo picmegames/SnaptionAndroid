@@ -20,6 +20,7 @@ import com.snaptiongame.app.data.converters.OAuthConverter;
 import com.snaptiongame.app.data.converters.RankConverter;
 import com.snaptiongame.app.data.converters.SessionConverter;
 import com.snaptiongame.app.data.converters.UserConverter;
+import com.snaptiongame.app.data.converters.UserStatsConverter;
 import com.snaptiongame.app.data.cookies.PersistentCookieStore;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Caption;
@@ -33,6 +34,7 @@ import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Rank;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.data.models.UserStats;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -218,6 +220,7 @@ public class ApiProvider {
         builder.registerTypeAdapter(FitBCaption.class, new FitBCaptionConverter());
         builder.registerTypeAdapter(DeepLinkRequest.class, new BranchConverter());
         builder.registerTypeAdapter(Rank.class, new RankConverter());
+        builder.registerTypeAdapter(UserStats.class, new UserStatsConverter());
         builder.excludeFieldsWithoutExposeAnnotation();
         return builder.create();
     }

@@ -2,6 +2,7 @@ package com.snaptiongame.app.presentation.view.profile.moreinfo;
 
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.UserProvider;
+import com.snaptiongame.app.data.providers.UserStatsProvider;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,7 +27,12 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
 
     private void loadUser() {
         Disposable disposable = UserProvider.getUser(mUserId)
-                .subscribe(this::loadRank, Timber::e);
+                .subscribe(
+                        user -> {
+                            loadRank(user);
+                            loadMoreInfo(user);
+                        }
+                        , Timber::e);
         mDisposables.add(disposable);
     }
 
@@ -35,6 +41,18 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         rank -> mMoreInfoView.showUserInfo(rank.title, user.exp),
+                        Timber::e
+                );
+        mDisposables.add(disposable);
+    }
+
+    private void loadMoreInfo(User user) {
+        Disposable disposable = UserStatsProvider.getUserStats(user.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        userStats -> mMoreInfoView.showMoreInfo(userStats.gamesCreated,
+                                userStats.captionsCreated, userStats.highestGameUpvote,
+                                userStats.captionUpvotes, userStats.topCaptionCount),
                         Timber::e
                 );
         mDisposables.add(disposable);
