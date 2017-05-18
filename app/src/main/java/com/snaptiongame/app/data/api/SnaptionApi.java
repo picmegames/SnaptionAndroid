@@ -294,6 +294,11 @@ public interface SnaptionApi {
     @POST("/DeepLink/")
     Single<String> getToken(@Body DeepLinkRequest deepLinkRequest);
 
+    /**
+     * This method sends a request to retrieve the user's stats
+     *
+     * @return An observable that emits a UserStats object
+     */
     @GET("/Users/Stats/{userId}")
     Single<UserStats> getUserStats(@Path("userId") int userId);
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.snaptiongame.app.data.models.UserStats;
 import com.snaptiongame.app.R;
 
 import butterknife.BindView;
@@ -24,15 +25,15 @@ public class MoreInfoFragment extends Fragment implements MoreInfoContract.View 
     TextView mRank;
     @BindView(R.id.experience)
     TextView mExperience;
-    @BindView(R.id.gamesCreated)
+    @BindView(R.id.games_created)
     TextView mGamesCreated;
-    @BindView(R.id.captionsCreated)
+    @BindView(R.id.captions_created)
     TextView mCaptionsCreated;
-    @BindView(R.id.topGame)
+    @BindView(R.id.top_game)
     TextView mTopGame;
-    @BindView(R.id.topCaption)
+    @BindView(R.id.top_caption)
     TextView mTopCaption;
-    @BindView(R.id.topCaptionCount)
+    @BindView(R.id.top_caption_count)
     TextView mTopCaptionCount;
 
     private MoreInfoContract.Presenter mPresenter;
@@ -70,12 +71,12 @@ public class MoreInfoFragment extends Fragment implements MoreInfoContract.View 
     }
 
     @Override
-    public void showMoreInfo(int gamesCreated, int captionsCreated, int topGameUpvotes, int topCaptionUpvotes, int topCaptionCount) {
-        mGamesCreated.setText(String.valueOf(gamesCreated));
-        mCaptionsCreated.setText(String.valueOf(captionsCreated));
-        mTopGame.setText(String.valueOf(topGameUpvotes));
-        mTopCaption.setText(String.valueOf(topCaptionUpvotes));
-        mTopCaptionCount.setText(String.valueOf(topCaptionCount));
+    public void showMoreInfo(UserStats userStats) {
+        mGamesCreated.setText(String.valueOf(userStats.gamesCreated));
+        mCaptionsCreated.setText(String.valueOf(userStats.captionsCreated));
+        mTopGame.setText(String.valueOf(userStats.highestGameUpvote));
+        mTopCaption.setText(String.valueOf(userStats.captionUpvotes));
+        mTopCaptionCount.setText(String.valueOf(userStats.topCaptionCount));
     }
 
     @Override
