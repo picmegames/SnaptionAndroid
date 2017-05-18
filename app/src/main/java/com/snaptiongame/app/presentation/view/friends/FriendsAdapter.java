@@ -99,7 +99,12 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             });
         }
         else {
-            holder.itemView.setAlpha(DIM);
+            if (mSelectedIds.contains(curFriend.id)) {
+                holder.itemView.setAlpha(BRIGHT);
+            }
+            else {
+                holder.itemView.setAlpha(DIM);
+            }
 
             holder.itemView.setOnClickListener(view -> {
                 if (!mSelectedIds.contains(curFriend.id)) {
@@ -179,6 +184,46 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         int oldSize = mFriends.size();
         mFriends.addAll(friends);
         notifyItemRangeInserted(oldSize, mFriends.size());
+    }
+
+    public void selectFriend(int friendId) {
+        if (!mSelectedIds.contains(friendId)) {
+            mSelectedIds.add(friendId);
+            mSelectedNames.add(getFriendById(friendId).username);
+            notifyItemChanged(mFriends.indexOf(getFriendById(friendId)));
+        }
+    }
+
+    public void deselectFriend(int friendId) {
+        if (mSelectedIds.contains(friendId)) {
+            mSelectedIds.remove(Integer.valueOf(friendId));
+            mSelectedNames.remove(getFriendById(friendId).username);
+            notifyItemChanged(mFriends.indexOf(getFriendById(friendId)));
+        }
+    }
+
+    public void setCallback(FriendItemListener callback) {
+        mCallback = callback;
+    }
+
+    public Friend getFriendById(int friendId) {
+        for (Friend friend : mFriends) {
+            if (friend.id == friendId) {
+                return friend;
+            }
+        }
+
+        return null;
+    }
+
+    public Friend getFriendByName(String name) {
+        for (Friend friend : mFriends) {
+            if (friend.username.equals(name)) {
+                return friend;
+            }
+        }
+
+        return null;
     }
 
     public boolean isEmpty() {

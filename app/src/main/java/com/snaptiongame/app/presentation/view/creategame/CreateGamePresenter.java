@@ -105,6 +105,11 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     @Override
+    public boolean isValidFriends() {
+        return !getFriendIds(mCreateGameView.getAddedFriends()).contains(-1);
+    }
+
+    @Override
     public List<Friend> getFriends() {
         return mFriends;
     }

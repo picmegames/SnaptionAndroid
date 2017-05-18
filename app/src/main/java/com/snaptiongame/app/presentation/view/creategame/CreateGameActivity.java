@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,6 +37,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.chip.Chip;
 import com.hootsuite.nachos.chip.ChipSpan;
 import com.hootsuite.nachos.chip.ChipSpanChipCreator;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
@@ -130,6 +132,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mAnimationView.playAnimation();
         }
 
+        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
+        mFriendsAdapter.setSelectable();
+
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
 
@@ -150,18 +155,26 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mFriendsTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mFriendsTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mFriendsTextView.enableEditChipOnTouch(false, true);
+        mFriendsTextView.setOnChipClickListener((Chip chip, MotionEvent motionEvent) -> {
+            int friendId = mPresenter.getFriendIdByName(chip.getText().toString());
+            if (friendId > 0) {
+                mFriendsAdapter.deselectFriend(friendId);
+            }
+        });
         mFriendsTextView.setChipTokenizer(new SpanChipTokenizer<>(this, new ChipSpanChipCreator() {
             @Override
             public ChipSpan createChip(@NonNull Context context, @NonNull CharSequence text, Object data) {
                 ChipSpan newChip;
+                int friendId = mPresenter.getFriendIdByName(text.toString());
 
-                if (mPresenter.getFriendIdByName(text.toString()) < 0) {
+                if (friendId < 0) {
                     newChip = new ChipSpan(context, text,
                             ContextCompat.getDrawable(CreateGameActivity.this, R.drawable.ic_cancel_red_400_24dp), data);
                 }
                 else {
                     newChip = new ChipSpan(context, text,
                             ContextCompat.getDrawable(CreateGameActivity.this, R.drawable.ic_check_circle_green_400_24dp), data);
+                    mFriendsAdapter.selectFriend(friendId);
                 }
 
                 return newChip;
@@ -274,9 +287,6 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @Override
     public void showFriendsDialog() {
-        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
-        mFriendsAdapter.setSelectable();
-
         if (!mPresenter.getFriends().isEmpty()) {
             mFriendsDialog = new MaterialDialog.Builder(this)
                     .title(R.string.add_friends)
@@ -309,7 +319,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.create_game)
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
-        if (mUri != null) {
+        if (mUri != null && mPresenter.isValidFriends()) {
             mPresenter.createGame(getContentResolver().getType(mUri), mUri,
                     AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
             mProgressDialog = new MaterialDialog.Builder(this)
