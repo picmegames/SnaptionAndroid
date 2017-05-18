@@ -22,12 +22,9 @@ public class UserProvider {
         return apiService.getUser(userId);
     }
 
-    public static Observable<List<User>> getUsersWithEmail(String email) {
-        return apiService.getUsersByEmail(email);
-    }
-
-    public static Observable<List<User>> getUsersWithFacebook(String facebookId) {
-        return apiService.getUsersByFacebookID(facebookId);
+    public static Observable<List<User>> searchUsers(String email, String facebookId,
+                                                     String username, String fullName, int page) {
+        return apiService.searchUsers(email, facebookId, username, fullName, page);
     }
 
     public static Observable<Rank> getRank(int rankId) {
@@ -39,15 +36,6 @@ public class UserProvider {
     public static Single<User> updateUser(User user) {
         return apiService.updateUser(user);
     }
-
-    public static Observable<List<User>> getUsersByUsername(String username) {
-        return apiService.getUsersByUsername(username);
-    }
-
-    public static Observable<List<User>> getUsersByFullName(String fullName) {
-        return apiService.getUsersByFullName(fullName);
-    }
-
     public static Single<UserStats> getUserStats(int userId) {
         return apiService.getUserStats(userId);
     }

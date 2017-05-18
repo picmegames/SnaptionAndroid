@@ -18,8 +18,8 @@ import io.reactivex.Single;
 public class FriendProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
-    public static Observable<List<Friend>> getFriends() {
-        return apiService.getFriends();
+    public static Observable<List<Friend>> getFriends(int page) {
+        return apiService.getFriends(page);
     }
 
     public static Observable<List<Friend>> getFollowers() {
@@ -38,8 +38,14 @@ public class FriendProvider {
         return apiService.deleteFriend(request);
     }
 
+    public static Observable<List<Friend>> getAllFriends() {
+        return Observable.range(1, Integer.MAX_VALUE)
+                .concatMap(FriendProvider::getFriends)
+                .takeWhile(friends -> !friends.isEmpty());
+    }
+
     public static Single<Boolean> isFriend(int userId) {
-        return getFriends()
+        return getAllFriends()
                 .flatMapIterable(friend -> friend)
                 .map(friend -> friend.id)
                 .contains(userId);

@@ -24,16 +24,12 @@ public class FriendsContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadFriends();
+        void loadFriends(int page);
 
         void removeFriend(String name, int friendId);
 
         void addFriend(String name, int friendId);
 
-        void findFriends(String query);
-
-        void addFriendTemp(Friend friend);
-
-        void removeTempFriend(Friend friend);
+        void findFriends(String query, int page);
     }
 }

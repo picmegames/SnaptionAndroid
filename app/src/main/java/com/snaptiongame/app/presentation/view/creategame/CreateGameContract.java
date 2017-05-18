@@ -17,7 +17,7 @@ public class CreateGameContract {
     interface View extends BaseView<Presenter> {
         void createGame();
 
-        void setFriendNames(String[] friendNames);
+        void addFriendNames(List<String> friendNames);
 
         void onBackPressed();
 
