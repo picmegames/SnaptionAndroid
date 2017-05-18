@@ -42,6 +42,7 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.presentation.view.activityfeed.ActivityFeedFragment;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
@@ -220,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (!AuthManager.isLoggedIn()) {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
             mNavigationView.getMenu().findItem(R.id.friends).setVisible(false);
+            mNavigationView.getMenu().findItem(R.id.activity_feed).setVisible(false);
             mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
             if (initItem == R.id.my_wall) {
                 mBottomNavigationView.setSelectedItemId(R.id.discover);
@@ -230,7 +232,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
-            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);
+            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);            mNavigationView.getMenu().findItem(R.id.activity_feed).setVisible(false);
+            mNavigationView.getMenu().findItem(R.id.activity_feed).setVisible(true);
             if (mBottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
                 mBottomNavigationView.getMenu()
                         .add(0, R.id.my_wall, Menu.FIRST, getString(R.string.my_wall))
@@ -460,6 +463,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mMenu.findItem(R.id.share).setVisible(true);
                 mFab.setVisibility(View.GONE);
                 break;
+
+            case R.id.activity_feed:
+                mCurrentFragment = ActivityFeedFragment.getInstance();
+                fragTag = ActivityFeedFragment.TAG;
+                mActionBar.setTitle(R.string.activity_feed);
+                mBottomNavigationView.setVisibility(View.GONE);
+                resetFabPosition(false);
+                setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+                mMenu.findItem(R.id.filter).setVisible(false);
+                mMenu.findItem(R.id.layout).setVisible(false);
+                mMenu.findItem(R.id.search).setVisible(false);
+                mMenu.findItem(R.id.share).setVisible(false);
+                mFab.setVisibility(View.GONE);
 
             case R.id.settings:
                 startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
