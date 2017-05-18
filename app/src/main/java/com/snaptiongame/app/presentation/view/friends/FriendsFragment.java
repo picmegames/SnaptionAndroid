@@ -106,7 +106,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     @Override
     public void showEmptyView() {
         mEmptyView.setVisibility(View.VISIBLE);
-        mFriendsList.setVisibility(View.INVISIBLE);
     }
 
     @Override

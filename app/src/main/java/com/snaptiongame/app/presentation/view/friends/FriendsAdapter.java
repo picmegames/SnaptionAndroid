@@ -208,6 +208,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     }
 
     public void clear() {
+        lastPosition = -1;
         int oldSize = mFriends.size();
         mFriends.clear();
         notifyItemRangeRemoved(0, oldSize);

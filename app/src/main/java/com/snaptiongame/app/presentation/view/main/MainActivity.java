@@ -52,6 +52,8 @@ import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -350,22 +352,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .title(R.string.filter_games_title)
                     .positiveText(R.string.filter)
                     .negativeText(R.string.clear)
-                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        if (fragTag.equals(WallFragment.TAG)) {
-                            mFilterTextView.chipifyAllUnterminatedTokens();
-                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
+                    .cancelListener(dialog -> {
+                        if (fragTag.equals(WallFragment.TAG) && !((WallFragment) mCurrentFragment).hasTags()) {
+                            clearFilterView();
                         }
                     })
-                    .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        clearFilterView();
-                        if (fragTag.equals(WallFragment.TAG)) {
-                            mFilterTextView.chipifyAllUnterminatedTokens();
-                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
-                        }
-                    })
-                    .cancelListener(dialogInterface -> {
+                    .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
+                        clearFilterView()
+                    )
+                    .onAny((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         mFilterTextView.chipifyAllUnterminatedTokens();
-                        ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
+                        filter(mFilterTextView.getChipValues());
                     })
                     .cancelable(true)
                     .show();
@@ -374,6 +371,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             mFilterDialog.show();
+        }
+    }
+
+    private void filter(List<String> tags) {
+        if (fragTag.equals(WallFragment.TAG)) {
+            ((WallFragment) mCurrentFragment).filterGames(tags);
         }
     }
 

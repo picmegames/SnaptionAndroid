@@ -10,9 +10,6 @@ import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.FriendProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -68,7 +65,6 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                         },
                         () -> {
                             Timber.i("Getting friends was successful");
-                            mFriendView.showFriendList();
                             mFriendView.setRefreshing(false);
                         });
         mDisposables.add(disposable);
