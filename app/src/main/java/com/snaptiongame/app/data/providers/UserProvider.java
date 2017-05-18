@@ -36,6 +36,7 @@ public class UserProvider {
     public static Single<User> updateUser(User user) {
         return apiService.updateUser(user);
     }
+    
     public static Single<UserStats> getUserStats(int userId) {
         return apiService.getUserStats(userId);
     }
