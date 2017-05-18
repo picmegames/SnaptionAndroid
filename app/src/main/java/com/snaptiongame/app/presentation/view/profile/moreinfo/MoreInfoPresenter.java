@@ -49,7 +49,7 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
         Disposable disposable = UserProvider.getUserStats(user.id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        userStats -> mMoreInfoView.showMoreInfo(userStats),
+                        mMoreInfoView::showMoreInfo,
                         Timber::e
                 );
         mDisposables.add(disposable);
