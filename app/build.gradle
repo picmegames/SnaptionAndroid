@@ -11,7 +11,7 @@ android {
         applicationId "com.snaptiongame.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
+        versionCode 13
         versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -62,6 +62,12 @@ android {
                 includeNoLocationClasses = true
             }
         }
+    }
+}
+
+repositories {
+    maven {
+        url "https://maven.google.com"
     }
 }
 

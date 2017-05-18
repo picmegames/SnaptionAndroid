@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
-    private static final int RESULT_CODE = 7777;
-    private static final int SEARCH_RESULT_CODE = 1414;
+    private static final int WALL_RESULT_CODE = 7777;
+    private static final int FRIEND_RESULT_CODE = 1414;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 View searchMenuView = mToolbar.findViewById(R.id.search);
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
                         getString(R.string.transition_search_back)).toBundle();
-                startActivityForResult(searchIntent, SEARCH_RESULT_CODE, options);
+                startActivityForResult(searchIntent, FRIEND_RESULT_CODE, options);
                 break;
             case R.id.share:
                 sendInviteIntent();
@@ -396,8 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void sendInviteIntent() {
-        String smsBody = getString(R.string.invite_message) +
-                getString(R.string.store_url);
+        String smsBody = getString(R.string.invite_message) + getString(R.string.store_url);
         Intent inviteIntent = new Intent(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
         inviteIntent.setType(TEXT_TYPE);
@@ -558,12 +557,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void goToCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-        startActivityForResult(createGameIntent, RESULT_CODE);
+        startActivityForResult(createGameIntent, WALL_RESULT_CODE);
     }
 
     private void goToLogin() {
+        int resultCode = 0;
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(loginIntent, RESULT_CODE);
+
+        if (fragTag.equals(WallFragment.TAG)) {
+            resultCode = WALL_RESULT_CODE;
+        }
+        else if (fragTag.equals(FriendsFragment.TAG)) {
+            resultCode = FRIEND_RESULT_CODE;
+        }
+
+        startActivityForResult(loginIntent, resultCode);
     }
 
     private void hideKeyboard() {
@@ -579,10 +587,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_CODE && resultCode == RESULT_OK) {
+        if (requestCode == WALL_RESULT_CODE && resultCode == RESULT_OK) {
             refreshWall();
         }
-        else if (requestCode == SEARCH_RESULT_CODE && resultCode == RESULT_OK) {
+        else if (requestCode == FRIEND_RESULT_CODE && resultCode == RESULT_OK) {
             refreshFriends();
         }
     }

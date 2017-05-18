@@ -20,7 +20,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="32dp"
                 android:text="@string/rank"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
         </LinearLayout>
 
@@ -38,7 +38,7 @@
                 android:layout_marginStart="48dp"
                 android:layout_weight="1"
                 android:textSize="36sp"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"/>
         </LinearLayout>
 
         <LinearLayout
@@ -53,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="32dp"
                 android:text="@string/experience"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
         </LinearLayout>
 
@@ -72,7 +72,7 @@
                 android:layout_marginStart="48dp"
                 android:layout_weight="1"
                 android:textSize="36sp"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"/>
 
         </LinearLayout>
 
@@ -90,17 +90,17 @@
                 android:layout_weight="5"
                 android:gravity="center_vertical"
                 android:text="@string/games_created"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <TextView
                 android:id="@+id/games_created"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="32dp"
                 android:layout_weight="5"
+                android:textAlignment="viewEnd"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -117,17 +117,17 @@
                 android:layout_weight="5"
                 android:gravity="center_vertical"
                 android:text="@string/captions_created"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <TextView
                 android:id="@+id/captions_created"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="32dp"
                 android:layout_weight="5"
+                android:textAlignment="viewEnd"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -144,17 +144,17 @@
                 android:layout_weight="5"
                 android:gravity="center_vertical"
                 android:text="@string/top_caption_count"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <TextView
                 android:id="@+id/top_caption_count"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="32dp"
                 android:layout_weight="5"
+                android:textAlignment="viewEnd"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
@@ -172,17 +172,17 @@
                 android:layout_weight="5"
                 android:gravity="center_vertical"
                 android:text="@string/top_caption"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <TextView
                 android:id="@+id/top_caption"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="32dp"
                 android:layout_weight="5"
+                android:textAlignment="viewEnd"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -199,19 +199,18 @@
                 android:layout_weight="5"
                 android:gravity="center_vertical"
                 android:text="@string/top_game"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <TextView
                 android:id="@+id/top_game"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="32dp"
                 android:layout_weight="5"
+                android:textAlignment="viewEnd"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
-
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
 
