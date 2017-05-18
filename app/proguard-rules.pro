@@ -5,6 +5,7 @@
 -keepattributes Signature
 -keepattributes Exceptions
 -dontwarn retrofit2.adapter.rxjava.CompletableHelper$**
+-dontwarn javax.annotation.**
 
 # Okio
 -keep class sun.misc.Unsafe { *; }
