@@ -157,4 +157,5 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
         juego o toque en un juego en la pared para verlo</string>
     <string name="friends_showcase_content">Toca la lupa para añadir un amigo con su nombre
         completo, correo electrónico o nombre de usuario</string>
+    <string name="activity_feed">Feed de Actividad</string>
 </resources>
