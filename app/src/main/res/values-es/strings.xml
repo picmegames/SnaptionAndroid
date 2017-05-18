@@ -146,4 +146,10 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="no_friends_yet">No hay amigos todavía</string>
     <string name="no_friends_message">¡No tiene amigos todavía. Puede buscar amigos para añadir a este juego!</string>
 
+    <string name="games_created">Juegos Creado</string>
+    <string name="captions_created">Subtítulos Creado</string>
+    <string name="top_game">Mejores Juegos Votos</string>
+    <string name="top_caption">Mejores Subtítulos Votos</string>
+    <string name="top_caption_count">Cuenta de Mejor Subtítulos</string>
+
 </resources>

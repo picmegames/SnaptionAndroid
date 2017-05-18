@@ -12,6 +12,7 @@ import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Rank;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.data.models.UserStats;
 
 import java.util.List;
 
@@ -273,4 +274,12 @@ public interface SnaptionApi {
      */
     @POST("/DeepLink/")
     Single<String> getToken(@Body DeepLinkRequest deepLinkRequest);
+
+    /**
+     * This method sends a request to retrieve the user's stats
+     *
+     * @return An observable that emits a UserStats object
+     */
+    @GET("/Users/Stats/{userId}")
+    Single<UserStats> getUserStats(@Path("userId") int userId);
 }
