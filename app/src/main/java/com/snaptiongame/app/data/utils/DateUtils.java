@@ -16,8 +16,7 @@ public class DateUtils {
     public static final long TWO_WEEKS = 1209600000;
     public static final long ONE_DAY = 86400000;
     public static final long SECONDS_IN_HOUR = 3600;
-    public static final int DAY = 0;
-    public static final int HOUR = 1;
+    public static final int TWO_WEEKS_DAYS = 14;
 
     public static long getNow() {
         return System.currentTimeMillis() / MILLIS;

@@ -175,13 +175,13 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         }, ChipSpan.class));
 
         mCalendar = Calendar.getInstance();
-        mCalendar.add(Calendar.DATE, 1);
+        mCalendar.add(Calendar.DATE, DateUtils.TWO_WEEKS_DAYS);
         mYear = mCalendar.get(Calendar.YEAR);
         mMonth = mCalendar.get(Calendar.MONTH);
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
-        mDays = DateUtils.ONE_DAY / DateUtils.MILLIS;
+        mDays = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
     }
 
     @Override
@@ -285,7 +285,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                             addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
                     )
                     .positiveText(R.string.update)
-                    .cancelable(true)
+                    .cancelable(false)
                     .show();
         }
         else {
@@ -332,7 +332,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 mMonth = month;
                 mDayOfMonth = dayOfMonth;
                 mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
-                long today = mCalendar.getTime().getTime();
+                long today = Calendar.getInstance().getTime().getTime();
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(mYear, mMonth, mDayOfMonth + 1);
                 long selectedDay = calendar.getTime().getTime();
@@ -345,8 +345,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     mDays /= DateUtils.MILLIS;
                 }
             }, mYear, mMonth, mDayOfMonth);
-            mDatePickerDialog.getDatePicker().setMinDate(mCalendar.getTime().getTime());
-            mDatePickerDialog.getDatePicker().setMaxDate(mCalendar.getTime().getTime() + DateUtils.TWO_WEEKS_OFFSET);
+
+            Calendar calendar = Calendar.getInstance();
+            mDatePickerDialog.getDatePicker().setMinDate(calendar.getTime().getTime());
+            calendar.add(Calendar.DATE, DateUtils.TWO_WEEKS_DAYS);
+            mDatePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
             mDatePickerDialog.show();
         }
         else {
@@ -379,6 +382,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void onResume() {
         super.onResume();
         mAnimationView.playAnimation();
+        mFriendNameAdapter.clear();
         mPresenter.subscribe();
     }
 
