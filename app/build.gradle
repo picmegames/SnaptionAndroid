@@ -65,12 +65,6 @@ android {
     }
 }
 
-repositories {
-    maven {
-        url "https://maven.google.com"
-    }
-}
-
 task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     reports {
         xml.enabled = true
@@ -155,6 +149,9 @@ dependencies {
 
     // Material Dialogs
     compile "com.afollestad.material-dialogs:core:${materialDialogsVersion}"
+
+    // Material Showcase View
+    compile "com.github.deano2390:MaterialShowcaseView:${materialShowcaseView}"
 
     // Nachos
     compile "com.hootsuite.android:nachos:${nachosVersion}"
