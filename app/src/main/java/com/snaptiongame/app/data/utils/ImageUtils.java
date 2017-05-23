@@ -33,7 +33,6 @@ import timber.log.Timber;
 /**
  * @author Tyler Wong
  */
-
 public class ImageUtils {
 
     private static final float MAX_WIDTH = 1280.0f;
@@ -228,7 +227,7 @@ public class ImageUtils {
         }
     }
 
-    public static String getImageUrlWithAuthority(ContentResolver resolver, Uri uri) {
+    private static String getImageUrlWithAuthority(ContentResolver resolver, Uri uri) {
         InputStream is;
 
         if (uri.getAuthority() != null) {
