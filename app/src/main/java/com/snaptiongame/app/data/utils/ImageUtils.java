@@ -1,6 +1,6 @@
 package com.snaptiongame.app.data.utils;
 
-import android.content.Context;
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -106,7 +106,8 @@ public class ImageUtils {
     }
 
     private static String compressImage(Uri imageUri) {
-        String filePath = getImageUrlWithAuthority(SnaptionApplication.getContext(), imageUri);
+        ContentResolver resolver = SnaptionApplication.getContext().getContentResolver();
+        String filePath = getImageUrlWithAuthority(resolver, imageUri);
         Bitmap scaledBitmap = null;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -184,8 +185,7 @@ public class ImageUtils {
                 matrix.postRotate(TWO_SEVENTY_DEGREES);
             }
             scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,
-                    scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix,
-                    true);
+                    scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -228,33 +228,30 @@ public class ImageUtils {
         }
     }
 
-    public static String getImageUrlWithAuthority(Context context, Uri uri) {
-        InputStream is = null;
+    public static String getImageUrlWithAuthority(ContentResolver resolver, Uri uri) {
+        InputStream is;
+
         if (uri.getAuthority() != null) {
             try {
-                is = context.getContentResolver().openInputStream(uri);
+                is = resolver.openInputStream(uri);
                 Bitmap bmp = BitmapFactory.decodeStream(is);
-                return writeToTempImageAndGetPathUri(context, bmp).toString();
-            }
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
+                String path = getRealPathFromURI(writeToTempImageAndGetPathUri(resolver, bmp));
+                if (is != null) {
                     is.close();
                 }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+                return path;
+            }
+            catch (IOException e) {
+                Timber.e(e);
             }
         }
         return null;
     }
 
-    private static Uri writeToTempImageAndGetPathUri(Context inContext, Bitmap inImage) {
+    private static Uri writeToTempImageAndGetPathUri(ContentResolver resolver, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, FOLDER, null);
+        inImage.compress(Bitmap.CompressFormat.JPEG, QUALITY, bytes);
+        String path = MediaStore.Images.Media.insertImage(resolver, inImage, FOLDER, null);
         return Uri.parse(path);
     }
 
