@@ -12,6 +12,7 @@ import com.snaptiongame.app.data.models.OAuthRequest;
 import com.snaptiongame.app.data.models.Rank;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.data.models.UserStats;
 
 import java.util.List;
 
@@ -102,37 +103,18 @@ public interface SnaptionApi {
     /**
      * This method sends a request for a user with a GET request.
      *
-     * @param userEmail The desired user's E-mail address
-     * @return An observable that emits a User object
-     */
-    @GET("/Users")
-    Observable<List<User>> getUsersByEmail(@Query("email") String userEmail);
-
-    /**
-     * This method sends a request for a user with a GET request.
-     *
-     * @param facebookID The desired user's facebookID
-     * @return An observable that emits a User object
-     */
-    @GET("/Users")
-    Observable<List<User>> getUsersByFacebookID(@Query("facebookID") String facebookID);
-
-    /**
-     * This method sends a request for a user with a GET request.
-     *
+     * @param email The desired user's E-mail address
+     * @param facebookId The desired user's facebook id
      * @param username The desired user's username
+     * @param fullName The desired user's fullName
      * @return An observable that emits a User object
      */
     @GET("/Users")
-    Observable<List<User>> getUsersByUsername(@Query("username") String username);
-
-    /**
-     * This method sends a request for a user with a GET request
-     * @param fullName The desired user's Full Name
-     * @return An observable that emits a list of potential matches
-     */
-    @GET("/Users")
-    Observable<List<User>> getUsersByFullName(@Query("fullName") String fullName);
+    Observable<List<User>> searchUsers(@Query("email") String email,
+                                       @Query("facebookID") String facebookId,
+                                       @Query("username") String username,
+                                       @Query("fullName") String fullName,
+                                       @Query("page") int page);
 
     /**
      * This method sends a request to update a user with a PUT request.
@@ -144,22 +126,13 @@ public interface SnaptionApi {
     Single<User> updateUser(@Body User user);
 
     /**
-     * This method sends a request to get a list of games
-     * with a GET request.
-     *
-     * @return An observable that emits a list of Game objects.
-     */
-    @GET("/Games")
-    Observable<List<Game>> getGames(@Query("private") boolean isPrivate);
-
-    /**
      * This method sends a request to get a list of the current
      * user's games with a GET request.
      *
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/mine")
-    Observable<List<Game>> getUserGames(@Query("tag") List<String> tags, @Query("page") int page);
+    Observable<List<Game>> getGamesMine(@Query("tag") List<String> tags, @Query("page") int page);
 
     /**
      * This method sends a request to get a list of the current
@@ -168,7 +141,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/discover")
-    Observable<List<Game>> getDiscoverGames(@Query("tag") List<String> tags, @Query("page") int page);
+    Observable<List<Game>> getGamesDiscover(@Query("tag") List<String> tags, @Query("page") int page);
 
     /**
      * This method sends a request to get a list of the current
@@ -177,8 +150,8 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/popular")
-    Observable<List<Game>> getPopularGames(@Query("tag") List<String> tags, @Query("page") int page);
-
+    Observable<List<Game>> getGamesPopular(@Query("tag") List<String> tags, @Query("page") int page);
+  
     /**
      * This method sends a request to get a list of the games
      * a user has been involved in with a GET request.
@@ -186,7 +159,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/UserGame/History")
-    Observable<List<Game>> getUserGameHistory(@Query("creator") int userId, @Query("page") int page);
+    Observable<List<Game>> getGamesHistory(@Query("creator") int userId, @Query("page") int page);
 
     /**
      * This method sends a request to get a single game
@@ -225,7 +198,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Friend objects
      */
     @GET("/UserFriends/")
-    Observable<List<Friend>> getFriends();
+    Observable<List<Friend>> getFriends(@Query("page") int page);
 
     /**
      * This method sends a request to get a user's friends
@@ -301,4 +274,12 @@ public interface SnaptionApi {
      */
     @POST("/DeepLink/")
     Single<String> getToken(@Body DeepLinkRequest deepLinkRequest);
+
+    /**
+     * This method sends a request to retrieve the user's stats
+     *
+     * @return An observable that emits a UserStats object
+     */
+    @GET("/Users/Stats/{userId}")
+    Single<UserStats> getUserStats(@Path("userId") int userId);
 }

@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,6 +37,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.chip.Chip;
 import com.hootsuite.nachos.chip.ChipSpan;
 import com.hootsuite.nachos.chip.ChipSpanChipCreator;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
@@ -45,9 +47,11 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
+import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -84,6 +88,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private MaterialDialog mFriendsDialog;
     private DatePickerDialog mDatePickerDialog;
     private FriendsAdapter mFriendsAdapter;
+    private ArrayAdapter<String> mFriendNameAdapter;
 
     private CreateGameContract.Presenter mPresenter;
 
@@ -127,6 +132,9 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mAnimationView.playAnimation();
         }
 
+        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
+        mFriendsAdapter.setSelectable();
+
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
 
@@ -134,6 +142,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mActionBar.setDisplayHomeAsUpEnabled(true);
             mActionBar.setTitle(getString(R.string.create_game));
         }
+
+        mFriendNameAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_expandable_list_item_1, new ArrayList<>());
+        mFriendsTextView.setAdapter(mFriendNameAdapter);
 
         mTagTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mTagTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
@@ -143,18 +155,26 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mFriendsTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mFriendsTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
         mFriendsTextView.enableEditChipOnTouch(false, true);
+        mFriendsTextView.setOnChipClickListener((Chip chip, MotionEvent motionEvent) -> {
+            int friendId = mPresenter.getFriendIdByName(chip.getText().toString());
+            if (friendId > 0) {
+                mFriendsAdapter.deselectFriend(friendId);
+            }
+        });
         mFriendsTextView.setChipTokenizer(new SpanChipTokenizer<>(this, new ChipSpanChipCreator() {
             @Override
             public ChipSpan createChip(@NonNull Context context, @NonNull CharSequence text, Object data) {
                 ChipSpan newChip;
+                int friendId = mPresenter.getFriendIdByName(text.toString());
 
-                if (mPresenter.getFriendIdByName(text.toString()) < 0) {
+                if (friendId < 0) {
                     newChip = new ChipSpan(context, text,
                             ContextCompat.getDrawable(CreateGameActivity.this, R.drawable.ic_cancel_red_400_24dp), data);
                 }
                 else {
                     newChip = new ChipSpan(context, text,
                             ContextCompat.getDrawable(CreateGameActivity.this, R.drawable.ic_check_circle_green_400_24dp), data);
+                    mFriendsAdapter.selectFriend(friendId);
                 }
 
                 return newChip;
@@ -168,13 +188,13 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         }, ChipSpan.class));
 
         mCalendar = Calendar.getInstance();
-        mCalendar.add(Calendar.DATE, 1);
+        mCalendar.add(Calendar.DATE, DateUtils.TWO_WEEKS_DAYS);
         mYear = mCalendar.get(Calendar.YEAR);
         mMonth = mCalendar.get(Calendar.MONTH);
         mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
-        mDays = DateUtils.ONE_DAY / DateUtils.MILLIS;
+        mDays = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
     }
 
     @Override
@@ -186,7 +206,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @Override
     public void showUploadFailure() {
         mProgressDialog.dismiss();
-        Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -267,18 +287,29 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @Override
     public void showFriendsDialog() {
-        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
-        mFriendsAdapter.setSelectable();
-
-        mFriendsDialog = new MaterialDialog.Builder(this)
-                .title(R.string.add_friends)
-                .adapter(mFriendsAdapter, new LinearLayoutManager(this))
-                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                        addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
-                )
-                .positiveText(R.string.update)
-                .cancelable(false)
-                .show();
+        if (!mPresenter.getFriends().isEmpty()) {
+            mFriendsDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.add_friends)
+                    .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                    .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                            addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
+                    )
+                    .positiveText(R.string.update)
+                    .cancelable(false)
+                    .show();
+        }
+        else {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.add_friends)
+                    .content(R.string.no_friends_message)
+                    .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                        startActivity(new Intent(this, FriendSearchActivity.class))
+                    )
+                    .positiveText(R.string.search)
+                    .negativeText(R.string.cancel)
+                    .cancelable(true)
+                    .show();
+        }
     }
 
     private void addFriendsToTextView(List<String> selectedFriendNames) {
@@ -288,23 +319,18 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.create_game)
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
-        if (!mPresenter.containsEmojis(mTagTextView.getChipValues())) {
-            if (mUri != null) {
-                mPresenter.createGame(getContentResolver().getType(mUri), mUri,
-                        AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
-                mProgressDialog = new MaterialDialog.Builder(this)
-                        .title(R.string.upload_title)
-                        .content(R.string.upload_message)
-                        .progress(true, 0)
-                        .cancelable(false)
-                        .show();
-            }
-            else {
-                Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
-            }
+        if (mUri != null && mPresenter.isValidFriends()) {
+            mPresenter.createGame(getContentResolver().getType(mUri), mUri,
+                    AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
+            mProgressDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.upload_title)
+                    .content(R.string.upload_message)
+                    .progress(true, 0)
+                    .cancelable(false)
+                    .show();
         }
         else {
-            Toast.makeText(this, getString(R.string.emoji_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -316,7 +342,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 mMonth = month;
                 mDayOfMonth = dayOfMonth;
                 mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
-                long today = mCalendar.getTime().getTime();
+                long today = Calendar.getInstance().getTime().getTime();
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(mYear, mMonth, mDayOfMonth + 1);
                 long selectedDay = calendar.getTime().getTime();
@@ -329,8 +355,11 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     mDays /= DateUtils.MILLIS;
                 }
             }, mYear, mMonth, mDayOfMonth);
-            mDatePickerDialog.getDatePicker().setMinDate(mCalendar.getTime().getTime());
-            mDatePickerDialog.getDatePicker().setMaxDate(mCalendar.getTime().getTime() + DateUtils.TWO_WEEKS_OFFSET);
+
+            Calendar calendar = Calendar.getInstance();
+            mDatePickerDialog.getDatePicker().setMinDate(calendar.getTime().getTime());
+            calendar.add(Calendar.DATE, DateUtils.TWO_WEEKS_DAYS);
+            mDatePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
             mDatePickerDialog.show();
         }
         else {
@@ -339,15 +368,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     }
 
     @Override
-    public void setFriendNames(String[] friends) {
-        ArrayAdapter<String> friendsAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_expandable_list_item_1, friends);
-        mFriendsTextView.setAdapter(friendsAdapter);
+    public void addFriendNames(List<String> friendNames) {
+        mFriendNameAdapter.addAll(friendNames);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             mAnimationView.pauseAnimation();
             mAnimationView.setVisibility(View.GONE);
@@ -364,6 +392,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void onResume() {
         super.onResume();
         mAnimationView.playAnimation();
+        mFriendNameAdapter.clear();
         mPresenter.subscribe();
     }
 

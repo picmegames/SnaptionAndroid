@@ -125,6 +125,7 @@ public class CaptionAdapter extends RecyclerView.Adapter {
     }
 
     public void clear() {
+        lastPosition = -1;
         int oldSize = mCaptions.size();
         mCaptions.clear();
         notifyItemRangeRemoved(0, oldSize);

@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
+import com.snaptiongame.app.presentation.view.listeners.InfiniteRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     LinearLayout mEmptyView;
 
     protected FriendsContract.Presenter mPresenter;
+    private InfiniteRecyclerViewScrollListener mScrollListener;
 
     private FriendsAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
@@ -64,31 +66,46 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         mFriendsList.addItemDecoration(mDecoration);
 
         mFriendsList.setHasFixedSize(true);
-        mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mFriendsList.setLayoutManager(layoutManager);
         mAdapter = new FriendsAdapter(new ArrayList<>());
         mAdapter.setPresenter(mPresenter);
         mAdapter.setShouldDisplayAddRemoveOption(true);
 
+        mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mPresenter.loadFriends(page);
+            }
+        };
+        mFriendsList.addOnScrollListener(mScrollListener);
+
         mFriendsList.setAdapter(mAdapter);
 
-        mRefreshLayout.setOnRefreshListener(mPresenter::loadFriends);
+        mRefreshLayout.setOnRefreshListener(() -> {
+            setRefreshing(true);
+            mAdapter.clear();
+            mScrollListener.resetState();
+            mPresenter.loadFriends(1);
+        });
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
+        mPresenter.subscribe();
+
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void refreshFriends() {
+        mAdapter.clear();
+        mScrollListener.resetState();
         mPresenter.subscribe();
     }
 
     @Override
     public void showEmptyView() {
         mEmptyView.setVisibility(View.VISIBLE);
-        mFriendsList.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -111,13 +128,14 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @Override
     public void processFriends(List<Friend> friends) {
-        if (friends.isEmpty()) {
-            showEmptyView();
+        mAdapter.addFriends(friends);
+        setRefreshing(false);
+
+        if (!mAdapter.isEmpty()) {
+            showFriendList();
         }
         else {
-            showFriendList();
-            mAdapter.setFriends(friends);
-            mRefreshLayout.setRefreshing(false);
+            showEmptyView();
         }
     }
 

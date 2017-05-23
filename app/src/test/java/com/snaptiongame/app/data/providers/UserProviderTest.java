@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 import static org.mockito.Mockito.mock;
@@ -30,8 +29,6 @@ public class UserProviderTest {
         List<User> users = new ArrayList<>();
         users.add(user);
         when(service.getUser(0)).thenReturn(Single.just(user));
-        when(service.getUsersByEmail("")).thenReturn(Observable.just(users));
-        when(service.getUsersByFacebookID("")).thenReturn(Observable.just(users));
         when(service.updateUser(user)).thenReturn(Single.just(user));
     }
 
@@ -39,34 +36,6 @@ public class UserProviderTest {
     public void testGetUser() {
         // TODO Fix test
 //      UserProvider.getUser(0)
-//            .subscribeOn(Schedulers.io())
-//            .subscribe(
-//                  returnedUser -> assertTrue(returnedUser.equals(user)),
-//                  e -> {
-//                  },
-//                  () -> {
-//                  }
-//            );
-    }
-
-    @Test
-    public void testFindUserEmail() {
-        // TODO Fix test
-//      UserProvider.getUserWithEmail("")
-//            .subscribeOn(Schedulers.io())
-//            .subscribe(
-//                  returnedUser -> assertTrue(returnedUser.equals(user)),
-//                  e -> {
-//                  },
-//                  () -> {
-//                  }
-//            );
-    }
-
-    @Test
-    public void testFindUserFacebook() {
-        // TODO Fix test
-//      UserProvider.getUserWithFacebook("")
 //            .subscribeOn(Schedulers.io())
 //            .subscribe(
 //                  returnedUser -> assertTrue(returnedUser.equals(user)),

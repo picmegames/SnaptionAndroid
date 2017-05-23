@@ -11,8 +11,6 @@ import com.snaptiongame.app.data.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -34,12 +32,11 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     // private byte[] mEncodedImage;
     private String mEncodedImage;
 
-    private static final String EMOJI_REGEX = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])";
-
     public CreateGamePresenter(@NonNull CreateGameContract.View createGameView) {
         mCreateGameView = createGameView;
         mDisposables = new CompositeDisposable();
         mCreateGameView.setPresenter(this);
+        mFriends = new ArrayList<>();
     }
 
     @Override
@@ -56,19 +53,6 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                         () -> uploadGame(userId, isPublic, type, gameDuration)
                 );
         mDisposables.add(disposable);
-    }
-
-    public boolean containsEmojis(List<String> tags) {
-        Matcher matcher;
-        Pattern emojiPattern = Pattern.compile(EMOJI_REGEX);
-
-        for (String tag : tags) {
-            matcher = emojiPattern.matcher(tag);
-            if (matcher.find()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void uploadGame(int userId, boolean isPublic, String type, long gameDuration) {
@@ -121,13 +105,18 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     @Override
+    public boolean isValidFriends() {
+        return !getFriendIds(mCreateGameView.getAddedFriends()).contains(-1);
+    }
+
+    @Override
     public List<Friend> getFriends() {
         return mFriends;
     }
 
     @Override
     public void loadFriends() {
-        Disposable disposable = FriendProvider.getFriends()
+        Disposable disposable = FriendProvider.getAllFriends()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processFriends,
@@ -138,16 +127,17 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     private void processFriends(List<Friend> friends) {
-        mFriends = friends;
-        String[] names = new String[friends.size()];
-        for (int index = 0; index < names.length; index++) {
-            names[index] = friends.get(index).username;
+        mFriends.addAll(friends);
+        List<String> names = new ArrayList<>();
+        for (Friend friend : friends) {
+            names.add(friend.username);
         }
-        mCreateGameView.setFriendNames(names);
+        mCreateGameView.addFriendNames(names);
     }
 
     @Override
     public void subscribe() {
+        mFriends.clear();
         loadFriends();
     }
 

@@ -182,6 +182,10 @@ public class WallFragment extends Fragment implements WallContract.View {
         mPresenter.loadGames(mType, mTags, 1);
     }
 
+    public boolean hasTags() {
+        return mTags != null && !mTags.isEmpty();
+    }
+
     /**
      * This method is called after the network call to get new
      * games is complete and successful.
@@ -212,27 +216,19 @@ public class WallFragment extends Fragment implements WallContract.View {
             mWallState.setText(R.string.nothing_here);
             mWallStateImage.setImageResource(R.drawable.snaption_icon_gray);
         }
-
-        if (mType != WallContract.HISTORY) {
-            mWall.setVisibility(View.GONE);
-        }
     }
 
     @Override
     public void showDisconnectedView() {
-        if (mAdapter.isEmpty()) {
-            if (mEmptyOrDisconnectedView != null) {
-                mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
-            }
+        mAdapter.clear();
 
-            if (mWallState != null && mWallStateImage != null) {
-                mWallState.setText(R.string.no_internet);
-                mWallStateImage.setImageResource(R.drawable.ic_signal_wifi_off_grey_600_48dp);
-            }
+        if (mEmptyOrDisconnectedView != null) {
+            mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+        }
 
-            if (mType != WallContract.HISTORY && mWall != null) {
-                mWall.setVisibility(View.GONE);
-            }
+        if (mWallState != null && mWallStateImage != null) {
+            mWallState.setText(R.string.no_internet);
+            mWallStateImage.setImageResource(R.drawable.ic_signal_wifi_off_grey_600_48dp);
         }
     }
 
@@ -240,10 +236,6 @@ public class WallFragment extends Fragment implements WallContract.View {
     public void showWall() {
         if (mEmptyOrDisconnectedView != null) {
             mEmptyOrDisconnectedView.setVisibility(View.GONE);
-        }
-
-        if (mType != WallContract.HISTORY && mWall != null) {
-            mWall.setVisibility(View.VISIBLE);
         }
     }
 

@@ -17,7 +17,7 @@ public class CreateGameContract {
     interface View extends BaseView<Presenter> {
         void createGame();
 
-        void setFriendNames(String[] friendNames);
+        void addFriendNames(List<String> friendNames);
 
         void onBackPressed();
 
@@ -43,8 +43,8 @@ public class CreateGameContract {
 
         List<Friend> getFriends();
 
-        boolean containsEmojis(List<String> tags);
-
         void loadFriends();
+
+        boolean isValidFriends();
     }
 }

@@ -52,6 +52,8 @@ import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -101,7 +103,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
-    private static final int RESULT_CODE = 7777;
+    private static final int WALL_RESULT_CODE = 7777;
+    private static final int FRIEND_RESULT_CODE = 1414;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -309,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 View searchMenuView = mToolbar.findViewById(R.id.search);
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
                         getString(R.string.transition_search_back)).toBundle();
-                startActivity(searchIntent, options);
+                startActivityForResult(searchIntent, FRIEND_RESULT_CODE, options);
                 break;
             case R.id.share:
                 sendInviteIntent();
@@ -349,22 +352,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .title(R.string.filter_games_title)
                     .positiveText(R.string.filter)
                     .negativeText(R.string.clear)
-                    .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        if (fragTag.equals(WallFragment.TAG)) {
-                            mFilterTextView.chipifyAllUnterminatedTokens();
-                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
+                    .cancelListener(dialog -> {
+                        if (fragTag.equals(WallFragment.TAG) && !((WallFragment) mCurrentFragment).hasTags()) {
+                            clearFilterView();
                         }
                     })
-                    .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        clearFilterView();
-                        if (fragTag.equals(WallFragment.TAG)) {
-                            mFilterTextView.chipifyAllUnterminatedTokens();
-                            ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
-                        }
-                    })
-                    .cancelListener(dialogInterface -> {
+                    .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
+                        clearFilterView()
+                    )
+                    .onAny((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
                         mFilterTextView.chipifyAllUnterminatedTokens();
-                        ((WallFragment) mCurrentFragment).filterGames(mFilterTextView.getChipValues());
+                        filter(mFilterTextView.getChipValues());
                     })
                     .cancelable(true)
                     .show();
@@ -373,6 +371,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             mFilterDialog.show();
+        }
+    }
+
+    private void filter(List<String> tags) {
+        if (fragTag.equals(WallFragment.TAG)) {
+            ((WallFragment) mCurrentFragment).filterGames(tags);
         }
     }
 
@@ -388,9 +392,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void refreshFriends() {
+        if (fragTag.equals(FriendsFragment.TAG)) {
+            ((FriendsFragment) mCurrentFragment).refreshFriends();
+        }
+    }
+
     private void sendInviteIntent() {
-        String smsBody = getString(R.string.invite_message) +
-                getString(R.string.store_url);
+        String smsBody = getString(R.string.invite_message) + getString(R.string.store_url);
         Intent inviteIntent = new Intent(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, smsBody);
         inviteIntent.setType(TEXT_TYPE);
@@ -551,12 +560,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void goToCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
-        startActivityForResult(createGameIntent, RESULT_CODE);
+        startActivityForResult(createGameIntent, WALL_RESULT_CODE);
     }
 
     private void goToLogin() {
+        int resultCode = 0;
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivityForResult(loginIntent, RESULT_CODE);
+
+        if (fragTag.equals(WallFragment.TAG)) {
+            resultCode = WALL_RESULT_CODE;
+        }
+        else if (fragTag.equals(FriendsFragment.TAG)) {
+            resultCode = FRIEND_RESULT_CODE;
+        }
+
+        startActivityForResult(loginIntent, resultCode);
     }
 
     private void hideKeyboard() {
@@ -572,8 +590,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_CODE && resultCode == RESULT_OK) {
+        if (requestCode == WALL_RESULT_CODE && resultCode == RESULT_OK) {
             refreshWall();
+        }
+        else if (requestCode == FRIEND_RESULT_CODE && resultCode == RESULT_OK) {
+            refreshFriends();
         }
     }
 }

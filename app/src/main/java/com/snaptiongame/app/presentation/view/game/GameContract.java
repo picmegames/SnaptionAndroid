@@ -38,6 +38,8 @@ public class GameContract {
         void setRefreshing(boolean isRefreshing);
 
         void resetScrollState();
+      
+        void showCaptionSubmissionError();
     }
 
     interface Presenter extends BasePresenter {

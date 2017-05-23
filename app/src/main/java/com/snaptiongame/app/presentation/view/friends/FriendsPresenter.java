@@ -10,10 +10,6 @@ import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.FriendProvider;
 import com.snaptiongame.app.data.providers.UserProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -31,83 +27,40 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     @NonNull
     private CompositeDisposable mDisposables;
 
-    private List<Friend> mFriends;
-
     public FriendsPresenter(@NonNull FriendsContract.View friendView) {
         mFriendView = friendView;
         mDisposables = new CompositeDisposable();
         mFriendView.setPresenter(this);
-        mFriends = new ArrayList<>();
     }
 
     @Override
-    public void findFriends(String query) {
+    public void findFriends(String query, int page) {
         mDisposables.clear();
 
-        Observable<Friend> friendResults = FriendProvider.getFriends()
-                .flatMapIterable(friend -> friend)
-                .filter(friend -> checkMyFriendsWithQuery(query, friend));
-
-        Observable<Friend> emailResults = UserProvider.getUsersWithEmail(query)
+        Disposable disposable = UserProvider.searchUsers(query, query, query, query, page)
                 .flatMapIterable(users -> users)
-                .map(Friend::new);
-
-        Observable<Friend> usernameResults = UserProvider.getUsersByUsername(query)
-                .flatMapIterable(users -> users)
-                .map(Friend::new);
-
-        Observable<Friend> fullNameResults = UserProvider.getUsersByFullName(query)
-                .flatMapIterable(users -> users)
-                .map(Friend::new);
-
-        // Do we need to? They should come up from the username search
-        // We need this if we want to specify that they came from Facebook
-//        Observable<Friend> facebook = FriendProvider.getFacebookFriends()
-//                .flatMapIterable(friend -> friend)
-//                .filter(friend -> checkMyFriendsWithQuery(query, friend));
-
-        //Note the order of concat matter
-        //If an observable ends up being empty, it will trash the entire call. That is dumb
-        //This is solved by using .defaultIsEmpty(new Friend(-1))
-        Disposable disposable = Observable.concat(usernameResults, friendResults, emailResults, fullNameResults)
+                .map(Friend::new)
                 .distinct(friend -> friend.id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mFriendView::addFriend,
                         Timber::e
                 );
+
         mDisposables.add(disposable);
     }
 
-    /**
-     * This filter will scan our friends list with the entered query from the SearchActivity. At the
-     * moment we want to check if the query can be found in EITHER the username or the email.
-     *
-     * @param query     The entered text in SearchActivity
-     * @param posFriend friends emmitted by the getFriends() Observable
-     * @return true if a user matches the search query
-     */
-    private boolean checkMyFriendsWithQuery(String query, Friend posFriend) {
-        // We have to check that the searchable fields are not null as certain network calls
-        // don't initialize username/email fields
-        return (posFriend.username != null && posFriend.username.toLowerCase().contains(query.toLowerCase())) ||
-                (posFriend.email != null) && posFriend.email.toLowerCase().contains(query.toLowerCase());
-    }
-
     @Override
-    public void loadFriends() {
+    public void loadFriends(int page) {
         mDisposables.clear();
 
-        Disposable disposable = FriendProvider.getFriends()
+        Disposable disposable = FriendProvider.getFriends(page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        friends -> {
-                            mFriendView.processFriends(friends);
-                            mFriends = new ArrayList<>(friends);
-                        },
+                        mFriendView::processFriends,
                         e -> {
                             Timber.e(e);
-                            mFriendView.showFriendList();
+                            mFriendView.showEmptyView();
                             mFriendView.setRefreshing(false);
                         },
                         () -> {
@@ -152,18 +105,8 @@ public class FriendsPresenter implements FriendsContract.Presenter {
     }
 
     @Override
-    public void addFriendTemp(Friend friend) {
-        mFriends.add(friend);
-    }
-
-    @Override
-    public void removeTempFriend(Friend friend) {
-        mFriends.remove(friend);
-    }
-
-    @Override
     public void subscribe() {
-        loadFriends();
+        loadFriends(1);
     }
 
     @Override

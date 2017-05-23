@@ -105,6 +105,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 userObject = user.getAsJsonObject();
                 newUser.id = userObject.get(User.ID).getAsInt();
                 newUser.username = userObject.get(User.USERNAME).getAsString();
+                newUser.fullName = userObject.get(User.FULL_NAME).getAsString();
                 newUser.exp = userObject.get(User.EXP).getAsInt();
                 pictureObject = userObject.get(User.PICTURE);
                 if (!pictureObject.isJsonNull()) {

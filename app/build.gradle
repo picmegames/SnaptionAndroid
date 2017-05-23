@@ -11,8 +11,8 @@ android {
         applicationId "com.snaptiongame.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "1.0.2"
+        versionCode 16
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -149,6 +149,9 @@ dependencies {
 
     // Material Dialogs
     compile "com.afollestad.material-dialogs:core:${materialDialogsVersion}"
+
+    // Material Showcase View
+    compile "com.github.deano2390:MaterialShowcaseView:${materialShowcaseView}"
 
     // Nachos
     compile "com.hootsuite.android:nachos:${nachosVersion}"

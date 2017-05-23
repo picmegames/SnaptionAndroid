@@ -128,6 +128,7 @@ gotten the project to build successfully!
 * [wasabeef/glide-transformations](https://github.com/wasabeef/glide-transformations)
 * [airbnb/lottie-android](https://github.com/airbnb/lottie-android)
 * [afollestad/material-dialogs](https://github.com/afollestad/material-dialogs)
+* [deano2390/MaterialShowcaseView](https://github.com/deano2390/MaterialShowcaseView)
 * [hootsuite/nachos](https://github.com/hootsuite/nachos)
 * [square/okhttp](https://github.com/square/okhttp)
 * [chrisbanes/PhotoView](https://github.com/chrisbanes/PhotoView)
