@@ -125,7 +125,7 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="game_closed_content">¿Te gustaría crear un nuevo juego con la misma imagen?</string>
     <string name="dont_ask_again">No me preguntes de nuevo</string>
     <string name="create_game_content">¡Siempre puedes crear un juego desde uno ya existente haciendo clic en el menú de arriba o subiendo el tuyo desde la pared!</string>
-    <string name="got_it">Lo tengo</string>
+    <string name="got_it">LO TENGO</string>
     <string name="create_game_title">Creando Otro Juego</string>
     <string name="posted_by">Publicado por %1$s</string>
     <string name="no_captions">No hay Subtítulos!</string>
@@ -151,5 +151,7 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="top_game">Mejores Juegos Votos</string>
     <string name="top_caption">Mejores Subtítulos Votos</string>
     <string name="top_caption_count">Cuenta de Mejor Subtítulos</string>
+    <string name="game_showcase_content">Haga clic en el botón rosa para agregar un subtítulo</string>
+    <string name="game_showcase_title">¡Esto es un Juego!</string>
 
 </resources>
