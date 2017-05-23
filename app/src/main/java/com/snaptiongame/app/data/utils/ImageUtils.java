@@ -1,5 +1,6 @@
 package com.snaptiongame.app.data.utils;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -105,7 +106,7 @@ public class ImageUtils {
     }
 
     private static String compressImage(Uri imageUri) {
-        String filePath = getRealPathFromURI(imageUri);
+        String filePath = getImageUrlWithAuthority(SnaptionApplication.getContext(), imageUri);
         Bitmap scaledBitmap = null;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -225,6 +226,36 @@ public class ImageUtils {
             cursor.close();
             return path;
         }
+    }
+
+    public static String getImageUrlWithAuthority(Context context, Uri uri) {
+        InputStream is = null;
+        if (uri.getAuthority() != null) {
+            try {
+                is = context.getContentResolver().openInputStream(uri);
+                Bitmap bmp = BitmapFactory.decodeStream(is);
+                return writeToTempImageAndGetPathUri(context, bmp).toString();
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    is.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Uri writeToTempImageAndGetPathUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, FOLDER, null);
+        return Uri.parse(path);
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
