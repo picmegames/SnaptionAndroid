@@ -30,6 +30,10 @@
     <string name="anim_3" translatable="false">emoji_tongue.json</string>
     <string name="anim_4" translatable="false">camera.json</string>
 
+    <!-- Showcase -->
+    <string name="game_showcase_title">This is a Game!</string>
+    <string name="game_showcase_content">Click the pink button to add a caption</string>
+
     <!-- Tags -->
     <string name="open_drawer" translatable="false">Navigation View Open</string>
     <string name="close_drawer" translatable="false">Navigation View Closed</string>
@@ -134,7 +138,7 @@
     <string name="game_closed_content">Would you like to create a new game with the same image?</string>
     <string name="dont_ask_again">Don\'t ask me again</string>
     <string name="create_game_content">You can always create a game from an existing one by clicking the menu above, or uploading your own from the wall!</string>
-    <string name="got_it">Got it</string>
+    <string name="got_it">GOT IT</string>
     <string name="posted_by">Posted by %1$s</string>
     <string name="no_captions">No Captions!</string>
     <string name="licenses">Open Source Licenses</string>

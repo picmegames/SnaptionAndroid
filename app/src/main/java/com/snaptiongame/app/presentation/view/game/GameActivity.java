@@ -78,6 +78,7 @@ import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.utils.AnimUtils;
 import com.snaptiongame.app.presentation.view.utils.ColorUtils;
 import com.snaptiongame.app.presentation.view.utils.GlideUtils;
+import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -209,6 +210,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
     private boolean isPublic;
+    private boolean isClosed;
     private float lastRefreshIconRotation = 0.0f;
 
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -674,6 +676,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
         mPickerName.setText(mPicker);
 
+        this.isClosed = isClosed;
+
         if (isClosed) {
             mAddCaptionFab.setVisibility(View.GONE);
 
@@ -698,6 +702,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         )
                         .show();
             }
+        }
+        else {
+            ShowcaseUtils.showShowcase(this, mAddCaptionFab,
+                    R.string.game_showcase_title, R.string.game_showcase_content);
         }
 
         mPresenter = new GamePresenter(id, this);

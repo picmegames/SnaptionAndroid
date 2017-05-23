@@ -1,6 +1,7 @@
 package com.snaptiongame.app.data.providers.api;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -112,11 +113,13 @@ public class ApiProvider {
      *
      * @return The development or production OkHttpClient
      */
+    @NonNull
     private static OkHttpClient makeOkHttpClient() {
         cookieStore = new PersistentCookieStore(getContext());
         CookieHandler cookieHandler = new CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieHandler);
         JavaNetCookieJar cookieJar = new JavaNetCookieJar(cookieHandler);
+        SSLSocketFactory socketFactory;
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .readTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
@@ -129,12 +132,15 @@ public class ApiProvider {
                 HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                 okHttpClientBuilder.addInterceptor(interceptor);
+                socketFactory = getSSLConfig(SnaptionApplication.getContext(), R.raw.api_cert_dev)
+                        .getSocketFactory();
                 okHttpClientBuilder.hostnameVerifier((String hostname, SSLSession session) -> true);
             }
             else {
-                SSLSocketFactory socketFactory = getSSLConfig(SnaptionApplication.getContext()).getSocketFactory();
-                okHttpClientBuilder.sslSocketFactory(socketFactory, trustManager);
+                 socketFactory = getSSLConfig(SnaptionApplication.getContext(), R.raw.api_cert_prod)
+                         .getSocketFactory();
             }
+            okHttpClientBuilder.sslSocketFactory(socketFactory, trustManager);
         }
         catch (CertificateException | KeyStoreException | NoSuchAlgorithmException |
                 KeyManagementException | IOException e) {
@@ -155,13 +161,13 @@ public class ApiProvider {
      * connection between our application and the server.
      *
      * @return A new instance of an SSLContext
-     * @throws CertificateException
-     * @throws KeyStoreException
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     * @throws IOException
+     * @throws CertificateException if the certificate could not be found
+     * @throws KeyStoreException if the keystore could not be found
+     * @throws NoSuchAlgorithmException if the algorithm could not be found
+     * @throws KeyManagementException if we could not verify the keystore
+     * @throws IOException if we could not verify the certificate
      */
-    private static SSLContext getSSLConfig(Context context) throws CertificateException,
+    private static SSLContext getSSLConfig(Context context, int certResourceId) throws CertificateException,
             KeyStoreException, NoSuchAlgorithmException, KeyManagementException, IOException {
 
         CertificateFactory certificateFactory;
@@ -169,7 +175,7 @@ public class ApiProvider {
 
         // Open certificate from raw resource
         Certificate certificate;
-        try (InputStream cert = context.getResources().openRawResource(R.raw.snaptionapicertificate)) {
+        try (InputStream cert = context.getResources().openRawResource(certResourceId)) {
             certificate = certificateFactory.generateCertificate(cert);
         }
 
@@ -206,6 +212,7 @@ public class ApiProvider {
      *
      * @return The Gson parser to be used with a Retrofit instance
      */
+    @NonNull
     private static Gson setupGson() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(OAuthRequest.class, new OAuthConverter());

@@ -24,6 +24,10 @@ allprojects {
         maven {
             url "https://jitpack.io"
         }
+
+        maven {
+            url "https://maven.google.com"
+        }
     }
 }
 
@@ -57,6 +61,7 @@ ext {
     glideTransformationsVersion = '2.0.2'
     lottieVersion = '2.0.0-rc1'
     materialDialogsVersion = '0.9.4.4'
+    materialShowcaseView = '1.1.0'
     nachosVersion = '1.1.0'
     okHttpVersion = '3.8.0'
     photoViewVersion = '2.0.0'
