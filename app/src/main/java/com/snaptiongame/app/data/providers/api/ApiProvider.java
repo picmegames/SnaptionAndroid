@@ -9,6 +9,7 @@ import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.api.SnaptionApi;
+import com.snaptiongame.app.data.converters.ActivityFeedItemConverter;
 import com.snaptiongame.app.data.converters.AddFriendConverter;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.converters.CaptionConverter;
@@ -23,6 +24,7 @@ import com.snaptiongame.app.data.converters.SessionConverter;
 import com.snaptiongame.app.data.converters.UserConverter;
 import com.snaptiongame.app.data.converters.UserStatsConverter;
 import com.snaptiongame.app.data.cookies.PersistentCookieStore;
+import com.snaptiongame.app.data.models.ActivityFeedItem;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
@@ -228,6 +230,7 @@ public class ApiProvider {
         builder.registerTypeAdapter(DeepLinkRequest.class, new BranchConverter());
         builder.registerTypeAdapter(Rank.class, new RankConverter());
         builder.registerTypeAdapter(UserStats.class, new UserStatsConverter());
+        builder.registerTypeAdapter(ActivityFeedItem.class, new ActivityFeedItemConverter());
         builder.excludeFieldsWithoutExposeAnnotation();
         return builder.create();
     }
