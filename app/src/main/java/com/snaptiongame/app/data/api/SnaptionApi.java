@@ -289,8 +289,8 @@ public interface SnaptionApi {
     /**
      * This method sends a request to retrieve the user's activity feed
      *
-     * @return
+     * @return A single that emits a list of ActivityFeedItem objects
      */
-    @GET("/UserActivity/")
+    @GET("/Activity/")
     Single<List<ActivityFeedItem>> getActivityFeed(int page);
 }
