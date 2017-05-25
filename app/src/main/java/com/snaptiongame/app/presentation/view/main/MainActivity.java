@@ -313,8 +313,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.search:
                 Intent searchIntent = new Intent(this, FriendSearchActivity.class);
                 View searchMenuView = mToolbar.findViewById(R.id.search);
-                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
-                        getString(R.string.transition_search_back)).toBundle();
+                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        searchMenuView, getString(R.string.transition_search_back)).toBundle();
                 startActivityForResult(searchIntent, FRIEND_RESULT_CODE, options);
                 break;
             case R.id.share:
@@ -461,6 +461,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mMenu.findItem(R.id.layout).setVisible(false);
                 mMenu.findItem(R.id.search).setVisible(true);
                 mMenu.findItem(R.id.share).setVisible(true);
+                ShowcaseUtils.showShowcase(this, mToolbar.findViewById(R.id.search),
+                        R.string.add_a_friend, R.string.friends_showcase_content);
                 mFab.setVisibility(View.GONE);
                 break;
 

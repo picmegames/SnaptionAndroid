@@ -35,6 +35,8 @@
     <string name="game_showcase_content">Click the pink button to add a caption</string>
     <string name="wall_showcase_content">Click the pink button to create your own game or
         tap on a game on the wall to view it</string>
+    <string name="friends_showcase_content">Tap on the magnifying glass to add a friend
+        using their full name, email, or username</string>
 
     <!-- Tags -->
     <string name="open_drawer" translatable="false">Navigation View Open</string>

@@ -155,5 +155,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="game_showcase_title">¡Esto es un Juego!</string>
     <string name="wall_showcase_content">Haga clic en el botón de color rosa para crear su propio
         juego o toque en un juego en la pared para verlo</string>
-
+    <string name="friends_showcase_content">Toca la lupa para añadir un amigo con su nombre
+        completo, correo electrónico o nombre de usuario</string>
 </resources>
