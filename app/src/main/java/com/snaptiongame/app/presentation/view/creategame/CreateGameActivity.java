@@ -43,7 +43,6 @@ import com.hootsuite.nachos.chip.ChipSpanChipCreator;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
@@ -326,11 +325,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         if (mUri != null && mPresenter.isValidFriends()) {
             if (!mIsFromAnotherGame) {
                 mPresenter.createGame(getContentResolver().getType(mUri), mUri,
-                        AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
+                        !mPrivateSwitch.isChecked(), mDays);
             }
             else {
-                mPresenter.createGameFromId(mGameId, AuthManager.getUserId(),
-                        !mPrivateSwitch.isChecked(), mDays);
+                mPresenter.createGameFromId(mGameId, !mPrivateSwitch.isChecked(), mDays);
             }
             mProgressDialog = new MaterialDialog.Builder(this)
                     .title(R.string.upload_title)

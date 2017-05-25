@@ -89,9 +89,9 @@ public class Game {
 
     }
 
-    public Game(int userId, boolean isPublic, String picture, String type,
-                List<String> tags, List<Integer> friendIds, long gameDuration) {
-        this.userId = userId;
+    // Constructor for creating Game with new picture
+    public Game(boolean isPublic, String picture, String type, List<String> tags,
+                List<Integer> friendIds, long gameDuration) {
         this.isPublic = isPublic;
         this.picture = picture;
         this.type = type;
@@ -101,10 +101,10 @@ public class Game {
         this.isFromAnotherGame = false;
     }
 
-    public Game(int gameId, int userId, boolean isPublic, List<String> tags,
-                List<Integer> friendIds, long gameDuration) {
+    // Constructor for creating Game from gameId
+    public Game(int gameId, boolean isPublic, List<String> tags, List<Integer> friendIds,
+                long gameDuration) {
         this.gameId = gameId;
-        this.userId = userId;
         this.isPublic = isPublic;
         this.sendTags = tags;
         this.friendIds = friendIds;
@@ -112,6 +112,7 @@ public class Game {
         this.isFromAnotherGame = true;
     }
 
+    // Constructor for Game from server
     public Game(int id, long startDate, boolean isPublic, int creatorId, String picture, String type) {
         this.id = id;
         this.startDate = startDate;

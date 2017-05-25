@@ -40,7 +40,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     }
 
     @Override
-    public void createGame(String type, Uri uri, int userId, boolean isPublic, long gameDuration) {
+    public void createGame(String type, Uri uri, boolean isPublic, long gameDuration) {
         Disposable disposable = ImageUtils.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -50,15 +50,15 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                             Timber.e(e);
                             mCreateGameView.showImageCompressionFailure();
                         },
-                        () -> uploadGame(userId, isPublic, type, gameDuration)
+                        () -> uploadGame(isPublic, type, gameDuration)
                 );
         mDisposables.add(disposable);
     }
 
     @Override
-    public void createGameFromId(int gameId, int userId, boolean isPublic, long gameDuration) {
+    public void createGameFromId(int gameId, boolean isPublic, long gameDuration) {
         Disposable disposable = GameProvider.addGame(
-                new Game(gameId, userId, isPublic, mCreateGameView.getTags(),
+                new Game(gameId, isPublic, mCreateGameView.getTags(),
                         getFriendIds(mCreateGameView.getAddedFriends()), gameDuration))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -71,9 +71,9 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         mDisposables.add(disposable);
     }
 
-    private void uploadGame(int userId, boolean isPublic, String type, long gameDuration) {
+    private void uploadGame(boolean isPublic, String type, long gameDuration) {
         Disposable disposable = GameProvider.addGame(
-                new Game(userId, isPublic, mEncodedImage, type, mCreateGameView.getTags(),
+                new Game(isPublic, mEncodedImage, type, mCreateGameView.getTags(),
                         getFriendIds(mCreateGameView.getAddedFriends()), gameDuration))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
