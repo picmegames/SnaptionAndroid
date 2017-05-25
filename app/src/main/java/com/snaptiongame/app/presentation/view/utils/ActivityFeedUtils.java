@@ -15,8 +15,10 @@ import com.snaptiongame.app.data.utils.DateUtils;
 public class ActivityFeedUtils {
 
     public static final int FRIEND_MADE_GAME = 0;
-    public static final int CAPTIONED_GAME = 1;
-    public static final int FRIENDED_YOU = 2;
+    public static final int FRIEND_INVITED_GAME = 1;
+    public static final int CAPTIONED_GAME = 2;
+    public static final int FRIENDED_YOU = 3;
+    public static final int NEW_FACEBOOK_FRIEND = 4;
 
     public static CharSequence getMessage(Context context, ActivityFeedItem item) {
         CharSequence message = "";
@@ -27,6 +29,10 @@ public class ActivityFeedUtils {
                 message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
                         res.getString(R.string.friend_made_game));
                 break;
+            case FRIEND_INVITED_GAME:
+                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+                        res.getString(R.string.friend_invited_game));
+                break;
             case CAPTIONED_GAME:
                 message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
                         res.getString(R.string.captioned_game));
@@ -34,6 +40,11 @@ public class ActivityFeedUtils {
             case FRIENDED_YOU:
                 message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
                         res.getString(R.string.friended_you));
+                break;
+            case NEW_FACEBOOK_FRIEND:
+                message = TextUtils.concat(res.getString(R.string.new_facebook_friend_prefix), " ",
+                        item.friend.fullName, " ", res.getString(R.string.new_facebook_friend_suffix),
+                        " ", TextStyleUtils.getTextBolded(item.friend.username), ".");
                 break;
             default:
                 break;

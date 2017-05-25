@@ -67,7 +67,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
                             ColorGenerator.MATERIAL.getColor(curActivityItem.friend.username)));
         }
 
-        if (curActivityItem.type != ActivityFeedUtils.FRIENDED_YOU) {
+        if (curActivityItem.type != ActivityFeedUtils.FRIENDED_YOU &&
+                curActivityItem.type != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
             if (curActivityItem.game.imageUrl != null) {
                 Glide.with(holder.mContext)
                         .load(curActivityItem.game.imageUrl)
