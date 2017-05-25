@@ -23,7 +23,7 @@
         android:title="@string/invite_friend"/>
 
     <item
-        android:id="@+id/isPrivate"
+        android:id="@+id/is_private"
         android:icon="@drawable/ic_lock_white_24dp"
         android:title="@string/is_private"
         android:visible="false"
