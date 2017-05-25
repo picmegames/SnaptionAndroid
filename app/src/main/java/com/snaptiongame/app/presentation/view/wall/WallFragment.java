@@ -19,7 +19,6 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.presentation.view.decorations.WallSpacesItemDecoration;
 import com.snaptiongame.app.presentation.view.listeners.InfiniteRecyclerViewScrollListener;
-import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
