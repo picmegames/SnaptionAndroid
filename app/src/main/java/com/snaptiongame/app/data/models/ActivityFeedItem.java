@@ -30,10 +30,6 @@ public class ActivityFeedItem {
     public static final String GAME = "game";
     public static final String CAPTION = "caption";
 
-    public static final int FRIEND_MADE_GAME = 0;
-    public static final int CAPTIONED_GAME = 1;
-    public static final int FRIENDED_YOU = 2;
-
     public ActivityFeedItem(int id, long date, int type, User user, User friend, Game game, Caption caption) {
         this.id = id;
         this.date = date;

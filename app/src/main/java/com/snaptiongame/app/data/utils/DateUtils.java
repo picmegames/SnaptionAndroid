@@ -17,6 +17,9 @@ public class DateUtils {
     public static final long ONE_DAY = 86400000;
     public static final long SECONDS_IN_HOUR = 3600;
     public static final int TWO_WEEKS_DAYS = 14;
+    public static final int SECONDS_IN_MINUTE = 60;
+    public static final int MINUTES_IN_HOUR = 60;
+    public static final int HOURS_IN_DAY = 24;
 
     public static long getNow() {
         return System.currentTimeMillis() / MILLIS;
@@ -28,6 +31,27 @@ public class DateUtils {
 
     public static boolean isPastNow(long date) {
         return date <= getNow();
+    }
+
+    public static String getTimeSince(Context context, long date) {
+        int diffInDays;
+        long diff = date - getNow();
+        Resources res = context.getResources();
+
+        diffInDays = (int) (diff / (MILLIS * SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY));
+        if (diffInDays > 0) {
+            return String.format(res.getString(R.string.days), diffInDays);
+        }
+        else {
+            int diffHours = (int) (diff / (MILLIS * SECONDS_IN_MINUTE * MINUTES_IN_HOUR));
+            if (diffHours > 0) {
+                return String.format(res.getString(R.string.hours), diffHours);
+            }
+            else {
+                int diffMinutes = (int) ((diff / (SECONDS_IN_MINUTE * MILLIS) % MINUTES_IN_HOUR));
+                return String.format(res.getString(R.string.minutes), diffMinutes);
+            }
+        }
     }
 
     public static String getTimeLeftLabel(Context context, long date) {
