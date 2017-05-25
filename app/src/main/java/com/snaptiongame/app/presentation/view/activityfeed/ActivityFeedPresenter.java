@@ -28,9 +28,13 @@ public class ActivityFeedPresenter implements ActivityFeedContract.Presenter {
         Disposable disposable = ActivityFeedProvider.getActivityFeed(page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mActivityFeedView::addActivityFeedItems,
+                        items -> {
+                            mActivityFeedView.addActivityFeedItems(items);
+                            mActivityFeedView.setRefreshing(false);
+                        },
                         e -> {
                             Timber.e(e);
+                            mActivityFeedView.setRefreshing(false);
                             mActivityFeedView.showEmptyView();
                         }
                 );

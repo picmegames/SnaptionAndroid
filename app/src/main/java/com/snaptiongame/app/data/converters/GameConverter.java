@@ -113,7 +113,6 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                     newUser.imageWidth = pictureObject.getAsJsonObject().get(User.IMAGE_WIDTH).getAsInt();
                     newUser.imageHeight = pictureObject.getAsJsonObject().get(User.IMAGE_HEIGHT).getAsInt();
                 }
-                newUser.rankId = userObject.get(User.RANK_ID).getAsInt();
                 gameUsers.add(newUser);
             }
         }

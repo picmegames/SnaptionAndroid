@@ -63,7 +63,6 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
             newUser.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
         }
 
-        newUser.rankId = object.get(User.RANK_ID).getAsInt();
         return newUser;
     }
 }
