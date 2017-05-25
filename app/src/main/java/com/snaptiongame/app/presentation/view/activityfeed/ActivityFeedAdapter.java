@@ -100,6 +100,13 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         lastPosition = -1;
     }
 
+    public void clear() {
+        lastPosition = -1;
+        int oldSize = mActivityItems.size();
+        mActivityItems.clear();
+        notifyItemRangeRemoved(0, oldSize);
+    }
+
     @Override
     public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
         ((ActivityFeedItemViewHolder) holder).itemView.clearAnimation();

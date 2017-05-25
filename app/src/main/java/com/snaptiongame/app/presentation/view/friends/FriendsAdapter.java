@@ -263,9 +263,4 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return mFriends.size();
     }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
 }

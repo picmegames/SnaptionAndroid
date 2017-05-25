@@ -156,7 +156,7 @@
         <item quantity="one">%d hour left</item>
         <item quantity="other">%d hours left</item>
     </plurals>
-    <string name="activity_feed">Activity Feed</string>
+    <string name="activity">Activity</string>
     <string name="days" translatable="false">%dd</string>
     <string name="hours" translatable="false">%dh</string>
     <string name="minutes" translatable="false">%dm</string>
@@ -164,7 +164,7 @@
     <!-- Activity Feed Items -->
     <string name="friend_made_game">created a new game.</string>
     <string name="captioned_game">captioned your game.</string>
-    <string name="friended_you">added you as a friend!</string>
+    <string name="friended_you">added you as a friend.</string>
 
     <!-- Facebook Login -->
     <string name="facebook_app_id" translatable="false">359612531056210</string>

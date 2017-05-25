@@ -139,9 +139,4 @@ public class CaptionAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return mCaptions.size();
     }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
 }

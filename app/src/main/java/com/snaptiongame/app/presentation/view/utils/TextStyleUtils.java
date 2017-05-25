@@ -1,7 +1,9 @@
 package com.snaptiongame.app.presentation.view.utils;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 
@@ -22,9 +24,9 @@ public class TextStyleUtils {
         return content;
     }
 
-    public static SpannableString getTextItalicized(String target) {
+    public static SpannableString getTextGray(String target) {
         SpannableString content = new SpannableString(target);
-        content.setSpan(new StyleSpan(Typeface.ITALIC), 0, content.length(), 0);
+        content.setSpan(new ForegroundColorSpan(Color.GRAY), 0, content.length(), 0);
         return content;
     }
 }
