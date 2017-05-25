@@ -13,6 +13,10 @@ import java.util.List;
 public class ActivityFeedContract {
     interface View extends BaseView<Presenter> {
         void addActivityFeedItems(List<ActivityFeedItem> items);
+
+        void showEmptyView();
+
+        void showActivityFeed();
     }
 
     interface Presenter extends BasePresenter {

@@ -35,20 +35,20 @@ public class DateUtils {
 
     public static String getTimeSince(Context context, long date) {
         int diffInDays;
-        long diff = date - getNow();
+        long diff = getNow() - date;
         Resources res = context.getResources();
 
-        diffInDays = (int) (diff / (MILLIS * SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY));
+        diffInDays = (int) (diff / (SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY));
         if (diffInDays > 0) {
             return String.format(res.getString(R.string.days), diffInDays);
         }
         else {
-            int diffHours = (int) (diff / (MILLIS * SECONDS_IN_MINUTE * MINUTES_IN_HOUR));
+            int diffHours = (int) (diff / (SECONDS_IN_MINUTE * MINUTES_IN_HOUR));
             if (diffHours > 0) {
                 return String.format(res.getString(R.string.hours), diffHours);
             }
             else {
-                int diffMinutes = (int) ((diff / (SECONDS_IN_MINUTE * MILLIS) % MINUTES_IN_HOUR));
+                int diffMinutes = (int) ((diff / SECONDS_IN_MINUTE % MINUTES_IN_HOUR));
                 return String.format(res.getString(R.string.minutes), diffMinutes);
             }
         }

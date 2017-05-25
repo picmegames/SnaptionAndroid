@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (!AuthManager.isLoggedIn()) {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
             mNavigationView.getMenu().findItem(R.id.friends).setVisible(false);
-            mNavigationView.getMenu().findItem(R.id.activity_feed).setVisible(false);
+            mNavigationView.getMenu().findItem(R.id.activity).setVisible(false);
             mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
             if (initItem == R.id.my_wall) {
                 mBottomNavigationView.setSelectedItemId(R.id.discover);
@@ -232,8 +232,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
-            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);            mNavigationView.getMenu().findItem(R.id.activity_feed).setVisible(false);
-            mNavigationView.getMenu().findItem(R.id.activity_feed).setVisible(true);
+            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);            mNavigationView.getMenu().findItem(R.id.activity).setVisible(false);
+            mNavigationView.getMenu().findItem(R.id.activity).setVisible(true);
             if (mBottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
                 mBottomNavigationView.getMenu()
                         .add(0, R.id.my_wall, Menu.FIRST, getString(R.string.my_wall))
@@ -464,10 +464,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mFab.setVisibility(View.GONE);
                 break;
 
-            case R.id.activity_feed:
+            case R.id.activity:
                 mCurrentFragment = ActivityFeedFragment.getInstance();
                 fragTag = ActivityFeedFragment.TAG;
-                mActionBar.setTitle(R.string.activity_feed);
+                mActionBar.setTitle(R.string.activity);
                 mBottomNavigationView.setVisibility(View.GONE);
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -476,6 +476,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mMenu.findItem(R.id.search).setVisible(false);
                 mMenu.findItem(R.id.share).setVisible(false);
                 mFab.setVisibility(View.GONE);
+                break;
 
             case R.id.settings:
                 startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
@@ -537,9 +538,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFab.getLayoutParams();
         CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
         FABScrollBehavior fabScrollBehavior = new FABScrollBehavior(this, null, isWall);
-        mFab.show();
 
         if (isWall) {
+            mFab.show();
             bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
                     getResources().getDisplayMetrics());
             coordinatorParams.setBehavior(fabScrollBehavior);

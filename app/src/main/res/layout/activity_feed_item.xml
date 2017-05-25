@@ -3,6 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
                 android:minHeight="72dp"
                 android:paddingBottom="16dp"
@@ -25,6 +26,7 @@
         android:layout_toEndOf="@+id/user_image"
         android:layout_toStartOf="@+id/content_image"
         android:textAlignment="gravity"
+        android:textColor="@android:color/black"
         android:textSize="14sp"/>
 
     <ImageView
