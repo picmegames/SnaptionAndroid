@@ -24,8 +24,8 @@ public class ActivityFeedPresenter implements ActivityFeedContract.Presenter {
     }
 
     @Override
-    public void loadActivityFeed(int page) {
-        Disposable disposable = ActivityFeedProvider.getActivityFeed(page)
+    public void loadActivityFeed() {
+        Disposable disposable = ActivityFeedProvider.getActivityFeed()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mActivityFeedView::addActivityFeedItems,
@@ -36,7 +36,7 @@ public class ActivityFeedPresenter implements ActivityFeedContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadActivityFeed(1);
+        loadActivityFeed();
     }
 
     @Override

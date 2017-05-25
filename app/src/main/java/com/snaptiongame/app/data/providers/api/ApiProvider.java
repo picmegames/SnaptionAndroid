@@ -72,7 +72,7 @@ import timber.log.Timber;
 import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 /**
- * The Game API Provider provides an instance of
+ * The Snaption API Provider provides an instance of
  * the API service built by Retrofit.
  *
  * @author Tyler Wong
@@ -90,7 +90,7 @@ public class ApiProvider {
 
     /**
      * This method provides and handles the creation of
-     * the Game API service.
+     * the Snaption API service.
      *
      * @return An instance of a Game API service
      */

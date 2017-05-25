@@ -16,6 +16,6 @@ public class ActivityFeedContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadActivityFeed(int page);
+        void loadActivityFeed();
     }
 }
