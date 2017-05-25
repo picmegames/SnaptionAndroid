@@ -1,5 +1,6 @@
 package com.snaptiongame.app.data.utils;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +33,6 @@ import timber.log.Timber;
 /**
  * @author Tyler Wong
  */
-
 public class ImageUtils {
 
     private static final float MAX_WIDTH = 1280.0f;
@@ -105,7 +105,8 @@ public class ImageUtils {
     }
 
     private static String compressImage(Uri imageUri) {
-        String filePath = getRealPathFromURI(imageUri);
+        ContentResolver resolver = SnaptionApplication.getContext().getContentResolver();
+        String filePath = getImageUrlWithAuthority(resolver, imageUri);
         Bitmap scaledBitmap = null;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -183,8 +184,7 @@ public class ImageUtils {
                 matrix.postRotate(TWO_SEVENTY_DEGREES);
             }
             scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,
-                    scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix,
-                    true);
+                    scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -225,6 +225,33 @@ public class ImageUtils {
             cursor.close();
             return path;
         }
+    }
+
+    private static String getImageUrlWithAuthority(ContentResolver resolver, Uri uri) {
+        InputStream is;
+
+        if (uri.getAuthority() != null) {
+            try {
+                is = resolver.openInputStream(uri);
+                Bitmap bmp = BitmapFactory.decodeStream(is);
+                String path = getRealPathFromURI(writeToTempImageAndGetPathUri(resolver, bmp));
+                if (is != null) {
+                    is.close();
+                }
+                return path;
+            }
+            catch (IOException e) {
+                Timber.e(e);
+            }
+        }
+        return null;
+    }
+
+    private static Uri writeToTempImageAndGetPathUri(ContentResolver resolver, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, QUALITY, bytes);
+        String path = MediaStore.Images.Media.insertImage(resolver, inImage, FOLDER, null);
+        return Uri.parse(path);
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
