@@ -257,6 +257,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
     private void startCreateGame() {
         Intent createGameIntent = new Intent(mContext, CreateGameActivity.class);
+        createGameIntent.putExtra(Game.GAME_ID, mGameId);
         createGameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat

@@ -440,6 +440,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private void startCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
+        createGameIntent.putExtra(Game.GAME_ID, mGameId);
         createGameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat

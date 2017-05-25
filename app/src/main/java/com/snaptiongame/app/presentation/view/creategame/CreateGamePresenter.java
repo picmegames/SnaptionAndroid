@@ -55,6 +55,22 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         mDisposables.add(disposable);
     }
 
+    @Override
+    public void createGameFromId(int gameId, int userId, boolean isPublic, long gameDuration) {
+        Disposable disposable = GameProvider.addGame(
+                new Game(gameId, userId, isPublic, mCreateGameView.getTags(),
+                        getFriendIds(mCreateGameView.getAddedFriends()), gameDuration))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mCreateGameView::showUploadComplete,
+                        e -> {
+                            Timber.e(e);
+                            mCreateGameView.showUploadFailure();
+                        }
+                );
+        mDisposables.add(disposable);
+    }
+
     private void uploadGame(int userId, boolean isPublic, String type, long gameDuration) {
         Disposable disposable = GameProvider.addGame(
                 new Game(userId, isPublic, mEncodedImage, type, mCreateGameView.getTags(),
