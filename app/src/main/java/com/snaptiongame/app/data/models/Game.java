@@ -54,6 +54,10 @@ public class Game {
     public int numUpvotes;
     @SerializedName(IS_CLOSED)
     public boolean isClosed;
+    @SerializedName(GAME_ID)
+    public int gameId;
+
+    public boolean isFromAnotherGame = false;
 
     public static final String ID = "id";
     public static final String USER_ID = "userId";
@@ -80,6 +84,7 @@ public class Game {
     public static final String NUM_UPVOTES = "numUpvotes";
     public static final String CREATOR_IMAGE = "creatorImage";
     public static final String IS_CLOSED = "isClosed";
+    public static final String GAME_ID = "gameId";
 
     public Game() {
 
@@ -94,6 +99,16 @@ public class Game {
         this.sendTags = tags;
         this.friendIds = friendIds;
         this.gameDuration = gameDuration;
+    }
+
+    public Game(int gameId, int userId, boolean isPublic, List<String> tags, List<Integer> friendIds, long gameDuration) {
+        this.gameId = gameId;
+        this.userId = userId;
+        this.isPublic = isPublic;
+        this.sendTags = tags;
+        this.friendIds = friendIds;
+        this.gameDuration = gameDuration;
+        isFromAnotherGame = true;
     }
 
     public Game(int id, long startDate, boolean isPublic, int creatorId, String picture, String type) {

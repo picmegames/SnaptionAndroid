@@ -100,6 +100,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private int mDayOfMonth;
     private long mDays;
     private String mFormattedDate;
+    private int mGameId = -1;
+    private boolean mIsFromAnotherGame = false;
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
@@ -113,8 +115,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mPresenter = new CreateGamePresenter(this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra(Game.IMAGE_URL)) {
+        if (intent.hasExtra(Game.GAME_ID) && intent.hasExtra(Game.IMAGE_URL)) {
+            mGameId = intent.getIntExtra(Game.GAME_ID, -1);
             mImageUrl = intent.getStringExtra(Game.IMAGE_URL);
+            mIsFromAnotherGame = true;
             ViewCompat.setTransitionName(mNewGameImage, mImageUrl);
 
             Glide.with(this)
@@ -320,8 +324,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
         if (mUri != null && mPresenter.isValidFriends()) {
-            mPresenter.createGame(getContentResolver().getType(mUri), mUri,
-                    AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
+            if (!mIsFromAnotherGame) {
+                mPresenter.createGame(getContentResolver().getType(mUri), mUri,
+                        AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
+            }
+            else {
+                mPresenter.createGameFromId(mGameId, AuthManager.getUserId(),
+                        !mPrivateSwitch.isChecked(), mDays);
+            }
             mProgressDialog = new MaterialDialog.Builder(this)
                     .title(R.string.upload_title)
                     .content(R.string.upload_message)
@@ -377,6 +387,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
+            mIsFromAnotherGame = false;
             mAnimationView.pauseAnimation();
             mAnimationView.setVisibility(View.GONE);
             mUri = data.getData();
