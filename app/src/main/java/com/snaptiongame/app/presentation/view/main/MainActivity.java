@@ -49,6 +49,7 @@ import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
 
@@ -142,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupWall();
         initializeWallFragments();
+        ShowcaseUtils.showShowcase(this, mFab,
+                R.string.welcome_message, R.string.wall_showcase_content);
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
