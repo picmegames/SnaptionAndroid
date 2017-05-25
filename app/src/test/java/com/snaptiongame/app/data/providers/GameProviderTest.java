@@ -28,13 +28,13 @@ public class GameProviderTest {
     public void setup() {
         service = mock(SnaptionApi.class);
         games = new ArrayList<>();
-        games.add(new Game(0, false, "picture0", "", new ArrayList<>(), new ArrayList<>(), 0));
-        games.add(new Game(1, false, "picture1", "", new ArrayList<>(), new ArrayList<>(), 0));
-        games.add(new Game(2, true, "picture2", "", new ArrayList<>(), new ArrayList<>(), 0));
-        games.add(new Game(3, false, "picture3", "", new ArrayList<>(), new ArrayList<>(), 0));
+        games.add(new Game(false, "picture0", "", new ArrayList<>(), new ArrayList<>(), 0));
+        games.add(new Game(false, "picture1", "", new ArrayList<>(), new ArrayList<>(), 0));
+        games.add(new Game(true, "picture2", "", new ArrayList<>(), new ArrayList<>(), 0));
+        games.add(new Game(false, "picture3", "", new ArrayList<>(), new ArrayList<>(), 0));
         gameAction = new GameAction(0, false, GameAction.UPVOTE, GameAction.GAME_ID);
         when(service.upvoteOrFlagGame(gameAction)).thenReturn(Completable.complete());
-        game = new Game(0, false, "picture0", "", new ArrayList<>(), new ArrayList<>(), 0);
+        game = new Game(false, "picture0", "", new ArrayList<>(), new ArrayList<>(), 0);
         when(service.addGame(game)).thenReturn(Completable.complete());
     }
 

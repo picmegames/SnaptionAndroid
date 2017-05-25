@@ -19,7 +19,7 @@ public class GameTest {
 
     @Test
     public void testConstructorSendGame() {
-        Game testGame = new Game(0, false, "", "", new ArrayList<>(), new ArrayList<>(), 0);
+        Game testGame = new Game(false, "", "", new ArrayList<>(), new ArrayList<>(), 0);
         assertTrue(testGame.userId == 0);
         assertTrue(!testGame.isPublic);
         assertTrue(testGame.picture.isEmpty());
