@@ -207,7 +207,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
     private boolean isPublic;
-    private boolean isClosed;
     private float lastRefreshIconRotation = 0.0f;
 
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -647,7 +646,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mPickerImageUrl = pickerImage;
         mPicker = pickerName;
         this.isPublic = isPublic;
-        this.isClosed = isClosed;
 
         ViewCompat.setTransitionName(mImage, mImageUrl);
 
@@ -758,6 +756,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             final Bitmap bitmap = GlideUtils.getBitmap(resource);
             final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     24, getResources().getDisplayMetrics());
+
             Palette.from(bitmap)
                     .maximumColorCount(3)
                     .clearFilters()
@@ -872,8 +871,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void generateInviteUrl(String inviteToken) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
-                .setTitle(getResources().getText(R.string.join_snaption).toString())
-                .setContentDescription(getResources().getString(R.string.snaption_description))
+                .setTitle(getString(R.string.join_snaption))
+                .setContentDescription(getString(R.string.snaption_description))
                 .setContentImageUrl(mImageUrl)
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
                 .addContentMetadata(GameInvite.INVITE_TOKEN, inviteToken)
@@ -885,11 +884,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         branchUniversalObject.generateShortUrl(this, linkProperties, (String url, BranchError error) -> {
             if (error == null) {
-                Timber.i("got my Branch link to share: " + url);
                 inviteFriendIntent(url);
             }
             else {
-                Timber.e("Branch " + error);
+                Timber.e(error.getMessage());
             }
         });
     }
@@ -996,11 +994,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void onGameUpdated(String type) {
         if (type.equals(GameAction.FLAGGED)) {
-            Toast.makeText(this, getString(R.string.flagged), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.flagged, Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
         else if (type.equals(GameAction.UPVOTE) && isUpvoted) {
-            Toast.makeText(this, getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.upvoted, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1008,10 +1006,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void onGameErrored(String type) {
         if (type.equals(GameAction.UPVOTE)) {
             upvoteGame();
-            Toast.makeText(this, getString(R.string.upvote_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.upvote_fail, Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(this, getString(R.string.flagged_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.flagged_fail, Toast.LENGTH_SHORT).show();
         }
     }
 
