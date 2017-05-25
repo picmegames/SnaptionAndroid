@@ -95,10 +95,10 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setActivityItems(List<ActivityFeedItem> items) {
-        mActivityItems = items;
-        notifyDataSetChanged();
-        lastPosition = -1;
+    public void addActivityItems(List<ActivityFeedItem> items) {
+        int oldSize = mActivityItems.size();
+        mActivityItems.addAll(items);
+        notifyItemRangeInserted(oldSize, mActivityItems.size());
     }
 
     public void clear() {
@@ -106,6 +106,10 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         int oldSize = mActivityItems.size();
         mActivityItems.clear();
         notifyItemRangeRemoved(0, oldSize);
+    }
+
+    public boolean isEmpty() {
+        return mActivityItems.isEmpty();
     }
 
     @Override

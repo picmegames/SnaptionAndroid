@@ -292,5 +292,5 @@ public interface SnaptionApi {
      * @return A single that emits a list of ActivityFeedItem objects
      */
     @GET("/Activity/")
-    Single<List<ActivityFeedItem>> getActivityFeed();
+    Single<List<ActivityFeedItem>> getActivityFeed(int page);
 }

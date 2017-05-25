@@ -17,9 +17,11 @@ public class ActivityFeedContract {
         void showEmptyView();
 
         void showActivityFeed();
+
+        void setRefreshing(boolean isRefreshing);
     }
 
     interface Presenter extends BasePresenter {
-        void loadActivityFeed();
+        void loadActivityFeed(int page);
     }
 }

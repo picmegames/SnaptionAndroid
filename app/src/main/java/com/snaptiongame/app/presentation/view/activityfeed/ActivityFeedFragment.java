@@ -17,6 +17,7 @@ import com.snaptiongame.app.data.models.ActivityFeedItem;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
+import com.snaptiongame.app.presentation.view.listeners.InfiniteRecyclerViewScrollListener;
 import com.snaptiongame.app.presentation.view.utils.ActivityFeedUtils;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
     private Unbinder mUnbinder;
     private ActivityFeedAdapter mAdapter;
     private InsetDividerDecoration mDecoration;
+    private InfiniteRecyclerViewScrollListener mScrollListener;
 
     public static final String TAG = ActivityFeedFragment.class.getSimpleName();
 
@@ -113,13 +115,35 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
 
         mAdapter = new ActivityFeedAdapter(testItems);
         mActivityFeed.setAdapter(mAdapter);
-        mActivityFeed.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mActivityFeed.setLayoutManager(layoutManager);
+
+        mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mPresenter.loadActivityFeed(page);
+            }
+        };
+
+        mActivityFeed.addOnScrollListener(mScrollListener);
+
+        mRefreshLayout.setOnRefreshListener(() -> {
+            setRefreshing(true);
+            mAdapter.clear();
+            mScrollListener.resetState();
+            mPresenter.loadActivityFeed(1);
+        });
 
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
         return view;
+    }
+
+    @Override
+    public void setRefreshing(boolean isRefreshing) {
+        mRefreshLayout.setRefreshing(isRefreshing);
     }
 
     @Override
@@ -141,9 +165,9 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
 
     @Override
     public void addActivityFeedItems(List<ActivityFeedItem> items) {
-        mAdapter.setActivityItems(items);
+        mAdapter.addActivityItems(items);
 
-        if (!items.isEmpty()) {
+        if (!mAdapter.isEmpty()) {
             showActivityFeed();
         }
         else {
