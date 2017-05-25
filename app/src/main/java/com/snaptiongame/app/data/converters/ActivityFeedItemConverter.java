@@ -23,7 +23,7 @@ public class ActivityFeedItemConverter implements JsonDeserializer<ActivityFeedI
 
         if (!activityObject.get(ActivityFeedItem.FRIEND).isJsonNull()) {
             JsonObject friendObject = activityObject.get(ActivityFeedItem.FRIEND).getAsJsonObject();
-            friend.username = friendObject.get(User.FULL_NAME).getAsString();
+            friend.username = friendObject.get(User.USERNAME).getAsString();
             friend.fullName = friendObject.get(User.FULL_NAME).getAsString();
 
             if (!friendObject.get(User.PICTURE).isJsonNull()) {
