@@ -49,6 +49,7 @@ import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
 
@@ -142,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupWall();
         initializeWallFragments();
+        ShowcaseUtils.showShowcase(this, mFab,
+                R.string.welcome_message, R.string.wall_showcase_content);
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -310,8 +313,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.search:
                 Intent searchIntent = new Intent(this, FriendSearchActivity.class);
                 View searchMenuView = mToolbar.findViewById(R.id.search);
-                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchMenuView,
-                        getString(R.string.transition_search_back)).toBundle();
+                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        searchMenuView, getString(R.string.transition_search_back)).toBundle();
                 startActivityForResult(searchIntent, FRIEND_RESULT_CODE, options);
                 break;
             case R.id.share:
@@ -458,6 +461,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mMenu.findItem(R.id.layout).setVisible(false);
                 mMenu.findItem(R.id.search).setVisible(true);
                 mMenu.findItem(R.id.share).setVisible(true);
+                ShowcaseUtils.showShowcase(this, mToolbar.findViewById(R.id.search),
+                        R.string.add_a_friend, R.string.friends_showcase_content);
                 mFab.setVisibility(View.GONE);
                 break;
 
