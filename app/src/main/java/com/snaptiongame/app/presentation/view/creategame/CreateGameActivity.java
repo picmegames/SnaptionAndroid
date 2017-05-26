@@ -322,7 +322,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.create_game)
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
-        if (mUri != null && mPresenter.isValidFriends()) {
+        if (mPresenter.isValidFriends()) {
             if (!mIsFromAnotherGame) {
                 mPresenter.createGame(getContentResolver().getType(mUri), mUri,
                         !mPrivateSwitch.isChecked(), mDays);
