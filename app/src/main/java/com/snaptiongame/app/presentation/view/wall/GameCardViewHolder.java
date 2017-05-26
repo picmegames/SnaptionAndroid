@@ -257,12 +257,14 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
     private void startCreateGame() {
         Intent createGameIntent = new Intent(mContext, CreateGameActivity.class);
+        createGameIntent.putExtra(Game.GAME_ID, mGameId);
         createGameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation((AppCompatActivity) mContext,
                         mImage, ViewCompat.getTransitionName(mImage));
-        mContext.startActivity(createGameIntent, transitionActivityOptions.toBundle());
+        ((AppCompatActivity) mContext).startActivityForResult(createGameIntent,
+                MainActivity.WALL_RESULT_CODE, transitionActivityOptions.toBundle());
     }
 
     private void upvoteGame() {

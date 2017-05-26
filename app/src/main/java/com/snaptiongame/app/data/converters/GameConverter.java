@@ -28,11 +28,16 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
     @Override
     public JsonElement serialize(Game src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(Game.USER_ID, src.userId);
         json.addProperty(Game.IS_PUBLIC, src.isPublic);
-        json.addProperty(Game.PICTURE, src.picture);
-        json.addProperty(Game.IMG_TYPE, src.type);
         json.addProperty(Game.GAME_DURATION, src.gameDuration);
+
+        if (!src.isFromAnotherGame) {
+            json.addProperty(Game.PICTURE, src.picture);
+            json.addProperty(Game.IMG_TYPE, src.type);
+        }
+        else {
+            json.addProperty(Game.GAME_ID, src.gameId);
+        }
 
         JsonArray tags = new JsonArray();
         if (src.sendTags != null && !src.sendTags.isEmpty()) {

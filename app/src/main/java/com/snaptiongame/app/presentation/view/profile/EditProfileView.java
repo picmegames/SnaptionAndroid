@@ -80,7 +80,7 @@ public class EditProfileView extends RelativeLayout {
         mProfileImage.setOnClickListener(imageView -> {
             Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
             imagePickerIntent.setType("image/*");
-            ((AppCompatActivity) mContext).startActivityForResult(imagePickerIntent, 1);
+            ((AppCompatActivity) mContext).startActivityForResult(imagePickerIntent, ProfileActivity.IMAGE_PICKER_RESULT);
         });
     }
 
