@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class UserStats {
+    @SerializedName(RANK)
+    public String rank;
     @SerializedName(GAMES_CREATED)
     public int gamesCreated;
     @SerializedName(HIGHEST_GAME_UPVOTE)
@@ -18,6 +20,7 @@ public class UserStats {
     @SerializedName(TOP_CAPTION_COUNT)
     public int topCaptionCount;
 
+    public static final String RANK = "rank";
     public static final String GAMES_CREATED = "gamesCreated";
     public static final String HIGHEST_GAME_UPVOTE = "highestGameUpvote";
     public static final String CAPTIONS_CREATED = "captionsCreated";

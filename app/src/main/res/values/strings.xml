@@ -164,7 +164,7 @@
     <!-- Activity Feed Items -->
     <string name="friend_made_game">created a new game.</string>
     <string name="friend_invited_game">invited you to a game.</string>
-    <string name="captioned_game">captioned your game.</string>
+    <string name="captioned_game">captioned your game:</string>
     <string name="friended_you">added you as a friend.</string>
     <string name="new_facebook_friend_prefix">Your friend</string>
     <string name="new_facebook_friend_suffix">is now on Snaption as</string>

@@ -82,6 +82,7 @@ public class ApiProvider {
     private static SnaptionApi apiService;
     private static PersistentCookieStore cookieStore;
     private static X509TrustManager trustManager;
+    private static Gson gson;
 
     private static final String CERT_TYPE = "X.509";
     private static final String CA = "ca";
@@ -96,11 +97,13 @@ public class ApiProvider {
      */
     public static SnaptionApi getApiService() {
         if (apiService == null) {
+            gson = setupGson();
+
             apiService = new Retrofit.Builder()
                     .baseUrl(BuildConfig.SERVER_ENDPOINT)
                     .client(makeOkHttpClient())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-                    .addConverterFactory(GsonConverterFactory.create(setupGson()))
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
                     .create(SnaptionApi.class);
         }
@@ -233,5 +236,9 @@ public class ApiProvider {
         builder.registerTypeAdapter(ActivityFeedItem.class, new ActivityFeedItemConverter());
         builder.excludeFieldsWithoutExposeAnnotation();
         return builder.create();
+    }
+
+    public static Gson getGson() {
+        return gson;
     }
 }

@@ -159,7 +159,7 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
         completo, correo electrónico o nombre de usuario</string>
     <string name="activity_feed">Feed de Actividad</string>
     <string name="activity">Actividad</string>
-    <string name="captioned_game">subtitulado su juego.</string>
+    <string name="captioned_game">subtitulado su juego:</string>
     <string name="friend_made_game">creó un nuevo juego.</string>
     <string name="friended_you">ha añadido como amigo.</string>
     <string name="friend_invited_game">te invitó a un juego.</string>

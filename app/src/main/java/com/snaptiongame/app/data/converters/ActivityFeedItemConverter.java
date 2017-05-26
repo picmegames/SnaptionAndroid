@@ -1,13 +1,16 @@
 package com.snaptiongame.app.data.converters;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.snaptiongame.app.data.models.ActivityFeedItem;
+import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.User;
+import com.snaptiongame.app.data.providers.api.ApiProvider;
 
 import java.lang.reflect.Type;
 
@@ -19,30 +22,14 @@ public class ActivityFeedItemConverter implements JsonDeserializer<ActivityFeedI
     @Override
     public ActivityFeedItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject activityObject = json.getAsJsonObject();
-        User friend = new User();
+        Gson gson = ApiProvider.getGson();
 
-        if (!activityObject.get(ActivityFeedItem.FRIEND).isJsonNull()) {
-            JsonObject friendObject = activityObject.get(ActivityFeedItem.FRIEND).getAsJsonObject();
-            friend.username = friendObject.get(User.USERNAME).getAsString();
-            friend.fullName = friendObject.get(User.FULL_NAME).getAsString();
-
-            if (!friendObject.get(User.PICTURE).isJsonNull()) {
-                JsonObject pictureObject = friendObject.getAsJsonObject(User.PICTURE);
-                friend.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
-            }
-        }
-
-        Game game = new Game();
-
-        if (!activityObject.get(ActivityFeedItem.GAME).isJsonNull()) {
-            JsonObject gameObject = activityObject.get(ActivityFeedItem.GAME).getAsJsonObject();
-            JsonObject picture = gameObject.getAsJsonObject(Game.PICTURE);
-            game.imageUrl = picture.get(Game.IMAGE_URL).getAsString();
-        }
+        User friend = gson.fromJson(activityObject.get(ActivityFeedItem.FRIEND), User.class);
+        Game game = gson.fromJson(activityObject.get(ActivityFeedItem.GAME), Game.class);
+        Caption caption = gson.fromJson(activityObject.get(ActivityFeedItem.CAPTION), Caption.class);
 
         return new ActivityFeedItem(activityObject.get(ActivityFeedItem.ID).getAsInt(),
                 activityObject.get(ActivityFeedItem.DATE).getAsLong(),
-                activityObject.get(ActivityFeedItem.TYPE).getAsInt(),
-                null, friend, game, null);
+                activityObject.get(ActivityFeedItem.TYPE).getAsInt(), friend, game, caption);
     }
 }

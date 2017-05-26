@@ -2,6 +2,7 @@ package com.snaptiongame.app.presentation.view.activityfeed;
 
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.ActivityFeedItem;
+import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.utils.ActivityFeedUtils;
 
 import java.util.List;
@@ -26,6 +28,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
 
     private List<ActivityFeedItem> mActivityItems;
     private int lastPosition = -1;
+    private long currentTime;
 
     private static final int AVATAR_SIZE = 40;
 
@@ -45,7 +48,11 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         ActivityFeedItemViewHolder holder = (ActivityFeedItemViewHolder) viewHolder;
         ActivityFeedItem curActivityItem = mActivityItems.get(position);
 
-        holder.mActivityType = curActivityItem.type;
+        holder.mFriend = curActivityItem.friend;
+        holder.mGame = curActivityItem.game;
+        holder.mCaption = curActivityItem.caption;
+
+        holder.setActivityOnClickListener(curActivityItem.type);
         holder.mActivityMessage.setText(ActivityFeedUtils.getMessage(holder.mContext, curActivityItem));
 
         if (curActivityItem.friend.imageUrl != null) {
@@ -54,7 +61,6 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
                     .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
                     .dontAnimate()
                     .into(holder.mUserImage);
-            holder.mImageUrl = curActivityItem.friend.imageUrl;
         }
         else {
             holder.mUserImage.setImageDrawable(TextDrawable.builder()
@@ -68,13 +74,19 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         }
 
         if (curActivityItem.type != ActivityFeedUtils.FRIENDED_YOU &&
-                curActivityItem.type != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
+                curActivityItem.type != ActivityFeedUtils.NEW_FACEBOOK_FRIEND &&
+                curActivityItem.type != ActivityFeedUtils.CAPTIONED_GAME) {
+
+            holder.mContentImage.setVisibility(View.VISIBLE);
+            holder.mGame.isClosed = DateUtils.isPastDate(holder.mGame.endDate, currentTime);
+
             if (curActivityItem.game.imageUrl != null) {
                 Glide.with(holder.mContext)
                         .load(curActivityItem.game.imageUrl)
                         .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.game.imageUrl)))
                         .dontAnimate()
                         .into(holder.mContentImage);
+                ViewCompat.setTransitionName(holder.mContentImage, curActivityItem.game.imageUrl);
             }
             else {
                 Glide.clear(holder.mContentImage);
@@ -98,6 +110,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
     public void addActivityItems(List<ActivityFeedItem> items) {
         int oldSize = mActivityItems.size();
         mActivityItems.addAll(items);
+        currentTime = DateUtils.getNow();
         notifyItemRangeInserted(oldSize, mActivityItems.size());
     }
 

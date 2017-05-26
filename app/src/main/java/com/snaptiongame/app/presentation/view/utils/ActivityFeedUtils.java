@@ -35,7 +35,8 @@ public class ActivityFeedUtils {
                 break;
             case CAPTIONED_GAME:
                 message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
-                        res.getString(R.string.captioned_game));
+                        res.getString(R.string.captioned_game), " ", item.caption.assocFitB.beforeBlank,
+                        TextStyleUtils.getTextUnderlined(item.caption.caption), item.caption.assocFitB.afterBlank);
                 break;
             case FRIENDED_YOU:
                 message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
@@ -44,10 +45,14 @@ public class ActivityFeedUtils {
             case NEW_FACEBOOK_FRIEND:
                 message = TextUtils.concat(res.getString(R.string.new_facebook_friend_prefix), " ",
                         item.friend.fullName, " ", res.getString(R.string.new_facebook_friend_suffix),
-                        " ", TextStyleUtils.getTextBolded(item.friend.username), ".");
+                        " ", TextStyleUtils.getTextBolded(item.friend.username));
                 break;
             default:
                 break;
+        }
+
+        if (!message.toString().endsWith(".")) {
+            message = TextUtils.concat(message, ".");
         }
 
         message = TextUtils.concat(message, " ",
