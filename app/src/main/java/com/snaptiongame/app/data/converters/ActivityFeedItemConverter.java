@@ -1,13 +1,11 @@
 package com.snaptiongame.app.data.converters;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.snaptiongame.app.data.models.ActivityFeedItem;
-import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.User;
 

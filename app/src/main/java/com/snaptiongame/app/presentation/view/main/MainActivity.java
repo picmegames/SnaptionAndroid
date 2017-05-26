@@ -483,20 +483,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mFab.setVisibility(View.GONE);
                 break;
 
-            case R.id.activity:
-                mCurrentFragment = ActivityFeedFragment.getInstance();
-                fragTag = ActivityFeedFragment.TAG;
-                mActionBar.setTitle(R.string.activity);
-                mBottomNavigationView.setVisibility(View.GONE);
-                resetFabPosition(false);
-                setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
-                mMenu.findItem(R.id.filter).setVisible(false);
-                mMenu.findItem(R.id.layout).setVisible(false);
-                mMenu.findItem(R.id.search).setVisible(false);
-                mMenu.findItem(R.id.share).setVisible(false);
-                mFab.setVisibility(View.GONE);
-                break;
-
             case R.id.settings:
                 startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
                 break;
