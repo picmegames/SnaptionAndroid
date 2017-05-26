@@ -109,6 +109,7 @@ public class ProfileActivity extends AppCompatActivity
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
+    public static final int IMAGE_PICKER_RESULT = 24;
     private static final int PROFILE_IMG_ELEVATION = 40;
     private static final int DEFAULT_IMG_SIZE = 140;
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
@@ -307,7 +308,7 @@ public class ProfileActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICKER_RESULT) {
             mUri = data.getData();
             mPresenter.convertImage(getContentResolver().getType(mUri), mUri);
         }

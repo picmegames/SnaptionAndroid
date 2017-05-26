@@ -101,11 +101,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean mLastLoggedInState = false;
     private boolean mComingFromGameActivity = false;
 
+    public static final int WALL_RESULT_CODE = 7777;
     private static final String TEXT_TYPE = "text/plain";
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
     private static final int BOTTOM_MARGIN = 72;
-    private static final int WALL_RESULT_CODE = 7777;
     private static final int FRIEND_RESULT_CODE = 1414;
 
     @Override

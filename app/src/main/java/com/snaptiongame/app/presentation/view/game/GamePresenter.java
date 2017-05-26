@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.DeepLinkRequest;
@@ -13,6 +14,7 @@ import com.snaptiongame.app.data.providers.CaptionProvider;
 import com.snaptiongame.app.data.providers.DeepLinkProvider;
 import com.snaptiongame.app.data.providers.FacebookShareProvider;
 import com.snaptiongame.app.data.providers.GameProvider;
+import com.snaptiongame.app.data.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +41,7 @@ public class GamePresenter implements GameContract.Presenter {
 
     public static final int MAX_FITBS_SHOWN = 8;
 
-    public GamePresenter(int gameId, @NonNull GameContract.View view) {
-        mGameId = gameId;
+    public GamePresenter(@NonNull GameContract.View view) {
         mGameView = view;
         mDisposables = new CompositeDisposable();
         mGameView.setPresenter(this);
@@ -71,6 +72,19 @@ public class GamePresenter implements GameContract.Presenter {
                             mGameView.onGameErrored(request.choiceType);
                             Timber.e(e);
                         }
+                );
+        mDisposables.add(disposable);
+    }
+
+    @Override
+    public void loadGame(int gameId) {
+        Disposable disposable = GameProvider.getGame(gameId, AuthManager.getInviteToken())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        game -> mGameView.showGame(game.imageUrl, game.id, game.creatorId,
+                                game.creatorName, game.creatorImage, game.beenUpvoted, game.beenFlagged,
+                                DateUtils.isPastNow(game.endDate), game.isPublic),
+                        Timber::e
                 );
         mDisposables.add(disposable);
     }
@@ -145,6 +159,11 @@ public class GamePresenter implements GameContract.Presenter {
         mDisposables.add(disposable);
     }
 
+    @Override
+    public void setGameId(int gameId) {
+        mGameId = gameId;
+    }
+
     private void countSets(List<CaptionSet> sets) {
         int numSets = sets.size();
         List<FitBCaption> captions = new ArrayList<>();
@@ -188,11 +207,10 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void getBranchToken(int gameId) {
-        DeepLinkRequest linkRequest = new DeepLinkRequest(gameId);
-        DeepLinkProvider.getToken(linkRequest)
+        DeepLinkProvider.getToken(new DeepLinkRequest(gameId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        token -> mGameView.generateInviteUrl(token),
+                        mGameView::generateInviteUrl,
                         Timber::e
                 );
     }
