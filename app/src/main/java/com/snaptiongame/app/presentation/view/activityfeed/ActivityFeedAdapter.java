@@ -74,8 +74,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         }
 
         if (curActivityItem.type != ActivityFeedUtils.FRIENDED_YOU &&
-                curActivityItem.type != ActivityFeedUtils.NEW_FACEBOOK_FRIEND &&
-                curActivityItem.type != ActivityFeedUtils.CAPTIONED_GAME) {
+                curActivityItem.type != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
 
             holder.mContentImage.setVisibility(View.VISIBLE);
             holder.mGame.isClosed = DateUtils.isPastDate(holder.mGame.endDate, currentTime);
