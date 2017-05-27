@@ -18,6 +18,7 @@ package com.snaptiongame.app.presentation.view.utils;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
@@ -26,6 +27,8 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 /**
  * Utility methods for working with Views.
@@ -78,6 +81,16 @@ public class ViewUtils {
             flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             view.setSystemUiVisibility(flags);
         }
+    }
+
+    public static void getDeepChildOffset(final ViewGroup mainParent, final ViewParent parent, final View child, final Point accumulatedOffset) {
+        ViewGroup parentGroup = (ViewGroup) parent;
+        accumulatedOffset.x += child.getLeft();
+        accumulatedOffset.y += child.getTop();
+        if (parentGroup.equals(mainParent)) {
+            return;
+        }
+        getDeepChildOffset(mainParent, parentGroup.getParent(), parentGroup, accumulatedOffset);
     }
 }
 

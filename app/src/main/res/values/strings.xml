@@ -37,6 +37,18 @@
         tap on a game on the wall to view it</string>
     <string name="friends_showcase_content">Tap on the magnifying glass to add a friend
         using their full name, email, or username</string>
+    <string name="create_game_showcase_title_1">Upload Image</string>
+    <string name="create_game_showcase_content_1">Click the camera to choose an image to upload</string>
+    <string name="create_game_showcase_title_2">Add Tags</string>
+    <string name="create_game_showcase_content_2">Make your game more discoverable by adding tags</string>
+    <string name="create_game_showcase_title_3">Make Private</string>
+    <string name="create_game_showcase_content_3">Turn this switch on to make your game private</string>
+    <string name="create_game_showcase_title_4">Add Friends</string>
+    <string name="create_game_showcase_content_4">Add your friends to this game by typing their username or selecting them from your friends list.</string>
+    <string name="create_game_showcase_title_5">Choose an End Date</string>
+    <string name="create_game_showcase_content_5">Click the date to choose when you want your game to end</string>
+    <string name="profile_showcase_title">Welcome to Your Profile</string>
+    <string name="profile_showcase_content">Click the pink button to change your profile picture or username</string>
 
     <!-- Tags -->
     <string name="open_drawer" translatable="false">Navigation View Open</string>

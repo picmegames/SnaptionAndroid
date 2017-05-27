@@ -46,6 +46,7 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
+import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
@@ -143,6 +144,8 @@ public class ProfileActivity extends AppCompatActivity
             mName = AuthManager.getUsername();
             mPicture = AuthManager.getProfileImageUrl();
             setupView();
+            ShowcaseUtils.showShowcase(this, mFab, R.string.profile_showcase_title,
+                    R.string.profile_showcase_content);
         }
         else if (profileIntent.hasExtra(User.USERNAME)) {
             mName = profileIntent.getStringExtra(User.USERNAME);

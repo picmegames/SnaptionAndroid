@@ -157,7 +157,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
         juego o toque en un juego en la pared para verlo</string>
     <string name="friends_showcase_content">Toca la lupa para añadir un amigo con su nombre
         completo, correo electrónico o nombre de usuario</string>
-    <string name="activity_feed">Feed de Actividad</string>
     <string name="activity">Actividad</string>
     <string name="captioned_game">subtitulado su juego:</string>
     <string name="friend_made_game">creó un nuevo juego.</string>
@@ -165,5 +164,17 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="friend_invited_game">te invitó a un juego.</string>
     <string name="new_facebook_friend_suffix">Tu amigoestá</string>
     <string name="new_facebook_friend_prefix">ahora en Snaption como</string>
+    <string name="create_game_showcase_content_1">Haga clic en la cámara para elegir una imagen para cargarla</string>
+    <string name="create_game_showcase_content_2">Haz que tu juego sea más fácil de descubrir añadiendo etiquetas</string>
+    <string name="create_game_showcase_content_3">Active este interruptor para que su juego sea privado</string>
+    <string name="create_game_showcase_content_4">Añade a tus amigos a este juego escribiendo su nombre de usuario o seleccionándolos en tu lista de amigos.</string>
+    <string name="create_game_showcase_content_5">Haga clic en la fecha para elegir cuándo desea terminar su juego</string>
+    <string name="create_game_showcase_title_1">Cargar Imagen</string>
+    <string name="create_game_showcase_title_2">Agregar Etiquetas</string>
+    <string name="create_game_showcase_title_3">Hazlo Privado</string>
+    <string name="create_game_showcase_title_4">Añade Amigos</string>
+    <string name="create_game_showcase_title_5">Seleccione una Fecha de Finalización</string>
+    <string name="profile_showcase_content">Haga clic en el botón rosa para cambiar su foto de perfil o nombre de usuario</string>
+    <string name="profile_showcase_title">Bienvenido a Su Perfil</string>
 
 </resources>

@@ -10,6 +10,7 @@
         layout="@layout/collapsable_toolbar"/>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@null"
@@ -47,6 +48,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tags"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -85,10 +87,10 @@
 
                 <Switch
                     android:id="@+id/private_switch"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_weight="1"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="16dp"/>
 
             </LinearLayout>
 
@@ -146,11 +148,10 @@
 
                 <TextView
                     android:id="@+id/set_date_field"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_margin="16dp"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
