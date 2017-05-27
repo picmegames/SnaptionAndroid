@@ -9,6 +9,7 @@ import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.api.SnaptionApi;
+import com.snaptiongame.app.data.converters.ActivityFeedItemConverter;
 import com.snaptiongame.app.data.converters.AddFriendConverter;
 import com.snaptiongame.app.data.converters.BranchConverter;
 import com.snaptiongame.app.data.converters.CaptionConverter;
@@ -23,6 +24,7 @@ import com.snaptiongame.app.data.converters.SessionConverter;
 import com.snaptiongame.app.data.converters.UserConverter;
 import com.snaptiongame.app.data.converters.UserStatsConverter;
 import com.snaptiongame.app.data.cookies.PersistentCookieStore;
+import com.snaptiongame.app.data.models.ActivityFeedItem;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
@@ -70,7 +72,7 @@ import timber.log.Timber;
 import static com.snaptiongame.app.SnaptionApplication.getContext;
 
 /**
- * The Game API Provider provides an instance of
+ * The Snaption API Provider provides an instance of
  * the API service built by Retrofit.
  *
  * @author Tyler Wong
@@ -80,6 +82,7 @@ public class ApiProvider {
     private static SnaptionApi apiService;
     private static PersistentCookieStore cookieStore;
     private static X509TrustManager trustManager;
+    private static Gson gson;
 
     private static final String CERT_TYPE = "X.509";
     private static final String CA = "ca";
@@ -88,17 +91,19 @@ public class ApiProvider {
 
     /**
      * This method provides and handles the creation of
-     * the Game API service.
+     * the Snaption API service.
      *
      * @return An instance of a Game API service
      */
     public static SnaptionApi getApiService() {
         if (apiService == null) {
+            gson = setupGson();
+
             apiService = new Retrofit.Builder()
                     .baseUrl(BuildConfig.SERVER_ENDPOINT)
                     .client(makeOkHttpClient())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-                    .addConverterFactory(GsonConverterFactory.create(setupGson()))
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
                     .create(SnaptionApi.class);
         }
@@ -228,7 +233,12 @@ public class ApiProvider {
         builder.registerTypeAdapter(DeepLinkRequest.class, new BranchConverter());
         builder.registerTypeAdapter(Rank.class, new RankConverter());
         builder.registerTypeAdapter(UserStats.class, new UserStatsConverter());
+        builder.registerTypeAdapter(ActivityFeedItem.class, new ActivityFeedItemConverter());
         builder.excludeFieldsWithoutExposeAnnotation();
         return builder.create();
+    }
+
+    public static Gson getGson() {
+        return gson;
     }
 }

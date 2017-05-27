@@ -213,9 +213,4 @@ public class WallAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return mGames.size();
     }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
 }

@@ -27,19 +27,7 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
     private void loadUser() {
         Disposable disposable = UserProvider.getUser(mUserId)
                 .subscribe(
-                        user -> {
-                            loadRank(user);
-                            loadMoreInfo(user);
-                        }
-                        , Timber::e);
-        mDisposables.add(disposable);
-    }
-
-    private void loadRank(User user) {
-        Disposable disposable = UserProvider.getRank(user.rankId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        rank -> mMoreInfoView.showUserInfo(rank.title, user.exp),
+                        this::loadMoreInfo,
                         Timber::e
                 );
         mDisposables.add(disposable);
@@ -49,7 +37,10 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
         Disposable disposable = UserProvider.getUserStats(user.id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mMoreInfoView::showMoreInfo,
+                        userStats -> {
+                            mMoreInfoView.showUserInfo(user.exp);
+                            mMoreInfoView.showMoreInfo(userStats);
+                        },
                         Timber::e
                 );
         mDisposables.add(disposable);

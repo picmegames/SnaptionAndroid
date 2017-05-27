@@ -1,5 +1,6 @@
 package com.snaptiongame.app.data.api;
 
+import com.snaptiongame.app.data.models.ActivityFeedItem;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.data.models.CaptionSet;
@@ -9,7 +10,6 @@ import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.OAuthRequest;
-import com.snaptiongame.app.data.models.Rank;
 import com.snaptiongame.app.data.models.Session;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.models.UserStats;
@@ -41,7 +41,7 @@ public interface SnaptionApi {
      * a POST request.
      *
      * @param request The request for authentication
-     * @return An observable that emits a Session
+     * @return A single that emits a Session
      */
     @POST("/OAuth/Facebook/")
     Single<Session> userOAuthFacebook(@Body OAuthRequest request);
@@ -51,13 +51,15 @@ public interface SnaptionApi {
      * a POST request.
      *
      * @param request The request for authentication
-     * @return An observable that emits a Session object
+     * @return A single that emits a Session object
      */
     @POST("/OAuth/Google/")
     Single<Session> userOAuthGoogle(@Body OAuthRequest request);
 
     /**
      * This method will log a user out with a GET request.
+     *
+     * @return A completable
      */
     @GET("/Logout/")
     Completable logout();
@@ -66,19 +68,10 @@ public interface SnaptionApi {
      * This method sends a request for a user with a GET request.
      *
      * @param userId The id of the desired user.
-     * @return An observable that emits a User object
+     * @return A single that emits a User object
      */
     @GET("/Users/{userId}/")
     Single<User> getUser(@Path("userId") int userId);
-
-    /**
-     * This method sends a request for a list of ranks with a GET
-     * request.
-     *
-     * @return An observable that emits a list of Ranks
-     */
-    @GET("/Ranks/")
-    Observable<List<Rank>> getRanks();
 
     /**
      * This method sends a request to add a friend
@@ -95,7 +88,7 @@ public interface SnaptionApi {
      * with a custom DELETE request.
      *
      * @param friendRequest The AddFriendRequest body
-     * @return An observable that emits an AddFriendRequest object
+     * @return A completable that emits an AddFriendRequest object
      */
     @HTTP(method = "DELETE", path = "/UserFriends/", hasBody = true)
     Completable deleteFriend(@Body AddFriendRequest friendRequest);
@@ -120,7 +113,7 @@ public interface SnaptionApi {
      * This method sends a request to update a user with a PUT request.
      *
      * @param user The new updated information for the user
-     * @return An observable that emits a User object
+     * @return A single that emits a User object
      */
     @PUT("/Users/")
     Single<User> updateUser(@Body User user);
@@ -166,7 +159,7 @@ public interface SnaptionApi {
      * with a GET request.
      *
      * @param gameId the id of the game
-     * @return An observable that emits a list of Game objects.
+     * @return A single that emits a list of Game objects.
      */
     @GET("/Games/{gameId}/")
     Single<Game> getGame(@Path("gameId") int gameId, @Query("linkToken") String token);
@@ -176,7 +169,7 @@ public interface SnaptionApi {
      * a PUT request.
      *
      * @param request The GameAction body
-     * @return An observable that emits a GameAction object
+     * @return A completable that emits a GameAction object
      */
     @PUT("/UserXGame/")
     Completable upvoteOrFlagGame(@Body GameAction request);
@@ -186,7 +179,7 @@ public interface SnaptionApi {
      * a POST request.
      *
      * @param snaption The game to be added
-     * @return An observable that emits a Game object
+     * @return A completable that emits a Game object
      */
     @POST("/Games/")
     Completable addGame(@Body Game snaption);
@@ -225,7 +218,7 @@ public interface SnaptionApi {
      *
      * @param gameId  The id of the game we are adding a caption to
      * @param caption The caption to be added
-     * @return An observable that emits a Caption object
+     * @return A completable that emits a Caption object
      */
     @POST("/Games/{game_id}/Captions/")
     Completable addCaption(@Path("game_id") int gameId, @Body Caption caption);
@@ -235,7 +228,7 @@ public interface SnaptionApi {
      * with a PUT request.
      *
      * @param request The GameAction body
-     * @return An observable that emits a GameAction object
+     * @return A completable that emits a GameAction object
      */
     @PUT("/UserXCaption/")
     Completable upvoteOrFlagCaption(@Body GameAction request);
@@ -270,7 +263,7 @@ public interface SnaptionApi {
      * This method sends a request for a deep link token that will be used to
      * generate a branch.io link
      *
-     * @return An observable that emits a deep link token
+     * @return A single that emits a deep link token
      */
     @POST("/DeepLink/")
     Single<String> getToken(@Body DeepLinkRequest deepLinkRequest);
@@ -278,8 +271,16 @@ public interface SnaptionApi {
     /**
      * This method sends a request to retrieve the user's stats
      *
-     * @return An observable that emits a UserStats object
+     * @return A single that emits a UserStats object
      */
     @GET("/Users/Stats/{userId}")
     Single<UserStats> getUserStats(@Path("userId") int userId);
+
+    /**
+     * This method sends a request to retrieve the user's activity feed
+     *
+     * @return A single that emits a list of ActivityFeedItem objects
+     */
+    @GET("/Activity/")
+    Single<List<ActivityFeedItem>> getActivityFeed(@Query("page") int page);
 }

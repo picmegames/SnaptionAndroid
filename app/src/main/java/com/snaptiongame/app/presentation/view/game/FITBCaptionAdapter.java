@@ -100,11 +100,6 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         return mCaptions.size();
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
     public void clearCaptions() {
         mCaptions.clear();
         notifyDataSetChanged();
