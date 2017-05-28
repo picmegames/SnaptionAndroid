@@ -37,14 +37,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.hootsuite.nachos.NachoTextView;
-import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.activityfeed.ActivityFeedFragment;
 import com.snaptiongame.app.presentation.view.behaviors.FABScrollBehavior;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
+import com.snaptiongame.app.presentation.view.customviews.FilterView;
 import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView mNameView;
     TextView mEmailView;
     ActionBar mActionBar;
-    NachoTextView mFilterTextView;
+    FilterView mFilterView;
 
     private AuthManager mAuthManager;
     private Fragment mCurrentFragment;
@@ -235,7 +234,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
-            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);            mNavigationView.getMenu().findItem(R.id.activity).setVisible(false);
+            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);
+            mNavigationView.getMenu().findItem(R.id.activity).setVisible(false);
             mNavigationView.getMenu().findItem(R.id.activity).setVisible(true);
             if (mBottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
                 mBottomNavigationView.getMenu()
@@ -343,52 +343,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void showFilterDialog() {
         if (mFilterDialog == null) {
-            mFilterTextView = new NachoTextView(this);
-            mFilterTextView.setChipHeight(R.dimen.chip_height);
-            mFilterTextView.setChipSpacing(R.dimen.chip_spacing);
-            mFilterTextView.setChipTextSize(R.dimen.chip_text_size);
-            mFilterTextView.setChipVerticalSpacing(R.dimen.chip_vertical_spacing);
-            mFilterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
-            mFilterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
-            mFilterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
-            mFilterTextView.enableEditChipOnTouch(false, true);
+            mFilterView = new FilterView(this);
 
             mFilterDialog = new MaterialDialog.Builder(this)
-                    .customView(mFilterTextView, false)
-                    .title(R.string.filter_games_title)
+                    .customView(mFilterView, true)
+                    .title(R.string.filter_wall)
                     .positiveText(R.string.filter)
                     .negativeText(R.string.clear)
                     .cancelListener(dialog -> {
                         if (fragTag.equals(WallFragment.TAG) && !((WallFragment) mCurrentFragment).hasTags()) {
-                            clearFilterView();
+                            mFilterView.clearFilterView();
                         }
                     })
                     .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
-                        clearFilterView()
+                            mFilterView.clearFilterView()
                     )
                     .onAny((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mFilterTextView.chipifyAllUnterminatedTokens();
-                        filter(mFilterTextView.getChipValues());
+                        mFilterView.chipifyAllUnterminatedTokens();
+                        filter(mFilterView.getChipValues(), mFilterView.getStatus());
                     })
                     .cancelable(true)
                     .show();
-            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFilterTextView.getLayoutParams();
-            layoutParams.setMargins(rightMargin, rightMargin, rightMargin, rightMargin);
         }
         else {
             mFilterDialog.show();
         }
     }
 
-    private void filter(List<String> tags) {
+    private void filter(List<String> tags, String status) {
         if (fragTag.equals(WallFragment.TAG)) {
-            ((WallFragment) mCurrentFragment).filterGames(tags);
+            ((WallFragment) mCurrentFragment).filterGames(tags, status);
         }
     }
 
     private void clearFilterView() {
-        if (mFilterTextView != null) {
-            mFilterTextView.setText("");
+        if (mFilterView != null) {
+            mFilterView.clearFilterView();
         }
     }
 
