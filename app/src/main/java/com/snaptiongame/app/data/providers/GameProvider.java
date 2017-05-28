@@ -18,22 +18,22 @@ import io.reactivex.Single;
 public class GameProvider {
     private static SnaptionApi apiService = ApiProvider.getApiService();
 
-    public static Single<List<Game>> getGamesMine(List<String> tags, int page) {
-        return apiService.getGamesMine(tags, page)
+    public static Single<List<Game>> getGamesMine(List<String> tags, String status, int page) {
+        return apiService.getGamesMine(tags, status, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
 
-    public static Single<List<Game>> getGamesDiscover(List<String> tags, int page) {
-        return apiService.getGamesDiscover(tags, page)
+    public static Single<List<Game>> getGamesDiscover(List<String> tags, String status, int page) {
+        return apiService.getGamesDiscover(tags, status, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();
     }
   
-    public static Single<List<Game>> getGamesPopular(List<String> tags, int page) {
-        return apiService.getGamesPopular(tags, page)
+    public static Single<List<Game>> getGamesPopular(List<String> tags, String status, int page) {
+        return apiService.getGamesPopular(tags, status, page)
                 .flatMapIterable(games -> games)
                 .filter(game -> !game.beenFlagged)
                 .toList();

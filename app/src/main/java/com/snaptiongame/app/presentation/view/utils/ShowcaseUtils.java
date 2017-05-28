@@ -39,7 +39,8 @@ public class ShowcaseUtils {
         config.setDelay(SHOWCASE_DELAY);
 
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(
-                activity, res.getString(titles.get(0)));
+                activity, res.getString(titles.get(titles.size() - 1)));
+        sequence.singleUse(res.getString(titles.get(titles.size() - 1)));
         sequence.setConfig(config);
 
         for (int index = 0; index < targets.size(); index++) {

@@ -176,5 +176,8 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="create_game_showcase_title_5">Seleccione una Fecha de Finalización</string>
     <string name="profile_showcase_content">Haga clic en el botón rosa para cambiar su foto de perfil o nombre de usuario</string>
     <string name="profile_showcase_title">Bienvenido a Su Perfil</string>
+    <string name="closed">Cerrado</string>
+    <string name="open">Abierto</string>
+    <string name="filter_wall">Filtrar el Muro</string>
 
 </resources>

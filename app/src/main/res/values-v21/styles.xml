@@ -50,6 +50,12 @@
         <item name="android:searchViewStyle">@style/SearchView</item>
     </style>
 
+    <style name="FilterViewTheme" parent="Base.Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+    </style>
+
     <style name="SearchView" parent="android:style/Widget.Material.SearchView">
         <item name="android:searchIcon">@android:color/transparent</item>
         <item name="android:queryBackground">@android:color/transparent</item>

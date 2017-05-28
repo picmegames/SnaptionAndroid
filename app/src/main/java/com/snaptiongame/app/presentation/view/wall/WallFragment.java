@@ -56,6 +56,7 @@ public class WallFragment extends Fragment implements WallContract.View {
     private WallSpacesItemDecoration mItemSpacesDecoration;
     private InfiniteRecyclerViewScrollListener mScrollListener;
     private List<String> mTags;
+    private String mStatus;
     private int mUserId;
     private int mType;
     private int mSpace;
@@ -117,7 +118,7 @@ public class WallFragment extends Fragment implements WallContract.View {
         mScrollListener = new InfiniteRecyclerViewScrollListener(mCurrentLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                mPresenter.loadGames(mType, mTags, page);
+                mPresenter.loadGames(mType, mTags, mStatus, page);
             }
         };
 
@@ -127,7 +128,7 @@ public class WallFragment extends Fragment implements WallContract.View {
             setRefreshing(true);
             mAdapter.clear();
             mScrollListener.resetState();
-            mPresenter.loadGames(mType, mTags, 1);
+            mPresenter.loadGames(mType, mTags, mStatus, 1);
         });
 
         mRefreshLayout.setColorSchemeColors(
@@ -170,16 +171,18 @@ public class WallFragment extends Fragment implements WallContract.View {
     }
 
     /**
-     * This method will filter the wall by tag
+     * This method will filter the wall by tag and status (open/closed)
      *
      * @param tags a list of user defined tags to filter by
+     * @param status open or closed
      */
-    public void filterGames(List<String> tags) {
+    public void filterGames(List<String> tags, String status) {
         setRefreshing(true);
         mAdapter.clear();
         mTags = tags;
+        mStatus = status;
         mScrollListener.resetState();
-        mPresenter.loadGames(mType, mTags, 1);
+        mPresenter.loadGames(mType, mTags, mStatus, 1);
     }
 
     public boolean hasTags() {

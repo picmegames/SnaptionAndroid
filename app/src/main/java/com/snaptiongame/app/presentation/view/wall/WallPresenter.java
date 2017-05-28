@@ -28,6 +28,7 @@ public class WallPresenter implements WallContract.Presenter {
     private CompositeDisposable mDisposables;
 
     private List<String> mTags;
+    private String mStatus;
     private int mUserId;
     private int mType;
 
@@ -51,24 +52,26 @@ public class WallPresenter implements WallContract.Presenter {
      * an IO thread and handle the result on the UI thread.
      */
     @Override
-    public void loadGames(int type, List<String> tags, int page) {
+    public void loadGames(int type, List<String> tags, String status, int page) {
         if (tags != null) {
             mTags = tags;
         }
 
+        mStatus = status;
+
         Single<List<Game>> gameRequest;
         switch (type) {
             case WallContract.DISCOVER:
-                gameRequest = GameProvider.getGamesDiscover(mTags, page);
+                gameRequest = GameProvider.getGamesDiscover(mTags, mStatus, page);
                 break;
             case WallContract.POPULAR:
-                gameRequest = GameProvider.getGamesPopular(mTags, page);
+                gameRequest = GameProvider.getGamesPopular(mTags, mStatus, page);
                 break;
             case WallContract.HISTORY:
                 gameRequest = GameProvider.getGamesHistory(mUserId, page);
                 break;
             default:
-                gameRequest = GameProvider.getGamesMine(mTags, page);
+                gameRequest = GameProvider.getGamesMine(mTags, mStatus, page);
                 break;
         }
 
@@ -96,7 +99,7 @@ public class WallPresenter implements WallContract.Presenter {
     @Override
     public void subscribe() {
         mWallView.setRefreshing(true);
-        loadGames(mType, mTags, 1);
+        loadGames(mType, mTags, mStatus, 1);
     }
 
     /**
