@@ -47,6 +47,8 @@ public class WallAdapter extends RecyclerView.Adapter {
             @Override
             public void updateUpvote(boolean value, int index) {
                 mGames.get(index).beenUpvoted = value;
+                mGames.get(index).numUpvotes = value ? mGames.get(index).numUpvotes + 1 :
+                        mGames.get(index).numUpvotes -1;
             }
 
             @Override

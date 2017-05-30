@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -31,11 +30,11 @@ import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
+import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.main.MainActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.utils.AnimUtils;
-import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -222,13 +221,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
     public void hasBeenUpvotedOrFlagged(boolean beenUpvoted) {
         isUpvoted = beenUpvoted;
-
-        if (isUpvoted) {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
-        }
-        else {
-            mUpvoteButton.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
-        }
+        setUpvoteIcon(!isUpvoted);
     }
 
     private void setBeenUpvoted() {
