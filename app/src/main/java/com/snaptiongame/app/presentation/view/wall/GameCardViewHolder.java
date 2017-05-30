@@ -68,6 +68,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     TextView mNumberOfUpvotes;
     @BindView(R.id.game_status)
     TextView mGameStatus;
+    @BindView(R.id.private_icon)
+    ImageView mPrivateIcon;
     CircleImageView mCreatorImage;
     TextView mTimeLeft;
 

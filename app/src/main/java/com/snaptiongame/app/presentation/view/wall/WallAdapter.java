@@ -76,6 +76,13 @@ public class WallAdapter extends RecyclerView.Adapter {
         holder.mCreatorImageUrl = curGame.creatorImage;
         holder.isPublic = curGame.isPublic;
 
+        if (holder.isPublic) {
+            holder.mPrivateIcon.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.mPrivateIcon.setVisibility(View.VISIBLE);
+        }
+
         if (curGame.imageUrl != null) {
             holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
             Glide.with(holder.mContext)
