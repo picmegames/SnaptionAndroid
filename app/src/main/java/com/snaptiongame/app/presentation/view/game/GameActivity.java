@@ -64,9 +64,7 @@ import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.GameInvite;
 import com.snaptiongame.app.data.models.User;
-import com.snaptiongame.app.data.providers.GameProvider;
 import com.snaptiongame.app.data.services.notifications.NotificationService;
-import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
@@ -93,7 +91,6 @@ import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 import static com.snaptiongame.app.SnaptionApplication.getContext;
@@ -210,7 +207,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private boolean isDark = false;
     private boolean isPublic;
-    private boolean isClosed;
     private float lastRefreshIconRotation = 0.0f;
 
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -225,6 +221,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private static final int SHORT_ROTATION_DURATION = 300;
     private static final String INVITE_CHANNEL = "GameInvite";
     private static final String INVITE = "invite";
+    private static final String TEXT_PLAIN = "text/plain";
     private static final int AVATAR_SIZE = 40;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
 
@@ -235,6 +232,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ButterKnife.bind(this);
+
+        mPresenter = new GamePresenter(this);
 
         Intent intent = getIntent();
 
@@ -249,25 +248,24 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 if (mInvite == null || mInvite.gameId == 0) {
                     if (intent.hasExtra(NotificationService.FROM_NOTIFICATION)) {
                         mInvite = new GameInvite("", intent.getIntExtra(Game.ID, 0));
-                        loadInvitedGame();
+                        mPresenter.loadGame(mInvite.gameId);
                     }
                     else {
                         showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
                                 intent.getIntExtra(Game.CREATOR_ID, 0), intent.getStringExtra(Game.CREATOR_NAME),
                                 intent.getStringExtra(Game.CREATOR_IMAGE), intent.getBooleanExtra(Game.BEEN_UPVOTED, false),
-                                intent.getBooleanExtra(Game.BEEN_FLAGGED, false), intent.getBooleanExtra(Game.IS_CLOSED, false));
-                        isPublic = intent.getBooleanExtra(Game.IS_PUBLIC, false);
+                                intent.getBooleanExtra(Game.BEEN_FLAGGED, false), intent.getBooleanExtra(Game.IS_CLOSED, false),
+                                intent.getBooleanExtra(Game.IS_PUBLIC, false));
                     }
                 }
                 // ELSE display information from the game invite
                 else {
                     AuthManager.saveToken(mInvite.inviteToken);
-                    loadInvitedGame();
+                    mPresenter.loadGame(mInvite.gameId);
                 }
-                Timber.i("token was " + mInvite.inviteToken + " gameId was " + mInvite.gameId);
             }
             else {
-                Timber.e("Branch errored with " + error.getMessage());
+                Timber.e(error.getMessage());
             }
         }, intent.getData(), this);
 
@@ -289,12 +287,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mFitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
         mCurrentCaptionState = CaptionState.List;
-    }
-
-    private void loadPrivateMenu(boolean isPublic) {
-        if (!isPublic) {
-            mMenu.findItem(R.id.isPrivate).setVisible(true);
-        }
     }
 
     private void upvoteGame() {
@@ -330,9 +322,18 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
         }
 
-        loadPrivateMenu(isPublic);
+        showPrivateIcon(isPublic);
 
         return true;
+    }
+
+    private void showPrivateIcon(boolean isPublic) {
+        if (isPublic) {
+            mMenu.findItem(R.id.is_private).setVisible(false);
+        }
+        else {
+            mMenu.findItem(R.id.is_private).setVisible(true);
+        }
     }
 
     @Override
@@ -349,9 +350,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     goToLogin();
                 }
                 break;
-            case R.id.isPrivate:
+            case R.id.is_private:
                 if (mPrivateGameDialog == null) {
                     mFriendsAdapter = new FriendsAdapter(new ArrayList<>());
+                    mPresenter.loadInvitedUsers(mGameId);
 
                     mPrivateGameDialog = new MaterialDialog.Builder(this)
                             .title(R.string.participants)
@@ -359,8 +361,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                             .positiveText(R.string.close)
                             .cancelable(true)
                             .show();
-
-                    mPresenter.loadInvitedUsers(mGameId);
                 }
                 else {
                     mPrivateGameDialog.show();
@@ -408,11 +408,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     }
 
     private void inviteFriendIntent(String url) {
-        String title = "Invite friend via";
+        String title = getString(R.string.invite_friend_via);
         Intent inviteIntent = new Intent();
         inviteIntent.setAction(Intent.ACTION_SEND);
         inviteIntent.putExtra(Intent.EXTRA_TEXT, url);
-        inviteIntent.setType("text/plain");
+        inviteIntent.setType(TEXT_PLAIN);
 
         Intent chooser = Intent.createChooser(inviteIntent, title);
         startActivity(chooser);
@@ -440,6 +440,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
     private void startCreateGame() {
         Intent createGameIntent = new Intent(this, CreateGameActivity.class);
+        createGameIntent.putExtra(Game.GAME_ID, mGameId);
         createGameIntent.putExtra(Game.IMAGE_URL, mImageUrl);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
@@ -636,13 +637,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mCurrentCaptionState = CaptionState.Sets;
     }
 
-    public void showGame(String image, int id, int pickerId, String pickerName, String pickerImage,
-                         boolean beenUpvoted, boolean beenFlagged, boolean isClosed) {
+    @Override
+    public void showGame(String image, int gameId, int pickerId, String pickerName, String pickerImage,
+                         boolean beenUpvoted, boolean beenFlagged, boolean isClosed, boolean isPublic) {
         mImageUrl = image;
         isUpvoted = beenUpvoted;
         isFlagged = beenFlagged;
         mPickerImageUrl = pickerImage;
         mPicker = pickerName;
+        this.isPublic = isPublic;
 
         ViewCompat.setTransitionName(mImage, mImageUrl);
 
@@ -654,7 +657,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 .listener(imageLoadListener)
                 .into(mImage);
 
-        mGameId = id;
+        mGameId = gameId;
         mPickerId = pickerId;
 
         if (pickerImage != null && !pickerImage.isEmpty()) {
@@ -675,8 +678,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                             ColorGenerator.MATERIAL.getColor(pickerName)));
         }
         mPickerName.setText(mPicker);
-
-        this.isClosed = isClosed;
 
         if (isClosed) {
             mAddCaptionFab.setVisibility(View.GONE);
@@ -708,8 +709,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     R.string.game_showcase_title, R.string.game_showcase_content);
         }
 
-        mPresenter = new GamePresenter(id, this);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mCaptionList.setLayoutManager(layoutManager);
@@ -740,8 +739,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         mPickerImage.setOnClickListener(this::goToPickerProfile);
 
+        mPresenter.setGameId(mGameId);
         mPresenter.subscribe();
         mRefreshLayout.setRefreshing(true);
+
+        if (mMenu != null) {
+            showPrivateIcon(isPublic);
+        }
     }
 
     private RequestListener imageLoadListener = new RequestListener<String, GlideDrawable>() {
@@ -752,6 +756,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             final Bitmap bitmap = GlideUtils.getBitmap(resource);
             final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     24, getResources().getDisplayMetrics());
+
             Palette.from(bitmap)
                     .maximumColorCount(3)
                     .clearFilters()
@@ -775,7 +780,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                                 final Drawable more = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_more_vert_grey_800_24dp, null);
                                 mToolbar.setOverflowIcon(more);
 
-                                mMenu.findItem(R.id.isPrivate).setIcon(R.drawable.ic_lock_grey_800_24dp);
+                                mMenu.findItem(R.id.is_private).setIcon(R.drawable.ic_lock_grey_800_24dp);
+
                                 if (isUpvoted) {
                                     mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
                                 }
@@ -836,16 +842,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
     };
 
-    public void loadInvitedGame() {
-        GameProvider.getGame(mInvite.gameId, AuthManager.getInviteToken())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        game -> showGame(game.imageUrl, game.id, game.creatorId, game.creatorName,
-                                game.creatorImage, game.beenUpvoted, game.beenFlagged, DateUtils.isPastNow(game.endDate)),
-                        Timber::e
-                );
-    }
-
     private void hideKeyboard() {
         View view = getCurrentFocus();
 
@@ -875,8 +871,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void generateInviteUrl(String inviteToken) {
         BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
                 .setCanonicalIdentifier(UUID.randomUUID().toString())
-                .setTitle(getResources().getText(R.string.join_snaption).toString())
-                .setContentDescription(getResources().getString(R.string.snaption_description))
+                .setTitle(getString(R.string.join_snaption))
+                .setContentDescription(getString(R.string.snaption_description))
                 .setContentImageUrl(mImageUrl)
                 .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
                 .addContentMetadata(GameInvite.INVITE_TOKEN, inviteToken)
@@ -888,11 +884,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         branchUniversalObject.generateShortUrl(this, linkProperties, (String url, BranchError error) -> {
             if (error == null) {
-                Timber.i("got my Branch link to share: " + url);
                 inviteFriendIntent(url);
             }
             else {
-                Timber.e("Branch " + error);
+                Timber.e(error.getMessage());
             }
         });
     }
@@ -999,11 +994,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void onGameUpdated(String type) {
         if (type.equals(GameAction.FLAGGED)) {
-            Toast.makeText(this, getString(R.string.flagged), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.flagged, Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
         else if (type.equals(GameAction.UPVOTE) && isUpvoted) {
-            Toast.makeText(this, getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.upvoted, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1011,10 +1006,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void onGameErrored(String type) {
         if (type.equals(GameAction.UPVOTE)) {
             upvoteGame();
-            Toast.makeText(this, getString(R.string.upvote_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.upvote_fail, Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(this, getString(R.string.flagged_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.flagged_fail, Toast.LENGTH_SHORT).show();
         }
     }
 

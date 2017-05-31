@@ -47,6 +47,8 @@ public class WallAdapter extends RecyclerView.Adapter {
             @Override
             public void updateUpvote(boolean value, int index) {
                 mGames.get(index).beenUpvoted = value;
+                mGames.get(index).numUpvotes = value ? mGames.get(index).numUpvotes + 1 :
+                        mGames.get(index).numUpvotes -1;
             }
 
             @Override
@@ -75,6 +77,13 @@ public class WallAdapter extends RecyclerView.Adapter {
         holder.mCreator = curGame.creatorName;
         holder.mCreatorImageUrl = curGame.creatorImage;
         holder.isPublic = curGame.isPublic;
+
+        if (holder.isPublic) {
+            holder.mPrivateIcon.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.mPrivateIcon.setVisibility(View.VISIBLE);
+        }
 
         if (curGame.imageUrl != null) {
             holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
@@ -212,10 +221,5 @@ public class WallAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return mGames.size();
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
     }
 }

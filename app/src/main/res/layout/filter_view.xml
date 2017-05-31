@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              style="@style/FilterViewTheme"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <com.hootsuite.nachos.NachoTextView
+        android:id="@+id/filter_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/filter_games_title"/>
+
+    <CheckBox
+        android:id="@+id/open_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:text="@string/open"
+        android:textColor="@color/colorAccent"
+        android:theme="@style/FilterViewTheme"/>
+
+    <CheckBox
+        android:id="@+id/closed_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:text="@string/closed"
+        android:textColor="@color/colorAccent"
+        android:theme="@style/FilterViewTheme"/>
+
+</LinearLayout>

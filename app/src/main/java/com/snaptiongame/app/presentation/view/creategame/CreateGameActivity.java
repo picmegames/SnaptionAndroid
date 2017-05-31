@@ -14,6 +14,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,12 +44,12 @@ import com.hootsuite.nachos.chip.ChipSpanChipCreator;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
 import com.snaptiongame.app.presentation.view.customviews.FourThreeImageView;
 import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
+import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,6 +67,8 @@ import butterknife.OnClick;
 public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
     @BindView(R.id.layout)
     CoordinatorLayout mLayout;
+    @BindView(R.id.scroll_view)
+    NestedScrollView mScrollView;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.image)
@@ -74,8 +77,12 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     LottieAnimationView mAnimationView;
     @BindView(R.id.private_switch)
     Switch mPrivateSwitch;
+    @BindView(R.id.add_friends_button)
+    Button mAddFriendsButton;
     @BindView(R.id.create_game)
     Button mCreateGameButton;
+    @BindView(R.id.tags)
+    TextView mTagsLabel;
     @BindView(R.id.tag_chip_view)
     NachoTextView mTagTextView;
     @BindView(R.id.friends_chip_view)
@@ -100,6 +107,8 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     private int mDayOfMonth;
     private long mDays;
     private String mFormattedDate;
+    private int mGameId = -1;
+    private boolean mIsFromAnotherGame = false;
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
@@ -113,8 +122,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mPresenter = new CreateGamePresenter(this);
 
         Intent intent = getIntent();
-        if (intent.hasExtra(Game.IMAGE_URL)) {
+        if (intent.hasExtra(Game.GAME_ID) && intent.hasExtra(Game.IMAGE_URL)) {
+            mGameId = intent.getIntExtra(Game.GAME_ID, -1);
             mImageUrl = intent.getStringExtra(Game.IMAGE_URL);
+            mIsFromAnotherGame = true;
             ViewCompat.setTransitionName(mNewGameImage, mImageUrl);
 
             Glide.with(this)
@@ -195,6 +206,39 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
         mDateLabel.setText(mFormattedDate);
         mDays = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
+
+        // Will only happen once
+        showShowcase();
+    }
+
+    private void showShowcase() {
+        List<View> showcaseViews = new ArrayList<>();
+        List<Integer> titles = new ArrayList<>();
+        List<Integer> contents = new ArrayList<>();
+
+        if (!mIsFromAnotherGame) {
+            showcaseViews.add(mAnimationView);
+            titles.add(R.string.create_game_showcase_title_1);
+            contents.add(R.string.create_game_showcase_content_1);
+        }
+
+        showcaseViews.add(mTagsLabel);
+        titles.add(R.string.create_game_showcase_title_2);
+        contents.add(R.string.create_game_showcase_content_2);
+
+        showcaseViews.add(mPrivateSwitch);
+        titles.add(R.string.create_game_showcase_title_3);
+        contents.add(R.string.create_game_showcase_content_3);
+
+        showcaseViews.add(mAddFriendsButton);
+        titles.add(R.string.create_game_showcase_title_4);
+        contents.add(R.string.create_game_showcase_content_4);
+
+        showcaseViews.add(mDateLabel);
+        titles.add(R.string.create_game_showcase_title_5);
+        contents.add(R.string.create_game_showcase_content_5);
+
+        ShowcaseUtils.showShowcaseSequence(this, mScrollView, showcaseViews, titles, contents);
     }
 
     @Override
@@ -319,9 +363,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.create_game)
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
-        if (mUri != null && mPresenter.isValidFriends()) {
-            mPresenter.createGame(getContentResolver().getType(mUri), mUri,
-                    AuthManager.getUserId(), !mPrivateSwitch.isChecked(), mDays);
+        if (mPresenter.isValidFriends()) {
+            if (!mIsFromAnotherGame) {
+                mPresenter.createGame(getContentResolver().getType(mUri), mUri,
+                        !mPrivateSwitch.isChecked(), mDays);
+            }
+            else {
+                mPresenter.createGameFromId(mGameId, !mPrivateSwitch.isChecked(), mDays);
+            }
             mProgressDialog = new MaterialDialog.Builder(this)
                     .title(R.string.upload_title)
                     .content(R.string.upload_message)
@@ -377,6 +426,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
+            mIsFromAnotherGame = false;
             mAnimationView.pauseAnimation();
             mAnimationView.setVisibility(View.GONE);
             mUri = data.getData();

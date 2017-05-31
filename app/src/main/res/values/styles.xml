@@ -28,6 +28,12 @@
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
 
+    <style name="FilterViewTheme" parent="Base.Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+    </style>
+
     <style name="LoginTheme" parent="AppTheme"/>
     <style name="CreateGameTheme" parent="AppTheme"/>
     <style name="StatusBarTheme" parent="AppTheme" />

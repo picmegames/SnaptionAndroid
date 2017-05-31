@@ -19,6 +19,9 @@ import java.util.List;
 
 public class GameContract {
     interface View extends BaseView<Presenter> {
+        void showGame(String image, int gameId, int pickerId, String pickerName, String pickerImage,
+                      boolean beenUpvoted, boolean beenFlagged, boolean isClosed, boolean isPublic);
+
         void showCaptions(List<Caption> captions);
 
         void generateInviteUrl(String inviteToken);
@@ -62,5 +65,9 @@ public class GameContract {
         void refreshCaptions();
 
         void loadInvitedUsers(int gameId);
+
+        void loadGame(int gameId);
+
+        void setGameId(int gameId);
     }
 }

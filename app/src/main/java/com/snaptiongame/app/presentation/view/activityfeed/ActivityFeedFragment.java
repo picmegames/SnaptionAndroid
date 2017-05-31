@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.friends;
+package com.snaptiongame.app.presentation.view.activityfeed;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.snaptiongame.app.R;
-import com.snaptiongame.app.data.models.Friend;
+import com.snaptiongame.app.data.models.ActivityFeedItem;
 import com.snaptiongame.app.presentation.view.decorations.InsetDividerDecoration;
 import com.snaptiongame.app.presentation.view.listeners.InfiniteRecyclerViewScrollListener;
-import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,69 +25,66 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * @author Brian Gouldsberry
+ * @author Tyler Wong
  */
 
-public class FriendsFragment extends Fragment implements FriendsContract.View {
-    @BindView(R.id.friend_list)
-    RecyclerView mFriendsList;
-    @BindView(R.id.refresh_layout_friends)
+public class ActivityFeedFragment extends Fragment implements ActivityFeedContract.View {
+
+    @BindView(R.id.activity)
+    RecyclerView mActivityFeed;
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.empty_view)
     LinearLayout mEmptyView;
 
-    protected FriendsContract.Presenter mPresenter;
+    private ActivityFeedContract.Presenter mPresenter;
+    private Unbinder mUnbinder;
+    private ActivityFeedAdapter mAdapter;
+    private InsetDividerDecoration mDecoration;
     private InfiniteRecyclerViewScrollListener mScrollListener;
 
-    private FriendsAdapter mAdapter;
-    private InsetDividerDecoration mDecoration;
+    public static final String TAG = ActivityFeedFragment.class.getSimpleName();
 
-    private Unbinder mUnbinder;
-    public static final String TAG = FriendsFragment.class.getSimpleName();
-
-    public static FriendsFragment getInstance() {
-        return new FriendsFragment();
+    public static ActivityFeedFragment getInstance() {
+        return new ActivityFeedFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.friends_fragment, container, false);
+        View view = inflater.inflate(R.layout.activity_feed_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
-
-        mPresenter = new FriendsPresenter(this);
+        mPresenter = new ActivityFeedPresenter(this);
 
         mDecoration = new InsetDividerDecoration(
-                FriendViewHolder.class,
+                ActivityFeedItemViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
                 ContextCompat.getColor(getContext(), R.color.divider));
-        mFriendsList.addItemDecoration(mDecoration);
+        mActivityFeed.addItemDecoration(mDecoration);
 
-        mFriendsList.setHasFixedSize(true);
+        mAdapter = new ActivityFeedAdapter(new ArrayList<>());
+        mActivityFeed.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mFriendsList.setLayoutManager(layoutManager);
-        mAdapter = new FriendsAdapter(new ArrayList<>());
-        mAdapter.setPresenter(mPresenter);
-        mAdapter.setShouldDisplayAddRemoveOption(true);
+        mActivityFeed.setLayoutManager(layoutManager);
 
         mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                mPresenter.loadFriends(page);
+                mPresenter.loadActivityFeed(page);
             }
         };
-        mFriendsList.addOnScrollListener(mScrollListener);
 
-        mFriendsList.setAdapter(mAdapter);
+        mActivityFeed.addOnScrollListener(mScrollListener);
 
         mRefreshLayout.setOnRefreshListener(() -> {
             setRefreshing(true);
             mAdapter.clear();
             mScrollListener.resetState();
-            mPresenter.loadFriends(1);
+            mPresenter.loadActivityFeed(1);
         });
+
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
@@ -98,42 +94,34 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
         return view;
     }
 
-    public void refreshFriends() {
-        mAdapter.clear();
-        mScrollListener.resetState();
-        mPresenter.subscribe();
-    }
-
-    @Override
-    public void showEmptyView() {
-        mEmptyView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void showFriendList() {
-        mEmptyView.setVisibility(View.GONE);
-        mFriendsList.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-        mPresenter.unsubscribe();
-    }
-
     @Override
     public void setRefreshing(boolean isRefreshing) {
         mRefreshLayout.setRefreshing(isRefreshing);
     }
 
     @Override
-    public void processFriends(List<Friend> friends) {
-        mAdapter.addFriends(friends);
-        setRefreshing(false);
+    public void setPresenter(ActivityFeedContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
+    public void showEmptyView() {
+        mEmptyView.setVisibility(View.VISIBLE);
+        mAdapter.clear();
+    }
+
+    @Override
+    public void showActivityFeed() {
+        mEmptyView.setVisibility(View.GONE);
+        mActivityFeed.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void addActivityFeedItems(List<ActivityFeedItem> items) {
+        mAdapter.addActivityItems(items);
 
         if (!mAdapter.isEmpty()) {
-            showFriendList();
+            showActivityFeed();
         }
         else {
             showEmptyView();
@@ -141,11 +129,9 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     }
 
     @Override
-    public void addFriend(Friend friend) {
-    }
-
-    @Override
-    public void setPresenter(FriendsContract.Presenter presenter) {
-        mPresenter = presenter;
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+        mPresenter.unsubscribe();
     }
 }

@@ -10,7 +10,7 @@ import com.snaptiongame.app.presentation.BaseView;
 
 public class MoreInfoContract {
     interface View extends BaseView<Presenter> {
-        void showUserInfo(String rank, int experience);
+        void showUserInfo(int experience);
 
         void showMoreInfo(UserStats userStats);
     }
