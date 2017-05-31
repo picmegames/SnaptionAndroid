@@ -228,8 +228,13 @@ public class ProfileActivity extends AppCompatActivity
                         .negativeText(R.string.cancel)
                         .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
                             String newUsername = mEditView.getNewUsername();
+
                             if (!newUsername.replaceAll(SPACES_DELIMITER, "").isEmpty()) {
                                 mPresenter.updateUsername(AuthManager.getUsername(), new User(newUsername));
+                            }
+                            else if (newUsername.contains(SPACES_DELIMITER))
+                            {
+                                showUsernameFailure(getString(R.string.spaces_in_name));
                             }
                             else {
                                 showUsernameFailure(getString(R.string.empty_username));

@@ -179,5 +179,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="closed">Cerrado</string>
     <string name="open">Abierto</string>
     <string name="filter_wall">Filtrar el Muro</string>
+    <string name="spaces_in_name">El nombre de usuario no puede contener espacios en blanco.</string>
 
 </resources>
