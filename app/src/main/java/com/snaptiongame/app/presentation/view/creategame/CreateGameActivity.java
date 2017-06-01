@@ -363,24 +363,19 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     @OnClick(R.id.create_game)
     public void createGame() {
         mTagTextView.chipifyAllUnterminatedTokens();
-        if (mPresenter.isValidFriends()) {
-            if (!mIsFromAnotherGame) {
-                mPresenter.createGame(getContentResolver().getType(mUri), mUri,
-                        !mPrivateSwitch.isChecked(), mDays);
-            }
-            else {
-                mPresenter.createGameFromId(mGameId, !mPrivateSwitch.isChecked(), mDays);
-            }
-            mProgressDialog = new MaterialDialog.Builder(this)
-                    .title(R.string.upload_title)
-                    .content(R.string.upload_message)
-                    .progress(true, 0)
-                    .cancelable(false)
-                    .show();
+        if (!mIsFromAnotherGame) {
+            mPresenter.createGame(getContentResolver().getType(mUri), mUri,
+                    !mPrivateSwitch.isChecked(), mDays);
         }
         else {
-            Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
+            mPresenter.createGameFromId(mGameId, !mPrivateSwitch.isChecked(), mDays);
         }
+        mProgressDialog = new MaterialDialog.Builder(this)
+                .title(R.string.upload_title)
+                .content(R.string.upload_message)
+                .progress(true, 0)
+                .cancelable(false)
+                .show();
     }
 
     @OnClick(R.id.set_date_field)
