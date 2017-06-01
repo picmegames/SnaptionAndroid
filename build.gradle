@@ -1,6 +1,10 @@
 buildscript {
     repositories {
         jcenter()
+
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
     dependencies {
         // Gradle
@@ -8,6 +12,9 @@ buildscript {
 
         // Play Services
         classpath 'com.google.gms:google-services:3.0.0'
+
+        // Fabric.io
+        classpath 'io.fabric.tools:gradle:1.22.1'
 
         // Retrolambda Gradle
         classpath 'me.tatarka:gradle-retrolambda:3.6.1'
@@ -48,7 +55,6 @@ ext {
     butterknifeVersion = '8.6.0'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'
-    leakCanaryVersion = '1.5.1'
     mockitoVersion = '2.7.1'
     robolectricVersion = '3.3.2'
     timberVersion = '4.5.1'
@@ -56,6 +62,7 @@ ext {
     // Application dependencies
     branchVersion = '2.8.0'
     circleImageViewVersion = '2.1.0'
+    crashlyticsVersion = '2.6.8'
     facebookSdkVersion = '4.23.0'
     glideVersion = '3.8.0'
     glideTransformationsVersion = '2.0.2'

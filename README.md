@@ -117,7 +117,6 @@ gotten the project to build successfully!
 ### Developer Dependencies
 * [JakeWharton/butterknife](https://github.com/JakeWharton/butterknife)
 * [evant/gradle-retrolambda](https://github.com/evant/gradle-retrolambda)
-* [square/leakcanary](https://github.com/square/leakcanary)
 * [JakeWharton/timber](https://github.com/JakeWharton/timber)
 
 ### Application Dependencies
