@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.AddFriendRequest;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.providers.FriendProvider;
@@ -41,6 +42,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .flatMapIterable(users -> users)
                 .map(Friend::new)
                 .distinct(friend -> friend.id)
+                .filter(friend -> friend.id != AuthManager.getUserId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mFriendView::addFriend,

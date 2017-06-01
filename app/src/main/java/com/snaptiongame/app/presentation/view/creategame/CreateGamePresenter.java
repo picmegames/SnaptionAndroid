@@ -103,7 +103,10 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     private List<Integer> getFriendIds(List<String> friendNames) {
         List<Integer> friendIds = new ArrayList<>();
         for (String name : friendNames) {
-            friendIds.add(getFriendIdByName(name));
+            int id = getFriendIdByName(name);
+            if (id !=  -1) { //check to see if the id is valid
+                friendIds.add(id);
+            }
         }
         return friendIds;
     }
@@ -118,11 +121,6 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
             }
         }
         return -1;
-    }
-
-    @Override
-    public boolean isValidFriends() {
-        return !getFriendIds(mCreateGameView.getAddedFriends()).contains(-1);
     }
 
     @Override

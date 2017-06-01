@@ -46,7 +46,5 @@ public class CreateGameContract {
         List<Friend> getFriends();
 
         void loadFriends();
-
-        boolean isValidFriends();
     }
 }
