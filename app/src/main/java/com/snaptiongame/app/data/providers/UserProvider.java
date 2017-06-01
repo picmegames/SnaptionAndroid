@@ -1,8 +1,6 @@
 package com.snaptiongame.app.data.providers;
 
 import com.snaptiongame.app.data.api.SnaptionApi;
-import com.snaptiongame.app.data.auth.AuthManager;
-import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.models.UserStats;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
