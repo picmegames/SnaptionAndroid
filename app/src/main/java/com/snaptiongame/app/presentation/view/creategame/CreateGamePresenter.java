@@ -32,6 +32,8 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     // private byte[] mEncodedImage;
     private String mEncodedImage;
 
+    private static final int INVALID_FRIEND = -1;
+
     public CreateGamePresenter(@NonNull CreateGameContract.View createGameView) {
         mCreateGameView = createGameView;
         mDisposables = new CompositeDisposable();
@@ -104,7 +106,9 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         List<Integer> friendIds = new ArrayList<>();
         for (String name : friendNames) {
             int id = getFriendIdByName(name);
-            if (id !=  -1) { //check to see if the id is valid
+
+            // IF the friend id is valid
+            if (id != INVALID_FRIEND) {
                 friendIds.add(id);
             }
         }
@@ -120,7 +124,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                 }
             }
         }
-        return -1;
+        return INVALID_FRIEND;
     }
 
     @Override
