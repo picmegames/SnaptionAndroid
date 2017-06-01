@@ -25,6 +25,10 @@
             android:name="io.branch.sdk.BranchKey"
             android:value="key_live_ojtqja2UgqbsW97lR1aDTeciAAdszI18"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0c61588637c924f6787df950aa86576e41c268ff"/>
+
         <activity
             android:name=".presentation.view.onboarding.OnboardingActivity"
             android:configChanges="orientation"
@@ -61,10 +65,10 @@
         <activity
             android:name=".presentation.view.profile.ProfileActivity"
             android:configChanges="orientation"
+            android:parentActivityName=".presentation.view.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarTheme"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".presentation.view.main.MainActivity"/>
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".presentation.view.creategame.CreateGameActivity"
@@ -76,13 +80,14 @@
         <activity
             android:name=".presentation.view.game.GameActivity"
             android:configChanges="orientation"
+            android:parentActivityName=".presentation.view.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/GameTheme"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".presentation.view.main.MainActivity">
+            android:windowSoftInputMode="adjustPan">
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
@@ -112,8 +117,10 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data android:scheme="@string/fb_login_protocol_scheme"/>
             </intent-filter>
         </activity>
