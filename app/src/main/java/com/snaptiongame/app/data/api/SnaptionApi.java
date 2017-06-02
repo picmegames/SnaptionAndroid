@@ -102,7 +102,7 @@ public interface SnaptionApi {
      * @param fullName The desired user's fullName
      * @return An observable that emits a User object
      */
-    @GET("/Users")
+    @GET("/Users/")
     Observable<List<User>> searchUsers(@Query("email") String email,
                                        @Query("facebookID") String facebookId,
                                        @Query("username") String username,
@@ -124,7 +124,7 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Game objects.
      */
-    @GET("/Games/mine")
+    @GET("/Games/mine/")
     Observable<List<Game>> getGamesMine(@Query("tag") List<String> tags,
                                         @Query("status") String status,
                                         @Query("page") int page);
@@ -135,7 +135,7 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Game objects.
      */
-    @GET("/Games/discover")
+    @GET("/Games/discover/")
     Observable<List<Game>> getGamesDiscover(@Query("tag") List<String> tags,
                                             @Query("status") String status,
                                             @Query("page") int page);
@@ -146,7 +146,7 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Game objects.
      */
-    @GET("/Games/popular")
+    @GET("/Games/popular/")
     Observable<List<Game>> getGamesPopular(@Query("tag") List<String> tags,
                                            @Query("status") String status,
                                            @Query("page") int page);
@@ -157,7 +157,7 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Game objects.
      */
-    @GET("/UserGame/History")
+    @GET("/UserGame/History/")
     Observable<List<Game>> getGamesHistory(@Query("creator") int userId, @Query("page") int page);
 
     /**
@@ -205,7 +205,7 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Friend objects
      */
-    @GET("/UserFriends/Followers")
+    @GET("/UserFriends/Followers/")
     Observable<List<Friend>> getFollowers();
 
     /**
@@ -279,7 +279,7 @@ public interface SnaptionApi {
      *
      * @return A single that emits a UserStats object
      */
-    @GET("/Users/Stats/{userId}")
+    @GET("/Users/Stats/{userId}/")
     Single<UserStats> getUserStats(@Path("userId") int userId);
 
     /**
