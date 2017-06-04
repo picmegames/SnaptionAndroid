@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -19,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
@@ -266,6 +268,14 @@ public final class AuthManager {
         return preferences.getBoolean(FRIEND_NOTIFICATIONS, true);
     }
 
+    public static boolean isLoggedInWithFacebook() {
+        return preferences.getBoolean(FACEBOOK_LOGIN, false);
+    }
+
+    public static boolean isLoggedInWithGoogle() {
+        return preferences.getBoolean(GOOGLE_SIGN_IN, false);
+    }
+
     public static void setGameNotificationsEnabled(boolean isEnabled) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(GAME_NOTIFICATIONS, isEnabled);
@@ -297,8 +307,8 @@ public final class AuthManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                             SharedPreferences.Editor editor = preferences.edit();
-                            boolean isFacebook = preferences.getBoolean(FACEBOOK_LOGIN, false);
-                            boolean isGoogle = preferences.getBoolean(GOOGLE_SIGN_IN, false);
+                            boolean isFacebook = isLoggedInWithFacebook();
+                            boolean isGoogle = isLoggedInWithGoogle();
                             // IF we are logged in with Facebook
                             if (isFacebook && !isGoogle) {
                                 // Call Facebook's logout method
@@ -309,13 +319,13 @@ public final class AuthManager {
                                 if (googleApiClient.isConnected()) {
                                     Auth.GoogleSignInApi.signOut(googleApiClient)
                                             .setResultCallback(status -> {
-                                        if (status.isSuccess()) {
-                                            Timber.i("Sign out of Google success");
-                                        }
-                                        else {
-                                            Timber.e("Could not sign out of Google");
-                                        }
-                                    });
+                                                if (status.isSuccess()) {
+                                                    Timber.i("Sign out of Google success");
+                                                }
+                                                else {
+                                                    Timber.e("Could not sign out of Google");
+                                                }
+                                            });
                                 }
                             }
                             editor.putBoolean(LOGGED_IN, false);
@@ -434,5 +444,69 @@ public final class AuthManager {
                             fireFailureCallback();
                         }
                 );
+    }
+
+    public void refreshSession() {
+        SessionProvider.isSessionValid()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::updateUserLogin,
+                        Timber::e
+                );
+    }
+
+    private void updateUserLogin(boolean isValid) {
+        if (!isValid) {
+            boolean isFacebook = isLoggedInWithFacebook();
+            boolean isGoogle = isLoggedInWithGoogle();
+
+            if (isFacebook && !isGoogle) {
+                updateFacebookLogin();
+            }
+            else if (!isFacebook && isGoogle) {
+                updateGoogleLogin();
+            }
+        }
+    }
+
+    private void updateFacebookLogin() {
+        AccessToken.refreshCurrentAccessTokenAsync(new AccessToken.AccessTokenRefreshCallback() {
+            @Override
+            public void OnTokenRefreshed(AccessToken accessToken) {
+                handleOAuthFacebook(accessToken.getToken(), FirebaseInstanceId.getInstance().getToken());
+            }
+
+            @Override
+            public void OnTokenRefreshFailed(FacebookException e) {
+                Timber.e(e);
+            }
+        });
+    }
+
+    private void updateGoogleLogin() {
+        OptionalPendingResult<GoogleSignInResult> pendingResult =
+                Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+
+        if (pendingResult.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            GoogleSignInResult result = pendingResult.get();
+
+            if (result.getSignInAccount() != null) {
+                handleOAuthGoogle(result.getSignInAccount().getIdToken(),
+                        FirebaseInstanceId.getInstance().getToken());
+            }
+        }
+        else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            pendingResult.setResultCallback(result -> {
+                if (result.getSignInAccount() != null) {
+                    handleOAuthGoogle(result.getSignInAccount().getIdToken(),
+                            FirebaseInstanceId.getInstance().getToken());
+                }
+            });
+        }
     }
 }

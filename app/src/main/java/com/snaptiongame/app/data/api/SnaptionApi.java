@@ -65,6 +65,25 @@ public interface SnaptionApi {
     Completable logout();
 
     /**
+     * This method will send a GET request to the server to determine
+     * if the currently logged in user's session is still valid.
+     *
+     * @return A single boolean true if the session is valid, else false
+     */
+    @GET("/OAuth/Status/")
+    Single<Boolean> isSessionValid();
+
+    /**
+     * This method will send a GET request to the server to update a
+     * user's device token
+     *
+     * @param deviceToken The currently logged in user's device token
+     * @return A completable
+     */
+    @GET("/Notifications/Refresh/")
+    Completable refreshNotificationToken(@Query("device_token") String deviceToken);
+
+    /**
      * This method sends a request for a user with a GET request.
      *
      * @param userId The id of the desired user.
