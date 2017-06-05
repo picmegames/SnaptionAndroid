@@ -51,7 +51,7 @@ ext {
 
     // Developer dependencies
     androidTestVersion = '0.5'
-    assertjVersion = '3.7.0'
+    assertjVersion = '3.8.0'
     butterknifeVersion = '8.6.0'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'

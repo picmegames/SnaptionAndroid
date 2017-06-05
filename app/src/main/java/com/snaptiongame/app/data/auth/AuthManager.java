@@ -447,12 +447,14 @@ public final class AuthManager {
     }
 
     public void refreshSession() {
-        SessionProvider.isSessionValid()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        this::updateUserLogin,
-                        Timber::e
-                );
+        if (isLoggedIn()) {
+            SessionProvider.isSessionValid()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            this::updateUserLogin,
+                            Timber::e
+                    );
+        }
     }
 
     private void updateUserLogin(boolean isValid) {
