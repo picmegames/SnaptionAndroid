@@ -64,7 +64,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         ListView list = null;
         if (rootView != null) {
             list = (ListView) rootView.findViewById(android.R.id.list);
-            mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
+            mPuffinLogo = (ImageView) rootView.getRootView().findViewById(R.id.puffinlogo);
         }
         if (list != null) {
             list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
@@ -164,7 +164,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 list.setPadding(0, 0, 0, 0);
                 list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
                 mListStyled = true;
-                mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
+                mPuffinLogo = (ImageView) rootView.getRootView().findViewById(R.id.puffinlogo);
             }
         }
         setupNotificationStatus();
@@ -217,7 +217,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             }
         }
         else if (key.equals(getString(R.string.version_label))) {
-           mPuffinEasterEgg.update(mPuffinLogo);
+            mPuffinEasterEgg.update(mPuffinLogo);
         }
         else if (key.equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
