@@ -60,11 +60,11 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         super.onCreate(savedInstanceState);
         mPresenter = new PreferencesPresenter(this);
 
-        View rootView = getView();
+        View view = getView();
         ListView list = null;
-        if (rootView != null) {
-            list = (ListView) rootView.findViewById(android.R.id.list);
-            mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
+        if (view != null) {
+            list = (ListView) view.findViewById(android.R.id.list);
+            mPuffinLogo = (ImageView) view.getRootView().findViewById(R.id.puffinlogo);
         }
         if (list != null) {
             list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
@@ -158,13 +158,13 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     public void onResume() {
         super.onResume();
         if (!mListStyled) {
-            View rootView = getView();
-            if (rootView != null) {
-                ListView list = (ListView) rootView.findViewById(android.R.id.list);
+            View view = getView();
+            if (view != null) {
+                ListView list = (ListView) view.findViewById(android.R.id.list);
                 list.setPadding(0, 0, 0, 0);
                 list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
                 mListStyled = true;
-                mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
+                mPuffinLogo = (ImageView) view.getRootView().findViewById(R.id.puffinlogo);
             }
         }
         setupNotificationStatus();
