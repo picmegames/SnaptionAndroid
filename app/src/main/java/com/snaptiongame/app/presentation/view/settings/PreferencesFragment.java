@@ -217,7 +217,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             }
         }
         else if (key.equals(getString(R.string.version_label))) {
-           mPuffinEasterEgg.update(mPuffinLogo);
+            if (mPuffinLogo == null)
+                mPuffinLogo = (ImageView) getView().getRootView().findViewById(R.id.puffinlogo);
+
+            mPuffinEasterEgg.update(mPuffinLogo);
         }
         else if (key.equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
