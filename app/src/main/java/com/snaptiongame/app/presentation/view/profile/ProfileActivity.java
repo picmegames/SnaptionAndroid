@@ -117,7 +117,6 @@ public class ProfileActivity extends AppCompatActivity
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
     private static final int BLUR_RADIUS = 40;
-    private static final String SPACES_DELIMITER = "\\s+";
 
     public static final String IS_CURRENT_USER = "is_current_user";
 
@@ -228,15 +227,13 @@ public class ProfileActivity extends AppCompatActivity
                         .negativeText(R.string.cancel)
                         .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
                             String newUsername = mEditView.getNewUsername();
-                            if (!newUsername.replaceAll(SPACES_DELIMITER, "").isEmpty()) {
+
+                            if (!newUsername.contains(" ")) {
                                 mPresenter.updateUsername(AuthManager.getUsername(), new User(newUsername));
                             }
                             else {
-                                showUsernameFailure(getString(R.string.empty_username));
+                                showUsernameFailure(getString(R.string.spaces_in_name));
                             }
-                        })
-                        .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
-
                         })
                         .show();
             }
