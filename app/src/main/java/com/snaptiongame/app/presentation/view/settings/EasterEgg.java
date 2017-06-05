@@ -14,10 +14,10 @@ import android.widget.ImageView;
 
 public final class EasterEgg {
     private int puffinCounter = 0;
-    private final int PUFFIN_THRESHOLD = 6;
-    private final int ONE_SECOND = 1000;
-    private final int TRANSPARENT = 0;
-    private final int SOLID = 1;
+    private static final int PUFFIN_THRESHOLD = 6;
+    private static final int ONE_SECOND = 1000;
+    private static final int TRANSPARENT = 0;
+    private static final int SOLID = 1;
 
     public void update(ImageView puffinLogo) {
 
