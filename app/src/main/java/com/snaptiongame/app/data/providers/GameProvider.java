@@ -1,6 +1,7 @@
 package com.snaptiongame.app.data.providers;
 
 import com.snaptiongame.app.data.api.SnaptionApi;
+import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
@@ -55,6 +56,7 @@ public class GameProvider {
                 .map(game -> game.users)
                 .toObservable()
                 .flatMapIterable(users -> users)
+                .filter(user -> user.id != AuthManager.getUserId())
                 .map(Friend::new)
                 .toList();
     }

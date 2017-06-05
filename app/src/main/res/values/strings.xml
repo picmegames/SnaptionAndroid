@@ -113,7 +113,6 @@
     <string name="upvote">Upvote</string>
     <string name="upvoted">Upvoted!</string>
     <string name="upvote_fail">Failed to upvote the game</string>
-    <string name="empty_username">Username cannot be empty</string>
     <string name="compression_error">Could not compress image</string>
     <string name="upload_error">Could not upload game</string>
     <string name="empty_caption">Nothing entered for caption.</string>
@@ -175,6 +174,7 @@
     <string name="minutes" translatable="false">%dm</string>
     <string name="open">Open</string>
     <string name="closed">Closed</string>
+    <string name="spaces_in_name">Username cannot contain whitespace</string>
 
     <!-- Activity Feed Items -->
     <string name="friend_made_game">created a new game.</string>
