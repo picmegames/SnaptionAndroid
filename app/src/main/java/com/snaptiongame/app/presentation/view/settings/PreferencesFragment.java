@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,8 +46,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private MaterialDialog mFeedbackDialog;
     private WebView mLicensesWebView;
     private WebView mFeedbackWebView;
+    private ImageView mPuffinLogo;
 
     private boolean mListStyled = false;
+    private final EasterEgg mPuffinEasterEgg = new EasterEgg();
 
     public static PreferencesFragment newInstance() {
         return new PreferencesFragment();
@@ -61,6 +64,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         ListView list = null;
         if (rootView != null) {
             list = (ListView) rootView.findViewById(android.R.id.list);
+            mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
         }
         if (list != null) {
             list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
@@ -100,6 +104,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         mLogoutPreference = mPreferenceScreen.findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
         mVersionPreference = mPreferenceScreen.findPreference(getString(R.string.version_label));
+        mVersionPreference.setOnPreferenceClickListener(this);
         mLicensesPreference = mPreferenceScreen.findPreference(getString(R.string.licenses));
         mLicensesPreference.setOnPreferenceClickListener(this);
         mFeedbackPreference = mPreferenceScreen.findPreference(getString(R.string.give_feedback));
@@ -159,6 +164,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 list.setPadding(0, 0, 0, 0);
                 list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
                 mListStyled = true;
+                mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
             }
         }
         setupNotificationStatus();
@@ -209,6 +215,9 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             else {
                 goToLogin();
             }
+        }
+        else if (key.equals(getString(R.string.version_label))) {
+           mPuffinEasterEgg.update(mPuffinLogo);
         }
         else if (key.equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
