@@ -12,7 +12,13 @@ import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,6 +53,8 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private WebView mFeedbackWebView;
 
     private boolean mListStyled = false;
+    private int mPuffincounter = 0;
+    private final EasterEgg mPuffinEasterEgg = new EasterEgg();
 
     public static PreferencesFragment newInstance() {
         return new PreferencesFragment();
@@ -100,6 +108,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         mLogoutPreference = mPreferenceScreen.findPreference(getString(R.string.log_out_label));
         mLogoutPreference.setOnPreferenceClickListener(this);
         mVersionPreference = mPreferenceScreen.findPreference(getString(R.string.version_label));
+        mVersionPreference.setOnPreferenceClickListener(this);
         mLicensesPreference = mPreferenceScreen.findPreference(getString(R.string.licenses));
         mLicensesPreference.setOnPreferenceClickListener(this);
         mFeedbackPreference = mPreferenceScreen.findPreference(getString(R.string.give_feedback));
@@ -210,6 +219,9 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 goToLogin();
             }
         }
+        else if (key.equals(getString(R.string.version_label))) {
+           mPuffinEasterEgg.update();
+        }
         else if (key.equals(getString(R.string.clear_cache))) {
             mPresenter.clearCache();
         }
@@ -257,5 +269,35 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     public void onDestroyView() {
         super.onDestroyView();
         mPresenter.unsubscribe();
+    }
+
+    private final class EasterEgg {
+        private int puffinCounter = 0;
+        private final int PUFFIN_THRESHOLD = 6;
+        private ImageView mPuffinLogo;
+
+        private void update() {
+
+            if (++puffinCounter == PUFFIN_THRESHOLD) {
+                puffinCounter = 0;
+                mPuffinLogo = (ImageView) getView().getRootView().findViewById(R.id.puffinlogo);
+
+                mPuffinLogo.setVisibility(View.INVISIBLE);
+                mPuffinLogo.bringToFront();
+                Animation fadeIn = new AlphaAnimation(0, 1);
+                fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+                fadeIn.setDuration(1000);
+
+                Animation fadeOut = new AlphaAnimation(1, 0);
+                fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+                fadeOut.setStartOffset(1000);
+                fadeOut.setDuration(1000);
+
+                AnimationSet animation = new AnimationSet(false); //change to false
+                animation.addAnimation(fadeIn);
+                animation.addAnimation(fadeOut);
+                mPuffinLogo.setAnimation(animation);
+            }
+        }
     }
 }
