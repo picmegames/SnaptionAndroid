@@ -292,20 +292,23 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private void upvoteGame() {
         if (isUpvoted) {
             if (!isDark) {
-                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
+                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_grey_800_24dp);
+                // mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
             }
             else {
-                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
+                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_white_24dp);
+                // mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
             }
             isUpvoted = false;
         }
         else {
-            if (!isDark) {
-                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
-            }
-            else {
-                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
-            }
+//            if (!isDark) {
+//                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
+//            }
+//            else {
+//                mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
+//            }
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_pink_300_24dp);
             isUpvoted = true;
         }
     }
@@ -316,10 +319,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mMenu = menu;
 
         if (isUpvoted) {
-            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_white_24dp);
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_pink_300_24dp);
         }
         else {
-            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_white_24dp);
+            mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_white_24dp);
         }
 
         showPrivateIcon(isPublic);
@@ -689,14 +692,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                         .positiveText(R.string.yes)
                         .negativeText(R.string.no)
                         .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
-                            startCreateGame()
+                                startCreateGame()
                         )
                         .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
-                            new MaterialDialog.Builder(this)
-                                    .title(R.string.create_game_title)
-                                    .content(R.string.create_game_content)
-                                    .positiveText(R.string.got_it)
-                                    .show()
+                                new MaterialDialog.Builder(this)
+                                        .title(R.string.create_game_title)
+                                        .content(R.string.create_game_content)
+                                        .positiveText(R.string.got_it)
+                                        .show()
                         )
                         .checkBoxPromptRes(R.string.dont_ask_again, false, (CompoundButton compoundButton, boolean isChecked) ->
                                 AuthManager.setIsClosedGameDialogEnabled(!isChecked)
@@ -783,10 +786,10 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                                 mMenu.findItem(R.id.is_private).setIcon(R.drawable.ic_lock_grey_800_24dp);
 
                                 if (isUpvoted) {
-                                    mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_grey_800_24dp);
+                                    mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_pink_300_24dp);
                                 }
                                 else {
-                                    mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_favorite_border_grey_800_24dp);
+                                    mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_grey_800_24dp);
                                 }
                             }
                         }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -299,10 +300,14 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setUpvoteIcon(boolean isGameUpvoted) {
         if (isGameUpvoted) {
-            mUpvoteButton.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
+            // mUpvoteButton.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
+            mUpvoteButton.setImageResource(R.drawable.ic_arrow_upward_grey_500_24dp);
+            mNumberOfUpvotes.setTextColor(ContextCompat.getColor(mContext, R.color.grey_600));
         }
         else {
-            mUpvoteButton.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
+            // mUpvoteButton.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
+            mUpvoteButton.setImageResource(R.drawable.ic_arrow_upward_pink_300_24dp);
+            mNumberOfUpvotes.setTextColor(ContextCompat.getColor(mContext, R.color.pink_300));
         }
     }
 

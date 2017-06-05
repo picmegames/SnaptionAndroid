@@ -130,13 +130,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     public void setHasBeenUpvotedOrFlagged(boolean beenUpvoted) {
         isUpvoted = beenUpvoted;
-
-        if (isUpvoted) {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_pink_300_24dp));
-        }
-        else {
-            mUpvote.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border_grey_800_24dp));
-        }
+        setUpvote(!isUpvoted);
     }
 
     private void setBeenUpvoted() {
@@ -195,10 +189,14 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setUpvote(boolean isGameUpvoted) {
         if (isGameUpvoted) {
-            mUpvote.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
+            // mUpvote.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
+            mUpvote.setImageResource(R.drawable.ic_arrow_upward_grey_500_24dp);
+            mNumberOfUpvotes.setTextColor(ContextCompat.getColor(mContext, R.color.grey_600));
         }
         else {
-            mUpvote.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
+            // mUpvote.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
+            mUpvote.setImageResource(R.drawable.ic_arrow_upward_pink_300_24dp);
+            mNumberOfUpvotes.setTextColor(ContextCompat.getColor(mContext, R.color.pink_300));
         }
     }
 }
