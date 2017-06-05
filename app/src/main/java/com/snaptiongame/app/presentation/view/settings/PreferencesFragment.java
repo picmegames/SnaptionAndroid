@@ -46,10 +46,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     private MaterialDialog mFeedbackDialog;
     private WebView mLicensesWebView;
     private WebView mFeedbackWebView;
+    private ImageView mPuffinLogo;
 
     private boolean mListStyled = false;
     private final EasterEgg mPuffinEasterEgg = new EasterEgg();
-    private ImageView mPuffinLogo;
 
     public static PreferencesFragment newInstance() {
         return new PreferencesFragment();
@@ -64,7 +64,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         ListView list = null;
         if (rootView != null) {
             list = (ListView) rootView.findViewById(android.R.id.list);
-            mPuffinLogo = (ImageView) getView().getRootView().findViewById(R.id.puffinlogo);
+            mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
         }
         if (list != null) {
             list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
@@ -164,7 +164,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 list.setPadding(0, 0, 0, 0);
                 list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
                 mListStyled = true;
-                mPuffinLogo = (ImageView) getView().getRootView().findViewById(R.id.puffinlogo);
             }
         }
         setupNotificationStatus();
