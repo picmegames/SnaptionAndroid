@@ -164,6 +164,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                 list.setPadding(0, 0, 0, 0);
                 list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
                 mListStyled = true;
+                mPuffinLogo = (ImageView) rootView.findViewById(R.id.puffinlogo);
             }
         }
         setupNotificationStatus();
