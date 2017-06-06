@@ -26,4 +26,8 @@ public class SessionProvider {
     public static Completable logout() {
         return apiService.logout();
     }
+
+    public static Single<Boolean> isSessionValid() {
+        return apiService.isSessionValid();
+    }
 }

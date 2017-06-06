@@ -39,6 +39,9 @@ public class SnaptionApplication extends Application {
             // INIT Timber (Logger for debug builds)
             Timber.plant(new Timber.DebugTree());
         }
+
+        // REFRESH if session has expired
+        AuthManager.getInstance().refreshSession();
     }
 
     public static Context getContext() {
