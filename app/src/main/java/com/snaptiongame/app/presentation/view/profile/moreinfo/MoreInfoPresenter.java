@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.profile.moreinfo;
 
-import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.providers.UserProvider;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,23 +23,12 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
         mDisposables = new CompositeDisposable();
     }
 
-    private void loadUser() {
-        Disposable disposable = UserProvider.getUser(mUserId)
-                .subscribe(
-                        this::loadMoreInfo,
-                        Timber::e
-                );
-        mDisposables.add(disposable);
-    }
-
-    private void loadMoreInfo(User user) {
-        Disposable disposable = UserProvider.getUserStats(user.id)
+    @Override
+    public void loadMoreInfo(int userId) {
+        Disposable disposable = UserProvider.getUserStats(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        userStats -> {
-                            mMoreInfoView.showUserInfo(user.exp);
-                            mMoreInfoView.showMoreInfo(userStats);
-                        },
+                        mMoreInfoView::showUserInfo,
                         Timber::e
                 );
         mDisposables.add(disposable);
@@ -48,7 +36,7 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadUser();
+        loadMoreInfo(mUserId);
     }
 
     @Override

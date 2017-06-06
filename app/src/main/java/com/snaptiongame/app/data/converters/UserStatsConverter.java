@@ -26,6 +26,7 @@ public class UserStatsConverter implements JsonDeserializer<UserStats> {
         newStats.gamesCreated = obj.get(UserStats.GAMES_CREATED).getAsInt();
         newStats.highestGameUpvote = obj.get(UserStats.HIGHEST_GAME_UPVOTE).getAsInt();
         newStats.topCaptionCount = obj.get(UserStats.TOP_CAPTION_COUNT).getAsInt();
+        newStats.exp = obj.get(UserStats.EXP).getAsInt();
 
         return newStats;
     }

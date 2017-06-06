@@ -19,6 +19,8 @@ public class UserStats {
     public int captionUpvotes;
     @SerializedName(TOP_CAPTION_COUNT)
     public int topCaptionCount;
+    @SerializedName(EXP)
+    public int exp;
 
     public static final String RANK = "rank";
     public static final String GAMES_CREATED = "gamesCreated";
@@ -26,6 +28,6 @@ public class UserStats {
     public static final String CAPTIONS_CREATED = "captionsCreated";
     public static final String CAPTION_UPVOTES = "captionUpvotes";
     public static final String TOP_CAPTION_COUNT = "topCaptionCount";
-
+    public static final String EXP = "exp";
 
 }

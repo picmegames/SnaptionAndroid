@@ -65,13 +65,9 @@ public class MoreInfoFragment extends Fragment implements MoreInfoContract.View 
     }
 
     @Override
-    public void showUserInfo(int experience) {
-        mExperience.setText(String.valueOf(experience));
-    }
-
-    @Override
-    public void showMoreInfo(UserStats userStats) {
+    public void showUserInfo(UserStats userStats) {
         mRank.setText(userStats.rank);
+        mExperience.setText(String.valueOf(userStats.exp));
         mGamesCreated.setText(String.valueOf(userStats.gamesCreated));
         mCaptionsCreated.setText(String.valueOf(userStats.captionsCreated));
         mTopGame.setText(String.valueOf(userStats.highestGameUpvote));
