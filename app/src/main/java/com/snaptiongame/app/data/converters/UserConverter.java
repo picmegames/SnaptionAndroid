@@ -49,7 +49,6 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
         newUser.id = object.get(User.ID).getAsInt();
         newUser.username = object.get(User.USERNAME).getAsString();
-        newUser.exp = object.get(User.EXP).getAsInt();
         newUser.isFriend = object.get(User.IS_FRIEND).getAsBoolean();
 
         if (!object.get(User.FULL_NAME).isJsonNull()) {

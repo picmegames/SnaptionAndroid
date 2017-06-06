@@ -24,8 +24,6 @@ public class User {
     public int imageHeight;
     @SerializedName(TYPE)
     public String type;
-    @SerializedName(EXP)
-    public int exp;
     @SerializedName(IS_FRIEND)
     public boolean isFriend;
 
@@ -37,7 +35,6 @@ public class User {
     public static final String IMAGE_WIDTH = "width";
     public static final String IMAGE_HEIGHT = "height";
     public static final String TYPE = "imgType";
-    public static final String EXP = "exp";
     public static final String IS_FRIEND = "isFriend";
 
     public User() {
