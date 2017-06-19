@@ -28,12 +28,10 @@ allprojects {
     repositories {
         jcenter()
 
-        maven {
-            url "https://jitpack.io"
-        }
+        google()
 
         maven {
-            url "https://maven.google.com"
+            url "https://jitpack.io"
         }
     }
 }
@@ -60,7 +58,7 @@ ext {
     timberVersion = '4.5.1'
 
     // Application dependencies
-    branchVersion = '2.8.0'
+    branchVersion = '2.9.0'
     circleImageViewVersion = '2.1.0'
     crashlyticsVersion = '2.6.8'
     facebookSdkVersion = '4.23.0'
@@ -70,12 +68,12 @@ ext {
     materialDialogsVersion = '0.9.4.5'
     materialShowcaseView = '1.1.0'
     nachosVersion = '1.1.1'
-    okHttpVersion = '3.8.0'
+    okHttpVersion = '3.8.1'
     photoViewVersion = '2.0.0'
-    playServicesVersion = '11.0.0'
+    playServicesVersion = '11.0.1'
     retrofitVersion = '2.3.0'
     rxAndroidVersion = '2.0.1'
     rxJavaVersion = '2.1.0'
-    supportLibVersion = '25.3.1'
+    supportLibVersion = '25.4.0'
     textDrawableVersion = '1.0.1'
 }
