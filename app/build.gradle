@@ -93,98 +93,98 @@ dependencies {
     // Testing Dependencies
 
     // AssertJ
-    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testCompile "org.assertj:assertj-core:$assertjVersion"
 
     // JUnit
-    testCompile "junit:junit:${junitVersion}"
+    testCompile "junit:junit:$junitVersion"
 
     // Mockito
-    testCompile "org.mockito:mockito-core:${mockitoVersion}"
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
 
     // Robolectric
-    testCompile "org.robolectric:robolectric:${robolectricVersion}"
-    testCompile "org.robolectric:shadows-support-v4:${robolectricVersion}"
+    testCompile "org.robolectric:robolectric:$robolectricVersion"
+    testCompile "org.robolectric:shadows-support-v4:$robolectricVersion"
 
     // Support Testing Libraries
-    androidTestCompile "com.android.support:support-annotations:${supportLibVersion}"
-    androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
-    androidTestCompile "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
-    androidTestCompile "com.android.support.test:runner:${androidTestVersion}"
-    androidTestCompile "com.android.support.test:rules:${androidTestVersion}"
+    androidTestCompile "com.android.support:support-annotations:$supportLibVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$espressoVersion"
+    androidTestCompile "com.android.support.test:runner:$androidTestVersion"
+    androidTestCompile "com.android.support.test:rules:$androidTestVersion"
 
     // Developer Dependencies
 
     // Butterknife
-    compile "com.jakewharton:butterknife:${butterknifeVersion}"
-    apt "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
+    compile "com.jakewharton:butterknife:$butterknifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     // Timber
-    compile "com.jakewharton.timber:timber:${timberVersion}"
+    compile "com.jakewharton.timber:timber:$timberVersion"
 
     // Application Dependencies
 
     // Branch
-    compile ("io.branch.sdk.android:library:${branchVersion}") {
+    compile ("io.branch.sdk.android:library:$branchVersion") {
         exclude module: 'answers-shim'
     }
 
     // Circle ImageView
-    compile "de.hdodenhof:circleimageview:${circleImageViewVersion}"
+    compile "de.hdodenhof:circleimageview:$circleImageViewVersion"
 
     // Crashlytics
-    compile ("com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}") {
+    compile ("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
         transitive = true
     }
 
     // Facebook Login
-    compile "com.facebook.android:facebook-android-sdk:${facebookSdkVersion}"
+    compile "com.facebook.android:facebook-android-sdk:$facebookSdkVersion"
 
     // Firebase
-    compile "com.google.firebase:firebase-core:${playServicesVersion}"
-    compile "com.google.firebase:firebase-messaging:${playServicesVersion}"
+    compile "com.google.firebase:firebase-core:$playServicesVersion"
+    compile "com.google.firebase:firebase-messaging:$playServicesVersion"
 
     // Glide
-    compile "com.github.bumptech.glide:glide:${glideVersion}"
-    compile "jp.wasabeef:glide-transformations:${glideTransformationsVersion}"
+    compile "com.github.bumptech.glide:glide:$glideVersion"
+    compile "jp.wasabeef:glide-transformations:$glideTransformationsVersion"
 
     // Google Login
-    compile "com.google.android.gms:play-services-auth:${playServicesVersion}"
+    compile "com.google.android.gms:play-services-auth:$playServicesVersion"
 
     // Lottie
-    compile "com.airbnb.android:lottie:${lottieVersion}"
+    compile "com.airbnb.android:lottie:$lottieVersion"
 
     // Material Dialogs
-    compile "com.afollestad.material-dialogs:core:${materialDialogsVersion}"
+    compile "com.afollestad.material-dialogs:core:$materialDialogsVersion"
 
     // Material Showcase View
-    compile "com.github.deano2390:MaterialShowcaseView:${materialShowcaseView}"
+    compile "com.github.deano2390:MaterialShowcaseView:$materialShowcaseView"
 
     // Nachos
-    compile "com.hootsuite.android:nachos:${nachosVersion}"
+    compile "com.hootsuite.android:nachos:$nachosVersion"
 
     // OkHttp
-    compile "com.squareup.okhttp3:okhttp-urlconnection:${okHttpVersion}"
-    compile "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 
     // PhotoView
-    compile "com.github.chrisbanes:PhotoView:${photoViewVersion}"
+    compile "com.github.chrisbanes:PhotoView:$photoViewVersion"
 
     // Retrofit
-    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-    compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
-    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
     // RxJava
-    compile "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
-    compile "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
     // Support Libraries
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.android.support:design:${supportLibVersion}"
-    compile "com.android.support:palette-v7:${supportLibVersion}"
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
+    compile "com.android.support:design:$supportLibVersion"
+    compile "com.android.support:palette-v7:$supportLibVersion"
 
     // Text Drawable
-    compile "com.amulyakhare:com.amulyakhare.textdrawable:${textDrawableVersion}"
+    compile "com.amulyakhare:com.amulyakhare.textdrawable:$textDrawableVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
