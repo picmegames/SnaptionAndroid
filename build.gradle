@@ -50,7 +50,7 @@ ext {
     // Developer dependencies
     androidTestVersion = '0.5'
     assertjVersion = '3.8.0'
-    butterknifeVersion = '8.6.0'
+    butterknifeVersion = '8.7.0'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'
     mockitoVersion = '2.7.1'
@@ -58,13 +58,13 @@ ext {
     timberVersion = '4.5.1'
 
     // Application dependencies
-    branchVersion = '2.10.0'
+    branchVersion = '2.10.2'
     circleImageViewVersion = '2.1.0'
     crashlyticsVersion = '2.6.8'
     facebookSdkVersion = '4.23.0'
     glideVersion = '3.8.0'
     glideTransformationsVersion = '2.0.2'
-    lottieVersion = '2.0.0'
+    lottieVersion = '2.1.0'
     materialDialogsVersion = '0.9.4.5'
     materialShowcaseView = '1.1.0'
     nachosVersion = '1.1.1'
