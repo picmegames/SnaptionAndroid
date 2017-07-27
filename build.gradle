@@ -14,7 +14,7 @@ buildscript {
         classpath 'com.google.gms:google-services:3.1.0'
 
         // Fabric.io
-        classpath 'io.fabric.tools:gradle:1.22.2'
+        classpath 'io.fabric.tools:gradle:1.23.0'
 
         // Retrolambda Gradle
         classpath 'me.tatarka:gradle-retrolambda:3.6.1'
@@ -43,9 +43,9 @@ task clean(type: Delete) {
 ext {
     // SDK versions and build tools
     minSdkVersion = 19
-    targetSdkVersion = 25
-    compileSdkVersion = 25
-    buildToolsVersion = '25.0.3'
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.1'
 
     // Developer dependencies
     androidTestVersion = '0.5'
@@ -58,10 +58,10 @@ ext {
     timberVersion = '4.5.1'
 
     // Application dependencies
-    branchVersion = '2.10.2'
+    branchVersion = '2.10.3'
     circleImageViewVersion = '2.1.0'
     crashlyticsVersion = '2.6.8'
-    facebookSdkVersion = '4.23.0'
+    facebookSdkVersion = '4.24.0'
     glideVersion = '3.8.0'
     glideTransformationsVersion = '2.0.2'
     lottieVersion = '2.1.0'
@@ -70,10 +70,10 @@ ext {
     nachosVersion = '1.1.1'
     okHttpVersion = '3.8.1'
     photoViewVersion = '2.0.0'
-    playServicesVersion = '11.0.1'
+    playServicesVersion = '11.0.4'
     retrofitVersion = '2.3.0'
     rxAndroidVersion = '2.0.1'
-    rxJavaVersion = '2.1.0'
-    supportLibVersion = '25.3.1'
+    rxJavaVersion = '2.1.2'
+    supportLibVersion = '26.0.0'
     textDrawableVersion = '1.0.1'
 }
