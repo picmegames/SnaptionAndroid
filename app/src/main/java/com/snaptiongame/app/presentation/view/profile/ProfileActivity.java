@@ -40,6 +40,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -49,14 +50,14 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
+import com.snaptiongame.app.presentation.view.transformations.BlurTransformation;
+import com.snaptiongame.app.presentation.view.transformations.ColorFilterTransformation;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.BlurTransformation;
-import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 
 import static android.R.color.transparent;
 
@@ -354,6 +355,7 @@ public class ProfileActivity extends AppCompatActivity
             Glide.with(this)
                     .load(mPicture)
                     .apply(options)
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .listener(listener)
                     .into(mCoverPhoto);
         }

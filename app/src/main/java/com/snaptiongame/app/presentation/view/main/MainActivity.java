@@ -36,8 +36,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
@@ -51,6 +51,8 @@ import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.app.presentation.view.transformations.BlurTransformation;
+import com.snaptiongame.app.presentation.view.transformations.ColorFilterTransformation;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
@@ -61,8 +63,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.glide.transformations.BlurTransformation;
-import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 
 /**
  * @author Tyler Wong
@@ -274,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Glide.with(this)
                 .load(profileImageUrl)
                 .apply(options)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(mCoverPhoto);
 
         mNameView.setText(name);
