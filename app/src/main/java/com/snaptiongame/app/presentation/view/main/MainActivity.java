@@ -35,8 +35,10 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
@@ -174,13 +176,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setDefaultHeader() {
+        RequestOptions options = new RequestOptions()
+                .priority(Priority.IMMEDIATE)
+                .dontAnimate();
+
         Glide.with(this)
                 .load(R.mipmap.ic_launcher)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .priority(Priority.IMMEDIATE)
-                .dontAnimate()
+                .apply(options)
                 .into(mProfilePicture);
-        Glide.clear(mCoverPhoto);
+        Glide.with(this)
+                .clear(mCoverPhoto);
         mNameView.setText(R.string.welcome_message);
         mEmailView.setText(R.string.sub_welcome_message);
     }
@@ -251,21 +256,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String name = AuthManager.getUsername();
         String email = AuthManager.getEmail();
 
-        Glide.with(this)
-                .load(profileImageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+        RequestOptions options = new RequestOptions()
                 .priority(Priority.IMMEDIATE)
-                .dontAnimate()
-                .into(mProfilePicture);
+                .dontAnimate();
 
         Glide.with(this)
                 .load(profileImageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .apply(options)
+                .into(mProfilePicture);
+
+        options = new RequestOptions()
                 .priority(Priority.IMMEDIATE)
-                .bitmapTransform(
-                        new CenterCrop(this),
-                        new BlurTransformation(this, BLUR_RADIUS),
-                        new ColorFilterTransformation(this, R.color.colorPrimary))
+                .dontAnimate()
+                .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(this, BLUR_RADIUS),
+                        new ColorFilterTransformation(this, R.color.colorPrimary)));
+
+        Glide.with(this)
+                .load(profileImageUrl)
+                .apply(options)
                 .into(mCoverPhoto);
 
         mNameView.setText(name);

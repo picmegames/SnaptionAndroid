@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.ActivityFeedItem;
 import com.snaptiongame.app.data.utils.DateUtils;
@@ -56,10 +57,13 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         holder.mActivityMessage.setText(ActivityFeedUtils.getMessage(holder.mContext, curActivityItem));
 
         if (curActivityItem.friend.imageUrl != null) {
+            RequestOptions options = new RequestOptions()
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                    .dontAnimate();
+
             Glide.with(holder.mContext)
                     .load(curActivityItem.friend.imageUrl)
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
-                    .dontAnimate()
+                    .apply(options)
                     .into(holder.mUserImage);
         }
         else {
@@ -80,15 +84,19 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
             holder.mGame.isClosed = DateUtils.isPastDate(holder.mGame.endDate, currentTime);
 
             if (curActivityItem.game.imageUrl != null) {
+                RequestOptions options = new RequestOptions()
+                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.game.imageUrl)))
+                        .dontAnimate();
+
                 Glide.with(holder.mContext)
                         .load(curActivityItem.game.imageUrl)
-                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.game.imageUrl)))
-                        .dontAnimate()
+                        .apply(options)
                         .into(holder.mContentImage);
                 ViewCompat.setTransitionName(holder.mContentImage, curActivityItem.game.imageUrl);
             }
             else {
-                Glide.clear(holder.mContentImage);
+                Glide.with(holder.mContext)
+                        .clear(holder.mContentImage);
             }
         }
         else {

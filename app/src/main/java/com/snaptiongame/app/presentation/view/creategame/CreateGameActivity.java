@@ -34,8 +34,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.request.RequestOptions;
 import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.chip.Chip;
@@ -128,12 +127,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mIsFromAnotherGame = true;
             ViewCompat.setTransitionName(mNewGameImage, mImageUrl);
 
-            Glide.with(this)
-                    .load(mImageUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+            RequestOptions options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
                     .fitCenter()
-                    .dontAnimate()
+                    .dontAnimate();
+
+            Glide.with(this)
+                    .load(mImageUrl)
+                    .apply(options)
                     .into(mNewGameImage);
             mCreateGameButton.setEnabled(true);
         }
@@ -431,9 +432,13 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             mAnimationView.setVisibility(View.GONE);
             mUri = data.getData();
             mCreateGameButton.setEnabled(true);
+
+            RequestOptions options = new RequestOptions()
+                    .fitCenter();
+
             Glide.with(this)
                     .load(mUri)
-                    .bitmapTransform(new FitCenter(this))
+                    .apply(options)
                     .into(mNewGameImage);
         }
     }

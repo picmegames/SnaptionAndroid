@@ -17,9 +17,9 @@ package com.snaptiongame.app.presentation.view.utils;
  */
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 
 /**
@@ -30,9 +30,9 @@ public class GlideUtils {
     private GlideUtils() {
     }
 
-    public static Bitmap getBitmap(GlideDrawable glideDrawable) {
-        if (glideDrawable instanceof GlideBitmapDrawable) {
-            return ((GlideBitmapDrawable) glideDrawable).getBitmap();
+    public static Bitmap getBitmap(Drawable glideDrawable) {
+        if (glideDrawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) glideDrawable).getBitmap();
         } else if (glideDrawable instanceof GifDrawable) {
             return ((GifDrawable) glideDrawable).getFirstFrame();
         }

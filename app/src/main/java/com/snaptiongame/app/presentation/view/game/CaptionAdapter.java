@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Caption;
 import com.snaptiongame.app.presentation.view.listeners.ItemListener;
@@ -75,10 +76,13 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         Caption curCaption = mCaptions.get(position);
 
         if (curCaption.creatorPicture != null) {
+            RequestOptions options = new RequestOptions()
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                    .dontAnimate();
+
             Glide.with(holder.mContext)
                     .load(curCaption.creatorPicture)
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
-                    .dontAnimate()
+                    .apply(options)
                     .into(holder.mUserImage);
             holder.imageUrl = curCaption.creatorPicture;
         }

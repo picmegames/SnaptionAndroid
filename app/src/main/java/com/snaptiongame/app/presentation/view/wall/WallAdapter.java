@@ -16,7 +16,8 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.utils.DateUtils;
@@ -71,6 +72,7 @@ public class WallAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         GameCardViewHolder holder = (GameCardViewHolder) viewHolder;
         Game curGame = mGames.get(position);
+        RequestOptions options;
 
         holder.mGameId = curGame.id;
         holder.mCreatorId = curGame.creatorId;
@@ -87,17 +89,22 @@ public class WallAdapter extends RecyclerView.Adapter {
 
         if (curGame.imageUrl != null) {
             holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
+
+            options = new RequestOptions()
+                    .priority(Priority.IMMEDIATE)
+                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.imageUrl)));
+
             Glide.with(holder.mContext)
                     .load(curGame.imageUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .priority(Priority.IMMEDIATE)
-                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.imageUrl)))
+                    .apply(options)
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.mImage);
             holder.mImageUrl = curGame.imageUrl;
             ViewCompat.setTransitionName(holder.mImage, curGame.imageUrl);
         }
         else {
-            Glide.clear(holder.mImage);
+            Glide.with(holder.mContext)
+                    .clear(holder.mImage);
         }
 
         String creatorName = String.format(holder.mContext.getString(R.string.posted_by), curGame.creatorName);
@@ -113,11 +120,14 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.mTopCaption.setVisibility(View.VISIBLE);
 
             if (curGame.topCaption.creatorPicture != null) {
+
+                options = new RequestOptions()
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                        .dontAnimate();
+
                 Glide.with(holder.mContext)
                         .load(curGame.topCaption.creatorPicture)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
-                        .dontAnimate()
+                        .apply(options)
                         .into(holder.mCaptionerImage);
             }
             else {
@@ -147,11 +157,14 @@ public class WallAdapter extends RecyclerView.Adapter {
 
         if (isList) {
             if (curGame.creatorImage != null) {
+
+                options = new RequestOptions()
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                        .dontAnimate();
+
                 Glide.with(holder.mContext)
                         .load(curGame.creatorImage)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
-                        .dontAnimate()
+                        .apply(options)
                         .into(holder.mCreatorImage);
             }
             else {
