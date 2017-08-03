@@ -5,6 +5,7 @@ import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
+import com.snaptiongame.app.data.models.Tag;
 import com.snaptiongame.app.data.providers.api.ApiProvider;
 
 import java.util.List;
@@ -59,6 +60,11 @@ public class GameProvider {
                 .filter(user -> user.id != AuthManager.getUserId())
                 .map(Friend::new)
                 .toList();
+    }
+
+    public static Single<List<Tag>> getGameTags(int gameId) {
+        return getGame(gameId, null)
+                .map(game -> game.tags);
     }
 
     public static Completable upvoteOrFlagGame(GameAction request) {

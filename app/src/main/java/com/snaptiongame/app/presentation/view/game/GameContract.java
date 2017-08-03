@@ -8,6 +8,7 @@ import com.snaptiongame.app.data.models.CaptionSet;
 import com.snaptiongame.app.data.models.FitBCaption;
 import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.GameAction;
+import com.snaptiongame.app.data.models.Tag;
 import com.snaptiongame.app.presentation.BasePresenter;
 import com.snaptiongame.app.presentation.BaseView;
 
@@ -33,6 +34,8 @@ public class GameContract {
         void showRandomCaptions(List<FitBCaption> randomCaptions);
 
         void showPrivateGameDialog(List<Friend> invitedUsers);
+
+        void showTags(List<Tag> tags);
 
         void onGameUpdated(String type);
 
@@ -65,6 +68,8 @@ public class GameContract {
         void refreshCaptions();
 
         void loadInvitedUsers(int gameId);
+
+        void loadTags(int gameId);
 
         void loadGame(int gameId);
 

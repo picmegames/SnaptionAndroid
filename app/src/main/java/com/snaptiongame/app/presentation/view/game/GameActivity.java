@@ -54,6 +54,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.JsonParser;
+import com.hootsuite.nachos.NachoTextView;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.converters.BranchConverter;
@@ -64,6 +65,7 @@ import com.snaptiongame.app.data.models.Friend;
 import com.snaptiongame.app.data.models.Game;
 import com.snaptiongame.app.data.models.GameAction;
 import com.snaptiongame.app.data.models.GameInvite;
+import com.snaptiongame.app.data.models.Tag;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.data.services.notifications.NotificationService;
 import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
@@ -151,6 +153,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     private CaptionSetAdapter mCaptionSetAdapter;
     private int mCurrentCaption;
     private TextWatcher mTextWatcher;
+    private MaterialDialog mTagsDialog;
+    private NachoTextView mTagsView;
     private MaterialDialog mPrivateGameDialog;
     private FriendsAdapter mFriendsAdapter;
     private InfiniteRecyclerViewScrollListener mScrollListener;
@@ -354,21 +358,11 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     goToLogin();
                 }
                 break;
+            case R.id.tags:
+                showTagsDialog();
+                break;
             case R.id.is_private:
-                if (mPrivateGameDialog == null) {
-                    mFriendsAdapter = new FriendsAdapter(new ArrayList<>());
-                    mPresenter.loadInvitedUsers(mGameId);
-
-                    mPrivateGameDialog = new MaterialDialog.Builder(this)
-                            .title(R.string.participants)
-                            .adapter(mFriendsAdapter, new LinearLayoutManager(this))
-                            .positiveText(R.string.close)
-                            .cancelable(true)
-                            .show();
-                }
-                else {
-                    mPrivateGameDialog.show();
-                }
+                showPrivateDialog();
                 break;
             case R.id.create_game:
                 if (AuthManager.isLoggedIn()) {
@@ -403,6 +397,45 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 break;
         }
         return true;
+    }
+
+    private void showPrivateDialog() {
+        if (mPrivateGameDialog == null) {
+            mFriendsAdapter = new FriendsAdapter(new ArrayList<>());
+            mPresenter.loadInvitedUsers(mGameId);
+
+            mPrivateGameDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.participants)
+                    .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                    .positiveText(R.string.close)
+                    .cancelable(true)
+                    .show();
+        }
+        else {
+            mPrivateGameDialog.show();
+        }
+    }
+
+    private void showTagsDialog() {
+        if (mTagsDialog == null) {
+            mTagsView = new NachoTextView(this);
+            mTagsView.setBackground(null);
+            mTagsView.setChipHeight(R.dimen.chip_height);
+            mTagsView.setChipSpacing(R.dimen.chip_spacing);
+            mTagsView.setChipTextSize(R.dimen.chip_text_size);
+            mTagsView.setEnabled(false);
+            mPresenter.loadTags(mGameId);
+
+            mTagsDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.tags_label)
+                    .customView(mTagsView, true)
+                    .positiveText(R.string.close)
+                    .cancelable(true)
+                    .show();
+        }
+        else {
+            mTagsDialog.show();
+        }
     }
 
     @Override
@@ -537,6 +570,15 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @Override
     public void showPrivateGameDialog(List<Friend> invitedUsers) {
         mFriendsAdapter.setFriends(invitedUsers);
+    }
+
+    @Override
+    public void showTags(List<Tag> tags) {
+        List<String> tagValues = new ArrayList<>();
+        for (Tag tag : tags) {
+            tagValues.add(tag.name);
+        }
+        mTagsView.setText(tagValues);
     }
 
     private void rotateIcon(float rotation, int duration, int whichIcon) {
@@ -794,6 +836,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                                 mToolbar.setOverflowIcon(more);
 
                                 mMenu.findItem(R.id.is_private).setIcon(R.drawable.ic_lock_grey_800_24dp);
+                                mMenu.findItem(R.id.tags).setIcon(R.drawable.ic_local_offer_grey_800_24dp);
 
                                 if (isUpvoted) {
                                     mMenu.findItem(R.id.upvote).setIcon(R.drawable.ic_arrow_upward_pink_300_24dp);
