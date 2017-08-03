@@ -263,11 +263,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Glide.with(this)
                 .load(profileImageUrl)
                 .apply(options)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(mProfilePicture);
 
         options = new RequestOptions()
                 .priority(Priority.IMMEDIATE)
-                .dontAnimate()
                 .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(this, BLUR_RADIUS),
                         new ColorFilterTransformation(this, R.color.colorPrimary)));
 

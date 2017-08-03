@@ -78,7 +78,7 @@ public class NotificationService extends FirebaseMessagingService {
             }
 
             // BUILD default notification
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.app_name))
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setAutoCancel(true)
                     .setSmallIcon(R.drawable.ic_notification)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))

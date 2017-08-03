@@ -74,6 +74,6 @@ ext {
     retrofitVersion = '2.3.0'
     rxAndroidVersion = '2.0.1'
     rxJavaVersion = '2.1.2'
-    supportLibVersion = '26.0.0'
+    supportLibVersion = '25.4.0'
     textDrawableVersion = '1.0.1'
 }
