@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,10 +36,13 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
@@ -46,14 +50,14 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
+import com.snaptiongame.app.presentation.view.transformations.BlurTransformation;
+import com.snaptiongame.app.presentation.view.transformations.ColorFilterTransformation;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.glide.transformations.BlurTransformation;
-import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 
 import static android.R.color.transparent;
 
@@ -325,9 +329,7 @@ public class ProfileActivity extends AppCompatActivity
         }
 
         if (mPicture != null && !mPicture.isEmpty()) {
-            Glide.with(this)
-                    .load(mPicture)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+            RequestOptions options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
                     .placeholder(TextDrawable.builder()
                             .beginConfig()
@@ -336,19 +338,24 @@ public class ProfileActivity extends AppCompatActivity
                             .toUpperCase()
                             .endConfig()
                             .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)))
-                    .dontAnimate()
-                    .listener(listener)
-                    .into(mProfileImg);
+                    .dontAnimate();
 
             Glide.with(this)
                     .load(mPicture)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .apply(options)
+                    .listener(listener)
+                    .into(mProfileImg);
+
+            options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
                     .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(mPicture)))
-                    .bitmapTransform(
-                            new CenterCrop(this),
-                            new BlurTransformation(this, BLUR_RADIUS),
-                            new ColorFilterTransformation(this, R.color.colorPrimary))
+                    .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(this, BLUR_RADIUS),
+                            new ColorFilterTransformation(this, R.color.colorPrimary)));
+
+            Glide.with(this)
+                    .load(mPicture)
+                    .apply(options)
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .listener(listener)
                     .into(mCoverPhoto);
         }
@@ -367,15 +374,15 @@ public class ProfileActivity extends AppCompatActivity
         }
     }
 
-    private RequestListener listener = new RequestListener<String, GlideDrawable>() {
+    private RequestListener listener = new RequestListener<Drawable>() {
         @Override
-        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
             shouldLoadHideAddFriend();
             return false;
         }
 
         @Override
-        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
             shouldLoadHideAddFriend();
             return false;
         }

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 
@@ -67,10 +67,13 @@ public class EditProfileView extends RelativeLayout {
         View view = inflate(mContext, R.layout.edit_profile, this);
         ButterKnife.bind(this, view);
 
+        RequestOptions options = new RequestOptions()
+                .placeholder(new ColorDrawable(ContextCompat.getColor(mContext, R.color.grey_300)))
+                .dontAnimate();
+
         Glide.with(mContext)
                 .load(AuthManager.getProfileImageUrl())
-                .placeholder(new ColorDrawable(ContextCompat.getColor(mContext, R.color.grey_300)))
-                .dontAnimate()
+                .apply(options)
                 .into(mProfileImage);
 
         mFullName.setText(AuthManager.getUserFullName());
@@ -85,10 +88,12 @@ public class EditProfileView extends RelativeLayout {
     }
 
     public void updateProfilePicture(String profileUrl) {
+        RequestOptions options = new RequestOptions()
+                .priority(Priority.IMMEDIATE);
+
         Glide.with(mContext)
                 .load(profileUrl)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .priority(Priority.IMMEDIATE)
+                .apply(options)
                 .into(mProfileImage);
     }
 

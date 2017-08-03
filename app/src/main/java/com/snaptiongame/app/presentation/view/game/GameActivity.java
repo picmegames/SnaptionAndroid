@@ -48,9 +48,10 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.JsonParser;
 import com.snaptiongame.app.R;
@@ -652,11 +653,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         ViewCompat.setTransitionName(mImage, mImageUrl);
 
+        RequestOptions options = new RequestOptions()
+                .dontAnimate()
+                .priority(Priority.IMMEDIATE);
+
         Glide.with(this)
                 .load(image)
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .priority(Priority.IMMEDIATE)
+                .apply(options)
                 .listener(imageLoadListener)
                 .into(mImage);
 
@@ -664,10 +667,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         mPickerId = pickerId;
 
         if (pickerImage != null && !pickerImage.isEmpty()) {
+
+            options = new RequestOptions()
+                    .dontAnimate()
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)));
+
             Glide.with(this)
                     .load(pickerImage)
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)))
-                    .dontAnimate()
+                    .apply(options)
                     .into(mPickerImage);
         }
         else {
@@ -751,11 +758,14 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
     }
 
-    private RequestListener imageLoadListener = new RequestListener<String, GlideDrawable>() {
+    private RequestListener imageLoadListener = new RequestListener<Drawable>() {
         @Override
-        public boolean onResourceReady(GlideDrawable resource, String model,
-                                       Target<GlideDrawable> target, boolean isFromMemoryCache,
-                                       boolean isFirstResource) {
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
             final Bitmap bitmap = GlideUtils.getBitmap(resource);
             final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     24, getResources().getDisplayMetrics());
@@ -835,12 +845,6 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                     });
 
             mImage.setBackground(null);
-            return false;
-        }
-
-        @Override
-        public boolean onException(Exception e, String model, Target<GlideDrawable> target,
-                                   boolean isFirstResource) {
             return false;
         }
     };
