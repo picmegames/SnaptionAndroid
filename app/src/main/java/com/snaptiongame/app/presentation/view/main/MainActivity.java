@@ -125,10 +125,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         View headerView = mNavigationView.getHeaderView(0);
-        mCoverPhoto = ButterKnife.findById(headerView, R.id.cover_photo);
-        mProfilePicture = ButterKnife.findById(headerView, R.id.profile_image);
-        mNameView = ButterKnife.findById(headerView, R.id.username);
-        mEmailView = ButterKnife.findById(headerView, R.id.email);
+        mCoverPhoto = headerView.findViewById(R.id.cover_photo);
+        mProfilePicture = headerView.findViewById(R.id.profile_image);
+        mNameView = headerView.findViewById(R.id.username);
+        mEmailView = headerView.findViewById(R.id.email);
 
         headerView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {

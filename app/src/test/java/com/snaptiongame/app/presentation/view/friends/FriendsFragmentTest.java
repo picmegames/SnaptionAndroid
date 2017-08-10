@@ -59,14 +59,14 @@ public class FriendsFragmentTest {
 
     @Test
     public void startingFragment_viewsAppear() {
-        RecyclerView friends = (RecyclerView) friendsFragment.getView().findViewById(R.id.friend_list);
+        RecyclerView friends = friendsFragment.getView().findViewById(R.id.friend_list);
         assertNotNull(friends);
     }
 
     @Test
     public void recyclerView_getsPopulated() {
         //Set up data and make sure the data exists in the recycler views adapter
-        RecyclerView friends = (RecyclerView) friendsFragment.getView().findViewById(R.id.friend_list);
+        RecyclerView friends = friendsFragment.getView().findViewById(R.id.friend_list);
         assertNotNull(friends);
         List<Friend> inst = new ArrayList<>();
         inst.add(new Friend(1, "John Cena", "jcena1234", "", "", ""));

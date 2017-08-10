@@ -128,10 +128,10 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         };
 
         if (isList) {
-            mCreatorImage = ButterKnife.findById(itemView, R.id.creator_image);
-            mTimeLeft = ButterKnife.findById(itemView, R.id.time_left);
+            mCreatorImage = itemView.findViewById(R.id.creator_image);
+            mTimeLeft = itemView.findViewById(R.id.time_left);
 
-            ImageView moreButton = ButterKnife.findById(itemView, R.id.more_button);
+            ImageView moreButton = itemView.findViewById(R.id.more_button);
             mMenu = new PopupMenu(mContext, moreButton);
             moreButton.setOnClickListener(view -> {
                 mMenu.setOnMenuItemClickListener(menuItemClickListener);
