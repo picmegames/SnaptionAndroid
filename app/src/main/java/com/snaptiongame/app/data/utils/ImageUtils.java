@@ -18,6 +18,7 @@ import android.util.Base64;
 import com.snaptiongame.app.SnaptionApplication;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class ImageUtils {
     private static final int NINETY_DEGREES = 90;
     private static final int ONE_EIGHTY_DEGREES = 180;
     private static final int TWO_SEVENTY_DEGREES = 270;
-    private static final String FOLDER = "Snaption";
+    private static final int BUFFER_SIZE = 8192;
 
     public static Observable<String> getCompressedImage(Uri uri) {
         return Observable.defer(() -> Observable.just(convertImageBase64(uri)));
@@ -50,11 +51,21 @@ public class ImageUtils {
 
     private static String convertImageBase64(Uri uri) {
         String picture = "";
+
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            BitmapFactory.decodeFile(compressImage(uri)).compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            picture = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-            byteArrayOutputStream.close();
+            int bytesRead;
+            InputStream inputStream = new FileInputStream(compressImage(uri));
+            byte[] buffer = new byte[BUFFER_SIZE];
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+            while((bytesRead = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, bytesRead);
+            }
+
+            picture = Base64.encodeToString(output.toByteArray(), Base64.DEFAULT);
+
+            inputStream.close();
+            output.close();
         }
         catch (IOException e) {
             Timber.e(e);
@@ -234,9 +245,7 @@ public class ImageUtils {
     }
 
     private static Uri writeToTempImageAndGetPathUri(ContentResolver resolver, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, QUALITY, bytes);
-        String path = MediaStore.Images.Media.insertImage(resolver, inImage, FOLDER, null);
+        String path = MediaStore.Images.Media.insertImage(resolver, inImage, null, null);
         return Uri.parse(path);
     }
 
