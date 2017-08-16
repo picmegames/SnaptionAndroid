@@ -70,7 +70,7 @@ ext {
     nachosVersion = '1.1.1'
     okHttpVersion = '3.8.1'
     photoViewVersion = '2.0.0'
-    playServicesVersion = '11.0.4'
+    playServicesVersion = '11.2.0'
     retrofitVersion = '2.3.0'
     rxAndroidVersion = '2.0.1'
     rxJavaVersion = '2.1.2'
