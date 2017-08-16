@@ -12,14 +12,12 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 
 import com.snaptiongame.app.SnaptionApplication;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,8 +42,7 @@ public class ImageUtils {
     private static final int NINETY_DEGREES = 90;
     private static final int ONE_EIGHTY_DEGREES = 180;
     private static final int TWO_SEVENTY_DEGREES = 270;
-    private static final String FOLDER = "Pictures/Snaption";
-    private static final String JPEG = ".jpg";
+    private static final String FOLDER = "Snaption";
 
     public static Observable<String> getCompressedImage(Uri uri) {
         return Observable.defer(() -> Observable.just(convertImageBase64(uri)));
@@ -191,26 +188,15 @@ public class ImageUtils {
         }
 
         FileOutputStream out;
-        String filename = getFilename();
         try {
-            out = new FileOutputStream(filename);
+            out = new FileOutputStream(filePath);
             scaledBitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, out);
         }
         catch (FileNotFoundException e) {
             Timber.e("Could not find file");
         }
 
-        return filename;
-    }
-
-    private static String getFilename() {
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), FOLDER);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
-        String uriSting = (file.getAbsolutePath() + "/" + System.currentTimeMillis() + JPEG);
-        return uriSting;
+        return filePath;
     }
 
     private static String getRealPathFromURI(Uri contentUri) {

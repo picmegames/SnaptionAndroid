@@ -125,10 +125,9 @@ public class WallFragment extends Fragment implements WallContract.View {
         mWall.addOnScrollListener(mScrollListener);
 
         mRefreshLayout.setOnRefreshListener(() -> {
-            setRefreshing(true);
             mAdapter.clear();
             mScrollListener.resetState();
-            mPresenter.loadGames(mType, mTags, mStatus, 1);
+            mPresenter.subscribe();
         });
 
         mRefreshLayout.setColorSchemeColors(
@@ -142,6 +141,7 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     public void refreshWall() {
         mAdapter.clear();
+        mScrollListener.resetState();
         mPresenter.subscribe();
     }
 

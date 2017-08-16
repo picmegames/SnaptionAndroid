@@ -43,6 +43,7 @@ public class ActivityFeedPresenter implements ActivityFeedContract.Presenter {
 
     @Override
     public void subscribe() {
+        mActivityFeedView.setRefreshing(true);
         loadActivityFeed(1);
     }
 

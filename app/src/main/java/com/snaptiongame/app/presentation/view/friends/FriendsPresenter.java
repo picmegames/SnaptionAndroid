@@ -108,6 +108,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void subscribe() {
+        mFriendView.setRefreshing(true);
         loadFriends(1);
     }
 

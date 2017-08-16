@@ -79,17 +79,14 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
         mActivityFeed.addOnScrollListener(mScrollListener);
 
         mRefreshLayout.setOnRefreshListener(() -> {
-            setRefreshing(true);
             mAdapter.clear();
             mScrollListener.resetState();
-            mPresenter.loadActivityFeed(1);
+            mPresenter.subscribe();
         });
 
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
-
-        mPresenter.subscribe();
 
         return view;
     }
@@ -126,6 +123,14 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
         else {
             showEmptyView();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.clear();
+        mScrollListener.resetState();
+        mPresenter.subscribe();
     }
 
     @Override
