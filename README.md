@@ -1,7 +1,5 @@
 # Snaption Android Application
 
-[![Build Status](https://travis-ci.com/picmegames/SnaptionAndroid.svg?token=AABXGtYrzS4uRtMAUqq3&branch=develop)](https://travis-ci.com/picmegames/SnaptionAndroid) [![codecov](https://codecov.io/gh/tylerbwong/SnaptionAndroid/branch/develop/graph/badge.svg?token=zeey0ytfqu)](https://codecov.io/gh/tylerbwong/SnaptionAndroid)
-
 ![Snaption](/art/banner.png)
 
 This is repository for the Snaption Android Application.
