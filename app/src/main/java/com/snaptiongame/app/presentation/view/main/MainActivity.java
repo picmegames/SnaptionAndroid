@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -48,6 +49,7 @@ import com.snaptiongame.app.presentation.view.creategame.CreateGameActivity;
 import com.snaptiongame.app.presentation.view.customviews.FilterView;
 import com.snaptiongame.app.presentation.view.friends.FriendSearchActivity;
 import com.snaptiongame.app.presentation.view.friends.FriendsFragment;
+import com.snaptiongame.app.presentation.view.leaderboards.LeaderboardsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
@@ -70,6 +72,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationView.OnNavigationItemSelectedListener {
+    @BindView(R.id.app_bar)
+    AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.drawer)
@@ -98,16 +102,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int mUserId;
     private int rightMargin;
     private int bottomMargin;
+    private float defaultElevation;
     private boolean mIsList = false;
     private boolean mLastLoggedInState = false;
     private boolean mComingFromGameActivity = false;
 
-    public static final int WALL_RESULT_CODE = 7777;
     private static final String TEXT_TYPE = "text/plain";
     private static final int BLUR_RADIUS = 40;
     private static final int DEFAULT_MARGIN = 16;
+    private static final int DEFAULT_ELEVATION = 4;
     private static final int BOTTOM_MARGIN = 72;
+    public static final int WALL_RESULT_CODE = 7777;
     private static final int FRIEND_RESULT_CODE = 1414;
+    private static final int ACTIVITY_FEED_RESULT_CODE = 1122;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
+        defaultElevation = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ELEVATION, getResources().getDisplayMetrics());
+
         mWebView = new WebView(this);
         mWebView.getSettings().setJavaScriptEnabled(true);
 
@@ -224,11 +234,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         resetFabPosition(true);
 
         int initItem = mBottomNavigationView.getSelectedItemId();
+        boolean isLoggedIn = AuthManager.isLoggedIn();
 
-        if (!AuthManager.isLoggedIn()) {
-            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(false);
-            mNavigationView.getMenu().findItem(R.id.friends).setVisible(false);
-            mNavigationView.getMenu().findItem(R.id.activity).setVisible(false);
+        mNavigationView.getMenu().findItem(R.id.friends).setVisible(isLoggedIn);
+        mNavigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
+        mNavigationView.getMenu().findItem(R.id.activity).setVisible(isLoggedIn);
+        mNavigationView.getMenu().findItem(R.id.log_out).setVisible(isLoggedIn);
+
+        if (!isLoggedIn) {
             mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
             if (initItem == R.id.my_wall) {
                 mBottomNavigationView.setSelectedItemId(R.id.discover);
@@ -238,10 +251,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         else {
-            mNavigationView.getMenu().findItem(R.id.log_out).setVisible(true);
-            mNavigationView.getMenu().findItem(R.id.friends).setVisible(true);
-            mNavigationView.getMenu().findItem(R.id.activity).setVisible(false);
-            mNavigationView.getMenu().findItem(R.id.activity).setVisible(true);
             if (mBottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
                 mBottomNavigationView.getMenu()
                         .add(0, R.id.my_wall, Menu.FIRST, getString(R.string.my_wall))
@@ -403,6 +412,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void refreshActivityFeed() {
+        if (fragTag.equals(ActivityFeedFragment.TAG)) {
+            ((ActivityFeedFragment) mCurrentFragment).refreshActivityFeed();
+        }
+    }
+
     private void sendInviteIntent() {
         String smsBody = getString(R.string.invite_message) + getString(R.string.store_url);
         Intent inviteIntent = new Intent(Intent.ACTION_SEND);
@@ -422,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.wall:
                 setupWall();
+                ViewCompat.setElevation(mAppBarLayout, defaultElevation);
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
@@ -466,6 +482,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ShowcaseUtils.showShowcase(this, mToolbar.findViewById(R.id.search),
                         R.string.add_a_friend, R.string.friends_showcase_content);
                 mFab.setVisibility(View.GONE);
+                ViewCompat.setElevation(mAppBarLayout, defaultElevation);
+                break;
+
+            case R.id.leaderboards:
+                mCurrentFragment = LeaderboardsFragment.getInstance();
+                fragTag = LeaderboardsFragment.TAG;
+                mActionBar.setTitle(getString(R.string.leaderboards_label));
+                mBottomNavigationView.setVisibility(View.GONE);
+                resetFabPosition(false);
+                setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+                mMenu.findItem(R.id.filter).setVisible(false);
+                mMenu.findItem(R.id.layout).setVisible(false);
+                mMenu.findItem(R.id.search).setVisible(false);
+                mMenu.findItem(R.id.share).setVisible(false);
+                mFab.setVisibility(View.GONE);
+                ViewCompat.setElevation(mAppBarLayout, 0);
                 break;
 
             case R.id.activity:
@@ -480,6 +512,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mMenu.findItem(R.id.search).setVisible(false);
                 mMenu.findItem(R.id.share).setVisible(false);
                 mFab.setVisibility(View.GONE);
+                ViewCompat.setElevation(mAppBarLayout, defaultElevation);
                 break;
 
             case R.id.settings:
@@ -594,6 +627,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (fragTag.equals(FriendsFragment.TAG)) {
             resultCode = FRIEND_RESULT_CODE;
         }
+        else if (fragTag.equals(ActivityFeedFragment.TAG)) {
+            resultCode = ACTIVITY_FEED_RESULT_CODE;
+        }
 
         startActivityForResult(loginIntent, resultCode);
     }
@@ -616,6 +652,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (requestCode == FRIEND_RESULT_CODE && resultCode == RESULT_OK) {
             refreshFriends();
+        }
+        else if (requestCode == ACTIVITY_FEED_RESULT_CODE && resultCode == RESULT_OK) {
+            refreshActivityFeed();
         }
     }
 }

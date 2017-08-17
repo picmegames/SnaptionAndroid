@@ -17,6 +17,12 @@
             android:title="@string/friends_label"/>
 
         <item
+            android:id="@+id/leaderboards"
+            android:checked="false"
+            android:icon="@drawable/ic_equalizer_grey_900_24dp"
+            android:title="@string/leaderboards_label"/>
+
+        <item
             android:id="@+id/activity"
             android:checked="false"
             android:icon="@drawable/ic_rss_feed_grey_900_24dp"

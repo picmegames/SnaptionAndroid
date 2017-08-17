@@ -189,6 +189,7 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         mMenu.getMenuInflater().inflate(R.menu.game_menu, mMenu.getMenu());
         mMenu.getMenu().findItem(R.id.invite_friend_to_game).setVisible(false);
         mMenu.getMenu().findItem(R.id.upvote).setVisible(false);
+        mMenu.getMenu().findItem(R.id.tags).setVisible(false);
 
         mImage.setOnClickListener(view -> {
             Intent gameIntent = new Intent(mContext, GameActivity.class);

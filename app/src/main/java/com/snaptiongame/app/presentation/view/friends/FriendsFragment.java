@@ -82,11 +82,8 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
         mFriendsList.setAdapter(mAdapter);
 
-        mRefreshLayout.setOnRefreshListener(() -> {
-            mAdapter.clear();
-            mScrollListener.resetState();
-            mPresenter.subscribe();
-        });
+        mRefreshLayout.setOnRefreshListener(this::refreshFriends);
+
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );

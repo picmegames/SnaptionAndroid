@@ -124,11 +124,7 @@ public class WallFragment extends Fragment implements WallContract.View {
 
         mWall.addOnScrollListener(mScrollListener);
 
-        mRefreshLayout.setOnRefreshListener(() -> {
-            mAdapter.clear();
-            mScrollListener.resetState();
-            mPresenter.subscribe();
-        });
+        mRefreshLayout.setOnRefreshListener(this::refreshWall);
 
         mRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)

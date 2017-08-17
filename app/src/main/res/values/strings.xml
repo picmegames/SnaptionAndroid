@@ -65,6 +65,7 @@
     <!-- Labels -->
     <string name="wall_label">Wall</string>
     <string name="friends_label">Friends</string>
+    <string name="leaderboards_label">Leaderboards</string>
     <string name="settings_label">Settings</string>
     <string name="version_label">Version</string>
     <string name="log_out_label">Log Out</string>
