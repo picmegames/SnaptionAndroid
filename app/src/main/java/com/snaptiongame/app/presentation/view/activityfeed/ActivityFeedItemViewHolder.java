@@ -28,65 +28,65 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityFeedItemViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.user_image)
-    CircleImageView mUserImage;
+    CircleImageView userImage;
     @BindView(R.id.activity_message)
-    TextView mActivityMessage;
+    TextView activityMessage;
     @BindView(R.id.content_image)
-    ImageView mContentImage;
+    ImageView contentImage;
 
-    public Context mContext;
-    public View mView;
-    public User mFriend;
-    public Game mGame;
-    public Caption mCaption;
+    public Context context;
+    public View view;
+    public User friend;
+    public Game game;
+    public Caption caption;
 
     public ActivityFeedItemViewHolder(View itemView) {
         super(itemView);
-        mView = itemView;
+        view = itemView;
         ButterKnife.bind(this, itemView);
-        mContext = itemView.getContext();
+        context = itemView.getContext();
     }
 
     public void setActivityOnClickListener(int type) {
         switch (type) {
             case ActivityFeedUtils.FRIENDED_YOU:
             case ActivityFeedUtils.NEW_FACEBOOK_FRIEND:
-                mView.setOnClickListener(view -> goToProfile());
+                view.setOnClickListener(view -> goToProfile());
                 break;
             case ActivityFeedUtils.CAPTIONED_GAME:
             case ActivityFeedUtils.FRIEND_INVITED_GAME:
             case ActivityFeedUtils.FRIEND_MADE_GAME:
-                mView.setOnClickListener(view -> goToGame());
+                view.setOnClickListener(view -> goToGame());
                 break;
         }
     }
 
     private void goToGame() {
-        Intent gameIntent = new Intent(mContext, GameActivity.class);
-        gameIntent.putExtra(Game.ID, mGame.id);
-        gameIntent.putExtra(Game.CREATOR_NAME, mGame.creatorName);
-        gameIntent.putExtra(Game.CREATOR_IMAGE, mGame.creatorImage);
-        gameIntent.putExtra(Game.CREATOR_ID, mGame.creatorId);
-        gameIntent.putExtra(Game.IMAGE_URL, mGame.imageUrl);
-        gameIntent.putExtra(Game.BEEN_UPVOTED, mGame.beenUpvoted);
-        gameIntent.putExtra(Game.IS_CLOSED, mGame.isClosed);
-        gameIntent.putExtra(Game.IS_PUBLIC, mGame.isPublic);
+        Intent gameIntent = new Intent(context, GameActivity.class);
+        gameIntent.putExtra(Game.ID, game.id);
+        gameIntent.putExtra(Game.CREATOR_NAME, game.creatorName);
+        gameIntent.putExtra(Game.CREATOR_IMAGE, game.creatorImage);
+        gameIntent.putExtra(Game.CREATOR_ID, game.creatorId);
+        gameIntent.putExtra(Game.IMAGE_URL, game.imageUrl);
+        gameIntent.putExtra(Game.BEEN_UPVOTED, game.beenUpvoted);
+        gameIntent.putExtra(Game.IS_CLOSED, game.isClosed);
+        gameIntent.putExtra(Game.IS_PUBLIC, game.isPublic);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation((AppCompatActivity) mContext,
-                        mContentImage, ViewCompat.getTransitionName(mContentImage));
-        mContext.startActivity(gameIntent, transitionActivityOptions.toBundle());
+                .makeSceneTransitionAnimation((AppCompatActivity) context,
+                        contentImage, ViewCompat.getTransitionName(contentImage));
+        context.startActivity(gameIntent, transitionActivityOptions.toBundle());
     }
 
     private void goToProfile() {
-        Intent profileIntent = new Intent(mContext, ProfileActivity.class);
-        profileIntent.putExtra(User.USERNAME, mFriend.username);
-        profileIntent.putExtra(User.IMAGE_URL, mFriend.imageUrl);
-        profileIntent.putExtra(User.ID, mFriend.id);
+        Intent profileIntent = new Intent(context, ProfileActivity.class);
+        profileIntent.putExtra(User.USERNAME, friend.username);
+        profileIntent.putExtra(User.IMAGE_URL, friend.imageUrl);
+        profileIntent.putExtra(User.ID, friend.id);
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation((AppCompatActivity) mContext, mUserImage,
-                        ViewCompat.getTransitionName(mUserImage));
-        mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
+                .makeSceneTransitionAnimation((AppCompatActivity) context, userImage,
+                        ViewCompat.getTransitionName(userImage));
+        context.startActivity(profileIntent, transitionActivityOptions.toBundle());
     }
 }

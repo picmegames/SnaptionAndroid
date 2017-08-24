@@ -56,6 +56,7 @@ public class Game {
     public boolean isClosed;
     @SerializedName(GAME_ID)
     public int gameId;
+
     public boolean isFromAnotherGame;
 
     public static final String ID = "id";

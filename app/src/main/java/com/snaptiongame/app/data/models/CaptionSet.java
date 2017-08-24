@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 /**
- * Created by nickromero on 2/8/17.
+ * @author Nick Romero
  */
 
 public class CaptionSet {
@@ -17,27 +17,15 @@ public class CaptionSet {
     @SerializedName(ACTIVE)
     public boolean isCaptionSetActive;
 
-    private int mTotalCaptions;
-    private int mCaptionsUnlocked;
-
     public static final String TITLE = "title";
     public static final String ID = "id";
     public static final String ACTIVE = "active";
 
-    private static final int MAX_CAPTIONS = 10;
-    private static final int MIN_CAPTIONS = 0;
+    public static final int MAX_CAPTIONS = 10;
+    public static final int MIN_CAPTIONS = 0;
 
     public CaptionSet() {
-        mCaptionsUnlocked = MIN_CAPTIONS;
-        mTotalCaptions = MAX_CAPTIONS;
-    }
 
-    public int getTotalCaptions() {
-        return MAX_CAPTIONS;
-    }
-
-    public int getCaptionsUnlocked() {
-        return mCaptionsUnlocked;
     }
 
     public String getSetName() {

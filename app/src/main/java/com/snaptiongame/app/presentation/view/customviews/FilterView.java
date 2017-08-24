@@ -22,71 +22,71 @@ import butterknife.ButterKnife;
 public class FilterView extends LinearLayout {
 
     @BindView(R.id.filter_view)
-    NachoTextView mFilterTextView;
+    NachoTextView filterTextView;
     @BindView(R.id.open_check)
-    CheckBox mOpenCheck;
+    CheckBox openCheck;
     @BindView(R.id.closed_check)
-    CheckBox mClosedCheck;
+    CheckBox closedCheck;
 
-    private Context mContext;
+    private Context context;
 
     private static final String OPEN = "open";
     private static final String CLOSED = "closed";
 
     public FilterView(Context context) {
         super(context);
-        mContext = context;
+        this.context = context;
         init();
     }
 
     public FilterView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
+        this.context = context;
         init();
     }
 
     public FilterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
+        this.context = context;
         init();
     }
 
     public void init() {
-        View view = inflate(mContext, R.layout.filter_view, this);
+        View view = inflate(context, R.layout.filter_view, this);
         ButterKnife.bind(this, view);
 
-        mFilterTextView.setChipHeight(R.dimen.chip_height);
-        mFilterTextView.setChipSpacing(R.dimen.chip_spacing);
-        mFilterTextView.setChipTextSize(R.dimen.chip_text_size);
-        mFilterTextView.setChipVerticalSpacing(R.dimen.chip_vertical_spacing);
-        mFilterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
-        mFilterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
-        mFilterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
-        mFilterTextView.enableEditChipOnTouch(false, true);
+        filterTextView.setChipHeight(R.dimen.chip_height);
+        filterTextView.setChipSpacing(R.dimen.chip_spacing);
+        filterTextView.setChipTextSize(R.dimen.chip_text_size);
+        filterTextView.setChipVerticalSpacing(R.dimen.chip_vertical_spacing);
+        filterTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+        filterTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+        filterTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+        filterTextView.enableEditChipOnTouch(false, true);
     }
 
     public void chipifyAllUnterminatedTokens() {
-        mFilterTextView.chipifyAllUnterminatedTokens();
+        filterTextView.chipifyAllUnterminatedTokens();
     }
 
     public List<String> getChipValues() {
-        return mFilterTextView.getChipValues();
+        return filterTextView.getChipValues();
     }
 
     public void clearFilterView() {
-        if (mFilterTextView != null) {
-            mFilterTextView.setText("");
+        if (filterTextView != null) {
+            filterTextView.setText("");
         }
 
-        if (mOpenCheck != null && mClosedCheck != null) {
-            mOpenCheck.setChecked(true);
-            mClosedCheck.setChecked(true);
+        if (openCheck != null && closedCheck != null) {
+            openCheck.setChecked(true);
+            closedCheck.setChecked(true);
         }
     }
 
     public String getStatus() {
-        boolean isOpen = mOpenCheck.isChecked();
-        boolean isClosed = mClosedCheck.isChecked();
+        boolean isOpen = openCheck.isChecked();
+        boolean isClosed = closedCheck.isChecked();
 
         if (isOpen && !isClosed) {
             return OPEN;

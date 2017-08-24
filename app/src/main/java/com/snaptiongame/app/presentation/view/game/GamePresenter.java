@@ -32,34 +32,34 @@ import timber.log.Timber;
 public class GamePresenter implements GameContract.Presenter {
 
     @NonNull
-    private GameContract.View mGameView;
+    private GameContract.View gameView;
     @NonNull
-    private CompositeDisposable mDisposables;
+    private CompositeDisposable disposables;
 
-    private int mGameId;
-    private List<FitBCaption> mCaptions;
+    private int gameId;
+    private List<FitBCaption> captions;
 
     public static final int MAX_FITBS_SHOWN = 8;
 
     public GamePresenter(@NonNull GameContract.View view) {
-        mGameView = view;
-        mDisposables = new CompositeDisposable();
-        mGameView.setPresenter(this);
-        mCaptions = new ArrayList<>();
+        gameView = view;
+        disposables = new CompositeDisposable();
+        gameView.setPresenter(this);
+        captions = new ArrayList<>();
     }
 
     @Override
     public void loadCaptions(int page) {
-        Disposable disposable = CaptionProvider.getCaptions(mGameId, page)
+        Disposable disposable = CaptionProvider.getCaptions(gameId, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameView::showCaptions,
+                        gameView::showCaptions,
                         e -> {
                             Timber.e(e);
-                            mGameView.setRefreshing(false);
+                            gameView.setRefreshing(false);
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -67,13 +67,13 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> mGameView.onGameUpdated(request.choiceType),
+                        () -> gameView.onGameUpdated(request.choiceType),
                         e -> {
-                            mGameView.onGameErrored(request.choiceType);
+                            gameView.onGameErrored(request.choiceType);
                             Timber.e(e);
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.getGame(gameId, AuthManager.getInviteToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        game -> mGameView.showGame(game.imageUrl, game.id, game.creatorId,
+                        game -> gameView.showGame(game.imageUrl, game.id, game.creatorId,
                                 game.creatorName, game.creatorImage, game.beenUpvoted, game.beenFlagged,
                                 DateUtils.isPastNow(game.endDate), game.isPublic),
                         Timber::e
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -96,20 +96,20 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void addCaption(int fitbId, String caption) {
-        Disposable disposable = CaptionProvider.addCaption(mGameId, new Caption(fitbId, caption))
+        Disposable disposable = CaptionProvider.addCaption(gameId, new Caption(fitbId, caption))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         () -> {
-                            mGameView.resetScrollState();
+                            gameView.resetScrollState();
                             loadCaptions(1);
                         },
                         e -> {
                             Timber.e(e);
-                            mGameView.setRefreshing(false);
-                            mGameView.showCaptionSubmissionError();
+                            gameView.setRefreshing(false);
+                            gameView.showCaptionSubmissionError();
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -117,11 +117,11 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.getCaptionSets()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameView::showCaptionSets,
+                        gameView::showCaptionSets,
                         Timber::e,
                         () -> Timber.i("Loading caption sets worked")
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -129,11 +129,11 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = CaptionProvider.getFitBCaptions(setId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameView::showFitBCaptions,
+                        gameView::showFitBCaptions,
                         Timber::e,
                         () -> Timber.i("Successfully got Fitb's!")
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class GamePresenter implements GameContract.Presenter {
                         Timber::e,
                         () -> Timber.i("Loading caption sets worked")
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -153,10 +153,10 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.getPrivateGameUsers(gameId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameView::showPrivateGameDialog,
+                        gameView::showPrivateGameDialog,
                         Timber::e
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -164,15 +164,15 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.getGameTags(gameId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameView::showTags,
+                        gameView::showTags,
                         Timber::e
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
     public void setGameId(int gameId) {
-        mGameId = gameId;
+        this.gameId = gameId;
     }
 
     private void countSets(List<CaptionSet> sets) {
@@ -191,18 +191,18 @@ public class GamePresenter implements GameContract.Presenter {
                 randomCaptions.add(captions.remove(nextCaption));
             }
         }
-        mGameView.showRandomCaptions(randomCaptions);
+        gameView.showRandomCaptions(randomCaptions);
     }
 
     private void getRandomCaptions(int numSets, List<FitBCaption> captions, int start) {
         if (start == numSets) {
-            buildRandomCaptions(new ArrayList<>(mCaptions));
+            buildRandomCaptions(new ArrayList<>(this.captions));
         }
         else {
             if (start == 0)
-                mCaptions = new ArrayList<>();
+                this.captions = new ArrayList<>();
             for (FitBCaption c : captions) {
-                mCaptions.add(c);
+                this.captions.add(c);
             }
             final int nextStart = ++start;
             Disposable disposable = CaptionProvider.getFitBCaptions(start)
@@ -212,7 +212,7 @@ public class GamePresenter implements GameContract.Presenter {
                             Timber::e,
                             () -> Timber.i("Successfully got Fitb's!")
                     );
-            mDisposables.add(disposable);
+            disposables.add(disposable);
         }
     }
 
@@ -221,14 +221,14 @@ public class GamePresenter implements GameContract.Presenter {
         DeepLinkProvider.getToken(new DeepLinkRequest(gameId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mGameView::generateInviteUrl,
+                        gameView::generateInviteUrl,
                         Timber::e
                 );
     }
 
     @Override
     public void refreshCaptions() {
-        buildRandomCaptions(new ArrayList<>(mCaptions));
+        buildRandomCaptions(new ArrayList<>(captions));
     }
 
     @Override
@@ -239,6 +239,6 @@ public class GamePresenter implements GameContract.Presenter {
 
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

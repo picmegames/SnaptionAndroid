@@ -37,29 +37,30 @@ import butterknife.Unbinder;
  */
 public class WallFragment extends Fragment implements WallContract.View {
     @BindView(R.id.wall)
-    RecyclerView mWall;
+    RecyclerView wall;
     @BindView(R.id.refresh_layout)
-    SwipeRefreshLayout mRefreshLayout;
+    SwipeRefreshLayout refreshLayout;
     @BindView(R.id.empty_or_disconnected_view)
-    LinearLayout mEmptyOrDisconnectedView;
+    LinearLayout emptyOrDisconnectedView;
     @BindView(R.id.wall_state_image)
-    ImageView mWallStateImage;
+    ImageView wallStateImage;
     @BindView(R.id.wall_state)
-    TextView mWallState;
+    TextView wallState;
 
-    private WallContract.Presenter mPresenter;
-    private WallAdapter mAdapter;
-    private Unbinder mUnbinder;
-    private RecyclerView.LayoutManager mCurrentLayoutManager;
-    private LinearLayoutManager mLinearLayoutManager;
-    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
-    private WallSpacesItemDecoration mItemSpacesDecoration;
-    private InfiniteRecyclerViewScrollListener mScrollListener;
-    private List<String> mTags;
-    private String mStatus;
-    private int mUserId;
-    private int mType;
-    private int mSpace;
+    private WallContract.Presenter presenter;
+    private WallAdapter adapter;
+    private Unbinder unbinder;
+    private RecyclerView.LayoutManager currentLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
+    private StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private WallSpacesItemDecoration itemSpacesDecoration;
+    private InfiniteRecyclerViewScrollListener scrollListener;
+    private List<String> tags;
+    private String status;
+    private int userId;
+    private int type;
+    private int space;
+
     public static final String TAG = WallFragment.class.getSimpleName();
 
     public static final int NUM_COLUMNS = 2;
@@ -97,72 +98,72 @@ public class WallFragment extends Fragment implements WallContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.wall_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
-        mUserId = getArguments().getInt(USER_ID);
-        mType = getArguments().getInt(TYPE);
+        unbinder = ButterKnife.bind(this, view);
+        userId = getArguments().getInt(USER_ID);
+        type = getArguments().getInt(TYPE);
         boolean isList = getArguments().getBoolean(IS_LIST);
-        mPresenter = new WallPresenter(this, mUserId, mType);
-        mLinearLayoutManager = new LinearLayoutManager(getContext());
-        mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
+        presenter = new WallPresenter(this, userId, type);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
 
         setLayoutManager(isList);
 
-        mItemSpacesDecoration = new WallSpacesItemDecoration(mSpace, isList);
-        mWall.addItemDecoration(mItemSpacesDecoration);
-        mWall.setHasFixedSize(true);
+        itemSpacesDecoration = new WallSpacesItemDecoration(space, isList);
+        wall.addItemDecoration(itemSpacesDecoration);
+        wall.setHasFixedSize(true);
 
-        mAdapter = new WallAdapter(new ArrayList<>());
-        mAdapter.setIsList(isList);
-        mWall.setAdapter(mAdapter);
+        adapter = new WallAdapter(new ArrayList<>());
+        adapter.setIsList(isList);
+        wall.setAdapter(adapter);
 
-        mScrollListener = new InfiniteRecyclerViewScrollListener(mCurrentLayoutManager) {
+        scrollListener = new InfiniteRecyclerViewScrollListener(currentLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                mPresenter.loadGames(mType, mTags, mStatus, page);
+                presenter.loadGames(type, tags, status, page);
             }
         };
 
-        mWall.addOnScrollListener(mScrollListener);
+        wall.addOnScrollListener(scrollListener);
 
-        mRefreshLayout.setOnRefreshListener(this::refreshWall);
+        refreshLayout.setOnRefreshListener(this::refreshWall);
 
-        mRefreshLayout.setColorSchemeColors(
+        refreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
-        mPresenter.subscribe();
+        presenter.subscribe();
 
         return view;
     }
 
     public void refreshWall() {
-        mAdapter.clear();
-        mScrollListener.resetState();
-        mPresenter.subscribe();
+        adapter.clear();
+        scrollListener.resetState();
+        presenter.subscribe();
     }
 
     public void switchLayout(boolean isList) {
-        if (mAdapter != null && mWall != null && mItemSpacesDecoration != null) {
-            mAdapter.setIsList(isList);
-            mWall.setAdapter(mAdapter);
+        if (adapter != null && wall != null && itemSpacesDecoration != null) {
+            adapter.setIsList(isList);
+            wall.setAdapter(adapter);
             setLayoutManager(isList);
 
-            mScrollListener.setLayoutManager(mCurrentLayoutManager);
-            mItemSpacesDecoration.setIsList(isList);
-            mItemSpacesDecoration.setSpacing(mSpace);
+            scrollListener.setLayoutManager(currentLayoutManager);
+            itemSpacesDecoration.setIsList(isList);
+            itemSpacesDecoration.setSpacing(space);
         }
     }
 
     private void setLayoutManager(boolean isList) {
         if (isList) {
-            mCurrentLayoutManager = mLinearLayoutManager;
-            mWall.setLayoutManager(mCurrentLayoutManager);
-            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
+            currentLayoutManager = linearLayoutManager;
+            wall.setLayoutManager(currentLayoutManager);
+            space = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_list);
         }
         else {
-            mCurrentLayoutManager = mStaggeredGridLayoutManager;
-            mWall.setLayoutManager(mCurrentLayoutManager);
-            mSpace = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
+            currentLayoutManager = staggeredGridLayoutManager;
+            wall.setLayoutManager(currentLayoutManager);
+            space = getContext().getResources().getDimensionPixelSize(R.dimen.item_spacing_grid);
         }
     }
 
@@ -174,15 +175,15 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     public void filterGames(List<String> tags, String status) {
         setRefreshing(true);
-        mAdapter.clear();
-        mTags = tags;
-        mStatus = status;
-        mScrollListener.resetState();
-        mPresenter.loadGames(mType, mTags, mStatus, 1);
+        adapter.clear();
+        this.tags = tags;
+        this.status = status;
+        scrollListener.resetState();
+        presenter.loadGames(type, this.tags, this.status, 1);
     }
 
     public boolean hasTags() {
-        return mTags != null && !mTags.isEmpty();
+        return tags != null && !tags.isEmpty();
     }
 
     /**
@@ -193,9 +194,9 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     @Override
     public void showGames(List<Game> games) {
-        mAdapter.addGames(games);
+        adapter.addGames(games);
 
-        if (!mAdapter.isEmpty()) {
+        if (!adapter.isEmpty()) {
             showWall();
         }
         else {
@@ -205,36 +206,36 @@ public class WallFragment extends Fragment implements WallContract.View {
 
     @Override
     public void showEmptyView() {
-        mAdapter.clear();
+        adapter.clear();
 
-        if (mEmptyOrDisconnectedView != null) {
-            mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+        if (emptyOrDisconnectedView != null) {
+            emptyOrDisconnectedView.setVisibility(View.VISIBLE);
         }
 
-        if (mWallState != null && mWallStateImage != null) {
-            mWallState.setText(R.string.nothing_here);
-            mWallStateImage.setImageResource(R.drawable.snaption_icon_gray);
+        if (wallState != null && wallStateImage != null) {
+            wallState.setText(R.string.nothing_here);
+            wallStateImage.setImageResource(R.drawable.snaption_icon_gray);
         }
     }
 
     @Override
     public void showDisconnectedView() {
-        mAdapter.clear();
+        adapter.clear();
 
-        if (mEmptyOrDisconnectedView != null) {
-            mEmptyOrDisconnectedView.setVisibility(View.VISIBLE);
+        if (emptyOrDisconnectedView != null) {
+            emptyOrDisconnectedView.setVisibility(View.VISIBLE);
         }
 
-        if (mWallState != null && mWallStateImage != null) {
-            mWallState.setText(R.string.no_internet);
-            mWallStateImage.setImageResource(R.drawable.ic_signal_wifi_off_grey_600_48dp);
+        if (wallState != null && wallStateImage != null) {
+            wallState.setText(R.string.no_internet);
+            wallStateImage.setImageResource(R.drawable.ic_signal_wifi_off_grey_600_48dp);
         }
     }
 
     @Override
     public void showWall() {
-        if (mEmptyOrDisconnectedView != null) {
-            mEmptyOrDisconnectedView.setVisibility(View.GONE);
+        if (emptyOrDisconnectedView != null) {
+            emptyOrDisconnectedView.setVisibility(View.GONE);
         }
     }
 
@@ -245,7 +246,7 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     @Override
     public void setPresenter(WallContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     /**
@@ -256,8 +257,8 @@ public class WallFragment extends Fragment implements WallContract.View {
      */
     @Override
     public void setRefreshing(boolean isRefreshing) {
-        if (mRefreshLayout != null) {
-            mRefreshLayout.setRefreshing(isRefreshing);
+        if (refreshLayout != null) {
+            refreshLayout.setRefreshing(isRefreshing);
         }
     }
 
@@ -269,7 +270,7 @@ public class WallFragment extends Fragment implements WallContract.View {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
-        mPresenter.unsubscribe();
+        unbinder.unbind();
+        presenter.unsubscribe();
     }
 }

@@ -123,7 +123,7 @@ public interface SnaptionApi {
      */
     @GET("/Users/")
     Observable<List<User>> searchUsers(@Query("email") String email,
-                                       @Query("facebookID") String facebookId,
+                                       @Query("facebookId") String facebookId,
                                        @Query("username") String username,
                                        @Query("fullName") String fullName,
                                        @Query("page") int page);

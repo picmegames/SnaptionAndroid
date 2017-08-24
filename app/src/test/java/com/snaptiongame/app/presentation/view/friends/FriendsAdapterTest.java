@@ -3,7 +3,7 @@ package com.snaptiongame.app.presentation.view.friends;
 import org.junit.Test;
 
 /**
- * Created by BrianGouldsberry on 2/9/17.
+ * @author Brian Gouldsberry
  */
 
 public class FriendsAdapterTest {

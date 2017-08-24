@@ -19,8 +19,11 @@ public class Friend {
     public int imageWidth;
     @SerializedName(IMAGE_HEIGHT)
     public int imageHeight;
+    @SerializedName(COVER)
     public String cover;
+    @SerializedName(EMAIL)
     public String email;
+
     public boolean isSnaptionFriend;
 
     public static final String ID = "id";
@@ -41,7 +44,6 @@ public class Friend {
         this.id = id;
     }
 
-    // Convert a User to a Friend
     public Friend(User user) {
         this.id = user.id;
         this.picture = user.picture;
@@ -66,6 +68,6 @@ public class Friend {
 
     @Override
     public boolean equals(Object other) {
-        return this.id == ((Friend) other).id;
+        return other.getClass() == Friend.class && this.id == ((Friend) other).id;
     }
 }

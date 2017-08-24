@@ -3,7 +3,7 @@ package com.snaptiongame.app.data.models;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author Quang Ngo.
+ * @author Quang Ngo
  */
 
 public class UserStats {
@@ -29,5 +29,4 @@ public class UserStats {
     public static final String CAPTION_UPVOTES = "captionUpvotes";
     public static final String TOP_CAPTION_COUNT = "topCaptionCount";
     public static final String EXP = "exp";
-
 }

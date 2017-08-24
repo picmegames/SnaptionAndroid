@@ -20,15 +20,14 @@ import butterknife.Unbinder;
  * @author Tyler Wong
  */
 
-public class LeaderboardsFragment extends Fragment implements LeaderboardsContract.View {
+public class LeaderboardsFragment extends Fragment {
 
     @BindView(R.id.tab_layout)
-    TabLayout mTabLayout;
+    TabLayout tabLayout;
     @BindView(R.id.view_pager)
-    ViewPager mViewPager;
+    ViewPager viewPager;
 
-    private LeaderboardsContract.Presenter mPresenter;
-    private Unbinder mUnbinder;
+    private Unbinder unbinder;
 
     public static final String TAG = LeaderboardsFragment.class.getSimpleName();
 
@@ -41,19 +40,20 @@ public class LeaderboardsFragment extends Fragment implements LeaderboardsContra
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.leaderboards_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
-        mViewPager.setAdapter(new LeaderboardsPageAdapter(getActivity().getSupportFragmentManager()));
+        viewPager.setAdapter(new LeaderboardsPageAdapter(getActivity().getSupportFragmentManager()));
 
-        mTabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
         int white = ContextCompat.getColor(getContext(), android.R.color.white);
-        mTabLayout.setTabTextColors(white, white);
+        tabLayout.setTabTextColors(white, white);
 
         return view;
     }
 
     @Override
-    public void setPresenter(LeaderboardsContract.Presenter presenter) {
-        mPresenter = presenter;
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

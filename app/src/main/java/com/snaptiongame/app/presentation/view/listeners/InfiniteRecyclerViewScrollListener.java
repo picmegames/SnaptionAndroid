@@ -22,10 +22,10 @@ public abstract class InfiniteRecyclerViewScrollListener extends RecyclerView.On
     // Sets the starting page index
     private static final int START_PAGE = 1;
 
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.LayoutManager layoutManager;
 
     public InfiniteRecyclerViewScrollListener(RecyclerView.LayoutManager layoutManager) {
-        mLayoutManager = layoutManager;
+        this.layoutManager = layoutManager;
 
         if (layoutManager instanceof StaggeredGridLayoutManager) {
             visibleThreshold *= ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
@@ -52,15 +52,15 @@ public abstract class InfiniteRecyclerViewScrollListener extends RecyclerView.On
     public void onScrolled(RecyclerView view, int dx, int dy) {
         if (dy > 0) {
             int lastVisibleItemPosition = 0;
-            int totalItemCount = mLayoutManager.getItemCount();
+            int totalItemCount = layoutManager.getItemCount();
 
-            if (mLayoutManager instanceof StaggeredGridLayoutManager) {
-                int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) mLayoutManager).findLastVisibleItemPositions(null);
+            if (layoutManager instanceof StaggeredGridLayoutManager) {
+                int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(null);
                 // get maximum element within the list
                 lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
             }
-            else if (mLayoutManager instanceof LinearLayoutManager) {
-                lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+            else if (layoutManager instanceof LinearLayoutManager) {
+                lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
             }
 
             // If the total item count is zero and the previous isn't, assume the
@@ -94,7 +94,7 @@ public abstract class InfiniteRecyclerViewScrollListener extends RecyclerView.On
     }
 
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        mLayoutManager = layoutManager;
+        this.layoutManager = layoutManager;
     }
 
     // Call this method whenever performing new searches

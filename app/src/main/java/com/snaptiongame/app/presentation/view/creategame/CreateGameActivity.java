@@ -65,49 +65,49 @@ import butterknife.OnClick;
  */
 public class CreateGameActivity extends AppCompatActivity implements CreateGameContract.View {
     @BindView(R.id.layout)
-    CoordinatorLayout mLayout;
+    CoordinatorLayout layout;
     @BindView(R.id.scroll_view)
-    NestedScrollView mScrollView;
+    NestedScrollView scrollView;
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
     @BindView(R.id.image)
-    FourThreeImageView mNewGameImage;
+    FourThreeImageView newGameImage;
     @BindView(R.id.camera_animation)
-    LottieAnimationView mAnimationView;
+    LottieAnimationView animationView;
     @BindView(R.id.private_switch)
-    Switch mPrivateSwitch;
+    Switch privateSwitch;
     @BindView(R.id.add_friends_button)
-    Button mAddFriendsButton;
+    Button addFriendsButton;
     @BindView(R.id.create_game)
-    Button mCreateGameButton;
+    Button createGameButton;
     @BindView(R.id.tags)
-    TextView mTagsLabel;
+    TextView tagsLabel;
     @BindView(R.id.tag_chip_view)
-    NachoTextView mTagTextView;
+    NachoTextView tagTextView;
     @BindView(R.id.friends_chip_view)
-    NachoTextView mFriendsTextView;
+    NachoTextView friendsTextView;
     @BindView(R.id.set_date_field)
-    TextView mDateLabel;
+    TextView dateLabel;
 
-    private ActionBar mActionBar;
-    private MaterialDialog mProgressDialog;
-    private MaterialDialog mFriendsDialog;
-    private DatePickerDialog mDatePickerDialog;
-    private FriendsAdapter mFriendsAdapter;
-    private ArrayAdapter<String> mFriendNameAdapter;
+    private ActionBar actionBar;
+    private MaterialDialog progressDialog;
+    private MaterialDialog friendsDialog;
+    private DatePickerDialog datePickerDialog;
+    private FriendsAdapter friendsAdapter;
+    private ArrayAdapter<String> friendNameAdapter;
 
-    private CreateGameContract.Presenter mPresenter;
+    private CreateGameContract.Presenter presenter;
 
-    private Uri mUri;
-    private String mImageUrl;
-    private Calendar mCalendar;
-    private int mYear;
-    private int mMonth;
-    private int mDayOfMonth;
-    private long mDays;
-    private String mFormattedDate;
-    private int mGameId = -1;
-    private boolean mIsFromAnotherGame = false;
+    private Uri uri;
+    private String imageUrl;
+    private Calendar calendar;
+    private int year;
+    private int month;
+    private int dayOfMonth;
+    private long days;
+    private String formattedDate;
+    private int gameId = -1;
+    private boolean isFromAnotherGame = false;
 
     private static final String INTENT_TYPE = "image/*";
     private static final String DATE_FORMAT = "MM/dd/yyyy";
@@ -118,14 +118,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         setContentView(R.layout.activity_create_game);
         ButterKnife.bind(this);
 
-        mPresenter = new CreateGamePresenter(this);
+        presenter = new CreateGamePresenter(this);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Game.GAME_ID) && intent.hasExtra(Game.IMAGE_URL)) {
-            mGameId = intent.getIntExtra(Game.GAME_ID, -1);
-            mImageUrl = intent.getStringExtra(Game.IMAGE_URL);
-            mIsFromAnotherGame = true;
-            ViewCompat.setTransitionName(mNewGameImage, mImageUrl);
+            gameId = intent.getIntExtra(Game.GAME_ID, -1);
+            imageUrl = intent.getStringExtra(Game.IMAGE_URL);
+            isFromAnotherGame = true;
+            ViewCompat.setTransitionName(newGameImage, imageUrl);
 
             RequestOptions options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
@@ -133,51 +133,51 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                     .dontAnimate();
 
             Glide.with(this)
-                    .load(mImageUrl)
+                    .load(imageUrl)
                     .apply(options)
-                    .into(mNewGameImage);
-            mCreateGameButton.setEnabled(true);
+                    .into(newGameImage);
+            createGameButton.setEnabled(true);
         }
         else {
-            mAnimationView.setVisibility(View.VISIBLE);
-            mAnimationView.setAnimation(getString(R.string.anim_4));
-            mAnimationView.playAnimation();
+            animationView.setVisibility(View.VISIBLE);
+            animationView.setAnimation(getString(R.string.anim_4));
+            animationView.playAnimation();
         }
 
-        mFriendsAdapter = new FriendsAdapter(mPresenter.getFriends());
-        mFriendsAdapter.setSelectable();
+        friendsAdapter = new FriendsAdapter(presenter.getFriends());
+        friendsAdapter.setSelectable();
 
-        setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
 
-        if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setTitle(getString(R.string.create_game));
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getString(R.string.create_game));
         }
 
-        mFriendNameAdapter = new ArrayAdapter<>(
+        friendNameAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_expandable_list_item_1, new ArrayList<>());
-        mFriendsTextView.setAdapter(mFriendNameAdapter);
+        friendsTextView.setAdapter(friendNameAdapter);
 
-        mTagTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-        mTagTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-        mTagTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-        mTagTextView.enableEditChipOnTouch(false, true);
-        mFriendsTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-        mFriendsTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-        mFriendsTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
-        mFriendsTextView.enableEditChipOnTouch(false, true);
-        mFriendsTextView.setOnChipClickListener((Chip chip, MotionEvent motionEvent) -> {
-            int friendId = mPresenter.getFriendIdByName(chip.getText().toString());
+        tagTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        tagTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        tagTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        tagTextView.enableEditChipOnTouch(false, true);
+        friendsTextView.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        friendsTextView.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        friendsTextView.addChipTerminator(',', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        friendsTextView.enableEditChipOnTouch(false, true);
+        friendsTextView.setOnChipClickListener((Chip chip, MotionEvent motionEvent) -> {
+            int friendId = presenter.getFriendIdByName(chip.getText().toString());
             if (friendId > 0) {
-                mFriendsAdapter.deselectFriend(friendId);
+                friendsAdapter.deselectFriend(friendId);
             }
         });
-        mFriendsTextView.setChipTokenizer(new SpanChipTokenizer<>(this, new ChipSpanChipCreator() {
+        friendsTextView.setChipTokenizer(new SpanChipTokenizer<>(this, new ChipSpanChipCreator() {
             @Override
             public ChipSpan createChip(@NonNull Context context, @NonNull CharSequence text, Object data) {
                 ChipSpan newChip;
-                int friendId = mPresenter.getFriendIdByName(text.toString());
+                int friendId = presenter.getFriendIdByName(text.toString());
 
                 if (friendId < 0) {
                     newChip = new ChipSpan(context, text,
@@ -186,7 +186,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
                 else {
                     newChip = new ChipSpan(context, text,
                             ContextCompat.getDrawable(CreateGameActivity.this, R.drawable.ic_check_circle_green_400_24dp), data);
-                    mFriendsAdapter.selectFriend(friendId);
+                    friendsAdapter.selectFriend(friendId);
                 }
 
                 return newChip;
@@ -199,14 +199,14 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
             }
         }, ChipSpan.class));
 
-        mCalendar = Calendar.getInstance();
-        mCalendar.add(Calendar.DATE, DateUtils.TWO_WEEKS_DAYS);
-        mYear = mCalendar.get(Calendar.YEAR);
-        mMonth = mCalendar.get(Calendar.MONTH);
-        mDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
-        mFormattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(mCalendar.getTime());
-        mDateLabel.setText(mFormattedDate);
-        mDays = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, DateUtils.TWO_WEEKS_DAYS);
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        formattedDate = new SimpleDateFormat(DATE_FORMAT, Locale.US).format(calendar.getTime());
+        dateLabel.setText(formattedDate);
+        days = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
 
         // Will only happen once
         showShowcase();
@@ -217,65 +217,65 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         List<Integer> titles = new ArrayList<>();
         List<Integer> contents = new ArrayList<>();
 
-        if (!mIsFromAnotherGame) {
-            showcaseViews.add(mAnimationView);
+        if (!isFromAnotherGame) {
+            showcaseViews.add(animationView);
             titles.add(R.string.create_game_showcase_title_1);
             contents.add(R.string.create_game_showcase_content_1);
         }
 
-        showcaseViews.add(mTagsLabel);
+        showcaseViews.add(tagsLabel);
         titles.add(R.string.create_game_showcase_title_2);
         contents.add(R.string.create_game_showcase_content_2);
 
-        showcaseViews.add(mPrivateSwitch);
+        showcaseViews.add(privateSwitch);
         titles.add(R.string.create_game_showcase_title_3);
         contents.add(R.string.create_game_showcase_content_3);
 
-        showcaseViews.add(mAddFriendsButton);
+        showcaseViews.add(addFriendsButton);
         titles.add(R.string.create_game_showcase_title_4);
         contents.add(R.string.create_game_showcase_content_4);
 
-        showcaseViews.add(mDateLabel);
+        showcaseViews.add(dateLabel);
         titles.add(R.string.create_game_showcase_title_5);
         contents.add(R.string.create_game_showcase_content_5);
 
-        ShowcaseUtils.showShowcaseSequence(this, mScrollView, showcaseViews, titles, contents);
+        ShowcaseUtils.showShowcaseSequence(this, scrollView, showcaseViews, titles, contents);
     }
 
     @Override
     public void showImageCompressionFailure() {
-        mProgressDialog.dismiss();
+        progressDialog.dismiss();
         Toast.makeText(this, getString(R.string.compression_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showUploadFailure() {
-        mProgressDialog.dismiss();
+        progressDialog.dismiss();
         Toast.makeText(this, getString(R.string.upload_error), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showUploadComplete() {
-        mProgressDialog.dismiss();
+        progressDialog.dismiss();
         setResult(RESULT_OK);
         onBackPressed();
     }
 
     @Override
     public List<String> getTags() {
-        mTagTextView.chipifyAllUnterminatedTokens();
-        return mTagTextView.getChipValues();
+        tagTextView.chipifyAllUnterminatedTokens();
+        return tagTextView.getChipValues();
     }
 
     @Override
     public void setPresenter(CreateGameContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
     public List<String> getAddedFriends() {
-        mFriendsTextView.chipifyAllUnterminatedTokens();
-        return mFriendsTextView.getChipValues();
+        friendsTextView.chipifyAllUnterminatedTokens();
+        return friendsTextView.getChipValues();
     }
 
     @Override
@@ -327,22 +327,22 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.add_friends_button)
     public void prepareFriendsDialog() {
-        if (mFriendsDialog == null) {
+        if (friendsDialog == null) {
             showFriendsDialog();
         }
         else {
-            mFriendsDialog.show();
+            friendsDialog.show();
         }
     }
 
     @Override
     public void showFriendsDialog() {
-        if (!mPresenter.getFriends().isEmpty()) {
-            mFriendsDialog = new MaterialDialog.Builder(this)
+        if (!presenter.getFriends().isEmpty()) {
+            friendsDialog = new MaterialDialog.Builder(this)
                     .title(R.string.add_friends)
-                    .adapter(mFriendsAdapter, new LinearLayoutManager(this))
+                    .adapter(friendsAdapter, new LinearLayoutManager(this))
                     .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
-                            addFriendsToTextView(mFriendsAdapter.getSelectedFriendNames())
+                            addFriendsToTextView(friendsAdapter.getSelectedFriendNames())
                     )
                     .positiveText(R.string.update)
                     .cancelable(false)
@@ -363,20 +363,20 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
     }
 
     private void addFriendsToTextView(List<String> selectedFriendNames) {
-        mFriendsTextView.setText(selectedFriendNames);
+        friendsTextView.setText(selectedFriendNames);
     }
 
     @OnClick(R.id.create_game)
     public void createGame() {
-        mTagTextView.chipifyAllUnterminatedTokens();
-        if (!mIsFromAnotherGame) {
-            mPresenter.createGame(getContentResolver().getType(mUri), mUri,
-                    !mPrivateSwitch.isChecked(), mDays);
+        tagTextView.chipifyAllUnterminatedTokens();
+        if (!isFromAnotherGame) {
+            presenter.createGame(getContentResolver().getType(uri), uri,
+                    !privateSwitch.isChecked(), days);
         }
         else {
-            mPresenter.createGameFromId(mGameId, !mPrivateSwitch.isChecked(), mDays);
+            presenter.createGameFromId(gameId, !privateSwitch.isChecked(), days);
         }
-        mProgressDialog = new MaterialDialog.Builder(this)
+        progressDialog = new MaterialDialog.Builder(this)
                 .title(R.string.upload_title)
                 .content(R.string.upload_message)
                 .progress(true, 0)
@@ -386,40 +386,40 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
 
     @OnClick(R.id.set_date_field)
     public void showDatePicker() {
-        if (mDatePickerDialog == null) {
-            mDatePickerDialog = new DatePickerDialog(this, (DatePicker view, int year, int month, int dayOfMonth) -> {
-                mYear = year;
-                mMonth = month;
-                mDayOfMonth = dayOfMonth;
-                mDateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+        if (datePickerDialog == null) {
+            datePickerDialog = new DatePickerDialog(this, (DatePicker view, int year, int month, int dayOfMonth) -> {
+                this.year = year;
+                this.month = month;
+                this.dayOfMonth = dayOfMonth;
+                dateLabel.setText((month + 1) + "/" + dayOfMonth + "/" + year);
                 long today = Calendar.getInstance().getTime().getTime();
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(mYear, mMonth, mDayOfMonth + 1);
+                calendar.set(this.year, this.month, this.dayOfMonth + 1);
                 long selectedDay = calendar.getTime().getTime();
-                mDays = selectedDay - today;
+                days = selectedDay - today;
 
-                if (mDays > DateUtils.TWO_WEEKS) {
-                    mDays = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
+                if (days > DateUtils.TWO_WEEKS) {
+                    days = DateUtils.TWO_WEEKS / DateUtils.MILLIS;
                 }
                 else {
-                    mDays /= DateUtils.MILLIS;
+                    days /= DateUtils.MILLIS;
                 }
-            }, mYear, mMonth, mDayOfMonth);
+            }, year, month, dayOfMonth);
 
             Calendar calendar = Calendar.getInstance();
-            mDatePickerDialog.getDatePicker().setMinDate(calendar.getTime().getTime());
+            datePickerDialog.getDatePicker().setMinDate(calendar.getTime().getTime());
             calendar.add(Calendar.DATE, DateUtils.TWO_WEEKS_DAYS);
-            mDatePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
-            mDatePickerDialog.show();
+            datePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
+            datePickerDialog.show();
         }
         else {
-            mDatePickerDialog.show();
+            datePickerDialog.show();
         }
     }
 
     @Override
     public void addFriendNames(List<String> friendNames) {
-        mFriendNameAdapter.addAll(friendNames);
+        friendNameAdapter.addAll(friendNames);
     }
 
     @Override
@@ -427,34 +427,34 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameC
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            mIsFromAnotherGame = false;
-            mAnimationView.pauseAnimation();
-            mAnimationView.setVisibility(View.GONE);
-            mUri = data.getData();
-            mCreateGameButton.setEnabled(true);
+            isFromAnotherGame = false;
+            animationView.pauseAnimation();
+            animationView.setVisibility(View.GONE);
+            uri = data.getData();
+            createGameButton.setEnabled(true);
 
             RequestOptions options = new RequestOptions()
                     .fitCenter();
 
             Glide.with(this)
-                    .load(mUri)
+                    .load(uri)
                     .apply(options)
-                    .into(mNewGameImage);
+                    .into(newGameImage);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mAnimationView.playAnimation();
-        mFriendNameAdapter.clear();
-        mPresenter.subscribe();
+        animationView.playAnimation();
+        friendNameAdapter.clear();
+        presenter.subscribe();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.unsubscribe();
+        presenter.unsubscribe();
     }
 
     @Override

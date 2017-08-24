@@ -28,34 +28,34 @@ import java.util.List;
 
 public class CaptionAdapter extends RecyclerView.Adapter {
 
-    private List<Caption> mCaptions;
-    private ItemListener mCallback;
+    private List<Caption> captions;
+    private ItemListener callback;
     private int lastPosition = -1;
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView recyclerView;
 
     private static final int AVATAR_SIZE = 40;
 
     public CaptionAdapter(List<Caption> captions, final RecyclerView recyclerView) {
-        this.mCaptions = captions;
-        this.mRecyclerView = recyclerView;
+        this.captions = captions;
+        this.recyclerView = recyclerView;
 
-        mCallback = new ItemListener() {
+        callback = new ItemListener() {
             @Override
             public void updateUpvote(boolean value, int index) {
-                mCaptions.get(index).beenUpvoted = value;
-                mCaptions.get(index).numVotes = value ? mCaptions.get(index)
-                        .numVotes + 1 : mCaptions.get(index).numVotes - 1;
+                CaptionAdapter.this.captions.get(index).beenUpvoted = value;
+                CaptionAdapter.this.captions.get(index).numVotes = value ? CaptionAdapter.this.captions.get(index)
+                        .numVotes + 1 : CaptionAdapter.this.captions.get(index).numVotes - 1;
             }
 
             @Override
             public void updateFlag(int index, RecyclerView.ViewHolder holder) {
-                final Caption tempCaption = mCaptions.remove(index);
+                final Caption tempCaption = CaptionAdapter.this.captions.remove(index);
                 notifyItemRemoved(index);
-                Snackbar.make(mRecyclerView, R.string.flagged, Snackbar.LENGTH_LONG)
+                Snackbar.make(CaptionAdapter.this.recyclerView, R.string.flagged, Snackbar.LENGTH_LONG)
                         .setAction(R.string.undo, view -> {
                             ((CaptionCardViewHolder) holder).unflagCaption();
-                            mCaptions.add(index, tempCaption);
+                            CaptionAdapter.this.captions.add(index, tempCaption);
                             notifyItemInserted(index);
                         })
                         .show();
@@ -67,27 +67,27 @@ public class CaptionAdapter extends RecyclerView.Adapter {
     public CaptionCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.caption_card, parent, false);
-        return new CaptionCardViewHolder(view, mCallback);
+        return new CaptionCardViewHolder(view, callback);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         CaptionCardViewHolder holder = (CaptionCardViewHolder) viewHolder;
-        Caption curCaption = mCaptions.get(position);
+        Caption curCaption = captions.get(position);
 
         if (curCaption.creatorPicture != null) {
             RequestOptions options = new RequestOptions()
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                     .dontAnimate();
 
-            Glide.with(holder.mContext)
+            Glide.with(holder.context)
                     .load(curCaption.creatorPicture)
                     .apply(options)
-                    .into(holder.mUserImage);
+                    .into(holder.userImage);
             holder.imageUrl = curCaption.creatorPicture;
         }
         else {
-            holder.mUserImage.setImageDrawable(TextDrawable.builder()
+            holder.userImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(AVATAR_SIZE)
                     .height(AVATAR_SIZE)
@@ -98,12 +98,12 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         }
         holder.userId = curCaption.creatorId;
         holder.captionId = curCaption.id;
-        holder.mCaption.setText(TextUtils.concat(curCaption.assocFitB.beforeBlank,
+        holder.caption.setText(TextUtils.concat(curCaption.assocFitB.beforeBlank,
                 TextStyleUtils.getTextUnderlined(curCaption.caption),
                 curCaption.assocFitB.afterBlank));
-        holder.mName.setText(curCaption.creatorName);
+        holder.name.setText(curCaption.creatorName);
         holder.username = curCaption.creatorName;
-        holder.mNumberOfUpvotes.setText(String.valueOf(curCaption.numVotes));
+        holder.numberOfUpvotes.setText(String.valueOf(curCaption.numVotes));
         holder.setHasBeenUpvotedOrFlagged(curCaption.beenUpvoted);
 
         setAnimation(holder.itemView, position);
@@ -123,24 +123,24 @@ public class CaptionAdapter extends RecyclerView.Adapter {
     }
 
     public void addCaptions(List<Caption> captions) {
-        int oldSize = mCaptions.size();
-        mCaptions.addAll(captions);
-        notifyItemRangeInserted(oldSize, mCaptions.size());
+        int oldSize = this.captions.size();
+        this.captions.addAll(captions);
+        notifyItemRangeInserted(oldSize, this.captions.size());
     }
 
     public void clear() {
         lastPosition = -1;
-        int oldSize = mCaptions.size();
-        mCaptions.clear();
+        int oldSize = captions.size();
+        captions.clear();
         notifyItemRangeRemoved(0, oldSize);
     }
 
     public List<Caption> getCaptions() {
-        return mCaptions;
+        return captions;
     }
 
     @Override
     public int getItemCount() {
-        return mCaptions.size();
+        return captions.size();
     }
 }

@@ -19,12 +19,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PersistentCookieStore implements CookieStore {
 
+    private final HashMap<String, ConcurrentHashMap<String, HttpCookie>> cookies;
+    private final SharedPreferences cookiePrefs;
+
     private static final String LOG_TAG = "PersistentCookieStore";
     private static final String COOKIE_PREFS = "CookiePrefsFile";
     private static final String COOKIE_NAME_PREFIX = "cookie_";
-
-    private final HashMap<String, ConcurrentHashMap<String, HttpCookie>> cookies;
-    private final SharedPreferences cookiePrefs;
 
     /**
      * Construct a persistent cookie store.

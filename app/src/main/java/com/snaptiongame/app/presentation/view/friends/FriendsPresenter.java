@@ -17,26 +17,26 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 /**
- * Created by nickromero on 1/30/17.
+ * @author Nick Romero
  */
 
 public class FriendsPresenter implements FriendsContract.Presenter {
 
     @NonNull
-    private final FriendsContract.View mFriendView;
+    private final FriendsContract.View friendsView;
 
     @NonNull
-    private CompositeDisposable mDisposables;
+    private CompositeDisposable disposables;
 
     public FriendsPresenter(@NonNull FriendsContract.View friendView) {
-        mFriendView = friendView;
-        mDisposables = new CompositeDisposable();
-        mFriendView.setPresenter(this);
+        friendsView = friendView;
+        disposables = new CompositeDisposable();
+        friendsView.setPresenter(this);
     }
 
     @Override
     public void findFriends(String query, int page) {
-        mDisposables.clear();
+        disposables.clear();
 
         Disposable disposable = UserProvider.searchUsers(query, query, query, query, page)
                 .flatMapIterable(users -> users)
@@ -45,31 +45,31 @@ public class FriendsPresenter implements FriendsContract.Presenter {
                 .filter(friend -> friend.id != AuthManager.getUserId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mFriendView::addFriend,
+                        friendsView::addFriend,
                         Timber::e
                 );
 
-        mDisposables.add(disposable);
+        this.disposables.add(disposable);
     }
 
     @Override
     public void loadFriends(int page) {
-        mDisposables.clear();
+        disposables.clear();
 
         Disposable disposable = FriendProvider.getFriends(page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mFriendView::processFriends,
+                        friendsView::processFriends,
                         e -> {
                             Timber.e(e);
-                            mFriendView.showEmptyView();
-                            mFriendView.setRefreshing(false);
+                            friendsView.showEmptyView();
+                            friendsView.setRefreshing(false);
                         },
                         () -> {
                             Timber.i("Getting friends was successful");
-                            mFriendView.setRefreshing(false);
+                            friendsView.setRefreshing(false);
                         });
-        mDisposables.add(disposable);
+        this.disposables.add(disposable);
     }
 
     @Override
@@ -108,12 +108,12 @@ public class FriendsPresenter implements FriendsContract.Presenter {
 
     @Override
     public void subscribe() {
-        mFriendView.setRefreshing(true);
+        friendsView.setRefreshing(true);
         loadFriends(1);
     }
 
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

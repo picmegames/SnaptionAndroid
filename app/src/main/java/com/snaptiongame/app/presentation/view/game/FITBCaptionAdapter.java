@@ -14,37 +14,37 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by nickromero on 2/7/17.
+ * @author Nick Romero
  */
 
 /**
  * A FITBCaptionAdapter is used by the the FITB Dialog View to display sets of empty captions.
  */
 public class FITBCaptionAdapter extends RecyclerView.Adapter {
-    private List<FitBCaption> mCaptions;
-    private CaptionContract.CaptionClickListener mCaptionClickListener;
-    private FitBCaption mSelectedCaption;
+    private List<FitBCaption> captions;
+    private CaptionContract.CaptionClickListener captionClickListener;
+    private FitBCaption selectedCaption;
 
     private static final int RESTING_ELEVATION = 2;
     private static final int SELECTED_ELEVATION = 8;
 
     public FITBCaptionAdapter(List<FitBCaption> captions, CaptionContract.CaptionClickListener captionClickListener) {
-        mCaptions = captions;
-        mCaptionClickListener = captionClickListener;
+        this.captions = captions;
+        this.captionClickListener = captionClickListener;
     }
 
     public void setCaptions(List<FitBCaption> captions) {
-        this.mCaptions = captions;
+        this.captions = captions;
         notifyDataSetChanged();
     }
 
     public void resetCaption() {
-        notifyItemChanged(mCaptions.indexOf(mSelectedCaption));
-        mSelectedCaption = null;
+        notifyItemChanged(captions.indexOf(selectedCaption));
+        selectedCaption = null;
     }
 
     public FitBCaption getCaption(int index) {
-        return mCaptions.get(index);
+        return captions.get(index);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         FITBCaptionCardViewHolder holder = (FITBCaptionCardViewHolder) viewHolder;
-        FitBCaption curCaption = mCaptions.get(position);
+        FitBCaption curCaption = captions.get(position);
 
         String fitbText = curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank;
         ArrayList<String> fitbs = new ArrayList<>(
@@ -66,26 +66,26 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
                         curCaption.afterBlank)
         );
 
-        holder.mCaptionTemplateTextView.setText(fitbText);
+        holder.captionTemplateTextView.setText(fitbText);
 
-        holder.mCurrentFitB.setText((position + 1) + "/" + mCaptions.size());
+        holder.currentFitB.setText((position + 1) + "/" + captions.size());
 
-        holder.mFitBCaptionCard.setOnClickListener(v -> {
-            mCaptionClickListener.captionClicked(v, holder.getAdapterPosition(), fitbs);
-            int oldSelectedCaptionPos = mCaptions.indexOf(mSelectedCaption);
-            mSelectedCaption = curCaption;
+        holder.fitBCaptionCard.setOnClickListener(v -> {
+            captionClickListener.captionClicked(v, holder.getAdapterPosition(), fitbs);
+            int oldSelectedCaptionPos = captions.indexOf(selectedCaption);
+            selectedCaption = curCaption;
             notifyItemChanged(oldSelectedCaptionPos);
             notifyItemChanged(position);
         });
 
-        if (curCaption.equals(mSelectedCaption)) {
-            holder.mFitBCaptionCard.setCardElevation(TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, SELECTED_ELEVATION, holder.mFitBCaptionCard.getContext()
+        if (curCaption.equals(selectedCaption)) {
+            holder.fitBCaptionCard.setCardElevation(TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, SELECTED_ELEVATION, holder.fitBCaptionCard.getContext()
                             .getResources().getDisplayMetrics()));
         }
         else {
-            holder.mFitBCaptionCard.setCardElevation(TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, RESTING_ELEVATION, holder.mFitBCaptionCard.getContext()
+            holder.fitBCaptionCard.setCardElevation(TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, RESTING_ELEVATION, holder.fitBCaptionCard.getContext()
                             .getResources().getDisplayMetrics()));
         }
     }
@@ -97,11 +97,11 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mCaptions.size();
+        return captions.size();
     }
 
     public void clearCaptions() {
-        mCaptions.clear();
+        captions.clear();
         notifyDataSetChanged();
     }
 }

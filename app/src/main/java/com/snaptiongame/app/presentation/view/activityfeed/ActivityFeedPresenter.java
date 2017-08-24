@@ -13,14 +13,14 @@ import timber.log.Timber;
 
 public class ActivityFeedPresenter implements ActivityFeedContract.Presenter {
 
-    private ActivityFeedContract.View mActivityFeedView;
+    private ActivityFeedContract.View activityFeedView;
 
-    private CompositeDisposable mDisposables;
+    private CompositeDisposable disposables;
 
     public ActivityFeedPresenter(ActivityFeedContract.View activityFeedView) {
-        mActivityFeedView = activityFeedView;
-        mActivityFeedView.setPresenter(this);
-        mDisposables = new CompositeDisposable();
+        this.activityFeedView = activityFeedView;
+        this.activityFeedView.setPresenter(this);
+        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -29,26 +29,26 @@ public class ActivityFeedPresenter implements ActivityFeedContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         items -> {
-                            mActivityFeedView.addActivityFeedItems(items);
-                            mActivityFeedView.setRefreshing(false);
+                            activityFeedView.addActivityFeedItems(items);
+                            activityFeedView.setRefreshing(false);
                         },
                         e -> {
                             Timber.e(e);
-                            mActivityFeedView.setRefreshing(false);
-                            mActivityFeedView.showEmptyView();
+                            activityFeedView.setRefreshing(false);
+                            activityFeedView.showEmptyView();
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
     public void subscribe() {
-        mActivityFeedView.setRefreshing(true);
+        activityFeedView.setRefreshing(true);
         loadActivityFeed(1);
     }
 
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

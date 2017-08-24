@@ -9,7 +9,7 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Created by BrianGouldsberry on 3/6/17.
+ * @author Brian Gouldsberry
  */
 
 public class FriendConverterTest {

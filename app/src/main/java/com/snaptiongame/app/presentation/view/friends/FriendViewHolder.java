@@ -23,25 +23,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.primary_text)
-    TextView mName;
+    TextView name;
     @BindView(R.id.image)
-    CircleImageView mImage;
+    CircleImageView image;
     @BindView(R.id.secondary_text)
-    TextView mUsernameField;
+    TextView usernameField;
     @BindView(R.id.add_remove_friend_icon)
-    ImageView mAddRemoveFriendIcon;
+    ImageView addRemoveFriendIcon;
 
-    private FriendItemListener mCallback;
+    private FriendItemListener callback;
     public boolean isSnaptionFriend = false;
     public String friendName;
     public boolean isCurrentUser = false;
 
-    public Context mContext;
+    public Context context;
 
     public FriendViewHolder(View itemView, FriendItemListener callback) {
         super(itemView);
-        mContext = itemView.getContext();
-        mCallback = callback;
+        context = itemView.getContext();
+        this.callback = callback;
         ButterKnife.bind(this, itemView);
 
         final ScaleAnimation growAnim = AnimUtils.getGrowAnim();
@@ -59,39 +59,39 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onAnimationEnd(Animation animation) {
                 setAddRemoveFriendIcon(isSnaptionFriend);
-                mAddRemoveFriendIcon.startAnimation(growAnim);
+                addRemoveFriendIcon.startAnimation(growAnim);
             }
         });
 
-        mAddRemoveFriendIcon.setOnClickListener(view -> {
+        addRemoveFriendIcon.setOnClickListener(view -> {
             if (isSnaptionFriend) {
-                new MaterialDialog.Builder(mContext)
-                        .title(mContext.getString(R.string.remove_friend))
-                        .content(String.format(mContext.getString(R.string.remove_friend_body), friendName))
+                new MaterialDialog.Builder(context)
+                        .title(context.getString(R.string.remove_friend))
+                        .content(String.format(context.getString(R.string.remove_friend_body), friendName))
                         .positiveText(R.string.yes)
                         .onPositive((materialDialog, dialogAction) -> {
-                            mAddRemoveFriendIcon.startAnimation(shrinkAnim);
-                            mCallback.setFriendAddRemoveState(friendName, true, getAdapterPosition());
+                            addRemoveFriendIcon.startAnimation(shrinkAnim);
+                            this.callback.setFriendAddRemoveState(friendName, true, getAdapterPosition());
                             isSnaptionFriend = false;
                         })
                         .negativeText(R.string.no)
-                        .positiveColor(ContextCompat.getColor(mContext, R.color.colorAccent))
-                        .negativeColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                        .positiveColor(ContextCompat.getColor(context, R.color.colorAccent))
+                        .negativeColor(ContextCompat.getColor(context, R.color.colorAccent))
                         .show();
             }
             else {
-                new MaterialDialog.Builder(mContext)
-                        .title(mContext.getString(R.string.add_friend))
-                        .content(String.format(mContext.getString(R.string.add_friend_body), friendName))
+                new MaterialDialog.Builder(context)
+                        .title(context.getString(R.string.add_friend))
+                        .content(String.format(context.getString(R.string.add_friend_body), friendName))
                         .positiveText(R.string.yes)
                         .onPositive((materialDialog, dialogAction) -> {
-                            mAddRemoveFriendIcon.startAnimation(shrinkAnim);
-                            mCallback.setFriendAddRemoveState(friendName, false, getAdapterPosition());
+                            addRemoveFriendIcon.startAnimation(shrinkAnim);
+                            this.callback.setFriendAddRemoveState(friendName, false, getAdapterPosition());
                             isSnaptionFriend = true;
                         })
                         .negativeText(R.string.no)
-                        .positiveColor(ContextCompat.getColor(mContext, R.color.colorAccent))
-                        .negativeColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                        .positiveColor(ContextCompat.getColor(context, R.color.colorAccent))
+                        .negativeColor(ContextCompat.getColor(context, R.color.colorAccent))
                         .show();
             }
         });
@@ -99,10 +99,10 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
 
     public void setAddRemoveFriendIcon(boolean isSnaptionFriend) {
         if (isSnaptionFriend) {
-            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
+            addRemoveFriendIcon.setImageResource(R.drawable.ic_remove_circle_outline_grey_800_24dp);
         }
         else {
-            mAddRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
+            addRemoveFriendIcon.setImageResource(R.drawable.ic_person_add_grey_800_24dp);
         }
     }
 }

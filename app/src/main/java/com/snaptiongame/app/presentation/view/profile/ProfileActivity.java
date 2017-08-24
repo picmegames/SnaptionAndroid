@@ -59,8 +59,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.R.color.transparent;
-
 /**
  * The Profile Activity is an activity that displays a Game user's information. It can be used
  * to display either the current logged in user, or the user's friend. From here, a user will be
@@ -73,46 +71,46 @@ import static android.R.color.transparent;
 public class ProfileActivity extends AppCompatActivity
         implements AppBarLayout.OnOffsetChangedListener, ProfileContract.View {
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
     @BindView(R.id.cover_photo)
-    ImageView mCoverPhoto;
+    ImageView coverPhoto;
     @BindView(R.id.profile_image)
-    ImageView mProfileImg;
+    ImageView profileImg;
     @BindView(R.id.name)
-    TextView mTitle;
+    TextView title;
     @BindView(R.id.main_title)
-    TextView mMainTitle;
+    TextView mainTitle;
     @BindView(R.id.layout)
-    CoordinatorLayout mLayout;
+    CoordinatorLayout layout;
     @BindView(R.id.app_bar)
-    AppBarLayout mAppBar;
+    AppBarLayout appBar;
     @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout mCollapsingLayout;
+    CollapsingToolbarLayout collapsingLayout;
     @BindView(R.id.tab_layout)
-    TabLayout mTabLayout;
+    TabLayout tabLayout;
     @BindView(R.id.view_pager)
-    ViewPager mViewPager;
+    ViewPager viewPager;
     @BindView(R.id.fab)
-    FloatingActionButton mFab;
+    FloatingActionButton fab;
 
-    private MaterialDialog mEditDialog;
-    private EditProfileView mEditView;
-    private ActionBar mActionBar;
-    private Uri mUri;
-    private Menu mMenu;
+    private MaterialDialog editDialog;
+    private EditProfileView editView;
+    private ActionBar actionBar;
+    private Uri uri;
+    private Menu menu;
 
-    private String mName;
-    private String mPicture;
-    private int mUserId;
+    private String name;
+    private String picture;
+    private int userId;
 
-    private int mColorPrimary;
-    private int mTransparent;
+    private int colorPrimary;
+    private int transparent;
 
-    private ProfileContract.Presenter mPresenter;
-    private boolean mIsUserProfile;
-    private boolean mHasSameUserId;
-    private boolean mIsTheTitleVisible = false;
-    private boolean mIsTheTitleContainerVisible = true;
+    private ProfileContract.Presenter presenter;
+    private boolean isUserProfile;
+    private boolean hasSameUserId;
+    private boolean isTheTitleVisible = false;
+    private boolean isTheTitleContainerVisible = true;
 
     public static final int IMAGE_PICKER_RESULT = 24;
     private static final int PROFILE_IMG_ELEVATION = 40;
@@ -121,7 +119,6 @@ public class ProfileActivity extends AppCompatActivity
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
     private static final int BLUR_RADIUS = 40;
-
     public static final String IS_CURRENT_USER = "is_current_user";
 
     /**
@@ -134,63 +131,63 @@ public class ProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
-        mPresenter = new ProfilePresenter(this);
+        presenter = new ProfilePresenter(this);
 
         // GET previous intent
         Intent profileIntent = getIntent();
-        mUserId = profileIntent.getIntExtra(User.ID, 0);
-        mIsUserProfile = profileIntent.getBooleanExtra(IS_CURRENT_USER, false);
-        mHasSameUserId = (mUserId == AuthManager.getUserId());
+        userId = profileIntent.getIntExtra(User.ID, 0);
+        isUserProfile = profileIntent.getBooleanExtra(IS_CURRENT_USER, false);
+        hasSameUserId = (userId == AuthManager.getUserId());
 
         // IF we are viewing the logged-in user's profile
-        if (mIsUserProfile || mHasSameUserId) {
-            mName = AuthManager.getUsername();
-            mPicture = AuthManager.getProfileImageUrl();
+        if (isUserProfile || hasSameUserId) {
+            name = AuthManager.getUsername();
+            picture = AuthManager.getProfileImageUrl();
             setupView();
-            ShowcaseUtils.showShowcase(this, mFab, R.string.profile_showcase_title,
+            ShowcaseUtils.showShowcase(this, fab, R.string.profile_showcase_title,
                     R.string.profile_showcase_content);
         }
         else if (profileIntent.hasExtra(User.USERNAME)) {
-            mName = profileIntent.getStringExtra(User.USERNAME);
-            mPicture = profileIntent.getStringExtra(User.IMAGE_URL);
-            mFab.setVisibility(View.GONE);
+            name = profileIntent.getStringExtra(User.USERNAME);
+            picture = profileIntent.getStringExtra(User.IMAGE_URL);
+            fab.setVisibility(View.GONE);
             setupView();
         }
         else {
-            mFab.setVisibility(View.GONE);
-            mPresenter.loadUser(mUserId);
+            fab.setVisibility(View.GONE);
+            presenter.loadUser(userId);
         }
 
         // IF the device is running Lollipop or higher, set elevation on the image
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
+            profileImg.setElevation(PROFILE_IMG_ELEVATION);
         }
 
-        mProfileImg.setOnClickListener(view -> {
-            if (mPicture != null && !mPicture.isEmpty()) {
+        profileImg.setOnClickListener(view -> {
+            if (picture != null && !picture.isEmpty()) {
                 Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
-                immersiveIntent.putExtra(ImmersiveActivity.IMAGE_URL, mPicture);
+                immersiveIntent.putExtra(ImmersiveActivity.IMAGE_URL, picture);
                 startActivity(immersiveIntent);
             }
         });
 
-        setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setDisplayShowTitleEnabled(false);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
         }
-        mAppBar.addOnOffsetChangedListener(this);
-        startAlphaAnimation(mTitle, 0, View.INVISIBLE);
+        appBar.addOnOffsetChangedListener(this);
+        startAlphaAnimation(title, 0, View.INVISIBLE);
 
-        mViewPager.setAdapter(new ProfileInfoPageAdapter(getSupportFragmentManager(), mUserId));
+        viewPager.setAdapter(new ProfileInfoPageAdapter(getSupportFragmentManager(), userId));
 
-        mTabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
         int white = ContextCompat.getColor(this, android.R.color.white);
-        mTabLayout.setTabTextColors(white, white);
+        tabLayout.setTabTextColors(white, white);
 
-        mColorPrimary = ContextCompat.getColor(this, R.color.colorPrimary);
-        mTransparent = ContextCompat.getColor(this, transparent);
+        colorPrimary = ContextCompat.getColor(this, R.color.colorPrimary);
+        transparent = ContextCompat.getColor(this, android.R.color.transparent);
 
         TransitionUtils.setupArcTransition(this, getWindow());
     }
@@ -198,19 +195,19 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void showHideAddFriend(boolean isVisible) {
         if (isVisible) {
-            mMenu.findItem(R.id.add_friend).setVisible(true);
-            mMenu.findItem(R.id.remove_friend).setVisible(false);
+            menu.findItem(R.id.add_friend).setVisible(true);
+            menu.findItem(R.id.remove_friend).setVisible(false);
         }
         else {
-            mMenu.findItem(R.id.add_friend).setVisible(false);
-            mMenu.findItem(R.id.remove_friend).setVisible(true);
+            menu.findItem(R.id.add_friend).setVisible(false);
+            menu.findItem(R.id.remove_friend).setVisible(true);
         }
     }
 
     @Override
     public void showUser(User user) {
-        mName = user.username;
-        mPicture = user.imageUrl;
+        name = user.username;
+        picture = user.imageUrl;
 
         setupView();
     }
@@ -221,19 +218,19 @@ public class ProfileActivity extends AppCompatActivity
     @OnClick(R.id.fab)
     public void showEditDialog() {
         if (isStoragePermissionGranted()) {
-            if (mEditDialog == null) {
-                mEditView = new EditProfileView(this);
+            if (editDialog == null) {
+                editView = new EditProfileView(this);
 
-                mEditDialog = new MaterialDialog.Builder(this)
+                editDialog = new MaterialDialog.Builder(this)
                         .title(getString(R.string.update_info))
-                        .customView(mEditView, false)
+                        .customView(editView, false)
                         .positiveText(getString(R.string.confirm))
                         .negativeText(R.string.cancel)
                         .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
-                            String newUsername = mEditView.getNewUsername();
+                            String newUsername = editView.getNewUsername();
 
                             if (!newUsername.contains(" ")) {
-                                mPresenter.updateUsername(AuthManager.getUsername(), new User(newUsername));
+                                presenter.updateUsername(AuthManager.getUsername(), new User(newUsername));
                             }
                             else {
                                 showUsernameFailure(getString(R.string.spaces_in_name));
@@ -242,8 +239,8 @@ public class ProfileActivity extends AppCompatActivity
                         .show();
             }
             else {
-                mEditView.clearUsernameField();
-                mEditDialog.show();
+                editView.clearUsernameField();
+                editDialog.show();
             }
         }
     }
@@ -251,19 +248,19 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.subscribe();
+        presenter.subscribe();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.unsubscribe();
+        presenter.unsubscribe();
     }
 
     private void setupView() {
         // SETUP toolbar and title with user's name
-        mTitle.setText(mName);
-        mMainTitle.setText(mName);
+        title.setText(name);
+        mainTitle.setText(name);
 
         // SHOW profile picture
         updateProfilePicture();
@@ -295,7 +292,7 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void setPresenter(ProfileContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
@@ -313,22 +310,22 @@ public class ProfileActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICKER_RESULT) {
-            mUri = data.getData();
-            mPresenter.convertImage(getContentResolver().getType(mUri), mUri);
+            uri = data.getData();
+            presenter.convertImage(getContentResolver().getType(uri), uri);
         }
     }
 
     private void updateProfilePicture() {
-        if (mEditView != null) {
-            mEditView.updateProfilePicture(mPicture);
+        if (editView != null) {
+            editView.updateProfilePicture(picture);
         }
 
         String initials = "";
-        if (!mName.isEmpty()) {
-            initials = mName.substring(0, 1);
+        if (!name.isEmpty()) {
+            initials = name.substring(0, 1);
         }
 
-        if (mPicture != null && !mPicture.isEmpty()) {
+        if (picture != null && !picture.isEmpty()) {
             RequestOptions options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
                     .placeholder(TextDrawable.builder()
@@ -337,38 +334,38 @@ public class ProfileActivity extends AppCompatActivity
                             .height(DEFAULT_IMG_SIZE)
                             .toUpperCase()
                             .endConfig()
-                            .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)))
+                            .buildRound(initials, ColorGenerator.MATERIAL.getColor(name)))
                     .dontAnimate();
 
             Glide.with(this)
-                    .load(mPicture)
+                    .load(picture)
                     .apply(options)
                     .listener(listener)
-                    .into(mProfileImg);
+                    .into(profileImg);
 
             options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
-                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(mPicture)))
+                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(picture)))
                     .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(this, BLUR_RADIUS),
                             new ColorFilterTransformation(this, R.color.colorPrimary)));
 
             Glide.with(this)
-                    .load(mPicture)
+                    .load(picture)
                     .apply(options)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .listener(listener)
-                    .into(mCoverPhoto);
+                    .into(coverPhoto);
         }
         else {
-            mProfileImg.setImageDrawable(TextDrawable.builder()
+            profileImg.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(DEFAULT_IMG_SIZE)
                     .height(DEFAULT_IMG_SIZE)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(initials, ColorGenerator.MATERIAL.getColor(mName)));
+                    .buildRound(initials, ColorGenerator.MATERIAL.getColor(name)));
 
-            mCoverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            coverPhoto.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
             shouldLoadHideAddFriend();
         }
@@ -389,47 +386,47 @@ public class ProfileActivity extends AppCompatActivity
     };
 
     private void shouldLoadHideAddFriend() {
-        if (!mHasSameUserId && AuthManager.isLoggedIn()) {
-            mPresenter.loadShouldHideAddFriend(mUserId);
+        if (!hasSameUserId && AuthManager.isLoggedIn()) {
+            presenter.loadShouldHideAddFriend(userId);
         }
     }
 
     @Override
     public void showProfilePictureSuccess() {
-        Snackbar.make(mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
-        mPicture = AuthManager.getProfileImageUrl();
+        Snackbar.make(layout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
+        picture = AuthManager.getProfileImageUrl();
         updateProfilePicture();
     }
 
     @Override
     public void showProfilePictureFailure() {
-        Snackbar.make(mLayout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(layout, getString(R.string.update_profile_picture_success), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showUsernameSuccess(String oldUsername, User user) {
-        Snackbar.make(mLayout, getString(R.string.update_success), Snackbar.LENGTH_LONG)
+        Snackbar.make(layout, getString(R.string.update_success), Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.undo), view ->
-                        mPresenter.updateUsername(user.username, new User(oldUsername)))
+                        presenter.updateUsername(user.username, new User(oldUsername)))
                 .show();
-        mTitle.setText(user.username);
-        mMainTitle.setText(user.username);
-        mEditView.updateUsername(user.username);
+        title.setText(user.username);
+        mainTitle.setText(user.username);
+        editView.updateUsername(user.username);
     }
 
     @Override
     public void showRemoveFriendResult(boolean success) {
-        String message = String.format(getString(R.string.remove_friend_failure), mName);
+        String message = String.format(getString(R.string.remove_friend_failure), name);
         Snackbar snackbar;
 
         if (success) {
-            message = String.format(getString(R.string.remove_friend_success), mName);
-            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
-            snackbar.setAction(R.string.undo, view -> mPresenter.addFriend(mUserId));
+            message = String.format(getString(R.string.remove_friend_success), name);
+            snackbar = Snackbar.make(layout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.undo, view -> presenter.addFriend(userId));
         }
         else {
-            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
-            snackbar.setAction(R.string.try_again, view -> mPresenter.removeFriend(mUserId));
+            snackbar = Snackbar.make(layout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.try_again, view -> presenter.removeFriend(userId));
         }
 
         snackbar.show();
@@ -437,24 +434,24 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void showAddFriendResult(boolean success) {
-        String message = String.format(getString(R.string.add_friend_failure), mName);
+        String message = String.format(getString(R.string.add_friend_failure), name);
         Snackbar snackbar;
 
         if (success) {
-            message = String.format(getString(R.string.add_friend_success), mName);
-            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
-            snackbar.setAction(R.string.undo, view -> mPresenter.removeFriend(mUserId));
+            message = String.format(getString(R.string.add_friend_success), name);
+            snackbar = Snackbar.make(layout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.undo, view -> presenter.removeFriend(userId));
         }
         else {
-            snackbar = Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG);
-            snackbar.setAction(R.string.try_again, view -> mPresenter.addFriend(mUserId));
+            snackbar = Snackbar.make(layout, message, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.try_again, view -> presenter.addFriend(userId));
         }
         snackbar.show();
     }
 
     @Override
     public void showUsernameFailure(String message) {
-        Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG)
+        Snackbar.make(layout, message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.try_again, view -> showEditDialog())
                 .show();
     }
@@ -462,14 +459,14 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu, menu);
-        mMenu = menu;
+        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (!mIsUserProfile && !mHasSameUserId) {
+        if (!isUserProfile && !hasSameUserId) {
             menu.findItem(R.id.log_out).setVisible(false);
         }
         return true;
@@ -499,16 +496,16 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mFab.setVisibility(View.GONE);
+        fab.setVisibility(View.GONE);
     }
 
     private void addFriend() {
         new MaterialDialog.Builder(this)
                 .title(R.string.add_friend)
-                .content(String.format(getString(R.string.add_friend_body), mName))
+                .content(String.format(getString(R.string.add_friend_body), name))
                 .positiveText(R.string.yes)
                 .negativeText(R.string.no)
-                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> mPresenter.addFriend(mUserId))
+                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> presenter.addFriend(userId))
                 .cancelable(true)
                 .show();
     }
@@ -516,10 +513,10 @@ public class ProfileActivity extends AppCompatActivity
     private void removeFriend() {
         new MaterialDialog.Builder(this)
                 .title(R.string.remove_friend)
-                .content(String.format(getString(R.string.remove_friend_body), mName))
+                .content(String.format(getString(R.string.remove_friend_body), name))
                 .positiveText(R.string.yes)
                 .negativeText(R.string.no)
-                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> mPresenter.removeFriend(mUserId))
+                .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> presenter.removeFriend(userId))
                 .cancelable(true)
                 .show();
     }
@@ -531,7 +528,7 @@ public class ProfileActivity extends AppCompatActivity
                 .positiveText(R.string.yes)
                 .negativeText(R.string.no)
                 .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                    mPresenter.logout();
+                    presenter.logout();
                     finish();
                 })
                 .show();
@@ -551,49 +548,49 @@ public class ProfileActivity extends AppCompatActivity
         handleAlphaOnTitle(percentage);
         handleToolbarTitleVisibility(percentage);
 
-        if (Math.abs(offset) >= mAppBar.getHeight() - TypedValue.applyDimension(
+        if (Math.abs(offset) >= appBar.getHeight() - TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics())) {
-            mActionBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
+            actionBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                     getResources().getDisplayMetrics()));
-            mToolbar.setBackgroundColor(mColorPrimary);
+            toolbar.setBackgroundColor(colorPrimary);
         }
         else {
-            mActionBar.setElevation(0);
-            mToolbar.setBackgroundColor(mTransparent);
+            actionBar.setElevation(0);
+            toolbar.setBackgroundColor(transparent);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mLayout.setPadding(0, (int) Math.floor(ProfileImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);
+            layout.setPadding(0, (int) Math.floor(ProfileImageBehavior.getStatusBarHeight(this) * percentage), 0, 0);
         }
     }
 
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-            if (!mIsTheTitleVisible) {
-                startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
-                mIsTheTitleVisible = true;
+            if (!isTheTitleVisible) {
+                startAlphaAnimation(title, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                isTheTitleVisible = true;
             }
         }
         else {
-            if (mIsTheTitleVisible) {
-                startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
-                mIsTheTitleVisible = false;
+            if (isTheTitleVisible) {
+                startAlphaAnimation(title, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                isTheTitleVisible = false;
             }
         }
     }
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if (mIsTheTitleContainerVisible) {
-                startAlphaAnimation(mMainTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
-                mIsTheTitleContainerVisible = false;
+            if (isTheTitleContainerVisible) {
+                startAlphaAnimation(mainTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                isTheTitleContainerVisible = false;
             }
 
         }
         else {
-            if (!mIsTheTitleContainerVisible) {
-                startAlphaAnimation(mMainTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
-                mIsTheTitleContainerVisible = true;
+            if (!isTheTitleContainerVisible) {
+                startAlphaAnimation(mainTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                isTheTitleContainerVisible = true;
             }
         }
     }

@@ -30,16 +30,16 @@ import butterknife.OnClick;
 
 public class OnboardingActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     @BindView(R.id.prev_button)
-    ImageButton mSkipPrevButton;
+    ImageButton skipPrevButton;
     @BindView(R.id.next_button)
-    ImageButton mNextDoneButton;
+    ImageButton nextDoneButton;
     @BindView(R.id.view_pager)
-    ViewPager mViewPager;
+    ViewPager viewPager;
     @BindView(R.id.dot_tabs)
-    TabLayout mDotTabLayout;
+    TabLayout dotTabLayout;
 
-    private List<OnboardingInfo> mOnboardingInfo;
-    private SharedPreferences mPreferences;
+    private List<OnboardingInfo> onboardingInfo;
+    private SharedPreferences preferences;
     private boolean isLastPage = false;
 
     private final OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -55,25 +55,25 @@ public class OnboardingActivity extends AppCompatActivity implements ViewPager.O
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPreferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        boolean isFirstRun = mPreferences.getBoolean(FIRST_RUN, true);
+        preferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        boolean isFirstRun = preferences.getBoolean(FIRST_RUN, true);
 
         if (isFirstRun) {
             setContentView(R.layout.activity_onboarding);
             ButterKnife.bind(this);
 
-            mNextDoneButton.getBackground().setAlpha(BUTTON_ALPHA);
-            mSkipPrevButton.getBackground().setAlpha(BUTTON_ALPHA);
+            nextDoneButton.getBackground().setAlpha(BUTTON_ALPHA);
+            skipPrevButton.getBackground().setAlpha(BUTTON_ALPHA);
 
-            mOnboardingInfo = new ArrayList<>();
-            mOnboardingInfo.add(new OnboardingInfo(R.string.title_1, R.string.desc_1, R.string.anim_1));
-            mOnboardingInfo.add(new OnboardingInfo(R.string.title_2, R.string.desc_2, R.string.anim_2));
-            mOnboardingInfo.add(new OnboardingInfo(R.string.title_3, R.string.desc_3, R.string.anim_3));
+            onboardingInfo = new ArrayList<>();
+            onboardingInfo.add(new OnboardingInfo(R.string.title_1, R.string.desc_1, R.string.anim_1));
+            onboardingInfo.add(new OnboardingInfo(R.string.title_2, R.string.desc_2, R.string.anim_2));
+            onboardingInfo.add(new OnboardingInfo(R.string.title_3, R.string.desc_3, R.string.anim_3));
 
-            mViewPager.setAdapter(new OnboardingPagerAdapter(getSupportFragmentManager(), mOnboardingInfo));
-            mViewPager.addOnPageChangeListener(this);
+            viewPager.setAdapter(new OnboardingPagerAdapter(getSupportFragmentManager(), onboardingInfo));
+            viewPager.addOnPageChangeListener(this);
 
-            mDotTabLayout.setupWithViewPager(mViewPager, true);
+            dotTabLayout.setupWithViewPager(viewPager, true);
         }
         else {
             goToMain();
@@ -87,22 +87,22 @@ public class OnboardingActivity extends AppCompatActivity implements ViewPager.O
 
     @Override
     public void onPageSelected(int position) {
-        if (position == mOnboardingInfo.size() - 1) {
+        if (position == onboardingInfo.size() - 1) {
             isLastPage = true;
-            animate(mNextDoneButton, R.drawable.ic_check_white_24dp, FULL_ROTATION, LONG_ROTATION_DURATION);
+            animate(nextDoneButton, R.drawable.ic_check_white_24dp, FULL_ROTATION, LONG_ROTATION_DURATION);
         }
         else {
             if (isLastPage) {
                 isLastPage = false;
-                animate(mNextDoneButton, R.drawable.ic_arrow_forward_white_24dp, REVERSE_FULL_ROTATION, LONG_ROTATION_DURATION);
+                animate(nextDoneButton, R.drawable.ic_arrow_forward_white_24dp, REVERSE_FULL_ROTATION, LONG_ROTATION_DURATION);
             }
         }
 
         if (position == 0) {
-            mSkipPrevButton.setVisibility(View.INVISIBLE);
+            skipPrevButton.setVisibility(View.INVISIBLE);
         }
         else {
-            mSkipPrevButton.setVisibility(View.VISIBLE);
+            skipPrevButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -113,18 +113,18 @@ public class OnboardingActivity extends AppCompatActivity implements ViewPager.O
 
     @OnClick(R.id.prev_button)
     public void onClickPrevButton() {
-        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
     }
 
     @OnClick(R.id.next_button)
     public void onClickNextButton() {
-        int currItem = mViewPager.getCurrentItem();
+        int currItem = viewPager.getCurrentItem();
 
-        if (currItem < mOnboardingInfo.size() - 1) {
-            mViewPager.setCurrentItem(currItem + 1);
+        if (currItem < onboardingInfo.size() - 1) {
+            viewPager.setCurrentItem(currItem + 1);
         }
         else {
-            mPreferences.edit().putBoolean(FIRST_RUN, false).apply();
+            preferences.edit().putBoolean(FIRST_RUN, false).apply();
             goToMain();
         }
     }

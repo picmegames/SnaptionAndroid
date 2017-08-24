@@ -35,13 +35,13 @@ import java.security.MessageDigest;
  */
 
 public class ColorFilterTransformation extends BitmapTransformation {
-    private BitmapPool mBitmapPool;
+    private BitmapPool bitmapPool;
 
-    private int mColor;
+    private int color;
 
     public ColorFilterTransformation(Context context, int color) {
-        mBitmapPool = Glide.get(context).getBitmapPool();
-        mColor = color;
+        bitmapPool = Glide.get(context).getBitmapPool();
+        this.color = color;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ColorFilterTransformation extends BitmapTransformation {
 
         Bitmap.Config config =
                 source.getConfig() != null ? source.getConfig() : Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = mBitmapPool.get(width, height, config);
+        Bitmap bitmap = this.bitmapPool.get(width, height, config);
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(width, height, config);
         }
@@ -59,7 +59,7 @@ public class ColorFilterTransformation extends BitmapTransformation {
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColorFilter(new PorterDuffColorFilter(mColor, PorterDuff.Mode.SRC_ATOP));
+        paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP));
         canvas.drawBitmap(source, 0, 0, paint);
 
         return bitmap;
@@ -67,7 +67,7 @@ public class ColorFilterTransformation extends BitmapTransformation {
 
     @Override
     public void updateDiskCacheKey(MessageDigest messageDigest) {
-        String id = "ColorFilterTransformation(color=" + mColor + ")";
+        String id = "ColorFilterTransformation(color=" + color + ")";
         messageDigest.update(id.getBytes());
     }
 }

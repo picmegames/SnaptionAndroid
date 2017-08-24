@@ -23,14 +23,14 @@ import timber.log.Timber;
  */
 public class WallPresenter implements WallContract.Presenter {
     @NonNull
-    private final WallContract.View mWallView;
+    private final WallContract.View wallView;
     @NonNull
-    private CompositeDisposable mDisposables;
+    private CompositeDisposable disposables;
 
-    private List<String> mTags;
-    private String mStatus;
-    private int mUserId;
-    private int mType;
+    private List<String> tags;
+    private String status;
+    private int userId;
+    private int type;
 
     /**
      * This constructor creates a new instance of a Wall Presenter
@@ -39,11 +39,11 @@ public class WallPresenter implements WallContract.Presenter {
      * @param wallView The view that it will present to
      */
     public WallPresenter(@NonNull WallContract.View wallView, int userId, int type) {
-        mWallView = wallView;
-        mDisposables = new CompositeDisposable();
-        mWallView.setPresenter(this);
-        mUserId = userId;
-        mType = type;
+        this.wallView = wallView;
+        disposables = new CompositeDisposable();
+        this.wallView.setPresenter(this);
+        this.userId = userId;
+        this.type = type;
     }
 
     /**
@@ -54,24 +54,24 @@ public class WallPresenter implements WallContract.Presenter {
     @Override
     public void loadGames(int type, List<String> tags, String status, int page) {
         if (tags != null) {
-            mTags = tags;
+            this.tags = tags;
         }
 
-        mStatus = status;
+        this.status = status;
 
         Single<List<Game>> gameRequest;
         switch (type) {
             case WallContract.DISCOVER:
-                gameRequest = GameProvider.getGamesDiscover(mTags, mStatus, page);
+                gameRequest = GameProvider.getGamesDiscover(this.tags, this.status, page);
                 break;
             case WallContract.POPULAR:
-                gameRequest = GameProvider.getGamesPopular(mTags, mStatus, page);
+                gameRequest = GameProvider.getGamesPopular(this.tags, this.status, page);
                 break;
             case WallContract.HISTORY:
-                gameRequest = GameProvider.getGamesHistory(mUserId, page);
+                gameRequest = GameProvider.getGamesHistory(userId, page);
                 break;
             default:
-                gameRequest = GameProvider.getGamesMine(mTags, mStatus, page);
+                gameRequest = GameProvider.getGamesMine(this.tags, this.status, page);
                 break;
         }
 
@@ -79,17 +79,17 @@ public class WallPresenter implements WallContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         games -> {
-                            mWallView.showGames(games);
+                            wallView.showGames(games);
                             Timber.i("Getting Snaptions completed successfully");
-                            mWallView.setRefreshing(false);
+                            wallView.setRefreshing(false);
                         },
                         e -> {
                             Timber.e(e);
-                            mWallView.showDisconnectedView();
-                            mWallView.setRefreshing(false);
+                            wallView.showDisconnectedView();
+                            wallView.setRefreshing(false);
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     /**
@@ -98,8 +98,8 @@ public class WallPresenter implements WallContract.Presenter {
      */
     @Override
     public void subscribe() {
-        mWallView.setRefreshing(true);
-        loadGames(mType, mTags, mStatus, 1);
+        wallView.setRefreshing(true);
+        loadGames(type, tags, status, 1);
     }
 
     /**
@@ -108,6 +108,6 @@ public class WallPresenter implements WallContract.Presenter {
      */
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

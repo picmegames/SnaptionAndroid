@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class LeaderboardsPageAdapter extends FragmentPagerAdapter {
 
-    private Fragment mCurrentFragment;
+    private Fragment currentFragment;
 
     private static final int PAGE_COUNT = 2;
     public static final int EXPERIENCE_PAGE = 0;
@@ -30,14 +30,14 @@ public class LeaderboardsPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case EXPERIENCE_PAGE:
-                mCurrentFragment = LeaderboardListFragment.getInstance(EXPERIENCE_PAGE);
+                currentFragment = LeaderboardListFragment.getInstance(EXPERIENCE_PAGE);
                 break;
 
             case RANK_PAGE:
-                mCurrentFragment = LeaderboardListFragment.getInstance(RANK_PAGE);
+                currentFragment = LeaderboardListFragment.getInstance(RANK_PAGE);
                 break;
         }
-        return mCurrentFragment;
+        return currentFragment;
     }
 
     @Override

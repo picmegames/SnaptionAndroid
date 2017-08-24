@@ -10,42 +10,42 @@ import android.view.View;
  */
 
 public class WallSpacesItemDecoration extends RecyclerView.ItemDecoration {
-    private int mSpace;
-    private boolean mIsList;
+    private int space;
+    private boolean isList;
 
     private static final int RIGHT = 1;
 
     public WallSpacesItemDecoration(int space, boolean isList) {
-        this.mSpace = space;
-        this.mIsList = isList;
+        this.space = space;
+        this.isList = isList;
     }
 
     public void setIsList(boolean isList) {
-        this.mIsList = isList;
+        this.isList = isList;
     }
 
     public void setSpacing(int spacing) {
-        this.mSpace = spacing;
+        this.space = spacing;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        if (!mIsList) {
+        if (!isList) {
             int spanIndex = ((StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams()).getSpanIndex();
 
             if (spanIndex == RIGHT) {
-                outRect.left = mSpace / 2;
-                outRect.right = mSpace;
+                outRect.left = space / 2;
+                outRect.right = space;
             }
             else {
-                outRect.left = mSpace;
-                outRect.right = mSpace / 2;
+                outRect.left = space;
+                outRect.right = space / 2;
             }
-            outRect.bottom = mSpace * 4;
-            outRect.top = mSpace;
+            outRect.bottom = space * 4;
+            outRect.top = space;
         }
         else {
-            outRect.bottom = mSpace * 2;
+            outRect.bottom = space * 2;
         }
     }
 }

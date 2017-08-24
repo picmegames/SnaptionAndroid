@@ -23,7 +23,7 @@ import butterknife.OnClick;
 
 public class ImmersiveActivity extends AppCompatActivity {
     @BindView(R.id.photo_view)
-    PhotoView mPhotoView;
+    PhotoView photoView;
 
     public static final String IMAGE_URL = "imageUrl";
 
@@ -35,7 +35,7 @@ public class ImmersiveActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String imageUrl = intent.getStringExtra(IMAGE_URL);
-        ViewCompat.setTransitionName(mPhotoView, imageUrl);
+        ViewCompat.setTransitionName(photoView, imageUrl);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             RequestOptions options = new RequestOptions()
@@ -45,7 +45,7 @@ public class ImmersiveActivity extends AppCompatActivity {
             Glide.with(this)
                     .load(imageUrl)
                     .apply(options)
-                    .into(mPhotoView);
+                    .into(photoView);
         }
 
         TransitionUtils.setupArcTransition(this, getWindow());

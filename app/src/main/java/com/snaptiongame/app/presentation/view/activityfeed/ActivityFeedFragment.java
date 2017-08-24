@@ -31,17 +31,17 @@ import butterknife.Unbinder;
 public class ActivityFeedFragment extends Fragment implements ActivityFeedContract.View {
 
     @BindView(R.id.activity)
-    RecyclerView mActivityFeed;
+    RecyclerView activityFeed;
     @BindView(R.id.refresh_layout)
-    SwipeRefreshLayout mRefreshLayout;
+    SwipeRefreshLayout refreshLayout;
     @BindView(R.id.empty_view)
-    LinearLayout mEmptyView;
+    LinearLayout emptyView;
 
-    private ActivityFeedContract.Presenter mPresenter;
-    private Unbinder mUnbinder;
-    private ActivityFeedAdapter mAdapter;
-    private InsetDividerDecoration mDecoration;
-    private InfiniteRecyclerViewScrollListener mScrollListener;
+    private ActivityFeedContract.Presenter presenter;
+    private Unbinder unbinder;
+    private ActivityFeedAdapter adapter;
+    private InsetDividerDecoration decoration;
+    private InfiniteRecyclerViewScrollListener scrollListener;
 
     public static final String TAG = ActivityFeedFragment.class.getSimpleName();
 
@@ -54,68 +54,68 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_feed_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
-        mPresenter = new ActivityFeedPresenter(this);
+        unbinder = ButterKnife.bind(this, view);
+        presenter = new ActivityFeedPresenter(this);
 
-        mDecoration = new InsetDividerDecoration(
+        decoration = new InsetDividerDecoration(
                 ActivityFeedItemViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
                 ContextCompat.getColor(getContext(), R.color.divider));
-        mActivityFeed.addItemDecoration(mDecoration);
+        activityFeed.addItemDecoration(decoration);
 
-        mAdapter = new ActivityFeedAdapter(new ArrayList<>());
-        mActivityFeed.setAdapter(mAdapter);
+        adapter = new ActivityFeedAdapter(new ArrayList<>());
+        activityFeed.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mActivityFeed.setLayoutManager(layoutManager);
+        activityFeed.setLayoutManager(layoutManager);
 
-        mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
+        scrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                mPresenter.loadActivityFeed(page);
+                presenter.loadActivityFeed(page);
             }
         };
 
-        mActivityFeed.addOnScrollListener(mScrollListener);
+        activityFeed.addOnScrollListener(scrollListener);
 
-        mRefreshLayout.setOnRefreshListener(this::refreshActivityFeed);
+        refreshLayout.setOnRefreshListener(this::refreshActivityFeed);
 
-        mRefreshLayout.setColorSchemeColors(
+        refreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
-        mPresenter.subscribe();
+        presenter.subscribe();
 
         return view;
     }
 
     @Override
     public void setRefreshing(boolean isRefreshing) {
-        mRefreshLayout.setRefreshing(isRefreshing);
+        refreshLayout.setRefreshing(isRefreshing);
     }
 
     @Override
     public void setPresenter(ActivityFeedContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
     public void showEmptyView() {
-        mEmptyView.setVisibility(View.VISIBLE);
-        mAdapter.clear();
+        emptyView.setVisibility(View.VISIBLE);
+        adapter.clear();
     }
 
     @Override
     public void showActivityFeed() {
-        mEmptyView.setVisibility(View.GONE);
-        mActivityFeed.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+        activityFeed.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void addActivityFeedItems(List<ActivityFeedItem> items) {
-        mAdapter.addActivityItems(items);
+        adapter.addActivityItems(items);
 
-        if (!mAdapter.isEmpty()) {
+        if (!adapter.isEmpty()) {
             showActivityFeed();
         }
         else {
@@ -124,15 +124,15 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
     }
 
     public void refreshActivityFeed() {
-        mAdapter.clear();
-        mScrollListener.resetState();
-        mPresenter.subscribe();
+        adapter.clear();
+        scrollListener.resetState();
+        presenter.subscribe();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
-        mPresenter.unsubscribe();
+        unbinder.unbind();
+        presenter.unsubscribe();
     }
 }

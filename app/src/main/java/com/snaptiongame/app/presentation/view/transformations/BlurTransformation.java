@@ -36,45 +36,45 @@ import jp.wasabeef.glide.transformations.internal.RSBlur;
 public class BlurTransformation extends BitmapTransformation {
     private static int DEFAULT_DOWN_SAMPLING = 1;
 
-    private Context mContext;
-    private BitmapPool mBitmapPool;
+    private Context context;
+    private BitmapPool bitmapPool;
 
-    private int mRadius;
-    private int mSampling;
+    private int radius;
+    private int sampling;
 
     public BlurTransformation(Context context, int radius) {
-        mContext = context.getApplicationContext();
-        mBitmapPool = Glide.get(context).getBitmapPool();
-        mRadius = radius;
-        mSampling = DEFAULT_DOWN_SAMPLING;
+        this.context = context.getApplicationContext();
+        bitmapPool = Glide.get(context).getBitmapPool();
+        this.radius = radius;
+        sampling = DEFAULT_DOWN_SAMPLING;
     }
 
     @Override
     protected Bitmap transform(@NonNull BitmapPool bitmapPool, @NonNull Bitmap source, int i, int i1) {
         int width = source.getWidth();
         int height = source.getHeight();
-        int scaledWidth = width / mSampling;
-        int scaledHeight = height / mSampling;
+        int scaledWidth = width / sampling;
+        int scaledHeight = height / sampling;
 
-        Bitmap bitmap = mBitmapPool.get(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = this.bitmapPool.get(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
         }
 
         Canvas canvas = new Canvas(bitmap);
-        canvas.scale(1 / (float) mSampling, 1 / (float) mSampling);
+        canvas.scale(1 / (float) sampling, 1 / (float) sampling);
         Paint paint = new Paint();
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
         canvas.drawBitmap(source, 0, 0, paint);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             try {
-                bitmap = RSBlur.blur(mContext, bitmap, mRadius);
+                bitmap = RSBlur.blur(context, bitmap, radius);
             } catch (RSRuntimeException e) {
-                bitmap = FastBlur.blur(bitmap, mRadius, true);
+                bitmap = FastBlur.blur(bitmap, radius, true);
             }
         } else {
-            bitmap = FastBlur.blur(bitmap, mRadius, true);
+            bitmap = FastBlur.blur(bitmap, radius, true);
         }
 
         return bitmap;
@@ -82,7 +82,7 @@ public class BlurTransformation extends BitmapTransformation {
 
     @Override
     public void updateDiskCacheKey(MessageDigest messageDigest) {
-        String id = "BlurTransformation(radius=" + mRadius + ", sampling=" + mSampling + ")";
+        String id = "BlurTransformation(radius=" + radius + ", sampling=" + sampling + ")";
         messageDigest.update(id.getBytes());
     }
 }

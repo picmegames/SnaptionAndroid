@@ -13,14 +13,14 @@ import timber.log.Timber;
 
 public class MoreInfoPresenter implements MoreInfoContract.Presenter {
 
-    private MoreInfoContract.View mMoreInfoView;
-    private CompositeDisposable mDisposables;
-    private int mUserId;
+    private MoreInfoContract.View moreInfoView;
+    private CompositeDisposable disposables;
+    private int userId;
 
     public MoreInfoPresenter(MoreInfoContract.View moreInfoView, int userId) {
-        this.mMoreInfoView = moreInfoView;
-        this.mUserId = userId;
-        mDisposables = new CompositeDisposable();
+        this.moreInfoView = moreInfoView;
+        this.userId = userId;
+        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -28,19 +28,19 @@ public class MoreInfoPresenter implements MoreInfoContract.Presenter {
         Disposable disposable = UserProvider.getUserStats(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mMoreInfoView::showUserInfo,
+                        moreInfoView::showUserInfo,
                         Timber::e
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
     public void subscribe() {
-        loadMoreInfo(mUserId);
+        loadMoreInfo(userId);
     }
 
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

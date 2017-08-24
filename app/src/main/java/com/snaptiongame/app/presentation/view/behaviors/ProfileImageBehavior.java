@@ -16,16 +16,16 @@ import com.snaptiongame.app.R;
 
 public class ProfileImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
 
-    private Context mContext;
+    private Context context;
 
-    private int mCustomFinalHeight;
-    private int mStartXPosition;
-    private float mStartToolbarPosition;
-    private int mStartYPosition;
-    private int mFinalYPosition;
-    private int mStartHeight;
-    private int mFinalXPosition;
-    private float mChangeBehaviorPoint;
+    private int customFinalHeight;
+    private int startXPosition;
+    private float startToolbarPosition;
+    private int startYPosition;
+    private int finalYPosition;
+    private int startHeight;
+    private int finalXPosition;
+    private float changeBehaviorPoint;
 
     private static final int CUSTOM_Y_OFFSET = 12;
     private static final int CUSTOM_X_OFFSET = 30;
@@ -35,7 +35,7 @@ public class ProfileImageBehavior extends CoordinatorLayout.Behavior<ImageView> 
     private static final String ANDROID = "android";
 
     public ProfileImageBehavior(Context context, AttributeSet attrs) {
-        mContext = context;
+        this.context = context;
     }
 
     @Override
@@ -47,72 +47,72 @@ public class ProfileImageBehavior extends CoordinatorLayout.Behavior<ImageView> 
     public boolean onDependentViewChanged(CoordinatorLayout parent, ImageView child, View dependency) {
         maybeInitProperties(child, dependency);
 
-        final int maxScrollDistance = (int) mStartToolbarPosition;
+        final int maxScrollDistance = (int) startToolbarPosition;
         float expandedPercentageFactor = dependency.getY() / maxScrollDistance;
 
-        if (expandedPercentageFactor < mChangeBehaviorPoint) {
-            float heightFactor = (mChangeBehaviorPoint - expandedPercentageFactor) / mChangeBehaviorPoint;
+        if (expandedPercentageFactor < changeBehaviorPoint) {
+            float heightFactor = (changeBehaviorPoint - expandedPercentageFactor) / changeBehaviorPoint;
 
-            float distanceXToSubtract = ((mStartXPosition - mFinalXPosition)
+            float distanceXToSubtract = ((startXPosition - finalXPosition)
                     * heightFactor) + (child.getHeight() / 2);
-            float distanceYToSubtract = ((mStartYPosition - mFinalYPosition)
+            float distanceYToSubtract = ((startYPosition - finalYPosition)
                     * (1f - expandedPercentageFactor)) + (child.getHeight() / 2);
 
-            child.setX(mStartXPosition - distanceXToSubtract);
-            child.setY(mStartYPosition - distanceYToSubtract);
+            child.setX(startXPosition - distanceXToSubtract);
+            child.setY(startYPosition - distanceYToSubtract);
 
-            float heightToSubtract = ((mStartHeight - mCustomFinalHeight) * heightFactor);
+            float heightToSubtract = ((startHeight - customFinalHeight) * heightFactor);
 
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
-            lp.width = (int) (mStartHeight - heightToSubtract);
-            lp.height = (int) (mStartHeight - heightToSubtract);
+            lp.width = (int) (startHeight - heightToSubtract);
+            lp.height = (int) (startHeight - heightToSubtract);
             child.setLayoutParams(lp);
         }
         else {
-            float distanceYToSubtract = ((mStartYPosition - mFinalYPosition)
-                    * (1f - expandedPercentageFactor)) + (mStartHeight / 2);
+            float distanceYToSubtract = ((startYPosition - finalYPosition)
+                    * (1f - expandedPercentageFactor)) + (startHeight / 2);
 
-            child.setX(mStartXPosition - child.getWidth() / 2);
-            child.setY(mStartYPosition - distanceYToSubtract);
+            child.setX(startXPosition - child.getWidth() / 2);
+            child.setY(startYPosition - distanceYToSubtract);
 
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
-            lp.width = mStartHeight;
-            lp.height = mStartHeight;
+            lp.width = startHeight;
+            lp.height = startHeight;
             child.setLayoutParams(lp);
         }
         return true;
     }
 
     private void maybeInitProperties(ImageView child, View dependency) {
-        if (mStartYPosition == 0) {
-            mStartYPosition = (int) dependency.getY();
+        if (startYPosition == 0) {
+            startYPosition = (int) dependency.getY();
         }
 
-        if (mFinalYPosition == 0) {
-            mFinalYPosition = dependency.getHeight() / 2 + CUSTOM_Y_OFFSET;
+        if (finalYPosition == 0) {
+            finalYPosition = dependency.getHeight() / 2 + CUSTOM_Y_OFFSET;
         }
 
-        if (mStartHeight == 0) {
-            mStartHeight = child.getHeight();
+        if (startHeight == 0) {
+            startHeight = child.getHeight();
         }
 
-        if (mStartXPosition == 0) {
-            mStartXPosition = (int) (child.getX() + child.getWidth() / 2);
+        if (startXPosition == 0) {
+            startXPosition = (int) (child.getX() + child.getWidth() / 2);
         }
 
-        if (mFinalXPosition == 0) {
-            mFinalXPosition = mContext.getResources().getDimensionPixelOffset(
-                    R.dimen.abc_action_bar_content_inset_material) + mCustomFinalHeight / 2 +
+        if (finalXPosition == 0) {
+            finalXPosition = context.getResources().getDimensionPixelOffset(
+                    R.dimen.abc_action_bar_content_inset_material) + customFinalHeight / 2 +
                     Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, CUSTOM_X_OFFSET,
                             dependency.getContext().getResources().getDisplayMetrics()));
         }
 
-        if (mStartToolbarPosition == 0) {
-            mStartToolbarPosition = dependency.getY();
+        if (startToolbarPosition == 0) {
+            startToolbarPosition = dependency.getY();
         }
 
-        if (mChangeBehaviorPoint == 0) {
-            mChangeBehaviorPoint = (child.getHeight() - mCustomFinalHeight) / (2f * (mStartYPosition - mFinalYPosition));
+        if (changeBehaviorPoint == 0) {
+            changeBehaviorPoint = (child.getHeight() - customFinalHeight) / (2f * (startYPosition - finalYPosition));
         }
     }
 

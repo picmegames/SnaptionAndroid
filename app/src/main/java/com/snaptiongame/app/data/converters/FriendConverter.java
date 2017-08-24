@@ -14,7 +14,7 @@ import com.snaptiongame.app.data.models.User;
 import java.lang.reflect.Type;
 
 /**
- * Created by BrianGouldsberry on 1/29/17.
+ * @author Brian Gouldsberry
  */
 
 public class FriendConverter implements JsonSerializer<Friend>, JsonDeserializer<Friend> {

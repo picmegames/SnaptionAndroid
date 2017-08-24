@@ -31,8 +31,8 @@ import java.util.List;
  */
 
 public class WallAdapter extends RecyclerView.Adapter {
-    private List<Game> mGames;
-    private final ItemListener mCallback;
+    private List<Game> games;
+    private final ItemListener callback;
 
     private boolean isList = false;
     private int lastPosition = -1;
@@ -42,19 +42,19 @@ public class WallAdapter extends RecyclerView.Adapter {
     private static final int AVATAR_SIZE_LIST = 40;
 
     public WallAdapter(List<Game> snaptions) {
-        this.mGames = snaptions;
+        this.games = snaptions;
 
-        mCallback = new ItemListener() {
+        callback = new ItemListener() {
             @Override
             public void updateUpvote(boolean value, int index) {
-                mGames.get(index).beenUpvoted = value;
-                mGames.get(index).numUpvotes = value ? mGames.get(index).numUpvotes + 1 :
-                        mGames.get(index).numUpvotes -1;
+                games.get(index).beenUpvoted = value;
+                games.get(index).numUpvotes = value ? games.get(index).numUpvotes + 1 :
+                        games.get(index).numUpvotes -1;
             }
 
             @Override
             public void updateFlag(int index, RecyclerView.ViewHolder holder) {
-                mGames.remove(index);
+                games.remove(index);
                 notifyItemRemoved(index);
                 Toast.makeText(holder.itemView.getContext(), R.string.flagged, Toast.LENGTH_LONG).show();
             }
@@ -65,73 +65,73 @@ public class WallAdapter extends RecyclerView.Adapter {
     public GameCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(isList ? R.layout.game_card_list : R.layout.game_card_grid, parent, false);
-        return new GameCardViewHolder(view, mCallback, isList);
+        return new GameCardViewHolder(view, callback, isList);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         GameCardViewHolder holder = (GameCardViewHolder) viewHolder;
-        Game curGame = mGames.get(position);
+        Game curGame = games.get(position);
         RequestOptions options;
 
-        holder.mGameId = curGame.id;
-        holder.mCreatorId = curGame.creatorId;
-        holder.mCreator = curGame.creatorName;
-        holder.mCreatorImageUrl = curGame.creatorImage;
+        holder.gameId = curGame.id;
+        holder.creatorId = curGame.creatorId;
+        holder.creator = curGame.creatorName;
+        holder.creatorImageUrl = curGame.creatorImage;
         holder.isPublic = curGame.isPublic;
 
         if (holder.isPublic) {
-            holder.mPrivateIcon.setVisibility(View.INVISIBLE);
+            holder.privateIcon.setVisibility(View.INVISIBLE);
         }
         else {
-            holder.mPrivateIcon.setVisibility(View.VISIBLE);
+            holder.privateIcon.setVisibility(View.VISIBLE);
         }
 
         if (curGame.imageUrl != null) {
-            holder.mImage.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
+            holder.image.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
 
             options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
                     .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.imageUrl)));
 
-            Glide.with(holder.mContext)
+            Glide.with(holder.context)
                     .load(curGame.imageUrl)
                     .apply(options)
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(holder.mImage);
-            holder.mImageUrl = curGame.imageUrl;
-            ViewCompat.setTransitionName(holder.mImage, curGame.imageUrl);
+                    .into(holder.image);
+            holder.imageUrl = curGame.imageUrl;
+            ViewCompat.setTransitionName(holder.image, curGame.imageUrl);
         }
         else {
-            Glide.with(holder.mContext)
-                    .clear(holder.mImage);
+            Glide.with(holder.context)
+                    .clear(holder.image);
         }
 
-        String creatorName = String.format(holder.mContext.getString(R.string.posted_by), curGame.creatorName);
+        String creatorName = String.format(holder.context.getString(R.string.posted_by), curGame.creatorName);
 
         if (isList) {
             creatorName = curGame.creatorName;
         }
-        holder.mCreatorName.setText(creatorName);
+        holder.creatorName.setText(creatorName);
 
         if (curGame.topCaption != null) {
-            holder.mCaptionerImage.setVisibility(View.VISIBLE);
-            holder.mCaptionerName.setVisibility(View.VISIBLE);
-            holder.mTopCaption.setVisibility(View.VISIBLE);
+            holder.captionerImage.setVisibility(View.VISIBLE);
+            holder.captionerName.setVisibility(View.VISIBLE);
+            holder.topCaption.setVisibility(View.VISIBLE);
 
             if (curGame.topCaption.creatorPicture != null) {
 
                 options = new RequestOptions()
-                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                         .dontAnimate();
 
-                Glide.with(holder.mContext)
+                Glide.with(holder.context)
                         .load(curGame.topCaption.creatorPicture)
                         .apply(options)
-                        .into(holder.mCaptionerImage);
+                        .into(holder.captionerImage);
             }
             else {
-                holder.mCaptionerImage.setImageDrawable(TextDrawable.builder()
+                holder.captionerImage.setImageDrawable(TextDrawable.builder()
                         .beginConfig()
                         .width(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
                         .height(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
@@ -140,35 +140,35 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .buildRound(curGame.topCaption.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curGame.topCaption.creatorName)));
             }
-            ViewCompat.setTransitionName(holder.mCaptionerImage, holder.mContext.getString(R.string.profile_transition));
-            holder.mCaptionerName.setText(curGame.topCaption.creatorName);
-            holder.mCaptionerId = curGame.topCaption.creatorId;
-            holder.mCaptioner = curGame.topCaption.creatorName;
-            holder.mCaptionerImageUrl = curGame.topCaption.creatorPicture;
-            holder.mTopCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
+            ViewCompat.setTransitionName(holder.captionerImage, holder.context.getString(R.string.profile_transition));
+            holder.captionerName.setText(curGame.topCaption.creatorName);
+            holder.captionerId = curGame.topCaption.creatorId;
+            holder.captioner = curGame.topCaption.creatorName;
+            holder.captionerImageUrl = curGame.topCaption.creatorPicture;
+            holder.topCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
                     TextStyleUtils.getTextUnderlined(curGame.topCaption.caption),
                     curGame.topCaption.assocFitB.afterBlank));
         }
         else {
-            holder.mCaptionerImage.setVisibility(View.GONE);
-            holder.mCaptionerName.setVisibility(View.GONE);
-            holder.mTopCaption.setVisibility(View.GONE);
+            holder.captionerImage.setVisibility(View.GONE);
+            holder.captionerName.setVisibility(View.GONE);
+            holder.topCaption.setVisibility(View.GONE);
         }
 
         if (isList) {
             if (curGame.creatorImage != null) {
 
                 options = new RequestOptions()
-                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                        .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                         .dontAnimate();
 
-                Glide.with(holder.mContext)
+                Glide.with(holder.context)
                         .load(curGame.creatorImage)
                         .apply(options)
-                        .into(holder.mCreatorImage);
+                        .into(holder.creatorImage);
             }
             else {
-                holder.mCreatorImage.setImageDrawable(TextDrawable.builder()
+                holder.creatorImage.setImageDrawable(TextDrawable.builder()
                         .beginConfig()
                         .width(AVATAR_SIZE_GRID)
                         .height(AVATAR_SIZE_GRID)
@@ -177,21 +177,21 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .buildRound(curGame.creatorName.substring(0, 1),
                                 ColorGenerator.MATERIAL.getColor(curGame.creatorName)));
             }
-            ViewCompat.setTransitionName(holder.mCreatorImage, holder.mContext.getString(R.string.profile_transition));
+            ViewCompat.setTransitionName(holder.creatorImage, holder.context.getString(R.string.profile_transition));
 
-            holder.mTimeLeft.setText(DateUtils.getTimeLeftLabel(holder.mContext, curGame.endDate));
+            holder.timeLeft.setText(DateUtils.getTimeLeftLabel(holder.context, curGame.endDate));
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted);
-        holder.mNumberOfUpvotes.setText(String.valueOf(curGame.numUpvotes));
+        holder.numberOfUpvotes.setText(String.valueOf(curGame.numUpvotes));
 
         holder.isClosed = DateUtils.isPastDate(curGame.endDate, currentTime);
 
         if (holder.isClosed) {
-            holder.mGameStatus.setText(holder.mContext.getString(R.string.game_closed));
+            holder.gameStatus.setText(holder.context.getString(R.string.game_closed));
         }
         else {
-            holder.mGameStatus.setText(holder.mContext.getString(R.string.game_open));
+            holder.gameStatus.setText(holder.context.getString(R.string.game_open));
         }
 
         setAnimation(holder.itemView, position);
@@ -209,21 +209,21 @@ public class WallAdapter extends RecyclerView.Adapter {
     }
 
     public void addGames(List<Game> games) {
-        int oldSize = mGames.size();
-        mGames.addAll(games);
+        int oldSize = this.games.size();
+        this.games.addAll(games);
         currentTime = DateUtils.getNow();
-        notifyItemRangeInserted(oldSize, mGames.size());
+        notifyItemRangeInserted(oldSize, this.games.size());
     }
 
     public void clear() {
         lastPosition = -1;
-        int oldSize = mGames.size();
-        mGames.clear();
+        int oldSize = games.size();
+        games.clear();
         notifyItemRangeRemoved(0, oldSize);
     }
 
     public boolean isEmpty() {
-        return mGames.isEmpty();
+        return games.isEmpty();
     }
 
     @Override
@@ -233,6 +233,6 @@ public class WallAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mGames.size();
+        return games.size();
     }
 }

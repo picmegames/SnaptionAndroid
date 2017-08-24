@@ -1,14 +1,13 @@
 package com.snaptiongame.app.data.models;
 
 /**
- * Created by BrianGouldsberry on 2/27/17.
+ * @author Brian Gouldsberry
  */
 
 public class GameInvite {
     public String inviteToken;
     public int gameId;
 
-    public static final String TOKEN = "token";
     public static final String INVITE_TOKEN = "inviteToken";
     public static final String GAME_ID = "gameId";
 

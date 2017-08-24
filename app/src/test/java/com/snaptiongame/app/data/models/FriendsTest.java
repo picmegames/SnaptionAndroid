@@ -3,7 +3,7 @@ package com.snaptiongame.app.data.models;
 import org.junit.Test;
 
 /**
- * Created by BrianGouldsberry on 1/23/17.
+ * @author Brian Gouldsberry
  * friends constructor comes in the form of Friend(String id, String first, String last, String fullName, String userName, String picture,
  * String cover, String email)
  */

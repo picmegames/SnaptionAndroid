@@ -27,14 +27,14 @@ import java.util.List;
 
 public class ActivityFeedAdapter extends RecyclerView.Adapter {
 
-    private List<ActivityFeedItem> mActivityItems;
+    private List<ActivityFeedItem> activityItems;
     private int lastPosition = -1;
     private long currentTime;
 
     private static final int AVATAR_SIZE = 40;
 
     public ActivityFeedAdapter(List<ActivityFeedItem> activityItems) {
-        mActivityItems = activityItems;
+        this.activityItems = activityItems;
     }
 
     @Override
@@ -47,27 +47,27 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         ActivityFeedItemViewHolder holder = (ActivityFeedItemViewHolder) viewHolder;
-        ActivityFeedItem curActivityItem = mActivityItems.get(position);
+        ActivityFeedItem curActivityItem = activityItems.get(position);
 
-        holder.mFriend = curActivityItem.friend;
-        holder.mGame = curActivityItem.game;
-        holder.mCaption = curActivityItem.caption;
+        holder.friend = curActivityItem.friend;
+        holder.game = curActivityItem.game;
+        holder.caption = curActivityItem.caption;
 
         holder.setActivityOnClickListener(curActivityItem.type);
-        holder.mActivityMessage.setText(ActivityFeedUtils.getMessage(holder.mContext, curActivityItem));
+        holder.activityMessage.setText(ActivityFeedUtils.getMessage(holder.context, curActivityItem));
 
         if (curActivityItem.friend.imageUrl != null) {
             RequestOptions options = new RequestOptions()
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.mContext, R.color.grey_300)))
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                     .dontAnimate();
 
-            Glide.with(holder.mContext)
+            Glide.with(holder.context)
                     .load(curActivityItem.friend.imageUrl)
                     .apply(options)
-                    .into(holder.mUserImage);
+                    .into(holder.userImage);
         }
         else {
-            holder.mUserImage.setImageDrawable(TextDrawable.builder()
+            holder.userImage.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(AVATAR_SIZE)
                     .height(AVATAR_SIZE)
@@ -80,27 +80,27 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         if (curActivityItem.type != ActivityFeedUtils.FRIENDED_YOU &&
                 curActivityItem.type != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
 
-            holder.mContentImage.setVisibility(View.VISIBLE);
-            holder.mGame.isClosed = DateUtils.isPastDate(holder.mGame.endDate, currentTime);
+            holder.contentImage.setVisibility(View.VISIBLE);
+            holder.game.isClosed = DateUtils.isPastDate(holder.game.endDate, currentTime);
 
             if (curActivityItem.game.imageUrl != null) {
                 RequestOptions options = new RequestOptions()
                         .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.game.imageUrl)))
                         .dontAnimate();
 
-                Glide.with(holder.mContext)
+                Glide.with(holder.context)
                         .load(curActivityItem.game.imageUrl)
                         .apply(options)
-                        .into(holder.mContentImage);
-                ViewCompat.setTransitionName(holder.mContentImage, curActivityItem.game.imageUrl);
+                        .into(holder.contentImage);
+                ViewCompat.setTransitionName(holder.contentImage, curActivityItem.game.imageUrl);
             }
             else {
-                Glide.with(holder.mContext)
-                        .clear(holder.mContentImage);
+                Glide.with(holder.context)
+                        .clear(holder.contentImage);
             }
         }
         else {
-            holder.mContentImage.setVisibility(View.GONE);
+            holder.contentImage.setVisibility(View.GONE);
         }
 
         setAnimation(holder.itemView, position);
@@ -115,21 +115,21 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
     }
 
     public void addActivityItems(List<ActivityFeedItem> items) {
-        int oldSize = mActivityItems.size();
-        mActivityItems.addAll(items);
+        int oldSize = activityItems.size();
+        activityItems.addAll(items);
         currentTime = DateUtils.getNow();
-        notifyItemRangeInserted(oldSize, mActivityItems.size());
+        notifyItemRangeInserted(oldSize, activityItems.size());
     }
 
     public void clear() {
         lastPosition = -1;
-        int oldSize = mActivityItems.size();
-        mActivityItems.clear();
+        int oldSize = activityItems.size();
+        activityItems.clear();
         notifyItemRangeRemoved(0, oldSize);
     }
 
     public boolean isEmpty() {
-        return mActivityItems.isEmpty();
+        return activityItems.isEmpty();
     }
 
     @Override
@@ -139,6 +139,6 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mActivityItems.size();
+        return activityItems.size();
     }
 }

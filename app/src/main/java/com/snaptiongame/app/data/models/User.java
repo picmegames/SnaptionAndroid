@@ -61,11 +61,7 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof User) {
-            User other = (User) o;
-            return (id == ((User) o).id);
-        }
-        return false;
+    public boolean equals(Object obj) {
+        return obj.getClass() == User.class && this.id == ((User) obj).id;
     }
 }

@@ -3,41 +3,40 @@ package com.snaptiongame.app.data.models;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by BrianGouldsberry on 2/27/17.
+ * @author Brian Gouldsberry
  */
 
 public class DeepLinkRequest {
-    @SerializedName(GAMEID)
+    @SerializedName(GAME_ID)
     public int gameId;
     @SerializedName(EMAIL)
     public String email;
     @SerializedName(PHONE)
     public String phone;
-    @SerializedName(FACEBOOKID)
-    public String facebookID;
-    @SerializedName(GOOGLEID)
-    public String googleID;
+    @SerializedName(FACEBOOK_ID)
+    public String facebookId;
+    @SerializedName(GOOGLE_ID)
+    public String googleId;
 
-    public static final String GAMEID = "gameId";
+    public static final String GAME_ID = "gameId";
     public static final String EMAIL = "email";
     public static final String PHONE = "phone";
-    public static final String FACEBOOKID = "facebookID";
-    public static final String GOOGLEID = "googleID";
+    public static final String FACEBOOK_ID = "facebookId";
+    public static final String GOOGLE_ID = "googleId";
 
     public DeepLinkRequest(int gameId) {
         this.gameId = gameId;
         this.email = null;
         this.phone = null;
-        this.facebookID = null;
-        this.googleID = null;
+        this.facebookId = null;
+        this.googleId = null;
     }
 
-    public DeepLinkRequest(int gameId, String email, String phone, String facebookID, String
-            googleID) {
+    public DeepLinkRequest(int gameId, String email, String phone, String facebookId, String googleId) {
         this.gameId = gameId;
         this.email = email;
         this.phone = phone;
-        this.facebookID = facebookID;
-        this.googleID = googleID;
+        this.facebookId = facebookId;
+        this.googleId = googleId;
     }
 }

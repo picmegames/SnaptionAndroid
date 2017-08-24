@@ -40,21 +40,21 @@ import timber.log.Timber;
 
 public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.user_image)
-    CircleImageView mUserImage;
+    CircleImageView userImage;
     @BindView(R.id.name)
-    TextView mName;
+    TextView name;
     @BindView(R.id.caption)
-    TextView mCaption;
+    TextView caption;
     @BindView(R.id.upvote)
-    ImageView mUpvote;
+    ImageView upvote;
     @BindView(R.id.number_of_upvotes)
-    TextView mNumberOfUpvotes;
+    TextView numberOfUpvotes;
     @BindView(R.id.upvote_view)
-    LinearLayout mUpvoteView;
+    LinearLayout upvoteView;
 
-    public Context mContext;
-    public View mView;
-    private ItemListener mListener;
+    public Context context;
+    public View view;
+    private ItemListener listener;
 
     public String imageUrl;
     public String username;
@@ -64,10 +64,10 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     public CaptionCardViewHolder(View itemView, ItemListener listener) {
         super(itemView);
-        mContext = itemView.getContext();
-        mView = itemView;
+        context = itemView.getContext();
+        view = itemView;
         ButterKnife.bind(this, itemView);
-        mListener = listener;
+        this.listener = listener;
 
         final ScaleAnimation growAnimation = AnimUtils.getGrowAnim();
         final ScaleAnimation shrinkAnimation = AnimUtils.getShrinkAnim();
@@ -86,13 +86,13 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onAnimationEnd(Animation animation) {
                 setUpvote(upvoted);
-                mUpvote.startAnimation(growAnimation);
+                upvote.startAnimation(growAnimation);
             }
         });
 
-        mUpvoteView.setOnClickListener(view -> {
+        upvoteView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
-                mUpvote.startAnimation(shrinkAnimation);
+                upvote.startAnimation(shrinkAnimation);
                 upvoteCaption();
             }
             else {
@@ -109,23 +109,23 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
             return true;
         });
 
-        mUserImage.setOnClickListener(view -> {
-            Intent profileIntent = new Intent(mContext, ProfileActivity.class);
+        userImage.setOnClickListener(view -> {
+            Intent profileIntent = new Intent(context, ProfileActivity.class);
             profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
             profileIntent.putExtra(User.USERNAME, username);
             profileIntent.putExtra(User.IMAGE_URL, imageUrl);
             profileIntent.putExtra(User.ID, userId);
 
             ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation((AppCompatActivity) mContext, mUserImage,
-                            ViewCompat.getTransitionName(mUserImage));
-            mContext.startActivity(profileIntent, transitionActivityOptions.toBundle());
+                    .makeSceneTransitionAnimation((AppCompatActivity) context, userImage,
+                            ViewCompat.getTransitionName(userImage));
+            context.startActivity(profileIntent, transitionActivityOptions.toBundle());
         });
     }
 
     private void goToLogin() {
-        Intent loginIntent = new Intent(mContext, LoginActivity.class);
-        mContext.startActivity(loginIntent);
+        Intent loginIntent = new Intent(context, LoginActivity.class);
+        context.startActivity(loginIntent);
     }
 
     public void setHasBeenUpvotedOrFlagged(boolean beenUpvoted) {
@@ -136,18 +136,18 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     private void setBeenUpvoted() {
         if (isUpvoted) {
             isUpvoted = false;
-            mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) - 1));
+            numberOfUpvotes.setText(String.valueOf(Integer.parseInt(numberOfUpvotes.getText().toString()) - 1));
         }
         else {
             isUpvoted = true;
-            mNumberOfUpvotes.setText(String.valueOf(Integer.parseInt(mNumberOfUpvotes.getText().toString()) + 1));
-            Toast.makeText(mContext, mContext.getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
+            numberOfUpvotes.setText(String.valueOf(Integer.parseInt(numberOfUpvotes.getText().toString()) + 1));
+            Toast.makeText(context, context.getString(R.string.upvoted), Toast.LENGTH_SHORT).show();
         }
-        mListener.updateUpvote(isUpvoted, getAdapterPosition());
+        listener.updateUpvote(isUpvoted, getAdapterPosition());
     }
 
     private void setBeenFlagged() {
-        new MaterialDialog.Builder(mContext)
+        new MaterialDialog.Builder(context)
                 .title(R.string.flag_alert_caption)
                 .content(R.string.ask_flag_caption)
                 .positiveText(R.string.confirm)
@@ -172,7 +172,7 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
                 GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> mListener.updateFlag(getAdapterPosition(), this),
+                        () -> listener.updateFlag(getAdapterPosition(), this),
                         Timber::e
                 );
     }
@@ -189,14 +189,14 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
 
     private void setUpvote(boolean isGameUpvoted) {
         if (isGameUpvoted) {
-            // mUpvote.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
-            mUpvote.setImageResource(R.drawable.ic_arrow_upward_grey_500_24dp);
-            mNumberOfUpvotes.setTextColor(ContextCompat.getColor(mContext, R.color.grey_600));
+            // upvote.setImageResource(R.drawable.ic_favorite_border_grey_800_24dp);
+            upvote.setImageResource(R.drawable.ic_arrow_upward_grey_500_24dp);
+            numberOfUpvotes.setTextColor(ContextCompat.getColor(context, R.color.grey_600));
         }
         else {
-            // mUpvote.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
-            mUpvote.setImageResource(R.drawable.ic_arrow_upward_pink_300_24dp);
-            mNumberOfUpvotes.setTextColor(ContextCompat.getColor(mContext, R.color.pink_300));
+            // upvote.setImageResource(R.drawable.ic_favorite_pink_300_24dp);
+            upvote.setImageResource(R.drawable.ic_arrow_upward_pink_300_24dp);
+            numberOfUpvotes.setTextColor(ContextCompat.getColor(context, R.color.pink_300));
         }
     }
 }

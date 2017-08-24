@@ -7,8 +7,9 @@ import java.io.Serializable;
 import java.net.HttpCookie;
 
 public class SerializableHttpCookie implements Serializable {
-    private transient final HttpCookie cookie;
+
     private transient HttpCookie clientCookie;
+    private transient final HttpCookie cookie;
 
     public SerializableHttpCookie(HttpCookie cookie) {
         this.cookie = cookie;

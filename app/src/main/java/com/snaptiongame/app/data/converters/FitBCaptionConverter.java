@@ -10,7 +10,7 @@ import com.snaptiongame.app.data.models.FitBCaption;
 import java.lang.reflect.Type;
 
 /**
- * Created by nickromero on 2/12/17.
+ * @author Nick Romero
  */
 
 public class FitBCaptionConverter implements JsonDeserializer<FitBCaption> {

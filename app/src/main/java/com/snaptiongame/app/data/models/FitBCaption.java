@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 /**
- * Created by nickromero on 2/10/17.
+ * @author Nick Romero
  */
 
 public class FitBCaption {
@@ -17,7 +17,7 @@ public class FitBCaption {
     @SerializedName(CHAR_LIMIT)
     public int charLimit;
     @SerializedName(SET_ID)
-    public int setID;
+    public int setId;
     @SerializedName(USER_ENTRY)
     public String userEntry;
 
@@ -29,12 +29,12 @@ public class FitBCaption {
     public static final String USER_ENTRY = "userEntry";
     public final String placeholderText = "______";
 
-    public FitBCaption(int id, int charLimit, String beforeBlank, String afterBlank, int setID) {
+    public FitBCaption(int id, int charLimit, String beforeBlank, String afterBlank, int setId) {
         this.id = id;
         this.beforeBlank = beforeBlank;
         this.afterBlank = afterBlank;
         this.charLimit = charLimit;
-        this.setID = setID;
+        this.setId = setId;
         this.userEntry = "";
     }
     @Override

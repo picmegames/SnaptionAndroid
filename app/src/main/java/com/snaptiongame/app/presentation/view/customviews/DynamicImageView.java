@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 @SuppressLint("AppCompatCustomView")
 public class DynamicImageView extends ImageView {
-    private float mAspectRatio;
+    private float aspectRatio;
 
     public DynamicImageView(Context context) {
         super(context);
@@ -26,13 +26,13 @@ public class DynamicImageView extends ImageView {
     }
 
     public void setAspectRatio(float aspectRatio) {
-        mAspectRatio = aspectRatio;
+        this.aspectRatio = aspectRatio;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = (int) (width / mAspectRatio);
+        int height = (int) (width / aspectRatio);
         setMeasuredDimension(width, height);
     }
 }

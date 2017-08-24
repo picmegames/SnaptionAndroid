@@ -29,61 +29,61 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileView extends RelativeLayout {
     @BindView(R.id.profile_image)
-    CircleImageView mProfileImage;
+    CircleImageView profileImage;
     @BindView(R.id.full_name)
-    TextView mFullName;
+    TextView fullName;
     @BindView(R.id.email)
-    TextView mEmail;
+    TextView email;
     @BindView(R.id.username)
-    TextView mUsername;
+    TextView username;
     @BindView(R.id.text_layout)
-    TextInputLayout mInputLayout;
+    TextInputLayout inputLayout;
     @BindView(R.id.name_input)
-    TextInputEditText mEditText;
+    TextInputEditText editText;
     @BindView(R.id.name_count)
-    TextView mNameCount;
+    TextView nameCount;
 
-    private Context mContext;
+    private Context context;
 
     public EditProfileView(Context context) {
         super(context, null);
-        mContext = context;
+        this.context = context;
         init();
     }
 
     public EditProfileView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
+        this.context = context;
         init();
     }
 
     public EditProfileView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
+        this.context = context;
         init();
     }
 
     private void init() {
-        View view = inflate(mContext, R.layout.edit_profile, this);
+        View view = inflate(context, R.layout.edit_profile, this);
         ButterKnife.bind(this, view);
 
         RequestOptions options = new RequestOptions()
-                .placeholder(new ColorDrawable(ContextCompat.getColor(mContext, R.color.grey_300)))
+                .placeholder(new ColorDrawable(ContextCompat.getColor(context, R.color.grey_300)))
                 .dontAnimate();
 
-        Glide.with(mContext)
+        Glide.with(context)
                 .load(AuthManager.getProfileImageUrl())
                 .apply(options)
-                .into(mProfileImage);
+                .into(profileImage);
 
-        mFullName.setText(AuthManager.getUserFullName());
-        mEmail.setText(AuthManager.getEmail());
-        mUsername.setText(AuthManager.getUsername());
+        fullName.setText(AuthManager.getUserFullName());
+        email.setText(AuthManager.getEmail());
+        username.setText(AuthManager.getUsername());
 
-        mProfileImage.setOnClickListener(imageView -> {
+        profileImage.setOnClickListener(imageView -> {
             Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
             imagePickerIntent.setType("image/*");
-            ((AppCompatActivity) mContext).startActivityForResult(imagePickerIntent, ProfileActivity.IMAGE_PICKER_RESULT);
+            ((AppCompatActivity) context).startActivityForResult(imagePickerIntent, ProfileActivity.IMAGE_PICKER_RESULT);
         });
     }
 
@@ -91,27 +91,27 @@ public class EditProfileView extends RelativeLayout {
         RequestOptions options = new RequestOptions()
                 .priority(Priority.IMMEDIATE);
 
-        Glide.with(mContext)
+        Glide.with(context)
                 .load(profileUrl)
                 .apply(options)
-                .into(mProfileImage);
+                .into(profileImage);
     }
 
     public void updateUsername(String username) {
-        mUsername.setText(username);
+        this.username.setText(username);
     }
 
     @OnTextChanged(R.id.name_input)
     public void textChanged(CharSequence sequence) {
-        mNameCount.setText(
-                String.format(mContext.getString(R.string.count_format), sequence.length()));
+        nameCount.setText(
+                String.format(context.getString(R.string.count_format), sequence.length()));
     }
 
     public void clearUsernameField() {
-        mEditText.setText("");
+        editText.setText("");
     }
 
     public String getNewUsername() {
-        return mEditText.getText().toString();
+        return editText.getText().toString();
     }
 }

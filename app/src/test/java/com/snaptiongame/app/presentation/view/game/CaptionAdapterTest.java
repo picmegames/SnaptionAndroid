@@ -19,7 +19,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Created by nickromero on 2/20/17.
+ * @author Nick Romero
  */
 
 @RunWith(RobolectricTestRunner.class)

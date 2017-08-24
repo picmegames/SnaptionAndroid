@@ -25,19 +25,18 @@ import timber.log.Timber;
 
 public class ProfilePresenter implements ProfileContract.Presenter {
     @NonNull
-    private ProfileContract.View mProfileView;
+    private ProfileContract.View profileView;
     @NonNull
-    private CompositeDisposable mDisposables;
+    private CompositeDisposable disposables;
 
-    private AuthManager mAuthManager;
-
-    private String mEncodedImage;
+    private AuthManager authManager;
+    private String encodedImage;
 
     public ProfilePresenter(@NonNull ProfileContract.View profileView) {
-        mProfileView = profileView;
-        mDisposables = new CompositeDisposable();
-        mProfileView.setPresenter(this);
-        mAuthManager = AuthManager.getInstance();
+        this.profileView = profileView;
+        disposables = new CompositeDisposable();
+        this.profileView.setPresenter(this);
+        authManager = AuthManager.getInstance();
     }
 
     @Override
@@ -46,15 +45,15 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         newUser -> {
-                            mProfileView.saveProfilePicture(newUser.imageUrl);
-                            mProfileView.showProfilePictureSuccess();
+                            profileView.saveProfilePicture(newUser.imageUrl);
+                            profileView.showProfilePictureSuccess();
                         },
                         e -> {
                             Timber.e(e);
-                            mProfileView.showProfilePictureFailure();
+                            profileView.showProfilePictureFailure();
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -63,16 +62,16 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         request -> {
-                            mProfileView.showHideAddFriend(false);
-                            mProfileView.showAddFriendResult(true);
+                            profileView.showHideAddFriend(false);
+                            profileView.showAddFriendResult(true);
                         },
                         e -> {
                             Timber.e(e);
-                            mProfileView.showHideAddFriend(true);
-                            mProfileView.showAddFriendResult(false);
+                            profileView.showHideAddFriend(true);
+                            profileView.showAddFriendResult(false);
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -81,15 +80,15 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         () -> {
-                            mProfileView.showHideAddFriend(true);
-                            mProfileView.showRemoveFriendResult(true);
+                            profileView.showHideAddFriend(true);
+                            profileView.showRemoveFriendResult(true);
                         },
                         e -> {
-                            mProfileView.showHideAddFriend(false);
-                            mProfileView.showRemoveFriendResult(false);
+                            profileView.showHideAddFriend(false);
+                            profileView.showRemoveFriendResult(false);
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -97,10 +96,10 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         Disposable disposable = UserProvider.getUser(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mProfileView::showUser,
+                        profileView::showUser,
                         Timber::e
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -108,10 +107,10 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         Disposable disposable = FriendProvider.isFriend(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        isFriend -> mProfileView.showHideAddFriend(!isFriend),
+                        isFriend -> profileView.showHideAddFriend(!isFriend),
                         Timber::e
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -120,8 +119,8 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         nextUser -> {
-                            mProfileView.saveUsername(nextUser.username);
-                            mProfileView.showUsernameSuccess(oldUsername, user);
+                            profileView.saveUsername(nextUser.username);
+                            profileView.showUsernameSuccess(oldUsername, user);
                         },
                         e -> {
                             Timber.e(e);
@@ -132,10 +131,10 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                                     msg = SnaptionApplication.getContext().getString(R.string.invalid_char);
                                 }
                             }
-                            mProfileView.showUsernameFailure(msg);
+                            profileView.showUsernameFailure(msg);
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -144,18 +143,18 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        s -> mEncodedImage = s,
+                        s -> encodedImage = s,
                         Timber::e,
-                        () -> updateProfilePicture(new User(mEncodedImage, type))
+                        () -> updateProfilePicture(new User(encodedImage, type))
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
     public void logout() {
         if (AuthManager.isLoggedIn()) {
-            mAuthManager.logout();
-            mProfileView.goToLogin();
+            authManager.logout();
+            profileView.goToLogin();
         }
     }
 
@@ -166,6 +165,6 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

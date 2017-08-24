@@ -24,21 +24,21 @@ import timber.log.Timber;
 
 public class CreateGamePresenter implements CreateGameContract.Presenter {
     @NonNull
-    private CreateGameContract.View mCreateGameView;
+    private CreateGameContract.View createGameView;
     @NonNull
-    private CompositeDisposable mDisposables;
+    private CompositeDisposable disposables;
 
-    private List<Friend> mFriends;
-    // private byte[] mEncodedImage;
-    private String mEncodedImage;
+    private List<Friend> friends;
+    // private byte[] encodedImage;
+    private String encodedImage;
 
     private static final int INVALID_FRIEND = -1;
 
     public CreateGamePresenter(@NonNull CreateGameContract.View createGameView) {
-        mCreateGameView = createGameView;
-        mDisposables = new CompositeDisposable();
-        mCreateGameView.setPresenter(this);
-        mFriends = new ArrayList<>();
+        this.createGameView = createGameView;
+        disposables = new CompositeDisposable();
+        this.createGameView.setPresenter(this);
+        friends = new ArrayList<>();
     }
 
     @Override
@@ -47,59 +47,59 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        image -> mEncodedImage = image,
+                        image -> encodedImage = image,
                         e -> {
                             Timber.e(e);
-                            mCreateGameView.showImageCompressionFailure();
+                            createGameView.showImageCompressionFailure();
                         },
                         () -> uploadGame(isPublic, type, gameDuration)
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
     public void createGameFromId(int gameId, boolean isPublic, long gameDuration) {
         Disposable disposable = GameProvider.addGame(
-                new Game(gameId, isPublic, mCreateGameView.getTags(),
-                        getFriendIds(mCreateGameView.getAddedFriends()), gameDuration))
+                new Game(gameId, isPublic, createGameView.getTags(),
+                        getFriendIds(createGameView.getAddedFriends()), gameDuration))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mCreateGameView::showUploadComplete,
+                        createGameView::showUploadComplete,
                         e -> {
                             Timber.e(e);
-                            mCreateGameView.showUploadFailure();
+                            createGameView.showUploadFailure();
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     private void uploadGame(boolean isPublic, String type, long gameDuration) {
         Disposable disposable = GameProvider.addGame(
-                new Game(isPublic, mEncodedImage, type, mCreateGameView.getTags(),
-                        getFriendIds(mCreateGameView.getAddedFriends()), gameDuration))
+                new Game(isPublic, encodedImage, type, createGameView.getTags(),
+                        getFriendIds(createGameView.getAddedFriends()), gameDuration))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mCreateGameView::showUploadComplete,
+                        createGameView::showUploadComplete,
                         e -> {
                             Timber.e(e);
-                            mCreateGameView.showUploadFailure();
+                            createGameView.showUploadFailure();
                         }
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
 //    private void startUploadService(int userId, boolean isPublic, String type) {
-//        Context context = mCreateGameView.getContext();
+//        Context context = createGameView.getContext();
 //        Bundle uploadBundle = new Bundle();
 //        uploadBundle.putInt(Game.ID, userId);
 //        uploadBundle.putBoolean(Game.IS_PUBLIC, isPublic);
-//        uploadBundle.putByteArray(Game.PICTURE, mEncodedImage);
+//        uploadBundle.putByteArray(Game.PICTURE, encodedImage);
 //        uploadBundle.putString(Game.IMG_TYPE, type);
-//        uploadBundle.putIntegerArrayList(Game.FRIENDS, getFriendIds(mCreateGameView.getAddedFriends()));
+//        uploadBundle.putIntegerArrayList(Game.FRIENDS, getFriendIds(createGameView.getAddedFriends()));
 //        Intent uploadIntent = new Intent(context, GameUploadService.class);
 //        uploadIntent.putExtras(uploadBundle);
 //        context.startService(uploadIntent);
-//        mCreateGameView.onBackPressed();
+//        createGameView.onBackPressed();
 //    }
 
     private List<Integer> getFriendIds(List<String> friendNames) {
@@ -117,8 +117,8 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public int getFriendIdByName(String name) {
-        if (mFriends != null) {
-            for (Friend friend : mFriends) {
+        if (friends != null) {
+            for (Friend friend : friends) {
                 if (friend.username.equals(name)) {
                     return friend.id;
                 }
@@ -129,7 +129,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
 
     @Override
     public List<Friend> getFriends() {
-        return mFriends;
+        return friends;
     }
 
     @Override
@@ -141,26 +141,26 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                         Timber::e,
                         () -> Timber.i("Friends loaded successfully!")
                 );
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     private void processFriends(List<Friend> friends) {
-        mFriends.addAll(friends);
+        this.friends.addAll(friends);
         List<String> names = new ArrayList<>();
         for (Friend friend : friends) {
             names.add(friend.username);
         }
-        mCreateGameView.addFriendNames(names);
+        createGameView.addFriendNames(names);
     }
 
     @Override
     public void subscribe() {
-        mFriends.clear();
+        friends.clear();
         loadFriends();
     }
 
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

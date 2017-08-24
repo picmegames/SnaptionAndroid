@@ -9,11 +9,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
 /**
- * Created by nickromero on 6/4/17.
+ * @author Nick Romero
  */
 
 public final class EasterEgg {
     private int puffinCounter = 0;
+
     private static final int PUFFIN_THRESHOLD = 6;
     private static final int ONE_SECOND = 1000;
     private static final int TRANSPARENT = 0;

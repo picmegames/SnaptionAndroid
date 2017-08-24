@@ -22,22 +22,22 @@ import butterknife.Unbinder;
 public class MoreInfoFragment extends Fragment implements MoreInfoContract.View {
 
     @BindView(R.id.rank)
-    TextView mRank;
+    TextView rank;
     @BindView(R.id.experience)
-    TextView mExperience;
+    TextView experience;
     @BindView(R.id.games_created)
-    TextView mGamesCreated;
+    TextView gamesCreated;
     @BindView(R.id.captions_created)
-    TextView mCaptionsCreated;
+    TextView captionsCreated;
     @BindView(R.id.top_game)
-    TextView mTopGame;
+    TextView topGame;
     @BindView(R.id.top_caption)
-    TextView mTopCaption;
+    TextView topCaption;
     @BindView(R.id.top_caption_count)
-    TextView mTopCaptionCount;
+    TextView topCaptionCount;
 
-    private MoreInfoContract.Presenter mPresenter;
-    private Unbinder mUnbinder;
+    private MoreInfoContract.Presenter presenter;
+    private Unbinder unbinder;
 
     public static final String USER_ID = "userId";
 
@@ -54,37 +54,37 @@ public class MoreInfoFragment extends Fragment implements MoreInfoContract.View 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.more_info_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
-        mPresenter = new MoreInfoPresenter(this, getArguments().getInt(USER_ID));
+        unbinder = ButterKnife.bind(this, view);
+        presenter = new MoreInfoPresenter(this, getArguments().getInt(USER_ID));
         return view;
     }
 
     @Override
     public void setPresenter(MoreInfoContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
     public void showUserInfo(UserStats userStats) {
-        mRank.setText(userStats.rank);
-        mExperience.setText(String.valueOf(userStats.exp));
-        mGamesCreated.setText(String.valueOf(userStats.gamesCreated));
-        mCaptionsCreated.setText(String.valueOf(userStats.captionsCreated));
-        mTopGame.setText(String.valueOf(userStats.highestGameUpvote));
-        mTopCaption.setText(String.valueOf(userStats.captionUpvotes));
-        mTopCaptionCount.setText(String.valueOf(userStats.topCaptionCount));
+        rank.setText(userStats.rank);
+        experience.setText(String.valueOf(userStats.exp));
+        gamesCreated.setText(String.valueOf(userStats.gamesCreated));
+        captionsCreated.setText(String.valueOf(userStats.captionsCreated));
+        topGame.setText(String.valueOf(userStats.highestGameUpvote));
+        topCaption.setText(String.valueOf(userStats.captionUpvotes));
+        topCaptionCount.setText(String.valueOf(userStats.topCaptionCount));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.subscribe();
+        presenter.subscribe();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
-        mPresenter.unsubscribe();
+        unbinder.unbind();
+        presenter.unsubscribe();
     }
 }

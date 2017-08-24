@@ -30,19 +30,18 @@ import butterknife.Unbinder;
 
 public class FriendsFragment extends Fragment implements FriendsContract.View {
     @BindView(R.id.friend_list)
-    RecyclerView mFriendsList;
+    RecyclerView friendsList;
     @BindView(R.id.refresh_layout_friends)
-    SwipeRefreshLayout mRefreshLayout;
+    SwipeRefreshLayout refreshLayout;
     @BindView(R.id.empty_view)
-    LinearLayout mEmptyView;
+    LinearLayout emptyView;
 
-    protected FriendsContract.Presenter mPresenter;
-    private InfiniteRecyclerViewScrollListener mScrollListener;
+    protected FriendsContract.Presenter presenter;
+    private Unbinder unbinder;
+    private InfiniteRecyclerViewScrollListener scrollListener;
+    private FriendsAdapter adapter;
+    private InsetDividerDecoration decoration;
 
-    private FriendsAdapter mAdapter;
-    private InsetDividerDecoration mDecoration;
-
-    private Unbinder mUnbinder;
     public static final String TAG = FriendsFragment.class.getSimpleName();
 
     public static FriendsFragment getInstance() {
@@ -54,80 +53,80 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.friends_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
-        mPresenter = new FriendsPresenter(this);
+        presenter = new FriendsPresenter(this);
 
-        mDecoration = new InsetDividerDecoration(
+        decoration = new InsetDividerDecoration(
                 FriendViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
                 ContextCompat.getColor(getContext(), R.color.divider));
-        mFriendsList.addItemDecoration(mDecoration);
+        friendsList.addItemDecoration(decoration);
 
-        mFriendsList.setHasFixedSize(true);
+        friendsList.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mFriendsList.setLayoutManager(layoutManager);
-        mAdapter = new FriendsAdapter(new ArrayList<>());
-        mAdapter.setPresenter(mPresenter);
-        mAdapter.setShouldDisplayAddRemoveOption(true);
+        friendsList.setLayoutManager(layoutManager);
+        adapter = new FriendsAdapter(new ArrayList<>());
+        adapter.setPresenter(presenter);
+        adapter.setShouldDisplayAddRemoveOption(true);
 
-        mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
+        scrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                mPresenter.loadFriends(page);
+                presenter.loadFriends(page);
             }
         };
-        mFriendsList.addOnScrollListener(mScrollListener);
+        friendsList.addOnScrollListener(scrollListener);
 
-        mFriendsList.setAdapter(mAdapter);
+        friendsList.setAdapter(adapter);
 
-        mRefreshLayout.setOnRefreshListener(this::refreshFriends);
+        refreshLayout.setOnRefreshListener(this::refreshFriends);
 
-        mRefreshLayout.setColorSchemeColors(
+        refreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorAccent)
         );
 
-        mPresenter.subscribe();
+        presenter.subscribe();
 
         return view;
     }
 
     public void refreshFriends() {
-        mAdapter.clear();
-        mScrollListener.resetState();
-        mPresenter.subscribe();
+        adapter.clear();
+        scrollListener.resetState();
+        presenter.subscribe();
     }
 
     @Override
     public void showEmptyView() {
-        mEmptyView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showFriendList() {
-        mEmptyView.setVisibility(View.GONE);
-        mFriendsList.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+        friendsList.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
-        mPresenter.unsubscribe();
+        unbinder.unbind();
+        presenter.unsubscribe();
     }
 
     @Override
     public void setRefreshing(boolean isRefreshing) {
-        mRefreshLayout.setRefreshing(isRefreshing);
+        refreshLayout.setRefreshing(isRefreshing);
     }
 
     @Override
     public void processFriends(List<Friend> friends) {
-        mAdapter.addFriends(friends);
+        adapter.addFriends(friends);
         setRefreshing(false);
 
-        if (!mAdapter.isEmpty()) {
+        if (!adapter.isEmpty()) {
             showFriendList();
         }
         else {
@@ -141,6 +140,6 @@ public class FriendsFragment extends Fragment implements FriendsContract.View {
 
     @Override
     public void setPresenter(FriendsContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 }

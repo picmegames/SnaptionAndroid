@@ -1,15 +1,15 @@
 package com.snaptiongame.app.data.models;
 
 /**
- * Created by nickromero on 1/30/17.
+ * @author Nick Romero
  */
 
 public class AddFriendRequest {
-    public int mFriendId;
+    public int friendId;
 
     public static final String FRIEND_ID = "friendId";
 
     public AddFriendRequest(int friendId) {
-        mFriendId = friendId;
+        this.friendId = friendId;
     }
 }

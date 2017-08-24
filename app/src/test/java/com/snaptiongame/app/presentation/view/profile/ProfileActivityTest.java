@@ -25,7 +25,7 @@ import org.robolectric.annotation.Config;
 import static junit.framework.Assert.assertNotNull;
 
 /**
- * Created by Brian Gouldsberry on 2/20/17.
+ * @author Brian Gouldsberry
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)

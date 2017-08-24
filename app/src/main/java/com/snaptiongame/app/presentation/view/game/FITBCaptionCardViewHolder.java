@@ -11,24 +11,24 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by nickromero on 2/7/17.
+ * @author Nick Romero
  */
 public class FITBCaptionCardViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.fitb_caption_card)
-    CardView mFitBCaptionCard;
+    CardView fitBCaptionCard;
     @BindView(R.id.fitb_caption_card_text)
-    TextView mCaptionTemplateTextView;
+    TextView captionTemplateTextView;
     @BindView(R.id.cur_fitb)
-    TextView mCurrentFitB;
+    TextView currentFitB;
 
-    public String mCaptionTemplate;
-    public String mCurFitB;
+    public String captionTemplate;
+    public String curFitB;
 
     public FITBCaptionCardViewHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
-        mCaptionTemplate = mCaptionTemplateTextView.getText().toString();
-        mCurFitB = mCurrentFitB.getText().toString();
+        captionTemplate = captionTemplateTextView.getText().toString();
+        curFitB = currentFitB.getText().toString();
 
         view.setOnClickListener(v -> {
 

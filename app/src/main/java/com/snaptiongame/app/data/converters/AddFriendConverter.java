@@ -13,7 +13,7 @@ import com.snaptiongame.app.data.models.AddFriendRequest;
 import java.lang.reflect.Type;
 
 /**
- * Created by nickromero on 1/30/17.
+ * @author Nick Romero
  */
 
 public class AddFriendConverter implements JsonSerializer<AddFriendRequest>,
@@ -21,7 +21,7 @@ public class AddFriendConverter implements JsonSerializer<AddFriendRequest>,
     @Override
     public JsonElement serialize(AddFriendRequest src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(AddFriendRequest.FRIEND_ID, src.mFriendId);
+        json.addProperty(AddFriendRequest.FRIEND_ID, src.friendId);
         return json;
     }
 

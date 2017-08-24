@@ -11,7 +11,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 /**
- * Created by nickromero on 2/20/17.
+ * @author Nick Romero
  */
 
 public class CaptionSetTest {
@@ -37,12 +37,12 @@ public class CaptionSetTest {
 
     @Test
     public void testGetTotalCaptions() {
-        assertEquals(testSet.getTotalCaptions(), 10);
+        assertEquals(CaptionSet.MAX_CAPTIONS, 10);
     }
 
     @Test
     public void testGetCaptionsUnlocked() {
-        assertEquals(testSet.getCaptionsUnlocked(), 0);
+        assertEquals(CaptionSet.MIN_CAPTIONS, 0);
     }
 
     @Test

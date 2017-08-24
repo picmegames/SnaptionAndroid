@@ -14,6 +14,6 @@ public class LeaderboardsContract {
     }
 
     interface Presenter extends BasePresenter {
-
+        void loadLeaderboard(int type);
     }
 }

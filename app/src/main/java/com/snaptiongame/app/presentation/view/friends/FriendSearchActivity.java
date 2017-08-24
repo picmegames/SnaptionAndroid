@@ -32,16 +32,16 @@ import butterknife.OnClick;
 
 public class FriendSearchActivity extends AppCompatActivity implements FriendsContract.View, SearchView.OnQueryTextListener {
     @BindView(R.id.search_view)
-    SearchView mSearchView;
+    SearchView searchView;
     @BindView(R.id.search_results)
-    RecyclerView mSearchResults;
+    RecyclerView searchResults;
 
-    private FriendsContract.Presenter mPresenter;
-    private InfiniteRecyclerViewScrollListener mScrollListener;
+    private FriendsContract.Presenter presenter;
+    private InfiniteRecyclerViewScrollListener scrollListener;
 
-    private String mQuery;
-    private FriendsAdapter mAdapter;
-    private InsetDividerDecoration mDecoration;
+    private String query;
+    private FriendsAdapter adapter;
+    private InsetDividerDecoration decoration;
 
     private static final String SEARCH_ICON = "android:id/search_mag_icon";
 
@@ -50,38 +50,38 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_search);
         ButterKnife.bind(this);
-        mPresenter = new FriendsPresenter(this);
+        presenter = new FriendsPresenter(this);
 
-        mDecoration = new InsetDividerDecoration(
+        decoration = new InsetDividerDecoration(
                 FriendViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
                 ContextCompat.getColor(this, R.color.divider));
-        mSearchResults.addItemDecoration(mDecoration);
+        searchResults.addItemDecoration(decoration);
 
-        mAdapter = new FriendsAdapter(new ArrayList<>());
-        mAdapter.setPresenter(mPresenter);
-        mAdapter.setShouldDisplayAddRemoveOption(true);
+        adapter = new FriendsAdapter(new ArrayList<>());
+        adapter.setPresenter(presenter);
+        adapter.setShouldDisplayAddRemoveOption(true);
 
-        mSearchResults.setHasFixedSize(true);
+        searchResults.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mSearchResults.setLayoutManager(layoutManager);
-        mSearchResults.setAdapter(mAdapter);
-        mSearchView.setOnQueryTextListener(this);
+        searchResults.setLayoutManager(layoutManager);
+        searchResults.setAdapter(adapter);
+        searchView.setOnQueryTextListener(this);
 
-        mScrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
+        scrollListener = new InfiniteRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (mQuery != null && !mQuery.isEmpty()) {
-                    mPresenter.findFriends(mQuery, page);
+                if (query != null && !query.isEmpty()) {
+                    presenter.findFriends(query, page);
                 }
                 else {
-                    mPresenter.loadFriends(page);
+                    presenter.loadFriends(page);
                 }
             }
         };
 
-        mSearchResults.addOnScrollListener(mScrollListener);
+        searchResults.addOnScrollListener(scrollListener);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             int searchIconId = getResources().getIdentifier(SEARCH_ICON, null, null);
@@ -104,15 +104,15 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     }
 
     private void handleSearch(String query) {
-        mQuery = query.trim();
-        mAdapter.clear();
-        mScrollListener.resetState();
+        this.query = query.trim();
+        adapter.clear();
+        scrollListener.resetState();
 
-        if (mQuery.isEmpty()) {
-            mPresenter.subscribe();
+        if (this.query.isEmpty()) {
+            presenter.subscribe();
         }
         else {
-            mPresenter.findFriends(mQuery, 1);
+            presenter.findFriends(this.query, 1);
         }
     }
 
@@ -134,28 +134,28 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
 
     @Override
     public void setPresenter(FriendsContract.Presenter presenter) {
-        this.mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
     public void processFriends(List<Friend> friends) {
         showFriendList();
-        mAdapter.addFriends(friends);
+        adapter.addFriends(friends);
     }
 
     @Override
     public void addFriend(Friend friend) {
-        mAdapter.addFriend(friend);
+        adapter.addFriend(friend);
     }
 
     @Override
     public void showEmptyView() {
-        mSearchResults.setVisibility(View.INVISIBLE);
+        searchResults.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showFriendList() {
-        mSearchResults.setVisibility(View.VISIBLE);
+        searchResults.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -166,11 +166,11 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter.clear();
-        mScrollListener.resetState();
-        mPresenter.subscribe();
+        adapter.clear();
+        scrollListener.resetState();
+        presenter.subscribe();
         showInputMethod();
-        handleSearch(mSearchView.getQuery().toString());
+        handleSearch(searchView.getQuery().toString());
     }
 
     @Override
@@ -182,7 +182,7 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.unsubscribe();
+        presenter.unsubscribe();
     }
 
     @OnClick(R.id.searchback)
@@ -194,6 +194,6 @@ public class FriendSearchActivity extends AppCompatActivity implements FriendsCo
     public void onBackPressed() {
         super.onBackPressed();
         setResult(RESULT_OK);
-        mSearchResults.setVisibility(View.INVISIBLE);
+        searchResults.setVisibility(View.INVISIBLE);
     }
 }

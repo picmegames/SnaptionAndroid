@@ -9,7 +9,7 @@ import org.junit.Test;
 import static junit.framework.Assert.assertTrue;
 
 /**
- * Created by nickromero on 2/21/17.
+ * @author Nick Romero
  */
 
 public class FitBCaptionConverterTest {

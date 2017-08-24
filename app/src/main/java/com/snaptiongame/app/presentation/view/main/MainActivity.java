@@ -73,39 +73,39 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.app_bar)
-    AppBarLayout mAppBarLayout;
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
     @BindView(R.id.drawer)
-    DrawerLayout mDrawerLayout;
+    DrawerLayout drawerLayout;
     @BindView(R.id.navigation_view)
-    NavigationView mNavigationView;
+    NavigationView navigationView;
     @BindView(R.id.bottom_navigation)
-    BottomNavigationView mBottomNavigationView;
+    BottomNavigationView bottomNavigationView;
     @BindView(R.id.fab)
-    FloatingActionButton mFab;
+    FloatingActionButton fab;
 
-    ImageView mCoverPhoto;
-    CircleImageView mProfilePicture;
-    TextView mNameView;
-    TextView mEmailView;
-    ActionBar mActionBar;
-    FilterView mFilterView;
+    ImageView coverPhoto;
+    CircleImageView profilePicture;
+    TextView nameView;
+    TextView emailView;
+    ActionBar actionBar;
+    FilterView filterView;
 
-    private AuthManager mAuthManager;
-    private Fragment mCurrentFragment;
-    private MaterialDialog mFilterDialog;
-    private MaterialDialog mFeedbackDialog;
-    private WebView mWebView;
-    private Menu mMenu;
+    private AuthManager authManager;
+    private Fragment currentFragment;
+    private MaterialDialog filterDialog;
+    private MaterialDialog feedbackDialog;
+    private WebView webView;
+    private Menu menu;
     private String fragTag;
-    private int mUserId;
+    private int userId;
     private int rightMargin;
     private int bottomMargin;
     private float defaultElevation;
-    private boolean mIsList = false;
-    private boolean mLastLoggedInState = false;
-    private boolean mComingFromGameActivity = false;
+    private boolean isList = false;
+    private boolean lastLoggedInState = false;
+    private boolean comingFromGameActivity = false;
 
     private static final String TEXT_TYPE = "text/plain";
     private static final int BLUR_RADIUS = 40;
@@ -122,30 +122,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mAuthManager = AuthManager.getInstance();
+        authManager = AuthManager.getInstance();
 
-        mUserId = AuthManager.getUserId();
+        userId = AuthManager.getUserId();
 
-        setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
         defaultElevation = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ELEVATION, getResources().getDisplayMetrics());
 
-        mWebView = new WebView(this);
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        webView = new WebView(this);
+        webView.getSettings().setJavaScriptEnabled(true);
 
-        View headerView = mNavigationView.getHeaderView(0);
-        mCoverPhoto = headerView.findViewById(R.id.cover_photo);
-        mProfilePicture = headerView.findViewById(R.id.profile_image);
-        mNameView = headerView.findViewById(R.id.username);
-        mEmailView = headerView.findViewById(R.id.email);
+        View headerView = navigationView.getHeaderView(0);
+        coverPhoto = headerView.findViewById(R.id.cover_photo);
+        profilePicture = headerView.findViewById(R.id.profile_image);
+        nameView = headerView.findViewById(R.id.username);
+        emailView = headerView.findViewById(R.id.email);
 
         headerView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
                 profileIntent.putExtra(User.ID, AuthManager.getUserId());
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(this, mProfilePicture, ViewCompat.getTransitionName(mProfilePicture));
+                        .makeSceneTransitionAnimation(this, profilePicture, ViewCompat.getTransitionName(profilePicture));
                 startActivity(profileIntent, transitionActivityOptions.toBundle());
             }
             else {
@@ -155,14 +155,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupWall();
         initializeWallFragments();
-        ShowcaseUtils.showShowcase(this, mFab,
+        ShowcaseUtils.showShowcase(this, fab,
                 R.string.welcome_message, R.string.wall_showcase_content);
 
-        mNavigationView.setNavigationItemSelectedListener(this);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
+                this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerSlideAnimationEnabled(false);
         actionBarDrawerToggle.syncState();
 
@@ -193,70 +193,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Glide.with(this)
                 .load(R.mipmap.ic_launcher)
                 .apply(options)
-                .into(mProfilePicture);
+                .into(profilePicture);
         Glide.with(this)
-                .clear(mCoverPhoto);
-        mNameView.setText(R.string.welcome_message);
-        mEmailView.setText(R.string.sub_welcome_message);
+                .clear(coverPhoto);
+        nameView.setText(R.string.welcome_message);
+        emailView.setText(R.string.sub_welcome_message);
     }
 
     private void initializeWallFragments() {
         if (!AuthManager.isLoggedIn()) {
-            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER, mIsList);
-            mBottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
-            mActionBar.setTitle(R.string.discover);
+            currentFragment = WallFragment.getInstance(userId, WallContract.DISCOVER, isList);
+            bottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
+            actionBar.setTitle(R.string.discover);
             setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
         }
         else {
-            mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL, mIsList);
-            mBottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
-            mActionBar.setTitle(R.string.my_wall);
+            currentFragment = WallFragment.getInstance(userId, WallContract.MY_WALL, isList);
+            bottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
+            actionBar.setTitle(R.string.my_wall);
             setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
         }
 
         fragTag = WallFragment.TAG;
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frame, mCurrentFragment)
+                .replace(R.id.frame, currentFragment)
                 .commit();
     }
 
     private void setupWall() {
-        if (mMenu != null) {
-            mMenu.findItem(R.id.filter).setVisible(true);
-            mMenu.findItem(R.id.layout).setVisible(true);
-            mMenu.findItem(R.id.search).setVisible(false);
-            mMenu.findItem(R.id.share).setVisible(false);
+        if (menu != null) {
+            menu.findItem(R.id.filter).setVisible(true);
+            menu.findItem(R.id.layout).setVisible(true);
+            menu.findItem(R.id.search).setVisible(false);
+            menu.findItem(R.id.share).setVisible(false);
         }
 
-        mNavigationView.getMenu().findItem(R.id.wall).setChecked(true);
-        mBottomNavigationView.setVisibility(View.VISIBLE);
+        navigationView.getMenu().findItem(R.id.wall).setChecked(true);
+        bottomNavigationView.setVisibility(View.VISIBLE);
         resetFabPosition(true);
 
-        int initItem = mBottomNavigationView.getSelectedItemId();
+        int initItem = bottomNavigationView.getSelectedItemId();
         boolean isLoggedIn = AuthManager.isLoggedIn();
 
-        mNavigationView.getMenu().findItem(R.id.friends).setVisible(isLoggedIn);
-        mNavigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
-        mNavigationView.getMenu().findItem(R.id.activity).setVisible(isLoggedIn);
-        mNavigationView.getMenu().findItem(R.id.log_out).setVisible(isLoggedIn);
+        navigationView.getMenu().findItem(R.id.friends).setVisible(isLoggedIn);
+        navigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
+        navigationView.getMenu().findItem(R.id.activity).setVisible(isLoggedIn);
+        navigationView.getMenu().findItem(R.id.log_out).setVisible(isLoggedIn);
 
         if (!isLoggedIn) {
-            mBottomNavigationView.getMenu().removeItem(R.id.my_wall);
+            bottomNavigationView.getMenu().removeItem(R.id.my_wall);
             if (initItem == R.id.my_wall) {
-                mBottomNavigationView.setSelectedItemId(R.id.discover);
+                bottomNavigationView.setSelectedItemId(R.id.discover);
             }
             else {
-                mBottomNavigationView.setSelectedItemId(initItem);
+                bottomNavigationView.setSelectedItemId(initItem);
             }
         }
         else {
-            if (mBottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
-                mBottomNavigationView.getMenu()
+            if (bottomNavigationView.getMenu().findItem(R.id.my_wall) == null) {
+                bottomNavigationView.getMenu()
                         .add(0, R.id.my_wall, Menu.FIRST, getString(R.string.my_wall))
                         .setIcon(R.drawable.ic_account_circle_white_24dp);
             }
-            mBottomNavigationView.setSelectedItemId(initItem);
+            bottomNavigationView.setSelectedItemId(initItem);
         }
     }
 
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .load(profileImageUrl)
                 .apply(options)
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .into(mProfilePicture);
+                .into(profilePicture);
 
         options = new RequestOptions()
                 .priority(Priority.IMMEDIATE)
@@ -284,10 +284,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .load(profileImageUrl)
                 .apply(options)
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .into(mCoverPhoto);
+                .into(coverPhoto);
 
-        mNameView.setText(name);
-        mEmailView.setText(email);
+        nameView.setText(name);
+        emailView.setText(email);
     }
 
     private void setHeader() {
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setComingFromGameActivity(boolean comingFromGameActivity) {
-        this.mComingFromGameActivity = comingFromGameActivity;
+        this.comingFromGameActivity = comingFromGameActivity;
     }
 
     @Override
@@ -308,13 +308,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         setHeader();
 
-        if (mLastLoggedInState != AuthManager.isLoggedIn()) {
+        if (lastLoggedInState != AuthManager.isLoggedIn()) {
             setupWall();
-            mLastLoggedInState = AuthManager.isLoggedIn();
+            lastLoggedInState = AuthManager.isLoggedIn();
 
-            if (!mComingFromGameActivity) {
+            if (!comingFromGameActivity) {
                 initializeWallFragments();
-                mComingFromGameActivity = false;
+                comingFromGameActivity = false;
             }
         }
     }
@@ -322,9 +322,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        mMenu = menu;
-        mMenu.findItem(R.id.search).setVisible(false);
-        mMenu.findItem(R.id.share).setVisible(false);
+        this.menu = menu;
+        this.menu.findItem(R.id.search).setVisible(false);
+        this.menu.findItem(R.id.share).setVisible(false);
         return true;
     }
 
@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.search:
                 Intent searchIntent = new Intent(this, FriendSearchActivity.class);
-                View searchMenuView = mToolbar.findViewById(R.id.search);
+                View searchMenuView = toolbar.findViewById(R.id.search);
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                         searchMenuView, getString(R.string.transition_search_back)).toBundle();
                 startActivityForResult(searchIntent, FRIEND_RESULT_CODE, options);
@@ -345,14 +345,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 showFilterDialog();
                 break;
             case R.id.layout:
-                mIsList = !mIsList;
-                ((WallFragment) mCurrentFragment).switchLayout(mIsList);
+                isList = !isList;
+                ((WallFragment) currentFragment).switchLayout(isList);
 
-                if (mIsList) {
-                    mMenu.findItem(R.id.layout).setIcon(R.drawable.ic_dashboard_white_24dp);
+                if (isList) {
+                    menu.findItem(R.id.layout).setIcon(R.drawable.ic_dashboard_white_24dp);
                 }
                 else {
-                    mMenu.findItem(R.id.layout).setIcon(R.drawable.ic_view_stream_white_24dp);
+                    menu.findItem(R.id.layout).setIcon(R.drawable.ic_view_stream_white_24dp);
                 }
                 break;
         }
@@ -360,61 +360,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showFilterDialog() {
-        if (mFilterDialog == null) {
-            mFilterView = new FilterView(this);
+        if (filterDialog == null) {
+            filterView = new FilterView(this);
 
-            mFilterDialog = new MaterialDialog.Builder(this)
-                    .customView(mFilterView, true)
+            filterDialog = new MaterialDialog.Builder(this)
+                    .customView(filterView, true)
                     .title(R.string.filter_wall)
                     .positiveText(R.string.filter)
                     .negativeText(R.string.clear)
                     .cancelListener(dialog -> {
-                        if (fragTag.equals(WallFragment.TAG) && !((WallFragment) mCurrentFragment).hasTags()) {
-                            mFilterView.clearFilterView();
+                        if (fragTag.equals(WallFragment.TAG) && !((WallFragment) currentFragment).hasTags()) {
+                            filterView.clearFilterView();
                         }
                     })
                     .onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) ->
-                            mFilterView.clearFilterView()
+                            filterView.clearFilterView()
                     )
                     .onAny((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                        mFilterView.chipifyAllUnterminatedTokens();
-                        filter(mFilterView.getChipValues(), mFilterView.getStatus());
+                        filterView.chipifyAllUnterminatedTokens();
+                        filter(filterView.getChipValues(), filterView.getStatus());
                     })
                     .cancelable(true)
                     .show();
         }
         else {
-            mFilterDialog.show();
+            filterDialog.show();
         }
     }
 
     private void filter(List<String> tags, String status) {
         if (fragTag.equals(WallFragment.TAG)) {
-            ((WallFragment) mCurrentFragment).filterGames(tags, status);
+            ((WallFragment) currentFragment).filterGames(tags, status);
         }
     }
 
     private void clearFilterView() {
-        if (mFilterView != null) {
-            mFilterView.clearFilterView();
+        if (filterView != null) {
+            filterView.clearFilterView();
         }
     }
 
     private void refreshWall() {
         if (fragTag.equals(WallFragment.TAG)) {
-            ((WallFragment) mCurrentFragment).refreshWall();
+            ((WallFragment) currentFragment).refreshWall();
         }
     }
 
     private void refreshFriends() {
         if (fragTag.equals(FriendsFragment.TAG)) {
-            ((FriendsFragment) mCurrentFragment).refreshFriends();
+            ((FriendsFragment) currentFragment).refreshFriends();
         }
     }
 
     private void refreshActivityFeed() {
         if (fragTag.equals(ActivityFeedFragment.TAG)) {
-            ((ActivityFeedFragment) mCurrentFragment).refreshActivityFeed();
+            ((ActivityFeedFragment) currentFragment).refreshActivityFeed();
         }
     }
 
@@ -429,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        mDrawerLayout.closeDrawers();
+        drawerLayout.closeDrawers();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -437,82 +437,82 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.wall:
                 setupWall();
-                ViewCompat.setElevation(mAppBarLayout, defaultElevation);
+                ViewCompat.setElevation(appBarLayout, defaultElevation);
 
             case R.id.my_wall:
                 if (AuthManager.isLoggedIn()) {
-                    mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.MY_WALL, mIsList);
+                    currentFragment = WallFragment.getInstance(userId, WallContract.MY_WALL, isList);
                     fragTag = WallFragment.TAG;
-                    mBottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
-                    mActionBar.setTitle(R.string.my_wall);
+                    bottomNavigationView.getMenu().findItem(R.id.my_wall).setChecked(true);
+                    actionBar.setTitle(R.string.my_wall);
                     setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
                     clearFilterView();
                     break;
                 }
 
             case R.id.discover:
-                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.DISCOVER, mIsList);
+                currentFragment = WallFragment.getInstance(userId, WallContract.DISCOVER, isList);
                 fragTag = WallFragment.TAG;
-                mBottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
-                mActionBar.setTitle(R.string.discover);
+                bottomNavigationView.getMenu().findItem(R.id.discover).setChecked(true);
+                actionBar.setTitle(R.string.discover);
                 setAppStatusBarColors(R.color.colorDiscover, R.color.colorDiscoverDark);
                 clearFilterView();
                 break;
 
             case R.id.popular:
-                mCurrentFragment = WallFragment.getInstance(mUserId, WallContract.POPULAR, mIsList);
+                currentFragment = WallFragment.getInstance(userId, WallContract.POPULAR, isList);
                 fragTag = WallFragment.TAG;
-                mBottomNavigationView.getMenu().findItem(R.id.popular).setChecked(true);
-                mActionBar.setTitle(R.string.popular);
+                bottomNavigationView.getMenu().findItem(R.id.popular).setChecked(true);
+                actionBar.setTitle(R.string.popular);
                 setAppStatusBarColors(R.color.colorPopular, R.color.colorPopularDark);
                 clearFilterView();
                 break;
 
             case R.id.friends:
-                mCurrentFragment = FriendsFragment.getInstance();
+                currentFragment = FriendsFragment.getInstance();
                 fragTag = FriendsFragment.TAG;
-                mActionBar.setTitle(R.string.friends_label);
-                mBottomNavigationView.setVisibility(View.GONE);
+                actionBar.setTitle(R.string.friends_label);
+                bottomNavigationView.setVisibility(View.GONE);
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
-                mMenu.findItem(R.id.filter).setVisible(false);
-                mMenu.findItem(R.id.layout).setVisible(false);
-                mMenu.findItem(R.id.search).setVisible(true);
-                mMenu.findItem(R.id.share).setVisible(true);
-                ShowcaseUtils.showShowcase(this, mToolbar.findViewById(R.id.search),
+                menu.findItem(R.id.filter).setVisible(false);
+                menu.findItem(R.id.layout).setVisible(false);
+                menu.findItem(R.id.search).setVisible(true);
+                menu.findItem(R.id.share).setVisible(true);
+                ShowcaseUtils.showShowcase(this, toolbar.findViewById(R.id.search),
                         R.string.add_a_friend, R.string.friends_showcase_content);
-                mFab.setVisibility(View.GONE);
-                ViewCompat.setElevation(mAppBarLayout, defaultElevation);
+                fab.setVisibility(View.GONE);
+                ViewCompat.setElevation(appBarLayout, defaultElevation);
                 break;
 
             case R.id.leaderboards:
-                mCurrentFragment = LeaderboardsFragment.getInstance();
+                currentFragment = LeaderboardsFragment.getInstance();
                 fragTag = LeaderboardsFragment.TAG;
-                mActionBar.setTitle(getString(R.string.leaderboards_label));
-                mBottomNavigationView.setVisibility(View.GONE);
+                actionBar.setTitle(getString(R.string.leaderboards_label));
+                bottomNavigationView.setVisibility(View.GONE);
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
-                mMenu.findItem(R.id.filter).setVisible(false);
-                mMenu.findItem(R.id.layout).setVisible(false);
-                mMenu.findItem(R.id.search).setVisible(false);
-                mMenu.findItem(R.id.share).setVisible(false);
-                mFab.setVisibility(View.GONE);
-                ViewCompat.setElevation(mAppBarLayout, 0);
+                menu.findItem(R.id.filter).setVisible(false);
+                menu.findItem(R.id.layout).setVisible(false);
+                menu.findItem(R.id.search).setVisible(false);
+                menu.findItem(R.id.share).setVisible(false);
+                fab.setVisibility(View.GONE);
+                ViewCompat.setElevation(appBarLayout, 0);
                 break;
 
             case R.id.activity:
-                mCurrentFragment = ActivityFeedFragment.getInstance();
+                currentFragment = ActivityFeedFragment.getInstance();
                 fragTag = ActivityFeedFragment.TAG;
-                mActionBar.setTitle(R.string.activity);
-                mBottomNavigationView.setVisibility(View.GONE);
+                actionBar.setTitle(R.string.activity);
+                bottomNavigationView.setVisibility(View.GONE);
                 resetFabPosition(false);
                 setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
-                mMenu.findItem(R.id.filter).setVisible(false);
-                mMenu.findItem(R.id.layout).setVisible(false);
-                mMenu.findItem(R.id.search).setVisible(false);
-                mMenu.findItem(R.id.share).setVisible(false);
-                mFab.setVisibility(View.GONE);
-                ViewCompat.setElevation(mAppBarLayout, defaultElevation);
+                menu.findItem(R.id.filter).setVisible(false);
+                menu.findItem(R.id.layout).setVisible(false);
+                menu.findItem(R.id.search).setVisible(false);
+                menu.findItem(R.id.share).setVisible(false);
+                fab.setVisibility(View.GONE);
+                ViewCompat.setElevation(appBarLayout, defaultElevation);
                 break;
 
             case R.id.settings:
@@ -526,17 +526,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.feedback:
-                mWebView.reload();
-                mWebView.loadUrl(getString(R.string.feedback_url));
-                if (mFeedbackDialog == null) {
-                    mFeedbackDialog = new MaterialDialog.Builder(this)
+                webView.reload();
+                webView.loadUrl(getString(R.string.feedback_url));
+                if (feedbackDialog == null) {
+                    feedbackDialog = new MaterialDialog.Builder(this)
                             .title(R.string.give_feedback)
-                            .customView(mWebView, false)
+                            .customView(webView, false)
                             .positiveText(getString(R.string.close))
                             .show();
                 }
                 else {
-                    mFeedbackDialog.show();
+                    feedbackDialog.show();
                 }
                 break;
 
@@ -544,7 +544,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        transaction.replace(R.id.frame, mCurrentFragment).commit();
+        transaction.replace(R.id.frame, currentFragment).commit();
 
         return true;
     }
@@ -556,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .positiveText(R.string.yes)
                 .negativeText(R.string.no)
                 .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                    mAuthManager.logout();
+                    authManager.logout();
                     goToLogin();
                 })
                 .show();
@@ -567,17 +567,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             int color = ContextCompat.getColor(this, colorResource);
             int colorDark = ContextCompat.getColor(this, colorResourceDark);
             getWindow().setStatusBarColor(colorDark);
-            mActionBar.setBackgroundDrawable(new ColorDrawable(color));
+            actionBar.setBackgroundDrawable(new ColorDrawable(color));
         }
     }
 
     private void resetFabPosition(boolean isWall) {
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFab.getLayoutParams();
-        CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) fab.getLayoutParams();
+        CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
         FABScrollBehavior fabScrollBehavior = new FABScrollBehavior(this, null, isWall);
 
         if (isWall) {
-            mFab.show();
+            fab.show();
             bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
                     getResources().getDisplayMetrics());
             coordinatorParams.setBehavior(fabScrollBehavior);

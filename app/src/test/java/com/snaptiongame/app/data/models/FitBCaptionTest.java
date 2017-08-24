@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by nickromero on 2/20/17.
+ * @author Nick Romero
  */
 
 public class FitBCaptionTest {
@@ -16,7 +16,7 @@ public class FitBCaptionTest {
         assertTrue(caption.id == 0);
         assertTrue(caption.beforeBlank.equals("Before"));
         assertTrue(caption.afterBlank.equals("After"));
-        assertTrue(caption.setID == 12345);
+        assertTrue(caption.setId == 12345);
         assertTrue(caption.charLimit == 200);
     }
 }

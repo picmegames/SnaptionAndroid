@@ -22,14 +22,14 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View, AuthCallback {
     @BindView(R.id.logo)
-    ImageView mLogo;
+    ImageView logo;
     @BindView(R.id.facebook_login_button)
-    LoginButton mFacebookLoginButton;
+    LoginButton facebookLoginButton;
     @BindView(R.id.google_sign_in_button)
-    SignInButton mGoogleSignInButton;
+    SignInButton googleSignInButton;
 
-    private AuthManager mAuthManager;
-    private LoginContract.Presenter mPresenter;
+    private AuthManager authManager;
+    private LoginContract.Presenter presenter;
 
     private static final int RC_SIGN_IN = 2222;
 
@@ -40,20 +40,20 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         ButterKnife.bind(this);
 
         // Initialize Authentication Manager
-        mAuthManager = AuthManager.getInstance();
-        mAuthManager.registerCallback(this);
-        mAuthManager.setFacebookCallback(mFacebookLoginButton);
-        mPresenter = new LoginPresenter(this);
+        authManager = AuthManager.getInstance();
+        authManager.registerCallback(this);
+        authManager.setFacebookCallback(facebookLoginButton);
+        presenter = new LoginPresenter(this);
     }
 
     @OnClick(R.id.facebook_login_button_styled)
     public void facebookLogin() {
-        mFacebookLoginButton.performClick();
+        facebookLoginButton.performClick();
     }
 
     @OnClick(R.id.google_sign_in_button_styled)
     public void googleSignIn() {
-        startActivityForResult(mAuthManager.getGoogleIntent(), RC_SIGN_IN);
+        startActivityForResult(authManager.getGoogleIntent(), RC_SIGN_IN);
     }
 
     @Override
@@ -70,25 +70,25 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     protected void onStart() {
         super.onStart();
-        mAuthManager.connectGoogleApi();
+        authManager.connectGoogleApi();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mAuthManager.disconnectGoogleApi();
+        authManager.disconnectGoogleApi();
     }
 
     @Override
     public void onBackPressed() {
-        mAuthManager.registerCallback(null);
+        authManager.registerCallback(null);
         setResult(RESULT_OK);
         finish();
     }
 
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
@@ -96,10 +96,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            mAuthManager.googleActivityResult(data);
+            authManager.googleActivityResult(data);
         }
         else {
-            mAuthManager.facebookActivityResult(requestCode, resultCode, data);
+            authManager.facebookActivityResult(requestCode, resultCode, data);
         }
     }
 }

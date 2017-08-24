@@ -22,11 +22,11 @@ import butterknife.Unbinder;
 
 public class OnboardingInfoFragment extends Fragment {
     @BindView(R.id.title)
-    TextView mTitleText;
+    TextView titleText;
     @BindView(R.id.description)
-    TextView mDescriptionText;
+    TextView descriptionText;
     @BindView(R.id.animation_view)
-    LottieAnimationView mAnimationView;
+    LottieAnimationView animationView;
 
     private Unbinder unbinder;
 
@@ -49,11 +49,11 @@ public class OnboardingInfoFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         Bundle args = getArguments();
 
-        mTitleText.setText(args.getInt(OnboardingInfo.TITLE_ID));
-        mDescriptionText.setText(args.getInt(OnboardingInfo.DESCRIPTION_ID));
-        mAnimationView.setAnimation(getString(args.getInt(OnboardingInfo.ANIMATION)));
-        mAnimationView.loop(true);
-        mAnimationView.playAnimation();
+        titleText.setText(args.getInt(OnboardingInfo.TITLE_ID));
+        descriptionText.setText(args.getInt(OnboardingInfo.DESCRIPTION_ID));
+        animationView.setAnimation(getString(args.getInt(OnboardingInfo.ANIMATION)));
+        animationView.loop(true);
+        animationView.playAnimation();
 
         return view;
     }

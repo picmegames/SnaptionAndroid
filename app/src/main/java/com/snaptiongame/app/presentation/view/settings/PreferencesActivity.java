@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 public class PreferencesActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 .replace(R.id.frame, PreferencesFragment.newInstance())
                 .commit();
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {

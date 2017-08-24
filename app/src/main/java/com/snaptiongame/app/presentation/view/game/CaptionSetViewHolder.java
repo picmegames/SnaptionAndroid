@@ -12,20 +12,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by nickromero on 2/8/17.
+ * @author Nick Romero
  */
 
 public class CaptionSetViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.set_name)
-    TextView mSetName;
+    TextView setName;
     @BindView(R.id.set_image)
-    ImageView mSetImage;
+    ImageView setImage;
 
-    public Context mContext;
+    public Context context;
 
     public CaptionSetViewHolder(View itemView) {
         super(itemView);
-        mContext = itemView.getContext();
+        context = itemView.getContext();
         ButterKnife.bind(this, itemView);
     }
 }

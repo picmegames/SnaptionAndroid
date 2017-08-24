@@ -9,11 +9,11 @@ import android.support.annotation.NonNull;
 public class LoginPresenter implements LoginContract.Presenter {
 
     @NonNull
-    private LoginContract.View mLoginView;
+    private LoginContract.View loginView;
 
     public LoginPresenter(@NonNull LoginContract.View view) {
-        mLoginView = view;
-        mLoginView.setPresenter(this);
+        loginView = view;
+        loginView.setPresenter(this);
     }
 
     @Override

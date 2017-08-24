@@ -15,20 +15,20 @@ import timber.log.Timber;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 
-    private PreferencesContract.View mPreferencesView;
-    private AuthManager mAuthManager;
-    private CompositeDisposable mDisposables;
+    private PreferencesContract.View preferencesView;
+    private AuthManager authManager;
+    private CompositeDisposable disposables;
 
     public PreferencesPresenter(PreferencesContract.View preferencesView) {
-        mPreferencesView = preferencesView;
-        mPreferencesView.setPresenter(this);
-        mAuthManager = AuthManager.getInstance();
-        mDisposables = new CompositeDisposable();
+        this.preferencesView = preferencesView;
+        this.preferencesView.setPresenter(this);
+        authManager = AuthManager.getInstance();
+        disposables = new CompositeDisposable();
     }
 
     @Override
     public void loadCacheSize() {
-        mPreferencesView.updateCacheSummary(CacheUtils.getCacheSize());
+        preferencesView.updateCacheSummary(CacheUtils.getCacheSize());
     }
 
     @Override
@@ -37,14 +37,14 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
-                            mPreferencesView.clearCacheSuccess();
+                            preferencesView.clearCacheSuccess();
                             loadCacheSize();
                         },
                         e -> {
                             Timber.e(e);
-                            mPreferencesView.clearCacheFailure();
+                            preferencesView.clearCacheFailure();
                         });
-        mDisposables.add(disposable);
+        disposables.add(disposable);
     }
 
     @Override
@@ -59,17 +59,17 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
 
     @Override
     public void logout() {
-        mAuthManager.logout();
+        authManager.logout();
     }
 
     @Override
     public void subscribe() {
         loadCacheSize();
-        mPreferencesView.updateLoginSummary();
+        preferencesView.updateLoginSummary();
     }
 
     @Override
     public void unsubscribe() {
-        mDisposables.clear();
+        disposables.clear();
     }
 }

@@ -14,20 +14,20 @@ import java.util.List;
 
 public class OnboardingPagerAdapter extends FragmentStatePagerAdapter {
 
-    private List<OnboardingInfo> mOnboardingInfo;
+    private List<OnboardingInfo> onboardingInfo;
 
     public OnboardingPagerAdapter(FragmentManager manager, List<OnboardingInfo> onboardingInfo) {
         super(manager);
-        mOnboardingInfo = onboardingInfo;
+        this.onboardingInfo = onboardingInfo;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return OnboardingInfoFragment.newInstance(mOnboardingInfo.get(position));
+        return OnboardingInfoFragment.newInstance(onboardingInfo.get(position));
     }
 
     @Override
     public int getCount() {
-        return mOnboardingInfo.size();
+        return onboardingInfo.size();
     }
 }

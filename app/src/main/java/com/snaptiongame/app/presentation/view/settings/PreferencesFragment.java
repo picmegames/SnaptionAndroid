@@ -31,25 +31,25 @@ import timber.log.Timber;
  */
 public class PreferencesFragment extends PreferenceFragment implements PreferencesContract.View,
         Preference.OnPreferenceClickListener {
-    private Preference mCachePreference;
-    private Preference mLogoutPreference;
-    private Preference mVersionPreference;
-    private Preference mLicensesPreference;
-    private Preference mFeedbackPreference;
-    private PreferenceCategory mNotificationsCategory;
-    private SwitchPreference mGameNotificationsPreference;
-    private SwitchPreference mFriendNotificationsPreference;
+    private Preference cachePreference;
+    private Preference logoutPreference;
+    private Preference versionPreference;
+    private Preference licensesPreference;
+    private Preference feedbackPreference;
+    private PreferenceCategory notificationsCategory;
+    private SwitchPreference gameNotificationsPreference;
+    private SwitchPreference friendNotificationsPreference;
 
-    private PreferencesContract.Presenter mPresenter;
-    private PreferenceScreen mPreferenceScreen;
-    private MaterialDialog mLicensesDialog;
-    private MaterialDialog mFeedbackDialog;
-    private WebView mLicensesWebView;
-    private WebView mFeedbackWebView;
-    private ImageView mPuffinLogo;
+    private PreferencesContract.Presenter presenter;
+    private PreferenceScreen preferenceScreen;
+    private MaterialDialog licensesDialog;
+    private MaterialDialog feedbackDialog;
+    private WebView licensesWebView;
+    private WebView feedbackWebView;
+    private ImageView puffinLogo;
 
-    private boolean mListStyled = false;
-    private final EasterEgg mPuffinEasterEgg = new EasterEgg();
+    private boolean listStyled = false;
+    private final EasterEgg puffinEasterEgg = new EasterEgg();
 
     public static PreferencesFragment newInstance() {
         return new PreferencesFragment();
@@ -58,13 +58,13 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new PreferencesPresenter(this);
+        presenter = new PreferencesPresenter(this);
 
         View view = getView();
         ListView list = null;
         if (view != null) {
             list = view.findViewById(android.R.id.list);
-            mPuffinLogo = view.getRootView().findViewById(R.id.puffinlogo);
+            puffinLogo = view.getRootView().findViewById(R.id.puffinlogo);
         }
         if (list != null) {
             list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
@@ -82,47 +82,47 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         addPreferencesFromResource(R.xml.preferences);
 
-        mPreferenceScreen = getPreferenceScreen();
+        preferenceScreen = getPreferenceScreen();
 
-        mNotificationsCategory = (PreferenceCategory) mPreferenceScreen.findPreference(
+        notificationsCategory = (PreferenceCategory) preferenceScreen.findPreference(
                 getString(R.string.notifications));
-        mGameNotificationsPreference = (SwitchPreference) mPreferenceScreen.findPreference(
+        gameNotificationsPreference = (SwitchPreference) preferenceScreen.findPreference(
                 getString(R.string.game_notifications));
-        mFriendNotificationsPreference = (SwitchPreference) mPreferenceScreen.findPreference(
+        friendNotificationsPreference = (SwitchPreference) preferenceScreen.findPreference(
                 getString(R.string.friend_notifications));
 
         setupNotificationStatus();
 
-        mGameNotificationsPreference.setOnPreferenceClickListener(this);
-        mFriendNotificationsPreference.setOnPreferenceClickListener(this);
+        gameNotificationsPreference.setOnPreferenceClickListener(this);
+        friendNotificationsPreference.setOnPreferenceClickListener(this);
 
         setNotificationPreferencesVisibility();
 
-        mCachePreference = mPreferenceScreen.findPreference(getString(R.string.clear_cache));
-        mCachePreference.setOnPreferenceClickListener(this);
+        cachePreference = preferenceScreen.findPreference(getString(R.string.clear_cache));
+        cachePreference.setOnPreferenceClickListener(this);
 
-        mLogoutPreference = mPreferenceScreen.findPreference(getString(R.string.log_out_label));
-        mLogoutPreference.setOnPreferenceClickListener(this);
-        mVersionPreference = mPreferenceScreen.findPreference(getString(R.string.version_label));
-        mVersionPreference.setOnPreferenceClickListener(this);
-        mLicensesPreference = mPreferenceScreen.findPreference(getString(R.string.licenses));
-        mLicensesPreference.setOnPreferenceClickListener(this);
-        mFeedbackPreference = mPreferenceScreen.findPreference(getString(R.string.give_feedback));
-        mFeedbackPreference.setOnPreferenceClickListener(this);
+        logoutPreference = preferenceScreen.findPreference(getString(R.string.log_out_label));
+        logoutPreference.setOnPreferenceClickListener(this);
+        versionPreference = preferenceScreen.findPreference(getString(R.string.version_label));
+        versionPreference.setOnPreferenceClickListener(this);
+        licensesPreference = preferenceScreen.findPreference(getString(R.string.licenses));
+        licensesPreference.setOnPreferenceClickListener(this);
+        feedbackPreference = preferenceScreen.findPreference(getString(R.string.give_feedback));
+        feedbackPreference.setOnPreferenceClickListener(this);
 
         if (packageInfo != null) {
-            mVersionPreference.setSummary(packageInfo.versionName);
+            versionPreference.setSummary(packageInfo.versionName);
         }
-        mLicensesWebView = new WebView(getActivity());
-        mFeedbackWebView = new WebView(getActivity());
-        mFeedbackWebView.getSettings().setJavaScriptEnabled(true);
+        licensesWebView = new WebView(getActivity());
+        feedbackWebView = new WebView(getActivity());
+        feedbackWebView.getSettings().setJavaScriptEnabled(true);
 
-        mPresenter.subscribe();
+        presenter.subscribe();
     }
 
     @Override
     public void updateCacheSummary(String cacheSize) {
-        mCachePreference.setSummary(
+        cachePreference.setSummary(
                 String.format(getString(R.string.current_size), cacheSize));
     }
 
@@ -138,38 +138,38 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     @Override
     public void updateLoginSummary() {
-        if (mPresenter.isLoggedIn()) {
-            mLogoutPreference.setTitle(R.string.log_out_label);
-            mLogoutPreference.setSummary(String.format(getString(R.string.current_login),
-                    mPresenter.getUsername()));
+        if (presenter.isLoggedIn()) {
+            logoutPreference.setTitle(R.string.log_out_label);
+            logoutPreference.setSummary(String.format(getString(R.string.current_login),
+                    presenter.getUsername()));
         }
         else {
-            mLogoutPreference.setTitle(R.string.log_in_label);
-            mLogoutPreference.setSummary("");
+            logoutPreference.setTitle(R.string.log_in_label);
+            logoutPreference.setSummary("");
         }
     }
 
     @Override
     public void setPresenter(PreferencesContract.Presenter presenter) {
-        mPresenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (!mListStyled) {
+        if (!listStyled) {
             View view = getView();
             if (view != null) {
                 ListView list = view.findViewById(android.R.id.list);
                 list.setPadding(0, 0, 0, 0);
                 list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
-                mListStyled = true;
-                mPuffinLogo = view.getRootView().findViewById(R.id.puffinlogo);
+                listStyled = true;
+                puffinLogo = view.getRootView().findViewById(R.id.puffinlogo);
             }
         }
         setupNotificationStatus();
         setNotificationPreferencesVisibility();
-        mPresenter.subscribe();
+        presenter.subscribe();
     }
 
     private void goToLogin() {
@@ -179,20 +179,20 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     private void setNotificationPreferencesVisibility() {
         if (!AuthManager.isLoggedIn()) {
-            mPreferenceScreen.removePreference(mNotificationsCategory);
-            mPreferenceScreen.removePreference(mGameNotificationsPreference);
-            mPreferenceScreen.removePreference(mFriendNotificationsPreference);
+            preferenceScreen.removePreference(notificationsCategory);
+            preferenceScreen.removePreference(gameNotificationsPreference);
+            preferenceScreen.removePreference(friendNotificationsPreference);
         }
         else {
-            mPreferenceScreen.addPreference(mNotificationsCategory);
-            mPreferenceScreen.addPreference(mGameNotificationsPreference);
-            mPreferenceScreen.addPreference(mFriendNotificationsPreference);
+            preferenceScreen.addPreference(notificationsCategory);
+            preferenceScreen.addPreference(gameNotificationsPreference);
+            preferenceScreen.addPreference(friendNotificationsPreference);
         }
     }
 
     private void setupNotificationStatus() {
-        mGameNotificationsPreference.setChecked(AuthManager.isGameNotificationsEnabled());
-        mFriendNotificationsPreference.setChecked(AuthManager.isFriendNotificationsEnabled());
+        gameNotificationsPreference.setChecked(AuthManager.isGameNotificationsEnabled());
+        friendNotificationsPreference.setChecked(AuthManager.isFriendNotificationsEnabled());
     }
 
     @Override
@@ -207,7 +207,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                         .positiveText(R.string.yes)
                         .negativeText(R.string.no)
                         .onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-                            mPresenter.logout();
+                            presenter.logout();
                             goToLogin();
                         })
                         .show();
@@ -217,46 +217,46 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             }
         }
         else if (key.equals(getString(R.string.version_label))) {
-           mPuffinEasterEgg.update(mPuffinLogo);
+           puffinEasterEgg.update(puffinLogo);
         }
         else if (key.equals(getString(R.string.clear_cache))) {
-            mPresenter.clearCache();
+            presenter.clearCache();
         }
         else if (key.equals(getString(R.string.licenses))) {
-            mLicensesWebView.loadUrl(getString(R.string.licenses_url));
-            if (mLicensesDialog == null) {
-                mLicensesDialog = new MaterialDialog.Builder(getActivity())
+            licensesWebView.loadUrl(getString(R.string.licenses_url));
+            if (licensesDialog == null) {
+                licensesDialog = new MaterialDialog.Builder(getActivity())
                         .title(R.string.licenses)
-                        .customView(mLicensesWebView, false)
+                        .customView(licensesWebView, false)
                         .positiveText(R.string.close)
                         .show();
             }
             else {
-                mLicensesDialog.show();
+                licensesDialog.show();
             }
         }
         else if (key.equals(getString(R.string.give_feedback))) {
-            mFeedbackWebView.reload();
-            mFeedbackWebView.loadUrl(getString(R.string.feedback_url));
-            if (mFeedbackDialog == null) {
-                mFeedbackDialog = new MaterialDialog.Builder(getActivity())
+            feedbackWebView.reload();
+            feedbackWebView.loadUrl(getString(R.string.feedback_url));
+            if (feedbackDialog == null) {
+                feedbackDialog = new MaterialDialog.Builder(getActivity())
                         .title(R.string.give_feedback)
-                        .customView(mFeedbackWebView, false)
+                        .customView(feedbackWebView, false)
                         .positiveText(R.string.close)
                         .show();
             }
             else {
-                mFeedbackDialog.show();
+                feedbackDialog.show();
             }
         }
         else if (key.equals(getString(R.string.game_notifications))) {
             boolean userChoice = !AuthManager.isGameNotificationsEnabled();
-            mGameNotificationsPreference.setChecked(userChoice);
+            gameNotificationsPreference.setChecked(userChoice);
             AuthManager.setGameNotificationsEnabled(userChoice);
         }
         else if (key.equals(getString(R.string.friend_notifications))) {
             boolean userChoice = !AuthManager.isFriendNotificationsEnabled();
-            mFriendNotificationsPreference.setChecked(userChoice);
+            friendNotificationsPreference.setChecked(userChoice);
             AuthManager.setFriendNotificationsEnabled(userChoice);
         }
         return true;
@@ -265,6 +265,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.unsubscribe();
+        presenter.unsubscribe();
     }
 }
