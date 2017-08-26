@@ -61,7 +61,7 @@ ext {
     branchVersion = '2.11.1'
     circleImageViewVersion = '2.1.0'
     crashlyticsVersion = '2.6.8'
-    facebookSdkVersion = '4.25.0'
+    facebookSdkVersion = '4.26.0'
     glideVersion = '4.0.0'
     glideTransformationsVersion = '2.0.2'
     lottieVersion = '2.2.0'
