@@ -65,7 +65,8 @@ object ImageUtils {
 
             inputStream.close()
             output.close()
-        } catch (e: IOException) {
+        }
+        catch (e: IOException) {
             Timber.e(e)
         }
 
@@ -80,7 +81,8 @@ object ImageUtils {
             connection.connect()
             val input = connection.inputStream
             return BitmapFactory.decodeStream(input)
-        } catch (e: IOException) {
+        }
+        catch (e: IOException) {
             e.printStackTrace()
             return null
         }
@@ -131,11 +133,13 @@ object ImageUtils {
                 imgRatio = MAX_HEIGHT / actualHeight
                 actualWidth = (imgRatio * actualWidth).toInt()
                 actualHeight = MAX_HEIGHT.toInt()
-            } else if (imgRatio > maxRatio) {
+            }
+            else if (imgRatio > maxRatio) {
                 imgRatio = MAX_WIDTH / actualWidth
                 actualHeight = (imgRatio * actualHeight).toInt()
                 actualWidth = MAX_WIDTH.toInt()
-            } else {
+            }
+            else {
                 actualHeight = MAX_HEIGHT.toInt()
                 actualWidth = MAX_WIDTH.toInt()
             }
@@ -147,13 +151,15 @@ object ImageUtils {
 
         try {
             bmp = BitmapFactory.decodeFile(filePath, options)
-        } catch (exception: OutOfMemoryError) {
+        }
+        catch (exception: OutOfMemoryError) {
             exception.printStackTrace()
         }
 
         try {
             scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight, Bitmap.Config.ARGB_8888)
-        } catch (exception: OutOfMemoryError) {
+        }
+        catch (exception: OutOfMemoryError) {
             exception.printStackTrace()
         }
 
@@ -178,14 +184,17 @@ object ImageUtils {
 
             if (orientation == 6) {
                 matrix.postRotate(NINETY_DEGREES.toFloat())
-            } else if (orientation == 3) {
+            }
+            else if (orientation == 3) {
                 matrix.postRotate(ONE_EIGHTY_DEGREES.toFloat())
-            } else if (orientation == 8) {
+            }
+            else if (orientation == 8) {
                 matrix.postRotate(TWO_SEVENTY_DEGREES.toFloat())
             }
             scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,
                     scaledBitmap.width, scaledBitmap.height, matrix, true)
-        } catch (e: IOException) {
+        }
+        catch (e: IOException) {
             e.printStackTrace()
         }
 
@@ -193,7 +202,8 @@ object ImageUtils {
         try {
             out = FileOutputStream(filePath!!)
             scaledBitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, out)
-        } catch (e: FileNotFoundException) {
+        }
+        catch (e: FileNotFoundException) {
             Timber.e("Could not find file")
         }
 
@@ -204,7 +214,8 @@ object ImageUtils {
         val cursor = SnaptionApplication.getContext().contentResolver.query(contentUri, null, null, null, null)
         if (cursor == null) {
             return contentUri.path
-        } else {
+        }
+        else {
             cursor.moveToFirst()
             val index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
             val path = cursor.getString(index)
@@ -223,7 +234,8 @@ object ImageUtils {
                 val path = getRealPathFromURI(writeToTempImageAndGetPathUri(resolver, bmp))
                 inputStream?.close()
                 return path
-            } catch (e: IOException) {
+            }
+            catch (e: IOException) {
                 Timber.e(e)
             }
 
