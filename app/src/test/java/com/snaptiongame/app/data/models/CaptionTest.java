@@ -13,41 +13,41 @@ public class CaptionTest {
     @Test
     public void testDefaultConstructor() {
         Caption caption = new Caption();
-        assertTrue(caption.id == 0);
+        assertTrue(caption.getId() == 0);
     }
 
     @Test
     public void testConstructorSendCaption() {
         Caption caption = new Caption(0, "");
-        assertTrue(caption.fitBId == 0);
-        assertTrue(caption.caption.isEmpty());
+        assertTrue(caption.getFitBId() == 0);
+        assertTrue(caption.getCaption().isEmpty());
     }
 
     @Test
     public void testConstructorCaption() {
         Caption caption = new Caption(0, 0, 0, 0, 0, "", new FitBCaption(0, 0, "", "", 0));
-        assertTrue(caption.id == 0);
+        assertTrue(caption.getId() == 0);
     }
 
     @Test
     public void testEqualsCaptionTrue() {
         Caption caption1 = new Caption(32, "I'm a caption");
-        caption1.numVotes = 200;
-        caption1.creatorName = "hi";
-        caption1.creatorPicture = "http://url.com";
+        caption1.setNumVotes(200);
+        caption1.setCreatorName("hi");
+        caption1.setCreatorPicture("http://url.com");
         Caption caption2 = new Caption(32, "I'm a caption");
-        caption2.numVotes = 200;
-        caption2.creatorName = "hi";
-        caption2.creatorPicture = "http://url.com";
+        caption2.setNumVotes(200);
+        caption2.setCreatorName("hi");
+        caption2.setCreatorPicture("http://url.com");
         assertTrue(caption1.equals(caption2));
     }
 
     @Test
     public void testEqualsCaptionFalse() {
         Caption caption1 = new Caption(32, "I'm a caption");
-        caption1.numVotes = 200;
+        caption1.setNumVotes(200);
         Caption caption2 = new Caption(32, "I'm a caption");
-        caption1.numVotes = 1234567;
+        caption1.setNumVotes(1234567);
         assertFalse(caption1.equals(caption2));
 
     }

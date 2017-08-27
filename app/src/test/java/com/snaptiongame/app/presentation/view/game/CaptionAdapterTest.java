@@ -45,12 +45,12 @@ public class CaptionAdapterTest {
         Caption caption1 = new Caption(123, "First caption");
         Caption caption2 = new Caption(234, "Second caption");
         Caption caption3 = new Caption(345, "Third caption");
-        caption1.creatorName = "hi";
-        caption2.creatorName = "hi";
-        caption3.creatorName = "hi";
-        caption1.creatorPicture = "http://url.com";
-        caption2.creatorPicture = "http://url.com";
-        caption3.creatorName = "http://url.com";
+        caption1.setCreatorName("hi");
+        caption2.setCreatorName("hi");
+        caption3.setCreatorName("hi");
+        caption1.setCreatorPicture("http://url.com");
+        caption2.setCreatorPicture("http://url.com");
+        caption3.setCreatorName("http://url.com");
         captions2.add(caption1);
         captions2.add(caption2);
         captions2.add(caption3);

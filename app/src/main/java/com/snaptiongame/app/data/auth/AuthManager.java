@@ -335,7 +335,7 @@ public final class AuthManager {
                             setFriendNotificationsEnabled(true);
                             setIsClosedGameDialogEnabled(true);
                             clearLoginInfo();
-                            ApiProvider.clearCookies();
+                            ApiProvider.INSTANCE.clearCookies();
                         },
                         e -> Timber.e("Could not log out of Snaption", e)
                 );

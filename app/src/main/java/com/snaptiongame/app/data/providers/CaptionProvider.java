@@ -18,12 +18,12 @@ import io.reactivex.Single;
  */
 
 public class CaptionProvider {
-    private static SnaptionApi apiService = ApiProvider.getApiService();
+    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
 
     public static Single<List<Caption>> getCaptions(int gameId, int page) {
         return apiService.getCaptions(gameId, page)
                 .flatMapIterable(captions -> captions)
-                .filter(caption -> !caption.beenFlagged)
+                .filter(caption -> !caption.getBeenFlagged())
                 .toList();
     }
 

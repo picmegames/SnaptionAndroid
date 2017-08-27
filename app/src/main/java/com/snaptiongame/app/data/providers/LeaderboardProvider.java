@@ -14,7 +14,7 @@ import io.reactivex.Single;
  */
 
 public class LeaderboardProvider {
-    private static SnaptionApi apiService = ApiProvider.getApiService();
+    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
 
     public static Single<List<User>> getExperienceLeaderboard() {
         return Single.just(new ArrayList<>());

@@ -119,14 +119,14 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.captionerName.setVisibility(View.VISIBLE);
             holder.topCaption.setVisibility(View.VISIBLE);
 
-            if (curGame.topCaption.creatorPicture != null) {
+            if (curGame.topCaption.getCreatorPicture() != null) {
 
                 options = new RequestOptions()
                         .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                         .dontAnimate();
 
                 Glide.with(holder.context)
-                        .load(curGame.topCaption.creatorPicture)
+                        .load(curGame.topCaption.getCreatorPicture())
                         .apply(options)
                         .into(holder.captionerImage);
             }
@@ -137,17 +137,17 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .height(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
                         .toUpperCase()
                         .endConfig()
-                        .buildRound(curGame.topCaption.creatorName.substring(0, 1),
-                                ColorGenerator.MATERIAL.getColor(curGame.topCaption.creatorName)));
+                        .buildRound(curGame.topCaption.getCreatorName().substring(0, 1),
+                                ColorGenerator.MATERIAL.getColor(curGame.topCaption.getCreatorName())));
             }
             ViewCompat.setTransitionName(holder.captionerImage, holder.context.getString(R.string.profile_transition));
-            holder.captionerName.setText(curGame.topCaption.creatorName);
-            holder.captionerId = curGame.topCaption.creatorId;
-            holder.captioner = curGame.topCaption.creatorName;
-            holder.captionerImageUrl = curGame.topCaption.creatorPicture;
-            holder.topCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
-                    TextStyleUtils.getTextUnderlined(curGame.topCaption.caption),
-                    curGame.topCaption.assocFitB.afterBlank));
+            holder.captionerName.setText(curGame.topCaption.getCreatorName());
+            holder.captionerId = curGame.topCaption.getCreatorId();
+            holder.captioner = curGame.topCaption.getCreatorName();
+            holder.captionerImageUrl = curGame.topCaption.getCreatorPicture();
+            holder.topCaption.setText(TextUtils.concat(curGame.topCaption.getAssocFitB().beforeBlank,
+                    TextStyleUtils.getTextUnderlined(curGame.topCaption.getCaption()),
+                    curGame.topCaption.getAssocFitB().afterBlank));
         }
         else {
             holder.captionerImage.setVisibility(View.GONE);

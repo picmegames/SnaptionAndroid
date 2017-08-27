@@ -131,18 +131,18 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
 
         if (topCaption != null && topCaption.isJsonObject()) {
             Caption caption = new Caption();
-            caption.assocFitB = new FitBCaption(0, 0,
+            caption.setAssocFitB(new FitBCaption(0, 0,
                     topCaption.getAsJsonObject().get(Game.FITB_BEFORE).getAsString(),
-                    topCaption.getAsJsonObject().get(Game.FITB_AFTER).getAsString(), 0);
-            caption.caption = topCaption.getAsJsonObject().get(Caption.CAPTION).getAsString();
+                    topCaption.getAsJsonObject().get(Game.FITB_AFTER).getAsString(), 0));
+            caption.setCaption(topCaption.getAsJsonObject().get(Caption.CAPTION).getAsString());
             JsonElement topCaptionerPicture = topCaption.getAsJsonObject().get(Caption.USER_PICTURE);
 
             if (!topCaptionerPicture.isJsonNull()) {
-                caption.creatorPicture = topCaptionerPicture.getAsJsonObject().get(User.IMAGE_URL).getAsString();
+                caption.setCreatorPicture(topCaptionerPicture.getAsJsonObject().get(User.IMAGE_URL).getAsString());
             }
 
-            caption.creatorId = topCaption.getAsJsonObject().get(Caption.USER_ID).getAsInt();
-            caption.creatorName = topCaption.getAsJsonObject().get(Caption.USERNAME).getAsString();
+            caption.setCreatorId(topCaption.getAsJsonObject().get(Caption.USER_ID).getAsInt());
+            caption.setCreatorName(topCaption.getAsJsonObject().get(Caption.USERNAME).getAsString());
             game.topCaption = caption;
         }
         return game;

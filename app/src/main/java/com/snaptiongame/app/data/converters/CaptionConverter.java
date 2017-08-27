@@ -24,8 +24,8 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
     @Override
     public JsonElement serialize(Caption src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(Caption.FITB_ID_SEND, src.fitbIdSend);
-        json.addProperty(Caption.CAPTION, src.caption);
+        json.addProperty(Caption.FITB_ID_SEND, src.getFitbIdSend());
+        json.addProperty(Caption.CAPTION, src.getCaption());
         return json;
     }
 
@@ -37,18 +37,18 @@ public class CaptionConverter implements JsonSerializer<Caption>, JsonDeserializ
         JsonObject creator = content.getAsJsonObject(Caption.CREATOR);
 
         if (creator.isJsonObject()) {
-            caption.creatorName = creator.get(Caption.USERNAME).getAsString();
+            caption.setCreatorName(creator.get(Caption.USERNAME).getAsString());
             JsonObject picture = creator.get(User.PICTURE).getAsJsonObject();
             if (!picture.isJsonNull()) {
-                caption.creatorPicture = picture.get(User.IMAGE_URL).getAsString();
+                caption.setCreatorPicture(picture.get(User.IMAGE_URL).getAsString());
             }
         }
 
-        caption.creatorId = creator.get(User.ID).getAsInt();
+        caption.setCreatorId(creator.get(User.ID).getAsInt());
         JsonElement fitBCaption = content.get(Caption.FITB_OTHER);
 
         if (fitBCaption.isJsonObject()) {
-            caption.assocFitB = new Gson().fromJson(fitBCaption, FitBCaption.class);
+            caption.setAssocFitB(new Gson().fromJson(fitBCaption, FitBCaption.class));
         }
         return caption;
     }
