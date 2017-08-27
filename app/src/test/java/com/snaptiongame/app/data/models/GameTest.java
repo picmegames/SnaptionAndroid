@@ -21,7 +21,7 @@ public class GameTest {
     public void testConstructorSendGame() {
         Game testGame = new Game(false, "", "", new ArrayList<>(), new ArrayList<>(), 0);
         assertTrue(testGame.getUserId() == 0);
-        assertTrue(!testGame.getIsPublic());
+        assertTrue(!testGame.isPublic());
         assertTrue(testGame.getPicture().isEmpty());
         assertTrue(testGame.getType().isEmpty());
         assertTrue(testGame.getFriendIds().isEmpty());

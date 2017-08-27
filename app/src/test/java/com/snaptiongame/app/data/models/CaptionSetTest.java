@@ -37,12 +37,12 @@ public class CaptionSetTest {
 
     @Test
     public void testGetTotalCaptions() {
-        assertEquals(CaptionSet.Companion.getMAX_CAPTIONS(), 10);
+        assertEquals(CaptionSet.MAX_CAPTIONS, 10);
     }
 
     @Test
     public void testGetCaptionsUnlocked() {
-        assertEquals(CaptionSet.Companion.getMIN_CAPTIONS(), 0);
+        assertEquals(CaptionSet.MIN_CAPTIONS, 0);
     }
 
     @Test

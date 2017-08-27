@@ -22,12 +22,12 @@ public class CaptionSetConverterTest {
     @Before
     public void setup() {
         jsonObject = new JsonObject();
-        jsonObject.addProperty(CaptionSet.Companion.getTITLE(), "A Caption Set");
-        jsonObject.addProperty(CaptionSet.Companion.getID(), 123);
-        jsonObject.addProperty(CaptionSet.Companion.getACTIVE(), false);
+        jsonObject.addProperty(CaptionSet.TITLE, "A Caption Set");
+        jsonObject.addProperty(CaptionSet.ID, 123);
+        jsonObject.addProperty(CaptionSet.ACTIVE, false);
 
         captionSet = new CaptionSet();
-        captionSet.setIsCaptionSetActive(false);
+        captionSet.setCaptionSetActive(false);
         captionSet.setId(123);
         captionSet.setSetName("A Caption Set");
 

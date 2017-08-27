@@ -30,11 +30,11 @@ public class BranchConverterTest {
 
         inviteObject.addProperty(GameInvite.INVITE_TOKEN, invite.inviteToken);
         inviteObject.addProperty(GameInvite.GAME_ID, invite.gameId);
-        requestObject.addProperty(DeepLinkRequest.Companion.getGAME_ID(), req.getGameId());
-        requestObject.addProperty(DeepLinkRequest.Companion.getEMAIL(), req.getEmail());
-        requestObject.addProperty(DeepLinkRequest.Companion.getFACEBOOK_ID(), req.getFacebookId());
-        requestObject.addProperty(DeepLinkRequest.Companion.getGOOGLE_ID(), req.getGoogleId());
-        requestObject.addProperty(DeepLinkRequest.Companion.getPHONE(), req.getPhone());
+        requestObject.addProperty(DeepLinkRequest.GAME_ID, req.getGameId());
+        requestObject.addProperty(DeepLinkRequest.EMAIL, req.getEmail());
+        requestObject.addProperty(DeepLinkRequest.FACEBOOK_ID, req.getFacebookId());
+        requestObject.addProperty(DeepLinkRequest.GOOGLE_ID, req.getGoogleId());
+        requestObject.addProperty(DeepLinkRequest.PHONE, req.getPhone());
 
 
         converter = new BranchConverter();

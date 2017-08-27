@@ -25,7 +25,7 @@ public class AddFriendConverterTest {
     public void setup() {
         converter = new AddFriendConverter();
         testJson = new JsonObject();
-        testJson.addProperty(AddFriendRequest.Companion.getFRIEND_ID(), 12345);
+        testJson.addProperty(AddFriendRequest.FRIEND_ID, 12345);
         friendRequest = new AddFriendRequest(12345);
         jsonArray = new JsonArray();
         jsonArray.add(testJson);
