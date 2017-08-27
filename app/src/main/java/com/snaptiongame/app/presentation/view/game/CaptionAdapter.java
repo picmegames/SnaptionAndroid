@@ -43,9 +43,8 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         callback = new ItemListener() {
             @Override
             public void updateUpvote(boolean value, int index) {
-                CaptionAdapter.this.captions.get(index).beenUpvoted = value;
-                CaptionAdapter.this.captions.get(index).numVotes = value ? CaptionAdapter.this.captions.get(index)
-                        .numVotes + 1 : CaptionAdapter.this.captions.get(index).numVotes - 1;
+                CaptionAdapter.this.captions.get(index).setBeenUpvoted(value);
+                CaptionAdapter.this.captions.get(index).setNumVotes(value ? CaptionAdapter.this.captions.get(index).getNumVotes() + 1 : CaptionAdapter.this.captions.get(index).getNumVotes() - 1);
             }
 
             @Override
@@ -75,16 +74,16 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         CaptionCardViewHolder holder = (CaptionCardViewHolder) viewHolder;
         Caption curCaption = captions.get(position);
 
-        if (curCaption.creatorPicture != null) {
+        if (curCaption.getCreatorPicture() != null) {
             RequestOptions options = new RequestOptions()
                     .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                     .dontAnimate();
 
             Glide.with(holder.context)
-                    .load(curCaption.creatorPicture)
+                    .load(curCaption.getCreatorPicture())
                     .apply(options)
                     .into(holder.userImage);
-            holder.imageUrl = curCaption.creatorPicture;
+            holder.imageUrl = curCaption.getCreatorPicture();
         }
         else {
             holder.userImage.setImageDrawable(TextDrawable.builder()
@@ -93,18 +92,18 @@ public class CaptionAdapter extends RecyclerView.Adapter {
                     .height(AVATAR_SIZE)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(curCaption.creatorName.substring(0, 1),
-                            ColorGenerator.MATERIAL.getColor(curCaption.creatorName)));
+                    .buildRound(curCaption.getCreatorName().substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(curCaption.getCreatorName())));
         }
-        holder.userId = curCaption.creatorId;
-        holder.captionId = curCaption.id;
-        holder.caption.setText(TextUtils.concat(curCaption.assocFitB.beforeBlank,
-                TextStyleUtils.getTextUnderlined(curCaption.caption),
-                curCaption.assocFitB.afterBlank));
-        holder.name.setText(curCaption.creatorName);
-        holder.username = curCaption.creatorName;
-        holder.numberOfUpvotes.setText(String.valueOf(curCaption.numVotes));
-        holder.setHasBeenUpvotedOrFlagged(curCaption.beenUpvoted);
+        holder.userId = curCaption.getCreatorId();
+        holder.captionId = curCaption.getId();
+        holder.caption.setText(TextUtils.concat(curCaption.getAssocFitB().beforeBlank,
+                TextStyleUtils.getTextUnderlined(curCaption.getCaption()),
+                curCaption.getAssocFitB().afterBlank));
+        holder.name.setText(curCaption.getCreatorName());
+        holder.username = curCaption.getCreatorName();
+        holder.numberOfUpvotes.setText(String.valueOf(curCaption.getNumVotes()));
+        holder.setHasBeenUpvotedOrFlagged(curCaption.getBeenUpvoted());
 
         setAnimation(holder.itemView, position);
     }

@@ -11,7 +11,7 @@ import io.reactivex.Single;
  */
 
 public class DeepLinkProvider {
-    private static SnaptionApi apiService = ApiProvider.getApiService();
+    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
 
     public static Single<String> getToken(DeepLinkRequest invite) {
         return apiService.getToken(invite);

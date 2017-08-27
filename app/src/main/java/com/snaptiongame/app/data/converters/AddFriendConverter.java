@@ -21,7 +21,7 @@ public class AddFriendConverter implements JsonSerializer<AddFriendRequest>,
     @Override
     public JsonElement serialize(AddFriendRequest src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(AddFriendRequest.FRIEND_ID, src.friendId);
+        json.addProperty(AddFriendRequest.FRIEND_ID, src.getFriendId());
         return json;
     }
 

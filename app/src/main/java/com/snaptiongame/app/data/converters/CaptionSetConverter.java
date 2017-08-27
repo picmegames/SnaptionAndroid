@@ -21,9 +21,9 @@ public class CaptionSetConverter implements JsonSerializer<CaptionSet>, JsonDese
     @Override
     public JsonElement serialize(CaptionSet src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(CaptionSet.TITLE, src.captionSetTitle);
-        json.addProperty(CaptionSet.ID, src.id);
-        json.addProperty(CaptionSet.ACTIVE, src.isCaptionSetActive);
+        json.addProperty(CaptionSet.TITLE, src.getSetName());
+        json.addProperty(CaptionSet.ID, src.getId());
+        json.addProperty(CaptionSet.ACTIVE, src.isCaptionSetActive());
         return json;
     }
 

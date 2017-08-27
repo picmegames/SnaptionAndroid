@@ -27,7 +27,7 @@ public class CaptionSetTest {
         captions.add(new Caption(2, "Third caption"));
 
         testSet = new CaptionSet();
-        testSet.captionSetTitle = "Welcome to the thunderdome.";
+        testSet.setSetName("Welcome to the thunderdome.");
     }
 
     @Test
@@ -37,12 +37,12 @@ public class CaptionSetTest {
 
     @Test
     public void testGetTotalCaptions() {
-        assertEquals(CaptionSet.MAX_CAPTIONS, 10);
+        assertEquals(CaptionSet.Companion.getMAX_CAPTIONS(), 10);
     }
 
     @Test
     public void testGetCaptionsUnlocked() {
-        assertEquals(CaptionSet.MIN_CAPTIONS, 0);
+        assertEquals(CaptionSet.Companion.getMIN_CAPTIONS(), 0);
     }
 
     @Test

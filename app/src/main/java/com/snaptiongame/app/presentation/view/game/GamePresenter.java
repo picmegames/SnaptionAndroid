@@ -83,7 +83,7 @@ public class GamePresenter implements GameContract.Presenter {
                 .subscribe(
                         game -> gameView.showGame(game.imageUrl, game.id, game.creatorId,
                                 game.creatorName, game.creatorImage, game.beenUpvoted, game.beenFlagged,
-                                DateUtils.isPastNow(game.endDate), game.isPublic),
+                                DateUtils.INSTANCE.isPastNow(game.endDate), game.isPublic),
                         Timber::e
                 );
         disposables.add(disposable);

@@ -28,12 +28,12 @@ public class PreferencesPresenter implements PreferencesContract.Presenter {
 
     @Override
     public void loadCacheSize() {
-        preferencesView.updateCacheSummary(CacheUtils.getCacheSize());
+        preferencesView.updateCacheSummary(CacheUtils.INSTANCE.getCacheSize());
     }
 
     @Override
     public void clearCache() {
-        Disposable disposable = CacheUtils.clearCache()
+        Disposable disposable = CacheUtils.INSTANCE.clearCache()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {

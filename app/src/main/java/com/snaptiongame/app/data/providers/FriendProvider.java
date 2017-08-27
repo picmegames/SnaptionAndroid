@@ -16,7 +16,7 @@ import io.reactivex.Single;
  */
 
 public class FriendProvider {
-    private static SnaptionApi apiService = ApiProvider.getApiService();
+    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
 
     public static Observable<List<Friend>> getFriends(int page) {
         return apiService.getFriends(page);

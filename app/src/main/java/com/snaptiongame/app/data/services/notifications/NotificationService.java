@@ -111,7 +111,7 @@ public class NotificationService extends FirebaseMessagingService {
                         NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
                         style.setBigContentTitle(title);
                         style.setSummaryText(message);
-                        style.bigPicture(ImageUtils.getBitmapFromURL(imageUrl));
+                        style.bigPicture(ImageUtils.INSTANCE.getBitmapFromURL(imageUrl));
                         builder.setStyle(style);
                     }
                     // PASS image url to GameActivity
@@ -124,7 +124,7 @@ public class NotificationService extends FirebaseMessagingService {
                     // IF the user picture is not null and not empty
                     if (userImageUrl != null && !userImageUrl.isEmpty()) {
                         // SET notification large icon
-                        builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(data.get(USER_PICTURE)));
+                        builder.setLargeIcon(ImageUtils.INSTANCE.getCircularBitmapFromUrl(data.get(USER_PICTURE)));
                     }
                 }
                 // SPECIFY we are coming from a clicked notification
@@ -148,7 +148,7 @@ public class NotificationService extends FirebaseMessagingService {
                     // IF the user picture is not null and not empty
                     if (userImageUrl != null && !userImageUrl.isEmpty()) {
                         // SET notification large icon
-                        builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(userImageUrl));
+                        builder.setLargeIcon(ImageUtils.INSTANCE.getCircularBitmapFromUrl(userImageUrl));
                     }
                 }
                 // SPECIFY that the profile we are viewing is not the current user's
