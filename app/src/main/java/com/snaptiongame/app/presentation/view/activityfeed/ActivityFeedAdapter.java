@@ -81,18 +81,18 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
                 curActivityItem.getType() != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
 
             holder.contentImage.setVisibility(View.VISIBLE);
-            holder.game.isClosed = DateUtils.INSTANCE.isPastDate(holder.game.endDate, currentTime);
+            holder.game.setClosed(DateUtils.INSTANCE.isPastDate(holder.game.getEndDate(), currentTime));
 
-            if (curActivityItem.getGame().imageUrl != null) {
+            if (curActivityItem.getGame().getImageUrl() != null) {
                 RequestOptions options = new RequestOptions()
-                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.getGame().imageUrl)))
+                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.getGame().getImageUrl())))
                         .dontAnimate();
 
                 Glide.with(holder.context)
-                        .load(curActivityItem.getGame().imageUrl)
+                        .load(curActivityItem.getGame().getImageUrl())
                         .apply(options)
                         .into(holder.contentImage);
-                ViewCompat.setTransitionName(holder.contentImage, curActivityItem.getGame().imageUrl);
+                ViewCompat.setTransitionName(holder.contentImage, curActivityItem.getGame().getImageUrl());
             }
             else {
                 Glide.with(holder.context)

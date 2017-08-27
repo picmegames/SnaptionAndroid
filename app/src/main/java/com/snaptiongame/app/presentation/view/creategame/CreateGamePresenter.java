@@ -119,8 +119,8 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     public int getFriendIdByName(String name) {
         if (friends != null) {
             for (Friend friend : friends) {
-                if (friend.username.equals(name)) {
-                    return friend.id;
+                if (friend.getUsername().equals(name)) {
+                    return friend.getId();
                 }
             }
         }
@@ -148,7 +148,7 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
         this.friends.addAll(friends);
         List<String> names = new ArrayList<>();
         for (Friend friend : friends) {
-            names.add(friend.username);
+            names.add(friend.getUsername());
         }
         createGameView.addFriendNames(names);
     }

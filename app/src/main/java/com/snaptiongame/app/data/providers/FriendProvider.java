@@ -47,7 +47,7 @@ public class FriendProvider {
     public static Single<Boolean> isFriend(int userId) {
         return getAllFriends()
                 .flatMapIterable(friend -> friend)
-                .map(friend -> friend.id)
+                .map(friend -> friend.getId())
                 .contains(userId);
     }
 }

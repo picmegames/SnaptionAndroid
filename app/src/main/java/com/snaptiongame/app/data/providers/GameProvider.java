@@ -23,28 +23,28 @@ public class GameProvider {
     public static Single<List<Game>> getGamesMine(List<String> tags, String status, int page) {
         return apiService.getGamesMine(tags, status, page)
                 .flatMapIterable(games -> games)
-                .filter(game -> !game.beenFlagged)
+                .filter(game -> !game.getBeenFlagged())
                 .toList();
     }
 
     public static Single<List<Game>> getGamesDiscover(List<String> tags, String status, int page) {
         return apiService.getGamesDiscover(tags, status, page)
                 .flatMapIterable(games -> games)
-                .filter(game -> !game.beenFlagged)
+                .filter(game -> !game.getBeenFlagged())
                 .toList();
     }
   
     public static Single<List<Game>> getGamesPopular(List<String> tags, String status, int page) {
         return apiService.getGamesPopular(tags, status, page)
                 .flatMapIterable(games -> games)
-                .filter(game -> !game.beenFlagged)
+                .filter(game -> !game.getBeenFlagged())
                 .toList();
     }
 
     public static Single<List<Game>> getGamesHistory(int userId, int page) {
         return apiService.getGamesHistory(userId, page)
                 .flatMapIterable(games -> games)
-                .filter(game -> !game.beenFlagged)
+                .filter(game -> !game.getBeenFlagged())
                 .toList();
     }
 
@@ -54,7 +54,7 @@ public class GameProvider {
 
     public static Single<List<Friend>> getPrivateGameUsers(int gameId) {
         return getGame(gameId, null)
-                .map(game -> game.users)
+                .map(game -> game.getUsers())
                 .toObservable()
                 .flatMapIterable(users -> users)
                 .filter(user -> user.id != AuthManager.getUserId())
@@ -64,7 +64,7 @@ public class GameProvider {
 
     public static Single<List<Tag>> getGameTags(int gameId) {
         return getGame(gameId, null)
-                .map(game -> game.tags);
+                .map(game -> game.getTags());
     }
 
     public static Completable upvoteOrFlagGame(GameAction request) {

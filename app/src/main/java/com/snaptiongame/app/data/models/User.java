@@ -43,12 +43,12 @@ public class User {
 
     //Convert a Friend to a User
     public User(Friend friend) {
-        this.id = friend.id;
-        this.picture = friend.picture;
-        this.username = friend.username;
-        this.imageWidth = friend.imageWidth;
-        this.imageHeight = friend.imageHeight;
-        this.imageUrl = friend.imageUrl;
+        this.id = friend.getId();
+        this.picture = friend.getPicture();
+        this.username = friend.getUsername();
+        this.imageWidth = friend.getImageWidth();
+        this.imageHeight = friend.getImageHeight();
+        this.imageUrl = friend.getImageUrl();
     }
 
     public User(String username) {

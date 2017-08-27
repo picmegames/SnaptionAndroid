@@ -28,28 +28,28 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
     @Override
     public JsonElement serialize(Game src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(Game.IS_PUBLIC, src.isPublic);
-        json.addProperty(Game.GAME_DURATION, src.gameDuration);
+        json.addProperty(Game.IS_PUBLIC, src.isPublic());
+        json.addProperty(Game.GAME_DURATION, src.getGameDuration());
 
-        if (!src.isFromAnotherGame) {
-            json.addProperty(Game.PICTURE, src.picture);
-            json.addProperty(Game.IMG_TYPE, src.type);
+        if (!src.isFromAnotherGame()) {
+            json.addProperty(Game.PICTURE, src.getPicture());
+            json.addProperty(Game.IMG_TYPE, src.getType());
         }
         else {
-            json.addProperty(Game.GAME_ID, src.gameId);
+            json.addProperty(Game.GAME_ID, src.getGameId());
         }
 
         JsonArray tags = new JsonArray();
-        if (src.sendTags != null && !src.sendTags.isEmpty()) {
-            for (String sendTag : src.sendTags) {
+        if (src.getSendTags() != null && !src.getSendTags().isEmpty()) {
+            for (String sendTag : src.getSendTags()) {
                 tags.add(sendTag);
             }
         }
         json.add(Game.TAGS, tags);
 
         JsonArray friends = new JsonArray();
-        if (src.friendIds != null && !src.friendIds.isEmpty()) {
-            for (Integer friendId : src.friendIds) {
+        if (src.getFriendIds() != null && !src.getFriendIds().isEmpty()) {
+            for (Integer friendId : src.getFriendIds()) {
                 friends.add(friendId);
             }
         }
@@ -69,24 +69,24 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 content.get(Game.IS_PUBLIC).getAsBoolean(),
                 creatorObject.get(Game.ID).getAsInt(), "", "");
 
-        game.numUpvotes = content.get(Game.NUM_UPVOTES).getAsInt();
-        game.creatorName = creatorObject.get(User.USERNAME).getAsString();
+        game.setNumUpvotes(content.get(Game.NUM_UPVOTES).getAsInt());
+        game.setCreatorName(creatorObject.get(User.USERNAME).getAsString());
 
         if (!creatorObject.get(User.PICTURE).isJsonNull()) {
-            game.creatorImage = creatorObject.get(User.PICTURE).getAsJsonObject().get(User.IMAGE_URL).getAsString();
+            game.setCreatorImage(creatorObject.get(User.PICTURE).getAsJsonObject().get(User.IMAGE_URL).getAsString());
         }
 
         JsonObject picture = content.getAsJsonObject(Game.PICTURE);
-        game.imageUrl = picture.get(Game.IMAGE_URL).getAsString();
-        game.imageWidth = picture.get(Game.IMAGE_WIDTH).getAsInt();
-        game.imageHeight = picture.get(Game.IMAGE_HEIGHT).getAsInt();
+        game.setImageUrl(picture.get(Game.IMAGE_URL).getAsString());
+        game.setImageWidth(picture.get(Game.IMAGE_WIDTH).getAsInt());
+        game.setImageHeight(picture.get(Game.IMAGE_HEIGHT).getAsInt());
 
         JsonElement endDate = content.get(Game.END_DATE);
         if (endDate.isJsonNull()) {
-            game.endDate = 0;
+            game.setEndDate(0);
         }
         else {
-            game.endDate = endDate.getAsLong();
+            game.setEndDate(endDate.getAsLong());
         }
 
         JsonArray tags = content.getAsJsonArray(Game.TAGS);
@@ -96,7 +96,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 gameTags.add(new Gson().fromJson(tag, Tag.class));
             }
         }
-        game.tags = gameTags;
+        game.setTags(gameTags);
 
         JsonArray users = content.getAsJsonArray(Game.USERS);
         JsonObject userObject;
@@ -120,11 +120,11 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
                 gameUsers.add(newUser);
             }
         }
-        game.users = gameUsers;
+        game.setUsers(gameUsers);
 
         if (content.get(Game.BEEN_UPVOTED) != null && content.get(Game.BEEN_FLAGGED) != null) {
-            game.beenUpvoted = content.get(Game.BEEN_UPVOTED).getAsBoolean();
-            game.beenFlagged = content.get(Game.BEEN_FLAGGED).getAsBoolean();
+            game.setBeenUpvoted(content.get(Game.BEEN_UPVOTED).getAsBoolean());
+            game.setBeenFlagged(content.get(Game.BEEN_FLAGGED).getAsBoolean());
         }
 
         JsonElement topCaption = content.get(Game.TOP_CAPTION);
@@ -143,7 +143,7 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
 
             caption.setCreatorId(topCaption.getAsJsonObject().get(Caption.USER_ID).getAsInt());
             caption.setCreatorName(topCaption.getAsJsonObject().get(Caption.USERNAME).getAsString());
-            game.topCaption = caption;
+            game.setTopCaption(caption);
         }
         return game;
     }
