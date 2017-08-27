@@ -145,9 +145,9 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.captionerId = curGame.topCaption.getCreatorId();
             holder.captioner = curGame.topCaption.getCreatorName();
             holder.captionerImageUrl = curGame.topCaption.getCreatorPicture();
-            holder.topCaption.setText(TextUtils.concat(curGame.topCaption.getAssocFitB().beforeBlank,
+            holder.topCaption.setText(TextUtils.concat(curGame.topCaption.getAssocFitB().getBeforeBlank(),
                     TextStyleUtils.getTextUnderlined(curGame.topCaption.getCaption()),
-                    curGame.topCaption.getAssocFitB().afterBlank));
+                    curGame.topCaption.getAssocFitB().getAfterBlank()));
         }
         else {
             holder.captionerImage.setVisibility(View.GONE);

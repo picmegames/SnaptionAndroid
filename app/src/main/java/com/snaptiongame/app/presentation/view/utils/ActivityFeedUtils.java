@@ -35,8 +35,8 @@ public class ActivityFeedUtils {
                 break;
             case CAPTIONED_GAME:
                 message = TextUtils.concat(TextStyleUtils.getTextBolded(item.getFriend().username), " ",
-                        res.getString(R.string.captioned_game), " ", item.getCaption().getAssocFitB().beforeBlank,
-                        TextStyleUtils.getTextUnderlined(item.getCaption().getCaption()), item.getCaption().getAssocFitB().afterBlank);
+                        res.getString(R.string.captioned_game), " ", item.getCaption().getAssocFitB().getBeforeBlank(),
+                        TextStyleUtils.getTextUnderlined(item.getCaption().getCaption()), item.getCaption().getAssocFitB().getAfterBlank());
                 break;
             case FRIENDED_YOU:
                 message = TextUtils.concat(TextStyleUtils.getTextBolded(item.getFriend().username), " ",

@@ -604,7 +604,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         fitBEditTextField.setText("");
         fitBEditTextLayout.setHint("");
         adapter.clear();
-        presenter.addCaption(fitBAdapter.getCaption(currentCaption).id,
+        presenter.addCaption(fitBAdapter.getCaption(currentCaption).getId(),
                 curEntry);
         refreshLayout.setRefreshing(true);
         addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),

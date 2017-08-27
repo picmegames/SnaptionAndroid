@@ -97,9 +97,9 @@ public class CaptionAdapter extends RecyclerView.Adapter {
         }
         holder.userId = curCaption.getCreatorId();
         holder.captionId = curCaption.getId();
-        holder.caption.setText(TextUtils.concat(curCaption.getAssocFitB().beforeBlank,
+        holder.caption.setText(TextUtils.concat(curCaption.getAssocFitB().getBeforeBlank(),
                 TextStyleUtils.getTextUnderlined(curCaption.getCaption()),
-                curCaption.getAssocFitB().afterBlank));
+                curCaption.getAssocFitB().getAfterBlank()));
         holder.name.setText(curCaption.getCreatorName());
         holder.username = curCaption.getCreatorName();
         holder.numberOfUpvotes.setText(String.valueOf(curCaption.getNumVotes()));

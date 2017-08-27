@@ -31,11 +31,11 @@ public class BranchConverter implements JsonSerializer<DeepLinkRequest> {
     @Override
     public JsonElement serialize(DeepLinkRequest src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(DeepLinkRequest.GAME_ID, src.gameId);
-        json.addProperty(DeepLinkRequest.PHONE, src.phone);
-        json.addProperty(DeepLinkRequest.GOOGLE_ID, src.googleId);
-        json.addProperty(DeepLinkRequest.FACEBOOK_ID, src.facebookId);
-        json.addProperty(DeepLinkRequest.EMAIL, src.email);
+        json.addProperty(DeepLinkRequest.GAME_ID, src.getGameId());
+        json.addProperty(DeepLinkRequest.PHONE, src.getPhone());
+        json.addProperty(DeepLinkRequest.GOOGLE_ID, src.getGoogleId());
+        json.addProperty(DeepLinkRequest.FACEBOOK_ID, src.getFacebookId());
+        json.addProperty(DeepLinkRequest.EMAIL, src.getEmail());
         return json;
     }
 }

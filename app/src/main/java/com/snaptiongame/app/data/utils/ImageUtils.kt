@@ -200,7 +200,7 @@ object ImageUtils {
 
         val out: FileOutputStream
         try {
-            out = FileOutputStream(filePath!!)
+            out = FileOutputStream(filePath)
             scaledBitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, out)
         }
         catch (e: FileNotFoundException) {
