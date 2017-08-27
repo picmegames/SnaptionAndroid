@@ -13,7 +13,7 @@ import io.reactivex.Single;
  */
 
 public class SessionProvider {
-    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Single<Session> userOAuthFacebook(OAuthRequest request) {
         return apiService.userOAuthFacebook(request);

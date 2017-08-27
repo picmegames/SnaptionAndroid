@@ -22,7 +22,7 @@ public class ActivityFeedItemConverter implements JsonDeserializer<ActivityFeedI
     @Override
     public ActivityFeedItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject activityObject = json.getAsJsonObject();
-        Gson gson = ApiProvider.INSTANCE.getGson();
+        Gson gson = ApiProvider.getGson();
 
         User friend = gson.fromJson(activityObject.get(ActivityFeedItem.FRIEND), User.class);
         Game game = gson.fromJson(activityObject.get(ActivityFeedItem.GAME), Game.class);

@@ -13,7 +13,7 @@ import io.reactivex.Single;
  */
 
 public class ActivityFeedProvider {
-    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Single<List<ActivityFeedItem>> getActivityFeed(int page) {
         return apiService.getActivityFeed(page);

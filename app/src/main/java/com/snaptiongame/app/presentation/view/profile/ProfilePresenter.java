@@ -139,7 +139,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
 
     @Override
     public void convertImage(String type, Uri uri) {
-        Disposable disposable = ImageUtils.INSTANCE.getCompressedImage(uri)
+        Disposable disposable = ImageUtils.getCompressedImage(uri)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

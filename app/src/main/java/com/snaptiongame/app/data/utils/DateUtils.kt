@@ -21,17 +21,21 @@ object DateUtils {
     const val MINUTES_IN_HOUR = 60
     const val HOURS_IN_DAY = 24
 
+    @JvmStatic
     val now: Long
         get() = System.currentTimeMillis() / MILLIS
 
+    @JvmStatic
     fun isPastDate(date1: Long, date2: Long): Boolean {
         return date1 <= date2
     }
 
+    @JvmStatic
     fun isPastNow(date: Long): Boolean {
         return date <= now
     }
 
+    @JvmStatic
     fun getTimeSince(context: Context, date: Long): String {
         val diffInDays: Int
         val diff = now - date
@@ -40,17 +44,20 @@ object DateUtils {
         diffInDays = (diff / (SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY)).toInt()
         if (diffInDays > 0) {
             return String.format(res.getString(R.string.days), diffInDays)
-        } else {
+        }
+        else {
             val diffHours = (diff / (SECONDS_IN_MINUTE * MINUTES_IN_HOUR)).toInt()
             if (diffHours > 0) {
                 return String.format(res.getString(R.string.hours), diffHours)
-            } else {
+            }
+            else {
                 val diffMinutes = (diff / SECONDS_IN_MINUTE % MINUTES_IN_HOUR).toInt()
                 return String.format(res.getString(R.string.minutes), diffMinutes)
             }
         }
     }
 
+    @JvmStatic
     fun getTimeLeftLabel(context: Context, date: Long): String {
         val dateDiff = date - now
         val daySeconds = ONE_DAY / MILLIS
@@ -59,10 +66,12 @@ object DateUtils {
 
         if (dateDiff <= 0) {
             return res.getQuantityString(R.plurals.days_left, timeLeft, timeLeft)
-        } else if (dateDiff < daySeconds) {
+        }
+        else if (dateDiff < daySeconds) {
             timeLeft = Math.ceil((dateDiff / SECONDS_IN_HOUR).toDouble()).toInt()
             return res.getQuantityString(R.plurals.hours_left, timeLeft, timeLeft)
-        } else {
+        }
+        else {
             timeLeft = Math.ceil((dateDiff / daySeconds).toDouble()).toInt()
             return res.getQuantityString(R.plurals.days_left, timeLeft, timeLeft)
         }

@@ -9,6 +9,6 @@ import org.junit.Test;
 public class ImageUtilsTest {
     @Test
     public void testConvertImage() {
-        ImageUtils.INSTANCE.getCompressedImage(null);
+        ImageUtils.getCompressedImage(null);
     }
 }

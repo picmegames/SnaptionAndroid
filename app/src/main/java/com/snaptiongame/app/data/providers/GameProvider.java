@@ -18,7 +18,7 @@ import io.reactivex.Single;
  */
 
 public class GameProvider {
-    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Single<List<Game>> getGamesMine(List<String> tags, String status, int page) {
         return apiService.getGamesMine(tags, status, page)

@@ -179,13 +179,13 @@ public class WallAdapter extends RecyclerView.Adapter {
             }
             ViewCompat.setTransitionName(holder.creatorImage, holder.context.getString(R.string.profile_transition));
 
-            holder.timeLeft.setText(DateUtils.INSTANCE.getTimeLeftLabel(holder.context, curGame.getEndDate()));
+            holder.timeLeft.setText(DateUtils.getTimeLeftLabel(holder.context, curGame.getEndDate()));
         }
 
         holder.hasBeenUpvotedOrFlagged(curGame.getBeenUpvoted());
         holder.numberOfUpvotes.setText(String.valueOf(curGame.getNumUpvotes()));
 
-        holder.isClosed = DateUtils.INSTANCE.isPastDate(curGame.getEndDate(), currentTime);
+        holder.isClosed = DateUtils.isPastDate(curGame.getEndDate(), currentTime);
 
         if (holder.isClosed) {
             holder.gameStatus.setText(holder.context.getString(R.string.game_closed));
@@ -211,7 +211,7 @@ public class WallAdapter extends RecyclerView.Adapter {
     public void addGames(List<Game> games) {
         int oldSize = this.games.size();
         this.games.addAll(games);
-        currentTime = DateUtils.INSTANCE.getNow();
+        currentTime = DateUtils.getNow();
         notifyItemRangeInserted(oldSize, this.games.size());
     }
 

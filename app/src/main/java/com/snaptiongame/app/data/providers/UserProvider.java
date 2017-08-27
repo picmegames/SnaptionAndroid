@@ -15,7 +15,7 @@ import io.reactivex.Single;
  */
 
 public class UserProvider {
-    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Single<User> getUser(int userId) {
         return apiService.getUser(userId);

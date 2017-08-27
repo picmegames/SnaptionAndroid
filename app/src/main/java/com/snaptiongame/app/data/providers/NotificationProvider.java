@@ -10,7 +10,7 @@ import io.reactivex.Completable;
  */
 
 public class NotificationProvider {
-    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Completable refreshNotificationToken(String deviceToken) {
         return apiService.refreshNotificationToken(deviceToken);

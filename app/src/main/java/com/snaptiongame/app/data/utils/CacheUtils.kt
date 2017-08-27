@@ -21,10 +21,12 @@ object CacheUtils {
     private const val PREFIX = "KMGTPE"
     private const val BYTE = " B"
 
+    @JvmStatic
     fun clearCache(): Completable {
         return Completable.defer(Callable<CompletableSource> { deleteCache() })
     }
 
+    @JvmStatic
     val cacheSize: String
         get() {
             var size: Long = 0
@@ -39,7 +41,8 @@ object CacheUtils {
         for (file in dir!!.listFiles()) {
             if (file != null && file.isDirectory) {
                 size += getDirSize(file)
-            } else if (file != null && file.isFile) {
+            }
+            else if (file != null && file.isFile) {
                 size += file.length()
             }
         }
@@ -60,7 +63,8 @@ object CacheUtils {
         try {
             val dir = SnaptionApplication.getContext().cacheDir
             deleteDir(dir)
-        } catch (e: Exception) {
+        }
+        catch (e: Exception) {
             Timber.e(e)
         }
 
@@ -77,9 +81,11 @@ object CacheUtils {
                 }
             }
             return dir.delete()
-        } else return if (dir != null && dir.isFile) {
+        }
+        else return if (dir != null && dir.isFile) {
             dir.delete()
-        } else {
+        }
+        else {
             false
         }
     }

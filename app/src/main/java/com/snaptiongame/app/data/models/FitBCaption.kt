@@ -7,14 +7,11 @@ import com.google.gson.annotations.SerializedName
  * @author Nick Romero
  */
 
-class FitBCaption(@SerializedName(ID) var id: Int,
-                  @SerializedName(CHAR_LIMIT) var charLimit: Int,
-                  @SerializedName(BEFORE) var beforeBlank: String,
-                  @SerializedName(AFTER) var afterBlank: String,
-                  @SerializedName(SET_ID) var setId: Int) {
-
-    @SerializedName(USER_ENTRY)
-    var userEntry: String = ""
+class FitBCaption(@SerializedName(ID) val id: Int,
+                  @SerializedName(CHAR_LIMIT) val charLimit: Int,
+                  @SerializedName(BEFORE) val beforeBlank: String,
+                  @SerializedName(AFTER) val afterBlank: String,
+                  @SerializedName(SET_ID) val setId: Int) {
 
     override fun equals(other: Any?): Boolean {
         return other is FitBCaption && other.id == id
@@ -26,7 +23,6 @@ class FitBCaption(@SerializedName(ID) var id: Int,
         const val AFTER = "after"
         const val CHAR_LIMIT = "charLimit"
         const val SET_ID = "set_id"
-        const val USER_ENTRY = "userEntry"
         const val PLACEHOLDER = "______"
     }
 }

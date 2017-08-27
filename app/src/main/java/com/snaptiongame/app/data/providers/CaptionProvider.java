@@ -18,7 +18,7 @@ import io.reactivex.Single;
  */
 
 public class CaptionProvider {
-    private static SnaptionApi apiService = ApiProvider.INSTANCE.getApiService();
+    private static SnaptionApi apiService = ApiProvider.getApiService();
 
     public static Single<List<Caption>> getCaptions(int gameId, int page) {
         return apiService.getCaptions(gameId, page)

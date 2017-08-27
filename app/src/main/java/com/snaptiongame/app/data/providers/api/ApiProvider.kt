@@ -79,13 +79,15 @@ object ApiProvider {
     private var apiService: SnaptionApi? = null
     private var cookieStore: PersistentCookieStore? = null
     private var trustManager: X509TrustManager? = null
+
+    @JvmStatic
     var gson: Gson? = null
         private set
 
-    private val CERT_TYPE = "X.509"
-    private val CA = "ca"
-    private val TLS = "TLS"
-    private val CONNECTION_TIMEOUT: Long = 60
+    private const val CERT_TYPE = "X.509"
+    private const val CA = "ca"
+    private const val TLS = "TLS"
+    private const val CONNECTION_TIMEOUT: Long = 60
 
     /**
      * This method provides and handles the creation of
@@ -93,6 +95,7 @@ object ApiProvider {
      *
      * @return An instance of a Game API service
      */
+    @JvmStatic
     fun getApiService(): SnaptionApi {
         if (apiService == null) {
             gson = setupGson()
@@ -168,6 +171,7 @@ object ApiProvider {
         return okHttpClientBuilder.build()
     }
 
+    @JvmStatic
     fun clearCookies() {
         cookieStore!!.removeAll()
     }

@@ -44,6 +44,7 @@ object ImageUtils {
     private const val TWO_SEVENTY_DEGREES = 270
     private const val BUFFER_SIZE = 8192
 
+    @JvmStatic
     fun getCompressedImage(uri: Uri): Observable<String> {
         return Observable.defer { Observable.just(convertImageBase64(uri)) }
     }
@@ -73,6 +74,7 @@ object ImageUtils {
         return picture
     }
 
+    @JvmStatic
     fun getBitmapFromURL(imageUrl: String): Bitmap? {
         try {
             val url = URL(imageUrl)
@@ -89,6 +91,7 @@ object ImageUtils {
 
     }
 
+    @JvmStatic
     fun getCircularBitmapFromUrl(imageUrl: String): Bitmap {
         return convertToCircularBitmap(getBitmapFromURL(imageUrl))
     }

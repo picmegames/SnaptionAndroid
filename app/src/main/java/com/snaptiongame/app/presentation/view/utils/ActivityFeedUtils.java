@@ -56,7 +56,7 @@ public class ActivityFeedUtils {
         }
 
         message = TextUtils.concat(message, " ",
-                TextStyleUtils.getTextGray(DateUtils.INSTANCE.getTimeSince(context, item.getDate())));
+                TextStyleUtils.getTextGray(DateUtils.getTimeSince(context, item.getDate())));
 
         return message;
     }

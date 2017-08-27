@@ -81,7 +81,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
                 curActivityItem.getType() != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
 
             holder.contentImage.setVisibility(View.VISIBLE);
-            holder.game.setClosed(DateUtils.INSTANCE.isPastDate(holder.game.getEndDate(), currentTime));
+            holder.game.setClosed(DateUtils.isPastDate(holder.game.getEndDate(), currentTime));
 
             if (curActivityItem.getGame().getImageUrl() != null) {
                 RequestOptions options = new RequestOptions()
@@ -117,7 +117,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
     public void addActivityItems(List<ActivityFeedItem> items) {
         int oldSize = activityItems.size();
         activityItems.addAll(items);
-        currentTime = DateUtils.INSTANCE.getNow();
+        currentTime = DateUtils.getNow();
         notifyItemRangeInserted(oldSize, activityItems.size());
     }
 
