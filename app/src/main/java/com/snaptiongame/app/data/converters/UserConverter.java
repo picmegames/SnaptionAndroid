@@ -20,11 +20,11 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
     @Override
     public JsonElement serialize(User src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        if (src.username == null) {
-            json.addProperty(User.PICTURE, src.picture);
-            json.addProperty(User.TYPE, src.type);
+        if (src.getUsername() == null) {
+            json.addProperty(User.PICTURE, src.getPicture());
+            json.addProperty(User.TYPE, src.getType());
         } else {
-            json.addProperty(User.USERNAME, src.username);
+            json.addProperty(User.USERNAME, src.getUsername());
         }
         return json;
     }
@@ -47,19 +47,19 @@ public class UserConverter implements JsonSerializer<User>, JsonDeserializer<Use
 
         User newUser = new User();
 
-        newUser.id = object.get(User.ID).getAsInt();
-        newUser.username = object.get(User.USERNAME).getAsString();
-        newUser.isFriend = object.get(User.IS_FRIEND).getAsBoolean();
+        newUser.setId(object.get(User.ID).getAsInt());
+        newUser.setUsername(object.get(User.USERNAME).getAsString());
+        newUser.setFriend(object.get(User.IS_FRIEND).getAsBoolean());
 
         if (!object.get(User.FULL_NAME).isJsonNull()) {
-            newUser.fullName = object.get(User.FULL_NAME).getAsString();
+            newUser.setFullName(object.get(User.FULL_NAME).getAsString());
         }
 
         if (!object.get(User.PICTURE).isJsonNull()) {
             JsonObject pictureObject = object.getAsJsonObject(User.PICTURE);
-            newUser.imageUrl = pictureObject.get(User.IMAGE_URL).getAsString();
-            newUser.imageWidth = pictureObject.get(User.IMAGE_WIDTH).getAsInt();
-            newUser.imageHeight = pictureObject.get(User.IMAGE_HEIGHT).getAsInt();
+            newUser.setImageUrl(pictureObject.get(User.IMAGE_URL).getAsString());
+            newUser.setImageWidth(pictureObject.get(User.IMAGE_WIDTH).getAsInt());
+            newUser.setImageHeight(pictureObject.get(User.IMAGE_HEIGHT).getAsInt());
         }
 
         return newUser;

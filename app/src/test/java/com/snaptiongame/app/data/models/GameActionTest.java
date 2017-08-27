@@ -12,9 +12,9 @@ public class GameActionTest {
     @Test
     public void testConstructorGameAction() {
         GameAction gameAction = new GameAction(0, false, GameAction.FLAGGED, GameAction.GAME_ID);
-        assertTrue(gameAction.targetId == 0);
-        assertTrue(!gameAction.choice);
-        assertTrue(!gameAction.choiceType.isEmpty());
-        assertTrue(!gameAction.type.isEmpty());
+        assertTrue(gameAction.getTargetId() == 0);
+        assertTrue(!gameAction.getChoice());
+        assertTrue(!gameAction.getChoiceType().isEmpty());
+        assertTrue(!gameAction.getType().isEmpty());
     }
 }

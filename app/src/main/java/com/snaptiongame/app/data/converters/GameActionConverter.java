@@ -17,8 +17,8 @@ public class GameActionConverter implements JsonSerializer<GameAction> {
     @Override
     public JsonElement serialize(GameAction src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(src.type, src.targetId);
-        json.addProperty(src.choiceType, src.choice);
+        json.addProperty(src.getType(), src.getTargetId());
+        json.addProperty(src.getChoiceType(), src.getChoice());
         return json;
     }
 }

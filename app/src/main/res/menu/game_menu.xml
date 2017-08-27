@@ -27,20 +27,20 @@
         android:icon="@drawable/ic_local_offer_white_24dp"
         android:title="@string/tags_label"
         android:visible="true"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/is_private"
         android:icon="@drawable/ic_lock_white_24dp"
         android:title="@string/is_private"
         android:visible="false"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/upvote"
         android:checked="false"
         android:icon="@drawable/ic_arrow_upward_white_24dp"
         android:title="@string/upvote"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>

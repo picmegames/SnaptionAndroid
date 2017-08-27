@@ -12,7 +12,7 @@ class Friend {
     var fullName: String = ""
     @SerializedName(USERNAME)
     var username: String = ""
-    var picture: String = ""
+    var picture: String? = null
     @SerializedName(IMAGE_URL)
     var imageUrl: String? = null
     @SerializedName(IMAGE_WIDTH)

@@ -38,7 +38,7 @@ public class CaptionProviderTest {
         captions.add(new Caption(3, "test3"));
         captions.add(new Caption(4, "test4"));
         when(service.getCaptions(TEST_GAME_ID, 1)).thenReturn(Observable.just(captions));
-        gameAction = new GameAction(0, false, GameAction.UPVOTE, GameAction.CAPTION_ID);
+        gameAction = new GameAction(0, false, GameAction.UPVOTE, GameAction.UPVOTE);
         when(service.upvoteOrFlagCaption(gameAction)).thenReturn(Completable.complete());
         caption = new Caption(0, "test0");
         when(service.addCaption(TEST_GAME_ID, caption)).thenReturn(Completable.complete());

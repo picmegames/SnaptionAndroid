@@ -16,8 +16,8 @@ public class RankConverter implements JsonDeserializer<Rank> {
     @Override
     public Rank deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         Rank rank = new Rank();
-        rank.id = json.getAsJsonObject().get(Rank.ID).getAsInt();
-        rank.title = json.getAsJsonObject().get(Rank.TITLE).getAsString();
+        rank.setId(json.getAsJsonObject().get(Rank.ID).getAsInt());
+        rank.setTitle(json.getAsJsonObject().get(Rank.TITLE).getAsString());
         return rank;
     }
 }

@@ -278,7 +278,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void flagGame() {
-        GameProvider.upvoteOrFlagGame(new GameAction(gameId, true, GameAction.FLAGGED, GameAction.GAME_ID))
+        GameProvider.upvoteOrFlagGame(new GameAction(gameId, true, GameAction.FLAGGED,
+                GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         () -> listener.updateFlag(getAdapterPosition(), this),
@@ -290,7 +291,8 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void unflagGame() {
-        GameProvider.upvoteOrFlagGame(new GameAction(gameId, false, GameAction.FLAGGED, GameAction.GAME_ID))
+        GameProvider.upvoteOrFlagGame(new GameAction(gameId, false, GameAction.FLAGGED,
+                GameAction.GAME_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         () -> {

@@ -80,9 +80,9 @@ public class ActivityFeedItemViewHolder extends RecyclerView.ViewHolder {
 
     private void goToProfile() {
         Intent profileIntent = new Intent(context, ProfileActivity.class);
-        profileIntent.putExtra(User.USERNAME, friend.username);
-        profileIntent.putExtra(User.IMAGE_URL, friend.imageUrl);
-        profileIntent.putExtra(User.ID, friend.id);
+        profileIntent.putExtra(User.USERNAME, friend.getUsername());
+        profileIntent.putExtra(User.IMAGE_URL, friend.getImageUrl());
+        profileIntent.putExtra(User.ID, friend.getId());
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation((AppCompatActivity) context, userImage,

@@ -17,10 +17,10 @@ public class OAuthConverter implements JsonSerializer<OAuthRequest> {
     @Override
     public JsonElement serialize(OAuthRequest src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
-        json.addProperty(OAuthRequest.TOKEN, src.token);
-        json.addProperty(OAuthRequest.DEVICE_TOKEN, src.deviceToken);
-        json.addProperty(OAuthRequest.DEVICE_TYPE, src.deviceType);
-        json.addProperty(OAuthRequest.LINK_TOKEN, src.linkToken);
+        json.addProperty(OAuthRequest.TOKEN, src.getToken());
+        json.addProperty(OAuthRequest.DEVICE_TOKEN, src.getDeviceToken());
+        json.addProperty(OAuthRequest.DEVICE_TYPE, src.getDeviceType());
+        json.addProperty(OAuthRequest.LINK_TOKEN, src.getLinkToken());
         return json;
     }
 }

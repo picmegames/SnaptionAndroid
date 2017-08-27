@@ -108,14 +108,14 @@ public class GameConverter implements JsonSerializer<Game>, JsonDeserializer<Gam
             for (JsonElement user : users) {
                 newUser = new User();
                 userObject = user.getAsJsonObject();
-                newUser.id = userObject.get(User.ID).getAsInt();
-                newUser.username = userObject.get(User.USERNAME).getAsString();
-                newUser.fullName = userObject.get(User.FULL_NAME).getAsString();
+                newUser.setId(userObject.get(User.ID).getAsInt());
+                newUser.setUsername(userObject.get(User.USERNAME).getAsString());
+                newUser.setFullName(userObject.get(User.FULL_NAME).getAsString());
                 pictureObject = userObject.get(User.PICTURE);
                 if (!pictureObject.isJsonNull()) {
-                    newUser.imageUrl = pictureObject.getAsJsonObject().get(User.IMAGE_URL).getAsString();
-                    newUser.imageWidth = pictureObject.getAsJsonObject().get(User.IMAGE_WIDTH).getAsInt();
-                    newUser.imageHeight = pictureObject.getAsJsonObject().get(User.IMAGE_HEIGHT).getAsInt();
+                    newUser.setImageUrl(pictureObject.getAsJsonObject().get(User.IMAGE_URL).getAsString());
+                    newUser.setImageWidth(pictureObject.getAsJsonObject().get(User.IMAGE_WIDTH).getAsInt());
+                    newUser.setImageHeight(pictureObject.getAsJsonObject().get(User.IMAGE_HEIGHT).getAsInt());
                 }
                 gameUsers.add(newUser);
             }

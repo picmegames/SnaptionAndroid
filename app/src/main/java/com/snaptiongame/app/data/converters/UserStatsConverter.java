@@ -20,13 +20,13 @@ public class UserStatsConverter implements JsonDeserializer<UserStats> {
         JsonObject obj = json.getAsJsonObject();
         UserStats newStats = new UserStats();
 
-        newStats.rank = obj.get(UserStats.RANK).getAsString();
-        newStats.captionsCreated = obj.get(UserStats.CAPTIONS_CREATED).getAsInt();
-        newStats.captionUpvotes = obj.get(UserStats.CAPTION_UPVOTES).getAsInt();
-        newStats.gamesCreated = obj.get(UserStats.GAMES_CREATED).getAsInt();
-        newStats.highestGameUpvote = obj.get(UserStats.HIGHEST_GAME_UPVOTE).getAsInt();
-        newStats.topCaptionCount = obj.get(UserStats.TOP_CAPTION_COUNT).getAsInt();
-        newStats.exp = obj.get(UserStats.EXP).getAsInt();
+        newStats.setRank(obj.get(UserStats.RANK).getAsString());
+        newStats.setCaptionsCreated(obj.get(UserStats.CAPTIONS_CREATED).getAsInt());
+        newStats.setCaptionUpvotes(obj.get(UserStats.CAPTION_UPVOTES).getAsInt());
+        newStats.setGamesCreated(obj.get(UserStats.GAMES_CREATED).getAsInt());
+        newStats.setHighestGameUpvote(obj.get(UserStats.HIGHEST_GAME_UPVOTE).getAsInt());
+        newStats.setTopCaptionCount(obj.get(UserStats.TOP_CAPTION_COUNT).getAsInt());
+        newStats.setExp(obj.get(UserStats.EXP).getAsInt());
 
         return newStats;
     }

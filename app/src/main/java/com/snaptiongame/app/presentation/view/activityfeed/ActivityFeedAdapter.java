@@ -56,13 +56,13 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         holder.setActivityOnClickListener(curActivityItem.getType());
         holder.activityMessage.setText(ActivityFeedUtils.getMessage(holder.context, curActivityItem));
 
-        if (curActivityItem.getFriend().imageUrl != null) {
+        if (curActivityItem.getFriend().getImageUrl() != null) {
             RequestOptions options = new RequestOptions()
                     .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                     .dontAnimate();
 
             Glide.with(holder.context)
-                    .load(curActivityItem.getFriend().imageUrl)
+                    .load(curActivityItem.getFriend().getImageUrl())
                     .apply(options)
                     .into(holder.userImage);
         }
@@ -73,8 +73,8 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
                     .height(AVATAR_SIZE)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(curActivityItem.getFriend().username.substring(0, 1),
-                            ColorGenerator.MATERIAL.getColor(curActivityItem.getFriend().username)));
+                    .buildRound(curActivityItem.getFriend().getUsername().substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(curActivityItem.getFriend().getUsername())));
         }
 
         if (curActivityItem.getType() != ActivityFeedUtils.FRIENDED_YOU &&

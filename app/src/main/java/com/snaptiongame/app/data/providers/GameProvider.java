@@ -57,7 +57,7 @@ public class GameProvider {
                 .map(game -> game.getUsers())
                 .toObservable()
                 .flatMapIterable(users -> users)
-                .filter(user -> user.id != AuthManager.getUserId())
+                .filter(user -> user.getId() != AuthManager.getUserId())
                 .map(Friend::new)
                 .toList();
     }

@@ -195,7 +195,7 @@ public final class AuthManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> {
-                            saveUserId(session.userId);
+                            saveUserId(session.getUserId());
                             getUserInfo(getUserId());
                         },
                         e -> {
@@ -213,7 +213,7 @@ public final class AuthManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> {
-                            saveUserId(session.userId);
+                            saveUserId(session.getUserId());
                             getUserInfo(getUserId());
                         },
                         e -> {
@@ -431,10 +431,10 @@ public final class AuthManager {
         UserProvider.getUser(snaptionUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
-                            saveUsername(user.username);
+                            saveUsername(user.getUsername());
 
-                            if (user.imageUrl != null) {
-                                saveProfileImage(user.imageUrl);
+                            if (user.getImageUrl() != null) {
+                                saveProfileImage(user.getImageUrl());
                             }
 
                             fireSuccessCallback();

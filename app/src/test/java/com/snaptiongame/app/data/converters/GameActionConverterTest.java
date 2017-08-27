@@ -24,8 +24,8 @@ public class GameActionConverterTest {
 
         jsonObject = new JsonObject();
 
-        jsonObject.addProperty(GameAction.GAME_ID, gameAction.targetId);
-        jsonObject.addProperty(GameAction.UPVOTE, gameAction.choice);
+        jsonObject.addProperty(GameAction.GAME_ID, gameAction.getTargetId());
+        jsonObject.addProperty(GameAction.GAME_ID, gameAction.getChoice());
 
         converter = new GameActionConverter();
     }

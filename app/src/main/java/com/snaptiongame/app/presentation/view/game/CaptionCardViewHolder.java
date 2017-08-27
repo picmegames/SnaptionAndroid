@@ -158,8 +158,8 @@ public class CaptionCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void upvoteCaption() {
-        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, !isUpvoted, GameAction
-                .UPVOTE, GameAction.CAPTION_ID))
+        CaptionProvider.upvoteOrFlagCaption(new GameAction(captionId, !isUpvoted, GameAction.UPVOTE,
+                GameAction.CAPTION_ID))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::setBeenUpvoted,

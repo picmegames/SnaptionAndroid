@@ -45,7 +45,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         newUser -> {
-                            profileView.saveProfilePicture(newUser.imageUrl);
+                            profileView.saveProfilePicture(newUser.getImageUrl());
                             profileView.showProfilePictureSuccess();
                         },
                         e -> {
@@ -119,7 +119,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         nextUser -> {
-                            profileView.saveUsername(nextUser.username);
+                            profileView.saveUsername(nextUser.getUsername());
                             profileView.showUsernameSuccess(oldUsername, user);
                         },
                         e -> {
