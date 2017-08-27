@@ -1,4 +1,5 @@
 buildscript {
+
     repositories {
         jcenter()
 
@@ -8,7 +9,7 @@ buildscript {
     }
     dependencies {
         // Gradle
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0-beta2'
 
         // Play Services
         classpath 'com.google.gms:google-services:3.1.0'
@@ -16,11 +17,8 @@ buildscript {
         // Fabric.io
         classpath 'io.fabric.tools:gradle:1.23.0'
 
-        // Retrolambda Gradle
-        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
-
-        // Annotation Processing
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        // Kotlin
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-2'
     }
 }
 
@@ -53,6 +51,7 @@ ext {
     butterknifeVersion = '8.8.1'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'
+    kotlinVersion = '1.1.4-2'
     mockitoVersion = '2.7.1'
     robolectricVersion = '3.3.2'
     timberVersion = '4.5.1'

@@ -1,31 +1,29 @@
-package com.snaptiongame.app.data.api;
+package com.snaptiongame.app.data.api
 
-import com.snaptiongame.app.data.models.ActivityFeedItem;
-import com.snaptiongame.app.data.models.AddFriendRequest;
-import com.snaptiongame.app.data.models.Caption;
-import com.snaptiongame.app.data.models.CaptionSet;
-import com.snaptiongame.app.data.models.DeepLinkRequest;
-import com.snaptiongame.app.data.models.FitBCaption;
-import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.data.models.Game;
-import com.snaptiongame.app.data.models.GameAction;
-import com.snaptiongame.app.data.models.OAuthRequest;
-import com.snaptiongame.app.data.models.Session;
-import com.snaptiongame.app.data.models.User;
-import com.snaptiongame.app.data.models.UserStats;
+import com.snaptiongame.app.data.models.ActivityFeedItem
+import com.snaptiongame.app.data.models.AddFriendRequest
+import com.snaptiongame.app.data.models.Caption
+import com.snaptiongame.app.data.models.CaptionSet
+import com.snaptiongame.app.data.models.DeepLinkRequest
+import com.snaptiongame.app.data.models.FitBCaption
+import com.snaptiongame.app.data.models.Friend
+import com.snaptiongame.app.data.models.Game
+import com.snaptiongame.app.data.models.GameAction
+import com.snaptiongame.app.data.models.OAuthRequest
+import com.snaptiongame.app.data.models.Session
+import com.snaptiongame.app.data.models.User
+import com.snaptiongame.app.data.models.UserStats
 
-import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.HTTP;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * This interface outlines the REST API that the application
@@ -34,7 +32,7 @@ import retrofit2.http.Query;
  * @author Tyler Wong
  * @version 1.0
  */
-public interface SnaptionApi {
+interface SnaptionApi {
 
     /**
      * This method authenticates a user with Facebook with
@@ -44,7 +42,7 @@ public interface SnaptionApi {
      * @return A single that emits a Session
      */
     @POST("/OAuth/Facebook/")
-    Single<Session> userOAuthFacebook(@Body OAuthRequest request);
+    fun userOAuthFacebook(@Body request: OAuthRequest): Single<Session>
 
     /**
      * This method authenticates a user with Google on with
@@ -54,7 +52,7 @@ public interface SnaptionApi {
      * @return A single that emits a Session object
      */
     @POST("/OAuth/Google/")
-    Single<Session> userOAuthGoogle(@Body OAuthRequest request);
+    fun userOAuthGoogle(@Body request: OAuthRequest): Single<Session>
 
     /**
      * This method will log a user out with a GET request.
@@ -62,7 +60,7 @@ public interface SnaptionApi {
      * @return A completable
      */
     @GET("/Logout/")
-    Completable logout();
+    fun logout(): Completable
 
     /**
      * This method will send a GET request to the server to determine
@@ -70,8 +68,8 @@ public interface SnaptionApi {
      *
      * @return A single boolean true if the session is valid, else false
      */
-    @GET("/OAuth/Status/")
-    Single<Boolean> isSessionValid();
+    @get:GET("/OAuth/Status/")
+    val isSessionValid: Single<Boolean>
 
     /**
      * This method will send a GET request to the server to update a
@@ -81,7 +79,7 @@ public interface SnaptionApi {
      * @return A completable
      */
     @GET("/Notifications/Refresh/")
-    Completable refreshNotificationToken(@Query("device_token") String deviceToken);
+    fun refreshNotificationToken(@Query("device_token") deviceToken: String): Completable
 
     /**
      * This method sends a request for a user with a GET request.
@@ -90,7 +88,7 @@ public interface SnaptionApi {
      * @return A single that emits a User object
      */
     @GET("/Users/{userId}/")
-    Single<User> getUser(@Path("userId") int userId);
+    fun getUser(@Path("userId") userId: Int): Single<User>
 
     /**
      * This method sends a request to add a friend
@@ -100,7 +98,7 @@ public interface SnaptionApi {
      * @return An observable that emits an AddFriendRequest object
      */
     @POST("/UserFriends/")
-    Single<AddFriendRequest> addFriend(@Body AddFriendRequest friendRequest);
+    fun addFriend(@Body friendRequest: AddFriendRequest): Single<AddFriendRequest>
 
     /**
      * This method sends a request to delete a friend
@@ -110,7 +108,7 @@ public interface SnaptionApi {
      * @return A completable that emits an AddFriendRequest object
      */
     @HTTP(method = "DELETE", path = "/UserFriends/", hasBody = true)
-    Completable deleteFriend(@Body AddFriendRequest friendRequest);
+    fun deleteFriend(@Body friendRequest: AddFriendRequest): Completable
 
     /**
      * This method sends a request for a user with a GET request.
@@ -122,11 +120,11 @@ public interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @GET("/Users/")
-    Observable<List<User>> searchUsers(@Query("email") String email,
-                                       @Query("facebookId") String facebookId,
-                                       @Query("username") String username,
-                                       @Query("fullName") String fullName,
-                                       @Query("page") int page);
+    fun searchUsers(@Query("email") email: String,
+                    @Query("facebookId") facebookId: String,
+                    @Query("username") username: String,
+                    @Query("fullName") fullName: String,
+                    @Query("page") page: Int): Observable<List<User>>
 
     /**
      * This method sends a request to update a user with a PUT request.
@@ -135,7 +133,7 @@ public interface SnaptionApi {
      * @return A single that emits a User object
      */
     @PUT("/Users/")
-    Single<User> updateUser(@Body User user);
+    fun updateUser(@Body user: User): Single<User>
 
     /**
      * This method sends a request to get a list of the current
@@ -144,9 +142,9 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/mine/")
-    Observable<List<Game>> getGamesMine(@Query("tag") List<String> tags,
-                                        @Query("status") String status,
-                                        @Query("page") int page);
+    fun getGamesMine(@Query("tag") tags: List<String>,
+                     @Query("status") status: String,
+                     @Query("page") page: Int): Observable<List<Game>>
 
     /**
      * This method sends a request to get a list of the current
@@ -155,9 +153,9 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/discover/")
-    Observable<List<Game>> getGamesDiscover(@Query("tag") List<String> tags,
-                                            @Query("status") String status,
-                                            @Query("page") int page);
+    fun getGamesDiscover(@Query("tag") tags: List<String>,
+                         @Query("status") status: String,
+                         @Query("page") page: Int): Observable<List<Game>>
 
     /**
      * This method sends a request to get a list of the current
@@ -166,10 +164,10 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/popular/")
-    Observable<List<Game>> getGamesPopular(@Query("tag") List<String> tags,
-                                           @Query("status") String status,
-                                           @Query("page") int page);
-  
+    fun getGamesPopular(@Query("tag") tags: List<String>,
+                        @Query("status") status: String,
+                        @Query("page") page: Int): Observable<List<Game>>
+
     /**
      * This method sends a request to get a list of the games
      * a user has been involved in with a GET request.
@@ -177,7 +175,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/UserGame/History/")
-    Observable<List<Game>> getGamesHistory(@Query("creator") int userId, @Query("page") int page);
+    fun getGamesHistory(@Query("creator") userId: Int, @Query("page") page: Int): Observable<List<Game>>
 
     /**
      * This method sends a request to get a single game
@@ -187,7 +185,7 @@ public interface SnaptionApi {
      * @return A single that emits a list of Game objects.
      */
     @GET("/Games/{gameId}/")
-    Single<Game> getGame(@Path("gameId") int gameId, @Query("linkToken") String token);
+    fun getGame(@Path("gameId") gameId: Int, @Query("linkToken") token: String): Single<Game>
 
     /**
      * This method sends a request to upvote or flag a game with
@@ -197,7 +195,7 @@ public interface SnaptionApi {
      * @return A completable that emits a GameAction object
      */
     @PUT("/UserXGame/")
-    Completable upvoteOrFlagGame(@Body GameAction request);
+    fun upvoteOrFlagGame(@Body request: GameAction): Completable
 
     /**
      * This method sends a request to add a game with
@@ -207,7 +205,7 @@ public interface SnaptionApi {
      * @return A completable that emits a Game object
      */
     @POST("/Games/")
-    Completable addGame(@Body Game snaption);
+    fun addGame(@Body snaption: Game): Completable
 
     /**
      * This method sends a request to get a user's friends
@@ -216,7 +214,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Friend objects
      */
     @GET("/UserFriends/")
-    Observable<List<Friend>> getFriends(@Query("page") int page);
+    fun getFriends(@Query("page") page: Int): Observable<List<Friend>>
 
     /**
      * This method sends a request to get a user's friends
@@ -224,8 +222,8 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Friend objects
      */
-    @GET("/UserFriends/Followers/")
-    Observable<List<Friend>> getFollowers();
+    @get:GET("/UserFriends/Followers/")
+    val followers: Observable<List<Friend>>
 
     /**
      * This method sends a request to get a list of captions
@@ -235,7 +233,7 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Caption objects
      */
     @GET("/Games/{gameId}/Captions/")
-    Observable<List<Caption>> getCaptions(@Path("gameId") int gameId, @Query("page") int page);
+    fun getCaptions(@Path("gameId") gameId: Int, @Query("page") page: Int): Observable<List<Caption>>
 
     /**
      * This method sends a request to add a caption to a game
@@ -246,7 +244,7 @@ public interface SnaptionApi {
      * @return A completable that emits a Caption object
      */
     @POST("/Games/{game_id}/Captions/")
-    Completable addCaption(@Path("game_id") int gameId, @Body Caption caption);
+    fun addCaption(@Path("game_id") gameId: Int, @Body caption: Caption): Completable
 
     /**
      * This method sends a request to upvote or flag a caption
@@ -256,7 +254,7 @@ public interface SnaptionApi {
      * @return A completable that emits a GameAction object
      */
     @PUT("/UserXCaption/")
-    Completable upvoteOrFlagCaption(@Body GameAction request);
+    fun upvoteOrFlagCaption(@Body request: GameAction): Completable
 
     /**
      * This method sends a request to retrieve all fill in the blank from snaption.
@@ -265,15 +263,15 @@ public interface SnaptionApi {
      * @return An observable that emits a list of Fill in the Blank Captions
      */
     @GET("/FitBSet/{set_id}/")
-    Observable<List<FitBCaption>> getFitBCaptions(@Path("set_id") int setId);
+    fun getFitBCaptions(@Path("set_id") setId: Int): Observable<List<FitBCaption>>
 
     /**
      * This method sends a request to retrieve all Caption Sets available to a user
      *
      * @return An observable that emits a list of Caption Sets
      */
-    @GET("/FitBSet/")
-    Observable<List<CaptionSet>> getCaptionSets();
+    @get:GET("/FitBSet/")
+    val captionSets: Observable<List<CaptionSet>>
 
     /**
      * This method sends a request to retrieve all the user's Facebook friends that
@@ -281,8 +279,8 @@ public interface SnaptionApi {
      *
      * @return An observable that emits a list of Friends
      */
-    @GET("/Social/Friends/")
-    Observable<List<Friend>> getFacebookFriends();
+    @get:GET("/Social/Friends/")
+    val facebookFriends: Observable<List<Friend>>
 
     /**
      * This method sends a request for a deep link token that will be used to
@@ -291,7 +289,7 @@ public interface SnaptionApi {
      * @return A single that emits a deep link token
      */
     @POST("/DeepLink/")
-    Single<String> getToken(@Body DeepLinkRequest deepLinkRequest);
+    fun getToken(@Body deepLinkRequest: DeepLinkRequest): Single<String>
 
     /**
      * This method sends a request to retrieve the user's stats
@@ -299,7 +297,7 @@ public interface SnaptionApi {
      * @return A single that emits a UserStats object
      */
     @GET("/Users/Stats/{userId}/")
-    Single<UserStats> getUserStats(@Path("userId") int userId);
+    fun getUserStats(@Path("userId") userId: Int): Single<UserStats>
 
     /**
      * This method sends a request to retrieve the user's activity feed
@@ -307,5 +305,5 @@ public interface SnaptionApi {
      * @return A single that emits a list of ActivityFeedItem objects
      */
     @GET("/Activity/")
-    Single<List<ActivityFeedItem>> getActivityFeed(@Query("page") int page);
+    fun getActivityFeed(@Query("page") page: Int): Single<List<ActivityFeedItem>>
 }
