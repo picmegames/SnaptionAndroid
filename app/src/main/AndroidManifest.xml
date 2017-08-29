@@ -136,10 +136,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- <service -->
-        <!-- android:name=".data.services.GameUploadService" -->
-        <!-- android:exported="false"/> -->
-
         <service android:name=".data.services.notifications.NotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

@@ -38,10 +38,10 @@ class Game {
     @SerializedName(USERS)
     var users: List<User>? = null
     @SerializedName(TAGS)
-    var tags: List<Tag>? = null
-    var sendTags: List<String>? = null
+    var tags: MutableList<Tag> = mutableListOf()
+    var sendTags: List<String> = mutableListOf()
     @SerializedName(FRIENDS)
-    var friendIds: List<Int>? = null
+    var friendIds: List<Int> = mutableListOf()
     @SerializedName(BEEN_UPVOTED)
     var beenUpvoted: Boolean = false
     @SerializedName(BEEN_FLAGGED)

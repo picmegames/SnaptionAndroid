@@ -28,8 +28,8 @@ public class BranchConverterTest {
         inviteObject = new JsonObject();
         requestObject = new JsonObject();
 
-        inviteObject.addProperty(GameInvite.INVITE_TOKEN, invite.inviteToken);
-        inviteObject.addProperty(GameInvite.GAME_ID, invite.gameId);
+        inviteObject.addProperty(GameInvite.INVITE_TOKEN, invite.getInviteToken());
+        inviteObject.addProperty(GameInvite.GAME_ID, invite.getGameId());
         requestObject.addProperty(DeepLinkRequest.GAME_ID, req.getGameId());
         requestObject.addProperty(DeepLinkRequest.EMAIL, req.getEmail());
         requestObject.addProperty(DeepLinkRequest.FACEBOOK_ID, req.getFacebookId());
@@ -43,6 +43,6 @@ public class BranchConverterTest {
     @Test
     public void testSerialize() {
         assertEquals(converter.serialize(req, GameInvite.class, null), requestObject);
-        assertEquals(BranchConverter.deserializeGameInvite(inviteObject), invite);
+        assertEquals(BranchConverter.Companion.deserializeGameInvite(inviteObject), invite);
     }
 }

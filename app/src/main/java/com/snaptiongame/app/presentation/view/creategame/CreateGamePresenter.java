@@ -29,7 +29,6 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
     private CompositeDisposable disposables;
 
     private List<Friend> friends;
-    // private byte[] encodedImage;
     private String encodedImage;
 
     private static final int INVALID_FRIEND = -1;
@@ -87,20 +86,6 @@ public class CreateGamePresenter implements CreateGameContract.Presenter {
                 );
         disposables.add(disposable);
     }
-
-//    private void startUploadService(int userId, boolean isPublic, String type) {
-//        Context context = createGameView.getContext();
-//        Bundle uploadBundle = new Bundle();
-//        uploadBundle.putInt(Game.ID, userId);
-//        uploadBundle.putBoolean(Game.IS_PUBLIC, isPublic);
-//        uploadBundle.putByteArray(Game.PICTURE, encodedImage);
-//        uploadBundle.putString(Game.IMG_TYPE, type);
-//        uploadBundle.putIntegerArrayList(Game.FRIENDS, getFriendIds(createGameView.getAddedFriends()));
-//        Intent uploadIntent = new Intent(context, GameUploadService.class);
-//        uploadIntent.putExtras(uploadBundle);
-//        context.startService(uploadIntent);
-//        createGameView.onBackPressed();
-//    }
 
     private List<Integer> getFriendIds(List<String> friendNames) {
         List<Integer> friendIds = new ArrayList<>();

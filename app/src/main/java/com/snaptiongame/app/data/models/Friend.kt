@@ -37,7 +37,7 @@ class Friend {
     constructor(user: User) {
         this.id = user.id
         this.picture = user.picture
-        this.username = user.username
+        this.username = user.username ?: ""
         this.fullName = user.fullName
         this.imageWidth = user.imageWidth
         this.imageHeight = user.imageHeight

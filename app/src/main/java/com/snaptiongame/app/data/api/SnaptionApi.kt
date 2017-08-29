@@ -120,10 +120,10 @@ interface SnaptionApi {
      * @return An observable that emits a User object
      */
     @GET("/Users/")
-    fun searchUsers(@Query("email") email: String,
-                    @Query("facebookId") facebookId: String,
-                    @Query("username") username: String,
-                    @Query("fullName") fullName: String,
+    fun searchUsers(@Query("email") email: String?,
+                    @Query("facebookId") facebookId: String?,
+                    @Query("username") username: String?,
+                    @Query("fullName") fullName: String?,
                     @Query("page") page: Int): Observable<List<User>>
 
     /**
@@ -142,8 +142,8 @@ interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/mine/")
-    fun getGamesMine(@Query("tag") tags: List<String>,
-                     @Query("status") status: String,
+    fun getGamesMine(@Query("tag") tags: List<String>?,
+                     @Query("status") status: String?,
                      @Query("page") page: Int): Observable<List<Game>>
 
     /**
@@ -153,8 +153,8 @@ interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/discover/")
-    fun getGamesDiscover(@Query("tag") tags: List<String>,
-                         @Query("status") status: String,
+    fun getGamesDiscover(@Query("tag") tags: List<String>?,
+                         @Query("status") status: String?,
                          @Query("page") page: Int): Observable<List<Game>>
 
     /**
@@ -164,8 +164,8 @@ interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/Games/popular/")
-    fun getGamesPopular(@Query("tag") tags: List<String>,
-                        @Query("status") status: String,
+    fun getGamesPopular(@Query("tag") tags: List<String>?,
+                        @Query("status") status: String?,
                         @Query("page") page: Int): Observable<List<Game>>
 
     /**
@@ -185,7 +185,7 @@ interface SnaptionApi {
      * @return A single that emits a list of Game objects.
      */
     @GET("/Games/{gameId}/")
-    fun getGame(@Path("gameId") gameId: Int, @Query("linkToken") token: String): Single<Game>
+    fun getGame(@Path("gameId") gameId: Int, @Query("linkToken") token: String?): Single<Game>
 
     /**
      * This method sends a request to upvote or flag a game with

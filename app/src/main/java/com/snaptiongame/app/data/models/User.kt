@@ -11,7 +11,7 @@ class User {
     @SerializedName(ID)
     var id: Int = 0
     @SerializedName(USERNAME)
-    var username: String = ""
+    var username: String? = null
     @SerializedName(FULL_NAME)
     var fullName: String = ""
     @SerializedName(PICTURE)

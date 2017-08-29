@@ -246,7 +246,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             // CALLED when the async initSession returns, won't error if no branch data is found
             if (error == null) {
                 Timber.i(referringParams.toString());
-                invite = BranchConverter.deserializeGameInvite(
+                invite = BranchConverter.Companion.deserializeGameInvite(
                         new JsonParser().parse(referringParams.toString()));
                 // IF branch returns a null or invalid invite then display the intent information
                 if (invite == null || invite.getGameId() == 0) {
