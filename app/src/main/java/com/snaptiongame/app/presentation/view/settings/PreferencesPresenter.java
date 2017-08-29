@@ -1,5 +1,7 @@
 package com.snaptiongame.app.presentation.view.settings;
 
+import android.support.annotation.NonNull;
+
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.utils.CacheUtils;
 
@@ -15,9 +17,12 @@ import timber.log.Timber;
 
 public class PreferencesPresenter implements PreferencesContract.Presenter {
 
+    @NonNull
     private PreferencesContract.View preferencesView;
-    private AuthManager authManager;
+    @NonNull
     private CompositeDisposable disposables;
+
+    private AuthManager authManager;
 
     public PreferencesPresenter(PreferencesContract.View preferencesView) {
         this.preferencesView = preferencesView;

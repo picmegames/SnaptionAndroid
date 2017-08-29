@@ -38,7 +38,6 @@ import timber.log.Timber;
 /**
  * @author Tyler Wong
  */
-
 public final class AuthManager {
     private static AuthManager authManager;
     private CallbackManager callbackManager;
@@ -90,7 +89,9 @@ public final class AuthManager {
     public static void init(Context context) {
         // INIT an instance of an Authentication Manager
         if (authManager == null) {
-            authManager = new AuthManager(context);
+            synchronized (AuthManager.class) {
+                authManager = new AuthManager(context);
+            }
         }
     }
 

@@ -37,8 +37,8 @@
             android:background="@drawable/round_button"
             android:gravity="end"
             android:rotation="180"
-            android:src="@drawable/ic_arrow_forward_white_24dp"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_arrow_forward_white_24dp"/>
 
         <ImageButton
             android:id="@+id/next_button"
@@ -47,6 +47,6 @@
             android:layout_alignParentEnd="true"
             android:background="@drawable/round_button"
             android:gravity="end"
-            android:src="@drawable/ic_arrow_forward_white_24dp"/>
+            app:srcCompat="@drawable/ic_arrow_forward_white_24dp"/>
     </RelativeLayout>
 </RelativeLayout>

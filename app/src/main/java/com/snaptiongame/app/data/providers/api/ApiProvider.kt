@@ -98,15 +98,17 @@ object ApiProvider {
     @JvmStatic
     fun getApiService(): SnaptionApi {
         if (apiService == null) {
-            gson = setupGson()
+            synchronized(ApiProvider.javaClass) {
+                gson = setupGson()
 
-            apiService = Retrofit.Builder()
-                    .baseUrl(BuildConfig.SERVER_ENDPOINT)
-                    .client(makeOkHttpClient())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-                    .addConverterFactory(GsonConverterFactory.create(gson!!))
-                    .build()
-                    .create(SnaptionApi::class.java)
+                apiService = Retrofit.Builder()
+                        .baseUrl(BuildConfig.SERVER_ENDPOINT)
+                        .client(makeOkHttpClient())
+                        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                        .addConverterFactory(GsonConverterFactory.create(gson!!))
+                        .build()
+                        .create(SnaptionApi::class.java)
+            }
         }
 
         return apiService!!
