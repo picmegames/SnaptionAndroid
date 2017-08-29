@@ -23,6 +23,7 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
+import com.snaptiongame.app.presentation.view.settings.easter.EasterEgg;
 
 import timber.log.Timber;
 

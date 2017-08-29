@@ -26,7 +26,7 @@ object GameProvider {
     }
 
     @JvmStatic
-    fun getGamesDiscover(tags: List<String>, status: String, page: Int): Single<List<Game>> {
+    fun getGamesDiscover(tags: List<String>?, status: String?, page: Int): Single<List<Game>> {
         return apiService.getGamesDiscover(tags, status, page)
                 .flatMapIterable { games -> games }
                 .filter { game -> !game.beenFlagged }
@@ -34,7 +34,7 @@ object GameProvider {
     }
 
     @JvmStatic
-    fun getGamesPopular(tags: List<String>, status: String, page: Int): Single<List<Game>> {
+    fun getGamesPopular(tags: List<String>?, status: String?, page: Int): Single<List<Game>> {
         return apiService.getGamesPopular(tags, status, page)
                 .flatMapIterable { games -> games }
                 .filter { game -> !game.beenFlagged }
