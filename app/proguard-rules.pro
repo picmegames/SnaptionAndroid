@@ -25,3 +25,8 @@
 
 # Branch.io
 -dontwarn com.crashlytics.android.answers.shim.**
+
+# Facebook
+-keep class com.facebook.** {
+   *;
+}

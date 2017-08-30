@@ -24,6 +24,7 @@ import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.settings.easter.EasterEgg;
+import com.snaptiongame.app.presentation.view.settings.licenses.LicensesActivity;
 
 import timber.log.Timber;
 
@@ -43,9 +44,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     private PreferencesContract.Presenter presenter;
     private PreferenceScreen preferenceScreen;
-    private MaterialDialog licensesDialog;
     private MaterialDialog feedbackDialog;
-    private WebView licensesWebView;
     private WebView feedbackWebView;
     private ImageView puffinLogo;
 
@@ -114,7 +113,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         if (packageInfo != null) {
             versionPreference.setSummary(packageInfo.versionName);
         }
-        licensesWebView = new WebView(getActivity());
         feedbackWebView = new WebView(getActivity());
         feedbackWebView.getSettings().setJavaScriptEnabled(true);
 
@@ -224,17 +222,8 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             presenter.clearCache();
         }
         else if (key.equals(getString(R.string.licenses))) {
-            licensesWebView.loadUrl(getString(R.string.licenses_url));
-            if (licensesDialog == null) {
-                licensesDialog = new MaterialDialog.Builder(getActivity())
-                        .title(R.string.licenses)
-                        .customView(licensesWebView, false)
-                        .positiveText(R.string.close)
-                        .show();
-            }
-            else {
-                licensesDialog.show();
-            }
+            Intent licenseIntent = new Intent(getActivity(), LicensesActivity.class);
+            startActivity(licenseIntent);
         }
         else if (key.equals(getString(R.string.give_feedback))) {
             feedbackWebView.reload();

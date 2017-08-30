@@ -1,3 +1,5 @@
+@file:JvmName("LeaderboardProvider")
+
 package com.snaptiongame.app.data.providers
 
 import com.snaptiongame.app.data.models.User
@@ -11,10 +13,7 @@ import io.reactivex.Single
  * @author Tyler Wong
  */
 
-object LeaderboardProvider {
-    private val apiService = ApiProvider.getApiService()
+private val apiService = ApiProvider.getApiService()
 
-    @JvmStatic
-    val experienceLeaderboard: Single<List<User>>
-        get() = Single.just(ArrayList())
-}
+val experienceLeaderboard: Single<List<User>>
+    get() = Single.just(ArrayList())

@@ -176,6 +176,7 @@
     <string name="open">Open</string>
     <string name="closed">Closed</string>
     <string name="spaces_in_name">Username cannot contain whitespace</string>
+    <string name="ok">OK</string>
 
     <!-- Activity Feed Items -->
     <string name="friend_made_game">created a new game.</string>
@@ -210,7 +211,6 @@
     <!-- Links -->
     <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.snaptiongame.app</string>
     <string name="feedback_url" translatable="false">https://docs.google.com/forms/d/e/1FAIpQLSdxx3G_deM6OJV8nj3SN94T2DkBq_rxB875qJ_H-e2q9mqf8g/viewform</string>
-    <string name="licenses_url" translatable="false">https://app.snaptiongame.com/android-licenses.html</string>
 
     <!-- Delete Friend Dialog -->
     <string name="delete_pre">Are you sure you want to remove</string>
@@ -233,4 +233,46 @@
     <string name="is_private">Private Game</string>
     <string name="no_friends_yet">No friends yet!</string>
     <string name="no_friends_message">No friends yet. You can search for friends to add to this game!</string>
+
+    <!-- License Names -->
+    <string-array name="license_names">
+        <item>Butterknife</item>
+        <item>Branch.io</item>
+        <item>CircleImageView</item>
+        <item>Crashlytics</item>
+        <item>Facebook Android SDK</item>
+        <item>Glide</item>
+        <item>Kotlin</item>
+        <item>Lottie</item>
+        <item>Material Dialogs</item>
+        <item>MaterialShowcaseView</item>
+        <item>Nachos</item>
+        <item>OkHttp</item>
+        <item>PhotoView</item>
+        <item>Retrofit</item>
+        <item>RxJava</item>
+        <item>TextDrawable</item>
+        <item>Timber</item>
+    </string-array>
+
+    <!-- License Authors -->
+    <string-array name="license_authors">
+        <item>Jake Wharton</item>
+        <item>Branch Metrics, Inc.</item>
+        <item>Henning Dodenhof</item>
+        <item>Crashlytics, Inc.</item>
+        <item>Facebook, Inc.</item>
+        <item>Google, Inc.</item>
+        <item>JetBrains, Inc.</item>
+        <item>Airbnb, Inc.</item>
+        <item>Aidan Michael Follestad</item>
+        <item>Dean Wild</item>
+        <item>Hootsuite Media, Inc.</item>
+        <item>Square, Inc.</item>
+        <item>Chris Banes</item>
+        <item>Square, Inc.</item>
+        <item>RxJava Contributors</item>
+        <item>Amulya Khare</item>
+        <item>Jake Wharton</item>
+    </string-array>
 </resources>
