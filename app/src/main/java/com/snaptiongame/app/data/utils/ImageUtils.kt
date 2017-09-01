@@ -38,7 +38,7 @@ object ImageUtils {
     private const val NUM_MB = 16
     private const val NUM_BYTES = 1024
     private const val MIDDLE_FACTOR = 2.0f
-    private const val QUALITY = 100
+    private const val QUALITY = 90
     private const val NINETY_DEGREES = 90
     private const val ONE_EIGHTY_DEGREES = 180
     private const val TWO_SEVENTY_DEGREES = 270
