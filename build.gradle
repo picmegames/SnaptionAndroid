@@ -3,13 +3,15 @@ buildscript {
     repositories {
         jcenter()
 
+        google()
+
         maven {
             url 'https://maven.fabric.io/public'
         }
     }
     dependencies {
         // Gradle
-        classpath 'com.android.tools.build:gradle:3.0.0-beta2'
+        classpath 'com.android.tools.build:gradle:3.0.0-beta4'
 
         // Play Services
         classpath 'com.google.gms:google-services:3.1.0'
@@ -18,7 +20,7 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.23.0'
 
         // Kotlin
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-3'
     }
 }
 
@@ -51,7 +53,7 @@ ext {
     butterknifeVersion = '8.8.1'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'
-    kotlinVersion = '1.1.4-2'
+    kotlinVersion = '1.1.4-3'
     mockitoVersion = '2.7.1'
     multidexVersion = '1.0.2'
     robolectricVersion = '3.3.2'
