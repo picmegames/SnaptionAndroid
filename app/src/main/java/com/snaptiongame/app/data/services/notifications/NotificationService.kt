@@ -65,7 +65,7 @@ class NotificationService : FirebaseMessagingService() {
             }
 
             // BUILD default notification
-            val builder = NotificationCompat.Builder(this)
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
                     .setAutoCancel(true)
                     .setSmallIcon(R.drawable.ic_notification)
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
@@ -167,6 +167,7 @@ class NotificationService : FirebaseMessagingService() {
         private val FRIEND = "user"
         private val PICTURE = "picture"
         private val USER_PICTURE = "userPicture"
+        const val CHANNEL_ID = "snaptionChannel";
         const val FROM_NOTIFICATION = "notification"
     }
 }
