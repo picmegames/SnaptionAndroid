@@ -1,5 +1,6 @@
 package com.snaptiongame.app.data.utils
 
+import com.bumptech.glide.Glide
 import com.snaptiongame.app.SnaptionApplication
 
 import java.io.File
@@ -61,8 +62,9 @@ object CacheUtils {
 
     private fun deleteCache(): Completable {
         try {
-            val dir = SnaptionApplication.getContext().cacheDir
-            deleteDir(dir)
+            val context = SnaptionApplication.getContext()
+            Glide.get(context).clearMemory()
+            deleteDir(context.cacheDir)
         }
         catch (e: Exception) {
             Timber.e(e)
