@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean isLoggedIn = AuthManager.isLoggedIn();
 
         navigationView.getMenu().findItem(R.id.friends).setVisible(isLoggedIn);
-        navigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
+        //navigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.activity).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.log_out).setVisible(isLoggedIn);
 
