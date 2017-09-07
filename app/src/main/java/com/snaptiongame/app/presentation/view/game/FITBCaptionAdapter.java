@@ -59,11 +59,11 @@ public class FITBCaptionAdapter extends RecyclerView.Adapter {
         FITBCaptionCardViewHolder holder = (FITBCaptionCardViewHolder) viewHolder;
         FitBCaption curCaption = captions.get(position);
 
-        String fitbText = curCaption.beforeBlank + curCaption.placeholderText + curCaption.afterBlank;
+        String fitbText = curCaption.getBeforeBlank() + FitBCaption.PLACEHOLDER + curCaption.getAfterBlank();
         ArrayList<String> fitbs = new ArrayList<>(
-                Arrays.asList(curCaption.beforeBlank,
-                        curCaption.placeholderText,
-                        curCaption.afterBlank)
+                Arrays.asList(curCaption.getBeforeBlank(),
+                        FitBCaption.PLACEHOLDER,
+                        curCaption.getAfterBlank())
         );
 
         holder.captionTemplateTextView.setText(fitbText);

@@ -33,9 +33,9 @@ public class OnboardingInfoFragment extends Fragment {
     public static OnboardingInfoFragment newInstance(OnboardingInfo info) {
         OnboardingInfoFragment frag = new OnboardingInfoFragment();
         Bundle args = new Bundle();
-        args.putInt(OnboardingInfo.TITLE_ID, info.titleId);
-        args.putInt(OnboardingInfo.DESCRIPTION_ID, info.descriptionId);
-        args.putInt(OnboardingInfo.ANIMATION, info.animationId);
+        args.putInt(OnboardingInfo.TITLE_ID, info.getTitleId());
+        args.putInt(OnboardingInfo.DESCRIPTION_ID, info.getDescriptionId());
+        args.putInt(OnboardingInfo.ANIMATION, info.getAnimationId());
         frag.setArguments(args);
         return frag;
     }

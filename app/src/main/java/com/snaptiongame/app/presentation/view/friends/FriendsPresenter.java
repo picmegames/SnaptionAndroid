@@ -41,8 +41,8 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Disposable disposable = UserProvider.searchUsers(query, query, query, query, page)
                 .flatMapIterable(users -> users)
                 .map(Friend::new)
-                .distinct(friend -> friend.id)
-                .filter(friend -> friend.id != AuthManager.getUserId())
+                .distinct(friend -> friend.getId())
+                .filter(friend -> friend.getId() != AuthManager.getUserId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         friendsView::addFriend,

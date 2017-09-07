@@ -66,13 +66,13 @@ public class MoreInfoFragment extends Fragment implements MoreInfoContract.View 
 
     @Override
     public void showUserInfo(UserStats userStats) {
-        rank.setText(userStats.rank);
-        experience.setText(String.valueOf(userStats.exp));
-        gamesCreated.setText(String.valueOf(userStats.gamesCreated));
-        captionsCreated.setText(String.valueOf(userStats.captionsCreated));
-        topGame.setText(String.valueOf(userStats.highestGameUpvote));
-        topCaption.setText(String.valueOf(userStats.captionUpvotes));
-        topCaptionCount.setText(String.valueOf(userStats.topCaptionCount));
+        rank.setText(userStats.getRank());
+        experience.setText(String.valueOf(userStats.getExp()));
+        gamesCreated.setText(String.valueOf(userStats.getGamesCreated()));
+        captionsCreated.setText(String.valueOf(userStats.getCaptionsCreated()));
+        topGame.setText(String.valueOf(userStats.getHighestGameUpvote()));
+        topCaption.setText(String.valueOf(userStats.getCaptionUpvotes()));
+        topCaptionCount.setText(String.valueOf(userStats.getTopCaptionCount()));
     }
 
     @Override

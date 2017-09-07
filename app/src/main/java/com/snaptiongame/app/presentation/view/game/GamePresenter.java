@@ -67,9 +67,9 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.upvoteOrFlagGame(request)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> gameView.onGameUpdated(request.choiceType),
+                        () -> gameView.onGameUpdated(request.getChoiceType()),
                         e -> {
-                            gameView.onGameErrored(request.choiceType);
+                            gameView.onGameErrored(request.getChoiceType());
                             Timber.e(e);
                         }
                 );
@@ -81,9 +81,9 @@ public class GamePresenter implements GameContract.Presenter {
         Disposable disposable = GameProvider.getGame(gameId, AuthManager.getInviteToken())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        game -> gameView.showGame(game.imageUrl, game.id, game.creatorId,
-                                game.creatorName, game.creatorImage, game.beenUpvoted, game.beenFlagged,
-                                DateUtils.isPastNow(game.endDate), game.isPublic),
+                        game -> gameView.showGame(game.getImageUrl(), game.getId(), game.getCreatorId(),
+                                game.getCreatorName(), game.getCreatorImage(), game.getBeenUpvoted(), game.getBeenFlagged(),
+                                DateUtils.isPastNow(game.getEndDate()), game.isPublic()),
                         Timber::e
                 );
         disposables.add(disposable);

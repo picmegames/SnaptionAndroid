@@ -27,7 +27,7 @@ public class CaptionSetTest {
         captions.add(new Caption(2, "Third caption"));
 
         testSet = new CaptionSet();
-        testSet.captionSetTitle = "Welcome to the thunderdome.";
+        testSet.setSetName("Welcome to the thunderdome.");
     }
 
     @Test

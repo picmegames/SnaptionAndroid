@@ -53,10 +53,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
         callback = (name, isAdded, position) -> {
             if (isAdded) {
-                presenter.removeFriend(name, this.friends.get(position).id);
+                presenter.removeFriend(name, this.friends.get(position).getId());
             }
             else {
-                presenter.addFriend(name, this.friends.get(position).id);
+                presenter.addFriend(name, this.friends.get(position).getId());
             }
         };
     }
@@ -90,9 +90,9 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             holder.image.setOnClickListener(view -> {
                 Intent profileIntent = new Intent(context, ProfileActivity.class);
                 profileIntent.putExtra(ProfileActivity.IS_CURRENT_USER, false);
-                profileIntent.putExtra(User.USERNAME, curFriend.username);
-                profileIntent.putExtra(User.IMAGE_URL, curFriend.imageUrl);
-                profileIntent.putExtra(User.ID, curFriend.id);
+                profileIntent.putExtra(User.USERNAME, curFriend.getUsername());
+                profileIntent.putExtra(User.IMAGE_URL, curFriend.getImageUrl());
+                profileIntent.putExtra(User.ID, curFriend.getId());
                 ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                         .makeSceneTransitionAnimation((AppCompatActivity) context, holder.image,
                                 ViewCompat.getTransitionName(holder.image));
@@ -100,7 +100,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             });
         }
         else {
-            if (selectedIds.contains(curFriend.id)) {
+            if (selectedIds.contains(curFriend.getId())) {
                 holder.itemView.setAlpha(BRIGHT);
             }
             else {
@@ -108,55 +108,54 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             }
 
             holder.itemView.setOnClickListener(view -> {
-                if (!selectedIds.contains(curFriend.id)) {
+                if (!selectedIds.contains(curFriend.getId())) {
                     view.setAlpha(BRIGHT);
-                    selectedIds.add(curFriend.id);
-                    selectedNames.add(curFriend.username);
+                    selectedIds.add(curFriend.getId());
+                    selectedNames.add(curFriend.getUsername());
                 }
                 else {
                     view.setAlpha(DIM);
-                    selectedIds.remove(Integer.valueOf(curFriend.id));
-                    selectedNames.remove(curFriend.username);
+                    selectedIds.remove(Integer.valueOf(curFriend.getId()));
+                    selectedNames.remove(curFriend.getUsername());
                 }
             });
         }
 
-        if (curFriend.fullName != null && !curFriend.fullName.isEmpty()) {
-            holder.name.setText(curFriend.fullName);
+        if (curFriend.getFullName() != null && !curFriend.getFullName().isEmpty()) {
+            holder.name.setText(curFriend.getFullName());
         }
         else {
-            holder.name.setText(curFriend.username);
+            holder.name.setText(curFriend.getUsername());
         }
 
-        holder.usernameField.setText(curFriend.username);
-        if (curFriend.imageUrl != null && !curFriend.imageUrl.isEmpty()) {
-
+        holder.usernameField.setText(curFriend.getUsername());
+        if (curFriend.getImageUrl() != null && !curFriend.getImageUrl().isEmpty()) {
             RequestOptions options = new RequestOptions()
                     .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                     .dontAnimate();
 
             Glide.with(holder.context)
-                    .load(curFriend.imageUrl)
+                    .load(curFriend.getImageUrl())
                     .apply(options)
                     .into(holder.image);
         }
-        else if (curFriend.imageUrl == null) {
+        else {
             holder.image.setImageDrawable(TextDrawable.builder()
                     .beginConfig()
                     .width(AVATAR_SIZE)
                     .height(AVATAR_SIZE)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(curFriend.username.substring(0, 1),
-                            ColorGenerator.MATERIAL.getColor(curFriend.username)));
+                    .buildRound(curFriend.getUsername().substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(curFriend.getUsername())));
         }
 
-        holder.friendName = curFriend.username;
-        holder.isCurrentUser = curFriend.id == AuthManager.getUserId();
+        holder.friendName = curFriend.getUsername();
+        holder.isCurrentUser = curFriend.getId() == AuthManager.getUserId();
 
         if (shouldDisplayAddRemoveIcon && !holder.isCurrentUser) {
             holder.addRemoveFriendIcon.setVisibility(View.VISIBLE);
-            holder.setAddRemoveFriendIcon(holder.isSnaptionFriend = curFriend.isSnaptionFriend);
+            holder.setAddRemoveFriendIcon(holder.isSnaptionFriend = curFriend.isSnaptionFriend());
         }
         else {
             holder.addRemoveFriendIcon.setVisibility(View.GONE);
@@ -194,7 +193,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void selectFriend(int friendId) {
         if (!selectedIds.contains(friendId)) {
             selectedIds.add(friendId);
-            selectedNames.add(getFriendById(friendId).username);
+            selectedNames.add(getFriendById(friendId).getUsername());
             notifyItemChanged(friends.indexOf(getFriendById(friendId)));
         }
     }
@@ -202,7 +201,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void deselectFriend(int friendId) {
         if (selectedIds.contains(friendId)) {
             selectedIds.remove(Integer.valueOf(friendId));
-            selectedNames.remove(getFriendById(friendId).username);
+            selectedNames.remove(getFriendById(friendId).getUsername());
             notifyItemChanged(friends.indexOf(getFriendById(friendId)));
         }
     }
@@ -213,7 +212,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
     public Friend getFriendById(int friendId) {
         for (Friend friend : friends) {
-            if (friend.id == friendId) {
+            if (friend.getId() == friendId) {
                 return friend;
             }
         }
@@ -223,7 +222,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
     public Friend getFriendByName(String name) {
         for (Friend friend : friends) {
-            if (friend.username.equals(name)) {
+            if (friend.getUsername().equals(name)) {
                 return friend;
             }
         }
@@ -238,7 +237,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     public void addFriend(Friend friend) {
         // Ensures that users who are not your friend appear at the top of the list
         if (!friends.contains(friend)) {
-            if (!friend.isSnaptionFriend) {
+            if (!friend.isSnaptionFriend()) {
                 friends.add(0, friend);
                 notifyItemInserted(0);
             }

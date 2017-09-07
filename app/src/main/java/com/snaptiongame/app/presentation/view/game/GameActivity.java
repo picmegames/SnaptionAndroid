@@ -246,13 +246,13 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
             // CALLED when the async initSession returns, won't error if no branch data is found
             if (error == null) {
                 Timber.i(referringParams.toString());
-                invite = BranchConverter.deserializeGameInvite(
+                invite = BranchConverter.Companion.deserializeGameInvite(
                         new JsonParser().parse(referringParams.toString()));
                 // IF branch returns a null or invalid invite then display the intent information
-                if (invite == null || invite.gameId == 0) {
+                if (invite == null || invite.getGameId() == 0) {
                     if (intent.hasExtra(NotificationService.FROM_NOTIFICATION)) {
                         invite = new GameInvite("", intent.getIntExtra(Game.ID, 0));
-                        presenter.loadGame(invite.gameId);
+                        presenter.loadGame(invite.getGameId());
                     }
                     else {
                         showGame(intent.getStringExtra(Game.IMAGE_URL), intent.getIntExtra(Game.ID, 0),
@@ -264,8 +264,8 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 }
                 // ELSE display information from the game invite
                 else {
-                    AuthManager.saveToken(invite.inviteToken);
-                    presenter.loadGame(invite.gameId);
+                    AuthManager.saveToken(invite.getInviteToken());
+                    presenter.loadGame(invite.getGameId());
                 }
             }
             else {
@@ -575,7 +575,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     public void showTags(List<Tag> tags) {
         List<String> tagValues = new ArrayList<>();
         for (Tag tag : tags) {
-            tagValues.add(tag.name);
+            tagValues.add(tag.getName());
         }
         tagsView.setText(tagValues);
     }
@@ -604,7 +604,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         fitBEditTextField.setText("");
         fitBEditTextLayout.setHint("");
         adapter.clear();
-        presenter.addCaption(fitBAdapter.getCaption(currentCaption).id,
+        presenter.addCaption(fitBAdapter.getCaption(currentCaption).getId(),
                 curEntry);
         refreshLayout.setRefreshing(true);
         addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),

@@ -47,9 +47,9 @@ public class WallAdapter extends RecyclerView.Adapter {
         callback = new ItemListener() {
             @Override
             public void updateUpvote(boolean value, int index) {
-                games.get(index).beenUpvoted = value;
-                games.get(index).numUpvotes = value ? games.get(index).numUpvotes + 1 :
-                        games.get(index).numUpvotes -1;
+                games.get(index).setBeenUpvoted(value);
+                games.get(index).setNumUpvotes(value ? games.get(index).getNumUpvotes() + 1 :
+                        games.get(index).getNumUpvotes() - 1);
             }
 
             @Override
@@ -74,11 +74,11 @@ public class WallAdapter extends RecyclerView.Adapter {
         Game curGame = games.get(position);
         RequestOptions options;
 
-        holder.gameId = curGame.id;
-        holder.creatorId = curGame.creatorId;
-        holder.creator = curGame.creatorName;
-        holder.creatorImageUrl = curGame.creatorImage;
-        holder.isPublic = curGame.isPublic;
+        holder.gameId = curGame.getId();
+        holder.creatorId = curGame.getCreatorId();
+        holder.creator = curGame.getCreatorName();
+        holder.creatorImageUrl = curGame.getCreatorImage();
+        holder.isPublic = curGame.isPublic();
 
         if (holder.isPublic) {
             holder.privateIcon.setVisibility(View.INVISIBLE);
@@ -87,46 +87,46 @@ public class WallAdapter extends RecyclerView.Adapter {
             holder.privateIcon.setVisibility(View.VISIBLE);
         }
 
-        if (curGame.imageUrl != null) {
-            holder.image.setAspectRatio((float) curGame.imageWidth / curGame.imageHeight);
+        if (curGame.getImageUrl() != null) {
+            holder.image.setAspectRatio((float) curGame.getImageWidth() / curGame.getImageHeight());
 
             options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
-                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.imageUrl)));
+                    .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curGame.getImageUrl())));
 
             Glide.with(holder.context)
-                    .load(curGame.imageUrl)
+                    .load(curGame.getImageUrl())
                     .apply(options)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.image);
-            holder.imageUrl = curGame.imageUrl;
-            ViewCompat.setTransitionName(holder.image, curGame.imageUrl);
+            holder.imageUrl = curGame.getImageUrl();
+            ViewCompat.setTransitionName(holder.image, curGame.getImageUrl());
         }
         else {
             Glide.with(holder.context)
                     .clear(holder.image);
         }
 
-        String creatorName = String.format(holder.context.getString(R.string.posted_by), curGame.creatorName);
+        String creatorName = String.format(holder.context.getString(R.string.posted_by), curGame.getCreatorName());
 
         if (isList) {
-            creatorName = curGame.creatorName;
+            creatorName = curGame.getCreatorName();
         }
         holder.creatorName.setText(creatorName);
 
-        if (curGame.topCaption != null) {
+        if (curGame.getTopCaption() != null) {
             holder.captionerImage.setVisibility(View.VISIBLE);
             holder.captionerName.setVisibility(View.VISIBLE);
             holder.topCaption.setVisibility(View.VISIBLE);
 
-            if (curGame.topCaption.creatorPicture != null) {
+            if (curGame.getTopCaption().getCreatorPicture() != null) {
 
                 options = new RequestOptions()
                         .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                         .dontAnimate();
 
                 Glide.with(holder.context)
-                        .load(curGame.topCaption.creatorPicture)
+                        .load(curGame.getTopCaption().getCreatorPicture())
                         .apply(options)
                         .into(holder.captionerImage);
             }
@@ -137,17 +137,17 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .height(isList ? AVATAR_SIZE_LIST : AVATAR_SIZE_GRID)
                         .toUpperCase()
                         .endConfig()
-                        .buildRound(curGame.topCaption.creatorName.substring(0, 1),
-                                ColorGenerator.MATERIAL.getColor(curGame.topCaption.creatorName)));
+                        .buildRound(curGame.getTopCaption().getCreatorName().substring(0, 1),
+                                ColorGenerator.MATERIAL.getColor(curGame.getTopCaption().getCreatorName())));
             }
             ViewCompat.setTransitionName(holder.captionerImage, holder.context.getString(R.string.profile_transition));
-            holder.captionerName.setText(curGame.topCaption.creatorName);
-            holder.captionerId = curGame.topCaption.creatorId;
-            holder.captioner = curGame.topCaption.creatorName;
-            holder.captionerImageUrl = curGame.topCaption.creatorPicture;
-            holder.topCaption.setText(TextUtils.concat(curGame.topCaption.assocFitB.beforeBlank,
-                    TextStyleUtils.getTextUnderlined(curGame.topCaption.caption),
-                    curGame.topCaption.assocFitB.afterBlank));
+            holder.captionerName.setText(curGame.getTopCaption().getCreatorName());
+            holder.captionerId = curGame.getTopCaption().getCreatorId();
+            holder.captioner = curGame.getTopCaption().getCreatorName();
+            holder.captionerImageUrl = curGame.getTopCaption().getCreatorPicture();
+            holder.topCaption.setText(TextUtils.concat(curGame.getTopCaption().getAssocFitB().getBeforeBlank(),
+                    TextStyleUtils.getTextUnderlined(curGame.getTopCaption().getCaption()),
+                    curGame.getTopCaption().getAssocFitB().getAfterBlank()));
         }
         else {
             holder.captionerImage.setVisibility(View.GONE);
@@ -156,14 +156,14 @@ public class WallAdapter extends RecyclerView.Adapter {
         }
 
         if (isList) {
-            if (curGame.creatorImage != null) {
+            if (curGame.getCreatorImage() != null) {
 
                 options = new RequestOptions()
                         .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                         .dontAnimate();
 
                 Glide.with(holder.context)
-                        .load(curGame.creatorImage)
+                        .load(curGame.getCreatorImage())
                         .apply(options)
                         .into(holder.creatorImage);
             }
@@ -174,18 +174,18 @@ public class WallAdapter extends RecyclerView.Adapter {
                         .height(AVATAR_SIZE_GRID)
                         .toUpperCase()
                         .endConfig()
-                        .buildRound(curGame.creatorName.substring(0, 1),
-                                ColorGenerator.MATERIAL.getColor(curGame.creatorName)));
+                        .buildRound(curGame.getCreatorName().substring(0, 1),
+                                ColorGenerator.MATERIAL.getColor(curGame.getCreatorName())));
             }
             ViewCompat.setTransitionName(holder.creatorImage, holder.context.getString(R.string.profile_transition));
 
-            holder.timeLeft.setText(DateUtils.getTimeLeftLabel(holder.context, curGame.endDate));
+            holder.timeLeft.setText(DateUtils.getTimeLeftLabel(holder.context, curGame.getEndDate()));
         }
 
-        holder.hasBeenUpvotedOrFlagged(curGame.beenUpvoted);
-        holder.numberOfUpvotes.setText(String.valueOf(curGame.numUpvotes));
+        holder.hasBeenUpvotedOrFlagged(curGame.getBeenUpvoted());
+        holder.numberOfUpvotes.setText(String.valueOf(curGame.getNumUpvotes()));
 
-        holder.isClosed = DateUtils.isPastDate(curGame.endDate, currentTime);
+        holder.isClosed = DateUtils.isPastDate(curGame.getEndDate(), currentTime);
 
         if (holder.isClosed) {
             holder.gameStatus.setText(holder.context.getString(R.string.game_closed));

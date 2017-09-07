@@ -27,9 +27,9 @@ public class CaptionSetConverterTest {
         jsonObject.addProperty(CaptionSet.ACTIVE, false);
 
         captionSet = new CaptionSet();
-        captionSet.isCaptionSetActive = false;
-        captionSet.id = 123;
-        captionSet.captionSetTitle = "A Caption Set";
+        captionSet.setCaptionSetActive(false);
+        captionSet.setId(123);
+        captionSet.setSetName("A Caption Set");
 
         converter = new CaptionSetConverter();
 

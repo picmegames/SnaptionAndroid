@@ -47,8 +47,6 @@ public class ImmersiveActivity extends AppCompatActivity {
                     .apply(options)
                     .into(photoView);
         }
-
-        TransitionUtils.setupArcTransition(this, getWindow());
     }
 
     @OnClick(R.id.photo_view)

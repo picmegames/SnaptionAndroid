@@ -24,28 +24,28 @@ public class ActivityFeedUtils {
         CharSequence message = "";
         Resources res = context.getResources();
 
-        switch (item.type) {
+        switch (item.getType()) {
             case FRIEND_MADE_GAME:
-                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.getFriend().getUsername()), " ",
                         res.getString(R.string.friend_made_game));
                 break;
             case FRIEND_INVITED_GAME:
-                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.getFriend().getUsername()), " ",
                         res.getString(R.string.friend_invited_game));
                 break;
             case CAPTIONED_GAME:
-                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
-                        res.getString(R.string.captioned_game), " ", item.caption.assocFitB.beforeBlank,
-                        TextStyleUtils.getTextUnderlined(item.caption.caption), item.caption.assocFitB.afterBlank);
+                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.getFriend().getUsername()), " ",
+                        res.getString(R.string.captioned_game), " ", item.getCaption().getAssocFitB().getBeforeBlank(),
+                        TextStyleUtils.getTextUnderlined(item.getCaption().getCaption()), item.getCaption().getAssocFitB().getAfterBlank());
                 break;
             case FRIENDED_YOU:
-                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+                message = TextUtils.concat(TextStyleUtils.getTextBolded(item.getFriend().getUsername()), " ",
                         res.getString(R.string.friended_you));
                 break;
             case NEW_FACEBOOK_FRIEND:
                 message = TextUtils.concat(res.getString(R.string.new_facebook_friend_prefix), " ",
-                        item.friend.fullName, " ", res.getString(R.string.new_facebook_friend_suffix),
-                        " ", TextStyleUtils.getTextBolded(item.friend.username));
+                        item.getFriend().getFullName(), " ", res.getString(R.string.new_facebook_friend_suffix),
+                        " ", TextStyleUtils.getTextBolded(item.getFriend().getUsername()));
                 break;
             default:
                 break;
@@ -56,7 +56,7 @@ public class ActivityFeedUtils {
         }
 
         message = TextUtils.concat(message, " ",
-                TextStyleUtils.getTextGray(DateUtils.getTimeSince(context, item.date)));
+                TextStyleUtils.getTextGray(DateUtils.getTimeSince(context, item.getDate())));
 
         return message;
     }

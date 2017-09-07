@@ -63,6 +63,13 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
+            android:name=".presentation.view.settings.licenses.LicensesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
             android:name=".presentation.view.profile.ProfileActivity"
             android:configChanges="orientation"
             android:parentActivityName=".presentation.view.main.MainActivity"
@@ -135,10 +142,6 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
-
-        <!-- <service -->
-        <!-- android:name=".data.services.GameUploadService" -->
-        <!-- android:exported="false"/> -->
 
         <service android:name=".data.services.notifications.NotificationService">
             <intent-filter>

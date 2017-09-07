@@ -38,7 +38,6 @@ import timber.log.Timber;
 /**
  * @author Tyler Wong
  */
-
 public final class AuthManager {
     private static AuthManager authManager;
     private CallbackManager callbackManager;
@@ -90,11 +89,13 @@ public final class AuthManager {
     public static void init(Context context) {
         // INIT an instance of an Authentication Manager
         if (authManager == null) {
-            authManager = new AuthManager(context);
+            synchronized (AuthManager.class) {
+                authManager = new AuthManager(context);
+            }
         }
     }
 
-    public static AuthManager getInstance() {
+    public synchronized static AuthManager getInstance() {
         // RETURN an instance of Authentication Manager
         return authManager;
     }
@@ -195,7 +196,7 @@ public final class AuthManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> {
-                            saveUserId(session.userId);
+                            saveUserId(session.getUserId());
                             getUserInfo(getUserId());
                         },
                         e -> {
@@ -213,7 +214,7 @@ public final class AuthManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         session -> {
-                            saveUserId(session.userId);
+                            saveUserId(session.getUserId());
                             getUserInfo(getUserId());
                         },
                         e -> {
@@ -335,7 +336,7 @@ public final class AuthManager {
                             setFriendNotificationsEnabled(true);
                             setIsClosedGameDialogEnabled(true);
                             clearLoginInfo();
-                            ApiProvider.clearCookies();
+                            ApiProvider.INSTANCE.clearCookies();
                         },
                         e -> Timber.e("Could not log out of Snaption", e)
                 );
@@ -431,10 +432,10 @@ public final class AuthManager {
         UserProvider.getUser(snaptionUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
-                            saveUsername(user.username);
+                            saveUsername(user.getUsername());
 
-                            if (user.imageUrl != null) {
-                                saveProfileImage(user.imageUrl);
+                            if (user.getImageUrl() != null) {
+                                saveProfileImage(user.getImageUrl());
                             }
 
                             fireSuccessCallback();

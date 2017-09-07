@@ -206,8 +206,8 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void showUser(User user) {
-        name = user.username;
-        picture = user.imageUrl;
+        name = user.getUsername();
+        picture = user.getImageUrl();
 
         setupView();
     }
@@ -407,11 +407,11 @@ public class ProfileActivity extends AppCompatActivity
     public void showUsernameSuccess(String oldUsername, User user) {
         Snackbar.make(layout, getString(R.string.update_success), Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.undo), view ->
-                        presenter.updateUsername(user.username, new User(oldUsername)))
+                        presenter.updateUsername(user.getUsername(), new User(oldUsername)))
                 .show();
-        title.setText(user.username);
-        mainTitle.setText(user.username);
-        editView.updateUsername(user.username);
+        title.setText(user.getUsername());
+        mainTitle.setText(user.getUsername());
+        editView.updateUsername(user.getUsername());
     }
 
     @Override

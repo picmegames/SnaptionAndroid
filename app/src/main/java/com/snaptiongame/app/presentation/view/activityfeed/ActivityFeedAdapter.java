@@ -49,20 +49,20 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
         ActivityFeedItemViewHolder holder = (ActivityFeedItemViewHolder) viewHolder;
         ActivityFeedItem curActivityItem = activityItems.get(position);
 
-        holder.friend = curActivityItem.friend;
-        holder.game = curActivityItem.game;
-        holder.caption = curActivityItem.caption;
+        holder.friend = curActivityItem.getFriend();
+        holder.game = curActivityItem.getGame();
+        holder.caption = curActivityItem.getCaption();
 
-        holder.setActivityOnClickListener(curActivityItem.type);
+        holder.setActivityOnClickListener(curActivityItem.getType());
         holder.activityMessage.setText(ActivityFeedUtils.getMessage(holder.context, curActivityItem));
 
-        if (curActivityItem.friend.imageUrl != null) {
+        if (curActivityItem.getFriend().getImageUrl() != null) {
             RequestOptions options = new RequestOptions()
                     .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
                     .dontAnimate();
 
             Glide.with(holder.context)
-                    .load(curActivityItem.friend.imageUrl)
+                    .load(curActivityItem.getFriend().getImageUrl())
                     .apply(options)
                     .into(holder.userImage);
         }
@@ -73,26 +73,26 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
                     .height(AVATAR_SIZE)
                     .toUpperCase()
                     .endConfig()
-                    .buildRound(curActivityItem.friend.username.substring(0, 1),
-                            ColorGenerator.MATERIAL.getColor(curActivityItem.friend.username)));
+                    .buildRound(curActivityItem.getFriend().getUsername().substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(curActivityItem.getFriend().getUsername())));
         }
 
-        if (curActivityItem.type != ActivityFeedUtils.FRIENDED_YOU &&
-                curActivityItem.type != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
+        if (curActivityItem.getType() != ActivityFeedUtils.FRIENDED_YOU &&
+                curActivityItem.getType() != ActivityFeedUtils.NEW_FACEBOOK_FRIEND) {
 
             holder.contentImage.setVisibility(View.VISIBLE);
-            holder.game.isClosed = DateUtils.isPastDate(holder.game.endDate, currentTime);
+            holder.game.setClosed(DateUtils.isPastDate(holder.game.getEndDate(), currentTime));
 
-            if (curActivityItem.game.imageUrl != null) {
+            if (curActivityItem.getGame().getImageUrl() != null) {
                 RequestOptions options = new RequestOptions()
-                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.game.imageUrl)))
+                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.getGame().getImageUrl())))
                         .dontAnimate();
 
                 Glide.with(holder.context)
-                        .load(curActivityItem.game.imageUrl)
+                        .load(curActivityItem.getGame().getImageUrl())
                         .apply(options)
                         .into(holder.contentImage);
-                ViewCompat.setTransitionName(holder.contentImage, curActivityItem.game.imageUrl);
+                ViewCompat.setTransitionName(holder.contentImage, curActivityItem.getGame().getImageUrl());
             }
             else {
                 Glide.with(holder.context)

@@ -20,7 +20,8 @@
             android:id="@+id/leaderboards"
             android:checked="false"
             android:icon="@drawable/ic_equalizer_grey_900_24dp"
-            android:title="@string/leaderboards_label"/>
+            android:title="@string/leaderboards_label"
+            android:visible="false"/>
 
         <item
             android:id="@+id/activity"

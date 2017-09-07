@@ -1,7 +1,7 @@
 package com.snaptiongame.app;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.snaptiongame.app.data.auth.AuthManager;
@@ -17,7 +17,7 @@ import timber.log.Timber;
  * @author Tyler Wong
  * @version 1.0
  */
-public class SnaptionApplication extends Application {
+public class SnaptionApplication extends MultiDexApplication {
     private static Context context;
 
     @Override

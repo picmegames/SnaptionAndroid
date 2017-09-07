@@ -22,31 +22,31 @@ public class FriendConverterTest {
     public void setup() {
         pal = new Friend(1, "Bill Nye", "sciencedude12", "fakeurl.com",
                 "anotherone.com", "j@j.com");
-        pal.isSnaptionFriend = false;
+        pal.setSnaptionFriend(false);
 
         jsonObjectSerialize = new JsonObject();
         jsonObjectDeserialize = new JsonObject();
 
-        jsonObjectSerialize.addProperty(Friend.ID, pal.id);
-        jsonObjectSerialize.addProperty(Friend.FULL_NAME, pal.fullName);
-        jsonObjectSerialize.addProperty(Friend.USERNAME, pal.username);
-        jsonObjectSerialize.addProperty(Friend.PICTURE, pal.picture);
-        jsonObjectSerialize.addProperty(Friend.IMAGE_WIDTH, pal.imageWidth);
-        jsonObjectSerialize.addProperty(Friend.IMAGE_HEIGHT, pal.imageHeight);
-        jsonObjectSerialize.addProperty(Friend.COVER, pal.cover);
-        jsonObjectSerialize.addProperty(Friend.EMAIL, pal.email);
+        jsonObjectSerialize.addProperty(Friend.ID, pal.getId());
+        jsonObjectSerialize.addProperty(Friend.FULL_NAME, pal.getFullName());
+        jsonObjectSerialize.addProperty(Friend.USERNAME, pal.getUsername());
+        jsonObjectSerialize.addProperty(Friend.PICTURE, pal.getPicture());
+        jsonObjectSerialize.addProperty(Friend.IMAGE_WIDTH, pal.getImageWidth());
+        jsonObjectSerialize.addProperty(Friend.IMAGE_HEIGHT, pal.getImageHeight());
+        jsonObjectSerialize.addProperty(Friend.COVER, pal.getCover());
+        jsonObjectSerialize.addProperty(Friend.EMAIL, pal.getEmail());
         jsonObjectSerialize.addProperty("isSnaptionFriend", false);
 
-        jsonObjectDeserialize.addProperty(Friend.ID, pal.id);
-        jsonObjectDeserialize.addProperty(Friend.FULL_NAME, pal.fullName);
-        jsonObjectDeserialize.addProperty(Friend.USERNAME, pal.username);
+        jsonObjectDeserialize.addProperty(Friend.ID, pal.getId());
+        jsonObjectDeserialize.addProperty(Friend.FULL_NAME, pal.getFullName());
+        jsonObjectDeserialize.addProperty(Friend.USERNAME, pal.getUsername());
         JsonObject picture = new JsonObject();
-        picture.addProperty(Friend.IMAGE_URL, pal.picture);
-        picture.addProperty(Friend.IMAGE_WIDTH, pal.imageWidth);
-        picture.addProperty(Friend.IMAGE_HEIGHT, pal.imageHeight);
+        picture.addProperty(Friend.IMAGE_URL, pal.getPicture());
+        picture.addProperty(Friend.IMAGE_WIDTH, pal.getImageWidth());
+        picture.addProperty(Friend.IMAGE_HEIGHT, pal.getImageHeight());
         jsonObjectDeserialize.add(Friend.PICTURE, picture);
-        jsonObjectDeserialize.addProperty(Friend.COVER, pal.cover);
-        jsonObjectDeserialize.addProperty(Friend.EMAIL, pal.email);
+        jsonObjectDeserialize.addProperty(Friend.COVER, pal.getCover());
+        jsonObjectDeserialize.addProperty(Friend.EMAIL, pal.getEmail());
         jsonObjectDeserialize.addProperty("isSnaptionFriend", false);
 
         converter = new FriendConverter();

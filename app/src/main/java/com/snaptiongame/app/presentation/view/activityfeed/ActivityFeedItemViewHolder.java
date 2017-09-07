@@ -63,14 +63,14 @@ public class ActivityFeedItemViewHolder extends RecyclerView.ViewHolder {
 
     private void goToGame() {
         Intent gameIntent = new Intent(context, GameActivity.class);
-        gameIntent.putExtra(Game.ID, game.id);
-        gameIntent.putExtra(Game.CREATOR_NAME, game.creatorName);
-        gameIntent.putExtra(Game.CREATOR_IMAGE, game.creatorImage);
-        gameIntent.putExtra(Game.CREATOR_ID, game.creatorId);
-        gameIntent.putExtra(Game.IMAGE_URL, game.imageUrl);
-        gameIntent.putExtra(Game.BEEN_UPVOTED, game.beenUpvoted);
-        gameIntent.putExtra(Game.IS_CLOSED, game.isClosed);
-        gameIntent.putExtra(Game.IS_PUBLIC, game.isPublic);
+        gameIntent.putExtra(Game.ID, game.getId());
+        gameIntent.putExtra(Game.CREATOR_NAME, game.getCreatorName());
+        gameIntent.putExtra(Game.CREATOR_IMAGE, game.getCreatorImage());
+        gameIntent.putExtra(Game.CREATOR_ID, game.getCreatorId());
+        gameIntent.putExtra(Game.IMAGE_URL, game.getImageUrl());
+        gameIntent.putExtra(Game.BEEN_UPVOTED, game.getBeenUpvoted());
+        gameIntent.putExtra(Game.IS_CLOSED, game.isClosed());
+        gameIntent.putExtra(Game.IS_PUBLIC, game.isPublic());
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation((AppCompatActivity) context,
@@ -80,9 +80,9 @@ public class ActivityFeedItemViewHolder extends RecyclerView.ViewHolder {
 
     private void goToProfile() {
         Intent profileIntent = new Intent(context, ProfileActivity.class);
-        profileIntent.putExtra(User.USERNAME, friend.username);
-        profileIntent.putExtra(User.IMAGE_URL, friend.imageUrl);
-        profileIntent.putExtra(User.ID, friend.id);
+        profileIntent.putExtra(User.USERNAME, friend.getUsername());
+        profileIntent.putExtra(User.IMAGE_URL, friend.getImageUrl());
+        profileIntent.putExtra(User.ID, friend.getId());
 
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
                 .makeSceneTransitionAnimation((AppCompatActivity) context, userImage,

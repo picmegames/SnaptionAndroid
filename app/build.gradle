@@ -1,13 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'jacoco'
 
 repositories {
     maven {
         url 'https://maven.fabric.io/public'
     }
+    mavenCentral()
 }
 
 android {
@@ -21,6 +23,8 @@ android {
         versionCode 20
         versionName "1.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -93,98 +97,105 @@ dependencies {
     // Testing Dependencies
 
     // AssertJ
-    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
 
     // JUnit
-    testCompile "junit:junit:$junitVersion"
+    testImplementation "junit:junit:$junitVersion"
 
     // Mockito
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Robolectric
-    testCompile "org.robolectric:robolectric:$robolectricVersion"
-    testCompile "org.robolectric:shadows-support-v4:$robolectricVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-support-v4:$robolectricVersion"
 
     // Support Testing Libraries
-    androidTestCompile "com.android.support:support-annotations:$supportLibVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-intents:$espressoVersion"
-    androidTestCompile "com.android.support.test:runner:$androidTestVersion"
-    androidTestCompile "com.android.support.test:rules:$androidTestVersion"
+    androidTestImplementation "com.android.support:support-annotations:$supportLibVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "com.android.support.test:runner:$androidTestVersion"
+    androidTestImplementation "com.android.support.test:rules:$androidTestVersion"
 
     // Developer Dependencies
 
     // Butterknife
-    compile "com.jakewharton:butterknife:$butterknifeVersion"
-    apt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+
+    // Multidex
+    implementation "com.android.support:multidex:$multidexVersion"
 
     // Timber
-    compile "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 
     // Application Dependencies
 
     // Branch
-    compile ("io.branch.sdk.android:library:$branchVersion") {
+    implementation ("io.branch.sdk.android:library:$branchVersion") {
         exclude module: 'answers-shim'
     }
 
-    // Circle ImageView
-    compile "de.hdodenhof:circleimageview:$circleImageViewVersion"
+    // CircleImageView
+    implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
 
     // Crashlytics
-    compile ("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
+    implementation ("com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion") {
         transitive = true
     }
 
     // Facebook Login
-    compile "com.facebook.android:facebook-android-sdk:$facebookSdkVersion"
+    implementation "com.facebook.android:facebook-android-sdk:$facebookSdkVersion"
 
     // Firebase
-    compile "com.google.firebase:firebase-core:$playServicesVersion"
-    compile "com.google.firebase:firebase-messaging:$playServicesVersion"
+    implementation "com.google.firebase:firebase-core:$playServicesVersion"
+    implementation "com.google.firebase:firebase-messaging:$playServicesVersion"
 
     // Glide
-    compile "com.github.bumptech.glide:glide:$glideVersion"
-    compile "jp.wasabeef:glide-transformations:$glideTransformationsVersion"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "jp.wasabeef:glide-transformations:$glideTransformationsVersion"
 
     // Google Login
-    compile "com.google.android.gms:play-services-auth:$playServicesVersion"
+    implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
 
     // Lottie
-    compile "com.airbnb.android:lottie:$lottieVersion"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
     // Material Dialogs
-    compile "com.afollestad.material-dialogs:core:$materialDialogsVersion"
+    implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
 
     // Material Showcase View
-    compile "com.github.deano2390:MaterialShowcaseView:$materialShowcaseView"
+    implementation "com.github.deano2390:MaterialShowcaseView:$materialShowcaseView"
 
     // Nachos
-    compile "com.hootsuite.android:nachos:$nachosVersion"
+    implementation "com.hootsuite.android:nachos:$nachosVersion"
 
     // OkHttp
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 
     // PhotoView
-    compile "com.github.chrisbanes:PhotoView:$photoViewVersion"
+    implementation "com.github.chrisbanes:PhotoView:$photoViewVersion"
 
     // Retrofit
-    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
     // RxJava
-    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
     // Support Libraries
-    compile "com.android.support:appcompat-v7:$supportLibVersion"
-    compile "com.android.support:design:$supportLibVersion"
-    compile "com.android.support:palette-v7:$supportLibVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "com.android.support:design:$supportLibVersion"
+    implementation "com.android.support:palette-v7:$supportLibVersion"
 
     // Text Drawable
-    compile "com.amulyakhare:com.amulyakhare.textdrawable:$textDrawableVersion"
+    implementation "com.amulyakhare:com.amulyakhare.textdrawable:$textDrawableVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

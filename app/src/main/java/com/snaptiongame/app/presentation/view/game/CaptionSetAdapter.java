@@ -42,7 +42,7 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
         setViewHolder.setName.setText(curSet.getSetName());
         setViewHolder.setImage.setImageResource(R.drawable.snaption_logo);
 
-        if (!curSet.isCaptionSetActive) {
+        if (!curSet.isCaptionSetActive()) {
             holder.itemView.setAlpha(NON_ACTIVE_SET_FADE);
         }
         else {
@@ -50,7 +50,7 @@ public class CaptionSetAdapter extends RecyclerView.Adapter {
         }
 
         setViewHolder.itemView.setOnClickListener(v ->
-                captionSetClickListener.captionSetClicked(v, curSet.id, position));
+                captionSetClickListener.captionSetClicked(v, curSet.getId(), position));
     }
 
     public String getSetName(int position) {

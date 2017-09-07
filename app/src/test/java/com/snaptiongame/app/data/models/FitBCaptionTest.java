@@ -13,10 +13,10 @@ public class FitBCaptionTest {
     @Test
     public void testDefaultConstructor() {
         FitBCaption caption = new FitBCaption(0, 200, "Before", "After", 12345);
-        assertTrue(caption.id == 0);
-        assertTrue(caption.beforeBlank.equals("Before"));
-        assertTrue(caption.afterBlank.equals("After"));
-        assertTrue(caption.setId == 12345);
-        assertTrue(caption.charLimit == 200);
+        assertTrue(caption.getId() == 0);
+        assertTrue(caption.getBeforeBlank().equals("Before"));
+        assertTrue(caption.getAfterBlank().equals("After"));
+        assertTrue(caption.getSetId() == 12345);
+        assertTrue(caption.getCharLimit() == 200);
     }
 }
