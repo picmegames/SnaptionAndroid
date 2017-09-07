@@ -95,7 +95,7 @@ public final class AuthManager {
         }
     }
 
-    public static AuthManager getInstance() {
+    public synchronized static AuthManager getInstance() {
         // RETURN an instance of Authentication Manager
         return authManager;
     }
