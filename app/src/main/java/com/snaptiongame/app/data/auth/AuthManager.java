@@ -135,13 +135,12 @@ public final class AuthManager {
                                         .getString(URL);
                                 name = object.getString(NAME);
                                 email = object.getString(EMAIL);
-
-                                saveLoginInfo(profileImageUrl, name, email);
                             }
                             catch (JSONException e) {
                                 Timber.e(e);
                             }
 
+                            saveLoginInfo(profileImageUrl, name, email);
                             handleOAuthFacebook(loginResult.getAccessToken().getToken(),
                                     FirebaseInstanceId.getInstance().getToken());
                         }
@@ -336,7 +335,7 @@ public final class AuthManager {
                             setFriendNotificationsEnabled(true);
                             setIsClosedGameDialogEnabled(true);
                             clearLoginInfo();
-                            ApiProvider.INSTANCE.clearCookies();
+                            ApiProvider.clearCookies();
                         },
                         e -> Timber.e("Could not log out of Snaption", e)
                 );
