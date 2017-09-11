@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.utils;
+package com.snaptiongame.app.presentation.view.utils
 
 /*
  * Copyright 2015 Google Inc.
@@ -19,13 +19,10 @@ package com.snaptiongame.app.presentation.view.utils;
 /**
  * Borrowed from github.com/romannurik/muzei
  */
-public class MathUtils {
-
-    private MathUtils() {
-    }
-
-    public static float constrain(float min, float max, float v) {
-        return Math.max(min, Math.min(max, v));
+object MathUtils {
+    @JvmStatic
+    fun constrain(min: Float, max: Float, v: Float): Float {
+        return Math.max(min, Math.min(max, v))
     }
 }
 

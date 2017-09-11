@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.utils;
+package com.snaptiongame.app.presentation.view.utils
 
 /*
  * Copyright 2015 Google Inc.
@@ -16,27 +16,25 @@ package com.snaptiongame.app.presentation.view.utils;
  * limitations under the License.
  */
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 
-import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable
 
 /**
  * Utility methods for working with Glide.
  */
-public class GlideUtils {
-
-    private GlideUtils() {
-    }
-
-    public static Bitmap getBitmap(Drawable glideDrawable) {
-        if (glideDrawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) glideDrawable).getBitmap();
-        } else if (glideDrawable instanceof GifDrawable) {
-            return ((GifDrawable) glideDrawable).getFirstFrame();
+object GlideUtils {
+    @JvmStatic
+    fun getBitmap(glideDrawable: Drawable): Bitmap? {
+        if (glideDrawable is BitmapDrawable) {
+            return glideDrawable.bitmap
         }
-        return null;
+        else if (glideDrawable is GifDrawable) {
+            return glideDrawable.firstFrame
+        }
+        return null
     }
 }
 
