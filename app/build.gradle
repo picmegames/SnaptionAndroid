@@ -123,7 +123,7 @@ dependencies {
     kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
 
     // Multidex
     implementation "com.android.support:multidex:$multidexVersion"
