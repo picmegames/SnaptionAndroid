@@ -110,7 +110,7 @@ public final class AuthManager {
     }
 
     public void setFacebookCallback(LoginButton facebookButton) {
-        Context context = SnaptionApplication.getContext();
+        Context context = SnaptionApplication.Companion.getContext();
         // Set Facebook Login Permissions
         facebookButton.setReadPermissions(
                 context.getString(R.string.fb_permission_profile),
@@ -201,7 +201,7 @@ public final class AuthManager {
                         e -> {
                             Timber.e(e);
                             logout();
-                            Toast.makeText(SnaptionApplication.getContext(),
+                            Toast.makeText(SnaptionApplication.Companion.getContext(),
                                     R.string.login_failure, Toast.LENGTH_LONG).show();
                             fireFailureCallback();
                         }
@@ -218,7 +218,7 @@ public final class AuthManager {
                         },
                         e -> {
                             Timber.e(e);
-                            Toast.makeText(SnaptionApplication.getContext(),
+                            Toast.makeText(SnaptionApplication.Companion.getContext(),
                                     R.string.login_failure, Toast.LENGTH_LONG).show();
                             logout();
                             fireFailureCallback();

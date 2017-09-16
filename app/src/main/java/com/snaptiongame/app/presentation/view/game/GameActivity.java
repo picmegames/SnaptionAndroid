@@ -96,8 +96,6 @@ import io.branch.referral.BranchError;
 import io.branch.referral.util.LinkProperties;
 import timber.log.Timber;
 
-import static com.snaptiongame.app.SnaptionApplication.getContext;
-
 /**
  * @author Tyler Wong
  */
@@ -607,7 +605,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         presenter.addCaption(fitBAdapter.getCaption(currentCaption).getId(),
                 curEntry);
         refreshLayout.setRefreshing(true);
-        addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+        addCaptionFab.setImageDrawable(ContextCompat.getDrawable(this,
                 R.drawable.ic_add_white_24dp));
         currentCaptionState = CaptionState.List;
         return true;
@@ -656,7 +654,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
     @OnClick(R.id.fitb_cancel_button)
     public void resetCaptionChoosing() {
         if (currentCaptionState == CaptionState.Typed) {
-            addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+            addCaptionFab.setImageDrawable(ContextCompat.getDrawable(this,
                     R.drawable.ic_add_white_24dp));
             rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
         }
@@ -952,7 +950,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         }
 
         if (currentCaptionState == CaptionState.Typed) {
-            addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+            addCaptionFab.setImageDrawable(ContextCompat.getDrawable(this,
                     R.drawable.ic_add_white_24dp));
             rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
         }
@@ -983,7 +981,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
                 if (!s.toString().replaceAll("\\s+", "").isEmpty()) {
                     if (currentCaptionState != CaptionState.Typed) {
-                        addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
                                 R.drawable.ic_check_white_24dp));
                         rotateIcon(NO_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                     }
@@ -992,7 +990,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
                 }
                 else {
                     if (currentCaptionState != CaptionState.Typed_Empty) {
-                        addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        addCaptionFab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
                                 R.drawable.ic_add_white_24dp));
                         rotateIcon(FORTY_FIVE_DEGREE_ROTATION, SHORT_ROTATION_DURATION, FAB_ICON);
                     }

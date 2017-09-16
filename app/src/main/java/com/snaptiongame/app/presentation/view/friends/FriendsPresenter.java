@@ -41,7 +41,7 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         Disposable disposable = UserProvider.searchUsers(query, query, query, query, page)
                 .flatMapIterable(users -> users)
                 .map(Friend::new)
-                .distinct(friend -> friend.getId())
+                .distinct(Friend::getId)
                 .filter(friend -> friend.getId() != AuthManager.getUserId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -77,13 +77,15 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         FriendProvider.removeFriend(new AddFriendRequest(friendId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> Toast.makeText(SnaptionApplication.getContext(),
-                                String.format(SnaptionApplication.getContext().getString(R.string.remove_friend_success), name),
+                        () -> Toast.makeText(SnaptionApplication.Companion.getContext(),
+                                String.format(SnaptionApplication.Companion.getContext().getString(
+                                        R.string.remove_friend_success), name),
                                 Toast.LENGTH_SHORT).show(),
                         e -> {
                             Timber.e(e);
-                            Toast.makeText(SnaptionApplication.getContext(),
-                                    String.format(SnaptionApplication.getContext().getString(R.string.remove_friend_failure), name),
+                            Toast.makeText(SnaptionApplication.Companion.getContext(),
+                                    String.format(SnaptionApplication.Companion.getContext().getString(
+                                            R.string.remove_friend_failure), name),
                                     Toast.LENGTH_SHORT).show();
                         }
                 );
@@ -94,13 +96,15 @@ public class FriendsPresenter implements FriendsContract.Presenter {
         FriendProvider.addFriend(new AddFriendRequest(friendId))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        result -> Toast.makeText(SnaptionApplication.getContext(),
-                                String.format(SnaptionApplication.getContext().getString(R.string.add_friend_success), name),
+                        result -> Toast.makeText(SnaptionApplication.Companion.getContext(),
+                                String.format(SnaptionApplication.Companion.getContext().getString(
+                                        R.string.add_friend_success), name),
                                 Toast.LENGTH_SHORT).show(),
                         e -> {
                             Timber.e(e);
-                            Toast.makeText(SnaptionApplication.getContext(),
-                                    String.format(SnaptionApplication.getContext().getString(R.string.add_friend_failure), name),
+                            Toast.makeText(SnaptionApplication.Companion.getContext(),
+                                    String.format(SnaptionApplication.Companion.getContext().getString(
+                                            R.string.add_friend_failure), name),
                                     Toast.LENGTH_SHORT).show();
                         }
                 );

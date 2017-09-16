@@ -31,8 +31,8 @@ object CacheUtils {
     val cacheSize: String
         get() {
             var size: Long = 0
-            size += getDirSize(SnaptionApplication.getContext().cacheDir)
-            size += getDirSize(SnaptionApplication.getContext().externalCacheDir)
+            size += getDirSize(SnaptionApplication.context?.cacheDir)
+            size += getDirSize(SnaptionApplication.context?.externalCacheDir)
             return humanReadableByteCount(size)
         }
 
@@ -62,9 +62,9 @@ object CacheUtils {
 
     private fun deleteCache(): Completable {
         try {
-            val context = SnaptionApplication.getContext()
+            val context = SnaptionApplication.context
             Glide.get(context).clearMemory()
-            deleteDir(context.cacheDir)
+            deleteDir(context?.cacheDir)
         }
         catch (e: Exception) {
             Timber.e(e)

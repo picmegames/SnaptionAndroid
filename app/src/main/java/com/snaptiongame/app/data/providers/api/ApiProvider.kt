@@ -66,8 +66,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 
-import com.snaptiongame.app.SnaptionApplication.getContext
-
 /**
  * The Snaption API Provider provides an instance of
  * the API service built by Retrofit.
@@ -122,7 +120,7 @@ object ApiProvider {
      * @return The development or production OkHttpClient
      */
     private fun makeOkHttpClient(): OkHttpClient {
-        cookieStore = PersistentCookieStore(getContext())
+        cookieStore = PersistentCookieStore(SnaptionApplication.context)
         val cookieHandler = CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL)
         CookieHandler.setDefault(cookieHandler)
         val cookieJar = JavaNetCookieJar(cookieHandler)
@@ -139,12 +137,12 @@ object ApiProvider {
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.level = HttpLoggingInterceptor.Level.BODY
                 okHttpClientBuilder.addInterceptor(interceptor)
-                socketFactory = getSSLConfig(SnaptionApplication.getContext(), R.raw.api_cert_dev)
+                socketFactory = getSSLConfig(SnaptionApplication.context, R.raw.api_cert_dev)
                         .socketFactory
                 okHttpClientBuilder.hostnameVerifier { _: String, _: SSLSession -> true }
             }
             else {
-                socketFactory = getSSLConfig(SnaptionApplication.getContext(), R.raw.api_cert_prod)
+                socketFactory = getSSLConfig(SnaptionApplication.context, R.raw.api_cert_prod)
                         .socketFactory
             }
             okHttpClientBuilder.sslSocketFactory(socketFactory, trustManager!!)
@@ -191,14 +189,14 @@ object ApiProvider {
      * @throws IOException if we could not verify the certificate
      */
     @Throws(CertificateException::class, KeyStoreException::class, NoSuchAlgorithmException::class, KeyManagementException::class, IOException::class)
-    private fun getSSLConfig(context: Context, certResourceId: Int): SSLContext {
+    private fun getSSLConfig(context: Context?, certResourceId: Int): SSLContext {
 
         val certificateFactory: CertificateFactory
         certificateFactory = CertificateFactory.getInstance(CERT_TYPE)
 
         // Open certificate from raw resource
         var certificate: Certificate? = null
-        context.resources.openRawResource(certResourceId).use { cert -> certificate = certificateFactory.generateCertificate(cert) }
+        context?.resources?.openRawResource(certResourceId).use { cert -> certificate = certificateFactory.generateCertificate(cert) }
 
         // Creating a KeyStore containing our trusted CAs
         val keyStoreType = KeyStore.getDefaultType()

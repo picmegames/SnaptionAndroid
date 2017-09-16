@@ -124,11 +124,13 @@ public class ProfilePresenter implements ProfileContract.Presenter {
                         },
                         e -> {
                             Timber.e(e);
-                            String msg = SnaptionApplication.getContext().getString(R.string.update_failure);
+                            String msg = SnaptionApplication.Companion.getContext().getString(
+                                    R.string.update_failure);
                             if (e instanceof HttpException) {
                                 //Show the invalid character message if the error code is 500
                                 if (((HttpException) e).code() == 500) {
-                                    msg = SnaptionApplication.getContext().getString(R.string.invalid_char);
+                                    msg = SnaptionApplication.Companion.getContext().getString(
+                                            R.string.invalid_char);
                                 }
                             }
                             profileView.showUsernameFailure(msg);

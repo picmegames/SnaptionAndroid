@@ -67,7 +67,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             puffinLogo = view.getRootView().findViewById(R.id.puffinlogo);
         }
         if (list != null) {
-            list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
+            list.setDivider(ContextCompat.getDrawable(SnaptionApplication.Companion.getContext(), R.drawable.line_divider));
         }
 
         PackageInfo packageInfo = null;
@@ -127,12 +127,12 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     @Override
     public void clearCacheSuccess() {
-        Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_success), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.clear_cache_success), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void clearCacheFailure() {
-        Toast.makeText(SnaptionApplication.getContext(), getString(R.string.clear_cache_fail), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.clear_cache_fail), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -161,7 +161,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             if (view != null) {
                 ListView list = view.findViewById(android.R.id.list);
                 list.setPadding(0, 0, 0, 0);
-                list.setDivider(ContextCompat.getDrawable(SnaptionApplication.getContext(), R.drawable.line_divider));
+                list.setDivider(ContextCompat.getDrawable(getActivity(), R.drawable.line_divider));
                 listStyled = true;
                 puffinLogo = view.getRootView().findViewById(R.id.puffinlogo);
             }

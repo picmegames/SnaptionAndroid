@@ -116,7 +116,7 @@ object ImageUtils {
     }
 
     private fun compressImage(imageUri: Uri): String {
-        val resolver = SnaptionApplication.getContext().contentResolver
+        val resolver = SnaptionApplication.context?.contentResolver
         val filePath = getImageUrlWithAuthority(resolver, imageUri)
         var scaledBitmap: Bitmap? = null
 
@@ -214,7 +214,8 @@ object ImageUtils {
     }
 
     private fun getRealPathFromURI(contentUri: Uri): String {
-        val cursor = SnaptionApplication.getContext().contentResolver.query(contentUri, null, null, null, null)
+        val cursor = SnaptionApplication.context?.contentResolver?.query(
+                contentUri, null, null, null, null)
         if (cursor == null) {
             return contentUri.path
         }
@@ -227,12 +228,12 @@ object ImageUtils {
         }
     }
 
-    private fun getImageUrlWithAuthority(resolver: ContentResolver, uri: Uri): String {
+    private fun getImageUrlWithAuthority(resolver: ContentResolver?, uri: Uri): String {
         val inputStream: InputStream?
 
         if (uri.authority != null) {
             try {
-                inputStream = resolver.openInputStream(uri)
+                inputStream = resolver?.openInputStream(uri)
                 val bmp = BitmapFactory.decodeStream(inputStream)
                 val path = getRealPathFromURI(writeToTempImageAndGetPathUri(resolver, bmp))
                 inputStream?.close()
@@ -246,7 +247,7 @@ object ImageUtils {
         return ""
     }
 
-    private fun writeToTempImageAndGetPathUri(resolver: ContentResolver, inImage: Bitmap): Uri {
+    private fun writeToTempImageAndGetPathUri(resolver: ContentResolver?, inImage: Bitmap): Uri {
         val path = MediaStore.Images.Media.insertImage(resolver, inImage, null, null)
         return Uri.parse(path)
     }
