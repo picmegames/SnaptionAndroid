@@ -53,6 +53,10 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude 'META-INF/MANIFEST.MF'
+    }
+
     dexOptions {
         javaMaxHeapSize "4g"
         jumboMode true
@@ -160,6 +164,9 @@ dependencies {
 
     // Google Login
     implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
+
+    // Google Play Billing
+    implementation "com.android.billingclient:billing:$playBillingVersion"
 
     // Lottie
     implementation "com.airbnb.android:lottie:$lottieVersion"
