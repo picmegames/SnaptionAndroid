@@ -32,9 +32,7 @@ class Caption {
     @SerializedName(BEEN_FLAGGED)
     var beenFlagged: Boolean = false
 
-    constructor() {
-
-    }
+    constructor()
 
     constructor(fitBId: Int, caption: String) {
         this.fitbIdSend = fitBId

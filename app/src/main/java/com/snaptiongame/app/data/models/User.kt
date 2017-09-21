@@ -27,9 +27,7 @@ class User {
     @SerializedName(IS_FRIEND)
     var isFriend: Boolean = false
 
-    constructor() {
-
-    }
+    constructor()
 
     //Convert a Friend to a User
     constructor(friend: Friend) {

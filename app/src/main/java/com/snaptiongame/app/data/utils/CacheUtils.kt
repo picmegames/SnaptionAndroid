@@ -7,9 +7,7 @@ import java.io.File
 import java.util.Locale
 
 import io.reactivex.Completable
-import io.reactivex.CompletableSource
 import timber.log.Timber
-import java.util.concurrent.Callable
 
 /**
  * @author Tyler Wong
@@ -24,7 +22,7 @@ object CacheUtils {
 
     @JvmStatic
     fun clearCache(): Completable {
-        return Completable.defer(Callable<CompletableSource> { deleteCache() })
+        return Completable.defer({ deleteCache() })
     }
 
     @JvmStatic
@@ -39,7 +37,7 @@ object CacheUtils {
     private fun getDirSize(dir: File?): Long {
         var size: Long = 0
 
-        for (file in dir!!.listFiles()) {
+        dir?.listFiles()?.forEach { file ->
             if (file != null && file.isDirectory) {
                 size += getDirSize(file)
             }
@@ -76,7 +74,7 @@ object CacheUtils {
     private fun deleteDir(dir: File?): Boolean {
         if (dir != null && dir.isDirectory) {
             val children = dir.list()
-            for (child in children) {
+            children.forEach { child ->
                 val success = deleteDir(File(dir, child))
                 if (!success) {
                     return false

@@ -9,9 +9,9 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
-import android.media.ExifInterface
 import android.net.Uri
 import android.provider.MediaStore
+import android.support.media.ExifInterface
 import android.util.Base64
 
 import com.snaptiongame.app.SnaptionApplication
@@ -53,7 +53,7 @@ object ImageUtils {
         var picture = ""
 
         try {
-            var bytesRead: Int = 0
+            var bytesRead = 0
             val inputStream = FileInputStream(compressImage(uri))
             val buffer = ByteArray(BUFFER_SIZE)
             val output = ByteArrayOutputStream()
@@ -75,7 +75,7 @@ object ImageUtils {
     }
 
     @JvmStatic
-    fun getBitmapFromURL(imageUrl: String): Bitmap? {
+    fun getBitmapFromURL(imageUrl: String): Bitmap {
         try {
             val url = URL(imageUrl)
             val connection = url.openConnection() as HttpURLConnection
@@ -86,9 +86,8 @@ object ImageUtils {
         }
         catch (e: IOException) {
             e.printStackTrace()
-            return null
         }
-
+        return BitmapFactory.decodeStream(null)
     }
 
     @JvmStatic
@@ -96,8 +95,8 @@ object ImageUtils {
         return convertToCircularBitmap(getBitmapFromURL(imageUrl))
     }
 
-    private fun convertToCircularBitmap(bitmap: Bitmap?): Bitmap {
-        val output = Bitmap.createBitmap(bitmap!!.width,
+    private fun convertToCircularBitmap(bitmap: Bitmap): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width,
                 bitmap.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(output)
 
@@ -242,7 +241,6 @@ object ImageUtils {
             catch (e: IOException) {
                 Timber.e(e)
             }
-
         }
         return ""
     }

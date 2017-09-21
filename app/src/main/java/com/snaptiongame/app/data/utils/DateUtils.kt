@@ -11,15 +11,15 @@ import com.snaptiongame.app.R
 
 object DateUtils {
 
-    const val MILLIS: Long = 1000
-    const val TWO_WEEKS_OFFSET: Long = 1123200000
-    const val TWO_WEEKS: Long = 1209600000
-    const val ONE_DAY: Long = 86400000
-    const val SECONDS_IN_HOUR: Long = 3600
     const val TWO_WEEKS_DAYS = 14
-    const val SECONDS_IN_MINUTE = 60
-    const val MINUTES_IN_HOUR = 60
-    const val HOURS_IN_DAY = 24
+    const val MILLIS: Long = 1000
+    const val TWO_WEEKS: Long = 1209600000
+
+    private const val ONE_DAY: Long = 86400000
+    private const val SECONDS_IN_HOUR: Long = 3600
+    private const val SECONDS_IN_MINUTE = 60
+    private const val MINUTES_IN_HOUR = 60
+    private const val HOURS_IN_DAY = 24
 
     @JvmStatic
     val now: Long

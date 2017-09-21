@@ -199,6 +199,7 @@ dependencies {
     // Support Libraries
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:design:$supportLibVersion"
+    implementation "com.android.support:exifinterface:$supportLibVersion"
     implementation "com.android.support:palette-v7:$supportLibVersion"
 
     // Text Drawable

@@ -19,6 +19,6 @@ class IdentificationService : FirebaseInstanceIdService() {
     }
 
     private fun sendRegistrationToServer(token: String?) {
-        refreshNotificationToken(token!!)
+        refreshNotificationToken(token ?: "")
     }
 }

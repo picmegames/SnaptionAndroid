@@ -6,7 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.snaptiongame.app.BuildConfig
 import com.snaptiongame.app.R
-import com.snaptiongame.app.SnaptionApplication
 import com.snaptiongame.app.data.api.SnaptionApi
 import com.snaptiongame.app.data.converters.ActivityFeedItemConverter
 import com.snaptiongame.app.data.converters.AddFriendConverter
@@ -52,7 +51,6 @@ import java.security.cert.CertificateFactory
 import java.util.concurrent.TimeUnit
 
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSession
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
@@ -88,27 +86,34 @@ object ApiProvider {
     private const val CONNECTION_TIMEOUT: Long = 60
 
     /**
-     * This method provides and handles the creation of
-     * the Snaption API service.
+     * This method creates the Snaption API service.
      *
      * @return An instance of a Game API service
      */
     @JvmStatic
-    fun getApiService(): SnaptionApi {
+    fun init(context: Context?) {
         if (apiService == null) {
             synchronized(ApiProvider.javaClass) {
                 gson = setupGson()
 
                 apiService = Retrofit.Builder()
                         .baseUrl(BuildConfig.SERVER_ENDPOINT)
-                        .client(makeOkHttpClient())
+                        .client(makeOkHttpClient(context))
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                         .addConverterFactory(GsonConverterFactory.create(gson!!))
                         .build()
                         .create(SnaptionApi::class.java)
             }
         }
+    }
 
+    /**
+     * This method provides the Snaption API service.
+     *
+     * @return An instance of a Game API service
+     */
+    @JvmStatic
+    fun getApiService(): SnaptionApi {
         return apiService!!
     }
 
@@ -119,8 +124,8 @@ object ApiProvider {
      *
      * @return The development or production OkHttpClient
      */
-    private fun makeOkHttpClient(): OkHttpClient {
-        cookieStore = PersistentCookieStore(SnaptionApplication.context)
+    private fun makeOkHttpClient(context: Context?): OkHttpClient {
+        cookieStore = PersistentCookieStore(context)
         val cookieHandler = CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL)
         CookieHandler.setDefault(cookieHandler)
         val cookieJar = JavaNetCookieJar(cookieHandler)
@@ -137,34 +142,32 @@ object ApiProvider {
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.level = HttpLoggingInterceptor.Level.BODY
                 okHttpClientBuilder.addInterceptor(interceptor)
-                socketFactory = getSSLConfig(SnaptionApplication.context, R.raw.api_cert_dev)
+                socketFactory = getSSLConfig(context, R.raw.api_cert_dev)
                         .socketFactory
-                okHttpClientBuilder.hostnameVerifier { _: String, _: SSLSession -> true }
+                okHttpClientBuilder.hostnameVerifier { _, _ -> true }
             }
             else {
-                socketFactory = getSSLConfig(SnaptionApplication.context, R.raw.api_cert_prod)
+                socketFactory = getSSLConfig(context, R.raw.api_cert_prod)
                         .socketFactory
             }
             okHttpClientBuilder.sslSocketFactory(socketFactory, trustManager!!)
         }
         catch (e: CertificateException) {
             Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
-            okHttpClientBuilder.cookieJar(cookieJar)
         }
         catch (e: KeyStoreException) {
             Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
-            okHttpClientBuilder.cookieJar(cookieJar)
         }
         catch (e: NoSuchAlgorithmException) {
             Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
-            okHttpClientBuilder.cookieJar(cookieJar)
         }
         catch (e: KeyManagementException) {
             Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
-            okHttpClientBuilder.cookieJar(cookieJar)
         }
         catch (e: IOException) {
             Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
+        }
+        finally {
             okHttpClientBuilder.cookieJar(cookieJar)
         }
 
@@ -173,7 +176,7 @@ object ApiProvider {
 
     @JvmStatic
     fun clearCookies() {
-        cookieStore!!.removeAll()
+        cookieStore?.removeAll()
     }
 
     /**
@@ -191,12 +194,13 @@ object ApiProvider {
     @Throws(CertificateException::class, KeyStoreException::class, NoSuchAlgorithmException::class, KeyManagementException::class, IOException::class)
     private fun getSSLConfig(context: Context?, certResourceId: Int): SSLContext {
 
-        val certificateFactory: CertificateFactory
-        certificateFactory = CertificateFactory.getInstance(CERT_TYPE)
+        val certificateFactory: CertificateFactory = CertificateFactory.getInstance(CERT_TYPE)
 
         // Open certificate from raw resource
         var certificate: Certificate? = null
-        context?.resources?.openRawResource(certResourceId).use { cert -> certificate = certificateFactory.generateCertificate(cert) }
+        context?.resources?.openRawResource(certResourceId).use { cert ->
+            certificate = certificateFactory.generateCertificate(cert)
+        }
 
         // Creating a KeyStore containing our trusted CAs
         val keyStoreType = KeyStore.getDefaultType()
@@ -211,7 +215,7 @@ object ApiProvider {
 
         // Find correct X509TrustManager
         val trustManagers = trustManagerFactory.trustManagers
-        for (manager in trustManagers) {
+        trustManagers.forEach { manager ->
             if (manager is X509TrustManager) {
                 trustManager = manager
             }

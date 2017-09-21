@@ -31,11 +31,11 @@ import java.util.Date
 class NotificationService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
-        val data = remoteMessage!!.data
+        val data = remoteMessage?.data
         val type: String?
 
         // IF data has well-formatted data
-        if (data.containsKey(TYPE)) {
+        if (data?.containsKey(TYPE) == true) {
             type = data[TYPE]
 
             // IF the data is composed of a GAME related notification
@@ -57,7 +57,7 @@ class NotificationService : FirebaseMessagingService() {
         val userImageUrl: String?
 
         // IF there is data
-        if (data.size > 0) {
+        if (data.isNotEmpty()) {
             // IF the data has a TITLE and MESSAGE
             if (data.containsKey(TITLE) && data.containsKey(MESSAGE)) {
                 title = data[TITLE]

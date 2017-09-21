@@ -5,6 +5,7 @@ import android.support.multidex.MultiDexApplication
 
 import com.crashlytics.android.Crashlytics
 import com.snaptiongame.app.data.auth.AuthManager
+import com.snaptiongame.app.data.providers.api.ApiProvider
 
 import io.branch.referral.Branch
 import io.fabric.sdk.android.Fabric
@@ -24,6 +25,9 @@ class SnaptionApplication : MultiDexApplication() {
 
         SnaptionApplication.context = applicationContext
 
+        // INIT Snaption API
+        ApiProvider.init(this)
+
         // INIT Branch
         Branch.getAutoInstance(this)
 
@@ -31,7 +35,7 @@ class SnaptionApplication : MultiDexApplication() {
         Fabric.with(this, Crashlytics())
 
         // INIT Authentication Manager
-        AuthManager.init(context)
+        AuthManager.init(this)
 
         if (BuildConfig.DEBUG) {
             // INIT Timber (Logger for debug builds)

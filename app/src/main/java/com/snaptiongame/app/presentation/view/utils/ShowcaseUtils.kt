@@ -50,7 +50,7 @@ object ShowcaseUtils {
         }
 
         if (scrollView != null) {
-            sequence.setOnItemDismissedListener { _: MaterialShowcaseView, index: Int ->
+            sequence.setOnItemDismissedListener { _, index ->
                 if (index < targets.size - 1) {
                     val nextView = targets[index + 1]
                     val childOffset = Point()
