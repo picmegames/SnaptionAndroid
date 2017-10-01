@@ -20,12 +20,6 @@ class ImmersiveActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_immersive)
 
-        photoView.setOnLongClickListener { _ ->
-            super.onBackPressed()
-            true
-        }
-
-        val intent = intent
         val imageUrl = intent.getStringExtra(IMAGE_URL)
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -37,6 +31,8 @@ class ImmersiveActivity : AppCompatActivity() {
                     .load(imageUrl)
                     .apply(options)
                     .into(photoView)
+
+            photoView.setOnClickListener { super.onBackPressed() }
         }
     }
 
