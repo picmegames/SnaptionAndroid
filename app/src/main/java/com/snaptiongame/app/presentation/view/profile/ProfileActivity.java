@@ -50,14 +50,14 @@ import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
-import com.snaptiongame.app.presentation.view.transformations.BlurTransformation;
-import com.snaptiongame.app.presentation.view.transformations.ColorFilterTransformation;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.utils.TransitionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 
 /**
  * The Profile Activity is an activity that displays a Game user's information. It can be used
@@ -346,8 +346,8 @@ public class ProfileActivity extends AppCompatActivity
             options = new RequestOptions()
                     .priority(Priority.IMMEDIATE)
                     .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(picture)))
-                    .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(this, BLUR_RADIUS),
-                            new ColorFilterTransformation(this, R.color.colorPrimary)));
+                    .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(BLUR_RADIUS),
+                            new ColorFilterTransformation(R.color.colorPrimary)));
 
             Glide.with(this)
                     .load(picture)

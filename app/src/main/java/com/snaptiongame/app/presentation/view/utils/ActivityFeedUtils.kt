@@ -1,7 +1,6 @@
 package com.snaptiongame.app.presentation.view.utils
 
 import android.content.Context
-import android.content.res.Resources
 import android.text.TextUtils
 
 import com.snaptiongame.app.R
@@ -26,18 +25,18 @@ object ActivityFeedUtils {
         val res = context.resources
 
         when (item.type) {
-            FRIEND_MADE_GAME -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+            FRIEND_MADE_GAME -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend?.username), " ",
                     res.getString(R.string.friend_made_game))
-            FRIEND_INVITED_GAME -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+            FRIEND_INVITED_GAME -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend?.username), " ",
                     res.getString(R.string.friend_invited_game))
-            CAPTIONED_GAME -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+            CAPTIONED_GAME -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend?.username), " ",
                     res.getString(R.string.captioned_game), " ", item.caption?.assocFitB?.beforeBlank,
                     TextStyleUtils.getTextUnderlined(item.caption?.caption ?: ""), item.caption?.assocFitB?.afterBlank)
-            FRIENDED_YOU -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend.username), " ",
+            FRIENDED_YOU -> message = TextUtils.concat(TextStyleUtils.getTextBolded(item.friend?.username), " ",
                     res.getString(R.string.friended_you))
             NEW_FACEBOOK_FRIEND -> message = TextUtils.concat(res.getString(R.string.new_facebook_friend_prefix), " ",
-                    item.friend.fullName, " ", res.getString(R.string.new_facebook_friend_suffix),
-                    " ", TextStyleUtils.getTextBolded(item.friend.username))
+                    item.friend?.fullName, " ", res.getString(R.string.new_facebook_friend_suffix),
+                    " ", TextStyleUtils.getTextBolded(item.friend?.username))
             else -> {
             }
         }

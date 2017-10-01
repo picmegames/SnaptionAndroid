@@ -121,7 +121,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             });
         }
 
-        if (curFriend.getFullName() != null && !curFriend.getFullName().isEmpty()) {
+        if (!curFriend.getFullName().isEmpty()) {
             holder.name.setText(curFriend.getFullName());
         }
         else {
@@ -131,8 +131,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         holder.usernameField.setText(curFriend.getUsername());
         if (curFriend.getImageUrl() != null && !curFriend.getImageUrl().isEmpty()) {
             RequestOptions options = new RequestOptions()
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
-                    .dontAnimate();
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)));
 
             Glide.with(holder.context)
                     .load(curFriend.getImageUrl())

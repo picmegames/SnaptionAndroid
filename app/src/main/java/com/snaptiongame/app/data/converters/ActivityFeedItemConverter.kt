@@ -22,9 +22,9 @@ class ActivityFeedItemConverter : JsonDeserializer<ActivityFeedItem> {
         val activityObject = json.asJsonObject
         val gson = ApiProvider.gson
 
-        val friend = gson!!.fromJson(activityObject.get(ActivityFeedItem.FRIEND), User::class.java)
-        val game = gson.fromJson(activityObject.get(ActivityFeedItem.GAME), Game::class.java)
-        val caption = gson.fromJson(activityObject.get(ActivityFeedItem.CAPTION), Caption::class.java)
+        val friend = gson?.fromJson(activityObject.get(ActivityFeedItem.FRIEND), User::class.java)
+        val game = gson?.fromJson(activityObject.get(ActivityFeedItem.GAME), Game::class.java)
+        val caption = gson?.fromJson(activityObject.get(ActivityFeedItem.CAPTION), Caption::class.java)
 
         return ActivityFeedItem(activityObject.get(ActivityFeedItem.ID).asInt,
                 activityObject.get(ActivityFeedItem.DATE).asLong,

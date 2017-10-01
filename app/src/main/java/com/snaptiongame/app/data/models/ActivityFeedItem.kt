@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 data class ActivityFeedItem(@SerializedName(ID) val id: Int,
                             @SerializedName(DATE) val date: Long,
                             @SerializedName(TYPE) val type: Int,
-                            @SerializedName(FRIEND) val friend: User,
+                            @SerializedName(FRIEND) val friend: User?,
                             @SerializedName(GAME) val game: Game?,
                             @SerializedName(CAPTION) val caption: Caption?) {
 

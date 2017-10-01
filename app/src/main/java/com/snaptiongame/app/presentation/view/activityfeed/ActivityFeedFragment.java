@@ -40,7 +40,6 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
     private ActivityFeedContract.Presenter presenter;
     private Unbinder unbinder;
     private ActivityFeedAdapter adapter;
-    private InsetDividerDecoration decoration;
     private InfiniteRecyclerViewScrollListener scrollListener;
 
     public static final String TAG = ActivityFeedFragment.class.getSimpleName();
@@ -57,7 +56,7 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
         unbinder = ButterKnife.bind(this, view);
         presenter = new ActivityFeedPresenter(this);
 
-        decoration = new InsetDividerDecoration(
+        InsetDividerDecoration decoration = new InsetDividerDecoration(
                 ActivityFeedItemViewHolder.class,
                 getResources().getDimensionPixelSize(R.dimen.divider_height),
                 getResources().getDimensionPixelSize(R.dimen.keyline_1),
@@ -66,6 +65,7 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
 
         adapter = new ActivityFeedAdapter(new ArrayList<>());
         activityFeed.setAdapter(adapter);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         activityFeed.setLayoutManager(layoutManager);
 
@@ -77,7 +77,6 @@ public class ActivityFeedFragment extends Fragment implements ActivityFeedContra
         };
 
         activityFeed.addOnScrollListener(scrollListener);
-
         refreshLayout.setOnRefreshListener(this::refreshActivityFeed);
 
         refreshLayout.setColorSchemeColors(

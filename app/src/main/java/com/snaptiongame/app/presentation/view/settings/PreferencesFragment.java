@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.auth.AuthManager;

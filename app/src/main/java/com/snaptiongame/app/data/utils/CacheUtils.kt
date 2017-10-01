@@ -1,5 +1,6 @@
 package com.snaptiongame.app.data.utils
 
+import android.app.PendingIntent.getActivity
 import com.bumptech.glide.Glide
 import com.snaptiongame.app.SnaptionApplication
 
@@ -61,7 +62,7 @@ object CacheUtils {
     private fun deleteCache(): Completable {
         try {
             val context = SnaptionApplication.context
-            Glide.get(context).clearMemory()
+            Glide.get(context).clearDiskCache()
             deleteDir(context?.cacheDir)
         }
         catch (e: Exception) {

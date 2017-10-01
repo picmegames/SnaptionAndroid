@@ -58,8 +58,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
 
         if (curActivityItem.getFriend().getImageUrl() != null) {
             RequestOptions options = new RequestOptions()
-                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)))
-                    .dontAnimate();
+                    .placeholder(new ColorDrawable(ContextCompat.getColor(holder.context, R.color.grey_300)));
 
             Glide.with(holder.context)
                     .load(curActivityItem.getFriend().getImageUrl())
@@ -85,8 +84,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter {
 
             if (curActivityItem.getGame().getImageUrl() != null) {
                 RequestOptions options = new RequestOptions()
-                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.getGame().getImageUrl())))
-                        .dontAnimate();
+                        .placeholder(new ColorDrawable(ColorGenerator.MATERIAL.getColor(curActivityItem.getGame().getImageUrl())));
 
                 Glide.with(holder.context)
                         .load(curActivityItem.getGame().getImageUrl())

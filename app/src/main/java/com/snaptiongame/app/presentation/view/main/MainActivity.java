@@ -53,8 +53,6 @@ import com.snaptiongame.app.presentation.view.leaderboards.LeaderboardsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
-import com.snaptiongame.app.presentation.view.transformations.BlurTransformation;
-import com.snaptiongame.app.presentation.view.transformations.ColorFilterTransformation;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
@@ -65,6 +63,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 
 /**
  * @author Tyler Wong
@@ -272,13 +272,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Glide.with(this)
                 .load(profileImageUrl)
                 .apply(options)
-                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(profilePicture);
 
         options = new RequestOptions()
                 .priority(Priority.IMMEDIATE)
-                .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(this, BLUR_RADIUS),
-                        new ColorFilterTransformation(this, R.color.colorPrimary)));
+                .transform(new MultiTransformation<>(new CenterCrop(), new BlurTransformation(BLUR_RADIUS),
+                        new ColorFilterTransformation(R.color.colorPrimary)));
 
         Glide.with(this)
                 .load(profileImageUrl)

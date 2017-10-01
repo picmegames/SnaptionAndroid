@@ -20,7 +20,7 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.24.1'
 
         // Kotlin
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.50'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.51'
     }
 }
 
@@ -53,7 +53,7 @@ ext {
     butterknifeVersion = '8.8.1'
     espressoVersion = '2.2.2'
     junitVersion = '4.12'
-    kotlinVersion = '1.1.50'
+    kotlinVersion = '1.1.51'
     mockitoVersion = '2.10.0'
     multidexVersion = '1.0.2'
     robolectricVersion = '3.3.2'
@@ -65,7 +65,7 @@ ext {
     crashlyticsVersion = '2.6.8'
     facebookSdkVersion = '4.27.0'
     glideVersion = '4.1.1'
-    glideTransformationsVersion = '2.0.2'
+    glideTransformationsVersion = '3.0.1'
     lottieVersion = '2.2.5'
     materialDialogsVersion = '0.9.4.5'
     materialShowcaseView = '1.1.0'
