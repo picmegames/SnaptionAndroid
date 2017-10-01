@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean isLoggedIn = AuthManager.isLoggedIn();
 
         navigationView.getMenu().findItem(R.id.friends).setVisible(isLoggedIn);
-        //navigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
+        navigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.activity).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.log_out).setVisible(isLoggedIn);
 
@@ -622,7 +622,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 
