@@ -12,20 +12,19 @@ import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.settings.easter.EasterEgg;
 import com.snaptiongame.app.presentation.view.settings.licenses.LicensesActivity;
+import com.snaptiongame.app.presentation.view.utils.MarketUtils;
 
 import timber.log.Timber;
 
@@ -45,8 +44,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     private PreferencesContract.Presenter presenter;
     private PreferenceScreen preferenceScreen;
-    private MaterialDialog feedbackDialog;
-    private WebView feedbackWebView;
     private ImageView puffinLogo;
 
     private boolean listStyled = false;
@@ -114,8 +111,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         if (packageInfo != null) {
             versionPreference.setSummary(packageInfo.versionName);
         }
-        feedbackWebView = new WebView(getActivity());
-        feedbackWebView.getSettings().setJavaScriptEnabled(true);
 
         presenter.subscribe();
     }
@@ -227,18 +222,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             startActivity(licenseIntent);
         }
         else if (key.equals(getString(R.string.give_feedback))) {
-            feedbackWebView.reload();
-            feedbackWebView.loadUrl(getString(R.string.feedback_url));
-            if (feedbackDialog == null) {
-                feedbackDialog = new MaterialDialog.Builder(getActivity())
-                        .title(R.string.give_feedback)
-                        .customView(feedbackWebView, false)
-                        .positiveText(R.string.close)
-                        .show();
-            }
-            else {
-                feedbackDialog.show();
-            }
+            MarketUtils.goToListing(getActivity());
         }
         else if (key.equals(getString(R.string.game_notifications))) {
             boolean userChoice = !AuthManager.isGameNotificationsEnabled();

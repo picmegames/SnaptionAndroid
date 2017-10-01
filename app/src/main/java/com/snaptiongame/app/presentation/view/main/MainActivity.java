@@ -28,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,6 +52,7 @@ import com.snaptiongame.app.presentation.view.leaderboards.LeaderboardsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.app.presentation.view.utils.MarketUtils;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
@@ -95,13 +95,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AuthManager authManager;
     private Fragment currentFragment;
     private MaterialDialog filterDialog;
-    private MaterialDialog feedbackDialog;
-    private WebView webView;
     private Menu menu;
     private String fragTag;
     private int userId;
     private int rightMargin;
-    private int bottomMargin;
     private float defaultElevation;
     private boolean isList = false;
     private boolean lastLoggedInState = false;
@@ -130,9 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBar = getSupportActionBar();
         defaultElevation = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ELEVATION, getResources().getDisplayMetrics());
-
-        webView = new WebView(this);
-        webView.getSettings().setJavaScriptEnabled(true);
 
         View headerView = navigationView.getHeaderView(0);
         coverPhoto = headerView.findViewById(R.id.cover_photo);
@@ -525,18 +519,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.feedback:
-                webView.reload();
-                webView.loadUrl(getString(R.string.feedback_url));
-                if (feedbackDialog == null) {
-                    feedbackDialog = new MaterialDialog.Builder(this)
-                            .title(R.string.give_feedback)
-                            .customView(webView, false)
-                            .positiveText(getString(R.string.close))
-                            .show();
-                }
-                else {
-                    feedbackDialog.show();
-                }
+                MarketUtils.goToListing(this);
                 break;
 
             default:
@@ -574,6 +557,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) fab.getLayoutParams();
         CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
         FABScrollBehavior fabScrollBehavior = new FABScrollBehavior(this, null, isWall);
+        int bottomMargin;
 
         if (isWall) {
             fab.show();
