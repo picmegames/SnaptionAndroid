@@ -35,7 +35,6 @@ public class ImmersiveActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String imageUrl = intent.getStringExtra(IMAGE_URL);
-        ViewCompat.setTransitionName(photoView, imageUrl);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             RequestOptions options = new RequestOptions()

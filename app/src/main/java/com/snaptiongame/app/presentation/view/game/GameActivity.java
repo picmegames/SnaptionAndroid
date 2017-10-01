@@ -281,10 +281,7 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         image.setOnClickListener(view -> {
             Intent immersiveIntent = new Intent(this, ImmersiveActivity.class);
             immersiveIntent.putExtra(ImmersiveActivity.IMAGE_URL, imageUrl);
-
-            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this, image, ViewCompat.getTransitionName(image));
-            startActivity(immersiveIntent, transitionActivityOptions.toBundle());
+            startActivity(immersiveIntent);
         });
 
         fitBAdapter = new FITBCaptionAdapter(new ArrayList<>(), this);
