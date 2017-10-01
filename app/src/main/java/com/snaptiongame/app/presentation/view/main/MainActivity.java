@@ -95,10 +95,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AuthManager authManager;
     private Fragment currentFragment;
     private MaterialDialog filterDialog;
+    private FABScrollBehavior fabScrollBehavior;
     private Menu menu;
     private String fragTag;
     private int userId;
-    private int rightMargin;
+    private int defaultMargin;
+    private int bottomMargin;
     private float defaultElevation;
     private boolean isList = false;
     private boolean lastLoggedInState = false;
@@ -106,9 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final String TEXT_TYPE = "text/plain";
     private static final int BLUR_RADIUS = 40;
-    private static final int DEFAULT_MARGIN = 16;
-    private static final int DEFAULT_ELEVATION = 4;
-    private static final int BOTTOM_MARGIN = 72;
     public static final int WALL_RESULT_CODE = 7777;
     private static final int FRIEND_RESULT_CODE = 1414;
     private static final int ACTIVITY_FEED_RESULT_CODE = 1122;
@@ -125,8 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
-        defaultElevation = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ELEVATION, getResources().getDisplayMetrics());
 
         View headerView = navigationView.getHeaderView(0);
         coverPhoto = headerView.findViewById(R.id.cover_photo);
@@ -146,6 +143,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 goToLogin();
             }
         });
+
+        fabScrollBehavior = new FABScrollBehavior(this, null, true);
+
+        CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+        coordinatorParams.setBehavior(fabScrollBehavior);
 
         setupWall();
         initializeWallFragments();
@@ -175,8 +177,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.setDrawerSlideAnimationEnabled(false);
         actionBarDrawerToggle.syncState();
 
-        rightMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_MARGIN,
-                getResources().getDisplayMetrics());
+        defaultElevation = getResources().getDimension(R.dimen.default_elevation);
+        defaultMargin = (int) getResources().getDimension(R.dimen.default_margin);
+        bottomMargin = (int) getResources().getDimension(R.dimen.bottom_margin);
     }
 
     private void setDefaultHeader() {
@@ -555,22 +558,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void resetFabPosition(boolean isWall) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) fab.getLayoutParams();
-        CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-        FABScrollBehavior fabScrollBehavior = new FABScrollBehavior(this, null, isWall);
-        int bottomMargin;
+        fabScrollBehavior.setIsWall(isWall);
 
         if (isWall) {
             fab.show();
-            bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
-                    getResources().getDisplayMetrics());
-            coordinatorParams.setBehavior(fabScrollBehavior);
-            layoutParams.setMargins(0, 0, rightMargin, bottomMargin);
+            layoutParams.setMargins(0, 0, defaultMargin, bottomMargin);
         }
         else {
-            bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_MARGIN,
-                    getResources().getDisplayMetrics());
-            coordinatorParams.setBehavior(fabScrollBehavior);
-            layoutParams.setMargins(0, 0, rightMargin, bottomMargin);
+            layoutParams.setMargins(0, 0, defaultMargin, defaultMargin);
         }
     }
 

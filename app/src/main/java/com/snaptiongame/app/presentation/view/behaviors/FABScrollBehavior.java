@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
+import com.snaptiongame.app.R;
+
 import timber.log.Timber;
 
 /**
@@ -33,14 +35,14 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
     private boolean scrollingEnabled = true;
     private boolean hideAlongSnackbar = false;
     private int bottomBarHeight;
+    private int defaultBottomBarHeight;
+    private int customBottomBarHeight;
 
     private final ViewWithSnackbar mWithSnackBarImpl = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
             new LollipopFABWithSnackBarImpl() : new PreLollipopFABWithSnackBarImpl();
 
     private static final Interpolator INTERPOLATOR = new LinearOutSlowInInterpolator();
     private static final int FAB_SPEED = 200;
-    private static final int BOTTOM_MARGIN = 16;
-    private static final int BOTTOM_BAR_HEIGHT = 56;
 
     public FABScrollBehavior() {
         super();
@@ -52,13 +54,18 @@ public final class FABScrollBehavior<V extends View> extends VerticalScrollingBe
         tabLayoutId = a.getResourceId(0, View.NO_ID);
         a.recycle();
 
+        defaultBottomBarHeight = (int) context.getResources().getDimension(R.dimen.default_margin);
+        customBottomBarHeight = (int) context.getResources().getDimension(R.dimen.bottom_margin);
+
+        setIsWall(isWall);
+    }
+
+    public void setIsWall(boolean isWall) {
         if (isWall) {
-            bottomBarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN + BOTTOM_BAR_HEIGHT,
-                    context.getResources().getDisplayMetrics());
+            bottomBarHeight = customBottomBarHeight;
         }
         else {
-            bottomBarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BOTTOM_MARGIN,
-                    context.getResources().getDisplayMetrics());
+            bottomBarHeight = defaultBottomBarHeight;
         }
     }
 
