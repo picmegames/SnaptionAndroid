@@ -30,7 +30,7 @@
             android:textSize="48sp"/>
 
         <Button
-            android:id="@+id/facebook_login_button_styled"
+            android:id="@+id/facebookLoginButtonStyled"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -46,7 +46,7 @@
             android:textSize="16sp"/>
 
         <Button
-            android:id="@+id/google_sign_in_button_styled"
+            android:id="@+id/googleSignInButtonStyled"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -62,13 +62,13 @@
             android:textSize="16sp"/>
 
         <com.facebook.login.widget.LoginButton
-            android:id="@+id/facebook_login_button"
+            android:id="@+id/facebookLoginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"/>
 
         <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_sign_in_button"
+            android:id="@+id/googleSignInButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"/>
