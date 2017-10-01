@@ -8,7 +8,6 @@ import android.content.ActivityNotFoundException
 import android.net.Uri
 import com.snaptiongame.app.R
 
-
 /**
  * @author Tyler Wong
  */
