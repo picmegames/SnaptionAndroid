@@ -6,7 +6,6 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import com.snaptiongame.app.data.models.UserStats
 
-
 import java.lang.reflect.Type
 
 /**

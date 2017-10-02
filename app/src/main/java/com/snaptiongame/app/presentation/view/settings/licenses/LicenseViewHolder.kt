@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.license_card.view.*
  * @author Tyler Wong
  */
 class LicenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val name: TextView = itemView.license_name
-    val author: TextView = itemView.license_author
+    val name: TextView = itemView.licenseName
+    val author: TextView = itemView.licenseAuthor
 
     var content: String = ""
 

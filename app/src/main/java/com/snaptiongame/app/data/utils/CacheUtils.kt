@@ -1,6 +1,5 @@
 package com.snaptiongame.app.data.utils
 
-import android.app.PendingIntent.getActivity
 import com.bumptech.glide.Glide
 import com.snaptiongame.app.SnaptionApplication
 

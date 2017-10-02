@@ -7,14 +7,14 @@
                     android:padding="16dp">
 
     <TextView
-        android:id="@+id/license_name"
+        android:id="@+id/licenseName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/license_author"
+        android:id="@+id/licenseAuthor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp" />

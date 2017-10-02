@@ -7,7 +7,7 @@ import com.snaptiongame.app.presentation.BaseView;
 import java.util.List;
 
 /**
- * Created by nickromero on 1/30/17.
+ * @author Nick Romero
  */
 
 public class FriendsContract {

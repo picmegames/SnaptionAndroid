@@ -1,8 +1,6 @@
 package com.snaptiongame.app.data.models
 
-
 import com.google.gson.annotations.SerializedName
-
 
 /**
  * @author Nick Romero

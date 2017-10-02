@@ -5,7 +5,7 @@ import android.view.View;
 import java.util.List;
 
 /**
- * Created by nickromero on 2/12/17.
+ * @author Nick Romero
  */
 
 public class CaptionContract {

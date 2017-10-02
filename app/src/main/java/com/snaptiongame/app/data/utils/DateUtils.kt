@@ -1,7 +1,6 @@
 package com.snaptiongame.app.data.utils
 
 import android.content.Context
-import android.content.res.Resources
 
 import com.snaptiongame.app.R
 
