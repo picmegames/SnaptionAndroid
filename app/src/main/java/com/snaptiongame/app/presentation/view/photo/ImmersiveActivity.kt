@@ -22,7 +22,7 @@ class ImmersiveActivity : AppCompatActivity() {
 
         val imageUrl = intent.getStringExtra(IMAGE_URL)
 
-        if (imageUrl != null && !imageUrl.isEmpty()) {
+        if (!imageUrl.isEmpty()) {
             val options = RequestOptions()
                     .dontAnimate()
                     .priority(Priority.IMMEDIATE)
