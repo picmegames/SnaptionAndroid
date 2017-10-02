@@ -31,9 +31,9 @@ class ImmersiveActivity : AppCompatActivity() {
                     .load(imageUrl)
                     .apply(options)
                     .into(photoView)
-
-            photoView.setOnClickListener { super.onBackPressed() }
         }
+
+        photoView.setOnClickListener { super.onBackPressed() }
     }
 
     companion object {
