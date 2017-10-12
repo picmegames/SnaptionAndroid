@@ -61,7 +61,7 @@ ext {
 
     // Application dependencies
     branchVersion = '2.12.1'
-    circleImageViewVersion = '2.1.0'
+    circleImageViewVersion = '2.2.0'
     crashlyticsVersion = '2.6.8'
     facebookSdkVersion = '4.27.0'
     glideVersion = '4.2.0'
