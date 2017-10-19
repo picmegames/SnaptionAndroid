@@ -42,7 +42,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.main.MainActivity"
+            android:name=".presentation.view.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/MainTheme"
@@ -72,7 +72,7 @@
         <activity
             android:name=".presentation.view.profile.ProfileActivity"
             android:configChanges="orientation"
-            android:parentActivityName=".presentation.view.main.MainActivity"
+            android:parentActivityName=".presentation.view.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StatusBarTheme"
             android:windowSoftInputMode="adjustPan"/>
@@ -87,7 +87,7 @@
         <activity
             android:name=".presentation.view.game.GameActivity"
             android:configChanges="orientation"
-            android:parentActivityName=".presentation.view.main.MainActivity"
+            android:parentActivityName=".presentation.view.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/GameTheme"
             android:windowSoftInputMode="adjustPan">

@@ -33,7 +33,7 @@ import com.snaptiongame.app.presentation.view.customviews.DynamicImageView;
 import com.snaptiongame.app.presentation.view.game.GameActivity;
 import com.snaptiongame.app.presentation.view.listeners.ItemListener;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
-import com.snaptiongame.app.presentation.view.main.MainActivity;
+import com.snaptiongame.app.presentation.view.MainActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.utils.AnimUtils;
 

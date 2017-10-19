@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.Friend;
-import com.snaptiongame.app.presentation.view.main.MainActivity;
+import com.snaptiongame.app.presentation.view.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;

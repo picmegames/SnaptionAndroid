@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.presentation.view.MainActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 
 import org.junit.After;

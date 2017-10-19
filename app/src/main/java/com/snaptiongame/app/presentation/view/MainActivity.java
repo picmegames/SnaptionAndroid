@@ -1,4 +1,4 @@
-package com.snaptiongame.app.presentation.view.main;
+package com.snaptiongame.app.presentation.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -51,6 +51,7 @@ import com.snaptiongame.app.presentation.view.leaderboards.LeaderboardsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.app.presentation.view.shop.ShopFragment;
 import com.snaptiongame.app.presentation.view.utils.MarketUtils;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
@@ -233,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean isLoggedIn = AuthManager.isLoggedIn();
 
         navigationView.getMenu().findItem(R.id.friends).setVisible(isLoggedIn);
+        navigationView.getMenu().findItem(R.id.shop).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.activity).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.log_out).setVisible(isLoggedIn);
@@ -476,6 +478,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 menu.findItem(R.id.share).setVisible(true);
                 ShowcaseUtils.showShowcase(this, toolbar.findViewById(R.id.search),
                         R.string.add_a_friend, R.string.friends_showcase_content);
+                fab.setVisibility(View.GONE);
+                ViewCompat.setElevation(appBarLayout, defaultElevation);
+                break;
+
+            case R.id.shop:
+                currentFragment = ShopFragment.Companion.getInstance();
+                fragTag = ShopFragment.Companion.getTAG();
+                actionBar.setTitle(R.string.shop_label);
+                bottomNavigationView.setVisibility(View.GONE);
+                resetFabPosition(false);
+                setAppStatusBarColors(R.color.colorPrimary, R.color.colorPrimaryDark);
+                menu.findItem(R.id.filter).setVisible(false);
+                menu.findItem(R.id.layout).setVisible(false);
+                menu.findItem(R.id.search).setVisible(false);
+                menu.findItem(R.id.share).setVisible(false);
                 fab.setVisibility(View.GONE);
                 ViewCompat.setElevation(appBarLayout, defaultElevation);
                 break;

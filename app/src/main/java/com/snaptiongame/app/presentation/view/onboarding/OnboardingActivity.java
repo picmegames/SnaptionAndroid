@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.models.OnboardingInfo;
-import com.snaptiongame.app.presentation.view.main.MainActivity;
+import com.snaptiongame.app.presentation.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -176,7 +176,8 @@
     <string name="open">Open</string>
     <string name="closed">Closed</string>
     <string name="spaces_in_name">Username cannot contain whitespace</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="shop_label">Shop</string>
 
     <!-- Activity Feed Items -->
     <string name="friend_made_game">created a new game.</string>

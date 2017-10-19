@@ -16,7 +16,7 @@ import com.snaptiongame.app.data.models.Game
 import com.snaptiongame.app.data.models.User
 import com.snaptiongame.app.data.utils.ImageUtils
 import com.snaptiongame.app.presentation.view.game.GameActivity
-import com.snaptiongame.app.presentation.view.main.MainActivity
+import com.snaptiongame.app.presentation.view.MainActivity
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity
 
 import java.util.Date
