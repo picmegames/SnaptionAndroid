@@ -194,41 +194,45 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         menu.getMenu().findItem(R.id.upvote).setVisible(false);
         menu.getMenu().findItem(R.id.tags).setVisible(false);
 
-        image.setOnClickListener(view -> {
-            Intent gameIntent = new Intent(context, GameActivity.class);
-            gameIntent.putExtra(Game.ID, gameId);
-            gameIntent.putExtra(Game.CREATOR_NAME, creator);
-            gameIntent.putExtra(Game.CREATOR_IMAGE, creatorImageUrl);
-            gameIntent.putExtra(Game.CREATOR_ID, creatorId);
-            gameIntent.putExtra(Game.IMAGE_URL, imageUrl);
-            gameIntent.putExtra(Game.BEEN_UPVOTED, isUpvoted);
-            gameIntent.putExtra(Game.IS_CLOSED, isClosed);
-            gameIntent.putExtra(Game.IS_PUBLIC, isPublic);
+        if (!(context instanceof ProfileActivity)) {
+            image.setOnClickListener(view -> {
+                Intent gameIntent = new Intent(context, GameActivity.class);
+                gameIntent.putExtra(Game.ID, gameId);
+                gameIntent.putExtra(Game.CREATOR_NAME, creator);
+                gameIntent.putExtra(Game.CREATOR_IMAGE, creatorImageUrl);
+                gameIntent.putExtra(Game.CREATOR_ID, creatorId);
+                gameIntent.putExtra(Game.IMAGE_URL, imageUrl);
+                gameIntent.putExtra(Game.BEEN_UPVOTED, isUpvoted);
+                gameIntent.putExtra(Game.IS_CLOSED, isClosed);
+                gameIntent.putExtra(Game.IS_PUBLIC, isPublic);
 
-            if (context instanceof MainActivity) {
-                ((MainActivity) context).setComingFromGameActivity(true);
-            }
+                if (context instanceof MainActivity) {
+                    ((MainActivity) context).setComingFromGameActivity(true);
+                }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    View statusBar = ((AppCompatActivity) context).findViewById(android.R.id.statusBarBackground);
+                    View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
 
-                ActivityOptions transitionActivityOptions = ActivityOptions
-                        .makeSceneTransitionAnimation((AppCompatActivity) context,
-                                Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
-                                Pair.create(view, ViewCompat.getTransitionName(view)));
+                    ActivityOptions transitionActivityOptions = ActivityOptions
+                            .makeSceneTransitionAnimation((AppCompatActivity) context,
+                                    Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME),
+                                    Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
+                                    Pair.create(view, ViewCompat.getTransitionName(view)));
 
-                context.startActivity(gameIntent, transitionActivityOptions.toBundle());
-            }
-            else {
-                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation((AppCompatActivity) context,
-                                view, ViewCompat.getTransitionName(view));
+                    context.startActivity(gameIntent, transitionActivityOptions.toBundle());
+                }
+                else {
+                    ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                            .makeSceneTransitionAnimation((AppCompatActivity) context,
+                                    view, ViewCompat.getTransitionName(view));
 
-                context.startActivity(gameIntent, transitionActivityOptions.toBundle());
-            }
-        });
+                    context.startActivity(gameIntent, transitionActivityOptions.toBundle());
+                }
+            });
 
-        captionerImage.setOnClickListener(view -> goToProfile(captionerId, captioner, captionerImageUrl, view));
+            captionerImage.setOnClickListener(view -> goToProfile(captionerId, captioner, captionerImageUrl, view));
+        }
     }
 
     private void goToLogin() {
@@ -336,10 +340,12 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         profileIntent.putExtra(User.ID, userId);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            View statusBar = ((AppCompatActivity) context).findViewById(android.R.id.statusBarBackground);
             View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
 
             ActivityOptions transitionActivityOptions = ActivityOptions
                     .makeSceneTransitionAnimation((AppCompatActivity) context,
+                            Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME),
                             Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
                             Pair.create(view, ViewCompat.getTransitionName(view)));
 
