@@ -18,57 +18,45 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-fun getGamesMine(tags: List<String>?, status: String?, page: Int): Single<List<Game>> {
-    return apiService.getGamesMine(tags, status, page)
+fun getGamesMine(tags: List<String>?, status: String?, page: Int): Single<List<Game>> =
+    apiService.getGamesMine(tags, status, page)
             .flatMapIterable { games -> games }
             .filter { game -> !game.beenFlagged }
             .toList()
-}
 
-fun getGamesDiscover(tags: List<String>?, status: String?, page: Int): Single<List<Game>> {
-    return apiService.getGamesDiscover(tags, status, page)
+fun getGamesDiscover(tags: List<String>?, status: String?, page: Int): Single<List<Game>> =
+    apiService.getGamesDiscover(tags, status, page)
             .flatMapIterable { games -> games }
             .filter { game -> !game.beenFlagged }
             .toList()
-}
 
-fun getGamesPopular(tags: List<String>?, status: String?, page: Int): Single<List<Game>> {
-    return apiService.getGamesPopular(tags, status, page)
+fun getGamesPopular(tags: List<String>?, status: String?, page: Int): Single<List<Game>> =
+    apiService.getGamesPopular(tags, status, page)
             .flatMapIterable { games -> games }
             .filter { game -> !game.beenFlagged }
             .toList()
-}
 
-fun getGamesHistory(userId: Int, page: Int): Single<List<Game>> {
-    return apiService.getGamesHistory(userId, page)
+fun getGamesHistory(userId: Int, page: Int): Single<List<Game>> =
+    apiService.getGamesHistory(userId, page)
             .flatMapIterable { games -> games }
             .filter { game -> !game.beenFlagged }
             .toList()
-}
 
-fun getGame(gameId: Int, token: String?): Single<Game> {
-    return apiService.getGame(gameId, token)
-}
+fun getGame(gameId: Int, token: String?): Single<Game> = apiService.getGame(gameId, token)
 
-fun getPrivateGameUsers(gameId: Int): Single<List<Friend>> {
-    return getGame(gameId, null)
+fun getPrivateGameUsers(gameId: Int): Single<List<Friend>> =
+    getGame(gameId, null)
             .map { game -> game.users }
             .toObservable()
             .flatMapIterable { users -> users }
             .filter { user -> user.id != AuthManager.getUserId() }
             .map { Friend(it) }
             .toList()
-}
 
-fun getGameTags(gameId: Int): Single<List<Tag>> {
-    return getGame(gameId, null)
+fun getGameTags(gameId: Int): Single<List<Tag>> =
+    getGame(gameId, null)
             .map { game -> game.tags }
-}
 
-fun upvoteOrFlagGame(request: GameAction): Completable {
-    return apiService.upvoteOrFlagGame(request)
-}
+fun upvoteOrFlagGame(request: GameAction): Completable = apiService.upvoteOrFlagGame(request)
 
-fun addGame(snaption: Game): Completable {
-    return apiService.addGame(snaption)
-}
+fun addGame(snaption: Game): Completable = apiService.addGame(snaption)

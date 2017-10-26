@@ -15,17 +15,10 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-fun userOAuthFacebook(request: OAuthRequest): Single<Session> {
-    return apiService.userOAuthFacebook(request)
-}
+fun userOAuthFacebook(request: OAuthRequest): Single<Session> = apiService.userOAuthFacebook(request)
 
-fun userOAuthGoogle(request: OAuthRequest): Single<Session> {
-    return apiService.userOAuthGoogle(request)
-}
+fun userOAuthGoogle(request: OAuthRequest): Single<Session> = apiService.userOAuthGoogle(request)
 
-fun logout(): Completable {
-    return apiService.logout()
-}
+fun logout(): Completable = apiService.logout()
 
-val isSessionValid: Single<Boolean>
-    get() = apiService.isSessionValid
+fun isSessionValid(): Single<Boolean> = apiService.isSessionValid()

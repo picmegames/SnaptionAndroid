@@ -12,6 +12,4 @@ import io.reactivex.Completable
 
 private val apiService = ApiProvider.getApiService()
 
-fun refreshNotificationToken(deviceToken: String): Completable {
-    return apiService.refreshNotificationToken(deviceToken)
-}
+fun refreshNotificationToken(deviceToken: String): Completable = apiService.refreshNotificationToken(deviceToken)

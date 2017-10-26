@@ -18,24 +18,16 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-fun getCaptions(gameId: Int, page: Int): Single<List<Caption>> {
-    return apiService.getCaptions(gameId, page)
+fun getCaptions(gameId: Int, page: Int): Single<List<Caption>> =
+    apiService.getCaptions(gameId, page)
             .flatMapIterable { captions -> captions }
             .filter { caption -> !caption.beenFlagged }
             .toList()
-}
 
-fun getFitBCaptions(setId: Int): Observable<List<FitBCaption>> {
-    return apiService.getFitBCaptions(setId)
-}
+fun getFitBCaptions(setId: Int): Observable<List<FitBCaption>> = apiService.getFitBCaptions(setId)
 
-fun upvoteOrFlagCaption(request: GameAction): Completable {
-    return apiService.upvoteOrFlagCaption(request)
-}
+fun upvoteOrFlagCaption(request: GameAction): Completable = apiService.upvoteOrFlagCaption(request)
 
-fun addCaption(gameId: Int, caption: Caption): Completable {
-    return apiService.addCaption(gameId, caption)
-}
+fun addCaption(gameId: Int, caption: Caption): Completable = apiService.addCaption(gameId, caption)
 
-val captionSets: Observable<List<CaptionSet>>
-    get() = apiService.captionSets
+fun getCaptionSets(): Observable<List<CaptionSet>> = apiService.getCaptionSets()

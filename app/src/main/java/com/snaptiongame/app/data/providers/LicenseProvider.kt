@@ -4,6 +4,7 @@ package com.snaptiongame.app.data.providers
 
 import android.content.Context
 import com.snaptiongame.app.R
+import com.snaptiongame.app.SnaptionApplication.Companion.context
 import com.snaptiongame.app.data.models.License
 import io.reactivex.Single
 
@@ -11,8 +12,8 @@ import io.reactivex.Single
  * @author Tyler Wong
  */
 
-fun getLicenses(context: Context): Single<List<License>> {
-    return Single.defer { Single.just(parseLicenses(context)) }
+fun getLicenses(context: Context): Single<List<License>> = Single.defer {
+    Single.just(parseLicenses(context))
 }
 
 private fun parseLicenses(context: Context): List<License> {

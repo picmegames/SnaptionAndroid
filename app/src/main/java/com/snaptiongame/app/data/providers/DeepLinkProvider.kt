@@ -13,6 +13,4 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-fun getToken(invite: DeepLinkRequest): Single<String> {
-    return apiService.getToken(invite)
-}
+fun getToken(invite: DeepLinkRequest): Single<String> = apiService.getToken(invite)

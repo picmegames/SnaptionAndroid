@@ -13,7 +13,4 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-fun getActivityFeed(page: Int): Single<List<ActivityFeedItem>> {
-    return apiService.getActivityFeed(page)
-}
-
+fun getActivityFeed(page: Int): Single<List<ActivityFeedItem>> = apiService.getActivityFeed(page)

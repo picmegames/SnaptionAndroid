@@ -15,19 +15,12 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-fun getUser(userId: Int): Single<User> {
-    return apiService.getUser(userId)
-}
+fun getUser(userId: Int): Single<User> = apiService.getUser(userId)
 
 fun searchUsers(email: String, facebookId: String,
-                username: String, fullName: String, page: Int): Observable<List<User>> {
-    return apiService.searchUsers(email, facebookId, username, fullName, page)
-}
+                username: String, fullName: String, page: Int): Observable<List<User>> =
+    apiService.searchUsers(email, facebookId, username, fullName, page)
 
-fun updateUser(user: User): Single<User> {
-    return apiService.updateUser(user)
-}
+fun updateUser(user: User): Single<User> = apiService.updateUser(user)
 
-fun getUserStats(userId: Int): Single<UserStats> {
-    return apiService.getUserStats(userId)
-}
+fun getUserStats(userId: Int): Single<UserStats> = apiService.getUserStats(userId)

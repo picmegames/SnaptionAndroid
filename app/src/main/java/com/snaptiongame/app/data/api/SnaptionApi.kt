@@ -1,18 +1,6 @@
 package com.snaptiongame.app.data.api
 
-import com.snaptiongame.app.data.models.ActivityFeedItem
-import com.snaptiongame.app.data.models.AddFriendRequest
-import com.snaptiongame.app.data.models.Caption
-import com.snaptiongame.app.data.models.CaptionSet
-import com.snaptiongame.app.data.models.DeepLinkRequest
-import com.snaptiongame.app.data.models.FitBCaption
-import com.snaptiongame.app.data.models.Friend
-import com.snaptiongame.app.data.models.Game
-import com.snaptiongame.app.data.models.GameAction
-import com.snaptiongame.app.data.models.OAuthRequest
-import com.snaptiongame.app.data.models.Session
-import com.snaptiongame.app.data.models.User
-import com.snaptiongame.app.data.models.UserStats
+import com.snaptiongame.app.data.models.*
 
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -68,8 +56,8 @@ interface SnaptionApi {
      *
      * @return A single boolean true if the session is valid, else false
      */
-    @get:GET("/OAuth/Status/")
-    val isSessionValid: Single<Boolean>
+    @GET("/OAuth/Status/")
+    fun isSessionValid(): Single<Boolean>
 
     /**
      * This method will send a GET request to the server to update a
@@ -222,8 +210,8 @@ interface SnaptionApi {
      *
      * @return An observable that emits a list of Friend objects
      */
-    @get:GET("/UserFriends/Followers/")
-    val followers: Observable<List<Friend>>
+    @GET("/UserFriends/Followers/")
+    fun getFollowers(): Observable<List<Friend>>
 
     /**
      * This method sends a request to get a list of captions
@@ -270,8 +258,8 @@ interface SnaptionApi {
      *
      * @return An observable that emits a list of Caption Sets
      */
-    @get:GET("/FitBSet/")
-    val captionSets: Observable<List<CaptionSet>>
+    @GET("/FitBSet/")
+    fun getCaptionSets(): Observable<List<CaptionSet>>
 
     /**
      * This method sends a request to retrieve all the user's Facebook friends that
@@ -279,8 +267,8 @@ interface SnaptionApi {
      *
      * @return An observable that emits a list of Friends
      */
-    @get:GET("/Social/Friends/")
-    val facebookFriends: Observable<List<Friend>>
+    @GET("/Social/Friends/")
+    fun getFacebookFriends(): Observable<List<Friend>>
 
     /**
      * This method sends a request for a deep link token that will be used to
@@ -306,4 +294,12 @@ interface SnaptionApi {
      */
     @GET("/Activity/")
     fun getActivityFeed(@Query("page") page: Int): Single<List<ActivityFeedItem>>
+
+    /**
+     * This method sends a request to retrieve the user's activity feed
+     *
+     * @return A single that emits a list of Offer objects
+     */
+    @GET("/Shop/")
+    fun getOffers(): Single<List<Offer>>
 }
