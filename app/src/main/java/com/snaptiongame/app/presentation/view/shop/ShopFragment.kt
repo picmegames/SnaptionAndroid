@@ -13,9 +13,9 @@ import com.snaptiongame.app.R
 
 class ShopFragment : Fragment(), ShopContract.View {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater?.inflate(R.layout.shop_fragment, container, false)
+        return inflater.inflate(R.layout.shop_fragment, container, false)
     }
 
     override fun setPresenter(presenter: ShopContract.Presenter) {
