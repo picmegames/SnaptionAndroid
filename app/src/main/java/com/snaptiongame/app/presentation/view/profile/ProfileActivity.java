@@ -26,6 +26,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
 import com.snaptiongame.app.presentation.view.behaviors.ProfileImageBehavior;
+import com.snaptiongame.app.presentation.view.game.GameActivity;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.photo.ImmersiveActivity;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
@@ -262,8 +264,15 @@ public class ProfileActivity extends AppCompatActivity
         title.setText(name);
         mainTitle.setText(name);
 
-        // SHOW profile picture
-        updateProfilePicture();
+        View decor = getWindow().getDecorView();
+        decor.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                decor.getViewTreeObserver().removeOnPreDrawListener(this);
+                updateProfilePicture();
+                return true;
+            }
+        });
     }
 
     public boolean isStoragePermissionGranted() {

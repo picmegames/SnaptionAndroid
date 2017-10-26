@@ -2,13 +2,12 @@
 
 package com.snaptiongame.app.data.providers
 
-import com.snaptiongame.app.R.id.friends
 import com.snaptiongame.app.data.models.AddFriendRequest
 import com.snaptiongame.app.data.models.Friend
 import com.snaptiongame.app.data.providers.api.ApiProvider
 
 import io.reactivex.Completable
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
@@ -17,18 +16,18 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-fun getFriends(page: Int): Observable<List<Friend>> = apiService.getFriends(page)
+fun getFriends(page: Int): Flowable<List<Friend>> = apiService.getFriends(page)
 
-fun getFollowers(): Observable<List<Friend>> = apiService.getFollowers()
+fun getFollowers(): Flowable<List<Friend>> = apiService.getFollowers()
 
-fun getFacebookFriends(): Observable<List<Friend>> = apiService.getFacebookFriends()
+fun getFacebookFriends(): Flowable<List<Friend>> = apiService.getFacebookFriends()
 
 fun addFriend(request: AddFriendRequest): Single<AddFriendRequest> = apiService.addFriend(request)
 
 fun removeFriend(request: AddFriendRequest): Completable = apiService.deleteFriend(request)
 
-fun getAllFriends(): Observable<List<Friend>> =
-        Observable.range(1, Integer.MAX_VALUE)
+fun getAllFriends(): Flowable<List<Friend>> =
+        Flowable.range(1, Integer.MAX_VALUE)
             .concatMap { getFriends(it) }
             .takeWhile { friends -> !friends.isEmpty() }
 

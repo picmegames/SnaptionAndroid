@@ -9,7 +9,7 @@ import com.snaptiongame.app.data.models.GameAction
 import com.snaptiongame.app.data.providers.api.ApiProvider
 
 import io.reactivex.Completable
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
@@ -24,10 +24,10 @@ fun getCaptions(gameId: Int, page: Int): Single<List<Caption>> =
             .filter { caption -> !caption.beenFlagged }
             .toList()
 
-fun getFitBCaptions(setId: Int): Observable<List<FitBCaption>> = apiService.getFitBCaptions(setId)
+fun getFitBCaptions(setId: Int): Flowable<List<FitBCaption>> = apiService.getFitBCaptions(setId)
 
 fun upvoteOrFlagCaption(request: GameAction): Completable = apiService.upvoteOrFlagCaption(request)
 
 fun addCaption(gameId: Int, caption: Caption): Completable = apiService.addCaption(gameId, caption)
 
-fun getCaptionSets(): Observable<List<CaptionSet>> = apiService.getCaptionSets()
+fun getCaptionSets(): Flowable<List<CaptionSet>> = apiService.getCaptionSets()

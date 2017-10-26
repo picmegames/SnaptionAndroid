@@ -3,6 +3,7 @@ package com.snaptiongame.app.data.api
 import com.snaptiongame.app.data.models.*
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.Body
@@ -112,7 +113,7 @@ interface SnaptionApi {
                     @Query("facebookId") facebookId: String?,
                     @Query("username") username: String?,
                     @Query("fullName") fullName: String?,
-                    @Query("page") page: Int): Observable<List<User>>
+                    @Query("page") page: Int): Flowable<List<User>>
 
     /**
      * This method sends a request to update a user with a PUT request.
@@ -132,7 +133,7 @@ interface SnaptionApi {
     @GET("/Games/mine/")
     fun getGamesMine(@Query("tag") tags: List<String>?,
                      @Query("status") status: String?,
-                     @Query("page") page: Int): Observable<List<Game>>
+                     @Query("page") page: Int): Flowable<List<Game>>
 
     /**
      * This method sends a request to get a list of the current
@@ -143,7 +144,7 @@ interface SnaptionApi {
     @GET("/Games/discover/")
     fun getGamesDiscover(@Query("tag") tags: List<String>?,
                          @Query("status") status: String?,
-                         @Query("page") page: Int): Observable<List<Game>>
+                         @Query("page") page: Int): Flowable<List<Game>>
 
     /**
      * This method sends a request to get a list of the current
@@ -154,7 +155,7 @@ interface SnaptionApi {
     @GET("/Games/popular/")
     fun getGamesPopular(@Query("tag") tags: List<String>?,
                         @Query("status") status: String?,
-                        @Query("page") page: Int): Observable<List<Game>>
+                        @Query("page") page: Int): Flowable<List<Game>>
 
     /**
      * This method sends a request to get a list of the games
@@ -163,7 +164,7 @@ interface SnaptionApi {
      * @return An observable that emits a list of Game objects.
      */
     @GET("/UserGame/History/")
-    fun getGamesHistory(@Query("creator") userId: Int, @Query("page") page: Int): Observable<List<Game>>
+    fun getGamesHistory(@Query("creator") userId: Int, @Query("page") page: Int): Flowable<List<Game>>
 
     /**
      * This method sends a request to get a single game
@@ -202,7 +203,7 @@ interface SnaptionApi {
      * @return An observable that emits a list of Friend objects
      */
     @GET("/UserFriends/")
-    fun getFriends(@Query("page") page: Int): Observable<List<Friend>>
+    fun getFriends(@Query("page") page: Int): Flowable<List<Friend>>
 
     /**
      * This method sends a request to get a user's friends
@@ -211,7 +212,7 @@ interface SnaptionApi {
      * @return An observable that emits a list of Friend objects
      */
     @GET("/UserFriends/Followers/")
-    fun getFollowers(): Observable<List<Friend>>
+    fun getFollowers(): Flowable<List<Friend>>
 
     /**
      * This method sends a request to get a list of captions
@@ -221,7 +222,7 @@ interface SnaptionApi {
      * @return An observable that emits a list of Caption objects
      */
     @GET("/Games/{gameId}/Captions/")
-    fun getCaptions(@Path("gameId") gameId: Int, @Query("page") page: Int): Observable<List<Caption>>
+    fun getCaptions(@Path("gameId") gameId: Int, @Query("page") page: Int): Flowable<List<Caption>>
 
     /**
      * This method sends a request to add a caption to a game
@@ -251,7 +252,7 @@ interface SnaptionApi {
      * @return An observable that emits a list of Fill in the Blank Captions
      */
     @GET("/FitBSet/{set_id}/")
-    fun getFitBCaptions(@Path("set_id") setId: Int): Observable<List<FitBCaption>>
+    fun getFitBCaptions(@Path("set_id") setId: Int): Flowable<List<FitBCaption>>
 
     /**
      * This method sends a request to retrieve all Caption Sets available to a user
@@ -259,7 +260,7 @@ interface SnaptionApi {
      * @return An observable that emits a list of Caption Sets
      */
     @GET("/FitBSet/")
-    fun getCaptionSets(): Observable<List<CaptionSet>>
+    fun getCaptionSets(): Flowable<List<CaptionSet>>
 
     /**
      * This method sends a request to retrieve all the user's Facebook friends that
@@ -268,7 +269,7 @@ interface SnaptionApi {
      * @return An observable that emits a list of Friends
      */
     @GET("/Social/Friends/")
-    fun getFacebookFriends(): Observable<List<Friend>>
+    fun getFacebookFriends(): Flowable<List<Friend>>
 
     /**
      * This method sends a request for a deep link token that will be used to
@@ -301,5 +302,5 @@ interface SnaptionApi {
      * @return A single that emits a list of Offer objects
      */
     @GET("/Shop/")
-    fun getOffers(): Single<List<Offer>>
+    fun getAllOffers(): Flowable<List<Offer>>
 }

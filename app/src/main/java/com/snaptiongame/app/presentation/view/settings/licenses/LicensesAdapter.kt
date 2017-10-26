@@ -14,13 +14,13 @@ class LicensesAdapter : RecyclerView.Adapter<LicenseViewHolder>() {
     private var licenses: List<License> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): LicenseViewHolder {
-        val view = LayoutInflater.from(parent!!.context)
+        val view = LayoutInflater.from(parent?.context)
                 .inflate(R.layout.license_card, parent, false)
         return LicenseViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: LicenseViewHolder, position: Int) {
-        val license = licenses.get(position)
+        val license = licenses[position]
         holder.name.text = license.name
         holder.author.text = license.author
         holder.content = license.content
@@ -31,7 +31,5 @@ class LicensesAdapter : RecyclerView.Adapter<LicenseViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return licenses.size
-    }
+    override fun getItemCount(): Int = licenses.size
 }

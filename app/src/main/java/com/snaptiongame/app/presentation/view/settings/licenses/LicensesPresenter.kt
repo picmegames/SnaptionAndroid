@@ -9,13 +9,12 @@ import timber.log.Timber
 /**
  * @author Tyler Wong
  */
-class LicensesPresenter(licensesView: LicensesContract.View) : LicensesContract.Presenter {
+class LicensesPresenter(private val licensesView: LicensesContract.View) : LicensesContract.Presenter {
 
-    val licensesView: LicensesContract.View = licensesView
     val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun loadLicenses() {
-        var disposable: Disposable = getLicenses(licensesView.getContext())
+        val disposable: Disposable = getLicenses(licensesView.getContext())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe (
                         licensesView::showLicenses,

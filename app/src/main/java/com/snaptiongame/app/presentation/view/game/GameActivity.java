@@ -1,6 +1,7 @@
 package com.snaptiongame.app.presentation.view.game;
 
 import android.animation.ValueAnimator;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,10 +28,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
@@ -486,9 +490,23 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         profileIntent.putExtra(User.IMAGE_URL, pickerImageUrl);
         profileIntent.putExtra(User.ID, pickerId);
 
-        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(pickerImage));
-        startActivity(profileIntent, transitionActivityOptions.toBundle());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions
+                    .makeSceneTransitionAnimation(this,
+                            Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME),
+                            Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
+                            Pair.create(view, ViewCompat.getTransitionName(view)));
+
+            startActivity(profileIntent, transitionActivityOptions.toBundle());
+        }
+        else {
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(view));
+            startActivity(profileIntent, transitionActivityOptions.toBundle());
+        }
     }
 
     @Override
@@ -689,22 +707,30 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
 
         ViewCompat.setTransitionName(this.image, imageUrl);
 
-        RequestOptions options = new RequestOptions()
-                .dontAnimate()
-                .priority(Priority.IMMEDIATE);
+        View decor = getWindow().getDecorView();
+        decor.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                decor.getViewTreeObserver().removeOnPreDrawListener(this);
 
-        Glide.with(this)
-                .load(image)
-                .apply(options)
-                .listener(imageLoadListener)
-                .into(this.image);
+                RequestOptions options = new RequestOptions()
+                        .dontAnimate()
+                        .priority(Priority.IMMEDIATE);
+
+                Glide.with(GameActivity.this)
+                        .load(image)
+                        .apply(options)
+                        .listener(imageLoadListener)
+                        .into(GameActivity.this.image);
+                return true;
+            }
+        });
 
         this.gameId = gameId;
         this.pickerId = pickerId;
 
         if (pickerImage != null && !pickerImage.isEmpty()) {
-
-            options = new RequestOptions()
+            RequestOptions options = new RequestOptions()
                     .dontAnimate()
                     .placeholder(new ColorDrawable(ContextCompat.getColor(this, R.color.grey_300)));
 

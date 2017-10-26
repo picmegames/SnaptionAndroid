@@ -1,5 +1,6 @@
 package com.snaptiongame.app.presentation.view.wall;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -10,7 +11,9 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
@@ -202,18 +205,30 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
             gameIntent.putExtra(Game.IS_CLOSED, isClosed);
             gameIntent.putExtra(Game.IS_PUBLIC, isPublic);
 
-            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation((AppCompatActivity) context,
-                            image, ViewCompat.getTransitionName(image));
             if (context instanceof MainActivity) {
                 ((MainActivity) context).setComingFromGameActivity(true);
             }
-            context.startActivity(gameIntent, transitionActivityOptions.toBundle());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
+
+                ActivityOptions transitionActivityOptions = ActivityOptions
+                        .makeSceneTransitionAnimation((AppCompatActivity) context,
+                                Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
+                                Pair.create(view, ViewCompat.getTransitionName(view)));
+
+                context.startActivity(gameIntent, transitionActivityOptions.toBundle());
+            }
+            else {
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation((AppCompatActivity) context,
+                                view, ViewCompat.getTransitionName(view));
+
+                context.startActivity(gameIntent, transitionActivityOptions.toBundle());
+            }
         });
 
-        captionerImage.setOnClickListener(view ->
-                goToProfile(captionerId, captioner, captionerImageUrl, view)
-        );
+        captionerImage.setOnClickListener(view -> goToProfile(captionerId, captioner, captionerImageUrl, view));
     }
 
     private void goToLogin() {
@@ -320,9 +335,21 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         profileIntent.putExtra(User.IMAGE_URL, userImageUrl);
         profileIntent.putExtra(User.ID, userId);
 
-        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                .makeSceneTransitionAnimation((AppCompatActivity) context, view,
-                        ViewCompat.getTransitionName(view));
-        context.startActivity(profileIntent, transitionActivityOptions.toBundle());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions
+                    .makeSceneTransitionAnimation((AppCompatActivity) context,
+                            Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
+                            Pair.create(view, ViewCompat.getTransitionName(view)));
+
+            context.startActivity(profileIntent, transitionActivityOptions.toBundle());
+        }
+        else {
+            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation((AppCompatActivity) context, view,
+                            ViewCompat.getTransitionName(view));
+            context.startActivity(profileIntent, transitionActivityOptions.toBundle());
+        }
     }
 }
