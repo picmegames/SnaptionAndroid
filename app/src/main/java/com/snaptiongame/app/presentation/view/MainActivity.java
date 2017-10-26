@@ -144,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        defaultElevation = getResources().getDimension(R.dimen.default_elevation);
+        defaultMargin = (int) getResources().getDimension(R.dimen.default_margin);
+        bottomMargin = (int) getResources().getDimension(R.dimen.bottom_margin);
+
         fabScrollBehavior = new FABScrollBehavior(this, null, true);
 
         CoordinatorLayout.LayoutParams coordinatorParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
@@ -176,10 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerSlideAnimationEnabled(false);
         actionBarDrawerToggle.syncState();
-
-        defaultElevation = getResources().getDimension(R.dimen.default_elevation);
-        defaultMargin = (int) getResources().getDimension(R.dimen.default_margin);
-        bottomMargin = (int) getResources().getDimension(R.dimen.bottom_margin);
     }
 
     private void setDefaultHeader() {

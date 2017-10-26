@@ -43,8 +43,8 @@ task clean(type: Delete) {
 ext {
     // SDK versions and build tools
     minSdkVersion = 19
-    targetSdkVersion = 26
-    compileSdkVersion = 26
+    targetSdkVersion = 27
+    compileSdkVersion = 27
     buildToolsVersion = '26.0.2'
 
     // Developer dependencies
@@ -55,7 +55,6 @@ ext {
     junitVersion = '4.12'
     kotlinVersion = '1.1.51'
     mockitoVersion = '2.11.0'
-    multidexVersion = '1.0.2'
     robolectricVersion = '3.3.2'
     timberVersion = '4.5.1'
 

@@ -24,7 +24,6 @@ android {
         versionName "1.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -120,9 +119,6 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
-
-    // Multidex
-    implementation "com.android.support:multidex:$multidexVersion"
 
     // Timber
     implementation "com.jakewharton.timber:timber:$timberVersion"
