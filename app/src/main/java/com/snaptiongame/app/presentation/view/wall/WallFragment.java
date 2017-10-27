@@ -98,10 +98,17 @@ public class WallFragment extends Fragment implements WallContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.wall_fragment, container, false);
+
+        Bundle arguments = getArguments();
+        boolean isList = false;
+
+        if (arguments != null) {
+            userId = arguments.getInt(USER_ID);
+            type = arguments.getInt(TYPE);
+            isList = arguments.getBoolean(IS_LIST);
+        }
+
         unbinder = ButterKnife.bind(this, view);
-        userId = getArguments().getInt(USER_ID);
-        type = getArguments().getInt(TYPE);
-        boolean isList = getArguments().getBoolean(IS_LIST);
         presenter = new WallPresenter(this, userId, type);
         linearLayoutManager = new LinearLayoutManager(getContext());
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
