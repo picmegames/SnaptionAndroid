@@ -103,7 +103,7 @@ dependencies {
 
     // Robolectric
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    testImplementation "org.robolectric:shadows-support-v4:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-support-v4:$robolectricShadowsVersion"
 
     // Support Testing Libraries
     androidTestImplementation "com.android.support:support-annotations:$supportLibVersion"
