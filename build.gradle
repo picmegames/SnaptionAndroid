@@ -58,7 +58,7 @@ ext {
     multidexVersion = '1.0.2'
     robolectricVersion = '3.5.1'
     robolectricShadowsVersion = '3.4-rc2'
-    timberVersion = '4.5.1'
+    timberVersion = '4.6.0'
 
     // Application dependencies
     branchVersion = '2.13.0'
