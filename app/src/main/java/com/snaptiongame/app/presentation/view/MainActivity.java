@@ -54,6 +54,8 @@ import com.snaptiongame.app.presentation.view.leaderboards.LeaderboardsFragment;
 import com.snaptiongame.app.presentation.view.login.LoginActivity;
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity;
 import com.snaptiongame.app.presentation.view.settings.PreferencesActivity;
+import com.snaptiongame.app.presentation.view.shop.ShopCheckCallback;
+import com.snaptiongame.app.presentation.view.shop.ShopChecker;
 import com.snaptiongame.app.presentation.view.shop.ShopFragment;
 import com.snaptiongame.app.presentation.view.utils.MarketUtils;
 import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
@@ -616,7 +618,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToLogin();
         }
         else {
-            goToCreateGame();
+            ShopChecker.shopCheck(this, this::goToCreateGame);
         }
     }
 
