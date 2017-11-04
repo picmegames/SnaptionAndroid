@@ -1,5 +1,4 @@
 buildscript {
-
     repositories {
         jcenter()
 
@@ -61,11 +60,11 @@ ext {
     timberVersion = '4.6.0'
 
     // Application dependencies
-    branchVersion = '2.13.0'
+    branchVersion = '2.13.1'
     circleImageViewVersion = '2.2.0'
     crashlyticsVersion = '2.7.0'
     facebookSdkVersion = '4.27.0'
-    glideVersion = '4.2.0'
+    glideVersion = '4.3.0'
     glideTransformationsVersion = '3.0.1'
     lottieVersion = '2.2.5'
     materialDialogsVersion = '0.9.5.0'
