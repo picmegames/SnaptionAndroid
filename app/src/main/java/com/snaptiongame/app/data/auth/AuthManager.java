@@ -63,6 +63,8 @@ public final class AuthManager {
     private static final String GAME_NOTIFICATIONS = "gameNotifications";
     private static final String FRIEND_NOTIFICATIONS = "friendNotifications";
     private static final String CLOSED_GAME_DIALOG = "closedGameDialog";
+    private static final String SOFT_CURRENCY = "soft";
+    private static final String HARD_CURRENCY = "hard";
 
     private AuthManager(Context context) {
         // INIT Shared Preferences Editor
@@ -196,6 +198,8 @@ public final class AuthManager {
                 .subscribe(
                         session -> {
                             saveUserId(session.getUserId());
+                            saveSoftCurrency(0);
+                            saveHardCurrency(0);
                             getUserInfo(getUserId());
                         },
                         e -> {
@@ -214,6 +218,8 @@ public final class AuthManager {
                 .subscribe(
                         session -> {
                             saveUserId(session.getUserId());
+                            saveSoftCurrency(0);
+                            saveHardCurrency(0);
                             getUserInfo(getUserId());
                         },
                         e -> {
@@ -337,7 +343,7 @@ public final class AuthManager {
                             clearLoginInfo();
                             ApiProvider.clearCookies();
                         },
-                        e -> Timber.e("Could not log out of Snaption", e)
+                        e -> Timber.e("Could not log out of Snaption")
                 );
     }
 
@@ -363,6 +369,18 @@ public final class AuthManager {
         editor.apply();
     }
 
+    public static void saveSoftCurrency(int soft) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(SOFT_CURRENCY, soft);
+        editor.apply();
+    }
+
+    public static void saveHardCurrency(int hard) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(HARD_CURRENCY, hard);
+        editor.apply();
+    }
+
     public static void saveToken(String token) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(INVITE_TOKEN, token);
@@ -384,6 +402,8 @@ public final class AuthManager {
         editor.putString(PROFILE_IMAGE_URL, "");
         editor.putString(FULL_NAME, "");
         editor.putString(EMAIL, "");
+        editor.putInt(SOFT_CURRENCY, 0);
+        editor.putInt(HARD_CURRENCY, 0);
         editor.apply();
     }
 
@@ -409,6 +429,14 @@ public final class AuthManager {
 
     public static String getEmail() {
         return preferences.getString(EMAIL, "");
+    }
+
+    public static int getSoftCurrency() {
+        return preferences.getInt(SOFT_CURRENCY, 0);
+    }
+
+    public static int getHardCurrency() {
+        return preferences.getInt(HARD_CURRENCY, 0);
     }
 
     private void setFacebookLoginState() {

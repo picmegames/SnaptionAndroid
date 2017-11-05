@@ -6,4 +6,6 @@ package com.snaptiongame.app.presentation.view.shop;
 
 public interface ShopCheckCallback {
     void confirmBuy();
+
+    void cancelBuy();
 }

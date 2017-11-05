@@ -153,19 +153,19 @@ object ApiProvider {
             okHttpClientBuilder.sslSocketFactory(socketFactory, trustManager!!)
         }
         catch (e: CertificateException) {
-            Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
+            Timber.e("Could not initialize OkHttpClient with SSL Certificate")
         }
         catch (e: KeyStoreException) {
-            Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
+            Timber.e("Could not initialize OkHttpClient with SSL Certificate")
         }
         catch (e: NoSuchAlgorithmException) {
-            Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
+            Timber.e("Could not initialize OkHttpClient with SSL Certificate")
         }
         catch (e: KeyManagementException) {
-            Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
+            Timber.e("Could not initialize OkHttpClient with SSL Certificate")
         }
         catch (e: IOException) {
-            Timber.e("Could not initialize OkHttpClient with SSL Certificate", e)
+            Timber.e("Could not initialize OkHttpClient with SSL Certificate")
         }
         finally {
             okHttpClientBuilder.cookieJar(cookieJar)

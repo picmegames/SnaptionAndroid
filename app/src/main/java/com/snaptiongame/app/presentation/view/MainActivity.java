@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CircleImageView profilePicture;
     TextView nameView;
     TextView emailView;
+    TextView softView;
+    TextView hardView;
     ActionBar actionBar;
     FilterView filterView;
 
@@ -135,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profilePicture = headerView.findViewById(R.id.profile_image);
         nameView = headerView.findViewById(R.id.username);
         emailView = headerView.findViewById(R.id.email);
+        softView = headerView.findViewById(R.id.soft);
+        hardView = headerView.findViewById(R.id.hard);
 
         headerView.setOnClickListener(view -> {
             if (AuthManager.isLoggedIn()) {
@@ -215,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .clear(coverPhoto);
         nameView.setText(R.string.welcome_message);
         emailView.setText(R.string.sub_welcome_message);
+        softView.setVisibility(View.GONE);
+        softView.setVisibility(View.VISIBLE);
     }
 
     private void initializeWallFragments() {
@@ -282,6 +288,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String profileImageUrl = AuthManager.getProfileImageUrl();
         String name = AuthManager.getUsername();
         String email = AuthManager.getEmail();
+        int soft = AuthManager.getSoftCurrency();
+        int hard = AuthManager.getHardCurrency();
 
         RequestOptions options = new RequestOptions()
                 .priority(Priority.IMMEDIATE)
@@ -305,6 +313,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         nameView.setText(name);
         emailView.setText(email);
+        softView.setVisibility(View.VISIBLE);
+        hardView.setVisibility(View.VISIBLE);
+        softView.setText(String.format(getString(R.string.soft), soft));
+        hardView.setText(String.format(getString(R.string.hard), hard));
     }
 
     private void setHeader() {
@@ -605,6 +617,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private ShopCheckCallback shopCallback = new ShopCheckCallback() {
+        @Override
+        public void confirmBuy() {
+            buyGame();
+        }
+
+        @Override
+        public void cancelBuy() {
+
+        }
+    };
+
     /**
      * This method is called when a user clicks the
      * floating action button on the wall. If the user is
@@ -618,8 +642,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToLogin();
         }
         else {
-            ShopChecker.shopCheck(this, this::goToCreateGame);
+            ShopChecker.shopCheck(this, shopCallback, R.string.create_game, R.string.buy_game, 10);
         }
+    }
+
+    /**
+     * This method will complete a transaction to buy a game
+     * and direct the user to the CreateGameActivity
+     */
+    private void buyGame() {
+        // RUN TRANSACTION FOR GAME
+        goToCreateGame(); // ON COMPLETE TRANSACTION
     }
 
     /**

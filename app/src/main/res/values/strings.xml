@@ -235,6 +235,12 @@
     <string name="no_friends_yet">No friends yet!</string>
     <string name="no_friends_message">No friends yet. You can search for friends to add to this game!</string>
 
+    <!-- Shop -->
+    <string name="soft">Coins %1$d</string>
+    <string name="hard">Rubies %1$d</string>
+    <string name="buy_game">Creating a game will cost you %1$d coins.\nAre you sure you want to continue?</string>
+    <string name="buy_caption">Adding a caption will cost you %1$d coins.\nAre you sure you want to continue?</string>
+
     <!-- License Names -->
     <string-array name="license_names">
         <item>Butterknife</item>
