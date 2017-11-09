@@ -46,7 +46,7 @@ public class LeaderboardsFragment extends Fragment {
         viewPager.setAdapter(new LeaderboardsPageAdapter(getActivity().getSupportFragmentManager()));
 
         tabLayout.setupWithViewPager(viewPager);
-        int white = ContextCompat.getColor(getContext(), android.R.color.white);
+        int white = ContextCompat.getColor(getActivity(), android.R.color.white);
         tabLayout.setTabTextColors(white, white);
 
         return view;

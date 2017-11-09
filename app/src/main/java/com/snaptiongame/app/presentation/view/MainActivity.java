@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nameView.setText(R.string.welcome_message);
         emailView.setText(R.string.sub_welcome_message);
         softView.setVisibility(View.GONE);
-        softView.setVisibility(View.VISIBLE);
+        hardView.setVisibility(View.GONE);
     }
 
     private void initializeWallFragments() {
@@ -313,10 +313,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         nameView.setText(name);
         emailView.setText(email);
-        softView.setVisibility(View.VISIBLE);
-        hardView.setVisibility(View.VISIBLE);
-        softView.setText(String.format(getString(R.string.soft), soft));
-        hardView.setText(String.format(getString(R.string.hard), hard));
+//        softView.setVisibility(View.VISIBLE);
+//        hardView.setVisibility(View.VISIBLE);
+//        softView.setText(String.format(getString(R.string.soft), soft));
+//        hardView.setText(String.format(getString(R.string.hard), hard));
     }
 
     private void setHeader() {
@@ -642,7 +642,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToLogin();
         }
         else {
-            ShopChecker.shopCheck(this, shopCallback, R.string.create_game, R.string.buy_game, 10);
+            goToCreateGame();
+            // ShopChecker.shopCheck(this, shopCallback, R.string.create_game, R.string.buy_game, 10);
         }
     }
 

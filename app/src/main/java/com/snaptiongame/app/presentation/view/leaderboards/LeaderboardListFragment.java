@@ -3,12 +3,20 @@ package com.snaptiongame.app.presentation.view.leaderboards;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.snaptiongame.app.R;
+import com.snaptiongame.app.data.models.Friend;
+import com.snaptiongame.app.presentation.view.friends.FriendsAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -18,7 +26,11 @@ import butterknife.Unbinder;
 
 public class LeaderboardListFragment extends Fragment implements LeaderboardsContract.View {
 
+    @BindView(R.id.leaderboard)
+    RecyclerView leaderboard;
+
     private LeaderboardsContract.Presenter presenter;
+    private FriendsAdapter adapter;
     private Unbinder unbinder;
 
     private int type;
@@ -41,7 +53,11 @@ public class LeaderboardListFragment extends Fragment implements LeaderboardsCon
         View view = inflater.inflate(R.layout.leaderboard_list_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
         presenter = new LeaderboardsPresenter(this, getArguments().getInt(TYPE));
-
+        adapter = new FriendsAdapter(new ArrayList<>());
+        leaderboard.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        leaderboard.setLayoutManager(layoutManager);
+        leaderboard.setAdapter(adapter);
         presenter.subscribe();
 
         return view;
@@ -50,6 +66,11 @@ public class LeaderboardListFragment extends Fragment implements LeaderboardsCon
     @Override
     public void setPresenter(LeaderboardsContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void setLeaderboard(List<Friend> leaderboard) {
+        adapter.addFriends(leaderboard);
     }
 
     @Override

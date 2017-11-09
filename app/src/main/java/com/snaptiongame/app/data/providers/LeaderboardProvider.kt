@@ -2,10 +2,8 @@
 
 package com.snaptiongame.app.data.providers
 
-import com.snaptiongame.app.data.models.User
+import com.snaptiongame.app.data.models.Friend
 import com.snaptiongame.app.data.providers.api.ApiProvider
-
-import java.util.ArrayList
 
 import io.reactivex.Single
 
@@ -15,5 +13,8 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-val experienceLeaderboard: Single<List<User>>
-    get() = Single.just(ArrayList())
+val experienceLeaderboard: Single<List<Friend>>
+    get() = apiService.getUserLeaderboard()
+            .flatMapIterable { user -> user }
+            .map { user -> Friend(user) }
+            .toList()

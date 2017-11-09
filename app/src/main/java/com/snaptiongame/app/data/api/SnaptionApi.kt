@@ -297,6 +297,14 @@ interface SnaptionApi {
     fun getActivityFeed(@Query("page") page: Int): Single<List<ActivityFeedItem>>
 
     /**
+     * This method sends a request to retrieve the user's friend leaderboard
+     *
+     * @return A single that emits a list of users
+     */
+    @GET("/Users/Leaderboard/")
+    fun getUserLeaderboard(): Flowable<List<User>>
+
+    /**
      * This method sends a request to retrieve the user's activity feed
      *
      * @return A single that emits a list of Offer objects
