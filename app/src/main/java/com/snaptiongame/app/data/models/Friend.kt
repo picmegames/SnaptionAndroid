@@ -23,6 +23,7 @@ class Friend {
     var cover: String = ""
     @SerializedName(EMAIL)
     var email: String = ""
+    var exp: Int = 0
 
     var isSnaptionFriend: Boolean = false
 
@@ -43,6 +44,7 @@ class Friend {
         this.imageHeight = user.imageHeight
         this.imageUrl = user.imageUrl
         this.isSnaptionFriend = user.isFriend
+        this.exp = user.exp
     }
 
     constructor(id: Int, fullName: String, username: String, picture: String,

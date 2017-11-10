@@ -26,6 +26,8 @@ class User {
     var type: String = ""
     @SerializedName(IS_FRIEND)
     var isFriend: Boolean = false
+    @SerializedName(EXP)
+    var exp: Int = 0
 
     constructor()
 
@@ -37,6 +39,7 @@ class User {
         this.imageWidth = friend.imageWidth
         this.imageHeight = friend.imageHeight
         this.imageUrl = friend.imageUrl
+        this.exp = friend.exp
     }
 
     constructor(username: String) {
@@ -62,5 +65,6 @@ class User {
         const val IMAGE_HEIGHT = "height"
         const val TYPE = "imgType"
         const val IS_FRIEND = "isFriend"
+        const val EXP = "exp"
     }
 }

@@ -56,6 +56,7 @@ public class LeaderboardListFragment extends Fragment implements LeaderboardsCon
         unbinder = ButterKnife.bind(this, view);
         presenter = new LeaderboardsPresenter(this, getArguments().getInt(TYPE));
         adapter = new FriendsAdapter(new ArrayList<>());
+        adapter.setShowExp(true);
         leaderboard.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         leaderboard.setLayoutManager(layoutManager);
@@ -75,6 +76,7 @@ public class LeaderboardListFragment extends Fragment implements LeaderboardsCon
 
     @Override
     public void setLeaderboard(List<Friend> leaderboard) {
+        adapter.clear();
         adapter.addFriends(leaderboard);
     }
 

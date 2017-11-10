@@ -30,6 +30,8 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     TextView usernameField;
     @BindView(R.id.add_remove_friend_icon)
     ImageView addRemoveFriendIcon;
+    @BindView(R.id.exp)
+    TextView exp;
 
     private FriendItemListener callback;
     public boolean isSnaptionFriend = false;

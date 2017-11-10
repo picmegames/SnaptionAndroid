@@ -42,6 +42,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private FriendsContract.Presenter presenter;
     private FriendItemListener callback;
     private boolean selectable;
+    private boolean showExp;
     private int lastPosition = -1;
     private boolean shouldDisplayAddRemoveIcon;
 
@@ -179,6 +180,22 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             holder.addRemoveFriendIcon.setVisibility(View.GONE);
         }
 
+        if (showExp) {
+            holder.exp.setVisibility(View.VISIBLE);
+            holder.exp.setText(String.valueOf(curFriend.getExp()));
+
+            if (curFriend.getUsername().equals(AuthManager.getUsername())) {
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.context, R.color.colorAccent));
+                holder.itemView.getBackground().setAlpha(75);
+            }
+            else {
+                holder.itemView.setBackground(null);
+            }
+        }
+        else {
+            holder.exp.setVisibility(View.GONE);
+        }
+
         setAnimation(holder.itemView, position);
     }
 
@@ -188,6 +205,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             view.startAnimation(animation);
             lastPosition = position;
         }
+    }
+
+    public void setShowExp(boolean showExp) {
+        this.showExp = showExp;
     }
 
     @Override

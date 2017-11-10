@@ -50,6 +50,7 @@ class UserConverter : JsonSerializer<User>, JsonDeserializer<User> {
         newUser.id = jsonObject.get(User.ID).asInt
         newUser.username = jsonObject.get(User.USERNAME).asString
         newUser.isFriend = jsonObject.get(User.IS_FRIEND).asBoolean
+        newUser.exp = jsonObject.get(User.EXP).asInt
 
         if (!jsonObject.get(User.FULL_NAME).isJsonNull) {
             newUser.fullName = jsonObject.get(User.FULL_NAME).asString
