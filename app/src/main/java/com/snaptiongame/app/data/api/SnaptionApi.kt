@@ -302,7 +302,7 @@ interface SnaptionApi {
      * @return A single that emits a list of users
      */
     @GET("/Users/Leaderboard/")
-    fun getUserLeaderboard(): Flowable<List<User>>
+    fun getUserLeaderboard(@Query("friends_only") friendsOnly: Boolean): Flowable<List<User>>
 
     /**
      * This method sends a request to retrieve the user's activity feed

@@ -13,8 +13,8 @@ import io.reactivex.Single
 
 private val apiService = ApiProvider.getApiService()
 
-val experienceLeaderboard: Single<List<Friend>>
-    get() = apiService.getUserLeaderboard()
+fun getUserLeaderboard(friendsOnly: Boolean): Single<List<Friend>> =
+    apiService.getUserLeaderboard(friendsOnly)
             .flatMapIterable { user -> user }
             .map { user -> Friend(user) }
             .toList()

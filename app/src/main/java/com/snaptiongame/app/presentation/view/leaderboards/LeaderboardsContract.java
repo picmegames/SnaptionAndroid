@@ -12,11 +12,16 @@ import java.util.List;
 
 public class LeaderboardsContract {
 
+    public static int WORLD = 0;
+    public static int FRIENDS = 1;
+
     interface View extends BaseView<Presenter> {
         void setLeaderboard(List<Friend> leaderboard);
+
+        void setRefreshing(boolean isRefreshing);
     }
 
     interface Presenter extends BasePresenter {
-        void loadLeaderboard(int type);
+        void loadLeaderboard();
     }
 }

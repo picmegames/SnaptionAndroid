@@ -16,25 +16,33 @@ public class LeaderboardsPresenter implements LeaderboardsContract.Presenter {
     private LeaderboardsContract.View leaderboardView;
     private CompositeDisposable disposables;
     private int type;
+    private boolean friendsOnly = false;
 
     public LeaderboardsPresenter(LeaderboardsContract.View leaderboardView, int type) {
         this.leaderboardView = leaderboardView;
         this.type = type;
+        friendsOnly = this.type != LeaderboardsContract.FRIENDS;
         leaderboardView.setPresenter(this);
         disposables = new CompositeDisposable();
     }
 
     @Override
-    public void loadLeaderboard(int type) {
-        Disposable disposable = LeaderboardProvider.getExperienceLeaderboard()
+    public void loadLeaderboard() {
+        Disposable disposable = LeaderboardProvider.getUserLeaderboard(friendsOnly)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(leaderboardView::setLeaderboard, Timber::e);
+                .subscribe(leaderboard -> {
+                    leaderboardView.setLeaderboard(leaderboard);
+                    leaderboardView.setRefreshing(false);
+                }, e -> {
+                    Timber.e(e);
+                    leaderboardView.setRefreshing(false);
+                });
         disposables.add(disposable);
     }
 
     @Override
     public void subscribe() {
-        loadLeaderboard(type);
+        loadLeaderboard();
     }
 
     @Override

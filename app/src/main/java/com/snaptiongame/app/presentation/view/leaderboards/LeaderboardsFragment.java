@@ -43,7 +43,7 @@ public class LeaderboardsFragment extends Fragment {
         View view = inflater.inflate(R.layout.leaderboards_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        viewPager.setAdapter(new LeaderboardsPageAdapter(getActivity().getSupportFragmentManager()));
+        viewPager.setAdapter(new LeaderboardsPageAdapter(getChildFragmentManager()));
 
         tabLayout.setupWithViewPager(viewPager);
         int white = ContextCompat.getColor(getActivity(), android.R.color.white);
