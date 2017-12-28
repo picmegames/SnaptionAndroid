@@ -41,6 +41,10 @@ import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.data.auth.AuthManager;
 import com.snaptiongame.app.data.models.User;
@@ -62,7 +66,9 @@ import com.snaptiongame.app.presentation.view.utils.ShowcaseUtils;
 import com.snaptiongame.app.presentation.view.wall.WallContract;
 import com.snaptiongame.app.presentation.view.wall.WallFragment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -112,8 +118,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isList = false;
     private boolean lastLoggedInState = false;
     private boolean comingFromGameActivity = false;
+    private boolean isStoreEnabled = false;
 
     private static final String TEXT_TYPE = "text/plain";
+    private static final String STORE_ENABLED = "store_enabled";
     private static final int BLUR_RADIUS = 40;
     public static final int WALL_RESULT_CODE = 7777;
     private static final int FRIEND_RESULT_CODE = 1414;
@@ -124,6 +132,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+        Map<String, Object> defaults = new HashMap<>();
+        defaults.put(STORE_ENABLED, false);
+        remoteConfig.setDefaults(defaults);
+        remoteConfig.fetch();
+        remoteConfig.activateFetched();
+
+        isStoreEnabled = remoteConfig.getBoolean(STORE_ENABLED);
 
         authManager = AuthManager.getInstance();
 
@@ -260,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean isLoggedIn = AuthManager.isLoggedIn();
 
         navigationView.getMenu().findItem(R.id.friends).setVisible(isLoggedIn);
-        navigationView.getMenu().findItem(R.id.shop).setVisible(isLoggedIn);
+        navigationView.getMenu().findItem(R.id.shop).setVisible(isLoggedIn && isStoreEnabled);
         navigationView.getMenu().findItem(R.id.leaderboards).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.activity).setVisible(isLoggedIn);
         navigationView.getMenu().findItem(R.id.log_out).setVisible(isLoggedIn);
@@ -313,10 +330,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         nameView.setText(name);
         emailView.setText(email);
-//        softView.setVisibility(View.VISIBLE);
-//        hardView.setVisibility(View.VISIBLE);
-//        softView.setText(String.format(getString(R.string.soft), soft));
-//        hardView.setText(String.format(getString(R.string.hard), hard));
+
+        if (isStoreEnabled) {
+            softView.setVisibility(View.VISIBLE);
+            hardView.setVisibility(View.VISIBLE);
+            softView.setText(String.format(getString(R.string.soft), soft));
+            hardView.setText(String.format(getString(R.string.hard), hard));
+        }
     }
 
     private void setHeader() {

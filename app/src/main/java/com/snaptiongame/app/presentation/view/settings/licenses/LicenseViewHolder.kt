@@ -10,19 +10,21 @@ import kotlinx.android.synthetic.main.license_card.view.*
 /**
  * @author Tyler Wong
  */
-class LicenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class LicenseViewHolder(itemView: View, licensesClickable: Boolean) : RecyclerView.ViewHolder(itemView) {
     val name: TextView = itemView.licenseName
     val author: TextView = itemView.licenseAuthor
 
     var content: String = ""
 
     init {
-        itemView.setOnClickListener {
-            MaterialDialog.Builder(itemView.context)
-                    .title(name.text)
-                    .content(content)
-                    .positiveText(R.string.ok)
-                    .show()
+        if (licensesClickable) {
+            itemView.setOnClickListener {
+                MaterialDialog.Builder(itemView.context)
+                        .title(name.text)
+                        .content(content)
+                        .positiveText(R.string.ok)
+                        .show()
+            }
         }
     }
 }

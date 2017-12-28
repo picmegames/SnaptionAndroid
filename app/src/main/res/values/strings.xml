@@ -242,7 +242,7 @@
     <string name="buy_caption">Adding a caption will cost you %1$d coins.\nAre you sure you want to continue?</string>
 
     <!-- License Names -->
-    <string-array name="license_names">
+    <string-array name="license_names" translatable="false">
         <item>Butterknife</item>
         <item>Branch.io</item>
         <item>CircleImageView</item>
@@ -263,7 +263,7 @@
     </string-array>
 
     <!-- License Authors -->
-    <string-array name="license_authors">
+    <string-array name="license_authors" translatable="false">
         <item>Jake Wharton</item>
         <item>Branch Metrics, Inc.</item>
         <item>Henning Dodenhof</item>

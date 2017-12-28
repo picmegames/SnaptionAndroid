@@ -12,11 +12,12 @@ import com.snaptiongame.app.data.models.License
 class LicensesAdapter : RecyclerView.Adapter<LicenseViewHolder>() {
 
     private var licenses: List<License> = listOf()
+    internal var licensesClickable: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): LicenseViewHolder {
         val view = LayoutInflater.from(parent?.context)
                 .inflate(R.layout.license_card, parent, false)
-        return LicenseViewHolder(view)
+        return LicenseViewHolder(view, licensesClickable)
     }
 
     override fun onBindViewHolder(holder: LicenseViewHolder, position: Int) {

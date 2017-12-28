@@ -203,7 +203,7 @@ object ImageUtils {
         val out: FileOutputStream
         try {
             out = FileOutputStream(filePath)
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, out)
+            scaledBitmap?.compress(Bitmap.CompressFormat.JPEG, QUALITY, out)
         }
         catch (e: FileNotFoundException) {
             Timber.e("Could not find file")

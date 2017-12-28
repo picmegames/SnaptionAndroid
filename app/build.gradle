@@ -20,8 +20,8 @@ android {
         applicationId "com.snaptiongame.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "1.0.6"
+        versionCode 22
+        versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -147,6 +147,7 @@ dependencies {
 
     // Firebase
     implementation "com.google.firebase:firebase-core:$playServicesVersion"
+    implementation "com.google.firebase:firebase-config:$playServicesVersion"
     implementation "com.google.firebase:firebase-messaging:$playServicesVersion"
 
     // Glide

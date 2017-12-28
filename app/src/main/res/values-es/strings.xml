@@ -183,4 +183,6 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="shop_label">Tienda</string>
     <string name="buy_game">Crear un juego te costará %1$d monedas.\n¿Estás seguro de que quieres continuar?</string>
     <string name="buy_caption">Agregar un título le costará %1$d monedas.\n¿Está seguro de que desea continuar?</string>
+    <string name="soft">Monedas %1$d</string>
+    <string name="hard">Rubíes %1$d</string>
 </resources>
