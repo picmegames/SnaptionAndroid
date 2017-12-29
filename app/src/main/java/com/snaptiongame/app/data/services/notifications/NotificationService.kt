@@ -1,10 +1,10 @@
 package com.snaptiongame.app.data.services.notifications
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
 
@@ -20,6 +20,11 @@ import com.snaptiongame.app.presentation.view.MainActivity
 import com.snaptiongame.app.presentation.view.profile.ProfileActivity
 
 import java.util.Date
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Color
+import android.os.Build
 
 /**
  * The NotificationService class handles getting notifications from the server
@@ -50,11 +55,21 @@ class NotificationService : FirebaseMessagingService() {
         }
     }
 
+    @SuppressLint("NewApi")
     private fun handleNotification(data: Map<String, String>, type: String) {
         var title: String? = ""
         var message: String? = ""
         val imageUrl: String?
         val userImageUrl: String?
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.BLUE
+            notificationChannel.enableVibration(true)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
 
         // IF there is data
         if (data.isNotEmpty()) {
@@ -153,7 +168,6 @@ class NotificationService : FirebaseMessagingService() {
             // SET notification intent
             builder.setContentIntent(resultPendingIntent)
             // BUILD and SHOW notification
-            val notificationManager = NotificationManagerCompat.from(applicationContext)
             notificationManager.notify(notificationIdentifier, builder.build())
         }
     }
@@ -167,7 +181,8 @@ class NotificationService : FirebaseMessagingService() {
         private val FRIEND = "user"
         private val PICTURE = "picture"
         private val USER_PICTURE = "userPicture"
-        const val CHANNEL_ID = "snaptionChannel";
+        const val CHANNEL_ID = "snaptionChannel"
+        const val CHANNEL_NAME = "Snaption"
         const val FROM_NOTIFICATION = "notification"
     }
 }

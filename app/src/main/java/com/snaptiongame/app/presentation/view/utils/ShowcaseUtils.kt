@@ -2,6 +2,7 @@ package com.snaptiongame.app.presentation.view.utils
 
 import android.app.Activity
 import android.graphics.Point
+import android.support.annotation.StringRes
 import android.support.v4.widget.NestedScrollView
 import android.view.View
 
@@ -19,7 +20,7 @@ object ShowcaseUtils {
     private const val SHOWCASE_DELAY = 750
 
     @JvmStatic
-    fun showShowcase(activity: Activity, target: View, title: Int, content: Int) {
+    fun showShowcase(activity: Activity, target: View, @StringRes title: Int, @StringRes content: Int) {
         MaterialShowcaseView.Builder(activity)
                 .setTarget(target)
                 .setDismissText(R.string.got_it)

@@ -1,8 +1,7 @@
 <resources>
     <!-- Titles -->
-    <string name="app_name">Snaption</string>
-    <string name="app_name_styled" translatable="false">SN@PTi*N</string>
-    <string name="welcome_message">Welcome to Snaption!</string>
+    <string name="app_name" translatable="false">SN@PTION</string>
+    <string name="welcome_message">Welcome to SN@PTION!</string>
     <string name="sub_welcome_message">Click the icon above to login</string>
     <string name="add_caption">Add a Caption</string>
     <string name="update_info">Update Information</string>
@@ -117,7 +116,7 @@
     <string name="compression_error">Could not compress image</string>
     <string name="upload_error">Could not upload game</string>
     <string name="empty_caption">Nothing entered for caption.</string>
-    <string name="join_snaption">Join Snaption!</string>
+    <string name="join_snaption">Join SN@PTION!</string>
     <string name="fitb">Fill in the blank!</string>
     <string name="snaption_description">Compete to create the best caption for a photo by filling in the blank on a caption with the word or phrase of your choice. </string>
     <string name="skip">Skip</string>
@@ -207,7 +206,7 @@
     <string name="invalid_char">Invalid symbol in username</string>
     <string name="no_friends">No friends could be found</string>
     <string name="invite_friend_via">Invite friend via</string>
-    <string name="invite_message">Hey there download this nifty app called Snaption!\n</string>
+    <string name="invite_message">"Hey there download this nifty app called SN@PTION! "</string>
 
     <!-- Links -->
     <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.snaptiongame.app</string>

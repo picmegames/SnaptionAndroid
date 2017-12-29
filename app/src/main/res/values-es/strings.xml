@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Titles -->
-    <string name="app_name">Snaption</string>
-
     <!-- Labels -->
     <string name="wall_label">Pared</string>
     <string name="friends_label">Amigos</string>
@@ -13,7 +10,7 @@
     <string name="flag">Marcar como Inapropiado</string>
     <string name="content_level_label">Nivel de Contenido</string>
     <string name="privacy_label">Juego Privado</string>
-    <string name="welcome_message">¡Bienvenido a Snaption!</string>
+    <string name="welcome_message">¡Bienvenido a SN@PTION!</string>
     <string name="sub_welcome_message">Haga clic en el icono de arriba para iniciar sesión</string>
     <string name="add_caption">Agrega un Subtítulo</string>
     <string name="game_closed">CERRADO</string>
@@ -70,7 +67,7 @@
     <string name="compression_error">No se pudo comprimir la imagen</string>
     <string name="upload_error">No se pudo subir el juego</string>
     <string name="empty_caption">Nada entró para el subtítulo.</string>
-    <string name="join_snaption">¡Únete a Snaption!</string>
+    <string name="join_snaption">¡Únete a SN@PTION!</string>
     <string name="fitb">¡Llena el espacio en blanco!</string>
     <string name="snaption_description">
 Competir para crear el mejor subtítulo para una foto rellenando el espacio en blanco en un subtítulo con la palabra o la frase de su opción</string>
@@ -91,7 +88,7 @@ Competir para crear el mejor subtítulo para una foto rellenando el espacio en b
     <string name="title_2">Añadir subtítulos.</string>
     <string name="title_3">Jugar con amigos.\n¡Comparte los memes con todo el mundo!</string>
     <string name="invite_friend_via">Invitar amigo a través de</string>
-    <string name="invite_message">Hola descarga esta aplicación ingeniosa llamada Snaption!\n</string>
+    <string name="invite_message">"Hola descarga esta aplicación ingeniosa llamada SN@PTION!"</string>
     <string name="back">Espalda</string>
     <string name="add_friend">Añade Amigo</string>
     <string name="find_friends">¡Encuentra a tus amigos!</string>
