@@ -1,6 +1,5 @@
 package com.snaptiongame.app.presentation.view.wall;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -11,9 +10,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
@@ -210,25 +207,11 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
                     ((MainActivity) context).setComingFromGameActivity(true);
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    View statusBar = ((AppCompatActivity) context).findViewById(android.R.id.statusBarBackground);
-                    View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation((AppCompatActivity) context,
+                                view, ViewCompat.getTransitionName(view));
 
-                    ActivityOptions transitionActivityOptions = ActivityOptions
-                            .makeSceneTransitionAnimation((AppCompatActivity) context,
-                                    Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME),
-                                    Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
-                                    Pair.create(view, ViewCompat.getTransitionName(view)));
-
-                    context.startActivity(gameIntent, transitionActivityOptions.toBundle());
-                }
-                else {
-                    ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                            .makeSceneTransitionAnimation((AppCompatActivity) context,
-                                    view, ViewCompat.getTransitionName(view));
-
-                    context.startActivity(gameIntent, transitionActivityOptions.toBundle());
-                }
+                context.startActivity(gameIntent, transitionActivityOptions.toBundle());
             });
 
             captionerImage.setOnClickListener(view -> goToProfile(captionerId, captioner, captionerImageUrl, view));
@@ -339,23 +322,9 @@ public class GameCardViewHolder extends RecyclerView.ViewHolder {
         profileIntent.putExtra(User.IMAGE_URL, userImageUrl);
         profileIntent.putExtra(User.ID, userId);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View statusBar = ((AppCompatActivity) context).findViewById(android.R.id.statusBarBackground);
-            View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
-
-            ActivityOptions transitionActivityOptions = ActivityOptions
-                    .makeSceneTransitionAnimation((AppCompatActivity) context,
-                            Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME),
-                            Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
-                            Pair.create(view, ViewCompat.getTransitionName(view)));
-
-            context.startActivity(profileIntent, transitionActivityOptions.toBundle());
-        }
-        else {
-            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation((AppCompatActivity) context, view,
-                            ViewCompat.getTransitionName(view));
-            context.startActivity(profileIntent, transitionActivityOptions.toBundle());
-        }
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation((AppCompatActivity) context, view,
+                        ViewCompat.getTransitionName(view));
+        context.startActivity(profileIntent, transitionActivityOptions.toBundle());
     }
 }
