@@ -3,6 +3,7 @@ package com.snaptiongame.app.presentation.view.settings;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.snaptiongame.app.BuildConfig;
 import com.snaptiongame.app.R;
 import com.snaptiongame.app.SnaptionApplication;
 import com.snaptiongame.app.data.auth.AuthManager;
@@ -68,16 +70,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             list.setDivider(ContextCompat.getDrawable(SnaptionApplication.Companion.getContext(), R.drawable.line_divider));
         }
 
-        PackageInfo packageInfo = null;
-
-        try {
-            packageInfo = getActivity().getPackageManager().getPackageInfo(
-                    getActivity().getPackageName(), 0);
-        }
-        catch (PackageManager.NameNotFoundException e) {
-            Timber.e(e);
-        }
-
         addPreferencesFromResource(R.xml.preferences);
 
         preferenceScreen = getPreferenceScreen();
@@ -107,10 +99,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         licensesPreference.setOnPreferenceClickListener(this);
         feedbackPreference = preferenceScreen.findPreference(getString(R.string.give_feedback));
         feedbackPreference.setOnPreferenceClickListener(this);
-
-        if (packageInfo != null) {
-            versionPreference.setSummary(packageInfo.versionName);
-        }
+        versionPreference.setSummary(BuildConfig.VERSION_NAME);
 
         presenter.subscribe();
     }
