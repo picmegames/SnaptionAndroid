@@ -27,6 +27,7 @@ import java.net.URL
 
 import io.reactivex.Observable
 import timber.log.Timber
+import java.lang.IllegalStateException
 
 /**
  * @author Tyler Wong
@@ -75,24 +76,28 @@ object ImageUtils {
     }
 
     @JvmStatic
-    fun getBitmapFromURL(imageUrl: String): Bitmap {
+    fun getBitmapFromURL(imageUrl: String): Bitmap? {
         try {
             val url = URL(imageUrl)
             val connection = url.openConnection() as HttpURLConnection
             connection.doInput = true
             connection.connect()
             val input = connection.inputStream
-            return BitmapFactory.decodeStream(input)
+            return input?.let { BitmapFactory.decodeStream(it) }
         }
         catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
-        return BitmapFactory.decodeStream(null)
+        catch (e: IllegalStateException) {
+            Timber.e(e)
+        }
+        return null
     }
 
     @JvmStatic
-    fun getCircularBitmapFromUrl(imageUrl: String): Bitmap {
-        return convertToCircularBitmap(getBitmapFromURL(imageUrl))
+    fun getCircularBitmapFromUrl(imageUrl: String): Bitmap? {
+        val bitmap = getBitmapFromURL(imageUrl)
+        return bitmap?.let { convertToCircularBitmap(it) }
     }
 
     private fun convertToCircularBitmap(bitmap: Bitmap): Bitmap {
@@ -215,16 +220,16 @@ object ImageUtils {
     private fun getRealPathFromURI(contentUri: Uri): String {
         val cursor = SnaptionApplication.context?.contentResolver?.query(
                 contentUri, null, null, null, null)
-        if (cursor == null) {
-            return contentUri.path
-        }
-        else {
-            cursor.moveToFirst()
-            val index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            val path = cursor.getString(index)
-            cursor.close()
+
+        cursor?.let {
+            it.moveToFirst()
+            val index = it.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            val path = it.getString(index)
+            it.close()
             return path
         }
+
+        return contentUri.path
     }
 
     private fun getImageUrlWithAuthority(resolver: ContentResolver?, uri: Uri): String {
@@ -233,10 +238,10 @@ object ImageUtils {
         if (uri.authority != null) {
             try {
                 inputStream = resolver?.openInputStream(uri)
-                val bmp = BitmapFactory.decodeStream(inputStream)
-                val path = getRealPathFromURI(writeToTempImageAndGetPathUri(resolver, bmp))
+                val bmp = inputStream?.let { BitmapFactory.decodeStream(it) }
+                val path = bmp?.let { getRealPathFromURI(writeToTempImageAndGetPathUri(resolver, it)) }
                 inputStream?.close()
-                return path
+                return path ?: ""
             }
             catch (e: IOException) {
                 Timber.e(e)

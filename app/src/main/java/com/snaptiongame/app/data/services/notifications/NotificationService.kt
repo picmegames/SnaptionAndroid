@@ -27,8 +27,9 @@ import android.graphics.Color
 import android.os.Build
 
 /**
- * The NotificationService class handles getting notifications from the server
- * and displaying the right notification to the user.
+ * The NotificationService class handles receiving notifications from the server
+ * and displaying the right notification to the user. It will also handle if the
+ * user has notifications enabled.
  *
  * @author Tyler Wong
  * @version 1.0
@@ -113,7 +114,9 @@ class NotificationService : FirebaseMessagingService() {
                         val style = NotificationCompat.BigPictureStyle()
                         style.setBigContentTitle(title)
                         style.setSummaryText(message)
-                        style.bigPicture(ImageUtils.getBitmapFromURL(imageUrl))
+
+                        val bigPicture = ImageUtils.getBitmapFromURL(imageUrl)
+                        bigPicture?.let { style.bigPicture(it) }
                         builder.setStyle(style)
                     }
                     // PASS image url to GameActivity
@@ -125,8 +128,9 @@ class NotificationService : FirebaseMessagingService() {
 
                     // IF the user picture is not null and not empty
                     if (userImageUrl != null && !userImageUrl.isEmpty()) {
+                        val circularBitmap = ImageUtils.getCircularBitmapFromUrl(data[USER_PICTURE] ?: "")
                         // SET notification large icon
-                        builder.setLargeIcon(ImageUtils.getCircularBitmapFromUrl(data[USER_PICTURE] ?: ""))
+                        circularBitmap?.let{ builder.setLargeIcon(it) }
                     }
                 }
                 // SPECIFY we are coming from a clicked notification
