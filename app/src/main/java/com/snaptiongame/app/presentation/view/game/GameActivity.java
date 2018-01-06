@@ -490,23 +490,9 @@ public class GameActivity extends AppCompatActivity implements GameContract.View
         profileIntent.putExtra(User.IMAGE_URL, pickerImageUrl);
         profileIntent.putExtra(User.ID, pickerId);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View statusBar = findViewById(android.R.id.statusBarBackground);
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-
-            ActivityOptions transitionActivityOptions = ActivityOptions
-                    .makeSceneTransitionAnimation(this,
-                            Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME),
-                            Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
-                            Pair.create(view, ViewCompat.getTransitionName(view)));
-
-            startActivity(profileIntent, transitionActivityOptions.toBundle());
-        }
-        else {
-            ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(view));
-            startActivity(profileIntent, transitionActivityOptions.toBundle());
-        }
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(view));
+        startActivity(profileIntent, transitionActivityOptions.toBundle());
     }
 
     @Override
