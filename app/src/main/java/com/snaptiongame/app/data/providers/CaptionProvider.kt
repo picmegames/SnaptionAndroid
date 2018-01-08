@@ -31,3 +31,7 @@ fun upvoteOrFlagCaption(request: GameAction): Completable = apiService.upvoteOrF
 fun addCaption(gameId: Int, caption: Caption): Completable = apiService.addCaption(gameId, caption)
 
 fun getCaptionSets(): Flowable<List<CaptionSet>> = apiService.getCaptionSets()
+
+fun getAllCaptions(): Flowable<List<FitBCaption>> = getCaptionSets()
+        .flatMapIterable { it }
+        .flatMap { getFitBCaptions(it.id) }
