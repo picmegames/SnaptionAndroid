@@ -55,7 +55,7 @@ public class GameContract {
 
         void loadFitBCaptions(int setId);
 
-        void loadRandomFITBCaptions();
+        void loadAllFITBCaptions();
 
         void addCaption(int fitBId, String caption);
 

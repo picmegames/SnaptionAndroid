@@ -138,13 +138,13 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
-    public void loadRandomFITBCaptions() {
-        Disposable disposable = CaptionProvider.getCaptionSets()
+    public void loadAllFITBCaptions() {
+        Disposable disposable = CaptionProvider.getAllCaptions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::countSets,
+                        this.captions::addAll,
                         Timber::e,
-                        () -> Timber.i("Loading caption sets worked")
+                        this::buildRandomCaptions
                 );
         disposables.add(disposable);
     }
@@ -176,11 +176,6 @@ public class GamePresenter implements GameContract.Presenter {
         this.gameId = gameId;
     }
 
-    private void countSets(List<CaptionSet> sets) {
-        this.sets = sets;
-        getRandomCaptions();
-    }
-
     private void buildRandomCaptions() {
         Random random = new Random();
         List<FitBCaption> allCaptions = new ArrayList<>(this.captions);
@@ -193,17 +188,6 @@ public class GamePresenter implements GameContract.Presenter {
             }
         }
         gameView.showRandomCaptions(randomCaptions);
-    }
-
-    private void getRandomCaptions() {
-        Disposable disposable = CaptionProvider.getAllCaptions()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        this.captions::addAll,
-                        Timber::e,
-                        this::buildRandomCaptions
-                );
-        disposables.add(disposable);
     }
 
     @Override
@@ -224,7 +208,7 @@ public class GamePresenter implements GameContract.Presenter {
     @Override
     public void subscribe() {
         loadCaptions(1);
-        loadRandomFITBCaptions();
+        loadAllFITBCaptions();
     }
 
     @Override
