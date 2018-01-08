@@ -1,20 +1,16 @@
 package com.snaptiongame.app.presentation.view.friends;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -99,24 +95,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 profileIntent.putExtra(User.IMAGE_URL, curFriend.getImageUrl());
                 profileIntent.putExtra(User.ID, curFriend.getId());
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    View statusBar = ((AppCompatActivity) context).findViewById(android.R.id.statusBarBackground);
-                    View navigationBar = ((AppCompatActivity) context).findViewById(android.R.id.navigationBarBackground);
-
-                    ActivityOptions transitionActivityOptions = ActivityOptions
-                            .makeSceneTransitionAnimation((AppCompatActivity) context,
-                                    Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME),
-                                    Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME),
-                                    Pair.create(view, ViewCompat.getTransitionName(view)));
-
-                    context.startActivity(profileIntent, transitionActivityOptions.toBundle());
-                }
-                else {
-                    ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
-                            .makeSceneTransitionAnimation((AppCompatActivity) context, view,
-                                    ViewCompat.getTransitionName(view));
-                    context.startActivity(profileIntent, transitionActivityOptions.toBundle());
-                }
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation((AppCompatActivity) context, view,
+                                ViewCompat.getTransitionName(view));
+                context.startActivity(profileIntent, transitionActivityOptions.toBundle());
             });
         }
         else {
